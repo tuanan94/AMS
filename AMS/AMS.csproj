@@ -349,6 +349,7 @@
     <Content Include="Views\Service\Index.cshtml" />
     <Content Include="Views\Service\_ServiceLayout.cshtml" />
     <Content Include="Views\Service\Receipt.cshtml" />
+    <Content Include="Views\Service\SendRequest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

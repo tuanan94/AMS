@@ -17,5 +17,9 @@ namespace AMS.Controllers
         {
             return View();
         }
+        public ActionResult SendRequest()
+        {
+            return View();
+        }
     }
 }
