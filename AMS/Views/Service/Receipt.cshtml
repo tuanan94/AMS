@@ -1,9 +1,10 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Receipt";
     Layout = "~/Views/Service/_ServiceLayout.cshtml";
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="~/Scripts/graph.js"></script>
 }
-<div id="content">
+<div id="content" class="col-md-9">
     <div class="container-fluid">
         <div class="panel panel-default">
             <ul class="nav nav-tabs" role="tablist">
@@ -11,209 +12,189 @@
                     <a href="#thismonth" role="tab" data-toggle="tab"><i class="fa fa-fw fa-calendar"></i> Tháng này</a>
                 </li>
                 <li class="">
-                    <a href="#all" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Tất cả</a>
+                    <a href="#all" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Lịch sử</a>
                 </li>
 
-                <li class="">
-                    <a href="#unpaid" role="tab" data-toggle="tab"><i class="fa fa-fw fa-ticket"></i> Chưa thanh toán</a>
-                </li>
+                @*<li class="">
+                        <a href="#unpaid" role="tab" data-toggle="tab"><i class="fa fa-fw fa-ticket"></i> Chưa thanh toán</a>
+                    </li>*@
 
                 <li class="">
                     <a href="#graph" role="tab" data-toggle="tab"><i class="fa fa-fw fa-pie-chart"></i> Thống kê</a>
                 </li>
 
-                
+
             </ul>
             <div class="tab-content">
                 <div class="tab-pane fade active in" id="thismonth">
                     <div class="panel panel-default">
-                        <div class="panel-heading panel-heading-gray">
-                            Regular Reponsive Table
-                        </div>
+                        <div class="panel-heading panel-heading-gray">Hóa đơn</div>
+                        <div class="panel-body">
+                            <form class="form-horizontal" role="form">
+                                <div class="timeline row" data-toggle="gridalicious">
+                                    <div class="timeline-block" data-toggle="modal" data-target="#myModal">
+                                        <div class="panel panel-default user-box">
+                                            <div class="panel-body">
+                                                <div class="media">
+                                                    <img src="/images/people/50/guy-6.jpg" alt="people" class="media-object img-circle pull-left" />
+                                                    <div class="media-body" style="float: left;">
+                                                        <a href="" class="username">Tiền điện</a>
+                                                        <div class="profile-icons">
+                                                            <span><i class="fa fa-users"></i> 200,000 vnd </span>
+                                                        </div>
+                                                        <div class="profile-icons">
+                                                            <span> </span>
+                                                        </div>
 
-                        <!-- Progress table -->
-                        <div class="table-responsive">
-                            <table class="table v-middle">
-                                <thead>
-                                    <tr>
-                                        <th width="20">
-                                            <input type="checkbox" name="checkbox" id="checkAll">
-                                        </th>
-                                        <th>Date</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Location</th>
-                                        <th>Progress</th>
-                                        <th class="text-right">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <input type="checkbox">
-                                        </td>
-                                        <td>
-                                            <span class="label label-gray">19/09/2014</span>
-                                        </td>
-                                        <td>
-                                            <img src="/images/people/110/guy-5.jpg" width="40" class="img-circle"> Jonathan Smith
-                                        </td>
-                                        <td>
-                                            <a href="#">contact@mosaicpro.biz</a>
-                                        </td>
-                                        <td>
-                                            Miami, FL<a href="#"><i class="fa fa-map-marker fa-fw text-muted"></i></a>
-                                        </td>
-                                        <td>
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                                                    </div>
+                                                    <div class="media-body" style="float: right;">
+                                                        <div class="profile-icons">
+                                                            <span><i class="fa fa-check"></i> Đã thanh toán  </span>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td class="text-right">
-                                            <a href="#" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
-                                            <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <input type="checkbox">
-                                        </td>
-                                        <td>
-                                            <span class="label label-primary">19/09/2014</span>
-                                        </td>
-                                        <td>
-                                            <img src="/images/people/110/woman-4.jpg" width="40" class="img-circle"> Michelle Smith
-                                        </td>
-                                        <td>
-                                            <a href="#">contact@mosaicpro.biz</a>
-                                        </td>
-                                        <td>
-                                            Amsterdam, EU <a href="#"><i class="fa fa-map-marker fa-fw text-muted"></i></a>
-                                        </td>
-                                        <td>
-                                            <div class="progress">
-                                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100" style="width: 43%;">
+                                        </div>
+                                    </div>
+                                    <div class="timeline-block" data-toggle="modal" data-target="#myModal1">
+                                        <div class="panel panel-default user-box">
+                                            <div class="panel-body">
+                                                <div class="media">
+                                                    <img src="/images/people/50/guy-6.jpg" alt="people" class="media-object img-circle pull-left" />
+                                                    <div class="media-body" style="float: left;">
+                                                        <a href="" class="username">Tiền nước</a>
+                                                        <div class="profile-icons">
+                                                            <span><i class="fa fa-users"></i> 100,000 vnd </span>
+                                                        </div>
+                                                        <div class="profile-icons">
+                                                            <span> </span>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="media-body" style="float: right;">
+                                                        <div class="profile-icons">
+                                                            <span><i class="fa fa-question"></i> Chưa thanh toán  </span>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td class="text-right">
-                                            <a href="#" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
-                                            <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-block" data-toggle="modal" data-target="#myModal2">
+                                        <div class="panel panel-default user-box">
+                                            <div class="panel-body">
+                                                <div class="media">
+                                                    <img src="/images/people/50/guy-6.jpg" alt="people" class="media-object img-circle pull-left" />
+                                                    <div class="media-body" style="float: left;">
+                                                        <a href="" class="username">Tiền điện</a>
+                                                        <div class="profile-icons">
+                                                            <span><i class="fa fa-users"></i> 200,000 vnd </span>
+                                                        </div>
+                                                        <div class="profile-icons">
+                                                            <span> </span>
+                                                        </div>
 
-                        <!-- // Progress table -->
-                        <div class="panel-footer padding-none text-center">
-                            <ul class="pagination">
-                                <li>
-                                    <a href="#">«</a>
-                                </li>
-                                <li class="active">
-                                    <a href="#">1</a>
-                                </li>
-                                <li>
-                                    <a href="#">2</a>
-                                </li>
-                                <li>
-                                    <a href="#">3</a>
-                                </li>
-                                <li>
-                                    <a href="#">4</a>
-                                </li>
-                                <li>
-                                    <a href="#">5</a>
-                                </li>
-                                <li>
-                                    <a href="#">»</a>
-                                </li>
-                            </ul>
+                                                    </div>
+                                                    <div class="media-body" style="float: right;">
+                                                        <div class="profile-icons">
+                                                            <span><i class="fa fa-check"></i> Đã thanh toán  </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    </div>
+                              
+                            
+                            </form>
                         </div>
                     </div>
                 </div>
 
                 <div class="tab-pane fade" id="all">
                     <div class="panel panel-default">
-                        <div class="panel-heading panel-heading-gray">
-                            Regular Reponsive Table
-                        </div>
-
                         <!-- Progress table -->
-                        <div class="table-responsive">
-                            <table class="table v-middle">
-                                <thead>
-                                    <tr>
-                                        <th width="20">
-                                            <input type="checkbox" name="checkbox" id="checkAll">
-                                        </th>
-                                        <th>Date</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Location</th>
-                                        <th>Progress</th>
-                                        <th class="text-right">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <input type="checkbox">
-                                        </td>
-                                        <td>
-                                            <span class="label label-gray">19/09/2014</span>
-                                        </td>
-                                        <td>
-                                            <img src="/images/people/110/guy-5.jpg" width="40" class="img-circle"> Jonathan Smith
-                                        </td>
-                                        <td>
-                                            <a href="#">contact@mosaicpro.biz</a>
-                                        </td>
-                                        <td>
-                                            Miami, FL<a href="#"><i class="fa fa-map-marker fa-fw text-muted"></i></a>
-                                        </td>
-                                        <td>
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                        <div class="panel-body">
+                            <form class="form-horizontal" role="form">
+                                <div class="timeline row" data-toggle="gridalicious">
+                                    <div class="timeline-block">
+                                        <div class="panel panel-default user-box">
+                                            <div class="panel-body">
+                                                <div class="media">
+                                                    <img src="/images/people/50/guy-6.jpg" alt="people" class="media-object img-circle pull-left" />
+                                                    <div class="media-body" style="float: left;">
+                                                        <a href="" class="username">Tiền điện</a>
+                                                        <div class="profile-icons">
+                                                            <span><i class="fa fa-users"></i> 200,000 vnd </span>
+                                                        </div>
+                                                        <div class="profile-icons">
+                                                            <span> </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="media-body" style="float: right;">
+                                                        <div class="profile-icons">
+                                                            <span><i class="fa fa-check"></i> Đã thanh toán  </span>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td class="text-right">
-                                            <a href="#" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
-                                            <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <input type="checkbox">
-                                        </td>
-                                        <td>
-                                            <span class="label label-primary">19/09/2014</span>
-                                        </td>
-                                        <td>
-                                            <img src="/images/people/110/woman-4.jpg" width="40" class="img-circle"> Michelle Smith
-                                        </td>
-                                        <td>
-                                            <a href="#">contact@mosaicpro.biz</a>
-                                        </td>
-                                        <td>
-                                            Amsterdam, EU <a href="#"><i class="fa fa-map-marker fa-fw text-muted"></i></a>
-                                        </td>
-                                        <td>
-                                            <div class="progress">
-                                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100" style="width: 43%;">
+                                        </div>
+                                    </div>
+                                    <div class="timeline-block">
+                                        <div class="panel panel-default user-box">
+                                            <div class="panel-body">
+                                                <div class="media">
+                                                    <img src="/images/people/50/guy-6.jpg" alt="people" class="media-object img-circle pull-left" />
+                                                    <div class="media-body" style="float: left;">
+                                                        <a href="" class="username">Tiền nước</a>
+                                                        <div class="profile-icons">
+                                                            <span><i class="fa fa-users"></i> 100,000 vnd </span>
+                                                        </div>
+                                                        <div class="profile-icons">
+                                                            <span> </span>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="media-body" style="float: right;">
+                                                        <div class="profile-icons">
+                                                            <span><i class="fa fa-question"></i> Chưa thanh toán  </span>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td class="text-right">
-                                            <a href="#" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
-                                            <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-block">
+                                        <div class="panel panel-default user-box">
+                                            <div class="panel-body">
+                                                <div class="media">
+                                                    <img src="/images/people/50/guy-6.jpg" alt="people" class="media-object img-circle pull-left" />
+                                                    <div class="media-body" style="float: left;">
+                                                        <a href="" class="username">Tiền điện</a>
+                                                        <div class="profile-icons">
+                                                            <span><i class="fa fa-users"></i> 200,000 vnd </span>
+                                                        </div>
+                                                        <div class="profile-icons">
+                                                            <span> </span>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="media-body" style="float: right;">
+                                                        <div class="profile-icons">
+                                                            <span><i class="fa fa-check"></i> Đã thanh toán  </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                               
+
+                            </form>
                         </div>
 
                         <!-- // Progress table -->
@@ -244,122 +225,66 @@
                         </div>
                     </div>
                 </div>
-              
-                <div class="tab-pane fade" id="unpaid">
-                    <div class="panel panel-default">
-                        <div class="panel-heading panel-heading-gray">
-                            Regular Reponsive Table
-                        </div>
 
-                        <!-- Progress table -->
-                        <div class="table-responsive">
-                            <table class="table v-middle">
-                                <thead>
-                                    <tr>
-                                        <th width="20">
-                                            <input type="checkbox" name="checkbox" id="checkAll">
-                                        </th>
-                                        <th>Date</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Location</th>
-                                        <th>Progress</th>
-                                        <th class="text-right">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <input type="checkbox">
-                                        </td>
-                                        <td>
-                                            <span class="label label-gray">19/09/2014</span>
-                                        </td>
-                                        <td>
-                                            <img src="/images/people/110/guy-5.jpg" width="40" class="img-circle"> Jonathan Smith
-                                        </td>
-                                        <td>
-                                            <a href="#">contact@mosaicpro.biz</a>
-                                        </td>
-                                        <td>
-                                            Miami, FL<a href="#"><i class="fa fa-map-marker fa-fw text-muted"></i></a>
-                                        </td>
-                                        <td>
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-right">
-                                            <a href="#" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
-                                            <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <input type="checkbox">
-                                        </td>
-                                        <td>
-                                            <span class="label label-primary">19/09/2014</span>
-                                        </td>
-                                        <td>
-                                            <img src="/images/people/110/woman-4.jpg" width="40" class="img-circle"> Michelle Smith
-                                        </td>
-                                        <td>
-                                            <a href="#">contact@mosaicpro.biz</a>
-                                        </td>
-                                        <td>
-                                            Amsterdam, EU <a href="#"><i class="fa fa-map-marker fa-fw text-muted"></i></a>
-                                        </td>
-                                        <td>
-                                            <div class="progress">
-                                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100" style="width: 43%;">
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-right">
-                                            <a href="#" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
-                                            <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- // Progress table -->
-                        <div class="panel-footer padding-none text-center">
-                            <ul class="pagination">
-                                <li>
-                                    <a href="#">«</a>
-                                </li>
-                                <li class="active">
-                                    <a href="#">1</a>
-                                </li>
-                                <li>
-                                    <a href="#">2</a>
-                                </li>
-                                <li>
-                                    <a href="#">3</a>
-                                </li>
-                                <li>
-                                    <a href="#">4</a>
-                                </li>
-                                <li>
-                                    <a href="#">5</a>
-                                </li>
-                                <li>
-                                    <a href="#">»</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+           
 
                 <div class="tab-pane fade" id="graph">
-
+                    <div id="chart_div"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Chi tiết </h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Tiền điện</label>
+                            <div class="col-sm-9">
+                                <input type="email" readonly="readonly" class="form-control" id="inputEmail3" value="Mr. A">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Điện tiêu thụ</label>
+                            <div class="col-sm-9">
+                                <input type="email" readonly="readonly" class="form-control" id="inputEmail3" value="30 kw">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Ngày xuất hóa đơn</label>
+                            <div class="col-sm-9">
+                                <input type="email" readonly="readonly" class="form-control" id="inputEmail3" value="12/12/2016">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Trạng thái</label>
+                            <div class="col-sm-9">
+                                <span><i class="fa fa-check"></i> Đã thanh toán  </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Hạn nộp tiền</label>
+                            <div class="col-sm-9">
+                                <input type="email" readonly="readonly" class="form-control" id="inputEmail3" value="12/12/2016">
+                            </div>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+               
+                <button type="button" class="btn btn-primary">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>

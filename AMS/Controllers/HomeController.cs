@@ -27,5 +27,16 @@ namespace AMS.Controllers
 
             return View();
         }
+        //BinhHT
+        [HttpGet]
+        public ActionResult ViewProfile()
+        {
+            return View();
+        }
+        [HttpGet]
+        public ActionResult ManageMember()
+        {
+            return View();
+        }
     }
 }

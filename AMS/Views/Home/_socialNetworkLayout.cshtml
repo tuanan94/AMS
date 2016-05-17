@@ -6,7 +6,7 @@
     <div data-scrollable="" tabindex="0" style="overflow: hidden; outline: none;">
         <div class="sidebar-block">
             <div class="profile">
-                <img src="images/people/110/guy-5.jpg" alt="people" class="img-circle">
+                <img src="~/images/people/110/guy-5.jpg" alt="people" class="img-circle">
                 <h4>H101_AnTT</h4>
             </div>
         </div>
@@ -14,10 +14,10 @@
             <ul>
                 <li class="category">Account</li>
                 <li class="">
-                    <a href="user-private-profile.html"><i class="icon-user-1"></i> Thông tin cá nhân</a>
+                    <a href="/Home/ViewProfile"><i class="icon-user-1"></i> Thông tin cá nhân</a>
                 </li>
                 <li class="">
-                    <a href="user-private-users.html"><i class="fa fa-group"></i> Thành viên</a>
+                    <a href="/Home/ManageMember"><i class="fa fa-group"></i> Thành viên</a>
                 </li>
                 <li class="">
                     <a href="user-private-messages.html"><i class="icon-comment-fill-1"></i> Tin nhắn</a>
@@ -104,19 +104,19 @@
     </ul>
 </div>
 <div id="content">
-    <nav class="navbar navbar-subnav navbar-static-top" role="navigation">
-        <div class="container-fluid">
+    @*<nav class="navbar navbar-subnav navbar-static-top" role="navigation">
+        <div class="container-fluid">*@
 
             <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
+            @*<div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subnav">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="fa fa-ellipsis-h"></span>
                 </button>
-            </div>
+            </div>*@
 
             <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="subnav">
+            @*<div class="collapse navbar-collapse" id="subnav">
                 <ul class="nav navbar-nav">
                     <li class="active">
                         <a href="user-private-timeline.html"><i class="fa fa-fw icon-ship-wheel"></i> New feeds</a>
@@ -127,11 +127,11 @@
                         <a href="login.html"> Logout<i class="fa fa-fw fa-sign-out"></i></a>
                     </li>
                 </ul>
-            </div>
+            </div>*@
 
             <!-- /.navbar-collapse -->
-        </div>
-    </nav>
+        @*</div>
+    </nav>*@
     @RenderBody()
      <!--Footer-->
     <div class="footer">

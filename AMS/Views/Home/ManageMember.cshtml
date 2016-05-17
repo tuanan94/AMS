@@ -1,0 +1,146 @@
+﻿@{
+    ViewBag.Title = "ManageMember";
+    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+}
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-gray">Thông tin thành viên</div>
+        <div class="panel-body">
+            <form class="form-horizontal" role="form">
+                <div class="timeline row" data-toggle="gridalicious">
+                    <div class="timeline-block">
+                        <div class="panel panel-default user-box">
+                            <div class="panel-body">
+                                <div class="media">
+                                    <img src="/images/people/50/guy-6.jpg" alt="people" class="media-object img-circle pull-left" />
+                                    <div class="media-body">
+                                        <a href="" class="username">Adrian D.</a>
+                                        <div class="profile-icons">
+                                            <span><i class="fa fa-users"></i> Chủ nhà </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*<div class="panel-footer">
+                                <a href="#" class="btn btn-default btn-sm">Follow <i class="fa fa-share"></i></a>
+                            </div>*@
+                        </div>
+                    </div>
+                    <div class="timeline-block">
+                        <div class="panel panel-default user-box">
+                            <div class="panel-body">
+                                <div class="media">
+                                    <img src="/images/people/50/guy-4.jpg" alt="people" class="media-object img-circle pull-left" />
+                                    <div class="media-body">
+                                        <a href="" class="username">Adrian D.</a>
+                                        <div class="profile-icons">
+                                            <span><i class="fa fa-users"></i> Vợ </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*<div class="panel-footer">
+                                <a href="#" class="btn btn-default btn-sm">Follow <i class="fa fa-share"></i></a>
+                            </div>*@
+                        </div>
+                    </div>
+                    <div class="timeline-block">
+                        <div class="panel panel-default user-box">
+                            <div class="panel-body">
+                                <div class="media">
+                                    <img src="/images/people/50/guy-6.jpg" alt="people" class="media-object img-circle pull-left" />
+                                    <div class="media-body">
+                                        <a href="" class="username">Adrian D.</a>
+                                        <div class="profile-icons">
+                                            <span><i class="fa fa-users"></i>Con út</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*<div class="panel-footer">
+                                <a href="#" class="btn btn-default btn-sm">Follow <i class="fa fa-share"></i></a>
+                            </div>*@
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+
+                    <div class="col-sm-offset-0 col-md-2">
+                        <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Thêm thành viên</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+  
+</div>
+
+
+  <div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Đăng ký thêm thành viên mới</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Tên</label>
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control" id="inputEmail3" value="Mr. A">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Giới tính</label>
+                            <div class="col-sm-9">
+                                <select name="select" class="selectpicker" data-size="3">
+                                    <option>Nữ</option>
+                                    <option>Nam</option>
+                                    <option>Khác</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Ngày sinh</label>
+                            <div class="col-sm-9">
+                                <input type="text" type="text" class="form-control datepicker" value="12/12/1993">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Số điện thoại</label>
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control" id="inputEmail3" value="09xxxxxxx">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Số CMND</label>
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control" id="inputEmail3" value="09xxxxxxx">
+                            </div>
+                        </div>
+
+
+                      
+
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Tắt</button>
+                <button type="button" class="btn btn-primary">Gửi yêu cầu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
