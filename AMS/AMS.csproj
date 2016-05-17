@@ -354,6 +354,7 @@
     <Content Include="Views\Home\ViewProfile.cshtml" />
     <Content Include="Views\Home\ManageMember.cshtml" />
     <Content Include="Views\Service\Provider.cshtml" />
+    <Content Include="Views\Service\SendRequest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
