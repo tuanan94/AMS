@@ -17,8 +17,8 @@ namespace AMS
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public Nullable<long> CreateDate { get; set; }
-        public Nullable<long> CloseDate { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
+        public Nullable<System.DateTime> CloseDate { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<int> HouseholderId { get; set; }
         public Nullable<int> PendingUserId { get; set; }

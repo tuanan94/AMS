@@ -22,7 +22,7 @@ namespace AMS
     
         public int Id { get; set; }
         public string ReceiptCode { get; set; }
-        public Nullable<long> CreateDate { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<int> HouseId { get; set; }
         public Nullable<int> ManagerId { get; set; }

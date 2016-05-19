@@ -17,7 +17,7 @@ namespace AMS
         public int Id { get; set; }
         public Nullable<int> UserId { get; set; }
         public Nullable<int> HouseId { get; set; }
-        public Nullable<long> CreateDate { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
     
         public virtual House House { get; set; }
         public virtual User User { get; set; }

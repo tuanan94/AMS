@@ -1,0 +1,83 @@
+﻿@{
+    List<House> allHouse = ViewBag.allHouse;
+}
+<div id="content">
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Block</th>
+                <th>Floor</th>
+                <th>House Name</th>
+            </tr>
+        </thead>
+        <tbody id="housetablebody">
+          
+        </tbody>
+    </table>
+    @using (Html.BeginForm("addHome", "Test", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <label>Block</label>
+        <input class="form-control" name="Block" id="Block" />
+        <label>Floor</label>
+        <input class="form-control" name="Floor" id="Floor" />
+        <label>House Name</label>
+        <input class="form-control" name="HouseName" id="HouseName" />
+        <input type="reset" class="btn btn-default" value="Reset" />
+        <input type="submit" class="btn btn-success" value="Thêm nhà vào hệ thống" id="btnsubmit" />
+        <input class="btn btn-success" onclick="addHouseByAjax()" value="Them nha bang Ajax"/>
+    }
+
+
+</div>
+<script>
+    $(document).ready(function () {
+        console.log("document loaded");
+        loadHouseList();
+    });
+    function loadHouseList() {
+        clearHouseList();
+        $.ajax({
+            url: '/Test/allHouse',
+            data: {
+            },
+            error: function () {
+                alert("error")
+                // $("#alertArea").html("Error occured!")
+            },
+            success: function (data) {
+                var obj = JSON.parse(data);
+                $.each(obj, function (index, jsonObject) {
+                    $("#housetablebody").append('<tr><td>' + jsonObject["Block"] + '</td><td>' + jsonObject["Floor"] + '<td/><td>' + jsonObject["RoomName"] + '</td></tr>')
+                });
+
+            },
+            type: 'GET'
+        });
+    }
+    function clearHouseList() {
+        $("#housetablebody").html("");
+
+    }
+    function addHouseByAjax() {
+        $.ajax({
+            url: '/Test/addHouseAjax',
+            data: {
+                Block: $("#Block").val(),
+                Floor: $("#Floor").val(),
+                HouseName: $("#HouseName").val()
+
+            },
+            error: function () {
+                alert("error")
+                // $("#alertArea").html("Error occured!")
+            },
+            success: function (data) {
+                clearHouseList();
+                loadHouseList();
+            },
+            type: 'POST'
+        });
+    }
+</script>

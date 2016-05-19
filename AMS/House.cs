@@ -24,12 +24,10 @@ namespace AMS
         public int Id { get; set; }
         public string Block { get; set; }
         public string Floor { get; set; }
-        public string RoomName { get; set; }
+        public string HouseName { get; set; }
         public string Description { get; set; }
         public Nullable<int> Area { get; set; }
-        public Nullable<int> ApartmentId { get; set; }
     
-        public virtual Apartment Apartment { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HelpdeskRequest> HelpdeskRequests { get; set; }
         public virtual Receipt Receipt { get; set; }

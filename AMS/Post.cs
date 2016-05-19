@@ -25,8 +25,8 @@ namespace AMS
         public string Body { get; set; }
         public string ImgUrl { get; set; }
         public string PostStatus { get; set; }
-        public Nullable<long> CreateDate { get; set; }
-        public Nullable<long> UpdateDate { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
+        public Nullable<System.DateTime> UpdateDate { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<int> PostId { get; set; }
         public Nullable<int> UserId { get; set; }
