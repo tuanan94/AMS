@@ -1,0 +1,219 @@
+﻿
+@{
+    ViewBag.Title = "ManageHousehold";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+}
+
+<div class="col-md-12">
+
+    <div class="panel panel-default">
+        
+        <div class="panel-body">
+            <form class="form-horizontal" role="form">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="active">
+                        <a href="#thismonth" role="tab" data-toggle="tab"><i class="fa fa-fw fa-calendar"></i> Hộ gia đình</a>
+                    </li>
+
+
+
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade active in" id="thismonth">
+                        <div class="panel panel-default">
+                           
+                            <!-- Progress table -->
+                            <div class="table-responsive">
+                                <table class="table v-middle">
+                                    <thead>
+                                        <tr>
+                                            <th width="20">
+                                                <input type="checkbox" name="checkbox" id="checkAll" />
+                                            </th>
+                                            <th>Date</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Location</th>
+                                            <th>Progress</th>
+                                            <th class="text-right">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" />
+                                            </td>
+                                            <td>
+                                                <span class="label label-gray">19/09/2014</span>
+                                            </td>
+                                            <td>
+                                                <img src="/images/people/110/guy-5.jpg" width="40" class="img-circle" /> Jonathan Smith
+                                            </td>
+                                            <td>
+                                                <a href="#">contact@mosaicpro.biz</a>
+                                            </td>
+                                            <td>
+                                                Miami, FL<a href="#"><i class="fa fa-map-marker fa-fw text-muted"></i></a>
+                                            </td>
+                                            <td>
+                                                <div class="progress">
+                                                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-right">
+                                                <a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
+                                                <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" />
+                                            </td>
+                                            <td>
+                                                <span class="label label-primary">19/09/2014</span>
+                                            </td>
+                                            <td>
+                                                <img src="/images/people/110/woman-4.jpg" width="40" class="img-circle" /> Michelle Smith
+                                            </td>
+                                            <td>
+                                                <a href="#">contact@mosaicpro.biz</a>
+                                            </td>
+                                            <td>
+                                                Amsterdam, EU <a href="#"><i class="fa fa-map-marker fa-fw text-muted"></i></a>
+                                            </td>
+                                            <td>
+                                                <div class="progress">
+                                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-right">
+                                                <a href="#" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
+                                                <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- // Progress table -->
+                            <div class="panel-footer padding-none text-center">
+                                <ul class="pagination">
+                                    <li>
+                                        <a href="#">&laquo;</a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="#">1</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">2</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">3</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">4</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">5</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">&raquo;</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Chi tiết </h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table v-middle">
+                            <thead>
+                                <tr>
+                                    <th width="20">
+                                        <input type="checkbox" name="checkbox" id="checkAll" />
+                                    </th>
+                                    <th>Date</th>
+                                    <th>Name</th>
+                                    <th>Location</th>
+                                    <th class="text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" />
+                                    </td>
+                                    <td>
+                                        <span class="label label-gray">19/09/2014</span>
+                                    </td>
+                                    <td>
+                                        <img src="/images/people/110/guy-5.jpg" width="40" class="img-circle" /> Jonathan Smith
+                                    </td>
+                                    <td>
+                                        Miami, FL<a href="#"><i class="fa fa-map-marker fa-fw text-muted"></i></a>
+                                    </td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-right">
+                                        <a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
+                                        <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
+                                    </td>
+                                </tr>
+                            <tr>
+                                <td>
+                                    <input type="checkbox"/>
+                                </td>
+                                <td>
+                                    <span class="label label-primary">19/09/2014</span>
+                                </td>
+                                <td>
+                                    <img src="/images/people/110/woman-4.jpg" width="40" class="img-circle"/> Michelle Smith
+                                </td>
+                                <td>
+                                    Amsterdam, EU <a href="#"><i class="fa fa-map-marker fa-fw text-muted"></i></a>
+                                </td>
+                                <td>
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-right">
+                                    <a href="#" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
+                                    <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"><button type="button" class="btn btn-primary">Thêm</button></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+</div>
+             
+      
+

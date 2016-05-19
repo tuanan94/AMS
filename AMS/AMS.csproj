@@ -198,6 +198,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ManagementController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -301,6 +302,7 @@
     <Content Include="Content\fonts\picto-foundry-weather.ttf" />
     <Content Include="Content\fonts\picto-foundry-weather.woff" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
+    <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\graph.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -355,6 +357,15 @@
     <Content Include="Views\Home\ManageMember.cshtml" />
     <Content Include="Views\Service\Provider.cshtml" />
     <Content Include="Views\Service\SendRequest.cshtml" />
+    <Content Include="Views\Management\__ManagementLayout.cshtml" />
+    <Content Include="Views\Management\AdminBoard.cshtml" />
+    <Content Include="Views\Management\ManageHousehold.cshtml" />
+    <Content Include="Views\Management\ManageRequest.cshtml" />
+    <Content Include="Views\Management\ManageIncome.cshtml" />
+    <Content Include="Views\Management\ManageReipt.cshtml" />
+    <Content Include="Views\Management\ViewReceipt.cshtml" />
+    <Content Include="Views\Management\CreateReceipt.cshtml" />
+    <Content Include="Views\Management\ManageReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

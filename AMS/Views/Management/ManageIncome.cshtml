@@ -1,0 +1,163 @@
+﻿@{
+    ViewBag.Title = "ManageIncome";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+
+    <script src="~/Scripts/Chart.min.js"></script>
+}
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-gray">Quản lý thu chi</div>
+        <div class="panel-body">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active">
+                    <a href="#thismonth" role="tab" data-toggle="tab"><i class="fa fa-fw fa-calendar"></i> Thu và chi</a>
+                </li>
+
+                <li class="">
+                    <a href="#graph" role="tab" data-toggle="tab"><i class="fa fa-fw fa-pie-chart"></i> Thống kê</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="thismonth">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <form class="form-horizontal" role="form">
+                                <div class="col-md-4 pull-right">
+                                    <div class="col-md-2">
+                                        <button type="submit" class="btn btn-primary">Thêm thu nhập </button>
+                                    </div>
+                                    <div class="col-sm-offset-4 col-md-2">
+                                        <button type="submit" class="btn btn-primary">Thêm chi tiêu </button>
+
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table v-middle">
+                                        <thead>
+                                            <tr>
+
+                                                <th>Ngày</th>
+                                                <th>Mô tả</th>
+                                                <th>Số tiền</th>
+                                                <th>Loại </th>
+
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+
+                                                <td>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-9">
+                                                            <input type="text" type="text" class="form-control datepicker">
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-9">
+                                                            <input type="email" class="form-control" id="inputEmail3" placeholder="Type here..">
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-9">
+                                                            <input type="email" class="form-control" id="inputEmail3" placeholder="Type here..">
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-9">
+                                                            <select name="select" class="selectpicker" data-size="5">
+                                                                <optgroup label="Thu">
+                                                                    <option>Tiền nhà</option>
+                                                                    <option>Tiền điện</option>
+                                                                    <option>Tiền nước</option>
+                                                                    <option>Phí sữa chữa</option>
+                                                                </optgroup>
+                                                                <optgroup label="Chi">
+                                                                    <option>Item 3</option>
+                                                                    <option>Item 4</option>
+                                                                </optgroup>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+
+                                            </tr>
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="all">
+                    <div class="panel panel-default">
+
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="graph">
+                    <canvas id="canvas" height="450" width="610"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer padding-none text-center">
+            <ul class="pagination">
+                <li>
+                    <a href="#">«</a>
+                </li>
+                <li class="active">
+                    <a href="#">1</a>
+                </li>
+                <li>
+                    <a href="#">2</a>
+                </li>
+                <li>
+                    <a href="#">3</a>
+                </li>
+                <li>
+                    <a href="#">4</a>
+                </li>
+                <li>
+                    <a href="#">5</a>
+                </li>
+                <li>
+                    <a href="#">»</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+    var BarChart = {
+        labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5"],
+        datasets: [
+            {
+                fillColor: "rgb(0, 0, 153)",
+                strokeColor: "rgba(255,255,255,1)",
+                data: [13, 20, 30, 40, 50]
+            },
+            {
+                fillColor: "rgb(204, 51, 0)",
+                strokeColor: "rgba(255,255,255,1)",
+                data: [28, 68, 40, 19, 96]
+            }
+        ]
+
+    }
+
+    var myBarChart = new Chart(document.getElementById("canvas").getContext("2d")).Bar(BarChart, { scaleFontSize: 13, scaleFontColor: "#003300" });
+
+</script>
