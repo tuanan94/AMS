@@ -18,7 +18,7 @@ namespace AMS.Service
             House h = new House();
             h.Block = Block;
             h.Floor = Floor;
-            h.RoomName = HouseName;
+            h.HouseName = HouseName;
             testRepository.Add(h);
         }
     }

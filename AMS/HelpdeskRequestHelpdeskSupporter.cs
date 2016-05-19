@@ -15,7 +15,7 @@ namespace AMS
     public partial class HelpdeskRequestHelpdeskSupporter
     {
         public int Id { get; set; }
-        public Nullable<int> HelpdeskId { get; set; }
+        public Nullable<int> HelpdeskSupporterId { get; set; }
         public Nullable<int> HelpdeskRequestId { get; set; }
         public Nullable<int> Status { get; set; }
     
