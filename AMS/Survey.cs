@@ -24,9 +24,9 @@ namespace AMS
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public Nullable<long> StartDate { get; set; }
-        public Nullable<long> EndDate { get; set; }
-        public Nullable<long> PublishDate { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
+        public Nullable<System.DateTime> PublishDate { get; set; }
         public Nullable<int> Status { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

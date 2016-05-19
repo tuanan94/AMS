@@ -26,7 +26,6 @@ namespace AMS
         }
     
         public virtual DbSet<Answer> Answers { get; set; }
-        public virtual DbSet<Apartment> Apartments { get; set; }
         public virtual DbSet<AroundProvider> AroundProviders { get; set; }
         public virtual DbSet<AroundProviderCategory> AroundProviderCategories { get; set; }
         public virtual DbSet<HelpdeskRequest> HelpdeskRequests { get; set; }
@@ -45,6 +44,7 @@ namespace AMS
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<ServiceFee> ServiceFees { get; set; }
         public virtual DbSet<Survey> Surveys { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAnswerSurvey> UserAnswerSurveys { get; set; }
         public virtual DbSet<UserInHouse> UserInHouses { get; set; }

@@ -13,5 +13,13 @@ namespace AMS.Service
         {
             return testRepository.List.ToList();
         }
+        public void addHouse(String Block, String Floor, String HouseName)
+        {
+            House h = new House();
+            h.Block = Block;
+            h.Floor = Floor;
+            h.HouseName = HouseName;
+            testRepository.Add(h);
+        }
     }
 }

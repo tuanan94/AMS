@@ -4,18 +4,17 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="22695d27372c477f99c3a5afc74f4bca" Name="Diagram1">
+      <Diagram DiagramId="c003a4863a0740b3b00611f09f72e51e" Name="Diagram1">
         <EntityTypeShape EntityType="AMSModel.Answer" Width="1.5" PointX="6" PointY="29.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="AMSModel.Apartment" Width="1.5" PointX="0.75" PointY="9.625" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.AroundProvider" Width="1.5" PointX="6" PointY="5.125" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.AroundProviderCategory" Width="1.5" PointX="3.75" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="AMSModel.HelpdeskRequest" Width="1.5" PointX="3" PointY="20.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="AMSModel.HelpdeskRequest" Width="1.5" PointX="3" PointY="20.375" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.HelpdeskRequestHelpdeskSupporter" Width="1.5" PointX="5.25" PointY="15.5" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.HelpdeskRequestLog" Width="1.5" PointX="8.25" PointY="15.25" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.HelpdeskRequestManager" Width="1.5" PointX="5.25" PointY="12.5" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.HelpdeskService" Width="1.5" PointX="0.75" PointY="21.25" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.HelpdeskServiceCategory" Width="1.5" PointX="1.5" PointY="25.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="AMSModel.House" Width="1.5" PointX="3" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="AMSModel.House" Width="1.5" PointX="3" PointY="9.25" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.PendingMemberRequest" Width="1.5" PointX="5.25" PointY="20.5" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.Post" Width="1.5" PointX="5.25" PointY="24.5" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.Question" Width="1.5" PointX="3.75" PointY="29.625" IsExpanded="true" />
@@ -25,13 +24,13 @@
         <EntityTypeShape EntityType="AMSModel.Role" Width="1.5" PointX="0.75" PointY="15.75" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.ServiceFee" Width="1.5" PointX="5.25" PointY="32.5" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.Survey" Width="1.5" PointX="1.5" PointY="29.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="AMSModel.sysdiagram" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.User" Width="1.5" PointX="3" PointY="14.375" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.UserAnswerSurvey" Width="1.5" PointX="8.25" PointY="19.375" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.UserInHouse" Width="1.5" PointX="5.25" PointY="9.5" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.UserProfile" Width="1.5" PointX="5.25" PointY="37.75" IsExpanded="true" />
         <AssociationConnector Association="AMSModel.FK_Answer_Question" ManuallyRouted="false" />
         <AssociationConnector Association="AMSModel.FK_UserDoServey_Answer" ManuallyRouted="false" />
-        <AssociationConnector Association="AMSModel.FK_tbl_house_tbl_appartment" ManuallyRouted="false" />
         <AssociationConnector Association="AMSModel.FK_tbl_arround_srv_tbl_around_srv_cat" ManuallyRouted="false" />
         <AssociationConnector Association="AMSModel.FK_tbl_resident_rate_around_srv_tbl_arround_srv" ManuallyRouted="false" />
         <AssociationConnector Association="AMSModel.FK_HelpdeskRequestLog_HelpdeskReq" ManuallyRouted="false" />
