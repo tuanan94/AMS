@@ -1,0 +1,28 @@
+﻿@{ 
+    List<House> allHouse = ViewBag.allHouse;
+}
+<div id="content">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>House ID</th>
+                <th>House Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ 
+                foreach(House h in allHouse)
+                {
+                    <tr>
+                        <th>
+                            @h.Id
+                        </th>
+                        <th>
+                            @h.RoomName
+                        </th>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

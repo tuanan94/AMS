@@ -1,0 +1,757 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="AMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Answer">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AnswerContent" Type="nvarchar" MaxLength="255" />
+    <Property Name="QuestionId" Type="int" />
+  </EntityType>
+  <EntityType Name="Apartment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="255" />
+    <Property Name="Address" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="AroundProvider">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="255" />
+    <Property Name="Description" Type="nvarchar(max)" />
+    <Property Name="Tel" Type="varchar" MaxLength="11" />
+    <Property Name="Address" Type="nvarchar" MaxLength="255" />
+    <Property Name="GoogleMapUrl" Type="nvarchar" MaxLength="255" />
+    <Property Name="ClickCount" Type="bigint" />
+    <Property Name="AroundProviderCategoryId" Type="int" />
+  </EntityType>
+  <EntityType Name="AroundProviderCategory">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="HelpdeskRequest">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" />
+    <Property Name="CreateDate" Type="bigint" />
+    <Property Name="CloseDate" Type="bigint" />
+    <Property Name="AssignDate" Type="bigint" />
+    <Property Name="Status" Type="int" />
+    <Property Name="Price" Type="float" />
+    <Property Name="HelpdeskServiceId" Type="int" />
+    <Property Name="HelpdeskId" Type="int" />
+    <Property Name="ManagerId" Type="int" />
+    <Property Name="HouseId" Type="int" />
+  </EntityType>
+  <EntityType Name="HelpdeskRequestHelpdeskSupporter">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="HelpdeskId" Type="int" />
+    <Property Name="HelpdeskRequestId" Type="int" />
+    <Property Name="Status" Type="int" />
+  </EntityType>
+  <EntityType Name="HelpdeskRequestLog">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="HelpdeskRequestId" Type="int" />
+    <Property Name="UserIdChangeStatus" Type="int" />
+    <Property Name="CreateDate" Type="bigint" />
+    <Property Name="StatusFrom" Type="int" />
+    <Property Name="StatusTo" Type="int" />
+  </EntityType>
+  <EntityType Name="HelpdeskRequestManager">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="HelpdeskRequestId" Type="int" />
+    <Property Name="ManagerId" Type="int" />
+    <Property Name="Status" Type="int" />
+  </EntityType>
+  <EntityType Name="HelpdeskService">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="255" />
+    <Property Name="Description" Type="nvarchar" MaxLength="255" />
+    <Property Name="Price" Type="float" />
+    <Property Name="Status" Type="int" />
+    <Property Name="HelpdeskServiceCategoryId" Type="int" />
+  </EntityType>
+  <EntityType Name="HelpdeskServiceCategory">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="House">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Block" Type="nvarchar" MaxLength="255" />
+    <Property Name="Floor" Type="nvarchar" MaxLength="255" />
+    <Property Name="RoomName" Type="nvarchar" MaxLength="255" />
+    <Property Name="Description" Type="nvarchar" MaxLength="255" />
+    <Property Name="Area" Type="int" />
+    <Property Name="ApartmentId" Type="int" />
+  </EntityType>
+  <EntityType Name="PendingMemberRequest">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="250" />
+    <Property Name="Description" Type="nvarchar(max)" />
+    <Property Name="CreateDate" Type="bigint" />
+    <Property Name="CloseDate" Type="bigint" />
+    <Property Name="Status" Type="int" />
+    <Property Name="HouseholderId" Type="int" />
+    <Property Name="PendingUserId" Type="int" />
+    <Property Name="ManagerId" Type="int" />
+  </EntityType>
+  <EntityType Name="Post">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="250" />
+    <Property Name="Body" Type="nvarchar(max)" />
+    <Property Name="ImgUrl" Type="varchar" MaxLength="255" />
+    <Property Name="PostStatus" Type="nvarchar" MaxLength="255" />
+    <Property Name="CreateDate" Type="bigint" />
+    <Property Name="UpdateDate" Type="bigint" />
+    <Property Name="Status" Type="int" />
+    <Property Name="PostId" Type="int" />
+    <Property Name="UserId" Type="int" />
+  </EntityType>
+  <EntityType Name="Question">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="QuestionContent" Type="nvarchar(max)" />
+    <Property Name="SurveyId" Type="int" />
+  </EntityType>
+  <EntityType Name="Receipt">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ReceiptCode" Type="varchar" MaxLength="255" />
+    <Property Name="CreateDate" Type="bigint" />
+    <Property Name="Status" Type="int" />
+    <Property Name="HouseId" Type="int" />
+    <Property Name="ManagerId" Type="int" />
+  </EntityType>
+  <EntityType Name="ReceiptDetail">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TotalBill" Type="float" />
+    <Property Name="UnitPrice" Type="float" />
+    <Property Name="Quantity" Type="int" />
+    <Property Name="Unit" Type="nvarchar" MaxLength="255" />
+    <Property Name="ServiceFeeId" Type="int" />
+    <Property Name="ReceiptId" Type="int" />
+  </EntityType>
+  <EntityType Name="ResidentRateAroundProvider">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="AroundProviderId" Type="int" />
+    <Property Name="Point" Type="int" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RoleName" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="ServiceFee">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="255" />
+    <Property Name="Description" Type="nvarchar(max)" />
+    <Property Name="Price" Type="int" />
+    <Property Name="Unit" Type="float" />
+  </EntityType>
+  <EntityType Name="Survey">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="255" />
+    <Property Name="Description" Type="nvarchar(max)" />
+    <Property Name="StartDate" Type="bigint" />
+    <Property Name="EndDate" Type="bigint" />
+    <Property Name="PublishDate" Type="bigint" />
+    <Property Name="Status" Type="int" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Email" Type="varchar" MaxLength="255" />
+    <Property Name="Username" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="Password" Type="varchar" MaxLength="255" />
+    <Property Name="RoleId" Type="int" Nullable="false" />
+    <Property Name="IsApproved" Type="int" />
+  </EntityType>
+  <EntityType Name="UserAnswerSurvey">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SurveyId" Type="int" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="AnswerId" Type="int" />
+  </EntityType>
+  <EntityType Name="UserInHouse">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="HouseId" Type="int" />
+    <Property Name="CreateDate" Type="bigint" />
+  </EntityType>
+  <EntityType Name="UserProfile">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DateOfBirth" Type="bigint" />
+    <Property Name="Gender" Type="int" />
+    <Property Name="Fullname" Type="nvarchar" MaxLength="255" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Answer_Question">
+    <End Role="Question" Type="Self.Question" Multiplicity="0..1" />
+    <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Question">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Answer">
+        <PropertyRef Name="QuestionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HelpdeskRequestLog_HelpdeskReq">
+    <End Role="HelpdeskRequest" Type="Self.HelpdeskRequest" Multiplicity="0..1" />
+    <End Role="HelpdeskRequestLog" Type="Self.HelpdeskRequestLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HelpdeskRequest">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HelpdeskRequestLog">
+        <PropertyRef Name="HelpdeskRequestId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HelpdeskRequestLog_User">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="HelpdeskRequestLog" Type="Self.HelpdeskRequestLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HelpdeskRequestLog">
+        <PropertyRef Name="HelpdeskRequestId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Question_Survey">
+    <End Role="Survey" Type="Self.Survey" Multiplicity="0..1" />
+    <End Role="Question" Type="Self.Question" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Survey">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Question">
+        <PropertyRef Name="SurveyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_arround_srv_tbl_around_srv_cat">
+    <End Role="AroundProviderCategory" Type="Self.AroundProviderCategory" Multiplicity="0..1" />
+    <End Role="AroundProvider" Type="Self.AroundProvider" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AroundProviderCategory">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AroundProvider">
+        <PropertyRef Name="AroundProviderCategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_h_desk_req_h_desk_tbl_h_desk_request">
+    <End Role="HelpdeskRequest" Type="Self.HelpdeskRequest" Multiplicity="0..1" />
+    <End Role="HelpdeskRequestHelpdeskSupporter" Type="Self.HelpdeskRequestHelpdeskSupporter" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HelpdeskRequest">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HelpdeskRequestHelpdeskSupporter">
+        <PropertyRef Name="HelpdeskRequestId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_h_desk_req_h_desk_tbl_user">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="HelpdeskRequestHelpdeskSupporter" Type="Self.HelpdeskRequestHelpdeskSupporter" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HelpdeskRequestHelpdeskSupporter">
+        <PropertyRef Name="HelpdeskId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_h_desk_req_mb_tbl_h_desk_request">
+    <End Role="HelpdeskRequest" Type="Self.HelpdeskRequest" Multiplicity="0..1" />
+    <End Role="HelpdeskRequestManager" Type="Self.HelpdeskRequestManager" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HelpdeskRequest">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HelpdeskRequestManager">
+        <PropertyRef Name="HelpdeskRequestId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_h_desk_req_mb_tbl_user">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="HelpdeskRequestManager" Type="Self.HelpdeskRequestManager" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HelpdeskRequestManager">
+        <PropertyRef Name="ManagerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_h_desk_request_tbl_h_desk_service">
+    <End Role="HelpdeskService" Type="Self.HelpdeskService" Multiplicity="0..1" />
+    <End Role="HelpdeskRequest" Type="Self.HelpdeskRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HelpdeskService">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HelpdeskRequest">
+        <PropertyRef Name="HelpdeskId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_h_desk_request_tbl_house">
+    <End Role="House" Type="Self.House" Multiplicity="0..1" />
+    <End Role="HelpdeskRequest" Type="Self.HelpdeskRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="House">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HelpdeskRequest">
+        <PropertyRef Name="HouseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_h_desk_service_tbl_h_desk_srv_cat">
+    <End Role="HelpdeskServiceCategory" Type="Self.HelpdeskServiceCategory" Multiplicity="0..1" />
+    <End Role="HelpdeskService" Type="Self.HelpdeskService" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HelpdeskServiceCategory">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HelpdeskService">
+        <PropertyRef Name="HelpdeskServiceCategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_house_tbl_appartment">
+    <End Role="Apartment" Type="Self.Apartment" Multiplicity="0..1" />
+    <End Role="House" Type="Self.House" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Apartment">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="House">
+        <PropertyRef Name="ApartmentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_pending_member_request_tbl_user">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="PendingMemberRequest" Type="Self.PendingMemberRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PendingMemberRequest">
+        <PropertyRef Name="HouseholderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_pending_member_request_tbl_user1">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="PendingMemberRequest" Type="Self.PendingMemberRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PendingMemberRequest">
+        <PropertyRef Name="PendingUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_pending_member_request_tbl_user2">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="PendingMemberRequest" Type="Self.PendingMemberRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PendingMemberRequest">
+        <PropertyRef Name="ManagerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_post_tbl_post">
+    <End Role="Post" Type="Self.Post" Multiplicity="0..1" />
+    <End Role="Post1" Type="Self.Post" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Post">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Post1">
+        <PropertyRef Name="PostId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_post_tbl_user">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="Post" Type="Self.Post" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Post">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_receipt_detail_tbl_receipt">
+    <End Role="Receipt" Type="Self.Receipt" Multiplicity="0..1" />
+    <End Role="ReceiptDetail" Type="Self.ReceiptDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Receipt">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ReceiptDetail">
+        <PropertyRef Name="ReceiptId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_receipt_detail_tbl_service_fee">
+    <End Role="ServiceFee" Type="Self.ServiceFee" Multiplicity="0..1" />
+    <End Role="ReceiptDetail" Type="Self.ReceiptDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ServiceFee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ReceiptDetail">
+        <PropertyRef Name="ServiceFeeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_receipt_tbl_house">
+    <End Role="House" Type="Self.House" Multiplicity="1" />
+    <End Role="Receipt" Type="Self.Receipt" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="House">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Receipt">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_resident_rate_around_srv_tbl_arround_srv">
+    <End Role="AroundProvider" Type="Self.AroundProvider" Multiplicity="0..1" />
+    <End Role="ResidentRateAroundProvider" Type="Self.ResidentRateAroundProvider" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AroundProvider">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ResidentRateAroundProvider">
+        <PropertyRef Name="AroundProviderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_resident_rate_around_srv_tbl_user">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="ResidentRateAroundProvider" Type="Self.ResidentRateAroundProvider" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ResidentRateAroundProvider">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_user_in_house_tbl_house">
+    <End Role="House" Type="Self.House" Multiplicity="0..1" />
+    <End Role="UserInHouse" Type="Self.UserInHouse" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="House">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserInHouse">
+        <PropertyRef Name="HouseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_user_in_house_tbl_user">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="UserInHouse" Type="Self.UserInHouse" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserInHouse">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_user_profile_tbl_user">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserProfile">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_user_tbl_role">
+    <End Role="Role" Type="Self.Role" Multiplicity="1" />
+    <End Role="User" Type="Self.User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserDoServey_Answer">
+    <End Role="Answer" Type="Self.Answer" Multiplicity="0..1" />
+    <End Role="UserAnswerSurvey" Type="Self.UserAnswerSurvey" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Answer">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserAnswerSurvey">
+        <PropertyRef Name="AnswerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserDoServey_Survey">
+    <End Role="Survey" Type="Self.Survey" Multiplicity="0..1" />
+    <End Role="UserAnswerSurvey" Type="Self.UserAnswerSurvey" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Survey">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserAnswerSurvey">
+        <PropertyRef Name="SurveyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserDoServey_User">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="UserAnswerSurvey" Type="Self.UserAnswerSurvey" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserAnswerSurvey">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="AMSModelStoreContainer">
+    <EntitySet Name="Answer" EntityType="Self.Answer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Apartment" EntityType="Self.Apartment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AroundProvider" EntityType="Self.AroundProvider" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AroundProviderCategory" EntityType="Self.AroundProviderCategory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HelpdeskRequest" EntityType="Self.HelpdeskRequest" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HelpdeskRequestHelpdeskSupporter" EntityType="Self.HelpdeskRequestHelpdeskSupporter" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HelpdeskRequestLog" EntityType="Self.HelpdeskRequestLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HelpdeskRequestManager" EntityType="Self.HelpdeskRequestManager" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HelpdeskService" EntityType="Self.HelpdeskService" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HelpdeskServiceCategory" EntityType="Self.HelpdeskServiceCategory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="House" EntityType="Self.House" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PendingMemberRequest" EntityType="Self.PendingMemberRequest" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Post" EntityType="Self.Post" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Receipt" EntityType="Self.Receipt" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ReceiptDetail" EntityType="Self.ReceiptDetail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ResidentRateAroundProvider" EntityType="Self.ResidentRateAroundProvider" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ServiceFee" EntityType="Self.ServiceFee" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Survey" EntityType="Self.Survey" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserAnswerSurvey" EntityType="Self.UserAnswerSurvey" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserInHouse" EntityType="Self.UserInHouse" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserProfile" EntityType="Self.UserProfile" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Answer_Question" Association="Self.FK_Answer_Question">
+      <End Role="Question" EntitySet="Question" />
+      <End Role="Answer" EntitySet="Answer" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HelpdeskRequestLog_HelpdeskReq" Association="Self.FK_HelpdeskRequestLog_HelpdeskReq">
+      <End Role="HelpdeskRequest" EntitySet="HelpdeskRequest" />
+      <End Role="HelpdeskRequestLog" EntitySet="HelpdeskRequestLog" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HelpdeskRequestLog_User" Association="Self.FK_HelpdeskRequestLog_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="HelpdeskRequestLog" EntitySet="HelpdeskRequestLog" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Question_Survey" Association="Self.FK_Question_Survey">
+      <End Role="Survey" EntitySet="Survey" />
+      <End Role="Question" EntitySet="Question" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_arround_srv_tbl_around_srv_cat" Association="Self.FK_tbl_arround_srv_tbl_around_srv_cat">
+      <End Role="AroundProviderCategory" EntitySet="AroundProviderCategory" />
+      <End Role="AroundProvider" EntitySet="AroundProvider" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_h_desk_req_h_desk_tbl_h_desk_request" Association="Self.FK_tbl_h_desk_req_h_desk_tbl_h_desk_request">
+      <End Role="HelpdeskRequest" EntitySet="HelpdeskRequest" />
+      <End Role="HelpdeskRequestHelpdeskSupporter" EntitySet="HelpdeskRequestHelpdeskSupporter" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_h_desk_req_h_desk_tbl_user" Association="Self.FK_tbl_h_desk_req_h_desk_tbl_user">
+      <End Role="User" EntitySet="User" />
+      <End Role="HelpdeskRequestHelpdeskSupporter" EntitySet="HelpdeskRequestHelpdeskSupporter" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_h_desk_req_mb_tbl_h_desk_request" Association="Self.FK_tbl_h_desk_req_mb_tbl_h_desk_request">
+      <End Role="HelpdeskRequest" EntitySet="HelpdeskRequest" />
+      <End Role="HelpdeskRequestManager" EntitySet="HelpdeskRequestManager" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_h_desk_req_mb_tbl_user" Association="Self.FK_tbl_h_desk_req_mb_tbl_user">
+      <End Role="User" EntitySet="User" />
+      <End Role="HelpdeskRequestManager" EntitySet="HelpdeskRequestManager" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_h_desk_request_tbl_h_desk_service" Association="Self.FK_tbl_h_desk_request_tbl_h_desk_service">
+      <End Role="HelpdeskService" EntitySet="HelpdeskService" />
+      <End Role="HelpdeskRequest" EntitySet="HelpdeskRequest" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_h_desk_request_tbl_house" Association="Self.FK_tbl_h_desk_request_tbl_house">
+      <End Role="House" EntitySet="House" />
+      <End Role="HelpdeskRequest" EntitySet="HelpdeskRequest" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_h_desk_service_tbl_h_desk_srv_cat" Association="Self.FK_tbl_h_desk_service_tbl_h_desk_srv_cat">
+      <End Role="HelpdeskServiceCategory" EntitySet="HelpdeskServiceCategory" />
+      <End Role="HelpdeskService" EntitySet="HelpdeskService" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_house_tbl_appartment" Association="Self.FK_tbl_house_tbl_appartment">
+      <End Role="Apartment" EntitySet="Apartment" />
+      <End Role="House" EntitySet="House" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_pending_member_request_tbl_user" Association="Self.FK_tbl_pending_member_request_tbl_user">
+      <End Role="User" EntitySet="User" />
+      <End Role="PendingMemberRequest" EntitySet="PendingMemberRequest" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_pending_member_request_tbl_user1" Association="Self.FK_tbl_pending_member_request_tbl_user1">
+      <End Role="User" EntitySet="User" />
+      <End Role="PendingMemberRequest" EntitySet="PendingMemberRequest" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_pending_member_request_tbl_user2" Association="Self.FK_tbl_pending_member_request_tbl_user2">
+      <End Role="User" EntitySet="User" />
+      <End Role="PendingMemberRequest" EntitySet="PendingMemberRequest" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_post_tbl_post" Association="Self.FK_tbl_post_tbl_post">
+      <End Role="Post" EntitySet="Post" />
+      <End Role="Post1" EntitySet="Post" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_post_tbl_user" Association="Self.FK_tbl_post_tbl_user">
+      <End Role="User" EntitySet="User" />
+      <End Role="Post" EntitySet="Post" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_receipt_detail_tbl_receipt" Association="Self.FK_tbl_receipt_detail_tbl_receipt">
+      <End Role="Receipt" EntitySet="Receipt" />
+      <End Role="ReceiptDetail" EntitySet="ReceiptDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_receipt_detail_tbl_service_fee" Association="Self.FK_tbl_receipt_detail_tbl_service_fee">
+      <End Role="ServiceFee" EntitySet="ServiceFee" />
+      <End Role="ReceiptDetail" EntitySet="ReceiptDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_receipt_tbl_house" Association="Self.FK_tbl_receipt_tbl_house">
+      <End Role="House" EntitySet="House" />
+      <End Role="Receipt" EntitySet="Receipt" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_resident_rate_around_srv_tbl_arround_srv" Association="Self.FK_tbl_resident_rate_around_srv_tbl_arround_srv">
+      <End Role="AroundProvider" EntitySet="AroundProvider" />
+      <End Role="ResidentRateAroundProvider" EntitySet="ResidentRateAroundProvider" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_resident_rate_around_srv_tbl_user" Association="Self.FK_tbl_resident_rate_around_srv_tbl_user">
+      <End Role="User" EntitySet="User" />
+      <End Role="ResidentRateAroundProvider" EntitySet="ResidentRateAroundProvider" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_user_in_house_tbl_house" Association="Self.FK_tbl_user_in_house_tbl_house">
+      <End Role="House" EntitySet="House" />
+      <End Role="UserInHouse" EntitySet="UserInHouse" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_user_in_house_tbl_user" Association="Self.FK_tbl_user_in_house_tbl_user">
+      <End Role="User" EntitySet="User" />
+      <End Role="UserInHouse" EntitySet="UserInHouse" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_user_profile_tbl_user" Association="Self.FK_tbl_user_profile_tbl_user">
+      <End Role="User" EntitySet="User" />
+      <End Role="UserProfile" EntitySet="UserProfile" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_user_tbl_role" Association="Self.FK_tbl_user_tbl_role">
+      <End Role="Role" EntitySet="Role" />
+      <End Role="User" EntitySet="User" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserDoServey_Answer" Association="Self.FK_UserDoServey_Answer">
+      <End Role="Answer" EntitySet="Answer" />
+      <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurvey" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserDoServey_Survey" Association="Self.FK_UserDoServey_Survey">
+      <End Role="Survey" EntitySet="Survey" />
+      <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurvey" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserDoServey_User" Association="Self.FK_UserDoServey_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurvey" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

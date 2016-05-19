@@ -1,4 +1,5 @@
-﻿@{
+﻿@model AMS.ViewModel.MemberViewModel
+@{
     ViewBag.Title = "ManageMember";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
 }
@@ -78,7 +79,8 @@
     </div>
   
 </div>
-
+@using (Html.BeginForm("", "Home", FormMethod.Post))
+{   
 
   <div id="myModal" class="modal fade">
     <div class="modal-dialog">
@@ -92,6 +94,7 @@
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
                             <label for="inputEmail3" class="col-sm-3 control-label">Tên</label>
+                            @Html.TextBoxFor(m => m.Name)
                             <div class="col-sm-9">
                                 <input type="email" class="form-control" id="inputEmail3" value="Mr. A">
                             </div>
@@ -142,3 +145,4 @@
     </div>
 </div>
 
+}

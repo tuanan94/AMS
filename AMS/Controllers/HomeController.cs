@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AMS.Service;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,7 +9,13 @@ namespace AMS.Controllers
 {
     public class HomeController : Controller
     {
-
+        TestService testService = new TestService();
+        public ActionResult Test()
+        {
+            List<House> allHouse = testService.getAllHouse();
+            ViewBag.allHouse = allHouse;
+            return View();
+         }
         public ActionResult Index()
         {
             return View();
