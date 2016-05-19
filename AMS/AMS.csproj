@@ -366,6 +366,7 @@
     <Content Include="Views\Management\ViewReceipt.cshtml" />
     <Content Include="Views\Management\CreateReceipt.cshtml" />
     <Content Include="Views\Management\ManageReport.cshtml" />
+    <Content Include="Views\Management\ManageSurvey.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

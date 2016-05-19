@@ -31,6 +31,10 @@ namespace AMS.Controllers
         {
             return View();
         }
+        public ActionResult ManageSurvey()
+        {
+            return View();
+        }
         public ActionResult ManageReipt()
         {
             return View();
