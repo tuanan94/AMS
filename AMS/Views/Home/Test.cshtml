@@ -2,6 +2,8 @@
     List<House> allHouse = ViewBag.allHouse;
 }
 <div id="content">
+    
+
     <table class="table">
         <thead>
             <tr>
@@ -25,4 +27,11 @@
             }
         </tbody>
     </table>
+    @using (Html.BeginForm("addBaiViet", "Quanli", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+
+
+    }
+
+
 </div>
