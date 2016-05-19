@@ -49,7 +49,7 @@
             success: function (data) {
                 var obj = JSON.parse(data);
                 $.each(obj, function (index, jsonObject) {
-                    $("#housetablebody").append('<tr><td>' + jsonObject["Block"] + '</td><td>' + jsonObject["Floor"] + '<td/><td>' + jsonObject["RoomName"] + '</td></tr>')
+                    $("#housetablebody").append('<tr><td>' + jsonObject["Block"] + '</td><td>' + jsonObject["Floor"] + '<td/><td>' + jsonObject["HouseName"] + '</td></tr>')
                 });
 
             },

@@ -36,7 +36,10 @@ namespace AMS.Controllers
         [HttpGet]
         public Object allHouse()
         {
-            return JsonConvert.SerializeObject(testService.getAllHouse());
+            return JsonConvert.SerializeObject(testService.getAllHouse(),Formatting.Indented, new JsonSerializerSettings
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects
+            });
 
         }
         [HttpPost]
