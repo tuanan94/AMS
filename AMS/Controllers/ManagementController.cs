@@ -69,7 +69,11 @@ namespace AMS.Controllers
         {
             return View();
         }
-        public ActionResult ManageReipt()
+        public ActionResult ManageSurvey()
+        {
+            return View();
+        }
+        public ActionResult ManageReceipt()
         {
             return View();
         }

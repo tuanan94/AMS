@@ -19,10 +19,7 @@ namespace AMS
         {
             this.HelpdeskRequestHelpdeskSupporters = new HashSet<HelpdeskRequestHelpdeskSupporter>();
             this.HelpdeskRequestLogs = new HashSet<HelpdeskRequestLog>();
-            this.HelpdeskRequestManagers = new HashSet<HelpdeskRequestManager>();
-            this.PendingMemberRequests = new HashSet<PendingMemberRequest>();
-            this.PendingMemberRequests1 = new HashSet<PendingMemberRequest>();
-            this.PendingMemberRequests2 = new HashSet<PendingMemberRequest>();
+            this.HelpdeskRequestLogs1 = new HashSet<HelpdeskRequestLog>();
             this.Posts = new HashSet<Post>();
             this.ResidentRateAroundProviders = new HashSet<ResidentRateAroundProvider>();
             this.UserInHouses = new HashSet<UserInHouse>();
@@ -35,20 +32,13 @@ namespace AMS
         public string Username { get; set; }
         public string Password { get; set; }
         public int RoleId { get; set; }
-        public Nullable<int> IsApproved { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HelpdeskRequestHelpdeskSupporter> HelpdeskRequestHelpdeskSupporters { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HelpdeskRequestLog> HelpdeskRequestLogs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<HelpdeskRequestManager> HelpdeskRequestManagers { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PendingMemberRequest> PendingMemberRequests { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PendingMemberRequest> PendingMemberRequests1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PendingMemberRequest> PendingMemberRequests2 { get; set; }
+        public virtual ICollection<HelpdeskRequestLog> HelpdeskRequestLogs1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Post> Posts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

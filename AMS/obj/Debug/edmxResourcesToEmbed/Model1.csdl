@@ -1,0 +1,705 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="AMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="AMSEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Answers" EntityType="AMSModel.Answer" />
+    <EntitySet Name="AroundProviders" EntityType="AMSModel.AroundProvider" />
+    <EntitySet Name="AroundProviderCategories" EntityType="AMSModel.AroundProviderCategory" />
+    <EntitySet Name="HelpdeskRequests" EntityType="AMSModel.HelpdeskRequest" />
+    <EntitySet Name="HelpdeskRequestHelpdeskSupporters" EntityType="AMSModel.HelpdeskRequestHelpdeskSupporter" />
+    <EntitySet Name="HelpdeskRequestLogs" EntityType="AMSModel.HelpdeskRequestLog" />
+    <EntitySet Name="HelpdeskServices" EntityType="AMSModel.HelpdeskService" />
+    <EntitySet Name="HelpdeskServiceCategories" EntityType="AMSModel.HelpdeskServiceCategory" />
+    <EntitySet Name="Houses" EntityType="AMSModel.House" />
+    <EntitySet Name="Posts" EntityType="AMSModel.Post" />
+    <EntitySet Name="Questions" EntityType="AMSModel.Question" />
+    <EntitySet Name="Receipts" EntityType="AMSModel.Receipt" />
+    <EntitySet Name="ReceiptDetails" EntityType="AMSModel.ReceiptDetail" />
+    <EntitySet Name="ResidentRateAroundProviders" EntityType="AMSModel.ResidentRateAroundProvider" />
+    <EntitySet Name="Roles" EntityType="AMSModel.Role" />
+    <EntitySet Name="ServiceFees" EntityType="AMSModel.ServiceFee" />
+    <EntitySet Name="Surveys" EntityType="AMSModel.Survey" />
+    <EntitySet Name="sysdiagrams" EntityType="AMSModel.sysdiagram" />
+    <EntitySet Name="Users" EntityType="AMSModel.User" />
+    <EntitySet Name="UserAnswerSurveys" EntityType="AMSModel.UserAnswerSurvey" />
+    <EntitySet Name="UserInHouses" EntityType="AMSModel.UserInHouse" />
+    <EntitySet Name="UserProfiles" EntityType="AMSModel.UserProfile" />
+    <AssociationSet Name="FK_Answer_Question" Association="AMSModel.FK_Answer_Question">
+      <End Role="Question" EntitySet="Questions" />
+      <End Role="Answer" EntitySet="Answers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserDoServey_Answer" Association="AMSModel.FK_UserDoServey_Answer">
+      <End Role="Answer" EntitySet="Answers" />
+      <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurveys" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_arround_srv_tbl_around_srv_cat" Association="AMSModel.FK_tbl_arround_srv_tbl_around_srv_cat">
+      <End Role="AroundProviderCategory" EntitySet="AroundProviderCategories" />
+      <End Role="AroundProvider" EntitySet="AroundProviders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_resident_rate_around_srv_tbl_arround_srv" Association="AMSModel.FK_tbl_resident_rate_around_srv_tbl_arround_srv">
+      <End Role="AroundProvider" EntitySet="AroundProviders" />
+      <End Role="ResidentRateAroundProvider" EntitySet="ResidentRateAroundProviders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HelpdeskRequestLog_HelpdeskReq" Association="AMSModel.FK_HelpdeskRequestLog_HelpdeskReq">
+      <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
+      <End Role="HelpdeskRequestLog" EntitySet="HelpdeskRequestLogs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_h_desk_req_h_desk_tbl_h_desk_request" Association="AMSModel.FK_tbl_h_desk_req_h_desk_tbl_h_desk_request">
+      <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
+      <End Role="HelpdeskRequestHelpdeskSupporter" EntitySet="HelpdeskRequestHelpdeskSupporters" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_h_desk_request_tbl_h_desk_service" Association="AMSModel.FK_tbl_h_desk_request_tbl_h_desk_service">
+      <End Role="HelpdeskService" EntitySet="HelpdeskServices" />
+      <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_h_desk_request_tbl_house" Association="AMSModel.FK_tbl_h_desk_request_tbl_house">
+      <End Role="House" EntitySet="Houses" />
+      <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_h_desk_req_h_desk_tbl_user" Association="AMSModel.FK_tbl_h_desk_req_h_desk_tbl_user">
+      <End Role="User" EntitySet="Users" />
+      <End Role="HelpdeskRequestHelpdeskSupporter" EntitySet="HelpdeskRequestHelpdeskSupporters" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HelpdeskRequestLog_User1" Association="AMSModel.FK_HelpdeskRequestLog_User1">
+      <End Role="User" EntitySet="Users" />
+      <End Role="HelpdeskRequestLog" EntitySet="HelpdeskRequestLogs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HelpdeskRequestLog_User2" Association="AMSModel.FK_HelpdeskRequestLog_User2">
+      <End Role="User" EntitySet="Users" />
+      <End Role="HelpdeskRequestLog" EntitySet="HelpdeskRequestLogs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_h_desk_service_tbl_h_desk_srv_cat" Association="AMSModel.FK_tbl_h_desk_service_tbl_h_desk_srv_cat">
+      <End Role="HelpdeskServiceCategory" EntitySet="HelpdeskServiceCategories" />
+      <End Role="HelpdeskService" EntitySet="HelpdeskServices" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_receipt_tbl_house" Association="AMSModel.FK_tbl_receipt_tbl_house">
+      <End Role="House" EntitySet="Houses" />
+      <End Role="Receipt" EntitySet="Receipts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_user_in_house_tbl_house" Association="AMSModel.FK_tbl_user_in_house_tbl_house">
+      <End Role="House" EntitySet="Houses" />
+      <End Role="UserInHouse" EntitySet="UserInHouses" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_post_tbl_post" Association="AMSModel.FK_tbl_post_tbl_post">
+      <End Role="Post" EntitySet="Posts" />
+      <End Role="Post1" EntitySet="Posts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_post_tbl_user" Association="AMSModel.FK_tbl_post_tbl_user">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Post" EntitySet="Posts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Question_Survey" Association="AMSModel.FK_Question_Survey">
+      <End Role="Survey" EntitySet="Surveys" />
+      <End Role="Question" EntitySet="Questions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_receipt_detail_tbl_receipt" Association="AMSModel.FK_tbl_receipt_detail_tbl_receipt">
+      <End Role="Receipt" EntitySet="Receipts" />
+      <End Role="ReceiptDetail" EntitySet="ReceiptDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_receipt_detail_tbl_service_fee" Association="AMSModel.FK_tbl_receipt_detail_tbl_service_fee">
+      <End Role="ServiceFee" EntitySet="ServiceFees" />
+      <End Role="ReceiptDetail" EntitySet="ReceiptDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_resident_rate_around_srv_tbl_user" Association="AMSModel.FK_tbl_resident_rate_around_srv_tbl_user">
+      <End Role="User" EntitySet="Users" />
+      <End Role="ResidentRateAroundProvider" EntitySet="ResidentRateAroundProviders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_user_tbl_role" Association="AMSModel.FK_tbl_user_tbl_role">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserDoServey_Survey" Association="AMSModel.FK_UserDoServey_Survey">
+      <End Role="Survey" EntitySet="Surveys" />
+      <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurveys" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_user_in_house_tbl_user" Association="AMSModel.FK_tbl_user_in_house_tbl_user">
+      <End Role="User" EntitySet="Users" />
+      <End Role="UserInHouse" EntitySet="UserInHouses" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_user_profile_tbl_user" Association="AMSModel.FK_tbl_user_profile_tbl_user">
+      <End Role="User" EntitySet="Users" />
+      <End Role="UserProfile" EntitySet="UserProfiles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserDoServey_User" Association="AMSModel.FK_UserDoServey_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurveys" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Answer">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AnswerContent" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="QuestionId" Type="Int32" />
+    <NavigationProperty Name="Question" Relationship="AMSModel.FK_Answer_Question" FromRole="Answer" ToRole="Question" />
+    <NavigationProperty Name="UserAnswerSurveys" Relationship="AMSModel.FK_UserDoServey_Answer" FromRole="Answer" ToRole="UserAnswerSurvey" />
+  </EntityType>
+  <EntityType Name="AroundProvider">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Tel" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="GoogleMapUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="ClickCount" Type="Int64" />
+    <Property Name="AroundProviderCategoryId" Type="Int32" />
+    <NavigationProperty Name="AroundProviderCategory" Relationship="AMSModel.FK_tbl_arround_srv_tbl_around_srv_cat" FromRole="AroundProvider" ToRole="AroundProviderCategory" />
+    <NavigationProperty Name="ResidentRateAroundProviders" Relationship="AMSModel.FK_tbl_resident_rate_around_srv_tbl_arround_srv" FromRole="AroundProvider" ToRole="ResidentRateAroundProvider" />
+  </EntityType>
+  <EntityType Name="AroundProviderCategory">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AroundProviders" Relationship="AMSModel.FK_tbl_arround_srv_tbl_around_srv_cat" FromRole="AroundProviderCategory" ToRole="AroundProvider" />
+  </EntityType>
+  <EntityType Name="HelpdeskRequest">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CreateDate" Type="DateTime" Precision="3" />
+    <Property Name="CloseDate" Type="DateTime" Precision="3" />
+    <Property Name="AssignDate" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="Int32" />
+    <Property Name="Price" Type="Double" />
+    <Property Name="HelpdeskServiceId" Type="Int32" />
+    <Property Name="HelpdeskSupporterId" Type="Int32" />
+    <Property Name="ManagerId" Type="Int32" />
+    <Property Name="HouseId" Type="Int32" />
+    <NavigationProperty Name="HelpdeskRequestLogs" Relationship="AMSModel.FK_HelpdeskRequestLog_HelpdeskReq" FromRole="HelpdeskRequest" ToRole="HelpdeskRequestLog" />
+    <NavigationProperty Name="HelpdeskRequestHelpdeskSupporters" Relationship="AMSModel.FK_tbl_h_desk_req_h_desk_tbl_h_desk_request" FromRole="HelpdeskRequest" ToRole="HelpdeskRequestHelpdeskSupporter" />
+    <NavigationProperty Name="HelpdeskService" Relationship="AMSModel.FK_tbl_h_desk_request_tbl_h_desk_service" FromRole="HelpdeskRequest" ToRole="HelpdeskService" />
+    <NavigationProperty Name="House" Relationship="AMSModel.FK_tbl_h_desk_request_tbl_house" FromRole="HelpdeskRequest" ToRole="House" />
+  </EntityType>
+  <EntityType Name="HelpdeskRequestHelpdeskSupporter">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="HelpdeskSupporterId" Type="Int32" />
+    <Property Name="HelpdeskRequestId" Type="Int32" />
+    <Property Name="Status" Type="Int32" />
+    <NavigationProperty Name="HelpdeskRequest" Relationship="AMSModel.FK_tbl_h_desk_req_h_desk_tbl_h_desk_request" FromRole="HelpdeskRequestHelpdeskSupporter" ToRole="HelpdeskRequest" />
+    <NavigationProperty Name="User" Relationship="AMSModel.FK_tbl_h_desk_req_h_desk_tbl_user" FromRole="HelpdeskRequestHelpdeskSupporter" ToRole="User" />
+  </EntityType>
+  <EntityType Name="HelpdeskRequestLog">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="HelpdeskRequestId" Type="Int32" />
+    <Property Name="ChangeFromUserId" Type="Int32" />
+    <Property Name="ChangeToUserId" Type="Int32" />
+    <Property Name="CreateDate" Type="Int64" />
+    <Property Name="StatusFrom" Type="Int32" />
+    <Property Name="StatusTo" Type="Int32" />
+    <NavigationProperty Name="HelpdeskRequest" Relationship="AMSModel.FK_HelpdeskRequestLog_HelpdeskReq" FromRole="HelpdeskRequestLog" ToRole="HelpdeskRequest" />
+    <NavigationProperty Name="User" Relationship="AMSModel.FK_HelpdeskRequestLog_User1" FromRole="HelpdeskRequestLog" ToRole="User" />
+    <NavigationProperty Name="User1" Relationship="AMSModel.FK_HelpdeskRequestLog_User2" FromRole="HelpdeskRequestLog" ToRole="User" />
+  </EntityType>
+  <EntityType Name="HelpdeskService">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Price" Type="Double" />
+    <Property Name="Status" Type="Int32" />
+    <Property Name="HelpdeskServiceCategoryId" Type="Int32" />
+    <NavigationProperty Name="HelpdeskRequests" Relationship="AMSModel.FK_tbl_h_desk_request_tbl_h_desk_service" FromRole="HelpdeskService" ToRole="HelpdeskRequest" />
+    <NavigationProperty Name="HelpdeskServiceCategory" Relationship="AMSModel.FK_tbl_h_desk_service_tbl_h_desk_srv_cat" FromRole="HelpdeskService" ToRole="HelpdeskServiceCategory" />
+  </EntityType>
+  <EntityType Name="HelpdeskServiceCategory">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="HelpdeskServices" Relationship="AMSModel.FK_tbl_h_desk_service_tbl_h_desk_srv_cat" FromRole="HelpdeskServiceCategory" ToRole="HelpdeskService" />
+  </EntityType>
+  <EntityType Name="House">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Block" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Floor" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="HouseName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Area" Type="Double" />
+    <NavigationProperty Name="HelpdeskRequests" Relationship="AMSModel.FK_tbl_h_desk_request_tbl_house" FromRole="House" ToRole="HelpdeskRequest" />
+    <NavigationProperty Name="Receipt" Relationship="AMSModel.FK_tbl_receipt_tbl_house" FromRole="House" ToRole="Receipt" />
+    <NavigationProperty Name="UserInHouses" Relationship="AMSModel.FK_tbl_user_in_house_tbl_house" FromRole="House" ToRole="UserInHouse" />
+  </EntityType>
+  <EntityType Name="Post">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ImgUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="PostStatus" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="CreateDate" Type="DateTime" Precision="3" />
+    <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="Int32" />
+    <Property Name="PostId" Type="Int32" />
+    <Property Name="UserId" Type="Int32" />
+    <NavigationProperty Name="Post1" Relationship="AMSModel.FK_tbl_post_tbl_post" FromRole="Post" ToRole="Post1" />
+    <NavigationProperty Name="Post2" Relationship="AMSModel.FK_tbl_post_tbl_post" FromRole="Post1" ToRole="Post" />
+    <NavigationProperty Name="User" Relationship="AMSModel.FK_tbl_post_tbl_user" FromRole="Post" ToRole="User" />
+  </EntityType>
+  <EntityType Name="Question">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="QuestionContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SurveyId" Type="Int32" />
+    <NavigationProperty Name="Answers" Relationship="AMSModel.FK_Answer_Question" FromRole="Question" ToRole="Answer" />
+    <NavigationProperty Name="Survey" Relationship="AMSModel.FK_Question_Survey" FromRole="Question" ToRole="Survey" />
+  </EntityType>
+  <EntityType Name="Receipt">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ReceiptCode" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="CreateDate" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="Int32" />
+    <Property Name="HouseId" Type="Int32" />
+    <Property Name="ManagerId" Type="Int32" />
+    <NavigationProperty Name="House" Relationship="AMSModel.FK_tbl_receipt_tbl_house" FromRole="Receipt" ToRole="House" />
+    <NavigationProperty Name="ReceiptDetails" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_receipt" FromRole="Receipt" ToRole="ReceiptDetail" />
+  </EntityType>
+  <EntityType Name="ReceiptDetail">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TotalBill" Type="Double" />
+    <Property Name="UnitPrice" Type="Double" />
+    <Property Name="Quantity" Type="Int32" />
+    <Property Name="Unit" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="ServiceFeeId" Type="Int32" />
+    <Property Name="ReceiptId" Type="Int32" />
+    <NavigationProperty Name="Receipt" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_receipt" FromRole="ReceiptDetail" ToRole="Receipt" />
+    <NavigationProperty Name="ServiceFee" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_service_fee" FromRole="ReceiptDetail" ToRole="ServiceFee" />
+  </EntityType>
+  <EntityType Name="ResidentRateAroundProvider">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="AroundProviderId" Type="Int32" />
+    <Property Name="Point" Type="Int32" />
+    <NavigationProperty Name="AroundProvider" Relationship="AMSModel.FK_tbl_resident_rate_around_srv_tbl_arround_srv" FromRole="ResidentRateAroundProvider" ToRole="AroundProvider" />
+    <NavigationProperty Name="User" Relationship="AMSModel.FK_tbl_resident_rate_around_srv_tbl_user" FromRole="ResidentRateAroundProvider" ToRole="User" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RoleName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Users" Relationship="AMSModel.FK_tbl_user_tbl_role" FromRole="Role" ToRole="User" />
+  </EntityType>
+  <EntityType Name="ServiceFee">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Price" Type="Int32" />
+    <Property Name="Unit" Type="Double" />
+    <NavigationProperty Name="ReceiptDetails" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_service_fee" FromRole="ServiceFee" ToRole="ReceiptDetail" />
+  </EntityType>
+  <EntityType Name="Survey">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="StartDate" Type="DateTime" Precision="3" />
+    <Property Name="EndDate" Type="DateTime" Precision="3" />
+    <Property Name="PublishDate" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="Int32" />
+    <NavigationProperty Name="Questions" Relationship="AMSModel.FK_Question_Survey" FromRole="Survey" ToRole="Question" />
+    <NavigationProperty Name="UserAnswerSurveys" Relationship="AMSModel.FK_UserDoServey_Survey" FromRole="Survey" ToRole="UserAnswerSurvey" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Username" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="RoleId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="HelpdeskRequestHelpdeskSupporters" Relationship="AMSModel.FK_tbl_h_desk_req_h_desk_tbl_user" FromRole="User" ToRole="HelpdeskRequestHelpdeskSupporter" />
+    <NavigationProperty Name="HelpdeskRequestLogs" Relationship="AMSModel.FK_HelpdeskRequestLog_User1" FromRole="User" ToRole="HelpdeskRequestLog" />
+    <NavigationProperty Name="HelpdeskRequestLogs1" Relationship="AMSModel.FK_HelpdeskRequestLog_User2" FromRole="User" ToRole="HelpdeskRequestLog" />
+    <NavigationProperty Name="Posts" Relationship="AMSModel.FK_tbl_post_tbl_user" FromRole="User" ToRole="Post" />
+    <NavigationProperty Name="ResidentRateAroundProviders" Relationship="AMSModel.FK_tbl_resident_rate_around_srv_tbl_user" FromRole="User" ToRole="ResidentRateAroundProvider" />
+    <NavigationProperty Name="Role" Relationship="AMSModel.FK_tbl_user_tbl_role" FromRole="User" ToRole="Role" />
+    <NavigationProperty Name="UserInHouses" Relationship="AMSModel.FK_tbl_user_in_house_tbl_user" FromRole="User" ToRole="UserInHouse" />
+    <NavigationProperty Name="UserProfiles" Relationship="AMSModel.FK_tbl_user_profile_tbl_user" FromRole="User" ToRole="UserProfile" />
+    <NavigationProperty Name="UserAnswerSurveys" Relationship="AMSModel.FK_UserDoServey_User" FromRole="User" ToRole="UserAnswerSurvey" />
+  </EntityType>
+  <EntityType Name="UserAnswerSurvey">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SurveyId" Type="Int32" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="AnswerId" Type="Int32" />
+    <NavigationProperty Name="Answer" Relationship="AMSModel.FK_UserDoServey_Answer" FromRole="UserAnswerSurvey" ToRole="Answer" />
+    <NavigationProperty Name="Survey" Relationship="AMSModel.FK_UserDoServey_Survey" FromRole="UserAnswerSurvey" ToRole="Survey" />
+    <NavigationProperty Name="User" Relationship="AMSModel.FK_UserDoServey_User" FromRole="UserAnswerSurvey" ToRole="User" />
+  </EntityType>
+  <EntityType Name="UserInHouse">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="HouseId" Type="Int32" />
+    <Property Name="CreateDate" Type="DateTime" Precision="3" />
+    <Property Name="IsApproved" Type="Int32" />
+    <NavigationProperty Name="House" Relationship="AMSModel.FK_tbl_user_in_house_tbl_house" FromRole="UserInHouse" ToRole="House" />
+    <NavigationProperty Name="User" Relationship="AMSModel.FK_tbl_user_in_house_tbl_user" FromRole="UserInHouse" ToRole="User" />
+  </EntityType>
+  <EntityType Name="UserProfile">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DateOfBirth" Type="DateTime" Precision="3" />
+    <Property Name="Gender" Type="Int32" />
+    <Property Name="Fullname" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="User" Relationship="AMSModel.FK_tbl_user_profile_tbl_user" FromRole="UserProfile" ToRole="User" />
+  </EntityType>
+  <Association Name="FK_Answer_Question">
+    <End Type="AMSModel.Question" Role="Question" Multiplicity="0..1" />
+    <End Type="AMSModel.Answer" Role="Answer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Question">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Answer">
+        <PropertyRef Name="QuestionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserDoServey_Answer">
+    <End Type="AMSModel.Answer" Role="Answer" Multiplicity="0..1" />
+    <End Type="AMSModel.UserAnswerSurvey" Role="UserAnswerSurvey" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Answer">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserAnswerSurvey">
+        <PropertyRef Name="AnswerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_arround_srv_tbl_around_srv_cat">
+    <End Type="AMSModel.AroundProviderCategory" Role="AroundProviderCategory" Multiplicity="0..1" />
+    <End Type="AMSModel.AroundProvider" Role="AroundProvider" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AroundProviderCategory">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AroundProvider">
+        <PropertyRef Name="AroundProviderCategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_resident_rate_around_srv_tbl_arround_srv">
+    <End Type="AMSModel.AroundProvider" Role="AroundProvider" Multiplicity="0..1" />
+    <End Type="AMSModel.ResidentRateAroundProvider" Role="ResidentRateAroundProvider" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AroundProvider">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ResidentRateAroundProvider">
+        <PropertyRef Name="AroundProviderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HelpdeskRequestLog_HelpdeskReq">
+    <End Type="AMSModel.HelpdeskRequest" Role="HelpdeskRequest" Multiplicity="0..1" />
+    <End Type="AMSModel.HelpdeskRequestLog" Role="HelpdeskRequestLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HelpdeskRequest">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HelpdeskRequestLog">
+        <PropertyRef Name="HelpdeskRequestId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_h_desk_req_h_desk_tbl_h_desk_request">
+    <End Type="AMSModel.HelpdeskRequest" Role="HelpdeskRequest" Multiplicity="0..1" />
+    <End Type="AMSModel.HelpdeskRequestHelpdeskSupporter" Role="HelpdeskRequestHelpdeskSupporter" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HelpdeskRequest">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HelpdeskRequestHelpdeskSupporter">
+        <PropertyRef Name="HelpdeskRequestId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_h_desk_request_tbl_h_desk_service">
+    <End Type="AMSModel.HelpdeskService" Role="HelpdeskService" Multiplicity="0..1" />
+    <End Type="AMSModel.HelpdeskRequest" Role="HelpdeskRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HelpdeskService">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HelpdeskRequest">
+        <PropertyRef Name="HelpdeskSupporterId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_h_desk_request_tbl_house">
+    <End Type="AMSModel.House" Role="House" Multiplicity="0..1" />
+    <End Type="AMSModel.HelpdeskRequest" Role="HelpdeskRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="House">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HelpdeskRequest">
+        <PropertyRef Name="HouseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_h_desk_req_h_desk_tbl_user">
+    <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+    <End Type="AMSModel.HelpdeskRequestHelpdeskSupporter" Role="HelpdeskRequestHelpdeskSupporter" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HelpdeskRequestHelpdeskSupporter">
+        <PropertyRef Name="HelpdeskSupporterId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HelpdeskRequestLog_User1">
+    <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+    <End Type="AMSModel.HelpdeskRequestLog" Role="HelpdeskRequestLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HelpdeskRequestLog">
+        <PropertyRef Name="ChangeFromUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HelpdeskRequestLog_User2">
+    <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+    <End Type="AMSModel.HelpdeskRequestLog" Role="HelpdeskRequestLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HelpdeskRequestLog">
+        <PropertyRef Name="ChangeToUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_h_desk_service_tbl_h_desk_srv_cat">
+    <End Type="AMSModel.HelpdeskServiceCategory" Role="HelpdeskServiceCategory" Multiplicity="0..1" />
+    <End Type="AMSModel.HelpdeskService" Role="HelpdeskService" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HelpdeskServiceCategory">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HelpdeskService">
+        <PropertyRef Name="HelpdeskServiceCategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_receipt_tbl_house">
+    <End Type="AMSModel.House" Role="House" Multiplicity="1" />
+    <End Type="AMSModel.Receipt" Role="Receipt" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="House">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Receipt">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_user_in_house_tbl_house">
+    <End Type="AMSModel.House" Role="House" Multiplicity="0..1" />
+    <End Type="AMSModel.UserInHouse" Role="UserInHouse" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="House">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserInHouse">
+        <PropertyRef Name="HouseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_post_tbl_post">
+    <End Type="AMSModel.Post" Role="Post" Multiplicity="0..1" />
+    <End Type="AMSModel.Post" Role="Post1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Post">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Post1">
+        <PropertyRef Name="PostId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_post_tbl_user">
+    <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+    <End Type="AMSModel.Post" Role="Post" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Post">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Question_Survey">
+    <End Type="AMSModel.Survey" Role="Survey" Multiplicity="0..1" />
+    <End Type="AMSModel.Question" Role="Question" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Survey">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Question">
+        <PropertyRef Name="SurveyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_receipt_detail_tbl_receipt">
+    <End Type="AMSModel.Receipt" Role="Receipt" Multiplicity="0..1" />
+    <End Type="AMSModel.ReceiptDetail" Role="ReceiptDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Receipt">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ReceiptDetail">
+        <PropertyRef Name="ReceiptId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_receipt_detail_tbl_service_fee">
+    <End Type="AMSModel.ServiceFee" Role="ServiceFee" Multiplicity="0..1" />
+    <End Type="AMSModel.ReceiptDetail" Role="ReceiptDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ServiceFee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ReceiptDetail">
+        <PropertyRef Name="ServiceFeeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_resident_rate_around_srv_tbl_user">
+    <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+    <End Type="AMSModel.ResidentRateAroundProvider" Role="ResidentRateAroundProvider" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ResidentRateAroundProvider">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_user_tbl_role">
+    <End Type="AMSModel.Role" Role="Role" Multiplicity="1" />
+    <End Type="AMSModel.User" Role="User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserDoServey_Survey">
+    <End Type="AMSModel.Survey" Role="Survey" Multiplicity="0..1" />
+    <End Type="AMSModel.UserAnswerSurvey" Role="UserAnswerSurvey" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Survey">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserAnswerSurvey">
+        <PropertyRef Name="SurveyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_user_in_house_tbl_user">
+    <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+    <End Type="AMSModel.UserInHouse" Role="UserInHouse" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserInHouse">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_user_profile_tbl_user">
+    <End Type="AMSModel.User" Role="User" Multiplicity="1" />
+    <End Type="AMSModel.UserProfile" Role="UserProfile" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserProfile">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserDoServey_User">
+    <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+    <End Type="AMSModel.UserAnswerSurvey" Role="UserAnswerSurvey" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserAnswerSurvey">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

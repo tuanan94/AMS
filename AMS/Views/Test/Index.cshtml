@@ -1,3 +1,4 @@
+
 ﻿@{
     List<House> allHouse = ViewBag.allHouse;
 }
@@ -13,7 +14,19 @@
             </tr>
         </thead>
         <tbody id="housetablebody">
-          
+            @{
+                foreach (House h in allHouse)
+                {
+                    <tr>
+                        <th>
+                            @h.Id
+                        </th>
+                        <th>
+                            @h.Description
+                        </th>
+                    </tr>
+                }
+            }
         </tbody>
     </table>
     @using (Html.BeginForm("addHome", "Test", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -49,7 +62,7 @@
             success: function (data) {
                 var obj = JSON.parse(data);
                 $.each(obj, function (index, jsonObject) {
-                    $("#housetablebody").append('<tr><td>' + jsonObject["Block"] + '</td><td>' + jsonObject["Floor"] + '<td/><td>' + jsonObject["HouseName"] + '</td></tr>')
+                    $("#housetablebody").append('<tr><td>' + jsonObject["Block"] + '</td><td>' + jsonObject["Floor"] + '<td/><td>' + jsonObject["RoomName"] + '</td></tr>')
                 });
 
             },
@@ -80,4 +93,12 @@
             type: 'POST'
         });
     }
+
+
+
+   
+
+
+
+
 </script>

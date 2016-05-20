@@ -19,7 +19,6 @@ namespace AMS
         {
             this.HelpdeskRequestLogs = new HashSet<HelpdeskRequestLog>();
             this.HelpdeskRequestHelpdeskSupporters = new HashSet<HelpdeskRequestHelpdeskSupporter>();
-            this.HelpdeskRequestManagers = new HashSet<HelpdeskRequestManager>();
         }
     
         public int Id { get; set; }
@@ -39,8 +38,6 @@ namespace AMS
         public virtual ICollection<HelpdeskRequestLog> HelpdeskRequestLogs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HelpdeskRequestHelpdeskSupporter> HelpdeskRequestHelpdeskSupporters { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<HelpdeskRequestManager> HelpdeskRequestManagers { get; set; }
         public virtual HelpdeskService HelpdeskService { get; set; }
         public virtual House House { get; set; }
     }

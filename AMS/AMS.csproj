@@ -224,9 +224,6 @@
     <Compile Include="HelpdeskRequestLog.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="HelpdeskRequestManager.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="HelpdeskService.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -254,9 +251,6 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="PendingMemberRequest.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Post.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -281,6 +275,7 @@
     <Compile Include="ServiceFee.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Service\PendingMemberService.cs" />
     <Compile Include="Service\TestService.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Survey.cs">
@@ -301,6 +296,7 @@
     <Compile Include="UserProfile.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\MemberViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -472,10 +468,11 @@
     <Content Include="Views\Management\ManageHousehold.cshtml" />
     <Content Include="Views\Management\ManageRequest.cshtml" />
     <Content Include="Views\Management\ManageIncome.cshtml" />
-    <Content Include="Views\Management\ManageReipt.cshtml" />
+    <Content Include="Views\Management\ManageReceipt.cshtml" />
     <Content Include="Views\Management\ViewReceipt.cshtml" />
     <Content Include="Views\Management\CreateReceipt.cshtml" />
     <Content Include="Views\Management\ManageReport.cshtml" />
+    <Content Include="Views\Management\ManageSurvey.cshtml" />
     <Content Include="Views\Home\Test.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
   </ItemGroup>
