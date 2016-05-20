@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using AMS.ViewModel;
 namespace AMS.Controllers
 {
     public class HomeController : Controller
     {
         TestService testService = new TestService();
+        PendingMemberService pendingMemberService = new PendingMemberService();
         public ActionResult Test()
         {
             List<House> allHouse = testService.getAllHouse();
@@ -43,6 +44,12 @@ namespace AMS.Controllers
         [HttpGet]
         public ActionResult ManageMember()
         {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult ManageMember(MemberViewModel member)
+        {
+            //pendingMemberService.addMemberRequest(member);
             return View();
         }
     }

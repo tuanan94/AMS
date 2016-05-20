@@ -16,12 +16,14 @@ namespace AMS
     {
         public int Id { get; set; }
         public Nullable<int> HelpdeskRequestId { get; set; }
-        public Nullable<int> UserIdChangeStatus { get; set; }
+        public Nullable<int> ChangeFromUserId { get; set; }
+        public Nullable<int> ChangeToUserId { get; set; }
         public Nullable<long> CreateDate { get; set; }
         public Nullable<int> StatusFrom { get; set; }
         public Nullable<int> StatusTo { get; set; }
     
         public virtual HelpdeskRequest HelpdeskRequest { get; set; }
         public virtual User User { get; set; }
+        public virtual User User1 { get; set; }
     }
 }

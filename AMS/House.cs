@@ -26,7 +26,7 @@ namespace AMS
         public string Floor { get; set; }
         public string HouseName { get; set; }
         public string Description { get; set; }
-        public Nullable<int> Area { get; set; }
+        public Nullable<double> Area { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HelpdeskRequest> HelpdeskRequests { get; set; }

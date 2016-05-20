@@ -13,7 +13,19 @@
             </tr>
         </thead>
         <tbody id="housetablebody">
-          
+            @{
+                foreach (House h in allHouse)
+                {
+                    <tr>
+                        <th>
+                            @h.Id
+                        </th>
+                        <th>
+                            @h.Description
+                        </th>
+                    </tr>
+                }
+            }
         </tbody>
     </table>
     @using (Html.BeginForm("addHome", "Test", FormMethod.Post, new { enctype = "multipart/form-data" }))

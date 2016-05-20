@@ -35,7 +35,7 @@ namespace AMS.Controllers
         {
             return View();
         }
-        public ActionResult ManageReipt()
+        public ActionResult ManageReceipt()
         {
             return View();
         }
