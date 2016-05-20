@@ -264,8 +264,8 @@
     <Compile Include="ReceiptDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Reposiroty\GenericRepository.cs" />
-    <Compile Include="Reposiroty\IRepository.cs" />
+    <Compile Include="Repository\GenericRepository.cs" />
+    <Compile Include="Repository\IRepository.cs" />
     <Compile Include="ResidentRateAroundProvider.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
