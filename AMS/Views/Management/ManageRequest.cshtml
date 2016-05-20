@@ -3,6 +3,9 @@
     ViewBag.Title = "ManageRequest";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
 }
+@{
+    List<HelpdeskService> helpdeskServices = ViewBag.helpdeskServices;
+}
 
 <div class="col-md-12">
     <div class="panel panel-default">
@@ -10,11 +13,13 @@
         <div class="panel-body">
 
             <ul class="nav nav-tabs" role="tablist">
-                <li class="">
+                <li class="active">
                     <a href="#h_desk_req_list" role="tab" data-toggle="tab"><i class="fa fa-fw fa-calendar"></i> Danh sách yêu cầu hỗ từ dân cư</a>
                 </li>
-                <li class="active">
-                    <a href="#h_desk_req_mng" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Quản lý yêu cầu hổ trợ</a>
+                <li class="" id="h_desk_mng">
+                    @*                    <a href="#h_desk_req_mng" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Quản lý yêu cầu hổ trợ</a>*@
+                    <a href="#" onclick="loadSubView(this,'h_desk_mng')" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Quản lý yêu cầu hổ trợ</a>
+                    @*                    <a href="./ManageRequest?action=h_desk_mng" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Quản lý yêu cầu hổ trợ</a>*@
                 </li>
                 <li class="">
                     <a href="#h_desk_req_cat_mng" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Quản lý yêu cầu hổ trợ</a>
@@ -128,111 +133,12 @@
                         </div>
                     </div>
                 </div>
-            <div class="tab-pane fade active in" id="h_desk_req_mng">
-                <div class="panel panel-default" style="border-color: transparent">
-                    <form class="form-horizontal" role="form">
-                        <div class="form-group">
-                            <button class="btn btn-inverse col-sm-1" data-toggle="modal" data-target="#add_h_req_modal" data-placement="top" title="Edit">
-                                <i class="fa fa-plus"></i> Add
-                            </button>
-                            @*                                <label class="col-sm-2 control-label">Tháng</label>*@
-                            <input type="email" class="form-control col-sm-offset-2 col-sm-4" id="" placeholder="Type here..">
-                            <div class="col-sm-3">
-                                <select name="select" class="form-control" data-size="3">
-                                    <option>Dịch vụ internet</option>
-                                    <option>Dịch vụ sữa chữa</option>
-                                    <option>Khác</option>
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-                            </div>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table v-middle">
-                                <thead>
-                                <tr>
-                                    <th>No.</th>
-                                    <th>Tên</th>
-                                    <th>Nhóm</th>
-                                    <th>Giá tiền</th>
-                                    <th>Trạng thái</th>
-                                    <th class="text-right">Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>
-                                        Sửa chửa bóng đèn cầu thang
-                                    </td>
-                                    <td>
-                                        Điện công cộng
-                                    </td>
-                                    <td>
-                                        Miễn phí
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-default btn-sm">Ngưng hổ trợ</button>
-                                    </td>
-                                    <td class="text-right">
-                                        <a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
-                                        <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>
-                                        Nghẹt cống
-                                    </td>
-                                    <td>
-                                        Nước
-                                    </td>
-                                    <td>
-                                        250,000 vnd
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-info btn-sm">Đang hổ trợ</button>
-                                    </td>
-                                    <td class="text-right">
-                                        <a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
-                                        <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- // Progress table -->
-                        <div class="panel-footer padding-none text-center">
-                            <ul class="pagination">
-                                <li>
-                                    <a href="#">&laquo;</a>
-                                </li>
-                                <li class="active">
-                                    <a href="#">1</a>
-                                </li>
-                                <li>
-                                    <a href="#">2</a>
-                                </li>
-                                <li>
-                                    <a href="#">3</a>
-                                </li>
-                                <li>
-                                    <a href="#">4</a>
-                                </li>
-                                <li>
-                                    <a href="#">5</a>
-                                </li>
-                                <li>
-                                    <a href="#">&raquo;</a>
-                                </li>
-                            </ul>
-                        </div>
 
-                    </form>
+                <div class="tab-pane fade active in" id="h_desk_mng_tab">
+
                 </div>
-            </div>
-                <div class="tab-pane fade active in" id="h_desk_req_cat_mng">
+
+                <div class="tab-pane fade" id="h_desk_req_cat_mng">
                     <div class="panel panel-default" style="border-color: transparent">
                         <form class="form-horizontal" role="form">
                             <div class="form-group">
@@ -345,13 +251,13 @@
                             <div class="form-group">
                                 <label for="inputEmail3" class="col-sm-3 control-label">Ngày bắt đầu</label>
                                 <div class="col-sm-9">
-                                    <input type="text" type="text" class="form-control datepicker" value="12/12/1993">
+                                    <input type="text" class="form-control datepicker" value="12/12/1993">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="inputEmail3" class="col-sm-3 control-label">Ngày kết thúc</label>
                                 <div class="col-sm-9">
-                                    <input type="text" type="text" class="form-control datepicker" value="12/12/1993">
+                                    <input type="text" class="form-control datepicker" value="12/12/1993">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -391,59 +297,82 @@
                 </div>
                 <div class="modal-body">
                     <div class="panel-body">
-                        <form class="form-horizontal" role="form">
+                        <form id="add_hd_req_form" class="form-horizontal" role="form">
                             <div class="form-group">
                                 <label for="h_desk_name" class="col-sm-3 control-label">Tên </label>
                                 <div class="col-sm-9">
-                                    <input id="h_desk_name" type="text" class="form-control" value="">
+                                    <input id="h_desk_srv_name" type="text" name="hd_req_name" class="form-control" value="">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="h_desk_type" class="col-sm-3 control-label">Nhóm dịch vụ hổ trợ</label>
                                 <div class="col-sm-9">
-                                    <select id="h_desk_type" name="select" class="form-control" data-size="3">
-                                        <option>Điện công cộng</option>
-                                        <option>Nước</option>
-                                        <option>Khác</option>
+                                    <select id="h_desk_type" name="h_desk_srv_cat" class="form-control" data-size="3">
+                                        <option value="1">Điện công cộng</option>
+                                        <option value="2">Nước</option>
+                                        <option value="3">Khác</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="h_desk_price" class="col-sm-3 control-label">Giá tiền</label>
                                 <div class="col-sm-9">
-                                    <input id="h_desk_price" type="text" type="text" class="form-control datepicker" value="">
+                                    <input id="h_desk_price" name="h_desk_srv_price" type="text" type="text" class="form-control datepicker" value="">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Trạng thái</label>
                                 <div class="col-sm-9">
                                     <label class="radio-inline">
-                                        <input type="radio" name="inlineRadioOptions" id="h_req_status_on" checked value="on"> Hổ trợ
+                                        <input type="radio" name="h_desk_srv_status" id="h_req_status_on" checked value="1"> Hổ trợ
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="inlineRadioOptions" id="h_req_status_off" value="off"> Ngưng hổ trợ
+                                        <input type="radio" name="h_desk_srv_status" id="h_req_status_off" value="0"> Ngưng hổ trợ
                                     </label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="h_desk_desc" class="col-sm-3 control-label">Mô tả</label>
                                 <div class="col-sm-9">
-                                    <textarea id="h_desk_desc" class="form-control" rows="5"></textarea>
+                                    <textarea id="h_desk_desc" name="h_desk_srv_desc" class="form-control" rows="5"></textarea>
                                 </div>
                             </div>
                             <div class="form-group">
 
                                 <div class="col-sm-offset-9 col-md-2">
-                                    <button type="submit" class="btn btn-primary">Hoàn thành</button>
+                                    <button id="add_hd_req" type="button" class="btn btn-primary">Hoàn thành</button>
                                 </div>
-
                             </div>
                         </form>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 
 </div>
+
+<script>
+    function loadSubView(e, viewName) {
+        if (!$("#" + viewName).hasClass("active")) {
+            window.currentTab = viewName;
+            $('#' + window.currentTab + '_tab').html("");
+            $('#' + window.currentTab + '_tab').load("ManageRequest?action=" + viewName);
+            $(".tab-pane.fade").removeClass("test active in");
+            $("#h_desk_req_list").html("");
+            $('#' + window.currentTab + '_tab').addClass("active in");
+        }
+    }
+
+    $("button#add_hd_req").click(function () {
+        console.log($("#add_hd_req_form").serialize());
+        $.ajax({
+            url: "ManageRequest?action=addHelpdeskSrv",
+            type: "post",
+            data: $("#add_hd_req_form").serialize(),
+            success: function (data) {
+                console.log(data);
+            }
+        });
+    });
+</script>

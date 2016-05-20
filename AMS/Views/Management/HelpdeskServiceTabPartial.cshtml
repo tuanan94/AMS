@@ -1,0 +1,102 @@
+﻿
+<div class="panel panel-default" style="border-color: transparent">
+    <form class="form-horizontal" role="form">
+        <div class="form-group">
+            <button class="btn btn-inverse col-sm-1" data-toggle="modal" data-target="#add_h_req_modal" data-placement="top" title="Edit">
+                <i class="fa fa-plus"></i> Add
+            </button>
+            @*                                <label class="col-sm-2 control-label">Tháng</label>*@
+            <input type="email" class="form-control col-sm-offset-2 col-sm-4" id="" placeholder="Type here..">
+            <div class="col-sm-3">
+                <select name="select" class="form-control" data-size="3">
+                    <option>Dịch vụ internet</option>
+                    <option>Dịch vụ sữa chữa</option>
+                    <option>Khác</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table v-middle">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Tên</th>
+                        <th>Nhóm</th>
+                        <th>Giá tiền</th>
+                        <th>Trạng thái</th>
+                        <th class="text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>
+                            Sửa chửa bóng đèn cầu thang
+                        </td>
+                        <td>
+                            Điện công cộng
+                        </td>
+                        <td>
+                            Miễn phí
+                        </td>
+                        <td>
+                            <button class="btn btn-default btn-sm">Ngưng hổ trợ</button>
+                        </td>
+                        <td class="text-right">
+                            <a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
+                            <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>
+                            Nghẹt cống
+                        </td>
+                        <td>
+                            Nước
+                        </td>
+                        <td>
+                            250,000 vnd
+                        </td>
+                        <td>
+                            <button class="btn btn-info btn-sm">Đang hổ trợ</button>
+                        </td>
+                        <td class="text-right">
+                            <a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
+                            <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- // Progress table -->
+        <div class="panel-footer padding-none text-center">
+            <ul class="pagination">
+                <li>
+                    <a href="#">&laquo;</a>
+                </li>
+                <li class="active">
+                    <a href="#">1</a>
+                </li>
+                <li>
+                    <a href="#">2</a>
+                </li>
+                <li>
+                    <a href="#">3</a>
+                </li>
+                <li>
+                    <a href="#">4</a>
+                </li>
+                <li>
+                    <a href="#">5</a>
+                </li>
+                <li>
+                    <a href="#">&raquo;</a>
+                </li>
+            </ul>
+        </div>
+    </form>
+</div>
