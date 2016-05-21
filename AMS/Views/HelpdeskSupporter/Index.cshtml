@@ -1,0 +1,185 @@
+﻿@{
+    List<HelpdeskRequest> allRequest = ViewBag.allRequest;
+    ViewBag.Title = "Index";
+    Layout = "~/Views/HelpdeskSupporter/__HelpdeskSupporterLayout.cshtml";
+    int count = 0;
+    
+}
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-gray">Yêu cầu helpdesk</div>
+        <div class="panel-body">
+            <form class="form-horizontal" role="form">
+                <div class="table-responsive">
+                    <table class="table v-middle">
+                        <thead>
+                            <tr>
+                                <th>Thứ tự</th>
+                                <th>Tiêu đề</th>
+                                <th>Căn hộ</th>
+                                <th>Ngày tạo</th>
+                                <th>Ngày giao việc</th>
+                                @*<th>Ngày đóng</th>*@
+                                <th>Trạng thái</th>
+                                @*<th>Nhân viên đã thực hiện</th>*@
+                                <th class="text-right">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (HelpdeskRequest hr in allRequest)
+                                {
+                                    <tr>
+                                        <td>
+                                            <span class="label label-gray">@(++count)</span>
+                                        </td>
+                                        <td>
+                                            <span class="label label-gray">@hr.Title</span>
+                                        </td>
+                                        <td>
+                                            @hr.House.HouseName
+                                        </td>
+                                        <td>
+                                            <span class="label label-primary">@Convert.ToString(string.Format("{0:dd/MM/yyyy}", @hr.CreateDate))</span>
+                                        </td>
+                                        <td>
+                                            <span class="label label-success">@Convert.ToString(string.Format("{0:dd/MM/yyyy}", @hr.AssignDate))</span>
+                                        </td>
+                                        <td>
+                                            <input class="label label-default" value="1"/>Open
+                                        </td>
+                                        <td class="text-right">
+                                            <a href="" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal" data-placement="top" title="Chi tiết"><i class="fa fa-eye"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- // Progress table -->
+                <div class="panel-footer padding-none text-center">
+                    <ul class="pagination">
+                        <li>
+                            <a href="#">&laquo;</a>
+                        </li>
+                        <li class="active">
+                            <a href="#">1</a>
+                        </li>
+                        <li>
+                            <a href="#">2</a>
+                        </li>
+                        <li>
+                            <a href="#">3</a>
+                        </li>
+                        <li>
+                            <a href="#">4</a>
+                        </li>
+                        <li>
+                            <a href="#">5</a>
+                        </li>
+                        <li>
+                            <a href="#">&raquo;</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Chi tiết </h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Tiêu đề</label>
+                            <div class="col-sm-9">
+                                <input type="email" readonly="readonly" class="form-control" id="inputEmail3" value="Mr. A">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Căn hộ</label>
+                            <div class="col-sm-9">
+                                <input type="text" type="text" class="form-control datepicker" value="12/12/1993">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Nội dung</label>
+                            <div class="col-sm-9">
+                                <input type="email" readonly="readonly" class="form-control" id="inputEmail3" value="30 kw">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Ngày tạo</label>
+                            <div class="col-sm-9">
+                                <span class="label label-primary">19/05/2016</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Ngày giao việc</label>
+                            <div class="col-sm-9">
+                                <span class="label label-success">19/05/2016</span>
+                            </div>
+                        </div>
+                        @*<div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">Ngày đóng</label>
+                                <div class="col-sm-9">
+                                    <span class="label label-primary">19/05/2016</span>
+                                </div>
+                            </div>*@
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Trạng thái</label>
+                            <div class="col-sm-9">
+                                <input type="text" type="text" class="form-control datepicker" value="12/12/1993">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Giá dịch vụ</label>
+                            <div class="col-sm-9">
+                                <input type="text" type="text" class="form-control datepicker" value="12/12/1993">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Loại dịch vụ</label>
+                            <div class="col-sm-9">
+                                <input type="text" type="text" class="form-control datepicker" value="12/12/1993">
+                            </div>
+                        </div>
+                        @*<div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">Ngày đóng</label>
+                                <div class="col-sm-9">
+                                    <select name="select" class="selectpicker" data-style="btn-white" data-size="5">
+                                        <option>Mr. A</option>
+                                        <option>Mr. B</option>
+                                        <option>Mr. C</option>
+                                        <option>Mr. D</option>
+                                        <option>Mr. E</option>
+                                        <option>Mr. F</option>
+                                    </select>
+                                </div>
+                            </div>*@
+                        <div class="form-group">
+
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Cập Nhật</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                            </div>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

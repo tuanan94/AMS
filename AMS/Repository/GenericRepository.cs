@@ -4,12 +4,12 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
-namespace AMS.Reposiroty
+namespace AMS.Repository
 {
     public class GenericRepository<T> : IRepository<T> where T : class
     {
         private AMSEntities db = null;
-        private DbSet<T> table = null;
+        protected DbSet<T> table = null;
         public GenericRepository()
         {
             this.db = new AMSEntities();

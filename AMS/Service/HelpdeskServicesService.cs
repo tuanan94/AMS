@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AMS.Reposiroty;
+using AMS.Repository;
 
 namespace AMS.Service
 {
