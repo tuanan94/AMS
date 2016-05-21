@@ -275,6 +275,7 @@
     <Compile Include="ServiceFee.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Service\HelpdeskServicesService.cs" />
     <Compile Include="Service\PendingMemberService.cs" />
     <Compile Include="Service\TestService.cs" />
     <Compile Include="Startup.cs" />
