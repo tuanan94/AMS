@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
+
+namespace AMS.ViewModel
+{
+    public class PostViewModel
+    {
+        public string Title { get; set; }
+        public string Body { get; set; }
+        public string ImgUrl { get; set; }
+        public string PostStatus { get; set; }
+        public string CreateDate { get; set; }
+        public string UpdateDate { get; set; }
+        public int Status { get; set; }
+        public int PostId { get; set; }
+        public int UserId { get; set; }
+        [DataType(DataType.Upload)]
+        public HttpPostedFileBase Media { get; set; }
+    }
+}

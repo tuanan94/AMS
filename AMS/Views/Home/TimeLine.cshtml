@@ -1,0 +1,109 @@
+﻿@using AMS.Helper
+@model AMS.ViewModel.PostViewModel
+@{
+    ViewBag.Title = "TimeLine";
+    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+    List<Post> allPost = ViewBag.allPost;
+  
+}
+
+
+
+<div class="col-md-9">
+    <ul class="timeline-list">
+        <li class="media">
+            <div class="pull-left">
+                <img src="/images/people/110/guy-5.jpg" alt="people" class="img-circle" width="80">
+                <div class="date">19 OCT</div>
+            </div>
+            <div class="media-body">
+                @using (Html.BeginForm("TimeLine", "Home", FormMethod.Post , new {role = "form", enctype = "multipart/form-data"}))
+                {
+                    <div class="row">
+                        <div class="col-md-10 col-lg-8">
+
+                            <div class="col-xs-10">
+                                <div class="panel-heading panel-heading-gray title">
+                                    What´s new
+                                </div>
+                                <div class="panel-body">
+                                    @Html.TextBoxFor(m =>m.Body)
+                                    @Html.TextAreaFor(m => m.Title, new {@Type = "text", rows = 3, columns = 40, @class = "form-control share-text", @placeholder = "Chia se cam xuc..."})
+                                </div>
+                                <p>
+                                    <button class="btn btn-default btn-upload"><i class="fa fa-picture-o"></i></button>
+                                    @Html.TextBoxFor(m => m.Media, new {@class = "media-upload", @type = "file"})
+                                    <button class="btn btn-primary btn-note-submit pull-right"><i class="fa fa-save"></i> Lưu</button>
+                                </p>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                }
+            </div>
+        </li>
+        @{
+           
+            foreach (var h in allPost)
+            {
+                 <li class="media">
+            <div class="pull-left">
+                <img src="/images/people/110/woman-9.jpg" alt="people" class="img-circle" width="80">
+                <div class="date">11 OCT</div>
+            </div>
+            <div class="media-body">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @*<p></p>*@
+                        <div class="timeline-added-images" >
+                            <img alt="media" src="@ViewHelper.Media(h.ImgUrl)" width="550" />
+                           
+                        </div>
+                    </div>
+                    <div class="view-all-comments"><a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments</div>
+                    <ul class="comments">
+                        <li>
+                            <div class="media">
+                                <a href="" class="pull-left">
+                                    <img src="/images/people/50/guy-5.jpg" class="media-object">
+                                </a>
+                                <div class="media-body">
+                                    <a href="" class="comment-author">Bill D.</a>
+                                    <span>Hi Mary, Nice Party</span>
+                                    <div class="comment-date">21st September</div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="media">
+                                <a href="" class="pull-left">
+                                    <img src="/images/people/50/woman-5.jpg" class="media-object">
+                                </a>
+                                <div class="media-body">
+                                    <a href="" class="comment-author">Mary</a>
+                                    <span>Thanks Bill</span>
+                                    <div class="comment-date">2 days</div>
+                                </div>
+                            </div>
+                        </li>
+                     
+                        <li class="comment-form">
+                            <div class="input-group">
+                                <input type="text" class="form-control">
+                                <span class="input-group-addon">
+                                    <a href=""><i class="fa fa-photo"></i></a>
+                                </span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </li>  
+            }
+        }
+     
+    </ul>
+</div>
+
+

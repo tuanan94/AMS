@@ -2,8 +2,26 @@
 @{
     ViewBag.Title = "ManageMember";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+    
 }
-
+<script>
+    jQuery(document).ready(function ($) {
+        var date = /^(\d{1,2})(\/|-)(\d{1,2})(\/|-)(\d{4})$/;
+ 
+        jQuery('input#date').bind('input propertychange', function () {
+            if (date.test(jQuery(this).val())) {
+                jQuery(this).css({
+                    'background': '#C2D699'
+                });
+            } else {
+                jQuery(this).css({
+                    'background': '#FFC2C2'
+                  
+                });
+            }
+        });
+    });
+</script>
 <div class="col-md-12">
     <div class="panel panel-default">
         <div class="panel-heading panel-heading-gray">Thông tin thành viên</div>
@@ -94,41 +112,26 @@
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
                             <label for="inputEmail3" class="col-sm-3 control-label">Tiêu đề</label>
-                            @Html.TextBoxFor(m => m.Title, new {@class="form-control"})
+                            @Html.TextBoxFor(m => m.UserId, new {@class="form-control"})
                             @*<div class="col-sm-9">
                                 <input type="email" class="form-control" id="inputEmail3" value="Mr. A">
                             </div>*@
                         </div>
                         <div class="form-group">
                             <label for="inputEmail3" class="col-sm-3 control-label">Mô tả</label>
-                            @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
+                            @Html.TextBoxFor(m => m.HouseId, new { @class = "form-control" })
                         </div>
                         <div class="form-group">
                             <label for="inputEmail3" class="col-sm-3 control-label">Ngày tạo</label>
-                            @Html.TextBoxFor(m => m.CreateDate, new {@class = "form-control"})
-                            @Html.ValidationMessageFor(m => m.CreateDate, "", new {@class = "text-danger"})
+                            @Html.TextBoxFor(m => m.CreateDate, new { id = "date", @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.CreateDate, "", new { id = "err",@class = "text-danger"})
                         </div>
                         <div class="form-group">
                             <label for="inputEmail3" class="col-sm-3 control-label">Ngày đóng</label>
-                            @Html.TextBoxFor(m => m.CloseDate, new {@class = "form-control"})
-                            @Html.ValidationMessageFor(m => m.CloseDate, "", new {@class = "text-danger"})
+                            @Html.TextBoxFor(m => m.IsApproved, new {@class = "form-control"})
+                          
                         </div>
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">Trạng thái</label>
-                            @Html.TextBoxFor(m => m.Status, new {@class = "form-control"})
-                        </div>
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">Mã căn hộ</label>
-                            @Html.TextBoxFor(m => m.HouseholderId, new {@class = "form-control"})
-                        </div>
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">Mã</label>
-                            @Html.TextBoxFor(m => m.PendingUserId, new { @class = "form-control" })
-                        </div>
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">Mã</label>
-                            @Html.TextBoxFor(m => m.ManagerId, new { @class = "form-control" })
-                        </div>
+                      
                     </form>
                 </div>
             </div>
