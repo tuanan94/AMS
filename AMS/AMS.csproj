@@ -484,6 +484,8 @@
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Management\HelpdeskServiceTabPartial.cshtml" />
     <Content Include="Views\Management\_helpdeskSeviceTablePartial.cshtml" />
+    <Content Include="Views\Management\_helpdeskServiceCategoryPartial.cshtml" />
+    <Content Include="Views\Management\_helpdeskServiceCategoryTablePartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

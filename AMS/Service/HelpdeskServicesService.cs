@@ -37,7 +37,7 @@ namespace AMS.Service
             if (null != name)
             {
                 return
-                    hdServiceRepository.List.Where(s => s.HelpdeskServiceCategoryId == catId && s.Name.Contains(name))
+                    hdServiceRepository.List.Where(s => s.HelpdeskServiceCategoryId == catId && s.Name.ToLower().Contains(name.ToLower()))
                         .ToList();
             }
             return hdServiceRepository.List.Where(s => s.HelpdeskServiceCategoryId == catId)
@@ -48,7 +48,7 @@ namespace AMS.Service
             if (null != name)
             {
                 return
-                    hdServiceRepository.List.Where(s => s.Status == status && s.Name.Contains(name))
+                    hdServiceRepository.List.Where(s => s.Status == status && s.Name.ToLower().Contains(name.ToLower()))
                         .ToList();
             }
             return hdServiceRepository.List.Where(s => s.HelpdeskServiceCategoryId == status)
@@ -57,7 +57,7 @@ namespace AMS.Service
         public List<HelpdeskService> FindByName(string name)
         {
             return
-                hdServiceRepository.List.Where(s => s.Name.Contains(name)).ToList();
+                hdServiceRepository.List.Where(s => s.Name.ToLower().Contains(name.ToLower())).ToList();
         }
     }
 }

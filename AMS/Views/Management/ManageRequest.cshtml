@@ -17,10 +17,10 @@
                     <a href="#h_desk_req_list" role="tab" data-toggle="tab"><i class="fa fa-fw fa-calendar"></i> Danh sách yêu cầu hỗ từ dân cư</a>
                 </li>
                 <li class="" id="helpdeskServiceManage">
-                    <a href="#" onclick="loadTab(this, 'helpdeskServiceManage')" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Quản lý yêu cầu hổ trợ</a>
+                    <a onclick="loadTab(this, 'helpdeskServiceManage')" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Quản lý yêu cầu hổ trợ</a>
                 </li>
                 <li class="">
-                    <a href="#h_desk_req_cat_mng" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Quản lý yêu cầu hổ trợ</a>
+                    <a onclick="loadTab(this, 'hdSrvCategoryManage')" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Quản lý yêu cầu hổ trợ</a>
                 </li>
             </ul>
             <div class="tab-content">
@@ -136,89 +136,8 @@
 
                 </div>
 
-                <div class="tab-pane fade" id="h_desk_req_cat_mng">
-                    <div class="panel panel-default" style="border-color: transparent">
-                        <form class="form-horizontal" role="form">
-                            <div class="form-group">
-                                <button class="btn btn-inverse col-sm-1" data-toggle="modal" data-target="#add_h_req_modal" data-placement="top" title="Edit">
-                                    <i class="fa fa-plus"></i> Add
-                                </button>
-                                @*                                <label class="col-sm-2 control-label">Tháng</label>*@
-                                <input type="email" class="form-control col-sm-offset-2 col-sm-4" id="" placeholder="Type here..">
-                                <div class="col-md-2">
-                                    <button type="submit" class="btn btn-primary">Tìm kiếm theo tên</button>
-                                </div>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table v-middle">
-                                    <thead>
-                                        <tr>
-                                            <th>No.</th>
-                                            <th>Tên</th>
-                                            <th>Trạng thái</th>
-                                            <th class="text-right">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>
-                                                Điện căn hộ
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-default btn-sm">Ngưng hổ trợ</button>
-                                            </td>
-                                            <td class="text-right">
-                                                <a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
-                                                <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>
-                                                Điện khu vực công cộng
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-info btn-sm">Ngưng hổ trợ</button>
-                                            </td>
-                                            <td class="text-right">
-                                                <a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
-                                                <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <!-- // Progress table -->
-                            <div class="panel-footer padding-none text-center">
-                                <ul class="pagination">
-                                    <li>
-                                        <a href="#">&laquo;</a>
-                                    </li>
-                                    <li class="active">
-                                        <a href="#">1</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">2</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">3</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">4</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">5</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">&raquo;</a>
-                                    </li>
-                                </ul>
-                            </div>
-
-                        </form>
-                    </div>
+                <div class="tab-pane fade" id="hdSrvCategoryManageTab">
+                    
                 </div>
             </div>
         </div>
@@ -370,6 +289,43 @@
                                 </div>
                             </div>
                             <input type="hidden" id="hdSrvId" name="hdSrvId" value="" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="hdSrvCategoryModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 id="hdSrvCateModalTitle" class="modal-title">Thêm loại dịch vụ hổ trợ</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <div class="alert alert-info" id="hdSrvCatSuccessNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Nhóm dịch vụ hổ trợ được khởi tạo thành công.</span>
+                        </div>
+                        <div class="alert alert-warning" id="hdSrvCatFailedNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Nhóm dịch vụ hổ trợ được khởi tạo thất bại.</span>
+                        </div>
+                        <form id="hdSrvCategoryForm" class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label for="hdSrvCatName" class="col-sm-3 control-label">Tên </label>
+                                <div class="col-sm-9">
+                                    <input id="hdSrvCatName" type="text" name="hdSrvCatName" class="form-control" value="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-9 col-md-2">
+                                    <button id="addHdSrvCat" name="addHdSrvCat" type="submit" class="btn btn-primary">Chấp nhận</button>
+                                </div>
+                            </div>
+                            <input type="hidden" id="hdSrvCatId" name="hdSrvCatId" value="" />
                         </form>
                     </div>
                 </div>

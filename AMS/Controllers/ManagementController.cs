@@ -38,6 +38,11 @@ namespace AMS.Controllers
                     url = "HelpdeskServiceTabPartial";
                     ViewBag.helpdeskServices = _helpdeskServicesService.GetHelpdeskServices();
                 }
+                else if (action.Equals("hdSrvCategoryManage"))
+                {
+                    url = "_helpdeskServiceCategoryPartial";
+                    ViewBag.helpdeskServiceCategories = _helpdeskServiceCatService.GetAll();
+                }
                 else if (action.Equals("loadHdSrvCat"))
                 {
                     // Start load all service category
@@ -68,9 +73,9 @@ namespace AMS.Controllers
                 {
                     NameValueCollection nvc = this.Request.QueryString;
                     String idStr = nvc["id"];
-                    int id = -1;
                     try
                     {
+                        int id = -1;
                         id = Int32.Parse(idStr);
                         HelpdeskService hdService = _helpdeskServicesService.FindById(id);
 
@@ -229,7 +234,8 @@ namespace AMS.Controllers
                         response.StatusCode = -1;
                     }
                     return Json(response);
-                }else if (action.Equals("searchHdSrv"))
+                }
+                else if (action.Equals("searchHdSrv"))
                 {
                     MessageViewModels response = new MessageViewModels();
                     NameValueCollection nvc = this.Request.Form;
@@ -267,6 +273,121 @@ namespace AMS.Controllers
                         return Json(response);
                     }
                 }
+
+                else if (action.Equals("hdSrvCatDetail"))
+                {
+                    NameValueCollection nvc = this.Request.QueryString;
+                    String idStr = nvc["id"];
+                    MessageViewModels response = new MessageViewModels();
+                    try
+                    {
+                        int id = Int32.Parse(idStr);
+                        HelpdeskServiceCategory hdSrvCategory = _helpdeskServiceCatService.FindById(id);
+                        if (null != hdSrvCategory)
+                        {
+                            HelpdeskServiceCatModel catModel = new HelpdeskServiceCatModel();
+                            catModel.Id = hdSrvCategory.Id;
+                            catModel.Name = hdSrvCategory.Name;
+                            response.Data = catModel;
+                        }
+                        else
+                        {
+                            response.StatusCode = 4;
+                            response.Msg = "Không tìm thấy nhóm dịch vụ hổ trợ.";
+                        }
+                        return Json(response, JsonRequestBehavior.AllowGet);
+
+                    }
+                    catch (Exception)
+                    {
+                        response.StatusCode = -1;
+                        return Json(response);
+                    }
+                }
+                else if (action.Equals("loadHdSrvCatTable"))
+                {
+                    url = "_helpdeskServiceCategoryTablePartial";
+                    ViewBag.helpdeskServiceCategories = _helpdeskServiceCatService.GetAll();
+                }else if (action.Equals("searchHdSrvCategory"))
+                {
+                    url = "_helpdeskServiceCategoryTablePartial";
+                    NameValueCollection nvc = this.Request.Form;
+                    string name = nvc["searchStrHdSrvCat"];
+                    ViewBag.helpdeskServiceCategories = _helpdeskServiceCatService.FindByName(name);
+                }
+                else if (action.Equals("addHdSrvCategory"))
+                {
+                    NameValueCollection nvc = this.Request.Form;
+                    String name = nvc["hdSrvCatName"];
+                    HelpdeskServiceCategory hdSrvCategory = new HelpdeskServiceCategory();
+                    hdSrvCategory.Name = name;
+                    _helpdeskServiceCatService.Add(hdSrvCategory);
+                    MessageViewModels response = new MessageViewModels();
+                    return Json(response);
+                }
+                else if (action.Equals("updateHdSrvCategory"))
+                {
+                    NameValueCollection nvc = this.Request.Form;
+                    String name = nvc["hdSrvCatName"];
+                    String idStr = nvc["hdSrvCatId"];
+                    MessageViewModels response = new MessageViewModels();
+                    try
+                    {
+                        int id = Int32.Parse(idStr);
+                        HelpdeskServiceCategory hdSrvCategory = _helpdeskServiceCatService.FindById(id);
+                        if (hdSrvCategory != null)
+                        {
+                            hdSrvCategory.Name = name;
+                            _helpdeskServiceCatService.Update(hdSrvCategory);
+                        }
+                        else
+                        {
+                            response.StatusCode = 4;
+                            response.Msg = "Không tìm thấy nhóm dịch vụ hổ trợ.";
+                        }
+                        return Json(response);
+                    }
+                    catch (Exception)
+                    {
+                        response.StatusCode = -1;
+                        response.Msg = "Lỗi cập nhật nhóm dịch vụ hổ trợ.";
+                        return Json(response);
+                    }
+                }
+                else if (action.Equals("delHdSrvCategory"))
+                {
+                    MessageViewModels response = new MessageViewModels();
+                    NameValueCollection nvc = this.Request.Form;
+                    String idStrList = nvc["hdSrvCatDeletedList"];
+                    List<string> ids = idStrList.Split(',').ToList();
+                    if (ids.Count != 0)
+                    {
+                        foreach (var id in ids)
+                        {
+                            try
+                            {
+                                HelpdeskServiceCategory s = _helpdeskServiceCatService.FindById(Int32.Parse(id));
+                                if (null != s)
+                                {
+                                    _helpdeskServiceCatService.Delete(s);
+                                }
+                            }
+                            catch (Exception exception)
+                            {
+                                response.StatusCode = -1;
+                                return Json(response);
+                            }
+                        }
+                        response.Msg = "OK !";
+                    }
+                    else
+                    {
+                        response.StatusCode = -1;
+                    }
+                    return Json(response);
+                }
+                
+
                 return PartialView(url);
             }
             else

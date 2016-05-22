@@ -7,7 +7,16 @@ window.UpdateServiceSuccessMsg = "Cập nhật dịch vụ hổ trợ thành cô
 window.INSERTMODALTITLE = "Thêm dịch vụ hổ trợ";
 window.AddServiceFailedMsg = "Thêm dịch vụ hổ trợ thất bại";
 window.AddServiceSuccessMsg = "Thêm dịch vụ hổ trợ thành công";
+
+window.UpdateHdSrvCategoryModalTitle = "Cập nhật nhóm dịch vụ hổ trợ";
+window.UpdateHdSrvCategoryFailedMsg = "Cập nhật nhóm dịch vụ hổ trợ thất bại";
+window.UpdateHdSrvCategorySuccessMsg = "Cập nhật nhóm dịch vụ hổ trợ thành công";
+window.InsertHdSrvCategoryModalTitle = "Thêm nhóm dịch vụ hổ trợ";
+window.AddHdSrvCategoryFailedMsg = "Thêm nhóm dịch vụ hổ trợ thất bại";
+window.AddHdSrvCategorySuccessMsg = "Thêm nhóm dịch vụ hổ trợ thành công";
+
 window.deleteHdSrvList = new Array();
+window.deleteHdSrvCatList = new Array();
 
 function loadHelpdeskServiceType() {
     var action = "loadHdSrvCat";
@@ -136,11 +145,10 @@ function reloadHdSrvTable() {
     var action = "loadHdSrvTable";
     $("#hdSrvTblBody").load("ManageRequest?action=" + action);
 }
-
 function searchHdSrv() {
     var mode = parseInt($("#hdReqFilterType").find("option:selected").val(), 10);
     var searchStr = $("#searchStr").val();
-    if (searchStr !== "" || (searchStr === "" && mode !== 0)) {
+//    if (searchStr !== "" || (searchStr === "" && mode !== 0)) {
         var action = "searchHdSrv";
         $.ajax({
             url: "ManageRequest?action=" + action,
@@ -153,11 +161,100 @@ function searchHdSrv() {
 
             }
         });
+//    }
+}
+function openHdSrvCategoryModal() {
+    window.POPUPMODE = window.INSERTMODE;
+    $("#hdSrvCateModalTitle").text(window.InsertHdSrvCategoryModalTitle);
+}
+function hdSrvCategoryDetail(id) {
+    var action = "hdSrvCatDetail&id=" + id;
+    window.POPUPMODE = window.UPDATEMODE;
+    $("#hdSrvCateModalTitle").text(window.UpdateHdSrvCategoryModalTitle);
+    $.ajax({
+        url: "ManageRequest?action=" + action,
+        type: "get",
+        success: function (data) {
+            if (data.StatusCode === 0) {
+                var returnData = data.Data;
+                $("#hdSrvCatName").val(returnData.Name);
+                $("#hdSrvCatId").val(returnData.Id);
+                $("#hdSrvCategoryModal").modal("show");
+            } else if (data.StatusCode === 4) {
+
+            } else {
+
+            }
+        }
+    });
+}
+function reloadHdSrvCategoryTable() {
+    var action = "loadHdSrvCatTable";
+    $("#hdSrvCatTblBody").load("ManageRequest?action=" + action);
+}
+function deleteHdSrvCategory(id) {
+    $("#delHdSrvBtnGroup").removeClass("show").addClass("show");
+    $("#rowHdSrvCat_" + id).css("display", "none");
+    deleteHdSrvCatList.push(id);
+}
+function searchHdSrvCategory() {
+    var searchStr = $("#searchStrHdSrvCat").val();
+//    if (searchStr !== "") {
+        var action = "searchHdSrvCategory";
+        $.ajax({
+            url: "ManageRequest?action=" + action,
+            type: "post",
+            data: $("#searchStrHdSrvCatForm").serialize(),
+            success: function (data) {
+                $("#hdSrvCatTblBody").html(data);
+            },
+            error: function () {
+
+            }
+        });
+//    }
+}
+function commitDeleteHdSrvCategory() {
+    var postData = { hdSrvCatDeletedList: window.deleteHdSrvCatList }
+    var action = "delHdSrvCategory";
+    $.ajax({
+        url: "ManageRequest?action=" + action,
+        type: "post",
+        data: postData,
+        dataType: "json",
+        traditional: true,
+        success: function (data) {
+            reloadHdSrvTable();
+            if (data.StatusCode === 0) {
+                window.deleteHdSrvCatList = new Array();
+            } else {
+                $("#delHdSrvBtnGroup").removeClass("show");
+                $("#delHdSrvBtnGroup").addClass("hide");
+                $("#messageModal .msgContent").text("Xóa dịch vụ hổ trợ thất bại!");
+            }
+            setTimeout(function () {
+                $("#delBtnGroup").removeClass("show");
+                $("#delBtnGroup").addClass("hide");
+            }, 1000);
+        },
+        error: function () {
+
+        }
+    });
+    setTimeout(function () {
+        $("#delBtnGroup").removeClass("show");
+        $("#delBtnGroup").addClass("hide");
+    }, 1000);
+}
+function cancelDeleteHdSrvCategory() {
+    for (var i = 0; i < deleteHdSrvCatList.length; i++) {
+        $("#rowHdSrvCat_" + deleteHdSrvCatList[i]).css("display", "table-row");
     }
+    window.deleteHdSrvCatList = new Array();
+    $("#delHdSrvBtnGroup").removeClass("show").addClass("hide");;
 }
 
 $(document).ready(function () {
-
     $("#addHelpdeskRequestForm").validate({
         rules: {
             hdSrvName: {
@@ -229,12 +326,69 @@ $(document).ready(function () {
         }
     });
 
-    $("#addHdSrv").on("click", function () {
-        console.log($("#addHelpdeskRequestForm").serialize());
-        $("#addHelpdeskRequestForm").valid();
+    $("#addHdSrvCat").on("click", function () {
+        console.log($("#hdSrvCategoryForm").serialize());
+        $("#hdSrvCategoryForm").valid();
     });
+    $("#hdSrvCategoryForm").validate({
+        rules: {
+            hdSrvCatName: {
+                required: true,
+                maxlength: 255
+            }
+        },
+        messages: {
+            hdSrvCatName: {
+                required: "Vui lòng nhập vào tên nhóm dịch vụ hổ trợ.",
+                maxlength: "Tên nhóm dịch vụ hổ trợ không dài quá 255 ký tự."
+            }
+        },
+        success: function (label, element) {
+            label.parent().removeClass("error");
+            label.remove();
+        },
+        submitHandler: function () {
+            var action = "";
+            if (window.POPUPMODE === window.UPDATEMODE) {
+                action = "updateHdSrvCategory";
+            } else {
+                action = "addHdSrvCategory";
+            }
+            $.ajax({
+                url: "ManageRequest?action=" + action,
+                type: "post",
+                data: $("#hdSrvCategoryForm").serialize(),
+                success: function (data) {
+                    reloadHdSrvCategoryTable();
+                    var msg = "";
+                    if (data.StatusCode === 0) {
+                        if (window.POPUPMODE === window.UPDATEMODE) {
+                            msg = window.UpdateHdSrvCategorySuccessMsg;
+                        } else {
+                            msg = window.AddHdSrvCategorySuccessMsg;
+                        }
+                        $("#hdSrvCategoryModal .alert-info  > span").text(msg);
+                        $("#hdSrvCatSuccessNotify").show().delay(3000).fadeOut(1000);
+                    } else if (data.StatusCode === -1 || data.StatusCode === 4) {
+                        if (window.POPUPMODE === window.UPDATEMODE) {
+                            msg = window.UpdateHdSrvCategoryFailedMsg;
+                        } else {
+                            msg = window.AddHdSrvCategoryFailedMsg;
+                        }
+                        $("#hdSrvCategoryModal .alert-warning > span").text(msg);
+                        $("#hdSrvCatFailedNotify").show().delay(3000).fadeOut(1000);
+                    }
+                }
+            });
+        }
+    });
+
+
     $("#addHelpdeskRequestModal").on("hidden.bs.modal", function () {
         document.getElementById("addHelpdeskRequestForm").reset();
+    });
+    $("#hdSrvCategoryModal").on("hidden.bs.modal", function () {
+        document.getElementById("hdSrvCategoryForm").reset();
     });
 
     $(document).on("change", "#hdReqFilterType", function () {
