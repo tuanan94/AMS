@@ -8,18 +8,29 @@ namespace AMS.Service
 {
     public class TestService
     {
-        GenericRepository<House> testRepository = new GenericRepository<House>();
+        GenericRepository<House> houseObj = new GenericRepository<House>();
+
+        /*  @detail get all house
+        *   @return list House object
+        */
         public List<House> getAllHouse()
         {
-            return testRepository.List.ToList();
+            return houseObj.List.ToList();
         }
+
+        /*  @Detail Add house
+         *  @Param Block : building apartment
+         *  @Param Floor
+         *  @Param Name of house
+         *  @return 
+         */
         public void addHouse(String Block, String Floor, String HouseName)
         {
-            House h = new House();
-            h.Block = Block;
-            h.Floor = Floor;
-            h.HouseName = HouseName;
-            testRepository.Add(h);
+            House house = new House();
+            house.Block = Block;
+            house.Floor = Floor;
+            house.HouseName = HouseName;
+            houseObj.Add(house);    //Add to house object
         }
     }
 }
