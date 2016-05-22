@@ -29,8 +29,6 @@ namespace AMS.Controllers
 
         public ActionResult ManageRequest()
         {
-
-
             String action = this.Request.QueryString["action"];
             if (null != action)
             {
@@ -135,10 +133,10 @@ namespace AMS.Controllers
 
                     List<String> listError = new List<string>();
                     MessageViewModels response = new MessageViewModels();
-//                    var message = new List<object>();
-//                    message.Add(new { txt_error = "MSG" });
-//                    message.Add(new { txt_error_2 = "MSG" });
-//                    response.Data = message;
+                    //                    var message = new List<object>();
+                    //                    message.Add(new { txt_error = "MSG" });
+                    //                    message.Add(new { txt_error_2 = "MSG" });
+                    //                    response.Data = message;
 
                     return Json(response);
                 }
@@ -156,7 +154,7 @@ namespace AMS.Controllers
                         MessageViewModels response = new MessageViewModels();
 
                         int id = Int32.Parse(idStr);
-                        HelpdeskService hdService  =_helpdeskServicesService.FindById(id);
+                        HelpdeskService hdService = _helpdeskServicesService.FindById(id);
                         if (null != hdService)
                         {
                             hdService.Name = name;
@@ -166,12 +164,12 @@ namespace AMS.Controllers
                             hdService.Description = desc;
                             _helpdeskServicesService.Update(hdService);
 
-//                            List<String> listError = new List<string>();
-//                            MessageViewModels response = new MessageViewModels();
-//                            var message = new List<object>();
-//                            message.Add(new {txt_error = "MSG"});
-//                            message.Add(new {txt_error_2 = "MSG"});
-//                            response.Data = message;
+                            //                            List<String> listError = new List<string>();
+                            //                            MessageViewModels response = new MessageViewModels();
+                            //                            var message = new List<object>();
+                            //                            message.Add(new {txt_error = "MSG"});
+                            //                            message.Add(new {txt_error_2 = "MSG"});
+                            //                            response.Data = message;
                         }
                         else
                         {
@@ -185,8 +183,8 @@ namespace AMS.Controllers
                     catch (Exception e)
                     {
                         MessageViewModels response = new MessageViewModels();
-//                        var message = new List<object>();
-//                        response.Data = message;
+                        //                        var message = new List<object>();
+                        //                        response.Data = message;
                         response.Msg = "Cập nhật thất bại !";
                         response.StatusCode = -1;
                         return Json(response);
@@ -194,21 +192,34 @@ namespace AMS.Controllers
                 }
                 else if (action.Equals("delHelpdeskSrv"))
                 {
+                    MessageViewModels response = new MessageViewModels();
                     NameValueCollection nvc = this.Request.Form;
                     String desc = nvc["hdSrvDeletedList"];
-
-                    List<string> list = new List<String>(nvc.)
-
-                    HelpdeskService hdService = new HelpdeskService();
-                    hdService.Description = desc;
-                    _helpdeskServicesService.Add(hdService);
-
-                    List<String> listError = new List<string>();
-                    MessageViewModels response = new MessageViewModels();
-                    //                    var message = new List<object>();
-                    //                    message.Add(new { txt_error = "MSG" });
-                    //                    message.Add(new { txt_error_2 = "MSG" });
-                    //                    response.Data = message;
+                    List<string> ids = desc.Split(',').ToList();
+                    if (ids.Count != 0)
+                    {
+                        foreach (var id in ids)
+                        {
+                            try
+                            {
+                                HelpdeskService s = _helpdeskServicesService.FindById(Int32.Parse(id));
+                                if (null != s)
+                                {
+                                    _helpdeskServicesService.Delete(s);
+                                }
+                            }
+                            catch (Exception exception)
+                            {
+                                response.StatusCode = -1;
+                                return Json(response);
+                            }
+                        }
+                        response.Msg = "OK !";
+                    }
+                    else
+                    {
+                        response.StatusCode = -1;
+                    }
 
                     return Json(response);
                 }

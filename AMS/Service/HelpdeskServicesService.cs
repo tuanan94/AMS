@@ -27,6 +27,10 @@ namespace AMS.Service
         {
             hdServiceRepository.Update(service);
         }
+        public void Delete(HelpdeskService service)
+        {
+            hdServiceRepository.Delete(service);
+        }
 
     }
 }

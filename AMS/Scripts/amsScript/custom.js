@@ -3,7 +3,7 @@ window.UPDATEMODE = 2;
 window.INSERTMODE = 1;
 window.UPDATEMODALTITLE = "Cập nhật dịch vụ hổ trợ";
 window.INSERTMODALTITLE = "Thêm dịch vụ hổ trợ";
-window.deleteHdSrvList = [];
+window.deleteHdSrvList = new Array();
 
 function loadHelpdeskServiceType() {
     var action = "loadHdSrvCat";
@@ -34,7 +34,6 @@ function helpdeskServiceDetail(id) {
     var action = "hdSrvDetail&id=" + id;
     window.POPUPMODE = window.UPDATEMODE;
     $("#hdSrvModalTitle").text(window.UPDATEMODALTITLE);
-
     $.ajax({
         url: "ManageRequest?action=" + action,
         type: "get",
@@ -70,7 +69,7 @@ function helpdeskServiceDetail(id) {
     });
 };
 function deleteHelpdeskService(id) {
-    $("#delBtnGroup").css("display", "block");
+    $("#delBtnGroup").removeClass("show").addClass("show");
     $("#row_" + id).css("display", "none");
     deleteHdSrvList.push(id);
 }
@@ -78,22 +77,26 @@ function cancelDeleteHelpdeskService() {
     for (var i = 0; i < deleteHdSrvList.length; i++) {
         $("#row_" + deleteHdSrvList[i]).css("display", "table-row");
     }
-    window.deleteHdSrvList = [];
-    setTimeout(function () {
-        $("#delBtnGroup").css("display", "none");
-    }, 1000);
+    window.deleteHdSrvList = new Array();
+    $("#delBtnGroup").removeClass("show").addClass("hide");;
+
 }
 function commitDeleteHelpdeskService() {
-//    var postData = { hdSrvDeletedList:  }
+    var postData = {hdSrvDeletedList: window.deleteHdSrvList}
     var action = "delHelpdeskSrv";
-    var postData = JSON.stringify(window.deleteHdSrvList);
     $.ajax({
         url: "ManageRequest?action=" + action,
         type: "post",
         data: postData,
+        dataType: "json",
+        traditional: true,
         success: function(data) {
-
-
+            if (data.StatusCode === 0) {
+                window.deleteHdSrvList = new Array();
+            } else {
+                $("#delBtnGroup").remvoeClass("show");
+                $("#delBtnGroup").addClass("hide");
+            }
         },
         error: function() {
 
