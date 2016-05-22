@@ -9,5 +9,8 @@ namespace AMS.Service
     interface IHelpdeskSupporterService
     {
         IEnumerable<HelpdeskRequest> ListAllRequest();
+        HelpdeskRequest GetHelpdeskRequest(int id);
+        bool UpdateHelpdeskRequest(HelpdeskRequest request);
+        bool UpdateStatus(int currId, int status);
     }
 }

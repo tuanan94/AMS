@@ -40,5 +40,6 @@ namespace AMS
         public virtual ICollection<HelpdeskRequestHelpdeskSupporter> HelpdeskRequestHelpdeskSupporters { get; set; }
         public virtual HelpdeskService HelpdeskService { get; set; }
         public virtual House House { get; set; }
+        public virtual HelpdeskService HelpdeskService1 { get; set; }
     }
 }

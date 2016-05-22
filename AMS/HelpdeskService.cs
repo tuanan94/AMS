@@ -18,6 +18,7 @@ namespace AMS
         public HelpdeskService()
         {
             this.HelpdeskRequests = new HashSet<HelpdeskRequest>();
+            this.HelpdeskRequests1 = new HashSet<HelpdeskRequest>();
         }
     
         public int Id { get; set; }
@@ -30,5 +31,7 @@ namespace AMS
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HelpdeskRequest> HelpdeskRequests { get; set; }
         public virtual HelpdeskServiceCategory HelpdeskServiceCategory { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<HelpdeskRequest> HelpdeskRequests1 { get; set; }
     }
 }

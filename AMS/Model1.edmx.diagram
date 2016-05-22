@@ -52,6 +52,7 @@
         <AssociationConnector Association="AMSModel.FK_tbl_user_in_house_tbl_user" />
         <AssociationConnector Association="AMSModel.FK_tbl_user_profile_tbl_user" />
         <AssociationConnector Association="AMSModel.FK_UserDoServey_User" />
+        <AssociationConnector Association="AMSModel.FK_HelpdeskRequest_HelpdeskService" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -3,8 +3,9 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/HelpdeskSupporter/__HelpdeskSupporterLayout.cshtml";
     int count = 0;
-    
+
 }
+<script src="~/Scripts/loaddata.js"></script>
 
 <div class="col-md-12">
     <div class="panel panel-default">
@@ -12,12 +13,13 @@
         <div class="panel-body">
             <form class="form-horizontal" role="form">
                 <div class="table-responsive">
-                    <table class="table v-middle">
+                    <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>Thứ tự</th>
                                 <th>Tiêu đề</th>
                                 <th>Căn hộ</th>
+                                <th>Nội dung</th>
                                 <th>Ngày tạo</th>
                                 <th>Ngày giao việc</th>
                                 @*<th>Ngày đóng</th>*@
@@ -30,9 +32,9 @@
                             @{
                                 foreach (HelpdeskRequest hr in allRequest)
                                 {
-                                    <tr>
+                                    <tr data-id="@(++count)">
                                         <td>
-                                            <span class="label label-gray">@(++count)</span>
+                                            <span class="label label-gray">@count</span>
                                         </td>
                                         <td>
                                             <span class="label label-gray">@hr.Title</span>
@@ -41,16 +43,30 @@
                                             @hr.House.HouseName
                                         </td>
                                         <td>
+                                            @hr.Description
+                                        </td>
+                                        <td>
                                             <span class="label label-primary">@Convert.ToString(string.Format("{0:dd/MM/yyyy}", @hr.CreateDate))</span>
                                         </td>
                                         <td>
                                             <span class="label label-success">@Convert.ToString(string.Format("{0:dd/MM/yyyy}", @hr.AssignDate))</span>
                                         </td>
                                         <td>
-                                            <input class="label label-default" value="1"/>Open
+                                            @{
+                                                if (hr.Status == 1)
+                                                {
+                                                    @Html.Label("Assigned")
+                                                }
+                                                if (hr.Status == 2)
+                                                {
+                                                    @Html.Label("Done")
+                                                }
+                                            }
+                                            @*<input class="label label-default" />*@
                                         </td>
                                         <td class="text-right">
-                                            <a href="" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal" data-placement="top" title="Chi tiết"><i class="fa fa-eye"></i></a>
+
+                                            <a href="" onclick="getSelectedRequest(@hr.Id)" class="btn btn-default btn-xs" data-toggle="modal" data-target="#loadData" data-placement="top" title="Chi tiết"><i class="fa fa-eye"></i></a>
                                         </td>
                                     </tr>
                                 }
@@ -87,10 +103,9 @@
             </form>
         </div>
     </div>
-
 </div>
 
-<div id="myModal" class="modal fade">
+<div id="loadData" class="modal fade">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -99,82 +114,159 @@
             </div>
             <div class="modal-body">
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form">
+                    <form class="form-horizontal" role="form" method="post">
                         <div class="form-group">
                             <label for="inputEmail3" class="col-sm-3 control-label">Tiêu đề</label>
                             <div class="col-sm-9">
-                                <input type="email" readonly="readonly" class="form-control" id="inputEmail3" value="Mr. A">
+                                <input type="email" readonly="readonly" class="form-control" id="title">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="inputEmail3" class="col-sm-3 control-label">Căn hộ</label>
                             <div class="col-sm-9">
-                                <input type="text" type="text" class="form-control datepicker" value="12/12/1993">
+                                <input type="email" readonly="readonly" class="form-control" id="houseName">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="inputEmail3" class="col-sm-3 control-label">Nội dung</label>
                             <div class="col-sm-9">
-                                <input type="email" readonly="readonly" class="form-control" id="inputEmail3" value="30 kw">
+                                <input type="email" readonly="readonly" class="form-control" id="description">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="inputEmail3" class="col-sm-3 control-label">Ngày tạo</label>
                             <div class="col-sm-9">
-                                <span class="label label-primary">19/05/2016</span>
+                                <input type="email" readonly="readonly" class="form-control" id="createDate">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="inputEmail3" class="col-sm-3 control-label">Ngày giao việc</label>
                             <div class="col-sm-9">
-                                <span class="label label-success">19/05/2016</span>
+                                <input type="email" readonly="readonly" class="form-control" id="assignDate">
                             </div>
                         </div>
-                        @*<div class="form-group">
-                                <label for="inputEmail3" class="col-sm-3 control-label">Ngày đóng</label>
-                                <div class="col-sm-9">
-                                    <span class="label label-primary">19/05/2016</span>
-                                </div>
-                            </div>*@
                         <div class="form-group">
                             <label for="inputEmail3" class="col-sm-3 control-label">Trạng thái</label>
                             <div class="col-sm-9">
-                                <input type="text" type="text" class="form-control datepicker" value="12/12/1993">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">Giá dịch vụ</label>
-                            <div class="col-sm-9">
-                                <input type="text" type="text" class="form-control datepicker" value="12/12/1993">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">Loại dịch vụ</label>
-                            <div class="col-sm-9">
-                                <input type="text" type="text" class="form-control datepicker" value="12/12/1993">
-                            </div>
-                        </div>
-                        @*<div class="form-group">
-                                <label for="inputEmail3" class="col-sm-3 control-label">Ngày đóng</label>
                                 <div class="col-sm-9">
-                                    <select name="select" class="selectpicker" data-style="btn-white" data-size="5">
-                                        <option>Mr. A</option>
-                                        <option>Mr. B</option>
-                                        <option>Mr. C</option>
-                                        <option>Mr. D</option>
-                                        <option>Mr. E</option>
-                                        <option>Mr. F</option>
+                                    <select id="status" name="select" class="selectpicker" data-style="btn-white" data-size="5">
+                                        <option value="1" selected="selected">Assigned</option>
+                                        <option value="2">Done</option>
                                     </select>
                                 </div>
-                            </div>*@
+                            </div>
+                        </div>
                         <div class="form-group">
-
+                            <label for="inputEmail3" class="col-sm-3 control-label">Giá dịch vụ (VND)</label>
+                            <div class="col-sm-9">
+                                <input type="email" readonly="readonly" class="form-control" id="price">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Thuộc dịch vụ</label>
+                            <div class="col-sm-9">
+                                <input type="email" readonly="readonly" class="form-control" id="serviceName">
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Cập Nhật</button>
+                                <input hidden="hidden" id="hiddenId" />
+                                <button type="submit" onclick="updateRequest(hiddenId.value, status.value)" class="btn btn-primary">Cập Nhật</button>
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
                             </div>
                         </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!--Script Region-->
+<script>
+    function getSelectedRequest(selectedId) {
+        loadSelectedRequest(selectedId);
+    }
+    function loadSelectedRequest(hrId) {
+        $.ajax({
+            url: '/HelpdeskSupporter/GetHelpdeskRequest',
+            data: {
+                selectedId: hrId
+            },
+            error: function () {
+                alert("error")
+            },
+            success: function (request) {
+                $("#title").val(request.Title)
+                $("#houseName").val(request.HouseName)
+                $("#description").val(request.Description)
+                $("#createDate").val(request.CreateDate)
+                $("#assignDate").val(request.AssignDate)
+                $("#status").val(request.Status)
+                $("#price").val(request.Price)
+                $("#serviceName").val(request.HelpdeskServiceName)
+                $("#hiddenId").val(request.Id)
+                //location.href = location.href;
+            },
+            type: 'POST'
+        });
+    }
+</script>
+<script>
+    function updateRequest(currId, currStatusValue) {
+        $.ajax({
+            url: '/HelpdeskSupporter/UpdateRequest',
+            data: {
+                id: currId,
+                status: currStatusValue
+            },
+            error: function () {
+                alert("error")
+
+            },
+            success: function (result) {
+                if (result == true) {
+                    alert("Thanh cong!");
+                    location.href = "/HelpdeskSupporter/Index";
+                }
+                //href = "/HelpdeskSupporter/Index";
+            },
+            type: 'POST'
+        });
+    }
+</script>
+<!--End Script Region-->
+<!--<script language="javascript">
+    function get_content() {
+        var html = document.getElementById(@count).innerHTML;
+        alert("Nội dung cần lấy là: " + html);
+    }
+</script>-->
+<!--Test
+<div id="loadData" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Chi tiết </h4>
+            </div>
+            <div class="modal-body" id="modalContent">
+                <div class="panel-body">
+                    <label>
+                        Assignee
+                    </label>
+                    <input id="assignee" type="text"/>
+                    <button class="btn btn-success" onclick="updateRequest()">Update</button>
+
+
+
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Tiêu đề</label>
+                            <div class="col-sm-9">
+                                <span class="label label-gray" id="dataTitle"></span>
+                            </div>
+                        </div>
 
                     </form>
                 </div>
@@ -182,4 +274,4 @@
 
         </div>
     </div>
-</div>
+</div>-->
