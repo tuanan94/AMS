@@ -1,12 +1,19 @@
-﻿
+﻿@{
+    List<HelpdeskService> helpdeskServices = ViewBag.helpdeskServices;
+}
 <div class="panel panel-default" style="border-color: transparent">
     <form class="form-horizontal" role="form">
         <div class="form-group">
-            <button class="btn btn-inverse col-sm-1" data-toggle="modal" data-target="#add_h_req_modal" data-placement="top" title="Edit">
-                <i class="fa fa-plus"></i> Add
-            </button>
-            @*                                <label class="col-sm-2 control-label">Tháng</label>*@
-            <input type="email" class="form-control col-sm-offset-2 col-sm-4" id="" placeholder="Type here..">
+            <div class="col-sm-offset-1 col-sm-7">
+                <div class="input-group col-sm-2">
+                    <input type="text" class="form-control">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-search"></i></button>
+                    </span>
+                </div>
+            </div>
+
+            @*            <input type="email" class="form-control col-sm-offset-2 col-sm-4" id="" placeholder="Type here..">*@
             <div class="col-sm-3">
                 <select name="select" class="form-control" data-size="3">
                     <option>Dịch vụ internet</option>
@@ -14,8 +21,11 @@
                     <option>Khác</option>
                 </select>
             </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            <div class="col-sm pull-right">
+                <button class="btn btn-info" data-toggle="modal" data-target="#addHelpdeskRequestModal"
+                        data-placement="top" title="Edit" onclick="loadHelpdeskServiceType()">
+                    <i class="fa fa-plus"></i>
+                </button>
             </div>
         </div>
         <div class="table-responsive">
@@ -31,47 +41,60 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>
-                            Sửa chửa bóng đèn cầu thang
-                        </td>
-                        <td>
-                            Điện công cộng
-                        </td>
-                        <td>
-                            Miễn phí
-                        </td>
-                        <td>
-                            <button class="btn btn-default btn-sm">Ngưng hổ trợ</button>
-                        </td>
-                        <td class="text-right">
-                            <a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
-                            <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>
-                            Nghẹt cống
-                        </td>
-                        <td>
-                            Nước
-                        </td>
-                        <td>
-                            250,000 vnd
-                        </td>
-                        <td>
-                            <button class="btn btn-info btn-sm">Đang hổ trợ</button>
-                        </td>
-                        <td class="text-right">
-                            <a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
-                            <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
-                        </td>
-                    </tr>
+                    @{
+                        foreach (var hdSrv in helpdeskServices)
+                        {
+                            <tr id="@("row_" +hdSrv.Id)">
+                                <td></td>
+                                <td>
+                                    @hdSrv.Name
+                                </td>
+                                <td>
+                                    @hdSrv.HelpdeskServiceCategory.Name
+                                </td>
+                                <td>
+                                    @(hdSrv.Price == 0 ? "Miễn phí" : hdSrv.Price.ToString())
+                                </td>
+                                <td>
+                                    @if (hdSrv.Status == 0)
+                                    {
+                                        <span class="btn btn-default btn-sm-1">Ngưng hổ trợ</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="btn btn-info btn-sm-1">Đang hổ trợ</span>
+                                    }
+
+                                </td>
+                                <td class="text-right">
+                                    @*                                    <a onclick="helpdeskServiceDetail(@hdSrv.Id)" class="btn btn-default btn-xs" data-toggle="modal"*@
+                                    @*                                       data-target="#addHelpdeskRequestModal" data-placement="center" title="Edit">*@
+                                    @*                                        <i class="fa fa-pencil"></i>*@
+                                    @*                                    </a>*@
+                                    <span onclick="helpdeskServiceDetail(@hdSrv.Id)" class="btn btn-default btn-xs">
+                                        <i class="fa fa-pencil"></i>
+                                    </span>
+                                    <span href="#" class="btn btn-danger btn-xs" onclick="deleteHelpdeskService(@hdSrv.Id)">
+                                        <i class="fa fa-times"></i>
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    }
                 </tbody>
             </table>
         </div>
+
+        <div class="form-group" id="delBtnGroup" style="display: none">
+            <span class="btn btn-primary col-sm-1 pull-right" style="margin-left: 5px" onclick="commitDeleteHelpdeskService()">
+                <i class="fa fa-plus"></i> Delete
+            </span>
+            <span class="btn btn-inverse col-sm-1 pull-right" onclick="cancelDeleteHelpdeskService()"
+                  style="background-color: transparent; color: #ab7a4b; border-color: transparent;">
+                <i class="fa fa-plus"></i> Cancel
+            </span>
+        </div>
+
         <!-- // Progress table -->
         <div class="panel-footer padding-none text-center">
             <ul class="pagination">

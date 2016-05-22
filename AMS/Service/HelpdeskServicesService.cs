@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AMS.Reposiroty;
 
@@ -13,9 +14,19 @@ namespace AMS.Service
             return hdServiceRepository.List.ToList();
         }
 
+        public HelpdeskService FindById(int id)
+        {
+            return hdServiceRepository.FindById(id);
+        }
+
         public void Add(HelpdeskService service)
         {
             hdServiceRepository.Add(service);
         }
+        public void Update(HelpdeskService service)
+        {
+            hdServiceRepository.Update(service);
+        }
+
     }
 }

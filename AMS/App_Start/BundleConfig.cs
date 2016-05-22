@@ -22,7 +22,8 @@ namespace AMS
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
-            bundles.Add(new ScriptBundle("~/bundles/amsScript").Include("~/Scripts/amsScript/scripts.js","~/Scripts/amsScript/vendor.js"));
+            bundles.Add(new ScriptBundle("~/bundles/amsScript").Include("~/Scripts/amsScript/scripts.js", "~/Scripts/amsScript/vendor.js", "~/Scripts/amsScript/custom.js",
+                "~/Scripts/amsScript/additional-methods.min.js", "~/Scripts/amsScript/jquery.validate.min.js"));
 
 
             bundles.Add(new StyleBundle("~/Content/css").Include(

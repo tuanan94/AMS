@@ -16,10 +16,8 @@
                 <li class="active">
                     <a href="#h_desk_req_list" role="tab" data-toggle="tab"><i class="fa fa-fw fa-calendar"></i> Danh sách yêu cầu hỗ từ dân cư</a>
                 </li>
-                <li class="" id="h_desk_mng">
-                    @*                    <a href="#h_desk_req_mng" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Quản lý yêu cầu hổ trợ</a>*@
-                    <a href="#" onclick="loadSubView(this,'h_desk_mng')" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Quản lý yêu cầu hổ trợ</a>
-                    @*                    <a href="./ManageRequest?action=h_desk_mng" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Quản lý yêu cầu hổ trợ</a>*@
+                <li class="" id="helpdeskServiceManage">
+                    <a href="#" onclick="loadTab(this, 'helpdeskServiceManage')" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Quản lý yêu cầu hổ trợ</a>
                 </li>
                 <li class="">
                     <a href="#h_desk_req_cat_mng" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Quản lý yêu cầu hổ trợ</a>
@@ -33,73 +31,73 @@
                                 <div class="table-responsive">
                                     <table class="table v-middle">
                                         <thead>
-                                            <tr>
-                                                <th width="20">
-                                                    <input type="checkbox" name="checkbox" id="checkAll" />
-                                                </th>
-                                                <th>Date</th>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Location</th>
-                                                <th>Progress</th>
-                                                <th class="text-right">Action</th>
-                                            </tr>
+                                        <tr>
+                                            <th width="20">
+                                                <input type="checkbox" name="checkbox" id="checkAll"/>
+                                            </th>
+                                            <th>Date</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Location</th>
+                                            <th>Progress</th>
+                                            <th class="text-right">Action</th>
+                                        </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>
-                                                    <input type="checkbox" />
-                                                </td>
-                                                <td>
-                                                    <span class="label label-gray">19/09/2014</span>
-                                                </td>
-                                                <td>
-                                                    <img src="/images/people/110/guy-5.jpg" width="40" class="img-circle" /> Jonathan Smith
-                                                </td>
-                                                <td>
-                                                    <a href="#">contact@mosaicpro.biz</a>
-                                                </td>
-                                                <td>
-                                                    Miami, FL<a href="#"><i class="fa fa-map-marker fa-fw text-muted"></i></a>
-                                                </td>
-                                                <td>
-                                                    <div class="progress">
-                                                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
-                                                        </div>
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox"/>
+                                            </td>
+                                            <td>
+                                                <span class="label label-gray">19/09/2014</span>
+                                            </td>
+                                            <td>
+                                                <img src="/images/people/110/guy-5.jpg" width="40" class="img-circle"/> Jonathan Smith
+                                            </td>
+                                            <td>
+                                                <a href="#">contact@mosaicpro.biz</a>
+                                            </td>
+                                            <td>
+                                                Miami, FL<a href="#"><i class="fa fa-map-marker fa-fw text-muted"></i></a>
+                                            </td>
+                                            <td>
+                                                <div class="progress">
+                                                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
                                                     </div>
-                                                </td>
-                                                <td class="text-right">
-                                                    <a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
-                                                    <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <input type="checkbox" />
-                                                </td>
-                                                <td>
-                                                    <span class="label label-primary">19/09/2014</span>
-                                                </td>
-                                                <td>
-                                                    <img src="/images/people/110/woman-4.jpg" width="40" class="img-circle" /> Michelle Smith
-                                                </td>
-                                                <td>
-                                                    <a href="#">contact@mosaicpro.biz</a>
-                                                </td>
-                                                <td>
-                                                    Amsterdam, EU <a href="#"><i class="fa fa-map-marker fa-fw text-muted"></i></a>
-                                                </td>
-                                                <td>
-                                                    <div class="progress">
-                                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100">
-                                                        </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-right">
+                                                <a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
+                                                <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox"/>
+                                            </td>
+                                            <td>
+                                                <span class="label label-primary">19/09/2014</span>
+                                            </td>
+                                            <td>
+                                                <img src="/images/people/110/woman-4.jpg" width="40" class="img-circle"/> Michelle Smith
+                                            </td>
+                                            <td>
+                                                <a href="#">contact@mosaicpro.biz</a>
+                                            </td>
+                                            <td>
+                                                Amsterdam, EU <a href="#"><i class="fa fa-map-marker fa-fw text-muted"></i></a>
+                                            </td>
+                                            <td>
+                                                <div class="progress">
+                                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100">
                                                     </div>
-                                                </td>
-                                                <td class="text-right">
-                                                    <a href="#" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
-                                                    <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
-                                                </td>
-                                            </tr>
+                                                </div>
+                                            </td>
+                                            <td class="text-right">
+                                                <a href="#" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
+                                                <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
+                                            </td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -134,7 +132,7 @@
                     </div>
                 </div>
 
-                <div class="tab-pane fade active in" id="h_desk_mng_tab">
+                <div class="tab-pane fade active in" id="helpdeskServiceManageTab">
 
                 </div>
 
@@ -154,43 +152,44 @@
                             <div class="table-responsive">
                                 <table class="table v-middle">
                                     <thead>
-                                        <tr>
-                                            <th>No.</th>
-                                            <th>Tên</th>
-                                            <th>Trạng thái</th>
-                                            <th class="text-right">Action</th>
-                                        </tr>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Tên</th>
+                                        <th>Trạng thái</th>
+                                        <th class="text-right">Action</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>
-                                                Điện căn hộ
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-default btn-sm">Ngưng hổ trợ</button>
-                                            </td>
-                                            <td class="text-right">
-                                                <a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
-                                                <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>
-                                                Điện khu vực công cộng
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-info btn-sm">Ngưng hổ trợ</button>
-                                            </td>
-                                            <td class="text-right">
-                                                <a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
-                                                <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>
+                                            Điện căn hộ
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-default btn-sm">Ngưng hổ trợ</button>
+                                        </td>
+                                        <td class="text-right">
+                                            <a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
+                                            <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>
+                                            Điện khu vực công cộng
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-info btn-sm">Ngưng hổ trợ</button>
+                                        </td>
+                                        <td class="text-right">
+                                            <a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
+                                            <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
+                            
                             <!-- // Progress table -->
                             <div class="panel-footer padding-none text-center">
                                 <ul class="pagination">
@@ -288,26 +287,36 @@
         </div>
     </div>
 
-    <div id="add_h_req_modal" class="modal fade" role="dialog">
+    <div id="addHelpdeskRequestModal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Thêm dịch vụ hổ trợ</h4>
+                    <h4 id ="hdSrvModalTitle" class="modal-title">Thêm dịch vụ hổ trợ</h4>
                 </div>
                 <div class="modal-body">
                     <div class="panel-body">
-                        <form id="add_hd_req_form" class="form-horizontal" role="form">
+                        
+                        <div class="alert alert-info" id="successNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            Dịch vụ hổ trợ được khởi tạo thành công.
+                        </div>
+                        <div class="alert alert-warning" id="failedNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            Dịch vụ hổ trợ được khởi tạo thất bại.
+                        </div>
+
+                        <form id="addHelpdeskRequestForm" class="form-horizontal" role="form">
                             <div class="form-group">
-                                <label for="h_desk_name" class="col-sm-3 control-label">Tên </label>
+                                <label for="HdSrvName" class="col-sm-3 control-label">Tên </label>
                                 <div class="col-sm-9">
-                                    <input id="h_desk_srv_name" type="text" name="hd_req_name" class="form-control" value="">
+                                    <input id="hdSrvName" type="text" name="hdSrvName" class="form-control" value="">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="h_desk_type" class="col-sm-3 control-label">Nhóm dịch vụ hổ trợ</label>
+                                <label for="hdSrvCat" class="col-sm-3 control-label">Nhóm dịch vụ hổ trợ</label>
                                 <div class="col-sm-9">
-                                    <select id="h_desk_type" name="h_desk_srv_cat" class="form-control" data-size="3">
+                                    <select id="hdSrvCat" name="hdSrvCat" class="form-control" data-size="3">
                                         <option value="1">Điện công cộng</option>
                                         <option value="2">Nước</option>
                                         <option value="3">Khác</option>
@@ -315,34 +324,35 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="h_desk_price" class="col-sm-3 control-label">Giá tiền</label>
+                                <label for="hdSrvPrice" class="col-sm-3 control-label">Giá tiền</label>
                                 <div class="col-sm-9">
-                                    <input id="h_desk_price" name="h_desk_srv_price" type="text" type="text" class="form-control datepicker" value="">
+                                    <input id="hdSrvPrice" name="hdSrvPrice" type="text" type="text" class="form-control" value="">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Trạng thái</label>
                                 <div class="col-sm-9">
                                     <label class="radio-inline">
-                                        <input type="radio" name="h_desk_srv_status" id="h_req_status_on" checked value="1"> Hổ trợ
+                                        <input type="radio" name="hdSrvStatus" id="hdSrvStatusOn" checked value="1"> Hổ trợ
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="h_desk_srv_status" id="h_req_status_off" value="0"> Ngưng hổ trợ
+                                        <input type="radio" name="hdSrvStatus" id="hdSrvStatusOff" value="0"> Ngưng hổ trợ
                                     </label>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="h_desk_desc" class="col-sm-3 control-label">Mô tả</label>
+                                <label for="hdSrvDesc" class="col-sm-3 control-label">Mô tả</label>
                                 <div class="col-sm-9">
-                                    <textarea id="h_desk_desc" name="h_desk_srv_desc" class="form-control" rows="5"></textarea>
+                                    <textarea id="hdSrvDesc" name="hdSrvDesc" class="form-control" rows="5"></textarea>
                                 </div>
                             </div>
                             <div class="form-group">
-
                                 <div class="col-sm-offset-9 col-md-2">
-                                    <button id="add_hd_req" type="button" class="btn btn-primary">Hoàn thành</button>
+                                    @*                                    <button id="addHdSrv" name="addHdSrv" styletype="button"  class="btn btn-primary">Hoàn thành</button>*@
+                                    <button id="addHdSrv" name="addHdSrv" type="submit" class="btn btn-primary">Tạo mới</button>
                                 </div>
                             </div>
+                            <input type="hidden" id="hdSrvId" name ="hdSrvId" value=""/>
                         </form>
                     </div>
                 </div>
@@ -352,27 +362,14 @@
 
 </div>
 
+
 <script>
-    function loadSubView(e, viewName) {
+    function loadTab(e, viewName) {
         if (!$("#" + viewName).hasClass("active")) {
             window.currentTab = viewName;
-            $('#' + window.currentTab + '_tab').html("");
-            $('#' + window.currentTab + '_tab').load("ManageRequest?action=" + viewName);
+            $('#' + window.currentTab + 'Tab').load("ManageRequest?action=" + viewName);
             $(".tab-pane.fade").removeClass("test active in");
-            $("#h_desk_req_list").html("");
-            $('#' + window.currentTab + '_tab').addClass("active in");
+            $('#' + window.currentTab + 'Tab').addClass("active in");
         }
     }
-
-    $("button#add_hd_req").click(function () {
-        console.log($("#add_hd_req_form").serialize());
-        $.ajax({
-            url: "ManageRequest?action=addHelpdeskSrv",
-            type: "post",
-            data: $("#add_hd_req_form").serialize(),
-            success: function (data) {
-                console.log(data);
-            }
-        });
-    });
 </script>
