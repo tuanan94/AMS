@@ -483,6 +483,7 @@
     <Content Include="Views\Home\Test.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Management\HelpdeskServiceTabPartial.cshtml" />
+    <Content Include="Views\Management\_helpdeskSeviceTablePartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -7,7 +7,7 @@ namespace AMS.Service
 {
     public class HelpdeskServicesService
     {
-         GenericRepository<HelpdeskService>  hdServiceRepository = new GenericRepository<HelpdeskService>();
+        GenericRepository<HelpdeskService> hdServiceRepository = new GenericRepository<HelpdeskService>();
 
         public List<HelpdeskService> GetHelpdeskServices()
         {
@@ -32,5 +32,32 @@ namespace AMS.Service
             hdServiceRepository.Delete(service);
         }
 
+        public List<HelpdeskService> FindByCategoryAndName(string name, int catId)
+        {
+            if (null != name)
+            {
+                return
+                    hdServiceRepository.List.Where(s => s.HelpdeskServiceCategoryId == catId && s.Name.Contains(name))
+                        .ToList();
+            }
+            return hdServiceRepository.List.Where(s => s.HelpdeskServiceCategoryId == catId)
+                    .ToList();
+        }
+        public List<HelpdeskService> FindByStatusAndName(string name, int status)
+        {
+            if (null != name)
+            {
+                return
+                    hdServiceRepository.List.Where(s => s.Status == status && s.Name.Contains(name))
+                        .ToList();
+            }
+            return hdServiceRepository.List.Where(s => s.HelpdeskServiceCategoryId == status)
+                    .ToList();
+        }
+        public List<HelpdeskService> FindByName(string name)
+        {
+            return
+                hdServiceRepository.List.Where(s => s.Name.Contains(name)).ToList();
+        }
     }
 }

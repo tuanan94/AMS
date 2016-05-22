@@ -292,10 +292,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 id="hdSrvModalTitle" class="modal-title">Thông Báo !</h4>
+                    <h4 id="hdSrvMsgModalTitle" class="modal-title">Thông Báo !</h4>
                 </div>
                 <div class="modal-body">
-                    <p id="msgContent">One fine body…</p>
+                    <p id="msgContent"></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -316,11 +316,11 @@
 
                         <div class="alert alert-info" id="successNotify" style="display: none">
                             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                            Dịch vụ hổ trợ được khởi tạo thành công.
+                            <span>Dịch vụ hổ trợ được khởi tạo thành công.</span>
                         </div>
                         <div class="alert alert-warning" id="failedNotify" style="display: none">
                             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                            Dịch vụ hổ trợ được khởi tạo thất bại.
+                            <span>Dịch vụ hổ trợ được khởi tạo thất bại.</span>
                         </div>
 
                         <form id="addHelpdeskRequestForm" class="form-horizontal" role="form">
@@ -366,7 +366,7 @@
                             <div class="form-group">
                                 <div class="col-sm-offset-9 col-md-2">
                                     @*                                    <button id="addHdSrv" name="addHdSrv" styletype="button"  class="btn btn-primary">Hoàn thành</button>*@
-                                    <button id="addHdSrv" name="addHdSrv" type="submit" class="btn btn-primary">Tạo mới</button>
+                                    <button id="addHdSrv" name="addHdSrv" type="submit" class="btn btn-primary">Chấp nhận</button>
                                 </div>
                             </div>
                             <input type="hidden" id="hdSrvId" name="hdSrvId" value="" />

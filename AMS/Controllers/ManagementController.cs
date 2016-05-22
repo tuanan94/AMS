@@ -56,6 +56,14 @@ namespace AMS.Controllers
 
                     return Json(hdSrvCatListModel, JsonRequestBehavior.AllowGet);
                 }
+                else if (action.Equals("loadHdSrvTable"))
+                {
+                    // Start load all service category
+                    ViewBag.helpdeskServices = _helpdeskServicesService.GetHelpdeskServices();
+                    // Start load all service category
+                    url = "_helpdeskSeviceTablePartial";
+                    return PartialView(url);
+                }
                 else if (action.Equals("hdSrvDetail"))
                 {
                     NameValueCollection nvc = this.Request.QueryString;
@@ -220,8 +228,44 @@ namespace AMS.Controllers
                     {
                         response.StatusCode = -1;
                     }
-
                     return Json(response);
+                }else if (action.Equals("searchHdSrv"))
+                {
+                    MessageViewModels response = new MessageViewModels();
+                    NameValueCollection nvc = this.Request.Form;
+                    String searchStr = nvc["searchStr"];
+                    String modeStr = nvc["filterMode"];
+                    String filterValue = nvc["filterValue"];
+                    try
+                    {
+                        int mode = Int32.Parse(modeStr);
+                        int value = -1;
+                        if (mode != 0)
+                        {
+                            value = Int32.Parse(filterValue);
+                        }
+                        List<HelpdeskService> helpdeskServices = null;
+                        if (mode == 1)
+                        {
+                            helpdeskServices = _helpdeskServicesService.FindByCategoryAndName(searchStr, value);
+                        }
+                        else if (mode == 2)
+                        {
+                            helpdeskServices = _helpdeskServicesService.FindByStatusAndName(searchStr, value);
+                        }
+                        else
+                        {
+                            helpdeskServices = _helpdeskServicesService.FindByName(searchStr);
+                        }
+                        ViewBag.helpdeskServices = helpdeskServices;
+                        url = "_helpdeskSeviceTablePartial";
+                        return PartialView(url);
+                    }
+                    catch (Exception)
+                    {
+                        response.StatusCode = -1;
+                        return Json(response);
+                    }
                 }
                 return PartialView(url);
             }
