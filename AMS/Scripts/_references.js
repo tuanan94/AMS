@@ -10,3 +10,4 @@
 /// <reference path="respond.js" />
 /// <reference path="graph.js" />
 /// <reference path="chart.js" />
+/// <reference path="amsscript/social.js" />
