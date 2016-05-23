@@ -8,8 +8,8 @@ namespace AMS.Reposiroty
 {
     public class GenericRepository<T> : IRepository<T> where T : class
     {
-        private AMSEntities db = null;
-        private DbSet<T> table = null;
+        protected AMSEntities db = null;
+        protected DbSet<T> table = null;
         public GenericRepository()
         {
             this.db = new AMSEntities();

@@ -20,6 +20,7 @@ namespace AMS.Controllers
             ViewBag.allHouse = allHouse;
             return View(allHouse);
         }
+        [Authorize]
         public ActionResult Index()
         {
             return View();
