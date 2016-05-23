@@ -29,7 +29,7 @@ namespace AMS.Controllers
         public ActionResult Index(string Title, int PostId)
         {
             postService.createPost(Title, PostId);
-            return View("TimeLine");
+            return RedirectToAction("TimeLine");
         }
         public ActionResult TimeLine()
         {
@@ -136,7 +136,7 @@ namespace AMS.Controllers
 
             postService.createPost(post);
             //}
-            return View();
+            return RedirectToAction("TimeLine");
         }
         public ActionResult About()
         {

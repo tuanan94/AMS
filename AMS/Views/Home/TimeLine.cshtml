@@ -23,29 +23,30 @@
             <div class="media-body">
                 @using (Html.BeginForm("TimeLine", "Home", FormMethod.Post , new {role = "form", enctype = "multipart/form-data"}))
                 {
-                    <div class="row">
-                        <div class="col-md-10 col-lg-8">
-
-                            <div class="col-xs-10">
-                                <div class="panel-heading panel-heading-gray title">
-                                    What´s new
+                   
+                     <div class="row">
+                                <div class="col-md-12 col-lg-8">
+                                    <div class="panel panel-default share">
+                                        <div class="panel-heading panel-heading-gray title">
+                                            Chia se
+                                        </div>
+                                        <div class="panel-body">
+                                          
+                                            <textarea rows="4" cols="50" name="Title" id="Title" class="form-control share-text" rows="3" placeholder="chia sẽ cảm xúc của bạn..."></textarea>
+                                        </div>
+                                        <div class="panel-footer share-buttons">
+                                           
+                                          
+                                                @*<i class="fa fa-photo">*@
+                                                    @Html.TextBoxFor(m => m.Media, new { @class = "fa fa-photo", @type = "file", @name = "Media", @id = "Media" })
+                                                @*</i>*@
+                                           
+                                            
+                                            <button @*onclick="addPostByAjax()"*@ class="btn btn-primary btn-note-submit pull-right"><i class="fa fa-save"></i> Lưu</button>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div class="panel-body">
-                                    <textarea rows="4" cols="50" name="Title" id="Title"></textarea>
-                                    @*@Html.TextBoxFor(m =>m.Body)*@
-                                    @*@Html.TextAreaFor(m => m.Title, new {@Type = "text", rows = 3, columns = 40, @class = "form-control share-text", @placeholder = "Chia se cam xuc..."})*@
-                                </div>
-                                <p>
-                                    <button class="btn btn-default btn-upload"><i class="fa fa-picture-o"></i></button>
-                                    @Html.TextBoxFor(m => m.Media, new {@class = "media-upload", @type = "file", @name="Media", @id="Media"})
-                                    <button @*onclick="addPostByAjax()"*@ class="btn btn-primary btn-note-submit pull-right"><i class="fa fa-save"></i> Lưu</button>
-                                </p>
-                                
                             </div>
-                            
-                        </div>
-                    </div>
                 }
             </div>
         </li>
@@ -67,11 +68,20 @@
                    
                     <div class="panel-body">
                         <p>@h.Title</p>
+                        @if(h.ImgUrl== null)
+                        {
                         <div class="timeline-added-images">
-                            <img alt="media" src="@ViewHelper.Media(h.ImgUrl)" width="550" />
+                           
 
                         </div>
-                    </div>
+                        }else
+                        {
+                            <div class="timeline-added-images">
+                                <img alt="media" src="@ViewHelper.Media(h.ImgUrl)" width="550" />
+                            </div>
+                            }
+
+                        </div>
                  
                   
                     <div class="view-all-comments"><a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments
@@ -117,7 +127,7 @@
 
                                     <span class="input-group-addon">
                                         <button onclick="addCommentByAjax()" class="btn btn-success"><i class="fa fa-save"></i> Đăng</button>
-                                    <a href=""><i class="fa fa-photo"></i></a>
+                                   
                                 </span>
                                 </div>
                             }
@@ -135,7 +145,32 @@
      
     </ul>
 </div>
-
+<div class="col-md-3">
+    <div data-spy="affix" data-offset-top="318" data-offset-bottom="100" class="affix-top">
+        <div id="scroll-spy">
+            <ul class="nav timeline-months">
+                <li class="active">
+                    <a href="#october"><i class="fa fa-calendar fa-fw"></i>October</a>
+                </li>
+                <li>
+                    <a href="#september"><i class="fa fa-calendar fa-fw"></i>September</a>
+                </li>
+                <li>
+                    <a href="#august"><i class="fa fa-calendar fa-fw"></i>August</a>
+                </li>
+                <li>
+                    <a href="#july"><i class="fa fa-calendar fa-fw"></i>July</a>
+                </li>
+                <li>
+                    <a href="#june"><i class="fa fa-calendar fa-fw"></i>June</a>
+                </li>
+                <li>
+                    <a href="#may"><i class="fa fa-calendar fa-fw"></i>May</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
 <script>
     function addPostByAjax() {
         $.ajax({

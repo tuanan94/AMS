@@ -28,7 +28,7 @@ namespace AMS.Service
         }
         public IEnumerable<Post> getAllPost()
         {
-            return postRepository.List.ToList();
+            return postRepository.List.OrderByDescending(t=>t.Id).ToList();
         }
         public IEnumerable<Post> getAllCommentBelongPost(long id)
         {
@@ -36,7 +36,7 @@ namespace AMS.Service
         }
         public IEnumerable<Post> getCommentBelongPost(int id)
         {
-            IEnumerable<Post> post = postRepository.List.ToList().Where(t => t.PostId == id);
+            IEnumerable<Post> post = postRepository.List.Where(t => t.PostId == id);
             return post;
         }
         public IEnumerable<Post> getCommentPostIdNotNull()
