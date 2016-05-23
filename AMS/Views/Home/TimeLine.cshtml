@@ -1,10 +1,14 @@
-﻿@using AMS.Helper
+﻿@using System.Collections
+@using AMS.Helper
+@using Microsoft.Ajax.Utilities
 @model AMS.ViewModel.PostViewModel
 @{
     ViewBag.Title = "TimeLine";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
-    IEnumerable<Post> allPost = ViewBag.allPost;
-  
+    List<Post> allPost = new List<Post>();
+    allPost = ViewBag.allPost;
+    IEnumerable<Post> comment = ViewBag.commentsLists;
+    List<IEnumerable<Post>> listCommentList = ViewBag.listCommentList;
 }
 
 
@@ -45,10 +49,14 @@
                 }
             </div>
         </li>
-        {
+        
            
-            @foreach (var h in allPost)
+            @foreach (Post h in allPost)
             {
+                if (h.ImgUrl != null)
+                {
+                    
+               
                  <li class="media">
             <div class="pull-left">
                 <img src="/images/people/110/woman-9.jpg" alt="people" class="img-circle" width="80">
@@ -56,42 +64,72 @@
             </div>
             <div class="media-body">
                 <div class="panel panel-default">
+                   
                     <div class="panel-body">
                         <p>@h.Title</p>
-                        <div class="timeline-added-images" >
+                        <div class="timeline-added-images">
                             <img alt="media" src="@ViewHelper.Media(h.ImgUrl)" width="550" />
-                           
+
                         </div>
                     </div>
-                    <div class="view-all-comments"><a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments</div>
+                 
+                  
+                    <div class="view-all-comments"><a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments
+                    </div>
                     <ul class="comments">
-                       
-                        <li>
-                            <div class="media">
-                                <a href="" class="pull-left">
-                                    <img src="/images/people/50/woman-5.jpg" class="media-object">
-                                </a>
-                                <div class="media-body">
-                                    <a href="" class="comment-author">Mary</a>
-                                    <span>Thanks Bill</span>
-                                    <div class="comment-date">2 days</div>
+                        @foreach (var c in comment)
+                        {
+                            //foreach (var d in listCommentList)
+                            //{
+                            if (h.Id == c.PostId)
+                             {
+                                  <li>
+                                <div class="media">
+                                    <a href="" class="pull-left">
+                                        <img src="/images/people/50/woman-5.jpg" class="media-object">
+                                    </a>
+                                    <div class="media-body">
+                                        <a href="" class="comment-author">Mary</a>
+                                        @if (@c.Title.IsNullOrWhiteSpace() || @h.ImgUrl.IsNullOrWhiteSpace())
+                                        {
+                                            <span></span>
+                                        }
+                                        else
+                                        {
+                                            <span>@c.Title</span>
+                                        }
+
+                                        <div class="comment-date">2 days</div>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
+                            </li>
+                             }
+                              @*}*@ 
+                        }
+
 
                         <li class="comment-form">
-                            <div class="input-group">
-                                <input type="text" class="form-control comment-content">
-                                <span class="input-group-addon">
+                            @using (Html.BeginForm("Index", "Home", FormMethod.Post, new {role = "form", enctype = "multipart/form-data"}))
+                            {
+                                <div class="input-group">
+                                    <input type="text" hidden="hidden" value="@h.Id" class="form-control comment-content" id="PostId" name="PostId">
+                                    <input type="text" class="form-control comment-content" id="Title" name="Title">
+
+                                    <span class="input-group-addon">
+                                        <button onclick="addCommentByAjax()" class="btn btn-success"><i class="fa fa-save"></i> Đăng</button>
                                     <a href=""><i class="fa fa-photo"></i></a>
                                 </span>
-                            </div>
+                                </div>
+                            }
+
                         </li>
                     </ul>
 
                 </div>
             </div>
         </li>  
+            
+             }
             }
         }
      
@@ -118,6 +156,24 @@
             type: 'POST'
         });
     }
+    function addCommentByAjax() {
+        $.ajax({
+            url: '/Home/TimeLine',
+            data: {
+                Title: $("#Title").val(),
+                Media: $("#PostId").val()
 
+            },
+            error: function () {
+                alert("error")
+
+            },
+            success: function (data) {
+                //clearHouseList();
+                //loadHouseList();
+            },
+            type: 'POST'
+        });
+    }
 </script>
   
