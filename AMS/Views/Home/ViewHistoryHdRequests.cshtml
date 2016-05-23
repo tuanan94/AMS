@@ -41,16 +41,18 @@
         <div class="panel-body">
             <form class="form-horizontal" id="searchHdSrv" role="form" onkeypress="return event.keyCode !== 13;">
                 <div class="form-group">
+                    <label class="col-sm-1 control-label">DV H.Trợ</label>
                     <div class="col-md-3 full-width-select">
-                        <select multiple data-style="btn-white" class="selectpicker" title="Dịch vụ hổ trợ">
+                        <select multiple data-style="btn-white" class="selectpicker" title="Nhóm dịch vụ hổ trợ">
                             <option value="0">Tất cả</option>
                             <option value="0">Điện</option>
                             <option value="1">Nước</option>
                             <option value="2">Nước công cộng</option>
                         </select>
                     </div>
+                    <label class="col-sm-1 control-label">Trạng thái</label>
                     <div class="col-md-3 full-width-select">
-                        <select multiple data-style="btn-white" class="selectpicker" title="Trạng thái">
+                        <select multiple data-style="btn-white" class="selectpicker" title="Dịch vụ hổ trợ">
                             <option value="0">Mở</option>
                             <option value="1">Đã giao việc</option>
                             <option value="2">Đang xử lý</option>
@@ -58,11 +60,11 @@
                             <option value="3">Đóng</option>
                         </select>
                     </div>
-                    <div class="col-md-6">
-                        <div class="col-md-10">
-                            <input type="email" class="form-control" style="max-width: none" id="searchStr" name="searchStr">
+                    <div class="col-md-4">
+                        <div class="col-md-8">
+                            <input type="email" class="form-control" style="max-width: none" placeholder="Request title" id="searchStr" name="searchStr">
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-4">
                             <span onclick="searchHdSrv()" class="btn btn-primary" style="margin-left: 5px">Search</span>
                         </div>
                     </div>
@@ -104,7 +106,6 @@
                                 <th>NV được giao</th>
                                 <th>Trạng thái</th>
                                 <th>Ngày tạo</th>
-                                <th>Ngày cập nhật</th>
                                 <th>Ngày hoàn thành</th>
                                 <th class="text-right">Thao tác</th>
                             </tr>
@@ -123,9 +124,6 @@
                                 </td>
                                 <td>
                                     <span class="label label-info">Đang xử lý</span>
-                                </td>
-                                <td>
-                                    <span class="label label-warning">08:08</span> <span class="label label-gray">03/03/2013</span>
                                 </td>
                                 <td>
                                     <span class="label label-warning">08:08</span> <span class="label label-gray">03/03/2013</span>

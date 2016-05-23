@@ -40,33 +40,35 @@
         @*        <div class="panel-heading panel-heading-gray">Bảng yêu cầu dịch vụ hổ trợ</div>*@
         <div class="panel-body">
             <form class="form-horizontal" id="searchHdSrv" role="form" onkeypress="return event.keyCode !== 13;">
-                <div class="form-group">
-                    <div class="col-md-3 full-width-select">
-                        <select multiple data-style="btn-white" class="selectpicker" title="Nhóm dịch vụ hổ trợ">
-                            <option value="0">Tất cả</option>
-                            <option value="0">Điện</option>
-                            <option value="1">Nước</option>
-                            <option value="2">Nước công cộng</option>
-                        </select>
+            <div class="form-group">
+                <label class="col-sm-1 control-label">Loại DV H.Trợ</label>
+                <div class="col-md-3 full-width-select">
+                    <select multiple data-style="btn-white" class="selectpicker" title="Nhóm dịch vụ hổ trợ">
+                        <option value="0">Tất cả</option>
+                        <option value="0">Điện</option>
+                        <option value="1">Nước</option>
+                        <option value="2">Nước công cộng</option>
+                    </select>
+                </div>
+                <label class="col-sm-1 control-label">DV H.Trợ</label>
+                <div class="col-md-3 full-width-select">
+                    <select multiple data-style="btn-white" class="selectpicker" title="Dịch vụ hổ trợ">
+                        <option value="0">Tất cả</option>
+                        <option value="0">Điện cầu thang</option>
+                        <option value="1">Bóng đèn phòng ngủ</option>
+                        <option value="2">Nghẹt cống</option>
+                        <option value="3">Quạt trần</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <div class="col-md-8">
+                        <input type="email" class="form-control" style="max-width: none" placeholder="Request title" id="searchStr" name="searchStr">
                     </div>
-                    <div class="col-md-3 full-width-select">
-                        <select multiple data-style="btn-white" class="selectpicker" title="Dịch vụ hổ trợ">
-                            <option value="0">Mở</option>
-                            <option value="1">Đã giao việc</option>
-                            <option value="2">Đang xử lý</option>
-                            <option value="3">Chờ Approve</option>
-                            <option value="3">Đóng</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="col-md-10">
-                            <input type="email" class="form-control" style="max-width: none" id="searchStr" name="searchStr">
-                        </div>
-                        <div class="col-md-2">
-                            <span onclick="searchHdSrv()" class="btn btn-primary" style="margin-left: 5px">Search</span>
-                        </div>
+                    <div class="col-md-4">
+                        <span onclick="searchHdSrv()" class="btn btn-primary" style="margin-left: 5px">Search</span>
                     </div>
                 </div>
+            </div>
                 <div class="form-group">
                     <label class="col-sm-1 control-label">Trạng thái</label>
                     <div class="col-md-3 full-width-select">
@@ -78,25 +80,25 @@
                             <option value="3">Đóng</option>
                         </select>
                     </div>
-                    <label class="col-sm-2 control-label">Người được giao</label>
-                    <div class="col-md-6 full-width-select">
+                    <label class="col-sm-1 control-label">Người H.Trợ</label>
+                    <div class="col-md-3 full-width-select">
                         <select class="selectpicker" multiple data-style="btn-white" title="Người được giao">
-                            <option>Mustard</option>
-                            <option>Ketchup</option>
-                            <option>Relish</option>
+                            <option>Nguyễn Văn A</option>
+                            <option>Trần Văn A</option>
+                            <option>Lại Thị C</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-4">
                         <fieldset class="scheduler-border less-padding">
-                            <legend class="scheduler-border">Ngày tạo</legend>
+                            <legend class="scheduler-border">Tạo mới</legend>
                             <div class="col-md-5">
                                 <div class="form-group">
-                                    <input type="radio" name="todayOrRange" checked="checked" value="1" /><strong>Hôm nay</strong>
+                                    <input type="radio" name="todayOrRange" checked="checked" value="1" /><strong>Tất cả</strong>
                                 </div>
                                 <div class="form-group">
-                                    <input type="radio" name="todayOrRange" checked="checked" value="1" /><strong>Tất cả</strong>
+                                    <input type="radio" name="todayOrRange" value="1" /><strong>Hôm nay</strong>
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -119,13 +121,13 @@
                     </div>
                     <div class="col-md-4">
                         <fieldset class="scheduler-border less-padding">
-                            <legend class="scheduler-border">Ngày hoàn thành</legend>
+                            <legend class="scheduler-border">Hoàn thành</legend>
                             <div class="col-md-5">
                                 <div class="form-group">
-                                    <input type="radio" name="todayOrRange" checked="checked" value="1" /><strong>Hôm nay</strong>
+                                    <input type="radio" name="todayOrRange" checked="checked" value="1" /><strong>Tất cả</strong>
                                 </div>
                                 <div class="form-group">
-                                    <input type="radio" name="todayOrRange" checked="checked" value="1" /><strong>Tất cả</strong>
+                                    <input type="radio" name="todayOrRange" value="1" /><strong>Hôm nay</strong>
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -151,10 +153,10 @@
                             <legend class="scheduler-border">Trễ hẹn</legend>
                             <div class="col-md-5">
                                 <div class="form-group">
-                                    <input type="radio" name="todayOrRange" checked="checked" value="1" /><strong>Hôm nay</strong>
+                                    <input type="radio" name="todayOrRange" checked="checked" value="1" /><strong>Tất cả</strong>
                                 </div>
                                 <div class="form-group">
-                                    <input type="radio" name="todayOrRange" checked="checked" value="1" /><strong>Tất cả</strong>
+                                    <input type="radio" name="todayOrRange" value="1" /><strong>Hôm nay</strong>
                                 </div>
                             </div>
                             <div class="col-md-2">
