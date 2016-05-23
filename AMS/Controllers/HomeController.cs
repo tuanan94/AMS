@@ -82,7 +82,7 @@ namespace AMS.Controllers
         {
             string mediaUrl = null;
 
-            bool imageFlag = false;
+         
             //if (ModelState.IsValid)
             //{
             if (post.Media != null && post.Media.ContentLength > 0)
@@ -121,7 +121,7 @@ namespace AMS.Controllers
                     {
                         mediaUrl = Path.Combine(uploadDir, fileName);
 
-                        imageFlag = true;
+                        
                     }
 
                     Util.DeleteFile(imagePath);
