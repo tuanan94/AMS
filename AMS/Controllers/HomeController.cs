@@ -46,6 +46,28 @@ namespace AMS.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        [Route("Home/HelpdeskRequest/Create")]
+        public ActionResult CreateNewHdRequest()
+        {
+            return View("CreateHdRequest");
+        }
+
+        [HttpGet]
+        [Route("Home/HelpdeskRequest/ViewHistory")]
+        public ActionResult ViewHistoryHdRequest()
+        {
+            return View("ViewHistoryHdRequests");
+        }
+
+        [HttpGet]
+        [Route("Home/HelpdeskRequest/AdminView")]
+        public ActionResult ViewRequestingHdRequestToManager()
+        {
+            return View("ViewRequestingHdRequestsOfManager");
+        }
+
         [HttpPost]
         public ActionResult ManageMember(MemberViewModel member)
         {

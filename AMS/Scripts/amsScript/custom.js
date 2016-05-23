@@ -253,7 +253,9 @@ function cancelDeleteHdSrvCategory() {
     window.deleteHdSrvCatList = new Array();
     $("#delHdSrvBtnGroup").removeClass("show").addClass("hide");;
 }
-
+function sentHepdeskRequest() {
+    $("#messageModal").modal("show");
+}
 $(document).ready(function () {
     $("#addHelpdeskRequestForm").validate({
         rules: {
@@ -390,7 +392,6 @@ $(document).ready(function () {
     $("#hdSrvCategoryModal").on("hidden.bs.modal", function () {
         document.getElementById("hdSrvCategoryForm").reset();
     });
-
     $(document).on("change", "#hdReqFilterType", function () {
         var selected = parseInt($(this).find("option:selected").val(), 10);
         if (selected === 0) {

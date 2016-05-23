@@ -29,7 +29,8 @@ namespace AMS
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
-            bundles.Add(new StyleBundle("~/Content/css/css").Include("~/Content/css/default.css"));
+            bundles.Add(new StyleBundle("~/Content/css/css").Include("~/Content/css/default.css",
+                      "~/Content/css/custom.css"));
 
         }
     }

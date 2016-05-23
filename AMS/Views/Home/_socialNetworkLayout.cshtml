@@ -11,7 +11,7 @@
             </div>
         </div>
         <div id="menu">
-            <ul>
+            <ul id="slide-left" class="slide-left-inactive">
                 <li class="category">Account</li>
                 <li class="">
                     <a href="/Home/ViewProfile"><i class="icon-user-1"></i> Thông tin cá nhân</a>
@@ -21,6 +21,9 @@
                 </li>
                 <li class="">
                     <a href="user-private-messages.html"><i class="icon-comment-fill-1"></i> Tin nhắn</a>
+                </li>
+                <li class="active">
+                    <a href="/Home/HelpdeskRequest/View"><i class="fa fa-cogs"></i> Dịch vụ</a>
                 </li>
                 <li>
                     <a href="login.html"><i class="icon-unlock-fill"></i> Logout</a>
@@ -130,12 +133,30 @@
             </div>*@
 
             <!-- /.navbar-collapse -->
-        @*</div>
+    @*</div>
     </nav>*@
+
+   
     @RenderBody()
      <!--Footer-->
     <div class="footer">
         Social Network Template © Copyright Notice
+    </div>
+    <div id="messageModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 id="hdSrvMsgModalTitle" class="modal-title">Thông Báo !</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="msgContent"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
