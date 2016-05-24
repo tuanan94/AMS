@@ -38,7 +38,7 @@
         }
     </table>
 </div>
-@*@{
+@{
     List<House> allHouse = ViewBag.allHouse;
 }
 <div id="content">
@@ -77,7 +77,7 @@
     function loadHouseList() {
         clearHouseList();
         $.ajax({
-            url: '/Admin/allHouseInfo',
+            url: '/Admin/ManageHouse',
             data: {
             },
             error: function () {
@@ -118,4 +118,4 @@
             type: 'POST'
         });
     }
-</script>*@
+</script>
