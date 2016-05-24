@@ -15,8 +15,8 @@
 
     //List<PostViewModel> listComment = listPostViewModel;
 }
-
-
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+<script src="~/Scripts/jquery-1.10.2.js"></script>
 
 <div class="col-md-9">
     <ul class="timeline-list">
@@ -124,7 +124,7 @@
 
 
                                 <li class="comment-form">
-                                    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))
+                                    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new {role = "form", enctype = "multipart/form-data"}))
                                     {
                                         <div class="input-group">
                                             <input type="text" hidden="hidden" value="@h.Id" class="form-control comment-content" id="PostId" name="PostId">
@@ -132,6 +132,21 @@
 
                                             <span class="input-group-addon">
                                                 <button onclick="addCommentByAjax()" class="btn btn-success"><i class="fa fa-save"></i> Đăng</button>
+
+                                            </span>
+                                        </div>
+                                    }
+
+                                </li>
+                                <li class="comment-form" id="comment">
+                                    @using (Html.BeginForm("AddByAjax", "Home", FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))
+                                    {
+                                        <div class="input-group">
+                                            <input type="text" hidden="hidden" value="@h.Id" class="form-control comment-content" id="PostId" name="PostId">
+                                            <input type="text" class="form-control comment-content" id="Title" name="Title">
+
+                                            <span class="input-group-addon">
+                                                <button onclick="addCommentByAjax()" class="btn btn-success"><i class="fa fa-save"></i> Đăng Ajax</button>
 
                                             </span>
                                         </div>
@@ -177,6 +192,30 @@
     </div>
 </div>
 <script>
+    function clearHouseList() {
+        $("#comment").html("");
+
+    }
+    function loadHouseList() {
+        clearHouseList();
+        $.ajax({
+            url: '/Home/allHouse',
+            data: {
+            },
+            error: function () {
+                alert("error")
+                // $("#alertArea").html("Error occured!")
+            },
+            success: function (data) {
+                var obj = JSON.parse(data);
+                $.each(obj, function (index, jsonObject) {
+                    $("#housetablebody").append('<tr><td>' + jsonObject["PostId"] + '</td><td>' + jsonObject["Title"] + '<td/></tr>')
+                });
+
+            },
+            type: 'GET'
+        });
+    }
     function addPostByAjax() {
         $.ajax({
             url: '/Home/TimeLine',
@@ -190,15 +229,15 @@
 
             },
             success: function (data) {
-                //clearHouseList();
-                //loadHouseList();
+                clearHouseList();
+                loadHouseList();
             },
             type: 'POST'
         });
     }
     function addCommentByAjax() {
         $.ajax({
-            url: '/Home/TimeLine',
+            url: '/Home/AddByAjax',
             data: {
                 Title: $("#Title").val(),
                 Media: $("#PostId").val()
@@ -209,11 +248,12 @@
 
             },
             success: function (data) {
-                //clearHouseList();
-                //loadHouseList();
+                clearHouseList();
+                loadHouseList();
             },
             type: 'POST'
         });
     }
 </script>
-
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>

@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using AMS.Helper;
 using AMS.ViewModel;
+using Newtonsoft.Json;
+
 namespace AMS.Controllers
 {
     public class HomeController : Controller
@@ -25,11 +27,27 @@ namespace AMS.Controllers
         {
             return View();
         }
+       
+        [HttpPost]
+        public void AddByAjax(string Title, int PostId)
+        {
+            postService.createPost(Title, PostId);
+         
+        }
         [HttpPost]
         public ActionResult Index(string Title, int PostId)
         {
             postService.createPost(Title, PostId);
             return RedirectToAction("TimeLine");
+        }
+        [HttpGet]
+        public Object allHouse()
+        {
+            return JsonConvert.SerializeObject(postService.getAllPostNotDe(), Formatting.Indented, new JsonSerializerSettings
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects
+            });
+
         }
         public ActionResult TimeLine()
         {
