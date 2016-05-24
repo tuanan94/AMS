@@ -30,19 +30,28 @@ namespace AMS.Service
         {
             return postRepository.List.OrderByDescending(t=>t.Id).ToList();
         }
+        public IEnumerable<Post> getAllPostNotDe()
+        {
+            return postRepository.List.ToList();
+        }
         public IEnumerable<Post> getAllCommentBelongPost(long id)
         {
             return postRepository.List.ToList().Where(t=>t.PostId == id);
         }
         public IEnumerable<Post> getCommentBelongPost(int id)
         {
-            IEnumerable<Post> post = postRepository.List.Where(t => t.PostId == id);
-            return post;
+             return postRepository.List.ToList().Where(t => t.PostId == id);
+           
         }
         public IEnumerable<Post> getCommentPostIdNotNull()
         {
            return postRepository.List.ToList().Where(t => t.PostId.HasValue);
            
+        }
+        public Post getRowPostByPostId(int id)
+        {
+            return postRepository.List.ToList().FirstOrDefault(t => t.PostId.HasValue);
+
         }
         public int GetPostIdByPost(int id)
         {

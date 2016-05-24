@@ -14,7 +14,7 @@ namespace AMS.Controllers
     {
         TestService testService = new TestService();
         UserInHouseService userInHouseService = new UserInHouseService();
-        PostService  postService = new PostService();
+        PostService postService = new PostService();
         public ActionResult Test()
         {
             List<House> allHouse = testService.getAllHouse();
@@ -34,55 +34,37 @@ namespace AMS.Controllers
         public ActionResult TimeLine()
         {
             // get all post
-            IEnumerable<Post> allPost = postService.getAllPost();
-            // list of list comment
-            List<IEnumerable<Post>> listCommentList = new List<IEnumerable<Post>>();
-            IEnumerable<Post> commentsLists = new List<Post>();
-            List<int> listPostId = new List<int>();
+            IEnumerable<Post> allPost = postService.getAllPostNotDe();
+            IEnumerable<Post> listComment = new List<Post>();
+            ListPostViewModel listPostViewModel = new ListPostViewModel();
+            listPostViewModel.listPost = new List<PostViewModel>();
             foreach (var item in allPost)
             {
-                if (item.PostId.ToString().Length > 0)
+                 PostViewModel  postViewModel = new PostViewModel();
+                postViewModel.ImgUrl = item.ImgUrl;
+                postViewModel.Id = item.Id;
+                postViewModel.Title = item.Title;
+                //get list comment belong post
+                listComment = postService.getCommentBelongPost(postViewModel.Id);
+                if (listComment !=null)
                 {
-                    // get postId of post
-                    int i = item.PostId.Value;
-                    //create list of postId
-                    listPostId.Add(i);
+                    postViewModel.Post = listComment;
                 }
-            }
-            foreach (var id in listPostId)
-            {
-                // get all comment belong each post ???
-                commentsLists = postService.getCommentBelongPost(id);
-            }
-            //for (int j = 0; j < listPostId.Count; j++)
-            //{
-            //    for (int k = j+1; k < listPostId.Count; k++)
-            //    {
-            //        if (listPostId[j].Equals(listPostId[k]))
-            //        {
-            //            //listPostId.Remove(k);
-            //            listCommentList.Add(postService.getCommentBelongPost(listPostId[j]));
-            //        }
-            //        if (!listPostId[j].Equals(listPostId[k]))
-            //        {
-            //            commentsLists = postService.getCommentBelongPost(listPostId[j]);
-            //        }  
-            //    }
+                listPostViewModel.listPost.Add(postViewModel);
               
-              
-            //}
-            ViewBag.listCommentList = listCommentList;
-            ViewBag.commentsLists = commentsLists;
-            ViewBag.allPost = allPost;
-            return View();
+            }
+           
+            //ViewBag.allPost = allPost;
+            //ViewBag.listComment = listComment;
+            return View(listPostViewModel);
         }
-       
+
         [HttpPost]
         public ActionResult TimeLine(PostViewModel post, string Title, HttpPostedFileBase Media)
         {
             string mediaUrl = null;
 
-         
+
             //if (ModelState.IsValid)
             //{
             if (post.Media != null && post.Media.ContentLength > 0)
@@ -121,7 +103,7 @@ namespace AMS.Controllers
                     {
                         mediaUrl = Path.Combine(uploadDir, fileName);
 
-                        
+
                     }
 
                     Util.DeleteFile(imagePath);
