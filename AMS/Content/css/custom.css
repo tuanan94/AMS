@@ -28,6 +28,14 @@ fieldset.scheduler-border {
 .scheduler-border.less-padding {
     padding: 0 1em 0.5em 1em !important;
 }
+.scheduler-border.square {
+    border-radius: 0px;
+}
+.scheduler-border.border-top {
+    border: none !important;
+    border-top: 1px solid #ccc !important;
+    border-radius: inherit;
+}
     fieldset.scheduler-border > legend {
         width: auto;
         border-bottom: none;
@@ -35,9 +43,14 @@ fieldset.scheduler-border {
         font-size: 15px;
         color: #CCC;
     }
+    fieldset.scheduler-border > legend.bold-black {
+        font-weight: 600;
+        color: #000;
+    }
 .full-width-select >div >button {
     width: 100% !important
 }
 .full-width-select >div .dropdown-menu {
     width: 100% !important
 }
+.datepicker{z-index:1151 !important;}

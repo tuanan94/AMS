@@ -51,13 +51,13 @@
                     <span>Yêu cầu dịch vụ Hỗ trợ thất bại!</span>
                 </div>
                 <div class="col-sm-6">
-                    <fieldset class="scheduler-border">
+                    <fieldset class="scheduler-border less-padding">
                         <legend class="scheduler-border">Thông tin dịch vụ Hỗ trợ</legend>
 
                         <div class="form-group">
                             <label for="inputFirstname" class="col-sm-4 control-label">Nhóm dịch vụ</label>
-                            <div class="col-sm-8">
-                                <select name="filterMode" class="form-control">
+                            <div class="col-sm-8 full-width-select">
+                                <select name="filterMode" class="selectpicker">
                                     <option value="0" selected="selected">Điện khu vực chung</option>
                                     <option value="1">Nước</option>
                                     <option value="2">Điện căn hộ</option>
@@ -66,8 +66,8 @@
                         </div>
                         <div class="form-group">
                             <label for="inputFirstname" class="col-sm-4 control-label">Loại dịch vụ</label>
-                            <div class="col-sm-8">
-                                <select name="filterMode" class="form-control">
+                            <div class="col-sm-8 full-width-select">
+                                <select name="filterMode" class="selectpicker">
                                     <option value="0" selected="selected">Bóng đèn nhà bếp</option>
                                     <option value="1">Bóng đèn bể ống nước</option>
                                     <option value="2">Thông cống</option>
@@ -89,30 +89,28 @@
                     </fieldset>
                 </div>
                 <div class="col-sm-6">
-                    <fieldset class="scheduler-border">
+                    <fieldset class="scheduler-border less-padding">
                         <legend class="scheduler-border">Ghi chú của cư dân</legend>
                         <div class="form-group">
-                            <div class="form-group">
-                                <label for="inputFirstname" class="col-md-4 control-label">Tiêu đề</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control">
-                                </div>
+                            <label for="inputFirstname" class="col-md-4 control-label">Tiêu đề</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control">
                             </div>
-                            <div class="form-group">
-                                <label for="inputFirstname" class="col-md-4 control-label">Mức độ khẩn cấp</label>
-                                <div class="col-sm-8">
-                                    <select name="filterMode" class="form-control">
-                                        <option value="0" selected="selected">Thấp</option>
-                                        <option value="1">Trung bình</option>
-                                        <option value="2">Cao</option>
-                                    </select>
-                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputFirstname" class="col-md-4 control-label">Mức độ khẩn cấp</label>
+                            <div class="col-sm-8 full-width-select">
+                                <select name="filterMode" class="selectpicker">
+                                    <option value="0" selected="selected">Thấp</option>
+                                    <option value="1">Trung bình</option>
+                                    <option value="2">Cao</option>
+                                </select>
                             </div>
-                            <div class="form-group">
-                                <label for="inputFirstname" class="col-md-4 control-label">Yêu cầu khách hàng</label>
-                                <div class="col-md-8">
-                                    <textarea class="form-control" style="max-width: initial;" rows="3"></textarea>
-                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputFirstname" class="col-md-4 control-label">Yêu cầu khách hàng</label>
+                            <div class="col-md-8">
+                                <textarea class="form-control" style="max-width: initial;" rows="3"></textarea>
                             </div>
                         </div>
                     </fieldset>

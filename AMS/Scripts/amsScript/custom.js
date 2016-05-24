@@ -256,6 +256,10 @@ function cancelDeleteHdSrvCategory() {
 function sentHepdeskRequest() {
     $("#messageModal").modal("show");
 }
+function hdRequestDetail(id) {
+    $("#hdSrvTblBody > tr").removeClass("active");
+    $("#hdReq_" + id).addClass("active");
+}
 $(document).ready(function () {
     $("#addHelpdeskRequestForm").validate({
         rules: {
@@ -287,7 +291,7 @@ $(document).ready(function () {
             }
         },
         success: function (label, element) {
-            label.parent().removeClass('error');
+            label.parent().removeClass("error");
             label.remove();
         },
         submitHandler: function () {
@@ -408,5 +412,37 @@ $(document).ready(function () {
             $("#hdReqFilterResult").html(opt);
         }
     });
+    $("#testDatePicker").datepicker();
 });
 
+function setModalMaxHeight(element) {
+    this.$element = $(element);
+    this.$content = this.$element.find(".modal-content");
+    var borderWidth = this.$content.outerHeight() - this.$content.innerHeight();
+    var dialogMargin = $(window).width() < 768 ? 20 : 60;
+    var contentHeight = $(window).height() - (dialogMargin + borderWidth);
+    var headerHeight = this.$element.find(".modal-header").outerHeight() || 0;
+    var footerHeight = this.$element.find(".modal-footer").outerHeight() || 0;
+    var maxHeight = contentHeight - (headerHeight + footerHeight);
+
+    this.$content.css({
+        "overflow": "hidden"
+    });
+
+    this.$element
+      .find(".modal-body").css({
+          "max-height": maxHeight,
+          "overflow-y": "auto"
+      });
+}
+
+$(".modal").on("show.bs.modal", function () {
+    $(this).show();
+    setModalMaxHeight(this);
+});
+
+$(window).resize(function () {
+    if ($(".modal.in").length !== 0) {
+        setModalMaxHeight($(".modal.in"));
+    }
+});
