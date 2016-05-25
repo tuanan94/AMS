@@ -284,7 +284,6 @@
     </Compile>
     <Compile Include="Service\HelpdeskServiceCatService.cs" />
     <Compile Include="Service\HelpdeskServicesService.cs" />
-    <Compile Include="Service\PendingMemberService.cs" />
     <Compile Include="Service\PostService.cs" />
     <Compile Include="Service\UserInHouseService.cs" />
     <Compile Include="Service\TestService.cs" />
