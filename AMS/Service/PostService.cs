@@ -14,9 +14,10 @@ namespace AMS.Service
         {
           Post h = new Post();
             h.ImgUrl = post.ImgUrl;
+            h.Title = post.Title;
             postRepository.Add(h);
         }
-        public List<Post> getAllPost()
+        public IEnumerable<Post> getAllPost()
         {
             return postRepository.List.ToList();
         }

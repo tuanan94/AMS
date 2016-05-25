@@ -18,7 +18,7 @@ namespace AMS.Controllers
         {
             List<House> allHouse = testService.getAllHouse();
             ViewBag.allHouse = allHouse;
-            return View();
+            return View(allHouse);
         }
         public ActionResult Index()
         {
@@ -26,12 +26,12 @@ namespace AMS.Controllers
         }
         public ActionResult TimeLine()
         {
-            List<Post> allPost = postService.getAllPost();
+            IEnumerable<Post> allPost = postService.getAllPost();
             ViewBag.allPost = allPost;
             return View();
         }
         [HttpPost]
-        public ActionResult TimeLine(PostViewModel post)
+        public ActionResult TimeLine(PostViewModel post, string Title, HttpPostedFileBase Media)
         {
             string mediaUrl = null;
           
@@ -48,7 +48,7 @@ namespace AMS.Controllers
                         var ext = "";
                         try
                         {
-                            ext = post.Media.FileName.Substring(post.Media.FileName.LastIndexOf(".",
+                            ext = Media.FileName.Substring(post.Media.FileName.LastIndexOf(".",
                                 StringComparison.Ordinal));
                         }
                         catch (Exception)
@@ -84,14 +84,9 @@ namespace AMS.Controllers
                 }
                 Post p = new Post();
                // post.Body = p.Body;
+                post.Title = Title;
                 post.ImgUrl = mediaUrl;
-                //var postnew = new Post()
-                //{
-                //    Body = "aaaaaaaa",
-                //    Title = "aaaaaa",
-                //    ImgUrl = mediaUrl
-
-                //};
+               
                 postService.createPost(post);
             //}
             return View();

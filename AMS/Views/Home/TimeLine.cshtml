@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "TimeLine";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
-    List<Post> allPost = ViewBag.allPost;
+    IEnumerable<Post> allPost = ViewBag.allPost;
   
 }
 
@@ -26,14 +26,16 @@
                                 <div class="panel-heading panel-heading-gray title">
                                     What´s new
                                 </div>
+
                                 <div class="panel-body">
-                                    @Html.TextBoxFor(m =>m.Body)
-                                    @Html.TextAreaFor(m => m.Title, new {@Type = "text", rows = 3, columns = 40, @class = "form-control share-text", @placeholder = "Chia se cam xuc..."})
+                                    <textarea rows="4" cols="50" name="Title" id="Title"></textarea>
+                                    @*@Html.TextBoxFor(m =>m.Body)*@
+                                    @*@Html.TextAreaFor(m => m.Title, new {@Type = "text", rows = 3, columns = 40, @class = "form-control share-text", @placeholder = "Chia se cam xuc..."})*@
                                 </div>
                                 <p>
                                     <button class="btn btn-default btn-upload"><i class="fa fa-picture-o"></i></button>
-                                    @Html.TextBoxFor(m => m.Media, new {@class = "media-upload", @type = "file"})
-                                    <button class="btn btn-primary btn-note-submit pull-right"><i class="fa fa-save"></i> Lưu</button>
+                                    @Html.TextBoxFor(m => m.Media, new {@class = "media-upload", @type = "file", @name="Media", @id="Media"})
+                                    <button @*onclick="addPostByAjax()"*@ class="btn btn-primary btn-note-submit pull-right"><i class="fa fa-save"></i> Lưu</button>
                                 </p>
                                 
                             </div>
@@ -43,9 +45,9 @@
                 }
             </div>
         </li>
-        @{
+        {
            
-            foreach (var h in allPost)
+            @foreach (var h in allPost)
             {
                  <li class="media">
             <div class="pull-left">
@@ -55,7 +57,7 @@
             <div class="media-body">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        @*<p></p>*@
+                        <p>@h.Title</p>
                         <div class="timeline-added-images" >
                             <img alt="media" src="@ViewHelper.Media(h.ImgUrl)" width="550" />
                            
@@ -63,18 +65,7 @@
                     </div>
                     <div class="view-all-comments"><a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments</div>
                     <ul class="comments">
-                        <li>
-                            <div class="media">
-                                <a href="" class="pull-left">
-                                    <img src="/images/people/50/guy-5.jpg" class="media-object">
-                                </a>
-                                <div class="media-body">
-                                    <a href="" class="comment-author">Bill D.</a>
-                                    <span>Hi Mary, Nice Party</span>
-                                    <div class="comment-date">21st September</div>
-                                </div>
-                            </div>
-                        </li>
+                       
                         <li>
                             <div class="media">
                                 <a href="" class="pull-left">
@@ -87,16 +78,17 @@
                                 </div>
                             </div>
                         </li>
-                     
+
                         <li class="comment-form">
                             <div class="input-group">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control comment-content">
                                 <span class="input-group-addon">
                                     <a href=""><i class="fa fa-photo"></i></a>
                                 </span>
                             </div>
                         </li>
                     </ul>
+
                 </div>
             </div>
         </li>  
@@ -106,4 +98,26 @@
     </ul>
 </div>
 
+<script>
+    function addPostByAjax() {
+        $.ajax({
+            url: '/Home/TimeLine',
+            data: {
+                Title: $("#Title").val(),
+               Media: $("#Media").val()
 
+            },
+            error: function () {
+                alert("error")
+               
+            },
+            success: function (data) {
+                //clearHouseList();
+                //loadHouseList();
+            },
+            type: 'POST'
+        });
+    }
+
+</script>
+  

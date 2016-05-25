@@ -347,6 +347,7 @@
     <Content Include="Scripts\amsScript\jquery.validate.min.js" />
     <Content Include="Scripts\amsScript\scripts.js" />
     <Content Include="Scripts\amsScript\scripts.min.js" />
+    <Content Include="Scripts\amsScript\Social.js" />
     <Content Include="Scripts\amsScript\vendor.js" />
     <Content Include="Scripts\amsScript\vendor.min.js" />
     <Content Include="Scripts\bootstrap.js" />
