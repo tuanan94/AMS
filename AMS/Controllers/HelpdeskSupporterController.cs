@@ -12,7 +12,6 @@ namespace AMS.Views.HelpdeskSupporter
     public class HelpdeskSupporterController : Controller
     {
         private HelpdeskSupporterService _helpdeskSupporterService = new HelpdeskSupporterService();
-        private int currId;
         // GET: HelpdeskSupporter
         public ActionResult Index()
         {
@@ -24,7 +23,6 @@ namespace AMS.Views.HelpdeskSupporter
         [ValidateInput(false)]
         public ActionResult GetHelpdeskRequest(int selectedId)
         {
-            currId = selectedId;
             HelpdeskRequest hr = _helpdeskSupporterService.GetHelpdeskRequest(selectedId);
             HelpdeskRequestViewModel request = new HelpdeskRequestViewModel();
             request.Title = hr.Title;

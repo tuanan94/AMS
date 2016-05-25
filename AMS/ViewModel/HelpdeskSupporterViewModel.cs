@@ -24,5 +24,13 @@ namespace AMS.ViewModel
         public int ManagerId { get; set; }
         public string HouseName { get; set; }
     
+        public enum listStatus
+        {
+            Open = 0,
+            Assigned = 1,
+            Processing = 2,
+            Done = 3,
+            WaitForApproval = 4
+        }
     }
 }

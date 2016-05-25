@@ -18,6 +18,7 @@ namespace AMS
         public Nullable<int> HelpdeskSupporterId { get; set; }
         public Nullable<int> HelpdeskRequestId { get; set; }
         public Nullable<int> Status { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
     
         public virtual HelpdeskRequest HelpdeskRequest { get; set; }
         public virtual User User { get; set; }

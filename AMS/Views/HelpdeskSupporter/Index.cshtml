@@ -194,7 +194,7 @@
                 selectedId: hrId
             },
             error: function () {
-                alert("error")
+                alert("Xảy ra lỗi trong quá trình tải dữ liệu!")
             },
             success: function (request) {
                 $("#title").val(request.Title)
@@ -226,16 +226,16 @@
             },
             success: function (result) {
                 if (result == true) {
-                    alert("Thanh cong!");
+                    //alert("Thanh cong!");
                     location.href = "/HelpdeskSupporter/Index";
                 }
-                //href = "/HelpdeskSupporter/Index";
             },
             type: 'POST'
         });
     }
 </script>
 <!--End Script Region-->
+
 <!--<script language="javascript">
     function get_content() {
         var html = document.getElementById(@count).innerHTML;
