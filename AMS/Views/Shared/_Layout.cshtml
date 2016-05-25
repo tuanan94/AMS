@@ -1,13 +1,20 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity;
+@{ 
+    var currentUser = User.Identity;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Scripts.Render("~/bundles/jquery")
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/css/css")
     @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/jquery")
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
 </head>
 <body class="breakpoint-1024">
     <div class="navbar navbar-main navbar-primary navbar-fixed-top" role="navigation">
@@ -71,12 +78,13 @@
                         <a href="#" data-toggle="sidebar-chat">
                             <i class="fa fa-comments"></i>
                         </a>
+
                     </li>
 
                     <!-- User -->
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle user" data-toggle="dropdown">
-                            <img src="/images/people/110/guy-5.jpg" alt="Bill" class="img-circle" width="40"> Bill <span class="caret"></span>
+                            <img src="/images/people/110/guy-5.jpg" alt="Bill" class="img-circle" width="40"> @currentUser.GetUserName() <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li>
@@ -86,8 +94,9 @@
                                 <a href="user-private-messages.html">Messages</a>
                             </li>
                             <li>
-                                <a href="login.html">Logout</a>
+                                <a href="/Account/LogOff">Logout</a>
                             </li>
+
                         </ul>
                     </li>
                 </ul>

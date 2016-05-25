@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using AMS.Helper;
 using AMS.ViewModel;
+using Microsoft.AspNet.Identity;
 namespace AMS.Controllers
 {
     public class HomeController : Controller
@@ -14,6 +15,7 @@ namespace AMS.Controllers
         TestService testService = new TestService();
         UserInHouseService userInHouseService = new UserInHouseService();
         PostService  postService = new PostService();
+        UserService userService = new UserService();
         public ActionResult Test()
         {
             List<House> allHouse = testService.getAllHouse();
@@ -112,8 +114,20 @@ namespace AMS.Controllers
             return View();
         }
         [HttpGet]
+        [Authorize]
         public ActionResult ManageMember()
         {
+            var currentUser = User.Identity;
+            int userId;
+            bool isValidID = int.TryParse(currentUser.GetUserId(), out userId);
+            if (!isValidID)
+            {
+                return View("error");
+            }
+            User user = userService.findById(userId);
+            List<User> members = userService.findByHouseId(user.Id);
+            ViewBag.currentHouse = user.House;
+            ViewBag.members = members;
             return View();
         }
 
@@ -139,16 +153,47 @@ namespace AMS.Controllers
         }
 
         [HttpPost]
-        public ActionResult ManageMember(MemberViewModel member)
+        public ActionResult ManageMember(AddMemberViewModel member)
         {
             if (ModelState.IsValid)
             {
-                userInHouseService.addMemberRequest(member);
+                User existUser = userService.findByUsername(member.Username);
+                if (existUser != null)
+                {
+                    ModelState.AddModelError("Username", "Tên người dùng này đã được sử dụng");
+                }
+                else
+                {
+                    var curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
+                    User newUser = new AMS.User();
+                    newUser.Creator = curUser.Id;
+                    newUser.Fullname = member.Fullname;
+                    newUser.Username = member.Username;
+                    newUser.Password = member.Password;
+                    newUser.Gender = member.Gender;
+                    newUser.ProfileImage = member.ImageURL;
+                    newUser.RoleId = SLIM_CONFIG.Role_RESIDENT;
+                    newUser.HouseId = curUser.HouseId;
+                    userService.addUser(newUser);
 
+                }
             }
+            else
+            {
+                ViewBag.adding = true;
+            }
+            var currentUser = User.Identity;
+            int userId;
+            bool isValidID = int.TryParse(currentUser.GetUserId(), out userId);
+            if (!isValidID)
+            {
+                return View("error");
+            }
+            User user = userService.findById(userId);
+            List<User> members = userService.findByHouseId(user.Id);
+            ViewBag.currentHouse = user.House;
+            ViewBag.members = members;
             return View();
-            //pendingMemberService.addMemberRequest(member);
-
         }
     }
 }

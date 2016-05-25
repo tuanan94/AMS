@@ -209,6 +209,7 @@
     <Compile Include="Constant.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ManagementController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
@@ -293,21 +294,16 @@
     <Compile Include="Survey.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="sysdiagram.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="User.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="UserAnswerSurvey.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="UserInHouse.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="UserProfile.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\AddMemberViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\MemberViewModel.cs" />
     <Compile Include="ViewModel\PostViewModel.cs" />
@@ -332,6 +328,8 @@
     <Content Include="Content\css\thumbnails.css" />
     <Content Include="Content\css\_vendor.bundle.css" />
     <Content Include="Content\css\_vendor.min.css" />
+    <Content Include="Content\images\defaultProfile.png" />
+    <Content Include="Content\images\guy-5.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -509,6 +507,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="images\Post\Binh\" />
+    <Folder Include="Views\Image\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

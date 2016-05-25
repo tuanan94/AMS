@@ -42,10 +42,8 @@ namespace AMS
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<ServiceFee> ServiceFees { get; set; }
         public virtual DbSet<Survey> Surveys { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAnswerSurvey> UserAnswerSurveys { get; set; }
-        public virtual DbSet<UserInHouse> UserInHouses { get; set; }
         public virtual DbSet<UserProfile> UserProfiles { get; set; }
     }
 }

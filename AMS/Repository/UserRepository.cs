@@ -17,5 +17,11 @@ namespace AMS.Repository
             var result = (from r in db.Users where username.Equals(r.Username) select r).FirstOrDefault();
             return result;
         }
+        public List<User> findByHouseID(int houseId)
+        {
+            var result = (from r in db.Users where r.HouseId == houseId select r).ToList();
+            return result;
+        }
+       
     }
 }

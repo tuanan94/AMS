@@ -22,6 +22,25 @@ namespace AMS.Service
         {
             this.userRepository = userRepository;
         }
+        public void addUser(User user)
+        {
+            this.userRepository.Add(user);
+        }
+        public User findByUsername(String username)
+        {
+            return userRepository.findByUsername(username);
+        }
+
+        public User findById(int id)
+        {
+            User user = userRepository.FindById(id);
+            return user;
+        }
+        public List<User> findByHouseId(int houseId)
+        {
+            return userRepository.findByHouseID(houseId);
+           
+        }
 
         public SLIM_CONFIG.LoginResult login(string username, string password)
         {
@@ -37,7 +56,7 @@ namespace AMS.Service
                     var ident = new ClaimsIdentity(
              new[] { 
               // adding following 2 claim just for supporting default antiforgery provider
-              new Claim(ClaimTypes.NameIdentifier, username),
+              new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
               new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", "ASP.NET Identity", "http://www.w3.org/2001/XMLSchema#string"),
 
               new Claim(ClaimTypes.Name,username),

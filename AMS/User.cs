@@ -22,7 +22,6 @@ namespace AMS
             this.HelpdeskRequestLogs1 = new HashSet<HelpdeskRequestLog>();
             this.Posts = new HashSet<Post>();
             this.ResidentRateAroundProviders = new HashSet<ResidentRateAroundProvider>();
-            this.UserInHouses = new HashSet<UserInHouse>();
             this.UserProfiles = new HashSet<UserProfile>();
             this.UserAnswerSurveys = new HashSet<UserAnswerSurvey>();
         }
@@ -32,6 +31,14 @@ namespace AMS
         public string Username { get; set; }
         public string Password { get; set; }
         public int RoleId { get; set; }
+        public Nullable<int> IsApproved { get; set; }
+        public Nullable<int> HouseId { get; set; }
+        public Nullable<int> Creator { get; set; }
+        public string ProfileImage { get; set; }
+        public Nullable<System.DateTime> DataOfBirth { get; set; }
+        public string IDNumber { get; set; }
+        public Nullable<int> Gender { get; set; }
+        public string Fullname { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HelpdeskRequestHelpdeskSupporter> HelpdeskRequestHelpdeskSupporters { get; set; }
@@ -39,13 +46,12 @@ namespace AMS
         public virtual ICollection<HelpdeskRequestLog> HelpdeskRequestLogs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HelpdeskRequestLog> HelpdeskRequestLogs1 { get; set; }
+        public virtual House House { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Post> Posts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ResidentRateAroundProvider> ResidentRateAroundProviders { get; set; }
         public virtual Role Role { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserInHouse> UserInHouses { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserProfile> UserProfiles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

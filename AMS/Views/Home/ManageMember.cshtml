@@ -1,162 +1,279 @@
-﻿@model AMS.ViewModel.MemberViewModel
+
+﻿@using AMS.ViewModel;
+@model AddMemberViewModel
 @{
     ViewBag.Title = "ManageMember";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
-    
+    List<User> members = ViewBag.members;
+    House currentHouse = ViewBag.currentHouse;
+    var isEditing = ViewBag.adding;
 }
-<script>
-    jQuery(document).ready(function ($) {
-        var date = /^(\d{1,2})(\/|-)(\d{1,2})(\/|-)(\d{4})$/;
- 
-        jQuery('input#date').bind('input propertychange', function () {
-            if (date.test(jQuery(this).val())) {
-                jQuery(this).css({
-                    'background': '#C2D699'
-                });
-            } else {
-                jQuery(this).css({
-                    'background': '#FFC2C2'
-                  
-                });
-            }
-        });
-    });
-</script>
 <div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-gray" onclick="showHideAddNewMember()" style="background-color:#00ff90;text-align:center;color:#ff6a00">+ Thêm thành viên mới</div>
+        <div class="panel-body">
+            <div class="row" id="addNewMember" style="display:none">
+                <div class="col-md-8">
+                    <div id="addMember">
+                        @using (Html.BeginForm("ManageMember", "Home", null, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" });
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Fullname, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.Fullname, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.Fullname, "", new { @class = "text-danger" })
+
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Username, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Gender, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    <label>@Html.RadioButtonFor(m => m.Gender, 0, new { id = "male" }) Nam</label>
+                                    <label>@Html.RadioButtonFor(m => m.Gender, 1, new { id = "female" }) Nữ</label>
+
+                                    @Html.ValidationMessageFor(m => m.Gender, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.DateOfBirth, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(m => m.DateOfBirth, new { @class = "form-control", @readonly = "true" })
+
+                                    @Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.IDNumber, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(m => m.IDNumber, new { @class = "form-control", @readonly = "true" })
+
+                                    @Html.ValidationMessageFor(m => m.IDNumber, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ImageURL, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(m => m.ImageURL)
+                                    @Html.ValidationMessageFor(m => m.ImageURL, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+
+                            <input type="submit" value="Tạo mới thành viên" class="btn btn-primary" />
+
+                        }
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <img id="profilePreview" src="~/Content/images/defaultProfile.png" alt="Default Profile" onclick="chooseProfile()" style="width:200px;height:auto" />
+                    <input style="visibility:hidden" type="file" id="uploadEditorImage" />
+                    <div id="progressBar" class="progress" style="width:200px" hidden="hidden">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:200px">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="panel panel-default">
         <div class="panel-heading panel-heading-gray">Thông tin thành viên</div>
         <div class="panel-body">
             <form class="form-horizontal" role="form">
                 <div class="timeline row" data-toggle="gridalicious">
-                    <div class="timeline-block">
-                        <div class="panel panel-default user-box">
-                            <div class="panel-body">
-                                <div class="media">
-                                    <img src="/images/people/50/guy-6.jpg" alt="people" class="media-object img-circle pull-left" />
-                                    <div class="media-body">
-                                        <a href="" class="username">Adrian D.</a>
-                                        <div class="profile-icons">
-                                            <span><i class="fa fa-users"></i> Chủ nhà </span>
+                    @{
+                        foreach (User u in members)
+                        {
+                            <div class="timeline-block">
+                                <div class="panel panel-default user-box">
+                                    <div class="panel-body">
+                                        <div class="media">
+                                            <img src="@u.ProfileImage" style="width:100px !important" alt="people" class="media-object img-circle pull-left" />
+                                            <div class="media-body">
+                                                <a href="" class="username">@u.Fullname</a>
+                                                <div class="profile-icons">
+                                                    <span><i class="fa fa-users"></i>@{
+                                                        if(u.Id == currentHouse.OwnerID)
+                                                        {
+                                                            <span> Chủ nhà</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span> Thành viên</span>
+                                                        }
+                                                        }</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+                                    @*<div class="panel-footer">
+                                            <a href="#" class="btn btn-default btn-sm">Follow <i class="fa fa-share"></i></a>
+                                        </div>*@
                                 </div>
                             </div>
-
-
-                        </div>
-                    </div>
-                    <div class="timeline-block">
-                        <div class="panel panel-default user-box">
-                            <div class="panel-body">
-                                <div class="media">
-                                    <img src="/images/people/50/guy-4.jpg" alt="people" class="media-object img-circle pull-left" />
-                                    <div class="media-body">
-                                        <a href="" class="username">Adrian D.</a>
-                                        <div class="profile-icons">
-                                            <span><i class="fa fa-users"></i> Vợ </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            @*<div class="panel-footer">
-                                    <a href="#" class="btn btn-default btn-sm">Follow <i class="fa fa-share"></i></a>
-                                </div>*@
-                        </div>
-                    </div>
-                    <div class="timeline-block">
-                        <div class="panel panel-default user-box">
-                            <div class="panel-body">
-                                <div class="media">
-                                    <img src="/images/people/50/guy-6.jpg" alt="people" class="media-object img-circle pull-left" />
-                                    <div class="media-body">
-                                        <a href="" class="username">Adrian D.</a>
-                                        <div class="profile-icons">
-                                            <span><i class="fa fa-users"></i>Con út</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            @*<div class="panel-footer">
-                                    <a href="#" class="btn btn-default btn-sm">Follow <i class="fa fa-share"></i></a>
-                                </div>*@
-                        </div>
-                    </div>
-
-                </div>
-                <div class="form-group">
-
-                    <div class="col-sm-offset-0 col-md-2">
-                        <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Thêm thành viên</button>
-                    </div>
+                        }
+                    }
 
                 </div>
             </form>
         </div>
     </div>
-
+   
 </div>
-@using (Html.BeginForm("ManageMember", "Home", FormMethod.Post))
-{
-    
-    <div id="myModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Đăng ký thêm thành viên mới</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="panel-body">
-                        <form class="form-horizontal" role="form">
-                            <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-3 control-label">Tiêu đề</label>
-                                @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
-                                @*<div class="col-sm-9">
-                                        <input type="email" class="form-control" id="inputEmail3" value="Mr. A">
-                                    </div>*@
-                            </div>
-                            <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-3 control-label">Mô tả</label>
-                                @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
-                            </div>
-                            <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-3 control-label">Ngày tạo</label>
-                                @Html.TextBoxFor(m => m.CreateDate, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.CreateDate, "", new { @class = "text-danger" })
-                            </div>
-                            <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-3 control-label">Ngày đóng</label>
-                                @Html.TextBoxFor(m => m.CloseDate, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.CloseDate, "", new { @class = "text-danger" })
-                            </div>
-                            <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-3 control-label">Trạng thái</label>
-                                @Html.TextBoxFor(m => m.Status, new { @class = "form-control" })
-                            </div>
-                            <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-3 control-label">Mã căn hộ</label>
-                                @Html.TextBoxFor(m => m.HouseholderId, new { @class = "form-control" })
-                            </div>
-                            <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-3 control-label">Mã</label>
-                                @Html.TextBoxFor(m => m.PendingUserId, new { @class = "form-control" })
-                            </div>
-                            <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-3 control-label">Mã</label>
-                                @Html.TextBoxFor(m => m.ManagerId, new { @class = "form-control" })
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Tắt</button>
-                    <button type="submit" class="btn btn-primary">Gửi yêu cầu</button>
 
+
+
+<script>
+    function showHideAddNewMember() {
+        if ($("#addNewMember").is(':visible')) {
+            $("#addNewMember").fadeOut();
+        } else {
+            $("#addNewMember").fadeIn();
+        }
+    }
+  
+
+    $(function () {
+        $("#DateOfBirth").datepicker();
+        $("#DateOfBirth").attr('readOnly', 'true');
+    });
+
+    function chooseProfile() {
+        $("#uploadEditorImage").click();
+    }
+
+    function changeImageURL(imageurl) {
+        $("#profilePreview").attr("src", imageurl)
+        $("#ImageURL").val(imageurl);
+
+    }
+
+    $("#uploadEditorImage").change(function () {
+        var data = new FormData();
+        var files = $("#uploadEditorImage").get(0).files;
+        if (files.length > 0) {
+            data.append("HelpSectionImages", files[0]);
+        }
+        progessBar(true);
+        $.ajax({
+            url: "/Image/Upload/",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: data,
+            success: function (successData) {
+                changeImageURL(successData);
+                progessBar(false);
+
+            },
+            error: function (er) {
+                alert(er);
+                progessBar(false);
+            }
+
+        });
+    });
+    function progessBar(isShow) {
+        if (isShow == true) {
+            $("#progressBar").removeAttr("hidden");
+        } else {
+            $("#progressBar").attr("hidden", "hidden");
+        }
+    }
+</script>
+
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Đăng ký thêm thành viên mới</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Tên</label>
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control" id="inputEmail3" value="Mr. A">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Giới tính</label>
+                            <div class="col-sm-9">
+                                <select name="select" class="selectpicker" data-size="3">
+                                    <option>Nữ</option>
+                                    <option>Nam</option>
+                                    <option>Khác</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Ngày sinh</label>
+                            <div class="col-sm-9">
+                                <input type="text" type="text" class="form-control datepicker" value="12/12/1993">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Số điện thoại</label>
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control" id="inputEmail3" value="09xxxxxxx">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Số CMND</label>
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control" id="inputEmail3" value="09xxxxxxx">
+                            </div>
+                        </div>
+
+
+                    </form>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Tắt</button>
+                <button type="button" class="btn btn-primary">Gửi yêu cầu</button>
             </div>
         </div>
     </div>
-
-}
+</div>
