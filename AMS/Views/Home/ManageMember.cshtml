@@ -2,8 +2,26 @@
 @{
     ViewBag.Title = "ManageMember";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+    
 }
-
+<script>
+    jQuery(document).ready(function ($) {
+        var date = /^(\d{1,2})(\/|-)(\d{1,2})(\/|-)(\d{4})$/;
+ 
+        jQuery('input#date').bind('input propertychange', function () {
+            if (date.test(jQuery(this).val())) {
+                jQuery(this).css({
+                    'background': '#C2D699'
+                });
+            } else {
+                jQuery(this).css({
+                    'background': '#FFC2C2'
+                  
+                });
+            }
+        });
+    });
+</script>
 <div class="col-md-12">
     <div class="panel panel-default">
         <div class="panel-heading panel-heading-gray">Thông tin thành viên</div>
@@ -81,7 +99,7 @@
 </div>
 @using (Html.BeginForm("ManageMember", "Home", FormMethod.Post))
 {
-
+    
     <div id="myModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -135,6 +153,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Tắt</button>
                     <button type="submit" class="btn btn-primary">Gửi yêu cầu</button>
+
                 </div>
             </div>
         </div>

@@ -206,6 +206,7 @@
     <Compile Include="AroundProviderCategory.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Constant.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -230,6 +231,8 @@
     <Compile Include="HelpdeskServiceCategory.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Helper\Util.cs" />
+    <Compile Include="Helper\ViewHelper.cs" />
     <Compile Include="House.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -280,6 +283,8 @@
     <Compile Include="Service\HelpdeskServiceCatService.cs" />
     <Compile Include="Service\HelpdeskServicesService.cs" />
     <Compile Include="Service\PendingMemberService.cs" />
+    <Compile Include="Service\PostService.cs" />
+    <Compile Include="Service\UserInHouseService.cs" />
     <Compile Include="Service\TestService.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Survey.cs">
@@ -301,6 +306,7 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\MemberViewModel.cs" />
+    <Compile Include="ViewModel\PostViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -314,6 +320,7 @@
     <Content Include="Content\css\default-nav-inverse.min.css" />
     <Content Include="Content\css\default.css" />
     <Content Include="Content\css\default.min.css" />
+    <Content Include="Content\css\media-upload.css" />
     <Content Include="Content\css\orange.css" />
     <Content Include="Content\css\orange.min.css" />
     <Content Include="Content\css\purple.css" />
@@ -492,10 +499,11 @@
     <Content Include="Views\Home\CreateHdRequest.cshtml" />
     <Content Include="Views\Home\ViewRequestingHdRequestsOfManager.cshtml" />
     <Content Include="Views\Home\ViewHistoryHdRequests.cshtml" />
+    <Content Include="Views\Home\TimeLine.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="images\" />
+    <Folder Include="images\Post\Binh\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
