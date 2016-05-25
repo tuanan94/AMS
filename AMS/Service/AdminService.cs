@@ -15,5 +15,18 @@ namespace AMS.Service
         {
             return allHouseInfo.List.ToList();
         }
+        public void addHouse(int Id, String Block, String Floor, String HouseName, String Description, double Area)
+        {
+            House house = new House();
+            house.Id = Id;
+            house.Block = Block;
+            house.Floor = Floor;
+            house.HouseName = HouseName;
+            house.Description = Description;
+            house.Area = Area;
+
+            allHouseInfo.Add(house);    //Add to house object
+        }
     }
+    
 }

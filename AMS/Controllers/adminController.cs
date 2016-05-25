@@ -25,5 +25,33 @@ namespace AMS.Controllers
             });
 
         }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult addHouse(int Id,String Block, String Floor, String HouseName,String Description,double Area)
+        {
+            bool isValid = true;
+            isValid = !HouseName.Equals("");
+            //Step 1: Valid
+            if (isValid)
+            {
+                //Step 2: Send to service to do business
+                manageHouseInfo.addHouse(Id,Block, Floor, HouseName,Description,Area);
+            }
+
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public void addHouseAjax(int Id, String Block, String Floor, String HouseName, String Description, double Area)
+        {
+            bool isValid = true;
+            //Step 1: Valid
+            isValid = !HouseName.Equals("");
+            if (isValid)
+            {
+                //Step 2: Send to service to do business
+                manageHouseInfo.addHouse(Id, Block, Floor, HouseName, Description, Area);
+            }
+        }
     }
 }

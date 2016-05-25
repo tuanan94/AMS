@@ -47,21 +47,32 @@
     <table class="table">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Block</th>
                 <th>Floor</th>
-                <th>House Name</th>
+                <th>HouseName</th>
+                <th>Description</th>
+                <th>Area</th>
+                
+
             </tr>
         </thead>
         <tbody id="housetablebody"></tbody>
     </table>
     @using (Html.BeginForm("addHome", "Test", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
+        <label>ID</label>
+        <input class="form-control" name="Id" id="Id" />
         <label>Block</label>
         <input class="form-control" name="Block" id="Block" />
         <label>Floor</label>
         <input class="form-control" name="Floor" id="Floor" />
         <label>House Name</label>
         <input class="form-control" name="HouseName" id="HouseName" />
+        <label>Description</label>
+        <input class="form-control" name="Description" id="Description" />
+        <label>Area</label>
+        <input class="form-control" name="Area" id="Area" />
         <input type="reset" class="btn btn-default" value="Reset" />
         <input type="submit" class="btn btn-success" value="Thêm nhà vào hệ thống" id="btnsubmit" />
         <input class="btn btn-success" onclick="addHouseByAjax()" value="Them nha bang Ajax" />
@@ -87,7 +98,7 @@
             success: function (data) {
                 var obj = JSON.parse(data);
                 $.each(obj, function (index, jsonObject) {
-                    $("#housetablebody").append('<tr><td>' + jsonObject["Block"] + '</td><td>' + jsonObject["Floor"] + '<td/><td>' + jsonObject["HouseName"] + '</td></tr>')
+                    $("#housetablebody").append('<tr><td>' + jsonObject["Id"] + '</td><td>' + jsonObject["Block"] + '</td><td>' + jsonObject["Floor"] + '<td/><td>' + jsonObject["HouseName"] + '</td><td>' + jsonObject["Description"] + '</td><td>' + jsonObject["Area"] + '</td></tr>')
                 });
 
             },
@@ -100,11 +111,14 @@
     }
     function addHouseByAjax() {
         $.ajax({
-            url: '/Test/addHouseAjax',
+            url: '/AdminController',
             data: {
+                Id: $("Id").val(),
                 Block: $("#Block").val(),
                 Floor: $("#Floor").val(),
-                HouseName: $("#HouseName").val()
+                HouseName: $("#HouseName").val(),
+                Description: $("Description").val(),
+                Area: $("Area").val()
 
             },
             error: function () {
