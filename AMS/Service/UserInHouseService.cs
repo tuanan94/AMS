@@ -9,10 +9,8 @@ namespace AMS.Service
 {
     public class UserInHouseService
     {
-
         public void addMemberRequest(MemberViewModel member)
         {
-          
         }
     }
 }

@@ -76,7 +76,7 @@ namespace AMS.Controllers
                             fileName))
                         {
                             mediaUrl = Path.Combine(uploadDir, fileName);
-
+                        
                             imageFlag = true;
                         }
                        
@@ -194,6 +194,8 @@ namespace AMS.Controllers
             ViewBag.currentHouse = user.House;
             ViewBag.members = members;
             return View();
+            //pendingMemberService.addMemberRequest(member);
+
         }
     }
 }
