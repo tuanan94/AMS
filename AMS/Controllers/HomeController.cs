@@ -168,12 +168,13 @@ namespace AMS.Controllers
                     User newUser = new AMS.User();
                     newUser.Creator = curUser.Id;
                     newUser.Fullname = member.Fullname;
-                    newUser.Username = member.Username;
+                    newUser.Username = curUser.House.HouseName + "_" + member.Username;
                     newUser.Password = member.Password;
                     newUser.Gender = member.Gender;
                     newUser.ProfileImage = member.ImageURL;
                     newUser.RoleId = SLIM_CONFIG.Role_RESIDENT;
                     newUser.HouseId = curUser.HouseId;
+                    newUser.IsApproved = SLIM_CONFIG.USER_APPROVE_WAITING;
                     userService.addUser(newUser);
 
                 }

@@ -10,5 +10,9 @@ namespace AMS
         public enum LoginResult { Success, NoUser,WrongPassword}
         public static String imagePath = "~/Images/";
         public static int Role_RESIDENT = 3;
+        public static int USER_APPROVE_YES=1;
+        public static int USER_APPROVE_REJECT = 2;
+        public static int USER_APPROVE_WAITING=0;
+
     }
 }

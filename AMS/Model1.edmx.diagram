@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="f0302b6ae9254c7b9495aa28ec7062d2" Name="Diagram1">
+      <Diagram DiagramId="04b7360342ee4f96b8f20bccb620c1a4" Name="Diagram1">
         <EntityTypeShape EntityType="AMSModel.Answer" Width="1.5" PointX="9" PointY="5.375" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.AroundProvider" Width="1.5" PointX="6" PointY="20.875" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.AroundProviderCategory" Width="1.5" PointX="3.75" PointY="21.5" IsExpanded="true" />
@@ -22,6 +22,7 @@
         <EntityTypeShape EntityType="AMSModel.Role" Width="1.5" PointX="3.75" PointY="8.5" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.ServiceFee" Width="1.5" PointX="3" PointY="23.875" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.Survey" Width="1.5" PointX="4.5" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="AMSModel.sysdiagram" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.User" Width="1.5" PointX="6" PointY="9.75" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.UserAnswerSurvey" Width="1.5" PointX="11.25" PointY="11.125" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.UserProfile" Width="1.5" PointX="8.25" PointY="19.5" IsExpanded="true" />

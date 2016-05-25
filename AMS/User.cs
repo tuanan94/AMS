@@ -35,7 +35,7 @@ namespace AMS
         public Nullable<int> HouseId { get; set; }
         public Nullable<int> Creator { get; set; }
         public string ProfileImage { get; set; }
-        public Nullable<System.DateTime> DataOfBirth { get; set; }
+        public Nullable<System.DateTime> DateOfBirth { get; set; }
         public string IDNumber { get; set; }
         public Nullable<int> Gender { get; set; }
         public string Fullname { get; set; }

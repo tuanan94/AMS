@@ -16261,7 +16261,7 @@ ul.timeline-list .media-body.fixed {
   background: #f9f9f9;
 }
 .gridalicious img {
-  width: auto !important;
+  
   display: inline-block !important;
 }
 @media (max-width: 480px) {
@@ -34211,7 +34211,6 @@ ul.timeline-list .media-body.fixed {
   background: #f9f9f9;
 }
 .gridalicious img {
-  width: auto !important;
   display: inline-block !important;
 }
 @media (max-width: 480px) {

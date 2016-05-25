@@ -6,11 +6,18 @@
     List<User> members = ViewBag.members;
     House currentHouse = ViewBag.currentHouse;
     var isEditing = ViewBag.adding;
+    String strEdit = isEditing != null ? "true" : "false";
 }
+<style>
+    .gridalicious img{
+        width:100px !important;
+        height:100px !important;
+    }
+</style>
 <div class="col-md-12">
     <div class="panel panel-default">
         <div class="panel-heading panel-heading-gray" onclick="showHideAddNewMember()"
-             style="background-color:#00ff90;text-align:center;color:#ff6a00">+ Thêm thành viên mới </div>
+             style="background-color:#25ad9f;text-align:center;color:#ff6a00">+ Thêm thành viên mới </div>
         <div class="panel-body">
             <div class="row" id="addNewMember" style="display:none">
                 <div class="col-md-8">
@@ -32,7 +39,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(m => m.Username, new { @class = "col-md-2 control-label" })
                                 <div class="col-md-10">
-                                    @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+                                    @currentHouse.HouseName _ @Html.TextBoxFor(m => m.Username, new { @class = "form-control",@style = "width: 90%;float: right;" })
                                     @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
                                 </div>
 
@@ -90,9 +97,8 @@
                             </div>
 
                             <div class="form-group">
-                                @Html.LabelFor(m => m.ImageURL, new { @class = "col-md-2 control-label" })
                                 <div class="col-md-10">
-                                    @Html.EditorFor(m => m.ImageURL)
+                                    @Html.HiddenFor(m => m.ImageURL)
                                     @Html.ValidationMessageFor(m => m.ImageURL, "", new { @class = "text-danger" })
 
                                 </div>
@@ -126,9 +132,22 @@
                                 <div class="panel panel-default user-box">
                                     <div class="panel-body">
                                         <div class="media">
-                                            <img src="@u.ProfileImage" style="width:100px !important" alt="people" class="media-object img-circle pull-left" />
+                                            <div style="width:100px">
+                                                @{
+                                                    if (@u.ProfileImage != null && !@u.ProfileImage.Equals(""))
+                                                    {
+                                                        <img src="@u.ProfileImage" style="width:100px !important" alt="People" class="media-object img-circle pull-left" />
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="~/Content/images/defaultProfile.png" style="width:100px !important" alt="People" class="media-object img-circle pull-left" />
+
+                                                    }
+                                                }
+                                            </div>
                                             <div class="media-body">
-                                                <a href="" class="username">@u.Fullname</a>
+                                                <a href="" class="username">@u.Fullname (@u.Username)</a>
                                                 <div class="profile-icons">
                                                     <span><i class="fa fa-users"></i>@{
                                                         if(u.Id == currentHouse.OwnerID)
@@ -140,6 +159,18 @@
                                                             <span> Thành viên</span>
                                                         }
                                                         }</span>
+                                                </div>
+                                                <div class="profile-icons">
+                                                    <span>
+                                                       @{
+                                                           if (u.IsApproved == SLIM_CONFIG.USER_APPROVE_WAITING)
+                                                           {
+                                                                <i class="fa fa-fw fa-warning" style="color:chocolate"></i>
+                                                                <span style="color:chocolate"> Đang đợi duyệt</span>
+                                                            }
+                                                           
+                                                        }
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -169,6 +200,11 @@
             $("#addNewMember").fadeIn();
         }
     }
+    $(document).ready(function () {
+        if(@strEdit === true){
+            $("#addNewMember").fadeIn();
+        }
+    });
   
 
     $(function () {
