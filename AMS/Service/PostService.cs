@@ -18,6 +18,14 @@ namespace AMS.Service
 
             postRepository.Add(h);
         }
+        public void createPost(ListPostViewModel post)
+        {
+            Post h = new Post();
+            h.ImgUrl = post.ImgUrl;
+            h.Title = post.Title;
+
+            postRepository.Add(h);
+        }
         public void createPost(string Title, int PostId)
         {
             Post h = new Post();

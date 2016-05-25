@@ -15894,7 +15894,8 @@ ul.timeline-list li.media > .media-body {
 ul.timeline-list li.media > .media-body .panel {
   float: left;
   position: relative;
-  min-width: 300px;
+  min-width: 500px;
+
 }
 @media (max-width: 480px) {
   ul.timeline-list li.media > .media-body {
@@ -15969,6 +15970,7 @@ ul.timeline-list .media-body.fixed {
   padding: 0;
   border-top: 1px solid #efefef;
   margin-bottom: 0;
+    width: 500px;
 }
 .panel.panel-default ul.comments li {
   border-bottom: 1px solid #efefef;
@@ -16189,6 +16191,7 @@ ul.timeline-list .media-body.fixed {
   box-shadow: none;
   border: none;
   background: #fff;
+    width: 500px;
 }
 .panel .share-text:focus {
   box-shadow: none;
@@ -16223,8 +16226,9 @@ ul.timeline-list .media-body.fixed {
   border-radius: 0;
   position: relative;
   z-index: 1;
-  top: -1px;
-  right: -1px;
+  top: 11px;
+  right: 11px;
+    bottom: 11px;
   height: 32px;
   line-height: 32px;
   padding: 0px 10px;
@@ -33844,7 +33848,7 @@ ul.timeline-list li.media > .media-body {
 ul.timeline-list li.media > .media-body .panel {
   float: left;
   position: relative;
-  min-width: 300px;
+  min-width: 500px;
 }
 @media (max-width: 480px) {
   ul.timeline-list li.media > .media-body {
@@ -33924,6 +33928,7 @@ ul.timeline-list .media-body.fixed {
   border-bottom: 1px solid #efefef;
   background: #fcfcfc;
   padding: 5px;
+   
 }
 .panel.panel-default ul.comments li.comment-form {
   background: #fff;
@@ -34173,8 +34178,9 @@ ul.timeline-list .media-body.fixed {
   border-radius: 0;
   position: relative;
   z-index: 1;
-  top: -1px;
-  right: -1px;
+  top: -5px;
+  right: 11px;
+    bottom: 11px;
   height: 32px;
   line-height: 32px;
   padding: 0px 10px;

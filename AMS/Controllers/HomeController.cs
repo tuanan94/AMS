@@ -23,36 +23,33 @@ namespace AMS.Controllers
             ViewBag.allHouse = allHouse;
             return View(allHouse);
         }
-        public ActionResult Index()
-        {
-            return View();
-        }
-       
+        
         [HttpPost]
         public void AddByAjax(string Title, int PostId)
         {
             postService.createPost(Title, PostId);
          
         }
-        [HttpPost]
+         [HttpPost]
         public ActionResult Index(string Title, int PostId)
         {
+
             postService.createPost(Title, PostId);
             return RedirectToAction("TimeLine");
         }
-        [HttpGet]
-        public Object allHouse()
+        [HttpPost]
+        public ActionResult Indexx(ListPostViewModel model)
         {
-            return JsonConvert.SerializeObject(postService.getAllPostNotDe(), Formatting.Indented, new JsonSerializerSettings
-            {
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects
-            });
 
+            postService.createPost(model.Title, model.Id);
+            //return PartialView("TimeLine");
+            return RedirectToAction("TimeLine");
         }
+        
         public ActionResult TimeLine()
         {
             // get all post
-            IEnumerable<Post> allPost = postService.getAllPostNotDe();
+            IEnumerable<Post> allPost = postService.getAllPost();
             IEnumerable<Post> listComment = new List<Post>();
             ListPostViewModel listPostViewModel = new ListPostViewModel();
             listPostViewModel.listPost = new List<PostViewModel>();
@@ -72,8 +69,7 @@ namespace AMS.Controllers
               
             }
            
-            //ViewBag.allPost = allPost;
-            //ViewBag.listComment = listComment;
+            
             return View(listPostViewModel);
         }
 
@@ -132,6 +128,68 @@ namespace AMS.Controllers
             Post p = new Post();
             // post.Body = p.Body;
             post.Title = Title;
+            post.ImgUrl = mediaUrl;
+
+            postService.createPost(post);
+            //}
+            return RedirectToAction("TimeLine");
+        }
+
+        [HttpPost]
+        public ActionResult TimeLinex(ListPostViewModel post)
+        {
+            string mediaUrl = null;
+
+
+            //if (ModelState.IsValid)
+            //{
+            if (post.Media != null && post.Media.ContentLength > 0)
+            {
+                {
+
+                    // Save dir
+                    var uploadDir = "~/images/Post/Binh";
+                    // File extentions
+                    var ext = "";
+                    try
+                    {
+                        ext = post.Media.FileName.Substring(post.Media.FileName.LastIndexOf(".",
+                            StringComparison.Ordinal));
+                    }
+                    catch (Exception)
+                    {
+                        ext = ".jpg";
+                    }
+                    // Force it to be jpg
+                    var fileName = Util.GetUnixTime() + ".jpg";
+                    // Tmp file name
+                    var tmpFileName = "tmp" + Util.GetUnixTime() + ext;
+
+                    string serverPath = Server.MapPath(uploadDir);
+                    // tmp image path
+                    var imagePath = Path.Combine(serverPath, tmpFileName);
+                    if (!Directory.Exists(serverPath))
+                    {
+                        Directory.CreateDirectory(serverPath);
+                    }
+                    // Save as tmp file
+                    post.Media.SaveAs(imagePath);
+                    if (Util.ConvertImageToJpg(uploadDir, tmpFileName, Constant.DefaultImageQuality, uploadDir,
+                        fileName))
+                    {
+                        mediaUrl = Path.Combine(uploadDir, fileName);
+
+
+                    }
+
+                    Util.DeleteFile(imagePath);
+                }
+
+
+            }
+            Post p = new Post();
+            // post.Body = p.Body;
+            post.Title = post.Title;
             post.ImgUrl = mediaUrl;
 
             postService.createPost(post);

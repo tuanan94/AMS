@@ -27,6 +27,7 @@ namespace AMS.ViewModel
     public class ListPostViewModel
     {
        public HttpPostedFileBase Media { get; set; }
+       public string ImgUrl { get; set; }
        public List<PostViewModel> listPost
        {
            get;
