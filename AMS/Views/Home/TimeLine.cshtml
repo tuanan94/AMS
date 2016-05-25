@@ -37,19 +37,19 @@
                                         Chia se
                                     </div>
                                     <div class="panel-body">
-
+                                        <input style="visibility:hidden" type="file" id="uploadEditorImage" />
                                         <textarea rows="4" cols="50" name="Title" id="Title" class="form-control share-text" rows="3" placeholder="chia sẽ cảm xúc của bạn...">
                                         </textarea>
                                         <img id="blah" src="#" width="300" />
-
+                                        <img id="profilePreviews" src="#" width="300" />
                                     </div>
                                     <div class="panel-footer share-buttons">
-
+                                      
 
                                         @*<i class="fa fa-photo">*@
                                         @Html.TextBoxFor(m => m.Media, new {@class = "fa fa-photo", @type = "file", @name = "Media", @id = "Media"})
                                         @*</i>*@
-
+                                        <img id="profilePreview" src="~/images/icon-camera.png" width="80px" alt="Default Profile" onclick="chooseProfile()" />
 
                                         <button @*onclick="addPostByAjax()"*@ class="btn btn-primary btn-note-submit pull-right"><i class="fa fa-save"></i> Lưu</button>
                                     </div>
@@ -213,6 +213,27 @@
 </div>
 
 <script>
+    function chooseProfile() {
+        $("#uploadEditorImage").click();
+       
+    }
+
+    function changeImageURL(imageurl) {
+        $("#profilePreviews").attr("src", imageurl)
+        $("#ImageURL").val(imageurl);
+
+    }
+    function readURLS(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#profilePreviews').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
     function readURL(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -224,9 +245,11 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
-
     $("#Media").change(function () {
         readURL(this);
+    });
+    $("#uploadEditorImage").change(function () {
+        readURLS(this);
     });
     $(document).ready(function () {
         $("#btnSave").click(function () {
