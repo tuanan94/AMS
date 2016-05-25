@@ -38,7 +38,10 @@
                                     </div>
                                     <div class="panel-body">
 
-                                        <textarea rows="4" cols="50" name="Title" id="Title" class="form-control share-text" rows="3" placeholder="chia sẽ cảm xúc của bạn..."></textarea>
+                                        <textarea rows="4" cols="50" name="Title" id="Title" class="form-control share-text" rows="3" placeholder="chia sẽ cảm xúc của bạn...">
+                                        </textarea>
+                                        <img id="blah" src="#" width="300" />
+
                                     </div>
                                     <div class="panel-footer share-buttons">
 
@@ -210,6 +213,21 @@
 </div>
 
 <script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#blah').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#Media").change(function () {
+        readURL(this);
+    });
     $(document).ready(function () {
         $("#btnSave").click(function () {
             $.ajax(
