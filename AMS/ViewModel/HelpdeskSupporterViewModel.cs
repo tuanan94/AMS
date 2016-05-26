@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -15,7 +16,7 @@ namespace AMS.ViewModel
         public string Title { get; set; }
         public string Description { get; set; }
         public string CreateDate { get; set; }
-        public System.DateTime CloseDate { get; set; }
+        public string CloseDate { get; set; }
         public string AssignDate { get; set; }
         public int Status { get; set; }
         public double Price { get; set; }
@@ -23,6 +24,7 @@ namespace AMS.ViewModel
         public int HelpdeskSupporterId { get; set; }
         public int ManagerId { get; set; }
         public string HouseName { get; set; }
+        public System.DateTime ModifyDate { get; set; }
     
         public enum listStatus
         {
@@ -32,5 +34,6 @@ namespace AMS.ViewModel
             Done = 3,
             WaitForApproval = 4
         }
+
     }
 }

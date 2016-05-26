@@ -306,6 +306,7 @@
     <Content Include="Content\css\blue.min.css" />
     <Content Include="Content\css\brown.css" />
     <Content Include="Content\css\brown.min.css" />
+    <Content Include="Content\css\datatables.css" />
     <Content Include="Content\css\default-nav-inverse.css" />
     <Content Include="Content\css\default-nav-inverse.min.css" />
     <Content Include="Content\css\default.css" />
@@ -410,6 +411,7 @@
     </Content>
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
     <Content Include="Scripts\Chart.min.js" />
+    <Content Include="Scripts\datatables.js" />
     <Content Include="Scripts\graph.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -478,6 +480,8 @@
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\HelpdeskSupporter\Index.cshtml" />
     <Content Include="Views\HelpdeskSupporter\__HelpdeskSupporterLayout.cshtml" />
+    <Content Include="Views\HelpdeskSupporter\TestDataTables.cshtml" />
+    <Content Include="Views\HelpdeskSupporter\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

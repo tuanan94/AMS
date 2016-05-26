@@ -1,39 +1,37 @@
 ﻿@{
-    List<HelpdeskRequest> allRequest = ViewBag.allRequest;
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Trang Chủ";
     Layout = "~/Views/HelpdeskSupporter/__HelpdeskSupporterLayout.cshtml";
     int count = 0;
+    List<HelpdeskRequest> openRequest = ViewBag.openRequest;
 
 }
-<script src="~/Scripts/loaddata.js"></script>
 
 <div class="col-md-12">
     <div class="panel panel-default">
         <div class="panel-heading panel-heading-gray">Yêu cầu helpdesk</div>
         <div class="panel-body">
-            <form class="form-horizontal" role="form">
+            <form class="form-horizontal" role="form" method="post">
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-striped" id="myTable">
                         <thead>
                             <tr>
-                                <th>Thứ tự</th>
+                                <th class="text-center">Thứ tự</th>
                                 <th>Tiêu đề</th>
                                 <th>Căn hộ</th>
                                 <th>Nội dung</th>
                                 <th>Ngày tạo</th>
-                                <th>Ngày giao việc</th>
-                                @*<th>Ngày đóng</th>*@
+                                <th>Ngày đóng</th>
                                 <th>Trạng thái</th>
                                 @*<th>Nhân viên đã thực hiện</th>*@
-                                <th class="text-right">Thao tác</th>
+                                <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
                             @{
-                                foreach (HelpdeskRequest hr in allRequest)
+                                foreach (HelpdeskRequest hr in openRequest)
                                 {
                                     <tr data-id="@(++count)">
-                                        <td>
+                                        <td class="text-center">
                                             <span class="label label-gray">@count</span>
                                         </td>
                                         <td>
@@ -49,56 +47,28 @@
                                             <span class="label label-primary">@Convert.ToString(string.Format("{0:dd/MM/yyyy}", @hr.CreateDate))</span>
                                         </td>
                                         <td>
-                                            <span class="label label-success">@Convert.ToString(string.Format("{0:dd/MM/yyyy}", @hr.AssignDate))</span>
+                                            <span class="label label-success">@Convert.ToString(string.Format("{0:dd/MM/yyyy}", @hr.CloseDate))</span>
                                         </td>
                                         <td>
                                             @{
-                                                if (hr.Status == 1)
-                                                {
-                                                    @Html.Label("Assigned")
+                                                    if (hr.Status == 1)
+                                                    {
+                                                        @Html.Label("Assigned")
+                                                    }
+                                                    if (hr.Status == 2)
+                                                    {
+                                                        @Html.Label("Done")
+                                                    }
                                                 }
-                                                if (hr.Status == 2)
-                                                {
-                                                    @Html.Label("Done")
-                                                }
-                                            }
-                                            @*<input class="label label-default" />*@
                                         </td>
-                                        <td class="text-right">
-
-                                            <a href="" onclick="getSelectedRequest(@hr.Id)" class="btn btn-default btn-xs" data-toggle="modal" data-target="#loadData" data-placement="top" title="Chi tiết"><i class="fa fa-eye"></i></a>
+                                        <td class="text-center">
+                                            <a class="btn btn-default btn-xs" title="Chi tiết"><i class="fa fa-eye"></i></a>
                                         </td>
                                     </tr>
                                 }
                             }
                         </tbody>
                     </table>
-                </div>
-                <!-- // Progress table -->
-                <div class="panel-footer padding-none text-center">
-                    <ul class="pagination">
-                        <li>
-                            <a href="#">&laquo;</a>
-                        </li>
-                        <li class="active">
-                            <a href="#">1</a>
-                        </li>
-                        <li>
-                            <a href="#">2</a>
-                        </li>
-                        <li>
-                            <a href="#">3</a>
-                        </li>
-                        <li>
-                            <a href="#">4</a>
-                        </li>
-                        <li>
-                            <a href="#">5</a>
-                        </li>
-                        <li>
-                            <a href="#">&raquo;</a>
-                        </li>
-                    </ul>
                 </div>
             </form>
         </div>
@@ -140,7 +110,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">Ngày giao việc</label>
+                            <label for="inputEmail3" class="col-sm-3 control-label">Ngày đóng</label>
                             <div class="col-sm-9">
                                 <input type="email" readonly="readonly" class="form-control" id="assignDate">
                             </div>
@@ -184,29 +154,32 @@
 
 <!--Script Region-->
 <script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
     function getSelectedRequest(selectedId) {
         loadSelectedRequest(selectedId);
     }
     function loadSelectedRequest(hrId) {
         $.ajax({
-            url: '/HelpdeskSupporter/GetHelpdeskRequest',
+            url: '/HelpdeskSupporter/Detail',
             data: {
-                selectedId: hrId
+                id: hrId
             },
             error: function () {
                 alert("Xảy ra lỗi trong quá trình tải dữ liệu!")
             },
             success: function (request) {
-                $("#title").val(request.Title)
-                $("#houseName").val(request.HouseName)
-                $("#description").val(request.Description)
-                $("#createDate").val(request.CreateDate)
-                $("#assignDate").val(request.AssignDate)
-                $("#status").val(request.Status)
-                $("#price").val(request.Price)
-                $("#serviceName").val(request.HelpdeskServiceName)
-                $("#hiddenId").val(request.Id)
-                //location.href = location.href;
+                //$("#title").val(request.Title)
+                //$("#houseName").val(request.HouseName)
+                //$("#description").val(request.Description)
+                //$("#createDate").val(request.CreateDate)
+                //$("#assignDate").val(request.AssignDate)
+                //$("#status").val(request.Status)
+                //$("#price").val(request.Price)
+                //$("#serviceName").val(request.HelpdeskServiceName)
+                //$("#hiddenId").val(request.Id)
+                //location.href = "HelpdeskSupporter/Detail";
             },
             type: 'POST'
         });
@@ -224,11 +197,17 @@
                 alert("error")
 
             },
-            success: function (result) {
-                if (result == true) {
-                    //alert("Thanh cong!");
-                    location.href = "/HelpdeskSupporter/Index";
-                }
+            success: function (data) {
+                //if (data === true) {
+                //    //alert("Thanh cong!");
+                //    location.reload = "/HelpdeskSupporter/Index";
+                //}
+                //else
+                //{
+                alert(data);
+                location.reload = "/HelpdeskSupporter/Index";
+
+                //}
             },
             type: 'POST'
         });
@@ -236,42 +215,3 @@
 </script>
 <!--End Script Region-->
 
-<!--<script language="javascript">
-    function get_content() {
-        var html = document.getElementById(@count).innerHTML;
-        alert("Nội dung cần lấy là: " + html);
-    }
-</script>-->
-<!--Test
-<div id="loadData" class="modal fade">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Chi tiết </h4>
-            </div>
-            <div class="modal-body" id="modalContent">
-                <div class="panel-body">
-                    <label>
-                        Assignee
-                    </label>
-                    <input id="assignee" type="text"/>
-                    <button class="btn btn-success" onclick="updateRequest()">Update</button>
-
-
-
-                    <form class="form-horizontal" role="form">
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">Tiêu đề</label>
-                            <div class="col-sm-9">
-                                <span class="label label-gray" id="dataTitle"></span>
-                            </div>
-                        </div>
-
-                    </form>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>-->
