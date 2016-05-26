@@ -26,6 +26,7 @@ namespace AMS
         public Nullable<double> Price { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<int> HelpdeskServiceCategoryId { get; set; }
+        public Nullable<System.DateTime> LastModified { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HelpdeskRequest> HelpdeskRequests { get; set; }

@@ -35,9 +35,8 @@
     <EntitySetMapping Name="HelpdeskRequests">
       <EntityTypeMapping TypeName="AMSModel.HelpdeskRequest">
         <MappingFragment StoreEntitySet="HelpdeskRequest">
+          <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
           <ScalarProperty Name="HouseId" ColumnName="HouseId" />
-          <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
-          <ScalarProperty Name="HelpdeskSupporterId" ColumnName="HelpdeskSupporterId" />
           <ScalarProperty Name="HelpdeskServiceId" ColumnName="HelpdeskServiceId" />
           <ScalarProperty Name="Price" ColumnName="Price" />
           <ScalarProperty Name="Status" ColumnName="Status" />
@@ -53,6 +52,7 @@
     <EntitySetMapping Name="HelpdeskRequestHelpdeskSupporters">
       <EntityTypeMapping TypeName="AMSModel.HelpdeskRequestHelpdeskSupporter">
         <MappingFragment StoreEntitySet="HelpdeskRequestHelpdeskSupporter">
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
           <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="HelpdeskRequestId" ColumnName="HelpdeskRequestId" />
           <ScalarProperty Name="HelpdeskSupporterId" ColumnName="HelpdeskSupporterId" />
@@ -76,6 +76,7 @@
     <EntitySetMapping Name="HelpdeskServices">
       <EntityTypeMapping TypeName="AMSModel.HelpdeskService">
         <MappingFragment StoreEntitySet="HelpdeskService">
+          <ScalarProperty Name="LastModified" ColumnName="LastModified" />
           <ScalarProperty Name="HelpdeskServiceCategoryId" ColumnName="HelpdeskServiceCategoryId" />
           <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="Price" ColumnName="Price" />
@@ -88,6 +89,7 @@
     <EntitySetMapping Name="HelpdeskServiceCategories">
       <EntityTypeMapping TypeName="AMSModel.HelpdeskServiceCategory">
         <MappingFragment StoreEntitySet="HelpdeskServiceCategory">
+          <ScalarProperty Name="LastModified" ColumnName="LastModified" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
@@ -96,6 +98,7 @@
     <EntitySetMapping Name="Houses">
       <EntityTypeMapping TypeName="AMSModel.House">
         <MappingFragment StoreEntitySet="House">
+          <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
           <ScalarProperty Name="Area" ColumnName="Area" />
           <ScalarProperty Name="Description" ColumnName="Description" />
           <ScalarProperty Name="HouseName" ColumnName="HouseName" />
@@ -211,6 +214,14 @@
     <EntitySetMapping Name="Users">
       <EntityTypeMapping TypeName="AMSModel.User">
         <MappingFragment StoreEntitySet="User">
+          <ScalarProperty Name="Fullname" ColumnName="Fullname" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="IDNumber" ColumnName="IDNumber" />
+          <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+          <ScalarProperty Name="ProfileImage" ColumnName="ProfileImage" />
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="HouseId" ColumnName="HouseId" />
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
           <ScalarProperty Name="RoleId" ColumnName="RoleId" />
           <ScalarProperty Name="Password" ColumnName="Password" />
           <ScalarProperty Name="Username" ColumnName="Username" />
@@ -225,17 +236,6 @@
           <ScalarProperty Name="AnswerId" ColumnName="AnswerId" />
           <ScalarProperty Name="UserId" ColumnName="UserId" />
           <ScalarProperty Name="SurveyId" ColumnName="SurveyId" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="UserInHouses">
-      <EntityTypeMapping TypeName="AMSModel.UserInHouse">
-        <MappingFragment StoreEntitySet="UserInHouse">
-          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
-          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-          <ScalarProperty Name="HouseId" ColumnName="HouseId" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

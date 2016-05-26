@@ -15,7 +15,6 @@ namespace AMS.Controllers
     public class HomeController : Controller
     {
         TestService testService = new TestService();
-        UserInHouseService userInHouseService = new UserInHouseService();
         PostService postService = new PostService();
         public ActionResult Test()
         {
@@ -183,17 +182,6 @@ namespace AMS.Controllers
         {
             return View();
         }
-        [HttpPost]
-        public ActionResult ManageMember(MemberViewModel member)
-        {
-            if (ModelState.IsValid)
-            {
-                userInHouseService.addMemberRequest(member);
-
-            }
-            return View();
-            //pendingMemberService.addMemberRequest(member);
-
-        }
+       
     }
 }

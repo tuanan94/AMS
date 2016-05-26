@@ -30,15 +30,14 @@ namespace AMS
         public Nullable<int> Status { get; set; }
         public Nullable<double> Price { get; set; }
         public Nullable<int> HelpdeskServiceId { get; set; }
-        public Nullable<int> HelpdeskSupporterId { get; set; }
-        public Nullable<int> ManagerId { get; set; }
         public Nullable<int> HouseId { get; set; }
+        public Nullable<System.DateTime> ModifyDate { get; set; }
     
+        public virtual HelpdeskService HelpdeskService { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HelpdeskRequestLog> HelpdeskRequestLogs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HelpdeskRequestHelpdeskSupporter> HelpdeskRequestHelpdeskSupporters { get; set; }
-        public virtual HelpdeskService HelpdeskService { get; set; }
         public virtual House House { get; set; }
     }
 }
