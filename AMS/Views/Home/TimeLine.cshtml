@@ -27,9 +27,9 @@
                     <div class="date">19 OCT</div>
                 </div>
                 <div class="media-body">
-                    @using (Html.BeginForm("TimeLine", "Home", FormMethod.Post, new {role = "form", enctype = "multipart/form-data"}))
+                    @using (Html.BeginForm("TimeLinex", "Home", FormMethod.Post, new {role = "form"}))
                     {
-
+                         @Html.AntiForgeryToken()
                         <div class="row">
                             <div class="col-md-12 col-lg-8">
                                 <div class="panel panel-default share">
@@ -41,16 +41,23 @@
                                         <textarea rows="4" cols="50" name="Title" id="Title" class="form-control share-text" rows="3" placeholder="chia sẽ cảm xúc của bạn...">
                                         </textarea>
                                         <img id="blah" src="#" width="300" />
-                                        <img id="profilePreviews" src="#" width="300" />
+                                        <img id="profilePreviews" src="#" width="300"/>
+                                        <div id="progressBar" class="progress" style="width:200px" hidden="hidden">
+                                            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:200px">
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="panel-footer share-buttons">
                                       
 
                                         @*<i class="fa fa-photo">*@
-                                        @Html.TextBoxFor(m => m.Media, new {@class = "fa fa-photo", @type = "file", @name = "Media", @id = "Media"})
+                                        @*@Html.TextBoxFor(m => m.Media, new {@class = "fa fa-photo" ,@type = "file", @name = "Media", @id = "Media"})*@
                                         @*</i>*@
-                                        <img id="profilePreview" src="~/images/icon-camera.png" width="80px" alt="Default Profile" onclick="chooseProfile()" />
+                                        @Html.HiddenFor(m => m.ImgUrl)
 
+
+                                        <img id="profilePreview" src="~/images/icon-camera.png" width="80px" alt="Default Profile" onclick="chooseProfile()" />
+                                        <input type="submit" value="Save" class="btn btn-primary" />
                                         <button @*onclick="addPostByAjax()"*@ class="btn btn-primary btn-note-submit pull-right"><i class="fa fa-save"></i> Lưu</button>
                                     </div>
                                 </div>
@@ -219,8 +226,8 @@
     }
 
     function changeImageURL(imageurl) {
-        $("#profilePreviews").attr("src", imageurl)
-        $("#ImageURL").val(imageurl);
+        $("#profilePreview").attr("src", imageurl)
+        $("#ImgUrl").val(imageurl);
 
     }
     function readURLS(input) {
@@ -228,10 +235,11 @@
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                $('#profilePreviews').attr('src', e.target.result);
+                $('#profilePreview').attr('src', e.target.result);
             }
 
             reader.readAsDataURL(input.files[0]);
+           
         }
     }
     function readURL(input) {
@@ -250,7 +258,42 @@
     });
     $("#uploadEditorImage").change(function () {
         readURLS(this);
+       
     });
+    $("#uploadEditorImage").change(function () {
+        readURLS(this);
+        var data = new FormData();
+        var files = $("#uploadEditorImage").get(0).files;
+        if (files.length > 0) {
+            data.append("HelpSectionImages", files[0]);
+        }
+        progessBar(true);
+        $.ajax({
+            url: "/images/Post/Binh",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: data,
+            success: function (successData) {
+                changeImageURL(successData);
+                progessBar(false);
+
+            },
+            error: function (er) {
+                alert(er);
+                progessBar(false);
+            }
+
+        });
+    });
+    function progessBar(isShow) {
+        if (isShow == true) {
+            $("#progressBar").removeAttr("hidden");
+        } else {
+            $("#progressBar").attr("hidden", "hidden");
+        }
+    }
+  
     $(document).ready(function () {
         $("#btnSave").click(function () {
             $.ajax(
@@ -272,7 +315,7 @@
             url: '/Home/TimeLine',
             data: {
                 Title: $("#Title").val(),
-                Media: $("#Media").val()
+                Media: $("#ImgUrl").val()
 
             },
             error: function () {
@@ -280,8 +323,7 @@
 
             },
             success: function (data) {
-                clearHouseList();
-                loadHouseList();
+               
             },
             type: 'POST'
         });

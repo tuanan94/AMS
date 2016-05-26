@@ -26,6 +26,12 @@ namespace AMS.Service
 
             postRepository.Add(h);
         }
+        public void CreatePosts(Post post)
+        {
+            
+
+            postRepository.Add(post);
+        }
         public void createPost(string Title, int PostId)
         {
             Post h = new Post();

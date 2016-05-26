@@ -143,56 +143,13 @@ namespace AMS.Controllers
 
             //if (ModelState.IsValid)
             //{
-            if (post.Media != null && post.Media.ContentLength > 0)
-            {
-                {
-
-                    // Save dir
-                    var uploadDir = "~/images/Post/Binh";
-                    // File extentions
-                    var ext = "";
-                    try
-                    {
-                        ext = post.Media.FileName.Substring(post.Media.FileName.LastIndexOf(".",
-                            StringComparison.Ordinal));
-                    }
-                    catch (Exception)
-                    {
-                        ext = ".jpg";
-                    }
-                    // Force it to be jpg
-                    var fileName = Util.GetUnixTime() + ".jpg";
-                    // Tmp file name
-                    var tmpFileName = "tmp" + Util.GetUnixTime() + ext;
-
-                    string serverPath = Server.MapPath(uploadDir);
-                    // tmp image path
-                    var imagePath = Path.Combine(serverPath, tmpFileName);
-                    if (!Directory.Exists(serverPath))
-                    {
-                        Directory.CreateDirectory(serverPath);
-                    }
-                    // Save as tmp file
-                    post.Media.SaveAs(imagePath);
-                    if (Util.ConvertImageToJpg(uploadDir, tmpFileName, Constant.DefaultImageQuality, uploadDir,
-                        fileName))
-                    {
-                        mediaUrl = Path.Combine(uploadDir, fileName);
-
-
-                    }
-
-                    Util.DeleteFile(imagePath);
-                }
-
-
-            }
+          
             Post p = new Post();
             // post.Body = p.Body;
-            post.Title = post.Title;
-            post.ImgUrl = mediaUrl;
+            p.Title = post.Title;
+            p.ImgUrl = post.ImgUrl;
 
-            postService.createPost(post);
+            postService.CreatePosts(p);
             //}
             return RedirectToAction("TimeLine");
         }
