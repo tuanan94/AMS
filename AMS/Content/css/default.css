@@ -34178,7 +34178,7 @@ ul.timeline-list .media-body.fixed {
   border-radius: 0;
   position: relative;
   z-index: 1;
-  top: -5px;
+  /*top: -5px;*/
   right: 11px;
     bottom: 11px;
   height: 32px;

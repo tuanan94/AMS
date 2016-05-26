@@ -1,85 +1,3 @@
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\roslyn\csc.exe
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\roslyn\Microsoft.CodeAnalysis.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\roslyn\Microsoft.CSharp.Core.targets
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\roslyn\Microsoft.VisualBasic.Core.targets
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\roslyn\System.Collections.Immutable.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\roslyn\System.Reflection.Metadata.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\roslyn\vbc.exe
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\roslyn\VBCSCompiler.exe
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\roslyn\VBCSCompiler.exe.config
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\AMS.dll.config
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\AMS.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\AMS.pdb
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Antlr3.Runtime.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\EntityFramework.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\EntityFramework.SqlServer.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.AI.Agent.Intercept.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.AI.DependencyCollector.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.AI.PerfCounterCollector.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.AI.ServerTelemetryChannel.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.AI.Web.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.AI.WindowsServer.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.ApplicationInsights.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.AspNet.Identity.Core.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.AspNet.Identity.EntityFramework.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.AspNet.Identity.Owin.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.Owin.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.Owin.Host.SystemWeb.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.Owin.Security.Cookies.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.Owin.Security.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.Owin.Security.Facebook.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.Owin.Security.Google.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.Owin.Security.OAuth.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.Owin.Security.Twitter.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.Web.Infrastructure.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Newtonsoft.Json.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Owin.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\System.Web.Helpers.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\System.Web.Mvc.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\System.Web.Optimization.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\System.Web.Razor.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\System.Web.WebPages.Deployment.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\System.Web.WebPages.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\System.Web.WebPages.Razor.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\WebGrease.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.AI.DependencyCollector.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.AI.ServerTelemetryChannel.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.AI.Web.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.AI.WindowsServer.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.ApplicationInsights.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\System.Web.Helpers.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\System.Web.Mvc.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\System.Web.Optimization.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\System.Web.Razor.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\System.Web.WebPages.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\System.Web.WebPages.Deployment.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\System.Web.WebPages.Razor.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Antlr3.Runtime.pdb
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Newtonsoft.Json.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\EntityFramework.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\EntityFramework.SqlServer.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.AspNet.Identity.Core.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.AspNet.Identity.Owin.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.AspNet.Identity.EntityFramework.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.Owin.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.Owin.Host.SystemWeb.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.Owin.Security.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.Owin.Security.Facebook.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.Owin.Security.Cookies.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.Owin.Security.OAuth.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.Owin.Security.Google.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.Owin.Security.Twitter.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\obj\Debug\AMS.csprojResolveAssemblyReference.cache
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\obj\Debug\AMS.dll
-\\mac\home\documents\visual studio 2015\Projects\AMS\AMS\obj\Debug\AMS.pdb
-F:\Chuyen Nganh\CP_2016\AMS\AMS\obj\Debug\AMS.csprojResolveAssemblyReference.cache
 F:\Chuyen Nganh\CP_2016\AMS\AMS\bin\roslyn\csc.exe
 F:\Chuyen Nganh\CP_2016\AMS\AMS\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
 F:\Chuyen Nganh\CP_2016\AMS\AMS\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
@@ -158,5 +76,6 @@ F:\Chuyen Nganh\CP_2016\AMS\AMS\bin\Microsoft.Owin.Security.OAuth.xml
 F:\Chuyen Nganh\CP_2016\AMS\AMS\bin\Microsoft.Owin.Security.Google.xml
 F:\Chuyen Nganh\CP_2016\AMS\AMS\bin\Microsoft.Owin.Security.Twitter.xml
 F:\Chuyen Nganh\CP_2016\AMS\AMS\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+F:\Chuyen Nganh\CP_2016\AMS\AMS\obj\Debug\AMS.csprojResolveAssemblyReference.cache
 F:\Chuyen Nganh\CP_2016\AMS\AMS\obj\Debug\AMS.dll
 F:\Chuyen Nganh\CP_2016\AMS\AMS\obj\Debug\AMS.pdb

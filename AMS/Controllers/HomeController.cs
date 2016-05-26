@@ -38,7 +38,7 @@ namespace AMS.Controllers
             return RedirectToAction("TimeLine");
         }
         [HttpPost]
-        public ActionResult Indexx(ListPostViewModel model)
+         public ActionResult Indexx(ListPostViewModel model, int postId)
         {
 
             postService.createPost(model.Title, model.Id);
@@ -59,6 +59,12 @@ namespace AMS.Controllers
                 postViewModel.ImgUrl = item.ImgUrl;
                 postViewModel.Id = item.Id;
                 postViewModel.Title = item.Title;
+                postViewModel.CountComment = postService.CountComment(postViewModel.Id);
+                if (item.CreateDate.HasValue)
+                {
+                    postViewModel.CreateDate = item.CreateDate.Value;
+                }
+             
                 //get list comment belong post
                 listComment = postService.getCommentBelongPost(postViewModel.Id);
                 if (listComment !=null)
@@ -129,7 +135,7 @@ namespace AMS.Controllers
             // post.Body = p.Body;
             post.Title = Title;
             post.ImgUrl = mediaUrl;
-
+            post.CreateDate = DateTime.Now;
             postService.createPost(post);
             //}
             return RedirectToAction("TimeLine");

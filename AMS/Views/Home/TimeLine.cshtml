@@ -10,12 +10,41 @@
     //allPost = ViewBag.allPost;
     //IEnumerable<Post> comment = ViewBag.listComment;
 
-   
+
 
 
     //List<PostViewModel> listComment = listPostViewModel;
 }
+<style>
+    input[type="file"] {
+        display: none;
 
+    }
+    img[src='#'] {
+        display: none;
+    }
+    #myList li {
+        display: none;
+    }
+
+    #loadMore {
+        color: green;
+        cursor: pointer;
+    }
+
+        #loadMore:hover {
+            color: black;
+        }
+
+    #showLess {
+        color: red;
+        cursor: pointer;
+    }
+
+        #showLess:hover {
+            color: black;
+        }
+</style>
 <script src="~/Scripts/jquery-1.10.2.js"></script>
 <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
 <div id="page">
@@ -27,110 +56,68 @@
                     <div class="date">19 OCT</div>
                 </div>
                 <div class="media-body">
-                    @using (Html.BeginForm("TimeLine", "Home", FormMethod.Post, new {role = "form"}))
+                    @using (Html.BeginForm("TimeLine", "Home", FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))
                     {
-                        @Html.AntiForgeryToken()
+
                         <div class="row">
                             <div class="col-md-12 col-lg-8">
-                                <div class="panel panel-default share">
-                                    <div class="panel-heading panel-heading-gray title">
-                                        Chia se
+                                <div class="panel panel-default share" style="border-color: grey">
+                                    <div class="panel-heading panel-heading-gray title" style="border-color: grey">
+                                        <h4><b>Chia sẽ</b></h4>
                                     </div>
+                                    <div class="panel-body" style="border-color: grey">
 
-                                    @*<div class="panel-body">
-                                        <input style="visibility:hidden" type="file" id="uploadEditorImage" />
-                                        <textarea rows="4" cols="50" name="Title" id="Title" class="form-control share-text" rows="3" placeholder="chia sẽ cảm xúc của bạn...">
-                                        </textarea>
+                                        <textarea rows="4" cols="50" name="Title" id="Title" class="form-control share-text" rows="3" placeholder="Chia sẽ cảm xúc của bạn..."></textarea>
                                         <img id="blah" src="#" width="300" />
-                                        <img id="profilePreviews" src="#" width="300"/>
-                                        <div id="progressBar" class="progress" style="width:200px" hidden="hidden">
-                                            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:200px">
+                                    </div>
+                                    <div class="panel-footer share-buttons" style="border-color: grey">
+                                        <div>
+                                            @*<i class="fa fa-photo">*@
+                                            @Html.TextBoxFor(m => m.Media, new { @class = "fa fa-photo", @type = "file", @name = "Media", @id = "Media" })
+                                            @*</i>*@
+
+                                            <img src="/images/Post/icon-camera.png" id="upfile1" style="cursor: pointer; width: 70px"/>
+                                            <img src="/images/Post/camera_icon.jpg" id="upfile1" style="cursor: pointer; width: 55px"/>
+                                            &nbsp;
+                                            <img src="/images/Post/location.png" id="upfile1" style="cursor: pointer; width: 45px" />
+                                            @*<img id="profilePreviews" src="#" width="300" />*@
+                                            <div id="progressBar" class="progress" style="width:200px" hidden="hidden">
+                                                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:200px">
+                                                </div>
                                             </div>
+                                            @*<div><img id="profilePreview" src="~/images/Post/icon-camera.png" width="80px" alt="Default Profile" onclick="chooseProfile()" /></div>*@
+                                            <button @*onclick="addPostByAjax()"*@ class="btn btn-primary pull-right"><i class="fa fa-save"></i> Lưu</button>
                                         </div>
-                                    </div>*@
-                                    <div class="panel-body">
 
-                                        <input style="visibility:hidden" type="file" id="uploadEditorImage" />
-                                        <textarea rows="4" cols="50" name="Title" id="Title" class="form-control share-text" rows="3" placeholder="chia sẽ cảm xúc của bạn..."></textarea>
-                                        <img id="blah" src="#" width="300" />
-
-                                        <img id="profilePreviews" src="#" width="300" />
-                                    </div>
-                                    <div class="panel-footer share-buttons">
-
-
-
-                                    <div class="panel-body">
-
-                                        <textarea rows="4" cols="50" name="Title" id="Title" class="form-control share-text" rows="3" placeholder="chia sẽ cảm xúc của bạn...">
-                                        </textarea>
-                                        <img id="blah" src="#" width="300" />
 
                                     </div>
-                                    <div class="panel-footer share-buttons">
-
-
-
-                                        @*<i class="fa fa-photo">*@
-                                        @Html.TextBoxFor(m => m.Media, new { @class = "fa fa-photo", @type = "file", @name = "Media", @id = "Media" })
-                                        @*</i>*@
-
-
-                                        <img id="profilePreview" src="~/images/icon-camera.png" width="80px" alt="Default Profile" onclick="chooseProfile()" />
-
-
-                                        <button @*onclick="addPostByAjax()"*@ class="btn btn-primary btn-note-submit pull-right"><i class="fa fa-save"></i> Lưu</button>
-                                    </div>
-                                    @*<div class="panel-footer share-buttons">
-                                      
-
-                                   
-                                      
-                                        @Html.TextBoxFor(m => m.Media, new { @class = "fa fa-photo", @type = "file", @name = "Media", @id = "Media" })
-                                       
-
-
-                                        <img id="profilePreview" src="~/images/icon-camera.png" width="80px" alt="Default Profile" onclick="chooseProfile()" />
-                                        <input type="submit" value="Save" class="btn btn-primary" />
-                                        <button onclick="addPostByAjax()" class="btn btn-primary btn-note-submit pull-right"><i class="fa fa-save"></i> Lưu</button>
-                                    </div>*@
                                 </div>
                             </div>
                         </div>
                     }
                 </div>
                 @*<div class="media-body">
-                     @using (Html.BeginForm("Indexx", "Home", null, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                    {
-                          @Html.AntiForgeryToken()
-                        <div class="row">
-                            <div class="col-md-12 col-lg-8">
-                                <div class="panel panel-default share">
-                                    <div class="panel-heading panel-heading-gray title">
-                                        Chia se
-                                    </div>
-                                    <div class="panel-body">
-                                        @Html.TextAreaFor(m =>m.Title, new { @class="form-control share-text"})
-                                        <div class="col-md-10">
-                                            @Html.HiddenFor(m => m.ImgUrl)
-                                            <img id="profilePreview" src="~/Content/images/defaultProfile.png" alt="Default Profile" onclick="chooseProfile()" style="width:200px;height:auto" />
-                                            <input style="visibility:hidden" type="file" id="uploadEditorImage" />
-                                            <div id="progressBar" class="progress" style="width:200px" hidden="hidden">
-                                                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:200px">
-                                                </div>
-                                            </div>
-
+                        @using (Ajax.BeginForm("TimeLinex", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "page" }))
+                        {
+                              @Html.AntiForgeryToken()
+                            <div class="row">
+                                <div class="col-md-12 col-lg-8">
+                                    <div class="panel panel-default share">
+                                        <div class="panel-heading panel-heading-gray title">
+                                            Chia se
                                         </div>
-                                    </div>
-                                    <div class="panel-footer share-buttons">
-                                        @Html.TextBoxFor(m => m.Media, new { @class = "fa fa-photo", @type = "file", @name = "Media", @id = "Media" })
-                                        <input type="submit" value="Save" class="btn btn-primary" />
+                                        <div class="panel-body">
+                                            @Html.TextAreaFor(m =>m.Title, new { @class="form-control share-text"})
+                                        </div>
+                                        <div class="panel-footer share-buttons">
+                                            @Html.TextBoxFor(m => m.Media, new { @class = "fa fa-photo", @type = "file", @name = "Media", @id = "Media" })
+                                            <input type="submit" value="Save" class="btn btn-primary" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    }
-                </div>*@
+                        }
+                    </div>*@
             </li>
             @foreach (var h in Model.listPost)
             {
@@ -147,6 +134,7 @@
                             <div class="panel panel-default">
 
                                 <div class="panel-body">
+                                    <p>@h.CreateDate</p>
                                     <p>@h.Title</p>
                                     @if (h.ImgUrl == null)
                                     {
@@ -163,69 +151,75 @@
 
 
                                 <div class="view-all-comments">
-                                    <a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments
-                                </div>
-                                <ul class="comments">
-                                    @foreach (var c in h.Post)
-                                    {
-                                        if (h.Id == c.PostId)
-                                        {
-                                            <li>
-                                                <div class="media">
-                                                    <a href="" class="pull-left">
-                                                        <img src="/images/people/50/woman-5.jpg" class="media-object">
-                                                    </a>
-                                                    <div class="media-body">
-                                                        <a href="" class="comment-author">Mary</a>
-                                                        @if (@c.Title.IsNullOrWhiteSpace() || @h.ImgUrl.IsNullOrWhiteSpace())
-                                                        {
-                                                            <span></span>
-                                                        }
-                                                        else
-                                                        {
-                                                            <span>@c.Title</span>
-                                                        }
 
-                                                        <div class="comment-date">2 days</div>
+                                    <div class="fa fa-comments-o" id="loadMore"><h5>Xem thêm</h5></div> @h.CountComment
+                                    <div id="showLess">Show less</div>
+                                    <ul class="comments" id="comment">
+                                        @foreach (var c in h.Post)
+                                        {
+                                            if (h.Id == c.PostId)
+                                            {
+                                                <li class="comment">
+                                                    <div class="media">
+                                                        <a href="" class="pull-left">
+                                                            <img src="/images/people/50/woman-5.jpg" class="media-object">
+                                                        </a>
+                                                        <div class="media-body">
+                                                            <a href="" class="comment-author">Mary</a>
+                                                            @if (@c.Title.IsNullOrWhiteSpace() || @h.ImgUrl.IsNullOrWhiteSpace())
+                                                            {
+                                                                <span></span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span>@c.Title</span>
+                                                            }
+
+                                                            <div class="comment-date">2 days</div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            }
+                                        }
+
+                                        @*Comment by ajax*@
+                                        @*<li class="comment-form" id="comment">
+                @using (Ajax.BeginForm("Indexx", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "comment" }, new { postId = @Model.Id }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="input-group">
+
+                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", } })
+                        <span class="input-group-addon">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+
+                        </span>
+                    </div>
+                }
+
+            </li>*@
+                                    </ul>
+                                    <ul>
+                                        <li class="comment-form">
+                                            @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))
+                                            {
+                                                <div class="input-group">
+                                                    <div class="input-group">
+                                                        <input type="hidden" value="@h.Id" style="width: 300px" id="PostId" name="PostId">
+                                                        <textarea type="text" cols="90" rows="4" style="width: 300px" id="Title" name="Title"></textarea>
+                                                        &nbsp;
+                                                        <button onclick="addCommentByAjax()" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Đăng</button>
+
                                                     </div>
                                                 </div>
-                                            </li>
-                                        }
-                                    }
-                                    <li class="comment-form">
-                                        @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))
-                                        {
-                                            <div class="input-group">
-                                                <input type="text" value="@h.Id" class="form-control comment-content" id="PostId" name="PostId">
-                                                <textarea type="text" cols="50" class="form-control comment-content" id="Title" name="Title"></textarea>
+                                            }
 
-                                                <span class="input-group-addon">
-                                                    <button onclick="addCommentByAjax()" class="btn btn-primary"><i class="fa fa-save"></i> Đăng</button>
-
-                                                </span>
-                                            </div>
-                                        }
-
-                                    </li>
-                                    @*<li class="comment-form" id="comment">
-                                        @using (Ajax.BeginForm("Indexx", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "page" }))
-                                        {
-                                            @Html.AntiForgeryToken()
-                                            <div class="input-group">
-
-                                                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-                                                @Html.TextBoxFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", @value = Model.Id } })
-                                                <span class="input-group-addon">
-                                                    <input type="submit" value="Save" class="btn btn-primary" />
-
-                                                </span>
-                                            </div>
-                                        }
-
-                                    </li>*@
-                                </ul>
-
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
+
                         </div>
                     </li>
 
@@ -262,10 +256,38 @@
         </div>
     </div>
 </div>
-
 <script>
 
-    
+    $("#upfile1").click(function () {
+        $("#Media").trigger('click');
+    });
+
+    //
+    //$(document).ready(function () {
+    //    // Load the first 3 list items from another HTML file
+    //    $('#comment').load('externalList.html li:lt(3)');
+    //    $('#comment li:lt(3)').show();
+    //    $('#loadMore').click(function () {
+    //        $('#comment li:lt(12)').show();
+    //    });
+    //    $('#showLess').click(function () {
+    //        $('#comment li').not(':lt(2)').hide();
+    //    });
+    //});
+    $(document).ready(function () {
+        size_li = $("#comment li").size();
+        x = 2;
+        $('#comment li:lt(3)').hide();
+        $('#loadMore').click(function () {
+            x = (x + 1 <= size_li) ? x + 1 : size_li;
+            $('#comment li:lt(' + x + ')').show();
+        });
+        $('#showLess').click(function () {
+            x = (x - 5 < 0) ? 3 : x - 5;
+            $('#comment li').not(':lt(' + x + ')').hide();
+        });
+    });
+
 
 
     //////////////////
@@ -286,7 +308,7 @@
             }
 
             reader.readAsDataURL(input.files[0]);
-           
+
         }
     }
 
@@ -308,7 +330,7 @@
 
     $("#uploadEditorImage").change(function () {
         readURLS(this);
-       
+
     });
     $("#uploadEditorImage").change(function () {
         readURLS(this);
@@ -343,18 +365,19 @@
             $("#progressBar").attr("hidden", "hidden");
         }
     }
-  
+
+
 
     $(document).ready(function () {
         $("#btnSave").click(function () {
             $.ajax(
             {
-                type: "POST", //HTTP POST Method  
-                url: "Home/Index", // Controller/View   
-                data: { //Passing data  
-                    Title: $("#Title").val(), //Reading text box values using Jquery   
+                type: "POST", //HTTP POST Method
+                url: "Home/Index", // Controller/View
+                data: { //Passing data
+                    Title: $("#Title").val(), //Reading text box values using Jquery
                     PostId: $("#PostId").val(),
-                  
+
                 }
 
             });
@@ -374,7 +397,7 @@
 
             },
             success: function (data) {
-               
+
             },
             type: 'POST'
         });
@@ -387,9 +410,9 @@
                 PostId: $("#PostId").val()
 
             },
-           
+
             success: function (data) {
-              
+
             },
             type: 'POST'
         });

@@ -15,7 +15,7 @@ namespace AMS.Service
           Post h = new Post();
             h.ImgUrl = post.ImgUrl;
             h.Title = post.Title;
-
+            h.CreateDate = post.CreateDate;
             postRepository.Add(h);
         }
         public void createPost(ListPostViewModel post)
@@ -76,6 +76,11 @@ namespace AMS.Service
             }
             return postId ;
         }
-       
+
+        public int CountComment(int id)
+        {
+            int count= postRepository.List.Count(t=>t.PostId==id);
+            return count;
+        }
     }
 }
