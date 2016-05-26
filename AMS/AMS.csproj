@@ -206,12 +206,14 @@
     <Compile Include="AroundProviderCategory.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Constant\RoleEnum.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ManagementController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Constant\StatusEnum.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -277,10 +279,14 @@
     <Compile Include="ServiceFee.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Service\HdReqHdSupporterServices.cs" />
+    <Compile Include="Service\HelpdeskRequestLogServices.cs" />
     <Compile Include="Service\HelpdeskServiceCatService.cs" />
+    <Compile Include="Service\HelpdeskRequestServices.cs" />
     <Compile Include="Service\HelpdeskServicesService.cs" />
     <Compile Include="Service\PendingMemberService.cs" />
     <Compile Include="Service\TestService.cs" />
+    <Compile Include="Service\UserServices.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Survey.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -492,6 +498,7 @@
     <Content Include="Views\Home\CreateHdRequest.cshtml" />
     <Content Include="Views\Home\ViewRequestingHdRequestsOfManager.cshtml" />
     <Content Include="Views\Home\ViewHistoryHdRequests.cshtml" />
+    <Content Include="Views\Home\_helpdeskRequestDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

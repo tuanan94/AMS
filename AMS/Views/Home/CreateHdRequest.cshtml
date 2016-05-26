@@ -2,7 +2,9 @@
     ViewBag.Title = "ManageMember";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
 }
-
+@{
+    List<HelpdeskServiceCategory> hdSrvCats = ViewBag.hdSrvCats;
+}
 <nav class="navbar navbar-subnav navbar-static-top" role="navigation">
     <div class="container-fluid">
 
@@ -18,20 +20,15 @@
         <div class="collapse navbar-collapse" id="subnav">
             <ul class="nav navbar-nav">
                 <li class="active">
-                    <a href="./Create"><i class="fa fa-fw icon-ship-wheel"></i> Tạo yêu cầu Hỗ trợ</a>
+                    <a href="./Create"><i class="fa fa-fw icon-ship-wheel"></i> Tạo yêu cầu hổ trợ</a>
                 </li>
                 <li>
-                    <a href="./ViewHistory"><i class="fa fa-fw icon-ship-wheel"></i> Lịch sử</a>
+                    <a href="./ViewHistory?userId=1"><i class="fa fa-fw icon-ship-wheel"></i> Lịch sử</a>
                 </li>
                 <li>
-                    <a href="./AdminView"><i class="fa fa-fw icon-ship-wheel"></i> Admin Page</a>
+                    <a href="./AdminView"><i class="fa fa-fw icon-ship-wheel"></i> Trang dành cho quản lý</a>
                 </li>
             </ul>
-            @*<ul class="nav navbar-nav navbar-right hidden-xs">
-                    <li>
-                        <a href="#" data-toggle="chat-box">Chat <i class="fa fa-fw fa-comment-o"></i></a>
-                    </li>
-                </ul>*@
         </div>
         <!-- /.navbar-collapse -->
     </div>
@@ -41,83 +38,88 @@
     <div class="panel panel-default">
         @*        <div class="panel-heading panel-heading-gray">Bảng yêu cầu dịch vụ Hỗ trợ</div>*@
         <div class="panel-body">
-            <form class="form-horizontal" role="form">
-                <div class="alert alert-info" id="hdSrvCatSuccessNotify" @*style="display: none"*@>
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <span>Yêu cầu dịch vụ Hỗ trợ thành công. Anh/Chị xin vui lòng đợi ban quản lý xử lý!</span>
+            <form class="form-horizontal" id="createHdService" role="form">
+                <div class="alert alert-info hide" id="createHdSrvSuccessNoti" @*style="display: none"*@>
+                    <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <span>Yêu cầu dịch vụ hổ trợ thành công. Anh/Chị xin vui lòng đợi ban quản lý xử lý!</span>
                 </div>
-                <div class="alert alert-danger" id="hdSrvCatSuccessNotify">
+                <div class="alert alert-danger hide" id="createHdSrvFailedNoti">
                     <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                    <span>Yêu cầu dịch vụ Hỗ trợ thất bại!</span>
+                    <span>Yêu cầu dịch vụ hổ trợ thất bại! Xin vui lòng thử lại một lần nữa</span>
                 </div>
-                <div class="col-sm-6">
-                    <fieldset class="scheduler-border less-padding">
-                        <legend class="scheduler-border">Thông tin dịch vụ Hỗ trợ</legend>
+                <div class="form-group">
 
-                        <div class="form-group">
-                            <label for="inputFirstname" class="col-sm-4 control-label">Nhóm dịch vụ</label>
-                            <div class="col-sm-8 full-width-select">
-                                <select name="filterMode" class="selectpicker">
-                                    <option value="0" selected="selected">Điện khu vực chung</option>
-                                    <option value="1">Nước</option>
-                                    <option value="2">Điện căn hộ</option>
-                                </select>
+                    <div class="col-sm-6">
+                        <fieldset class="scheduler-border less-padding">
+                            <legend class="scheduler-border">Thông tin dịch vụ hổ trợ</legend>
+
+                            <div class="form-group">
+                                <label for="hdSrvCatName" class="col-sm-4 control-label">Nhóm dịch vụ</label>
+                                <div class="col-sm-8 full-width-select">
+                                    <select id="hdSrvCatName" title="Dịch vụ hổ trợ" name="hdSrvCatName" class="selectpicker">
+                                        <option value="" selected="selected">  Hãy chọn nhóm dịch vụ hổ trợ</option>
+                                        @foreach (var cat in hdSrvCats)
+                                        {
+                                            <option value="@cat.Id"> @cat.Name</option>
+                                        }
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputFirstname" class="col-sm-4 control-label">Loại dịch vụ</label>
-                            <div class="col-sm-8 full-width-select">
-                                <select name="filterMode" class="selectpicker">
-                                    <option value="0" selected="selected">Bóng đèn nhà bếp</option>
-                                    <option value="1">Bóng đèn bể ống nước</option>
-                                    <option value="2">Thông cống</option>
-                                </select>
+                            <div class="form-group">
+                                <label for="hdServiceId" class="col-sm-4 control-label">Loại dịch vụ</label>
+                                <div class="col-sm-8 full-width-select">
+                                    <select id="hdServiceId" name="HdServiceId" class="selectpicker">
+                                        <option value="" selected="selected"> Hãy chọn dịch vụ hổ trợ</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputFirstname" class="col-sm-4 control-label">Giá tiền</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control">
+                            <div class="form-group">
+                                <label for="hdSrvPrice" class="col-sm-4 control-label">Giá tiền</label>
+                                <div class="col-sm-8">
+                                    <input disabled id="hdSrvPrice" type="text" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputFirstname" class="col-sm-4 control-label">Miêu tả</label>
-                            <div class="col-sm-8">
-                                <textarea class="form-control" rows="3"></textarea>
+                            <div class="form-group">
+                                <label for="hdSrvDesc" class="col-sm-4 control-label">Miêu tả</label>
+                                <div class="col-sm-8">
+                                    <textarea disabled id="hdSrvDesc" class="form-control" rows="3"></textarea>
+                                </div>
                             </div>
-                        </div>
-                    </fieldset>
-                </div>
-                <div class="col-sm-6">
-                    <fieldset class="scheduler-border less-padding">
-                        <legend class="scheduler-border">Ghi chú của cư dân</legend>
-                        <div class="form-group">
-                            <label for="inputFirstname" class="col-md-4 control-label">Tiêu đề</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control">
+                            @*Test hard code user 3*@
+                            <input type="hidden" name="hdReqUserId" value="3"/>
+                        </fieldset>
+                    </div>
+                    <div class="col-sm-6">
+                        <fieldset class="scheduler-border less-padding">
+                            <legend class="scheduler-border">Ghi chú của cư dân</legend>
+                            <div class="form-group">
+                                <label for="hdReqTitle" class="col-md-4 control-label">Tiêu đề</label>
+                                <div class="col-sm-8">
+                                    <input id="hdReqTitle" name="hdReqTitle" type="text" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputFirstname" class="col-md-4 control-label">Mức độ khẩn cấp</label>
-                            <div class="col-sm-8 full-width-select">
-                                <select name="filterMode" class="selectpicker">
-                                    <option value="0" selected="selected">Thấp</option>
-                                    <option value="1">Trung bình</option>
-                                    <option value="2">Cao</option>
-                                </select>
+                            <div class="form-group">
+                                <label for="hdReqPrior" class="col-md-4 control-label">Độ ưu tiên</label>
+                                <div class="col-sm-8 full-width-select">
+                                    <select name="hdReqPrior" id="hdReqPrior" class="selectpicker">
+                                        <option value="0">Thấp</option>
+                                        <option value="1" selected="selected">Trung bình</option>
+                                        <option value="2">Cao</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputFirstname" class="col-md-4 control-label">Yêu cầu khách hàng</label>
-                            <div class="col-md-8">
-                                <textarea class="form-control" style="max-width: initial;" rows="3"></textarea>
+                            <div class="form-group">
+                                <label for="hdReqUserDesc" class="col-md-4 control-label">Yêu cầu khách hàng</label>
+                                <div class="col-md-8">
+                                    <textarea name="hdReqUserDesc" id="hdReqUserDesc" class="form-control" style="max-width: initial;" rows="3"></textarea>
+                                </div>
                             </div>
-                        </div>
-                    </fieldset>
+                        </fieldset>
+                    </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-2 pull-right">
-                        <span type="submit" class="btn btn-primary" onclick="sentHepdeskRequest()">Gửi yêu cầu</span>
+                        <button type="submit"  id="addNewHdRequest" class="btn btn-primary">Gửi yêu cầu</button>
                     </div>
                 </div>
             </form>

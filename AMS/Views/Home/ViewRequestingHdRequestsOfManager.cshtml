@@ -179,91 +179,263 @@
                     </div>
                 </div>
 
-                <div class="table-responsive">
-                    <table class="table v-middle">
-                        <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>Tiêu đề</th>
-                                <th>Dịch vụ</th>
-                                <th>NV được giao</th>
-                                <th>Trạng thái</th>
-                                <th>Ngày tạo</th>
-                                <th>Ngày cập nhật</th>
-                                <th>Ngày hoàn thành</th>
-                                <th class="text-right">Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody id="hdSrvTblBody">
-                            <tr>
-                                <td>1</td>
-                                <td>
-                                    Sữa ống nước nhà vệ sinh
-                                </td>
-                                <td>
-                                    Sữa ống nước
-                                </td>
-                                <td>
-                                    Osama Binladen
-                                </td>
-                                <td>
-                                    <span class="label label-info">Đang xử lý</span>
-                                </td>
-                                <td>
-                                    <span class="label label-warning">08:08</span> <span class="label label-gray">03/03/2013</span>
-                                </td>
-                                <td>
-                                    <span class="label label-warning">08:08</span> <span class="label label-gray">03/03/2013</span>
-                                </td>
-                                <td>
-                                    <span class="label label-warning">08:08</span> <span class="label label-gray">05/03/2013</span>
-                                </td>
-                                <td class="text-right">
-                                    <span class="btn btn-default btn-xs">
-                                        <i class="fa fa-pencil"></i>
-                                    </span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <div class="table-responsive">
+                            <table class="table v-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Yêu cầu hổ trợ <a class="close"><i class="fa fa-refresh"></i></a></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="hdSrvTblBody">
+                                    <tr id="hdReq_15" onclick="hdRequestDetail(15)">
+                                        <td>
+                                            Sữa ống nước nhà vệ sinh
+                                        </td>
+                                    </tr>
+                                    <tr id="hdReq_16" onclick="hdRequestDetail(16)">
+                                        <td>
+                                            Sữa ống nước nhà vệ sinh
+                                        </td>
+                                    </tr>
+                                    <tr id="hdReq_17" onclick="hdRequestDetail(17)">
+                                        <td>
+                                            Sữa ống nước nhà vệ sinh
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Sữa ống nước nhà vệ sinh Sữa ống nước nhà vệ s
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Sữa ống nước nhà vệ sinhS ữa ống nước nhà vệ
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Sữa ống nước nhà vệ sinh
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Sữa ống nước nhà vệ sinh
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Sữa ống nước nhà vệ sinh
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="panel-footer padding-none text-center">
+
+                            <ul class="pagination">
+                                <li>
+                                    <a href="#">&laquo;</a>
+                                </li>
+
+                                <li class="active">
+                                    <a href="#">1</a>
+                                </li>
+
+                                <li>
+                                    <a href="#">2</a>
+                                </li>
+
+                                <li>
+                                    <a href="#">3</a>
+                                </li>
+
+                                <li>
+                                    <a href="#">&raquo;</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-9" style="padding-left: 0">
+                        <fieldset class="scheduler-border less-padding square">
+                            <div class="form-group" style="padding-top: 15px">
+                                <span for="HdSrvName" class="col-sm-1 control-label">Tòa nhà</span>
+                                <div class="col-sm-3">
+                                    <input id="hdSrvName" type="text" name="hdSrvName" class="form-control" value="V5">
+                                </div>
+                                <span for="HdSrvName" class="col-sm-1 control-label">Tầng</span>
+                                <div class="col-sm-3">
+                                    <input id="hdSrvName" type="text" name="hdSrvName" class="form-control" value="R3">
+                                </div>
+                                <span for="HdSrvName" class="col-sm-1 control-label">Căn hộ</span>
+                                <div class="col-sm-3">
+                                    <input id="hdSrvName" type="text" name="hdSrvName" class="form-control" value="Sunrise View">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <span class="btn btn-default col-sm-offset-1 btn-sm">Close</span>
+                                <span class="btn btn-default btn-sm" data-toggle="modal" data-target="#updateHdRequestModal" data-placement="center">Chỉnh sửa</span>
+                                <span class="btn btn-default btn-sm">Reopen</span>
+                                <span class="btn btn-default btn-sm" data-toggle="modal" data-target="#assignTaskModal" data-placement="center">Chia việc</span>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <fieldset class="scheduler-border less-padding border-top">
+                                        <legend class="scheduler-border bold-black">Chi tiết</legend>
+                                        <div class="form-group">
+                                            <span for="HdSrvName" class="col-sm-3 control-label">Tiêu đề</span>
+                                            <div class="col-sm-9">
+                                                <input id="hdSrvName" type="text" name="hdSrvName" class="form-control" value="Sữa ống nước nhà vệ sinh">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <span for="HdSrvName" class="col-sm-3 control-label">Nhóm dịch vụ</span>
+                                            <div class="col-sm-9">
+                                                <input id="hdSrvName" type="text" name="hdSrvName" class="form-control" value="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <span for="HdSrvName" class="col-sm-3 control-label">Loại dịch vụ</span>
+                                            <div class="col-sm-9">
+                                                <input id="hdSrvName" type="text" name="hdSrvName" class="form-control" value="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <span for="HdSrvName" class="col-sm-3 control-label">Trạng thái</span>
+                                            <div class="col-sm-9">
+                                                <span class="label label-info">Bắt đầu tiến hành</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <span for="HdSrvName" class="col-sm-3 control-label">Mức độ</span>
+                                            <div class="col-sm-9">
+                                                <input id="hdSrvName" type="text" name="hdSrvName" class="form-control" value="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <span for="HdSrvName" class="col-sm-3 control-label">Giá tiền</span>
+                                            <div class="col-sm-9">
+                                                <input id="hdSrvName" type="text" name="hdSrvName" class="form-control" value="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <span for="inputFirstname" class="col-sm-3 control-label">Miêu tả</span>
+                                            <div class="col-sm-9">
+                                                <textarea class="form-control" rows="3"></textarea>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-md-6">
+                                    <fieldset class="scheduler-border less-padding border-top" style="margin-bottom: 0px !important">
+                                        <legend class="scheduler-border bold-black">Người được giao</legend>
+                                        <div class="form-group">
+                                            <span for="hdSrvCat" class="col-sm-3 control-label">Thành viên</span>
+                                            <div class="col-sm-9">
+                                                <select id="hdSrvCat" name="hdSrvCat" class="form-control" data-size="3"></select>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset class="scheduler-border less-padding border-top">
+                                        <legend class="scheduler-border bold-black">Thời gian</legend>
+                                        <div class="form-group">
+                                            <span for="hdSrvCat" class="col-sm-3 control-label">Khởi tạo</span>
+                                            <div class="col-sm-9">
+                                                <input id="hdSrvCat" name="hdSrvCat" class="form-control datepicker" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <span for="hdSrvCat" class="col-sm-3 control-label">Cập nhật</span>
+                                            <div class="col-sm-9">
+                                                <input id="hdSrvCat" name="hdSrvCat" class="form-control datepicker" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <span for="hdSrvCat" class="col-sm-3 control-label">Hết hạn</span>
+                                            <div class="col-sm-9">
+                                                <input id="hdSrvCat" name="hdSrvCat" class="form-control datepicker" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <span for="hdSrvCat" class="col-sm-3 control-label">Hoàn thành</span>
+                                            <div class="col-sm-9">
+                                                <input id="hdSrvCat" name="hdSrvCat" class="form-control datepicker" />
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <fieldset class="scheduler-border less-padding border-top">
+                                        <legend class="scheduler-border bold-black">Lịch sử</legend>
+                                        <div class="table-responsive">
+                                            <table class="table v-middle">
+                                                <thead>
+                                                    <tr>
+                                                        <th>NV chuyển yêu cầu</th>
+                                                        <th>Từ trạng thái</th>
+                                                        <th>NV nhận yêu cầu</th>
+                                                        <th>Sang trạng thái</th>
+                                                        <th>Thời gian</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="hdSrvTblBody">
+                                                    <tr>
+                                                        <td>Nguyễn Văn Gữi</td>
+                                                        <td><span class="label label-info">Mở</span></td>
+                                                        <td>Nguyễn Văn Nhận</td>
+                                                        <td><span class="label label-info">Chờ xử lý</span></td>
+                                                        <td><span class="label label-warning">08:08</span> <span class="label label-gray">03/03/2013</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Nguyễn Văn Nhận</td>
+                                                        <td><span class="label label-info">Chờ xử lý</span></td>
+                                                        <td>Nguyễn Văn Thực Hiện Yêu Cầu</td>
+                                                        <td><span class="label label-info">Đã giao việc</span></td>
+                                                        <td><span class="label label-warning">08:08</span> <span class="label label-gray">03/03/2013</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Nguyễn Văn Thực Hiện Yêu Cầu</td>
+                                                        <td><span class="label label-info">Đã giao việc</span></td>
+                                                        <td></td>
+                                                        <td><span class="label label-info">Bắt đầu tiến hành</span></td>
+                                                        <td><span class="label label-warning">08:08</span> <span class="label label-gray">03/03/2013</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Nguyễn Văn Thực Hiện Yêu Cầu</td>
+                                                        <td><span class="label label-info">Bắt đầu tiến hành</span></td>
+                                                        <td>Nguyễn Văn Nhận</td>
+                                                        <td><span class="label label-info">Đã hoàn thành</span></td>
+                                                        <td><span class="label label-warning">08:08</span> <span class="label label-gray">03/03/2013</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Nguyễn Văn Nhận</td>
+                                                        <td><span class="label label-info">Đã hoàn thành</span></td>
+                                                        <td>Nguyễn Văn Gữi</td>
+                                                        <td><span class="label label-info">Chờ xác nhận căn hộ</span></td>
+                                                        <td><span class="label label-warning">08:08</span> <span class="label label-gray">03/03/2013</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Nguyễn Văn Gữi</td>
+                                                        <td><span class="label label-info">Chờ xác nhận căn hộ</span></td>
+                                                        <td></td>
+                                                        <td><span class="label label-info">Đóng và hoàn thành</span></td>
+                                                        <td><span class="label label-warning">08:08</span> <span class="label label-gray">03/03/2013</span></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
                 </div>
 
-                <div class="form-group" id="delBtnGroup" style="display: none">
-                    <span class="btn btn-primary col-sm-1 pull-right" style="margin-left: 5px" onclick="commitDeleteHelpdeskService()">
-                        <i class="fa fa-plus"></i> Delete
-                    </span>
-                    <span class="btn btn-inverse col-sm-1 pull-right" onclick="cancelDeleteHelpdeskService()"
-                          style="background-color: transparent; color: #ab7a4b; border-color: transparent;">
-                        <i class="fa fa-plus"></i> Cancel
-                    </span>
-                </div>
-                @**@
-                @*        <!-- // Progress table -->*@
-                @*        <div class="panel-footer padding-none text-center">*@
-                @*            <ul class="pagination">*@
-                @*                <li>*@
-                @*                    <a href="#">&laquo;</a>*@
-                @*                </li>*@
-                @*                <li class="active">*@
-                @*                    <a href="#">1</a>*@
-                @*                </li>*@
-                @*                <li>*@
-                @*                    <a href="#">2</a>*@
-                @*                </li>*@
-                @*                <li>*@
-                @*                    <a href="#">3</a>*@
-                @*                </li>*@
-                @*                <li>*@
-                @*                    <a href="#">4</a>*@
-                @*                </li>*@
-                @*                <li>*@
-                @*                    <a href="#">5</a>*@
-                @*                </li>*@
-                @*                <li>*@
-                @*                    <a href="#">&raquo;</a>*@
-                @*                </li>*@
-                @*            </ul>*@
-                @*        </div>*@
 
             </form>
         </div>
