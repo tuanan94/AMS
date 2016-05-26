@@ -160,7 +160,6 @@ F:\Chuyen Nganh\CP_2016\AMS\AMS\bin\Microsoft.Owin.Security.Twitter.xml
 F:\Chuyen Nganh\CP_2016\AMS\AMS\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 F:\Chuyen Nganh\CP_2016\AMS\AMS\obj\Debug\AMS.dll
 F:\Chuyen Nganh\CP_2016\AMS\AMS\obj\Debug\AMS.pdb
-D:\AMS\AMS\obj\Debug\AMS.csprojResolveAssemblyReference.cache
 D:\AMS\AMS\obj\Debug\AMS.dll
 D:\AMS\AMS\obj\Debug\AMS.pdb
 D:\AMS\AMS\bin\roslyn\csc.exe

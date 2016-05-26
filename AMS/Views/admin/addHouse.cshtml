@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "Add House";
+
+
+    List<House> allHouseInfo = ViewBag.allHouseInfo;
+}
+<div id="content">
+
+
+  
+    <table class="table">
+        <thead>
+            <tr>
+
+                <th>Add House</th>
+
+            </tr>
+        </thead>
+        <tbody id="housetablebody"></tbody>
+    </table>
+    @using (Html.BeginForm("addHouse", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @*<label>ID</label>
+            <input class="form-control" name="Id" id="Id" />*@
+        <label>Block</label>
+        <input class="form-control" name="Block" id="Block" />
+        <label>Floor</label>
+        <input class="form-control" name="Floor" id="Floor" />
+        <label>House Name</label>
+        <input class="form-control" name="HouseName" id="HouseName" />
+        <label>Description</label>
+        <input class="form-control" name="Description" id="Description" />
+        <label>Area</label>
+        <input class="form-control" name="Area" id="Area" />
+        <input type="reset" class="btn btn-default" value="Reset" />
+        <input type="submit" class="btn btn-success" value="Thêm nhà vào hệ thống" id="btnsubmit" />
+        <input class="btn btn-success" onclick="addHouseByAjax()" value="Them nha bang Ajax" />
+        //<input class="btn btn-success" onclick="addHouseByAjax()" value="Them nha bang Ajax" />
+        @*<input class="btn btn-success" onclick="deleteHousebyAjax()" value="\xóa nha bang Ajax" />*@
+    }
+
+
+</div>

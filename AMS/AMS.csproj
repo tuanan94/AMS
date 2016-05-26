@@ -480,6 +480,8 @@
     <Content Include="Views\Home\Test.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Admin\ManageHouse.cshtml" />
+    <Content Include="Views\Admin\addHouse.cshtml" />
+    <Content Include="Views\Admin\deleteHouse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

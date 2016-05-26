@@ -28,7 +28,7 @@ namespace AMS.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult addHouse(int Id,String Block, String Floor, String HouseName,String Description,double Area)
+        public ActionResult addHouse(String Block, String Floor, String HouseName,String Description,float Area)
         {
             bool isValid = true;
             isValid = !HouseName.Equals("");
@@ -36,13 +36,13 @@ namespace AMS.Controllers
             if (isValid)
             {
                 //Step 2: Send to service to do business
-                manageHouseInfo.addHouse(Id,Block, Floor, HouseName,Description,Area);
+                manageHouseInfo.addHouse(Block, Floor, HouseName,Description,Area);
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("ManageHouse");
         }
         [HttpPost]
-        public void addHouseAjax(int Id, String Block, String Floor, String HouseName, String Description, double Area)
+        public void addHouseAjax(String Block, String Floor, String HouseName, String Description, float Area)
         {
             bool isValid = true;
             //Step 1: Valid
@@ -50,8 +50,16 @@ namespace AMS.Controllers
             if (isValid)
             {
                 //Step 2: Send to service to do business
-                manageHouseInfo.addHouse(Id, Block, Floor, HouseName, Description, Area);
+                manageHouseInfo.addHouse(Block, Floor, HouseName, Description, Area);
             }
         }
-    }
+        // delete house
+        [HttpPost]
+        public ActionResult deleteHouse(int Id)
+        {
+            manageHouseInfo.deleteHouse(Id);
+            return RedirectToAction("ManageHouse");
+            //return Json("Response from delete house");
+        }
+   }
 }

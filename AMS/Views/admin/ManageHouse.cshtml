@@ -17,7 +17,7 @@
                 <th>House Name</th>
                 <th>Description</th>
                 <th>Area</th>
-                
+                @*<th>Delete</th>*@
 
             </tr>
         </thead>
@@ -32,6 +32,7 @@
                     <td>@house.HouseName</td>
                     <td>@house.Description</td>
                     <td>@house.Area</td>
+                    @*<td>@Html.ActionLink("DELETE", "deleteHouse", "Admin") </td>*@
                 </tr>
             }
 
@@ -42,27 +43,18 @@
     List<House> allHouse = ViewBag.allHouse;
 }
 <div id="content">
-
-
     <table class="table">
         <thead>
-            <tr>
-                <th>ID</th>
-                <th>Block</th>
-                <th>Floor</th>
-                <th>HouseName</th>
-                <th>Description</th>
-                <th>Area</th>
-                
-
+            <tr>            
+                <th>Add House</th>
             </tr>
         </thead>
         <tbody id="housetablebody"></tbody>
     </table>
-    @using (Html.BeginForm("addHome", "Test", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("addHouse", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
-        <label>ID</label>
-        <input class="form-control" name="Id" id="Id" />
+        @*<label>ID</label>
+        <input class="form-control" name="Id" id="Id" />*@
         <label>Block</label>
         <input class="form-control" name="Block" id="Block" />
         <label>Floor</label>
@@ -79,6 +71,41 @@
     }
 
 
+</div>
+@* Button Delete byhouse Id *@
+<div id="content">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Delete House</th>
+            </tr>
+        </thead>
+        <tbody id="housetablebody"></tbody>
+    </table>
+    @using (Html.BeginForm("deleteHouse", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <label>Delete BY House ID</label>
+        <input class="form-control" name="Id" id="Id" />
+        <input type="submit" class="btn btn-success" value="Delete" id="btnsubmit" />// button delete
+    }
+</div>
+
+@* Button Update by House ID *@
+<div id="content">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Update House</th>
+            </tr>
+        </thead>
+        <tbody id="housetablebody"></tbody>
+    </table>
+    @using (Html.BeginForm("updateHouse", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <label>Update BY House ID</label>
+        <input class="form-control" name="Id" id="Id" />
+        <input type="submit" class="btn btn-success" value="Update" id="btnsubmit" />// button Update
+    }
 </div>
 <script>
     $(document).ready(function () {
@@ -109,17 +136,16 @@
         $("#housetablebody").html("");
 
     }
+
     function addHouseByAjax() {
         $.ajax({
-            url: '/AdminController',
+            url: '/Admin/addHouseAjax',
             data: {
-                Id: $("Id").val(),
                 Block: $("#Block").val(),
                 Floor: $("#Floor").val(),
                 HouseName: $("#HouseName").val(),
-                Description: $("Description").val(),
-                Area: $("Area").val()
-
+                Description: $("#Description").val(),
+                Area: $("#Area").val()
             },
             error: function () {
                 alert("error")
