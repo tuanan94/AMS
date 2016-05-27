@@ -13,6 +13,7 @@ namespace AMS
         public static int USER_APPROVE_YES=1;
         public static int USER_APPROVE_REJECT = 2;
         public static int USER_APPROVE_WAITING=0;
-
+        public static int USER_SEX_MALE = 0;
+        public static int USER_SEX_FEMALE = 1;
     }
 }

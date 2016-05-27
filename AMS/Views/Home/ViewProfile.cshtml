@@ -1,17 +1,26 @@
 ﻿@{
     ViewBag.Title = "ViewProfile";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+    User user = ViewBag.user;
 }
 
 <div class="col-md-6">
     <div class="panel panel-default">
-        <div class="panel-heading panel-heading-gray">Thông tin cá nhân</div>
+        <div class="panel-heading panel-heading-gray">Thay đổi thông tin cá nhân</div>
         <div class="panel-body">
             <form class="form-horizontal" role="form">
+
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-3 control-label">Tên</label>
+                    <label for="username" class="col-sm-3 control-label">Tên đăng nhập</label>
                     <div class="col-sm-9">
-                        <input type="email" class="form-control" id="inputEmail3" value="Mr. A">
+                        <input type="text" disabled="disabled" class="form-control" id="username" value="@user.Username">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="fullname" class="col-sm-3 control-label">Tên đầy đủ</label>
+                    <div class="col-sm-9">
+                        <input type="text"  class="form-control" id="fullname" value="@user.Fullname">
                     </div>
                 </div>
 
@@ -19,18 +28,17 @@
                     <label class="col-sm-3 control-label">Giới tính</label>
                     <div class="col-sm-9">
                         <select name="select" class="selectpicker" data-size="3">
-                            <option>Nữ</option>
-                            <option>Nam</option>
-                            <option>Khác</option>
+                           <option @(user.Gender==SLIM_CONFIG.USER_SEX_MALE?"selected = \"selected\"":"") value="@SLIM_CONFIG.USER_SEX_MALE">Nam</option>
+                           <option @(user.Gender==SLIM_CONFIG.USER_SEX_FEMALE? "selected = \"selected\"" : "")value="@SLIM_CONFIG.USER_SEX_FEMALE">Nữ</option>
                         </select>
                     </div>
                 </div>
 
                
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">Ngày sinh</label>
+                    <label class="col-sm-3 control-label">Ngày sinh @user.DateOfBirth</label>
                     <div class="col-sm-9">
-                        <input type="text" type="text" class="form-control datepicker" value="12/12/1993">
+                        <input type="text" id="dateOfBirth"  class="form-control" value="@user.DateOfBirth">
                     </div>
                 </div>
                 <div class="form-group">
@@ -60,10 +68,9 @@
 </form>
         </div>
     </div>
-</div>
-<div class="col-md-6">
+
     <div class="panel panel-default">
-        <div class="panel-heading panel-heading-gray">Thông tin cá nhân</div>
+        <div class="panel-heading panel-heading-gray">Thay đổi mật khẩu</div>
         <div class="panel-body">
             <form class="form-horizontal" role="form">
                 <div class="form-group">
@@ -85,7 +92,6 @@
                     </div>
                 </div>
                 <div class="form-group">
-
                     <div class="col-sm-offset-3 col-md-2">
                         <button type="submit" class="btn btn-primary">Lưu</button>
                     </div>
@@ -97,3 +103,51 @@
         </div>
     </div>
 </div>
+<div class="col-md-6">
+    <img id="profilePreview" src="~/Content/images/defaultProfile.png" alt="Default Profile" onclick="chooseProfile()" style="width:200px;height:auto" />
+    <input style="visibility:hidden" type="file" id="uploadEditorImage" />
+    <div id="progressBar" class="progress" style="width:200px" hidden="hidden">
+        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:200px">
+        </div>
+    </div>
+</div>
+
+<script>
+   
+
+    function chooseProfile() {
+        $("#uploadEditorImage").click();
+    }
+    function progessBar(isShow) {
+        if (isShow == true) {
+            $("#progressBar").removeAttr("hidden");
+        } else {
+            $("#progressBar").attr("hidden", "hidden");
+        }
+    }
+    $("#uploadEditorImage").change(function () {
+        var data = new FormData();
+        var files = $("#uploadEditorImage").get(0).files;
+        if (files.length > 0) {
+            data.append("HelpSectionImages", files[0]);
+        }
+        progessBar(true);
+        $.ajax({
+            url: "/Image/Upload/",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: data,
+            success: function (successData) {
+                alert(successData);
+                progessBar(false);
+
+            },
+            error: function (er) {
+                alert(er);
+                progessBar(false);
+            }
+
+        });
+    });
+</script>

@@ -67,8 +67,8 @@
                             <div class="form-group">
                                 @Html.LabelFor(m => m.Gender, new { @class = "col-md-2 control-label" })
                                 <div class="col-md-10">
-                                    <label>@Html.RadioButtonFor(m => m.Gender, 0, new { id = "male" }) Nam</label>
-                                    <label>@Html.RadioButtonFor(m => m.Gender, 1, new { id = "female" }) Nữ</label>
+                                    <label>@Html.RadioButtonFor(m => m.Gender, SLIM_CONFIG.USER_SEX_MALE, new { id = "male" }) Nam</label>
+                                    <label>@Html.RadioButtonFor(m => m.Gender, SLIM_CONFIG.USER_SEX_FEMALE, new { id = "female" }) Nữ</label>
 
                                     @Html.ValidationMessageFor(m => m.Gender, "", new { @class = "text-danger" })
 
@@ -121,7 +121,7 @@
         </div>
     </div>
     <div class="panel panel-default">
-        <div class="panel-heading panel-heading-gray">Thông tin thành viên</div>
+        <div class="panel-heading panel-heading-gray">Nhà @currentHouse.HouseName - Tầng @currentHouse.Floor - Block @currentHouse.Block</div>
         <div class="panel-body">
             <form class="form-horizontal" role="form">
                 <div class="timeline row" data-toggle="gridalicious">

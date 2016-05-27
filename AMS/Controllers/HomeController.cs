@@ -111,6 +111,9 @@ namespace AMS.Controllers
         [HttpGet]
         public ActionResult ViewProfile()
         {
+            User currentUser = userService.findById(int.Parse(User.Identity.GetUserId()));
+            ViewBag.user = currentUser;
+
             return View();
         }
         [HttpGet]
@@ -175,6 +178,7 @@ namespace AMS.Controllers
                     newUser.RoleId = SLIM_CONFIG.Role_RESIDENT;
                     newUser.HouseId = curUser.HouseId;
                     newUser.IsApproved = SLIM_CONFIG.USER_APPROVE_WAITING;
+                    newUser.DateOfBirth = member.DateOfBirth;
                     userService.addUser(newUser);
 
                 }
