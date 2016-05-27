@@ -1,0 +1,26 @@
+﻿@model AMS.ViewModel.ListPostViewModel
+@{
+    Layout = null;
+}
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+<li class="comment-form" id="comment">
+    @using (Html.BeginForm("Index", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "comment" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="input-group">
+           
+            @*<input type="text" class="form-control comment-content" id="Title" name="Title">*@
+            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control" } })
+            <span class="input-group-addon">
+                <input type="submit" value="Save" class="btn btn-primary" />
+
+            </span>
+        </div>
+    }
+
+</li>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>

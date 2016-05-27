@@ -9,5 +9,6 @@
 /// <reference path="modernizr-2.6.2.js" />
 /// <reference path="respond.js" />
 /// <reference path="graph.js" />
-/// <reference path="chart.js" />
 /// <reference path="amsscript/social.js" />
+/// <reference path="jquery.unobtrusive-ajax.js" />
+/// <reference path="chart.js" />
