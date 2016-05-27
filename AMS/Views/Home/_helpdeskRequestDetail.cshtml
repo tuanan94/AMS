@@ -39,10 +39,10 @@
         <div class="collapse navbar-collapse" id="subnav">
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="./Create"><i class="fa fa-fw icon-ship-wheel"></i> Tạo yêu cầu hổ trợ</a>
+                    <a href="./Create/@userId"><i class="fa fa-fw icon-ship-wheel"></i> Tạo yêu cầu hổ trợ</a>
                 </li>
                 <li class="active">
-                    <a href="./ViewHistory?userId=1"><i class="fa fa-fw icon-ship-wheel"></i> Lịch sử</a>
+                    <a href="./ViewHistory/@userId"><i class="fa fa-fw icon-ship-wheel"></i> Lịch sử</a>
                 </li>
                 <li>
                     <a href="./AdminView"><i class="fa fa-fw icon-ship-wheel"></i> Admin Page</a>
@@ -73,25 +73,25 @@
                     <div class="form-group">
                         <div class="col-md-1"></div>
                         @{
-                            if (hd.Status == (int)StatusEnum.WaitingForQuotation && roleId == (int)RoleEnum.Helpdesk)
+                                        if (hd.Status == (int)StatusEnum.WaitingForQuotation && roleId == (int)SLIM_CONFIG.USER_ROLE_SUPPORTER) 
                             {
-                                <span id="btnOpenQuotation" data-toggle="modal" data-target="#sentQuotationModal" class="btn btn-default" data-id="@hd.Id" data-fromstatus="@hd.Status" data-tostatus="@((int) StatusEnum.WaitingQuoutationConfirming)" data-userid="6">Báo giá</span>
+                                <span id="btnOpenQuotation" data-toggle="modal" data-target="#sentQuotationModal" class="btn btn-default" data-id="@hd.Id" data-fromstatus="@hd.Status" data-tostatus="@((int) StatusEnum.WaitingQuoutationConfirming)" data-userid="@userId">Báo giá</span>
 
                             }
-                            else if ((hd.Status == (int)StatusEnum.QuoutationConfirmed || hd.Status == (int)StatusEnum.Reopen) && roleId == (int)RoleEnum.Helpdesk)
+                            else if ((hd.Status == (int)StatusEnum.QuoutationConfirmed || hd.Status == (int)StatusEnum.Reopen) && roleId == (int)SLIM_CONFIG.USER_ROLE_SUPPORTER)
                             {
                                 <span class="btn btn-default" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Processing), @userId)">Bắt đầu công việc</span>
                                 <span class="btn btn-default" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.WaitingForProcess), @userId)">Chờ tiến hành</span>
                             }
-                            else if (hd.Status == (int)StatusEnum.Processing && roleId == (int)RoleEnum.Helpdesk)
+                            else if (hd.Status == (int)StatusEnum.Processing && roleId == (int)SLIM_CONFIG.USER_ROLE_SUPPORTER)
                             {
                                 <span class="btn btn-default" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Done), @userId)">Hoàn thành</span>
                             }
-                            else if (hd.Status == (int)StatusEnum.WaitingForProcess && roleId == (int)RoleEnum.Helpdesk)
+                            else if (hd.Status == (int)StatusEnum.WaitingForProcess && roleId == (int)SLIM_CONFIG.USER_ROLE_SUPPORTER)
                             {
                                 <span class="btn btn-default" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Processing), @userId)">Bắt đầu công việc</span>
                             }
-                            else if (hd.Status == (int)StatusEnum.Done && (roleId == (int)RoleEnum.Resident || roleId == (int)RoleEnum.Resident))
+                            else if (hd.Status == (int)StatusEnum.Done && (roleId == (int)SLIM_CONFIG.USER_ROLE_RESIDENT || roleId == (int)SLIM_CONFIG.USER_ROLE_HOUSEHOLDER))
                             {
                                 <span class="btn btn-default" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Closed), @userId)">Đóng</span>
                                 <span class="btn btn-default" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Reopen), @userId)">Mở lại</span>
@@ -99,7 +99,7 @@
                             else if ((hd.Status == (int)StatusEnum.Open ||
                             hd.Status == (int)StatusEnum.WaitingForQuotation ||
                             hd.Status == (int)StatusEnum.WaitingQuoutationConfirming)
-                            && (roleId == (int)RoleEnum.Resident || roleId == (int)RoleEnum.Resident))
+                            && (roleId == (int)SLIM_CONFIG.USER_ROLE_RESIDENT || roleId == (int)SLIM_CONFIG.USER_ROLE_HOUSEHOLDER))
                             {
                                 <span class="btn btn-default" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Reject), @userId)">Hủy yêu cầu</span>
 
@@ -108,7 +108,7 @@
                                     <span class="btn btn-default" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.QuoutationConfirmed), @userId)">Chấp nhận sửa chữa</span>
                                 }
                             }
-                            else if (roleId == (int)RoleEnum.Manager && (hd.Status != (int)StatusEnum.Closed && hd.Status != (int)StatusEnum.Reject))
+                            else if (roleId == (int)SLIM_CONFIG.USER_ROLE_MANAGER && (hd.Status != (int)StatusEnum.Closed && hd.Status != (int)StatusEnum.Reject))
                             {
                                 <span id="assignHdReqBtn" class="btn btn-default" data-id="@hd.Id" data-fromuser="@userId" onclick="openModalAssignHdReq()">Giao việc</span>
                                 <span class="btn btn-default" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Reject), @userId)">Hủy yêu cầu</span>
@@ -288,7 +288,7 @@
                                             else
                                             {
                                                 User supporter = hd.HelpdeskRequestHelpdeskSupporters.Where(hdSup => hdSup.HelpdeskRequestId == hd.Id).OrderByDescending(hdSup => hdSup.CreateDate).First().User;
-                                                assignee = supporter.UserProfiles.Where(sup => sup.UserId == supporter.Id).First().Fullname;
+                                                assignee = supporter.Fullname;
                                             }
                                             <input id="HdReqSupporter" name="HdReqSupporter" class="form-control" value="@assignee" />
                                         }
@@ -387,7 +387,7 @@
                                             @{foreach (var log in helpdeskRequestLogs)
                                                 {
                                                     <tr>
-                                                        <td>@log.User.UserProfiles.First().Fullname </td>
+                                                        <td>@log.User.Fullname </td>
 
                                                         @{
                                                             if (log.StatusFrom == (int)StatusEnum.Open)

@@ -252,7 +252,7 @@ namespace AMS.Controllers
                     hdRequest.Description = request.HdReqUserDesc;
                     hdRequest.ModifyDate = DateTime.Now;
                     hdRequest.Priority = request.HdReqPrior;
-                    hdRequest.Status = 0;
+                    hdRequest.Status = (int) StatusEnum.Open;
                     hdRequest.Title = request.HdReqTitle;
 
                     int id = _hdReqServices.Add(hdRequest);
@@ -321,7 +321,7 @@ namespace AMS.Controllers
                                 }
                             }
                         }
-                        else if (u.RoleId == (int)SLIM_CONFIG.USER_ROLE_RESIDENT)
+                        else if (u.RoleId == (int)SLIM_CONFIG.USER_ROLE_RESIDENT || u.RoleId == (int)SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)
                         {
 
                             /**if (u.UserInHouses.First() != null &&
@@ -378,7 +378,7 @@ namespace AMS.Controllers
                         {
                             hdReq = _hdReqServices.GetAllHelpdeskRequests();
                         }
-                        else if (u.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT)
+                        else if (u.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT || u.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)
                         {
                             hdReq = _hdReqServices.GetHdRequestByHouseId(u.HouseId.Value); //ANTT
                         }
@@ -431,7 +431,7 @@ namespace AMS.Controllers
                                             .First()
                                             .User;
                                     row.HdReqSupporter =
-                                    user.UserProfiles.Where(uProfile => uProfile.UserId == user.Id).First().Fullname;
+                                    user.Fullname;
                                 }
                                 rows.Add(row);
                             }
@@ -441,7 +441,7 @@ namespace AMS.Controllers
                 catch (Exception)
                 {
                     reqponse.StatusCode = -1;
-                    Json(reqponse, JsonRequestBehavior.AllowGet);
+                    return Json(reqponse, JsonRequestBehavior.AllowGet);
                 }/*Return to main page*/
 
             }/*else return to main page*/
@@ -580,7 +580,7 @@ namespace AMS.Controllers
                             {
                                 isOk = true;
                             }
-                            else if (fromUser.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT &&
+                            else if (fromUser.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT && fromUser.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER &&
                                       (hdRequest.Status == (int)StatusEnum.WaitingForQuotation
                                       || hdRequest.Status == (int)StatusEnum.WaitingQuoutationConfirming
                                       || hdRequest.Status == (int)StatusEnum.Open))
@@ -652,7 +652,7 @@ namespace AMS.Controllers
                 {
                     model = new HdSuporterModel();
                     model.UserId = s.Id;
-                    model.Fullname = s.UserProfiles.First().Fullname;
+                    model.Fullname = s.Fullname;
                     listSupporter.Add(model);
                 }
                 if (hdRequest.HelpdeskRequestHelpdeskSupporters.Count != 0)
