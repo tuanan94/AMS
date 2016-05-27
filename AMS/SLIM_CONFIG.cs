@@ -15,5 +15,10 @@ namespace AMS
         public static int USER_APPROVE_WAITING=0;
         public static int USER_SEX_MALE = 0;
         public static int USER_SEX_FEMALE = 1;
+        public static int USER_ROLE_ADMIN = 0;
+        public static int USER_ROLE_MANAGER = 1;
+        public static int USER_ROLE_RESIDENT = 3;
+        public static int USER_ROLE_SUPPORTER = 4;
     }
+
 }

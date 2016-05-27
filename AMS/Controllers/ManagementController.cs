@@ -1,3 +1,4 @@
+
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -308,7 +309,8 @@ namespace AMS.Controllers
                 {
                     url = "_helpdeskServiceCategoryTablePartial";
                     ViewBag.helpdeskServiceCategories = _helpdeskServiceCatService.GetAll();
-                }else if (action.Equals("searchHdSrvCategory"))
+                }
+                else if (action.Equals("searchHdSrvCategory"))
                 {
                     url = "_helpdeskServiceCategoryTablePartial";
                     NameValueCollection nvc = this.Request.Form;
@@ -358,7 +360,7 @@ namespace AMS.Controllers
                 {
                     MessageViewModels response = new MessageViewModels();
                     NameValueCollection nvc = this.Request.Form;
-                    String idStrList = nvc["hdSrvCatDeletedList"];
+                    string idStrList = nvc["hdSrvCatDeletedList"];
                     List<string> ids = idStrList.Split(',').ToList();
                     if (ids.Count != 0)
                     {
@@ -386,8 +388,50 @@ namespace AMS.Controllers
                     }
                     return Json(response);
                 }
-                
+                else if (action.Equals("getHdServiceByCatId"))
+                {
+                    MessageViewModels response = new MessageViewModels();
+                    NameValueCollection nvc = this.Request.QueryString;
+                    string idStr = nvc["hdSrvCatId"];
+                    try
+                    {
+                        int id = Int32.Parse(idStr);
+                        List<HelpdeskService> hdSrvsList = _helpdeskServicesService.FindByCategoryAndEnable(id);
+                        List<HelpdeskServiceModel> hdServiceModels = new List<HelpdeskServiceModel>();
 
+                        
+                        if (hdSrvsList != null && hdSrvsList.Count != 0)
+                        {
+                            HelpdeskServiceModel model = null;
+                            foreach (var srv in hdSrvsList)
+                            {
+                                model = new HelpdeskServiceModel();
+                                model.Name = srv.Name;
+                                model.Description = srv.Description;
+                                model.Id = srv.Id;
+                                model.HelpdeskServiceCategoryId = srv.HelpdeskServiceCategoryId.Value;
+                                model.HelpdeskServiceCategoryName = srv.HelpdeskServiceCategory.Name;
+                                model.Price = srv.Price.Value;
+                                hdServiceModels.Add(model);
+                            }
+                            response.Data = hdServiceModels;
+                        }
+                        else
+                        {
+                            response.StatusCode = 4;
+                            response.Msg = "Không tìm thấy nhóm dịch vụ hổ trợ.";
+                        }
+                        return Json(response, JsonRequestBehavior.AllowGet);
+                    }
+                    catch (Exception)
+                    {
+                        response.StatusCode = -1;
+                        response.Msg = "Lỗi cập nhật nhóm dịch vụ hổ trợ.";
+                        return Json(response);
+                    }
+
+
+                }
                 return PartialView(url);
             }
             else
@@ -420,6 +464,5 @@ namespace AMS.Controllers
             return View();
         }
     }
-
 
 }

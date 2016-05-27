@@ -6,7 +6,7 @@ namespace AMS.Models
 {
     public class HelpdeskServiceModels
     {
-         
+
     }
 
     public class HelpdeskServiceCatModel
@@ -17,7 +17,7 @@ namespace AMS.Models
 
     public class HelpdeskSerivceCatListModel
     {
-        public List<HelpdeskServiceCatModel> HdSrvCategories{ get;  set; }
+        public List<HelpdeskServiceCatModel> HdSrvCategories { get; set; }
 
         public HelpdeskSerivceCatListModel(List<HelpdeskServiceCatModel> hdSrvCategories)
         {
@@ -35,5 +35,52 @@ namespace AMS.Models
         public int HelpdeskServiceCategoryId { get; set; }
         public string HelpdeskServiceCategoryName { get; set; }
         public List<HelpdeskServiceCatModel> HdSrvCategories { get; set; }
+    }
+
+    public class HelpdeskRequestModel
+    {
+        public int HdServiceId { get; set; }
+        public string HdReqTitle { get; set; }
+        public int HdReqPrior { get; set; }
+        public int HdReqUserId { get; set; }
+        public string HdReqUserDesc { get; set; }
+    }
+
+    public class HelpdeskRequestTableModel
+    {
+        public int HdReqId { get; set; }
+        public string HdReqTitle { get; set; }
+        public int HdReqPrior { get; set; }
+        public string HdReqHouse { get; set; }
+        public int HdReqStatus { get; set; }
+        public string HdReqSrvName { get; set; }
+        public string HdReqCreateDate { get; set; }
+        public string HdReqDeadline { get; set; }
+        public string HdReqSupporter { get; set; }
+    }
+
+    public class HdRequestChangeStatusModel
+    {
+        public int HdReqId { get; set; }
+        /*ToUserId just use when assign hdReq*/
+        public int ToUserId { get; set; }
+        public int FromUserId { get; set; }
+        public int ToStatus { get; set; }
+        public int FromStatus { get; set; }
+        public double Price { get; set; }
+        public string DueDate { get; set; }
+    }
+
+    public class HdRequestUpdatedModel
+    {
+        public int HdReqId { get; set; }
+        public int HdReqStatus { get; set; }
+        public string HdReqModifyDate { get; set; }
+    }
+
+    public class HdSuporterModel
+    {
+        public int UserId { get; set; }
+        public string Fullname { get; set; }
     }
 }

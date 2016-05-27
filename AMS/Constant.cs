@@ -5,7 +5,7 @@ using System.Web;
 
 namespace AMS
 {
-    public class Constant
+    public class ConstantB
     {
         public const long DefaultImageQuality = 80;
     }

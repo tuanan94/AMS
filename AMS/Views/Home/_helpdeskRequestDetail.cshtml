@@ -1,0 +1,708 @@
+﻿@using System.Globalization
+@using System.Runtime.CompilerServices
+@using AMS.Constant
+@using AMS.Enum
+@{
+    ViewBag.Title = "ManageMember";
+    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+}
+@{
+    HelpdeskRequest hd = null;
+    List<HelpdeskRequestLog> helpdeskRequestLogs = null;
+    int roleId = 0;
+    int userId = 0;
+    if (null != ViewBag.dhReqList && null != ViewBag.dhReqList[0])
+    {
+        hd = ViewBag.dhReqList[0];
+    }
+    else if (null != ViewBag.hdRequest)
+    {
+        hd = ViewBag.hdRequest;
+        roleId = ViewBag.roleId;
+        userId = ViewBag.userId;
+        helpdeskRequestLogs = ViewBag.helpdeskRequestLogs;
+    }
+}
+
+<nav class="navbar navbar-subnav navbar-static-top" role="navigation">
+    <div class="container-fluid">
+
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subnav">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="fa fa-ellipsis-h"></span>
+            </button>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="subnav">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="./Create"><i class="fa fa-fw icon-ship-wheel"></i> Tạo yêu cầu hổ trợ</a>
+                </li>
+                <li class="active">
+                    <a href="./ViewHistory?userId=1"><i class="fa fa-fw icon-ship-wheel"></i> Lịch sử</a>
+                </li>
+                <li>
+                    <a href="./AdminView"><i class="fa fa-fw icon-ship-wheel"></i> Admin Page</a>
+                </li>
+            </ul>
+
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</nav>
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="alert alert-info" id="updateStatusSuccessNoti" style="display: none">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <span>Dịch vụ hổ trợ được thay đổi thành công.</span>
+        </div>
+        <div class="alert alert-warning" id="updateStatusFailedNoti" style="display: none">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <span>Dịch vụ hổ trợ được thay đổi thất bại.</span>
+        </div>
+        <div class="panel-heading panel-heading-gray">
+            <i class="fa fa-bookmark"></i> Thông tin chi tiết yêu cầu hổ trợ
+        </div>
+        <div class="panel-body">
+            <div class="form-horizontal" id="searchHdSrv" role="form" onkeypress="return event.keyCode !== 13;">
+                <div class="form-group" style="padding-left: 0">
+                    <div class="form-group">
+                        <div class="col-md-1"></div>
+                        @{
+                            if (hd.Status == (int)StatusEnum.WaitingForQuotation && roleId == (int)RoleEnum.Helpdesk)
+                            {
+                                <span id="btnOpenQuotation" data-toggle="modal" data-target="#sentQuotationModal" class="btn btn-default" data-id="@hd.Id" data-fromstatus="@hd.Status" data-tostatus="@((int) StatusEnum.WaitingQuoutationConfirming)" data-userid="6">Báo giá</span>
+
+                            }
+                            else if ((hd.Status == (int)StatusEnum.QuoutationConfirmed || hd.Status == (int)StatusEnum.Reopen) && roleId == (int)RoleEnum.Helpdesk)
+                            {
+                                <span class="btn btn-default" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Processing), @userId)">Bắt đầu công việc</span>
+                                <span class="btn btn-default" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.WaitingForProcess), @userId)">Chờ tiến hành</span>
+                            }
+                            else if (hd.Status == (int)StatusEnum.Processing && roleId == (int)RoleEnum.Helpdesk)
+                            {
+                                <span class="btn btn-default" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Done), @userId)">Hoàn thành</span>
+                            }
+                            else if (hd.Status == (int)StatusEnum.WaitingForProcess && roleId == (int)RoleEnum.Helpdesk)
+                            {
+                                <span class="btn btn-default" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Processing), @userId)">Bắt đầu công việc</span>
+                            }
+                            else if (hd.Status == (int)StatusEnum.Done && (roleId == (int)RoleEnum.Resident || roleId == (int)RoleEnum.Resident))
+                            {
+                                <span class="btn btn-default" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Closed), @userId)">Đóng</span>
+                                <span class="btn btn-default" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Reopen), @userId)">Mở lại</span>
+                            }
+                            else if ((hd.Status == (int)StatusEnum.Open ||
+                            hd.Status == (int)StatusEnum.WaitingForQuotation ||
+                            hd.Status == (int)StatusEnum.WaitingQuoutationConfirming)
+                            && (roleId == (int)RoleEnum.Resident || roleId == (int)RoleEnum.Resident))
+                            {
+                                <span class="btn btn-default" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Reject), @userId)">Hủy yêu cầu</span>
+
+                                if (hd.Status == (int)StatusEnum.WaitingQuoutationConfirming)
+                                {
+                                    <span class="btn btn-default" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.QuoutationConfirmed), @userId)">Chấp nhận sửa chữa</span>
+                                }
+                            }
+                            else if (roleId == (int)RoleEnum.Manager && (hd.Status != (int)StatusEnum.Closed && hd.Status != (int)StatusEnum.Reject))
+                            {
+                                <span id="assignHdReqBtn" class="btn btn-default" data-id="@hd.Id" data-fromuser="@userId" onclick="openModalAssignHdReq()">Giao việc</span>
+                                <span class="btn btn-default" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Reject), @userId)">Hủy yêu cầu</span>
+                            }
+                        }
+                        @*                        <span class="btn btn-default" data-toggle="modal" data-target="#assignTaskModal" data-placement="center">Chia việc</span>*@
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <fieldset class="scheduler-border less-padding border-top">
+                                <legend class="scheduler-border bold-black">Chi tiết</legend>
+                                <div class="form-group">
+                                    <span for="HdReqName" class="col-sm-3 control-label">Tiêu đề</span>
+                                    <div class="col-sm-9">
+                                        <input id="HdReqName" type="text" name="HdReqName" class="form-control" value="@hd.Title">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <span for="HdReqSrvCatName" class="col-sm-3 control-label">Nhóm dịch vụ</span>
+                                    <div class="col-sm-9">
+                                        <input id="HdReqSrvCatName" type="text" name="HdReqSrvCatName" class="form-control" value="@hd.HelpdeskService.HelpdeskServiceCategory.Name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <span for="HdReqSrvName" class="col-sm-3 control-label">Loại dịch vụ</span>
+                                    <div class="col-sm-9">
+                                        <input id="HdReqSrvName" type="text" name="HdReqSrvName" class="form-control" value="@hd.HelpdeskService.Name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <span for="HdSrvName" class="col-sm-3 control-label">Trạng thái</span>
+                                    @if (@hd.Status == (int)StatusEnum.Open)
+                                    {
+                                        <div class="col-sm-9">
+                                            <h4>
+                                                <span class="label label-info margin-none">Đã chuyển đến ban quản lý</span>
+                                            </h4>
+                                        </div>
+                                    }
+                                    else if (@hd.Status == (int)StatusEnum.WaitingForQuotation)
+                                    {
+                                        <div class="col-sm-9">
+                                            <h4>
+                                                <span class="label label-info margin-none">Chờ báo giá</span>
+                                            </h4>
+                                        </div>
+                                    }
+                                    else if (@hd.Status == (int)StatusEnum.WaitingQuoutationConfirming)
+                                    {
+                                        <div class="col-sm-9">
+                                            <h4>
+                                                <span class="label label-info margin-none">Chờ xác nhận giá</span>
+                                            </h4>
+                                        </div>
+                                    }
+                                    else if (@hd.Status == (int)StatusEnum.QuoutationConfirmed)
+                                    {
+                                        <div class="col-sm-9">
+                                            <h4>
+                                                <span class="label label-info margin-none">Chấp nhận sửa chữa</span>
+                                            </h4>
+                                        </div>
+                                    } /*Cái này chỉ show cho HelpDesk và Manager*/
+                                    else if (@hd.Status == (int)StatusEnum.WaitingForProcess)
+                                    {
+                                        <div class="col-sm-9">
+                                            <h4>
+                                                <span class="label label-info margin-none">Chờ tiến hành</span>
+                                            </h4>
+                                        </div>
+                                    } /*Cái này chỉ show cho Resident*/
+                                    else if (@hd.Status == (int)StatusEnum.Processing)
+                                    {
+                                        <div class="col-sm-9">
+                                            <h4>
+                                                <span class="label label-info margin-none">Đang tiến hành</span>
+                                            </h4>
+                                        </div>
+                                    }
+                                    else if (@hd.Status == (int)StatusEnum.Done)
+                                    {
+                                        <div class="col-sm-9">
+                                            <h4>
+                                                <span class="label label-info margin-none">Hoàn thành</span>
+                                            </h4>
+                                        </div>
+                                    }
+                                    else if (@hd.Status == (int)StatusEnum.Closed)
+                                    {
+                                        <div class="col-sm-9">
+                                            <h4>
+                                                <span class="label label-info margin-none">Xong và Đóng</span>
+                                            </h4>
+                                        </div>
+                                    }
+                                    else if (@hd.Status == (int)StatusEnum.Reopen)
+                                    {
+                                        <div class="col-sm-9">
+                                            <h4>
+                                                <span class="label label-info margin-none">Mở lại</span>
+                                            </h4>
+                                        </div>
+                                    }
+                                    else if (@hd.Status == (int)StatusEnum.Reject)
+                                    {
+                                        <div class="col-sm-9">
+                                            <h4>
+                                                <span class="label label-info margin-none">Hủy</span>
+                                            </h4>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="form-group">
+                                    <span for="HdReqPrior" class="col-sm-3 control-label">Mức độ</span>
+                                    <div class="col-sm-9">
+                                        @{
+                                            string priorText = "";
+                                            switch (hd.Status)
+                                            {
+                                                case 1:
+                                                    {
+                                                        priorText = "Thấp";
+                                                        break;
+                                                    }
+                                                case 2:
+                                                    {
+                                                        priorText = "Trung bình";
+                                                        break;
+                                                    }
+
+                                                default:
+                                                    {
+                                                        priorText = "Cao";
+                                                        break;
+                                                    }
+                                            }
+
+                                            <input id="HdReqPrior" type="text" name="HdReqPrior" class="form-control" value="@priorText">
+                                        }
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <span for="HdReqPrice" class="col-sm-3 control-label">Giá tiền</span>
+                                    <div class="col-sm-9">
+                                        @{
+                                            string strPrice = "";
+                                            strPrice = hd.Price.Value.ToString();
+                                            if (hd.Price == 0)
+                                            {
+                                                strPrice = "Miễn phí";
+                                            }
+                                            <input id="HdReqPrice" type="text" name="HdReqPrice" class="form-control" value="@strPrice">
+                                        }
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <span for="HdReqDesc" class="col-sm-3 control-label">Miêu tả</span>
+                                    <div class="col-sm-9">
+                                        <textarea name="HdReqDesc" id="HdReqDesc" aria-valuemax="@hd.Description" class="form-control" rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col-md-6">
+                            <fieldset class="scheduler-border less-padding border-top" style="margin-bottom: 0px !important">
+                                <legend class="scheduler-border bold-black">Người được giao</legend>
+                                <div class="form-group">
+                                    <span for="HdReqSupporter" class="col-sm-3 control-label">Thành viên</span>
+                                    <div class="col-sm-9">
+                                        @{
+                                            string assignee = "";
+                                            if (hd.Status == (int)StatusEnum.Open)
+                                            {
+                                                assignee = "Đang chờ giao việc";
+                                            }
+                                            else
+                                            {
+                                                User supporter = hd.HelpdeskRequestHelpdeskSupporters.Where(hdSup => hdSup.HelpdeskRequestId == hd.Id).OrderByDescending(hdSup => hdSup.CreateDate).First().User;
+                                                assignee = supporter.UserProfiles.Where(sup => sup.UserId == supporter.Id).First().Fullname;
+                                            }
+                                            <input id="HdReqSupporter" name="HdReqSupporter" class="form-control" value="@assignee" />
+                                        }
+
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset class="scheduler-border less-padding border-top">
+                                <legend class="scheduler-border bold-black">Thời gian</legend>
+                                <div class="form-group">
+                                    @{
+
+                                        string parternTime = "HH:mm";
+                                        string parternDate = "dd-MM-yyyy ";
+                                        string strTime = hd.CreateDate.Value.ToString(parternTime);
+                                        string strDate = hd.CreateDate.Value.ToString(parternDate);
+
+                                        <span for="HdReqCreate" class="col-sm-3 control-label">Khởi tạo</span>
+                                        <div class="col-sm-9">
+                                            <h4 class="col-md-2 not-margin"><span class="label label-warning">@strTime</span></h4>
+                                            <h4 class="col-md-8 not-margin">
+                                                <span class="label label-gray">@strDate</span>
+                                            </h4>
+                                        </div>
+                                    }
+                                </div>
+                                @{
+                                    if (hd.ModifyDate != null)
+                                    {
+                                        strDate = hd.ModifyDate.Value.ToString(parternDate);
+                                        strTime = hd.ModifyDate.Value.ToString(parternTime);
+                                        <div class="form-group">
+                                            <span for="HdReqUpdate" class="col-sm-3 control-label">Cập nhật</span>
+                                            <div class="col-sm-9">
+                                                <h4 class="col-md-2 not-margin"><span class="label label-warning">@strTime</span></h4>
+                                                <h4 class="col-md-8 not-margin">
+                                                    <span class="label label-gray">@strDate</span>
+                                                </h4>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                @{
+                                    if (hd.DueDate != null)
+                                    {
+                                        strDate = hd.DueDate.Value.ToString(parternDate);
+                                        strTime = hd.DueDate.Value.ToString(parternTime);
+                                        <div class="form-group">
+                                            <span for="HdReqUpdate" class="col-sm-3 control-label">Hết hạn</span>
+                                            <div class="col-sm-9">
+                                                <h4 class="col-md-2 not-margin"><span class="label label-warning">@strTime</span></h4>
+                                                <h4 class="col-md-8 not-margin">
+                                                    <span class="label label-gray">@strDate</span>
+                                                </h4>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                                @{
+                                    if (hd.CloseDate != null)
+                                    {
+                                        strDate = hd.CloseDate.Value.ToString(parternDate);
+                                        strTime = hd.CloseDate.Value.ToString(parternTime);
+
+                                        <div class="form-group">
+                                            <span for="HdReqFinished" class="col-sm-3 control-label">Hoàn thành</span>
+                                            <div class="col-sm-9">
+                                                <h4 class="col-md-2 not-margin"><span class="label label-warning">@strTime</span></h4>
+                                                <h4 class="col-md-8 not-margin">
+                                                    <span class="label label-gray">@strDate</span>
+                                                </h4>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <fieldset class="scheduler-border less-padding border-top">
+                                <legend class="scheduler-border bold-black">Lịch sử</legend>
+                                <div class="table-responsive">
+                                    <table class="table v-middle">
+                                        <thead>
+                                            <tr>
+                                                <th>NV chuyển yêu cầu</th>
+                                                <th>Từ trạng thái</th>
+                                                <th>Sang trạng thái</th>
+                                                <th>Thời gian</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="hdReqLogTblBody">
+
+                                            @{foreach (var log in helpdeskRequestLogs)
+                                                {
+                                                    <tr>
+                                                        <td>@log.User.UserProfiles.First().Fullname </td>
+
+                                                        @{
+                                                            if (log.StatusFrom == (int)StatusEnum.Open)
+                                                            {
+                                                                <td><span class="label label-info">Đã chuyển đến ban quản lý</span></td>
+                                                            }
+                                                            else if (log.StatusFrom == (int)StatusEnum.WaitingForQuotation)
+                                                            {
+                                                                <td><span class="label label-info">Chờ báo giá</span></td>
+                                                            }
+                                                            else if (log.StatusFrom == (int)StatusEnum.WaitingQuoutationConfirming)
+                                                            {
+                                                                <td><span class="label label-info">Chờ xác nhận giá</span></td>
+                                                            }
+                                                            else if (log.StatusFrom == (int)StatusEnum.QuoutationConfirmed)
+                                                            {
+                                                                <td><span class="label label-info">Chấp nhận sửa chữa</span></td>
+                                                            }
+                                                            else if (log.StatusFrom == (int)StatusEnum.WaitingForProcess)
+                                                            {
+                                                                <td><span class="label label-info">Chờ tiến hành</span></td>
+                                                            }
+                                                            else if (log.StatusFrom == (int)StatusEnum.Processing)
+                                                            {
+                                                                <td><span class="label label-info">Đang tiến hành</span></td>
+                                                            }
+                                                            else if (log.StatusFrom == (int)StatusEnum.Done)
+                                                            {
+                                                                <td><span class="label label-info">Hoàn thành</span></td>
+                                                            }
+                                                            else if (log.StatusFrom == (int)StatusEnum.Closed)
+                                                            {
+                                                                <td><span class="label label-info">Xong và Đóng</span></td>
+                                                            }
+                                                            else if (log.StatusFrom == (int)StatusEnum.Reopen)
+                                                            {
+                                                                <td><span class="label label-info">Mở lại</span></td>
+                                                            }
+                                                            else if (log.StatusFrom == (int)StatusEnum.Reject)
+                                                            {
+                                                                <td><span class="label label-info">Hủy</span></td>
+                                                            }
+
+                                                        }
+
+                                                        @{
+                                                            if (log.StatusTo == (int)StatusEnum.Open)
+                                                            {
+                                                                <td><span class="label label-success">Đã chuyển đến ban quản lý</span></td>
+                                                            }
+                                                            else if (log.StatusTo == (int)StatusEnum.WaitingForQuotation)
+                                                            {
+                                                                <td><span class="label label-success">Chờ báo giá</span></td>
+                                                            }
+                                                            else if (log.StatusTo == (int)StatusEnum.WaitingQuoutationConfirming)
+                                                            {
+                                                                <td><span class="label label-success">Chờ xác nhận giá</span></td>
+                                                            }
+                                                            else if (log.StatusTo == (int)StatusEnum.QuoutationConfirmed)
+                                                            {
+                                                                <td><span class="label label-success">Chấp nhận sửa chữa</span></td>
+                                                            }
+                                                            else if (log.StatusTo == (int)StatusEnum.WaitingForProcess)
+                                                            {
+                                                                <td><span class="label label-success">Chờ tiến hành</span></td>
+                                                            }
+                                                            else if (log.StatusTo == (int)StatusEnum.Processing)
+                                                            {
+                                                                <td><span class="label label-success">Đang tiến hành</span></td>
+                                                            }
+                                                            else if (log.StatusTo == (int)StatusEnum.Done)
+                                                            {
+                                                                <td><span class="label label-success">Hoàn thành</span></td>
+                                                            }
+                                                            else if (log.StatusTo == (int)StatusEnum.Closed)
+                                                            {
+                                                                <td><span class="label label-success">Xong và Đóng</span></td>
+                                                            }
+                                                            else if (log.StatusTo == (int)StatusEnum.Reopen)
+                                                            {
+                                                                <td><span class="label label-success">Mở lại</span></td>
+                                                            }
+                                                            else if (log.StatusTo == (int)StatusEnum.Reject)
+                                                            {
+                                                                <td><span class="label label-success">Hủy</span></td>
+                                                            }
+
+                                                        }
+
+                                                        @{
+                                                            strDate = log.CreateDate.Value.ToString(parternDate);
+                                                            strTime = log.CreateDate.Value.ToString(parternTime);
+                                                        }
+
+                                                        <td><span class="label label-warning">@strTime</span> <span class="label label-gray">@strDate</span></td>
+                                                    </tr>
+                                                            }
+                                            }
+
+@*                                            <tr>*@
+@*                                                <td>Nguyễn Văn Gữi</td>*@
+@*                                                <td><span class="label label-info">Mở</span></td>*@
+@*                                                <td>Nguyễn Văn Nhận</td>*@
+@*                                                <td><span class="label label-info">Chờ xử lý</span></td>*@
+@*                                                <td><span class="label label-warning">08:08</span> <span class="label label-gray">03/03/2013</span></td>*@
+@*                                            </tr>*@
+@*                                            <tr>*@
+@*                                                <td>Nguyễn Văn Nhận</td>*@
+@*                                                <td><span class="label label-info">Chờ xử lý</span></td>*@
+@*                                                <td>Nguyễn Văn Thực Hiện Yêu Cầu</td>*@
+@*                                                <td><span class="label label-info">Đã giao việc</span></td>*@
+@*                                                <td><span class="label label-warning">08:08</span> <span class="label label-gray">03/03/2013</span></td>*@
+@*                                            </tr>*@
+@*                                            <tr>*@
+@*                                                <td>Nguyễn Văn Thực Hiện Yêu Cầu</td>*@
+@*                                                <td><span class="label label-info">Đã giao việc</span></td>*@
+@*                                                <td></td>*@
+@*                                                <td><span class="label label-info">Bắt đầu tiến hành</span></td>*@
+@*                                                <td><span class="label label-warning">08:08</span> <span class="label label-gray">03/03/2013</span></td>*@
+@*                                            </tr>*@
+@*                                            <tr>*@
+@*                                                <td>Nguyễn Văn Thực Hiện Yêu Cầu</td>*@
+@*                                                <td><span class="label label-info">Bắt đầu tiến hành</span></td>*@
+@*                                                <td>Nguyễn Văn Nhận</td>*@
+@*                                                <td><span class="label label-info">Đã hoàn thành</span></td>*@
+@*                                                <td><span class="label label-warning">08:08</span> <span class="label label-gray">03/03/2013</span></td>*@
+@*                                            </tr>*@
+@*                                            <tr>*@
+@*                                                <td>Nguyễn Văn Nhận</td>*@
+@*                                                <td><span class="label label-info">Đã hoàn thành</span></td>*@
+@*                                                <td>Nguyễn Văn Gữi</td>*@
+@*                                                <td><span class="label label-info">Chờ xác nhận căn hộ</span></td>*@
+@*                                                <td><span class="label label-warning">08:08</span> <span class="label label-gray">03/03/2013</span></td>*@
+@*                                            </tr>*@
+@*                                            <tr>*@
+@*                                                <td>Nguyễn Văn Gữi</td>*@
+@*                                                <td><span class="label label-info">Chờ xác nhận căn hộ</span></td>*@
+@*                                                <td></td>*@
+@*                                                <td><span class="label label-info">Đóng và hoàn thành</span></td>*@
+@*                                                <td><span class="label label-warning">08:08</span> <span class="label label-gray">03/03/2013</span></td>*@
+@*                                            </tr>*@
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="updateHdRequestModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 id="hdSrvModalTitle" class="modal-title">Cập nhật yêu cầu hổ trợ</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+
+                    <div class="alert alert-info" id="successNotify" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span>Dịch vụ hổ trợ được khởi tạo thành công.</span>
+                    </div>
+                    <div class="alert alert-warning" id="failedNotify" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span>Dịch vụ hổ trợ được khởi tạo thất bại.</span>
+                    </div>
+
+                    <form id="addHelpdeskRequestForm" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="HdSrvName" class="col-sm-3 control-label">Tiêu đề </label>
+                            <div class="col-sm-9">
+                                <input id="hdSrvName" type="text" name="hdSrvName" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="hdSrvCat" class="col-sm-3 control-label">Nhóm dịch vụ</label>
+                            <div class="col-sm-9">
+                                <select id="hdSrvCat" name="hdSrvCat" class="form-control" data-size="3"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="hdSrvCat" class="col-sm-3 control-label">DV Hổ Trợ</label>
+                            <div class="col-sm-9">
+                                <select id="hdSrvCat" name="hdSrvCat" class="form-control" data-size="3"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="hdSrvPrice" class="col-sm-3 control-label">Giá tiền</label>
+                            <div class="col-sm-9">
+                                <input id="hdSrvPrice" name="hdSrvPrice" type="text" type="text" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="hdSrvPrice" class="col-sm-3 control-label">Đô ưu tiên</label>
+                            <div class="col-sm-9">
+                                <select id="hdSrvCat" name="hdSrvCat" class="form-control" data-size="3"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="hdSrvDesc" class="col-sm-3 control-label">Mô tả</label>
+                            <div class="col-sm-9">
+                                <textarea id="hdSrvDesc" name="hdSrvDesc" class="form-control" rows="5"></textarea>
+                            </div>
+                        </div>
+                        @*                            <div class="form-group">*@
+                        @*                                <label for="hdSrvCat" class="col-sm-3 control-label">Giao việc cho</label>*@
+                        @*                                <div class="col-sm-9">*@
+                        @*                                    <select id="hdSrvCat" name="hdSrvCat" class="form-control" data-size="3">*@
+                        @*                                        <option value="0">Trần Đại Quang</option>*@
+                        @*                                        <option value="0">Nguyễn Tấn Dũng</option>*@
+                        @*                                        <option value="1">Phan Văn Khải</option>*@
+                        @*                                        <option value="2">Võ Văn Kiệt</option>*@
+                        @*                                    </select>*@
+                        @*                                </div>*@
+                        @*                            </div>*@
+                        @*                            <div class="form-group">*@
+                        @*                                <label for="hdSrvDesc" class="col-sm-3 control-label">Hết hạn</label>*@
+                        @*                                <div class="col-sm-9">*@
+                        @*                                    <input type="text" id="testDatePicker" class="form-control datepicke">*@
+                        @*                                </div>*@
+                        @*                            </div>*@
+                        <div class="form-group">
+                            <div class="col-sm-offset-9 col-md-2">
+                                <button id="addHdSrv" name="addHdSrv" type="submit" class="btn btn-primary">Chấp nhận</button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="hdSrvId" name="hdSrvId" value="" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="assignTaskModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 id="hdSrvModalTitle" class="modal-title">Chia công việc</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+
+                    <div class="alert alert-info" id="successNotify" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span>Dịch vụ hổ trợ được khởi tạo thành công.</span>
+                    </div>
+                    <div class="alert alert-warning" id="failedNotify" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span>Dịch vụ hổ trợ được khởi tạo thất bại.</span>
+                    </div>
+
+                    <form id="assignTaskForm" class="form-horizontal" method="POST" action="/Home/HelpdeskRequest/AssignTask" role="form">
+                        <div class="form-group">
+                            <label for="hdSrvCat" class="col-sm-3 control-label">Nhân viên hổ trợ</label>
+                            <div class="col-sm-9">
+                                <select id="lstSupporter" name="ToUserId" class="form-control" data-size="3">
+                                    @*                                    <option value="0">Trần Đại Quang</option>*@
+                                    @*                                    <option value="0">Nguyễn Tấn Dũng</option>*@
+                                    @*                                    <option value="1">Phan Văn Khải</option>*@
+                                    @*                                    <option value="2">Võ Văn Kiệt</option>*@
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-9 col-md-2">
+                                <button id="assignTask" onclick="submitAssignTask()" name="assignTask" type="submit" class="btn btn-primary">Chấp nhận</button>
+                            </div>
+                        </div>
+                        <input id="HdReqId" name="HdReqId" value="" type="hidden" />
+                        <input id="FromUserId" name="FromUserId" value="" type="hidden" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="sentQuotationModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Báo giá yêu cầu sửa chửa</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <div id="sentQuotationForm" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="hdSrvCat" class="col-sm-3 control-label">Giá tiền</label>
+                            <div class="col-sm-9">
+                                <input id="hdReqPrice" type="text" name="hdReqPrice" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="hdSrvCat" class="col-sm-3 control-label">Ngày hoàn thành</label>
+                            <div class="col-sm-9">
+                                <input id="hdReqDueDate" type="text" name="hdReqDueDate" class="form-control datepicker">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-9 col-md-2">
+                                <span name="addHdSrv" onclick="hdSentQuotation()" type="submit" class="btn btn-primary">Chấp nhận</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
