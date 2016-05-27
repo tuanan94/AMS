@@ -64,11 +64,13 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
-        [Route("Home/HelpdeskRequest/Create")]
-        public ActionResult CreateNewHdRequest()
+        [Route("Home/HelpdeskRequest/Create/{userId}")]
+        public ActionResult CreateNewHdRequest(int userId)
         {
+
             List<HelpdeskServiceCategory> hdSrvCats = _helpdeskServiceCat.GetAll();
             ViewBag.hdSrvCats = hdSrvCats;
+            ViewBag.userId = userId;
             return View("CreateHdRequest");
         }
 
@@ -223,6 +225,8 @@ namespace AMS.Controllers
                         {
                             List<HelpdeskRequestHelpdeskSupporter> hdReqHdSupporter =
                                 _hdReqHdSupporterServices.GetCurrentSupporterHdRequest(u.Id);
+
+
                             List<HelpdeskRequest> hdRequests = new List<HelpdeskRequest>();
                             if (hdReqHdSupporter != null || hdReqHdSupporter.Count != 0)
                             {
@@ -249,9 +253,9 @@ namespace AMS.Controllers
                                 {
                                     row.HdReqCreateDate = req.CreateDate.Value.ToString(parternTime);
                                 }
-                                if (null != req.CloseDate)
+                                if (null != req.DueDate)
                                 {
-                                    row.HdReqDeadline = req.CloseDate.Value.ToString(parternTime);
+                                    row.HdReqDeadline = req.DueDate.Value.ToString(parternTime);
                                 }
                                 row.HdReqSrvName = req.HelpdeskService.Name;
                                 row.HdReqHouse = req.House.HouseName;

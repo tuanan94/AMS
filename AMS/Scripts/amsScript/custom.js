@@ -627,7 +627,12 @@ $(document).ready(function () {
                 "data": "HdReqDeadline",
                 "render": function (data, type, full, meta) {
                     if (type === "display" || type === "filter") {
-                        return "Chưa giao việc";
+                        if (data !== null && data !== undefined) {
+                            var dateTime = data.split(" ");
+                            return "<span class='label label-warning'>" + dateTime[0] +
+                                "</span>  <span class='label label-gray'>" + dateTime[1] + "</span>";
+                        }
+                        return "Đang xác nhận";
                     }
                     return data;
                 }

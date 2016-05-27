@@ -4,6 +4,7 @@
 }
 @{
     List<HelpdeskServiceCategory> hdSrvCats = ViewBag.hdSrvCats;
+    int userId = ViewBag.userId;
 }
 <nav class="navbar navbar-subnav navbar-static-top" role="navigation">
     <div class="container-fluid">
@@ -20,10 +21,10 @@
         <div class="collapse navbar-collapse" id="subnav">
             <ul class="nav navbar-nav">
                 <li class="active">
-                    <a href="./Create"><i class="fa fa-fw icon-ship-wheel"></i> Tạo yêu cầu hổ trợ</a>
+                    <a href="../Create/@userId"><i class="fa fa-fw icon-ship-wheel"></i> Tạo yêu cầu hổ trợ</a>
                 </li>
                 <li>
-                    <a href="./ViewHistory?userId=1"><i class="fa fa-fw icon-ship-wheel"></i> Lịch sử</a>
+                    <a href="../ViewHistory/@userId"><i class="fa fa-fw icon-ship-wheel"></i> Lịch sử</a>
                 </li>
                 <li>
                     <a href="./AdminView"><i class="fa fa-fw icon-ship-wheel"></i> Trang dành cho quản lý</a>
