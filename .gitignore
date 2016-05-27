@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 *.cache
 
@@ -6,3 +7,15 @@
 *.dll
 
 AMS/Model1.edmx
+=======
+
+*.cache
+
+*.dll
+*.xml
+*.dll
+>>>>>>> gianglvt_helpdeskSupporter
+
+AMS/obj/Debug/AMS.csprojResolveAssemblyReference.cache
+
+AMS/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache

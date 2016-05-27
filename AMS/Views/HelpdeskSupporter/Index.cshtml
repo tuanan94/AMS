@@ -1,0 +1,217 @@
+﻿@{
+    ViewBag.Title = "Trang Chủ";
+    Layout = "~/Views/HelpdeskSupporter/__HelpdeskSupporterLayout.cshtml";
+    int count = 0;
+    List<HelpdeskRequest> openRequest = ViewBag.openRequest;
+
+}
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-gray">Yêu cầu helpdesk</div>
+        <div class="panel-body">
+            <form class="form-horizontal" role="form" method="post">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="myTable">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Thứ tự</th>
+                                <th>Tiêu đề</th>
+                                <th>Căn hộ</th>
+                                <th>Nội dung</th>
+                                <th>Ngày tạo</th>
+                                <th>Ngày đóng</th>
+                                <th>Trạng thái</th>
+                                @*<th>Nhân viên đã thực hiện</th>*@
+                                <th class="text-center">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (HelpdeskRequest hr in openRequest)
+                                {
+                                    <tr data-id="@(++count)">
+                                        <td class="text-center">
+                                            <span class="label label-gray">@count</span>
+                                        </td>
+                                        <td>
+                                            <span class="label label-gray">@hr.Title</span>
+                                        </td>
+                                        <td>
+                                            @hr.House.HouseName
+                                        </td>
+                                        <td>
+                                            @hr.Description
+                                        </td>
+                                        <td>
+                                            <span class="label label-primary">@Convert.ToString(string.Format("{0:dd/MM/yyyy}", @hr.CreateDate))</span>
+                                        </td>
+                                        <td>
+                                            <span class="label label-success">@Convert.ToString(string.Format("{0:dd/MM/yyyy}", @hr.CloseDate))</span>
+                                        </td>
+                                        <td>
+                                            @{
+                                                    if (hr.Status == 1)
+                                                    {
+                                                        @Html.Label("Assigned")
+                                                    }
+                                                    if (hr.Status == 2)
+                                                    {
+                                                        @Html.Label("Done")
+                                                    }
+                                                }
+                                        </td>
+                                        <td class="text-center">
+                                            <a class="btn btn-default btn-xs" title="Chi tiết"><i class="fa fa-eye"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="loadData" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Chi tiết </h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <form class="form-horizontal" role="form" method="post">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Tiêu đề</label>
+                            <div class="col-sm-9">
+                                <input type="email" readonly="readonly" class="form-control" id="title">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Căn hộ</label>
+                            <div class="col-sm-9">
+                                <input type="email" readonly="readonly" class="form-control" id="houseName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Nội dung</label>
+                            <div class="col-sm-9">
+                                <input type="email" readonly="readonly" class="form-control" id="description">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Ngày tạo</label>
+                            <div class="col-sm-9">
+                                <input type="email" readonly="readonly" class="form-control" id="createDate">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Ngày đóng</label>
+                            <div class="col-sm-9">
+                                <input type="email" readonly="readonly" class="form-control" id="assignDate">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Trạng thái</label>
+                            <div class="col-sm-9">
+                                <div class="col-sm-9">
+                                    <select id="status" name="select" class="selectpicker" data-style="btn-white" data-size="5">
+                                        <option value="1" selected="selected">Assigned</option>
+                                        <option value="2">Done</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Giá dịch vụ (VND)</label>
+                            <div class="col-sm-9">
+                                <input type="email" readonly="readonly" class="form-control" id="price">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Thuộc dịch vụ</label>
+                            <div class="col-sm-9">
+                                <input type="email" readonly="readonly" class="form-control" id="serviceName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="modal-footer">
+                                <input hidden="hidden" id="hiddenId" />
+                                <button type="submit" onclick="updateRequest(hiddenId.value, status.value)" class="btn btn-primary">Cập Nhật</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Script Region-->
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+    function getSelectedRequest(selectedId) {
+        loadSelectedRequest(selectedId);
+    }
+    function loadSelectedRequest(hrId) {
+        $.ajax({
+            url: '/HelpdeskSupporter/Detail',
+            data: {
+                id: hrId
+            },
+            error: function () {
+                alert("Xảy ra lỗi trong quá trình tải dữ liệu!")
+            },
+            success: function (request) {
+                //$("#title").val(request.Title)
+                //$("#houseName").val(request.HouseName)
+                //$("#description").val(request.Description)
+                //$("#createDate").val(request.CreateDate)
+                //$("#assignDate").val(request.AssignDate)
+                //$("#status").val(request.Status)
+                //$("#price").val(request.Price)
+                //$("#serviceName").val(request.HelpdeskServiceName)
+                //$("#hiddenId").val(request.Id)
+                //location.href = "HelpdeskSupporter/Detail";
+            },
+            type: 'POST'
+        });
+    }
+</script>
+<script>
+    function updateRequest(currId, currStatusValue) {
+        $.ajax({
+            url: '/HelpdeskSupporter/UpdateRequest',
+            data: {
+                id: currId,
+                status: currStatusValue
+            },
+            error: function () {
+                alert("error")
+
+            },
+            success: function (data) {
+                //if (data === true) {
+                //    //alert("Thanh cong!");
+                //    location.reload = "/HelpdeskSupporter/Index";
+                //}
+                //else
+                //{
+                alert(data);
+                location.reload = "/HelpdeskSupporter/Index";
+
+                //}
+            },
+            type: 'POST'
+        });
+    }
+</script>
+<!--End Script Region-->
+

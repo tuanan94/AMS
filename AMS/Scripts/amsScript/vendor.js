@@ -28543,7 +28543,7 @@ Licensed under the BSD-2-Clause License.
 			 *      } );
 			 *    } );
 			 */
-			"sZeroRecords": "No matching records found"
+			"sZeroRecords": "Không tìm thấy kết quả."
 		},
 	
 	

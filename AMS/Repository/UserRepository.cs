@@ -1,4 +1,4 @@
-﻿using AMS.Reposiroty;
+﻿using AMS.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;

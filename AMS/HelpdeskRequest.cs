@@ -27,11 +27,13 @@ namespace AMS
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> CloseDate { get; set; }
         public Nullable<System.DateTime> AssignDate { get; set; }
+        public Nullable<System.DateTime> ModifyDate { get; set; }
+        public Nullable<System.DateTime> DueDate { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<double> Price { get; set; }
         public Nullable<int> HelpdeskServiceId { get; set; }
         public Nullable<int> HouseId { get; set; }
-        public Nullable<System.DateTime> ModifyDate { get; set; }
+        public Nullable<int> Priority { get; set; }
     
         public virtual HelpdeskService HelpdeskService { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

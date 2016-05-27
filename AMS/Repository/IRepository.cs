@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AMS.Reposiroty
+namespace AMS.Repository
 {
     interface IRepository<T> where T : class
     {

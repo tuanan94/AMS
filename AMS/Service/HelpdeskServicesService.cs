@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AMS.Reposiroty;
+using AMS.Repository;
 
 namespace AMS.Service
 {
@@ -60,4 +60,5 @@ namespace AMS.Service
                 hdServiceRepository.List.Where(s => s.Name.ToLower().Contains(name.ToLower())).ToList();
         }
     }
+
 }

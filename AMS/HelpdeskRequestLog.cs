@@ -18,7 +18,7 @@ namespace AMS
         public Nullable<int> HelpdeskRequestId { get; set; }
         public Nullable<int> ChangeFromUserId { get; set; }
         public Nullable<int> ChangeToUserId { get; set; }
-        public Nullable<long> CreateDate { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<int> StatusFrom { get; set; }
         public Nullable<int> StatusTo { get; set; }
     
