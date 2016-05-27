@@ -1,0 +1,161 @@
+﻿
+@{
+    ViewBag.Title = "View House Info";
+ 
+
+    List<House> allHouseInfo = ViewBag.allHouseInfo;
+}
+<div id="content">
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Block</th>
+                <th>Floor</th>
+                <th>House Name</th>
+                <th>Description</th>
+                <th>Area</th>
+                @*<th>Delete</th>*@
+
+            </tr>
+        </thead>
+        <tbody id="housetablebody"></tbody>
+        @{
+            foreach (House house in allHouseInfo)
+            {
+                <tr>
+                    <td>@house.Id</td>
+                    <td>@house.Block</td>
+                    <td>@house.Floor</td>
+                    <td>@house.HouseName</td>
+                    <td>@house.Description</td>
+                    <td>@house.Area</td>
+                    @*<td>@Html.ActionLink("DELETE", "deleteHouse", "Admin") </td>*@
+                </tr>
+            }
+
+        }
+    </table>
+</div>
+@{
+    List<House> allHouse = ViewBag.allHouse;
+}
+<div id="content">
+    <table class="table">
+        <thead>
+            <tr>            
+                <th>Add House</th>
+            </tr>
+        </thead>
+        <tbody id="housetablebody"></tbody>
+    </table>
+    @using (Html.BeginForm("addHouse", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @*<label>ID</label>
+        <input class="form-control" name="Id" id="Id" />*@
+        <label>Block</label>
+        <input class="form-control" name="Block" id="Block" />
+        <label>Floor</label>
+        <input class="form-control" name="Floor" id="Floor" />
+        <label>House Name</label>
+        <input class="form-control" name="HouseName" id="HouseName" />
+        <label>Description</label>
+        <input class="form-control" name="Description" id="Description" />
+        <label>Area</label>
+        <input class="form-control" name="Area" id="Area" />
+        <input type="reset" class="btn btn-default" value="Reset" />
+        <input type="submit" class="btn btn-success" value="Thêm nhà vào hệ thống" id="btnsubmit" />
+        <input class="btn btn-success" onclick="addHouseByAjax()" value="Them nha bang Ajax" />
+    }
+
+
+</div>
+@* Button Delete byhouse Id *@
+<div id="content">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Delete House</th>
+            </tr>
+        </thead>
+        <tbody id="housetablebody"></tbody>
+    </table>
+    @using (Html.BeginForm("deleteHouse", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <label>Delete BY House ID</label>
+        <input class="form-control" name="Id" id="Id" />
+        <input type="submit" class="btn btn-success" value="Delete" id="btnsubmit" />// button delete
+    }
+</div>
+
+@* Button Update by House ID *@
+<div id="content">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Update House</th>
+            </tr>
+        </thead>
+        <tbody id="housetablebody"></tbody>
+    </table>
+    @using (Html.BeginForm("updateHouse", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <label>Update BY House ID</label>
+        <input class="form-control" name="Id" id="Id" />
+        <input type="submit" class="btn btn-success" value="Update" id="btnsubmit" />// button Update
+    }
+</div>
+<script>
+    $(document).ready(function () {
+        console.log("document loaded");
+        loadHouseList();
+    });
+    function loadHouseList() {
+        clearHouseList();
+        $.ajax({
+            url: '/Admin/ManageHouse',
+            data: {
+            },
+            error: function () {
+                alert("error")
+                // $("#alertArea").html("Error occured!")
+            },
+            success: function (data) {
+                var obj = JSON.parse(data);
+                $.each(obj, function (index, jsonObject) {
+                    $("#housetablebody").append('<tr><td>' + jsonObject["Id"] + '</td><td>' + jsonObject["Block"] + '</td><td>' + jsonObject["Floor"] + '<td/><td>' + jsonObject["HouseName"] + '</td><td>' + jsonObject["Description"] + '</td><td>' + jsonObject["Area"] + '</td></tr>')
+                });
+
+            },
+            type: 'GET'
+        });
+    }
+    function clearHouseList() {
+        $("#housetablebody").html("");
+
+    }
+
+    function addHouseByAjax() {
+        $.ajax({
+            url: '/Admin/addHouseAjax',
+            data: {
+                Block: $("#Block").val(),
+                Floor: $("#Floor").val(),
+                HouseName: $("#HouseName").val(),
+                Description: $("#Description").val(),
+                Area: $("#Area").val()
+            },
+            error: function () {
+                alert("error")
+                // $("#alertArea").html("Error occured!")
+            },
+            success: function (data) {
+                clearHouseList();
+                loadHouseList();
+            },
+            type: 'POST'
+        });
+    }
+</script>

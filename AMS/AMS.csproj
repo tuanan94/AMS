@@ -210,6 +210,7 @@
     <Compile Include="Constant\RoleEnum.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HelpdeskSupporterController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -257,6 +258,7 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\HelpdeskServiceModels.cs" />
+    <Compile Include="Models\ManageHouseViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MessageViewModels.cs" />
@@ -291,11 +293,12 @@
     <Compile Include="Service\HelpdeskRequestLogServices.cs" />
     <Compile Include="Service\HelpdeskServiceCatService.cs" />
     <Compile Include="Service\HelpdeskRequestServices.cs" />
-    <Compile Include="Service\HelpdeskServicesService.cs" />
     <Compile Include="Service\PostService.cs" />
     <Compile Include="Service\UserInHouseService.cs" />
     <Compile Include="Service\HelpdeskSupporterService.cs" />
     <Compile Include="Service\IHelpdeskSupporterService.cs" />
+    <Compile Include="Service\AdminService.cs" />
+    <Compile Include="Service\HelpdeskServicesService.cs" />
     <Compile Include="Service\PendingMemberService.cs" />
     <Compile Include="Service\TestService.cs" />
     <Compile Include="Service\UserService.cs" />
@@ -528,6 +531,9 @@
     <Content Include="Views\HelpdeskSupporter\Detail.cshtml" />
     <Content Include="Views\Home\_helpdeskRequestDetail.cshtml" />
     <Content Include="Views\Home\CommentView.cshtml" />
+    <Content Include="Views\Admin\ManageHouse.cshtml" />
+    <Content Include="Views\Admin\addHouse.cshtml" />
+    <Content Include="Views\Admin\deleteHouse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

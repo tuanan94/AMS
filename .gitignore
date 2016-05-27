@@ -5,6 +5,7 @@
 *.dll
 *.xml
 *.dll
+<<<<<<< HEAD
 
 AMS/Model1.edmx
 =======
@@ -37,3 +38,22 @@ AMS/obj/Debug/edmxResourcesToEmbed/Model1.msl
 AMS/bin/AMS.dll.config
 
 AMS/bin/AMS.pdb
+=======
+AMS/AMS.csproj
+>>>>>>> PhongNH60193
+
+AMS/bin/AMS.dll
+
+AMS/bin/AMS.dll.config
+
+AMS/bin/AMS.pdb
+
+AMS/obj/Debug/AMS.csproj.FileListAbsolute.txt
+
+AMS/obj/Debug/AMS.dll
+
+AMS/obj/Debug/AMS.pdb
+
+AMS/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+
+AMS/obj/Debug/AMS.csproj.FileListAbsolute.txt
