@@ -28,7 +28,7 @@ namespace AMS.Controllers
     {
         TestService testService = new TestService();
         UserInHouseService userInHouseService = new UserInHouseService();
-        PostService  postService = new PostService();
+        PostService postService = new PostService();
         UserService userService = new UserService();
         PendingMemberService pendingMemberService = new PendingMemberService();
         HelpdeskServiceCatService _helpdeskServiceCat = new HelpdeskServiceCatService();
@@ -55,9 +55,9 @@ namespace AMS.Controllers
         public void AddByAjax(string Title, int PostId)
         {
             postService.createPost(Title, PostId);
-         
+
         }
-         [HttpPost]
+        [HttpPost]
         public ActionResult Index(string Title, int PostId)
         {
 
@@ -65,14 +65,14 @@ namespace AMS.Controllers
             return RedirectToAction("TimeLine");
         }
         [HttpPost]
-         public ActionResult Indexx(ListPostViewModel model, int postId)
+        public ActionResult Indexx(ListPostViewModel model, int postId)
         {
 
             postService.createPost(model.Title, model.Id);
             //return PartialView("TimeLine");
             return RedirectToAction("TimeLine");
         }
-        
+
         public ActionResult TimeLine()
         {
             // get all post
@@ -82,7 +82,7 @@ namespace AMS.Controllers
             listPostViewModel.listPost = new List<PostViewModel>();
             foreach (var item in allPost)
             {
-                 PostViewModel  postViewModel = new PostViewModel();
+                PostViewModel postViewModel = new PostViewModel();
                 postViewModel.ImgUrl = item.ImgUrl;
                 postViewModel.Id = item.Id;
                 postViewModel.Title = item.Title;
@@ -91,18 +91,18 @@ namespace AMS.Controllers
                 {
                     postViewModel.CreateDate = item.CreateDate.Value;
                 }
-             
+
                 //get list comment belong post
                 listComment = postService.getCommentBelongPost(postViewModel.Id);
-                if (listComment !=null)
+                if (listComment != null)
                 {
                     postViewModel.Post = listComment;
                 }
                 listPostViewModel.listPost.Add(postViewModel);
-              
+
             }
-           
-            
+
+
             return View(listPostViewModel);
         }
 
@@ -125,7 +125,7 @@ namespace AMS.Controllers
                     //Modify ANTT
                     ext = Media.FileName.Substring(post.Media.FileName.LastIndexOf(".",
                             StringComparison.Ordinal));
-                    
+
                     // Force it to be jpg
                     var fileName = Util.GetUnixTime() + ".jpg";
                     // Tmp file name
@@ -171,7 +171,7 @@ namespace AMS.Controllers
 
             //if (ModelState.IsValid)
             //{
-          
+
             Post p = new Post();
             // post.Body = p.Body;
             p.Title = post.Title;
@@ -329,8 +329,10 @@ namespace AMS.Controllers
                             {
                                 allowViewDetail = true;
                             }*/ //ANTT
-
-                            allowViewDetail = true;
+                            if (u.HouseId == hdRequest.HouseId)
+                            {
+                                allowViewDetail = true;
+                            }
                         }
                         if (allowViewDetail)
                         {
@@ -391,7 +393,7 @@ namespace AMS.Controllers
                             {
                                 foreach (var s in hdReqHdSupporter)
                                 {
-                                    hdRequests.Add(s.HelpdeskRequest); 
+                                    hdRequests.Add(s.HelpdeskRequest);
                                 }
                                 hdReq = hdRequests;
                             }
@@ -587,7 +589,7 @@ namespace AMS.Controllers
                             }
                             if (isOk)
                             {
-                                hdRequest.Status = (int) StatusEnum.Reject;
+                                hdRequest.Status = (int)StatusEnum.Reject;
                                 hdRequest.ModifyDate = DateTime.Now;
                                 _hdReqServices.Update(hdRequest);
 
@@ -596,7 +598,7 @@ namespace AMS.Controllers
                                     HelpdeskRequestHelpdeskSupporter hdReqHdSupporter =
                                         hdRequest.HelpdeskRequestHelpdeskSupporters.OrderByDescending(s => s.CreateDate)
                                             .First();
-                                    hdReqHdSupporter.Status = (int) StatusEnum.Reject;
+                                    hdReqHdSupporter.Status = (int)StatusEnum.Reject;
                                     _hdReqHdSupporterServices.Update(hdReqHdSupporter);
                                 }
                             }
@@ -697,7 +699,7 @@ namespace AMS.Controllers
                     }
                     else if (hdRequest.Status != (int)StatusEnum.Reject && hdRequest.Status != (int)StatusEnum.Closed)
                     {
-                        int curSupporterId =  hdRequest.HelpdeskRequestHelpdeskSupporters.OrderByDescending(e => e.CreateDate).First().HelpdeskSupporterId.Value;
+                        int curSupporterId = hdRequest.HelpdeskRequestHelpdeskSupporters.OrderByDescending(e => e.CreateDate).First().HelpdeskSupporterId.Value;
 
                         if (curSupporterId != hdReqChngStatus.ToUserId)
                         {
@@ -710,7 +712,7 @@ namespace AMS.Controllers
                             hdReqHdSupporter.CreateDate = DateTime.Now;
                             _hdReqHdSupporterServices.Add(hdReqHdSupporter);
                         }
-                        
+
                         return RedirectToAction("ViewHdRequestDetail", new { hdReqId = hdRequest.Id, userId = fromUser.Id });
                     }
                 }
