@@ -22,7 +22,6 @@ namespace AMS
             this.HelpdeskRequestLogs1 = new HashSet<HelpdeskRequestLog>();
             this.Posts = new HashSet<Post>();
             this.ResidentRateAroundProviders = new HashSet<ResidentRateAroundProvider>();
-            this.UserProfiles = new HashSet<UserProfile>();
             this.UserAnswerSurveys = new HashSet<UserAnswerSurvey>();
         }
     
@@ -52,8 +51,6 @@ namespace AMS
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ResidentRateAroundProvider> ResidentRateAroundProviders { get; set; }
         public virtual Role Role { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserProfile> UserProfiles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserAnswerSurvey> UserAnswerSurveys { get; set; }
     }

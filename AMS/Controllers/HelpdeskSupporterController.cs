@@ -12,8 +12,9 @@ namespace AMS.Views.HelpdeskSupporter
     public class HelpdeskSupporterController : Controller
     {
         private HelpdeskSupporterService _helpdeskSupporterService = new HelpdeskSupporterService();
+        private HelpdeskRequestHelpdeskSupporterService _hrhs = new HelpdeskRequestHelpdeskSupporterService();
         // GET: HelpdeskSupporter
-        public ActionResult Index()
+        public ActionResult Index(int id)
         {
             //IEnumerable<HelpdeskRequest> allRequest = _helpdeskSupporterService.ListAllRequest();
             //HelpdeskRequestViewModel viewModel = new HelpdeskRequestViewModel();
@@ -36,41 +37,38 @@ namespace AMS.Views.HelpdeskSupporter
             //        allViewModel.Add(viewModel);
             //    }
             //}
-            IEnumerable<HelpdeskRequest> allRequest = _helpdeskSupporterService.ListAllRequest();
-            List<HelpdeskRequest> openRequest = new List<HelpdeskRequest>();
+            List<HelpdeskRequestHelpdeskSupporter> allRequest = _hrhs.GetCurrentHelpdeskRequest(id);
+            List<HelpdeskRequest> hr = new List<HelpdeskRequest>();
             foreach (var request in allRequest)
             {
-                if (request.Status == 1)
-                {
-                    openRequest.Add(request);
-                }
+                hr.Add(request.HelpdeskRequest);
             }
-            ViewBag.openRequest = openRequest;
+            ViewBag.hr = hr;
             return View();
         }
 
-        [HttpPost]
-        [ValidateInput(false)]
-        public ActionResult GetHelpdeskRequest(int selectedId)
-        {
-            HelpdeskRequest hr = _helpdeskSupporterService.GetHelpdeskRequest(selectedId);
-            HelpdeskRequestViewModel request = new HelpdeskRequestViewModel();
-            request.Title = hr.Title;
-            request.Description = hr.Description;
-            //Convert date to dd/MM/yyyy
-            DateTime parsedCreateDate = (DateTime) hr.CreateDate;
-            request.CreateDate = parsedCreateDate.ToString("dd/MM/yyyy");
-            DateTime parsedAssignDate = (DateTime)hr.AssignDate;
-            request.AssignDate = parsedAssignDate.ToString("dd/MM/yyyy");
-            request.Status = hr.Status.Value;
-            request.Price = hr.Price.Value;
-            request.HouseName = hr.House.HouseName;
-            request.HelpdeskServiceName = hr.HelpdeskService.Name;
-            request.Id = hr.Id;
-            return Json(request);
-        }
+        //[HttpPost]
+        //[ValidateInput(false)]
+        //public ActionResult GetHelpdeskRequest(int selectedId)
+        //{
+        //    HelpdeskRequest hr = _helpdeskSupporterService.GetHelpdeskRequest(selectedId);
+        //    HelpdeskRequestViewModel request = new HelpdeskRequestViewModel();
+        //    request.Title = hr.Title;
+        //    request.Description = hr.Description;
+        //    //Convert date to dd/MM/yyyy
+        //    DateTime parsedCreateDate = (DateTime) hr.CreateDate;
+        //    request.CreateDate = parsedCreateDate.ToString("dd/MM/yyyy");
+        //    DateTime parsedAssignDate = (DateTime)hr.AssignDate;
+        //    request.AssignDate = parsedAssignDate.ToString("dd/MM/yyyy");
+        //    request.Status = hr.Status.Value;
+        //    request.Price = hr.Price.Value;
+        //    request.HouseName = hr.House.HouseName;
+        //    request.HelpdeskServiceName = hr.HelpdeskService.Name;
+        //    request.Id = hr.Id;
+        //    return Json(request);
+        //}
 
-        [HttpPost]
+        [HttpGet]
         [ValidateInput(false)]
         public ActionResult Detail(int id)
         {
@@ -78,23 +76,29 @@ namespace AMS.Views.HelpdeskSupporter
             HelpdeskRequestViewModel request = new HelpdeskRequestViewModel();
             request.Title = hr.Title;
             request.Description = hr.Description;
-            //Convert date to dd/MM/yyyy
+            //---Convert date to dd/MM/yyyy
             DateTime parsedCreateDate = (DateTime)hr.CreateDate;
             request.CreateDate = parsedCreateDate.ToString("dd/MM/yyyy");
-            DateTime parsedCloseDate = (DateTime)hr.CloseDate;
-            request.CloseDate = parsedCloseDate.ToString("dd/MM/yyyy");
+            DateTime parsedDueDate = (DateTime)hr.DueDate;
+            request.DueDate = parsedDueDate.ToString("dd/MM/yyyy");
             request.Status = hr.Status.Value;
             request.Price = hr.Price.Value;
             request.HouseName = hr.House.HouseName;
             request.HelpdeskServiceName = hr.HelpdeskService.Name;
             request.Id = hr.Id;
+            //request.HelpdeskSupporterId = hr.Id;
             ViewBag.currRequest = request;
             return View();
         }
 
-        public ActionResult Detail()
+        public ActionResult Detail(int id, int status)
         {
-            return View();
+            bool result = _helpdeskSupporterService.UpdateStatus(id, status);
+            if(result)
+            {
+                return View();
+            }
+            return Redirect("~/View/Shared/Error");
         }
 
         [HttpPost]

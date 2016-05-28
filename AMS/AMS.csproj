@@ -208,6 +208,7 @@
     </Compile>
     <Compile Include="Constant.cs" />
     <Compile Include="Constant\RoleEnum.cs" />
+    <Compile Include="Constant\StatusEnumNew.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HelpdeskSupporterController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
@@ -290,9 +291,11 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Service\HdReqHdSupporterServices.cs" />
+    <Compile Include="Service\HelpdeskRequestHelpdeskSupporterService.cs" />
     <Compile Include="Service\HelpdeskRequestLogServices.cs" />
     <Compile Include="Service\HelpdeskServiceCatService.cs" />
     <Compile Include="Service\HelpdeskRequestServices.cs" />
+    <Compile Include="Service\IHelpdeskRequestHelpdeskSupporterService.cs" />
     <Compile Include="Service\PostService.cs" />
     <Compile Include="Service\UserInHouseService.cs" />
     <Compile Include="Service\HelpdeskSupporterService.cs" />

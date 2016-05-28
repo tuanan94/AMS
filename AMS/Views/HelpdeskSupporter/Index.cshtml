@@ -1,8 +1,9 @@
-﻿@{
+﻿@using AMS.Constant;
+@{
     ViewBag.Title = "Trang Chủ";
     Layout = "~/Views/HelpdeskSupporter/__HelpdeskSupporterLayout.cshtml";
     int count = 0;
-    List<HelpdeskRequest> openRequest = ViewBag.openRequest;
+    List<HelpdeskRequest> allRequest = ViewBag.hr;
 
 }
 
@@ -28,7 +29,7 @@
                         </thead>
                         <tbody>
                             @{
-                                foreach (HelpdeskRequest hr in openRequest)
+                                foreach (HelpdeskRequest hr in allRequest)
                                 {
                                     <tr data-id="@(++count)">
                                         <td class="text-center">
@@ -51,18 +52,18 @@
                                         </td>
                                         <td>
                                             @{
-                                                    if (hr.Status == 1)
-                                                    {
-                                                        @Html.Label("Assigned")
-                                                    }
-                                                    if (hr.Status == 2)
-                                                    {
-                                                        @Html.Label("Done")
-                                                    }
+                                                if (hr.Status == (int)StatusEnumNew.Open)
+                                                {
+                                                    @Html.Label("Mở")
                                                 }
+                                                else if (hr.Status == (int)StatusEnumNew.Processing)
+                                                {
+                                                    @Html.Label("Đang xử lý")
+                                                }
+                                            }
                                         </td>
                                         <td class="text-center">
-                                            <a class="btn btn-default btn-xs" title="Chi tiết"><i class="fa fa-eye"></i></a>
+                                            <a class="btn btn-default btn-xs" href="/HelpdeskSupporter/Detail?id=@hr.Id" title="Chi tiết"><i class="fa fa-pencil"></i></a>
                                         </td>
                                     </tr>
                                 }
