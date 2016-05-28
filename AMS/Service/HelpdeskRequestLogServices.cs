@@ -22,7 +22,7 @@ namespace AMS.Service
 
         public List<HelpdeskRequestLog> GetHelpdeskRequestLog(int id)
         {
-            return logRepository.List.Where(l => l.HelpdeskRequestId == id).OrderBy(l => l.CreateDate).ToList();
+            return logRepository.List.Where(l => l.HelpdeskRequestId == id).OrderByDescending(l => l.CreateDate).ToList();
         }
     }
 }

@@ -336,6 +336,7 @@
     <Content Include="Content\css\default-nav-inverse.min.css" />
     <Content Include="Content\css\default.css" />
     <Content Include="Content\css\default.min.css" />
+    <Content Include="Content\css\jquery.timepicker.css" />
     <Content Include="Content\css\media-upload.css" />
     <Content Include="Content\css\orange.css" />
     <Content Include="Content\css\orange.min.css" />
@@ -362,6 +363,7 @@
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\amsScript\additional-methods.min.js" />
+    <Content Include="Scripts\amsScript\jquery.timepicker.min.js" />
     <Content Include="Scripts\amsScript\jquery.validate.min.js" />
     <Content Include="Scripts\amsScript\scripts.js" />
     <Content Include="Scripts\amsScript\scripts.min.js" />

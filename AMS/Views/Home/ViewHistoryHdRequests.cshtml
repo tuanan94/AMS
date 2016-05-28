@@ -40,16 +40,21 @@
 
 <div class="col-md-12">
     <div class="panel panel-default">
+        
+        <div class="panel-heading panel-heading-gray">
+            <i class="fa fa-bookmark"></i> Danh sách yêu cầu hổ trợ
+        </div>
+
         <div class="panel-body">
-            <div class="form-horizontal" id="searchHdSrv" role="form" onkeypress="return event.keyCode !== 13;">
+            <div class="form-horizontal" id="searchHdSrv" role="form">
                 <!-- Data table -->
-                <table id="hdRequestTbl" data-userid ="@userId" class="table">
+                <table id="hdRequestTbl" data-userid="@userId" class="table table-hover table-bordered">
                     <thead>
                     <tr>
+                        <th></th>
                         <th>Tiêu đề</th>
                         <th>Căn hộ</th>
                         <th>DV hổ trợ</th>
-                        <th>Ưu tiên</th>
                         <th>Trạng thái</th>
                         <th>NV hổ trợ</th>
                         <th>Ngày tạo</th>
@@ -59,10 +64,10 @@
                     </thead>
                     <tfoot>
                     <tr>
+                        <th></th>
                         <th>Tiêu đề</th>
                         <th>Căn hộ</th>
                         <th>DV hổ trợ</th>
-                        <th>Ưu tiên</th>
                         <th>Trạng thái</th>
                         <th>NV hổ trợ</th>
                         <th>Ngày tạo</th>

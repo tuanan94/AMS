@@ -32,8 +32,8 @@ namespace AMS.Service
         public List<HelpdeskRequestHelpdeskSupporter> GetCurrentSupporterHdRequest(int hdSupporterId)
         {
           return  hdReqHdsupporterRepository.List.Where(
-                s => s.HelpdeskSupporterId == hdSupporterId && s.HelpdeskRequest.Status != (int)StatusEnum.Closed &&
-                     s.HelpdeskRequest.Status != (int)StatusEnum.Reject && 
+                s => s.HelpdeskSupporterId == hdSupporterId && s.HelpdeskRequest.Status != (int)StatusEnum.Close &&
+                     s.HelpdeskRequest.Status != (int)StatusEnum.Cancel && 
                     s.HelpdeskRequest.HelpdeskRequestHelpdeskSupporters.OrderByDescending(ee => ee.CreateDate).First().HelpdeskSupporterId == hdSupporterId
                     ).ToList();
         }

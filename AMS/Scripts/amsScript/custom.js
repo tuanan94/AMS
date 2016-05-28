@@ -19,18 +19,10 @@ window.deleteHdSrvList = new Array();
 window.deleteHdSrvCatList = new Array();
 
 window.StatusOpen = 1;
-window.StatusWaitingForQuotation = 2;
-window.StatusWaitingQuoutationConfirming = 3;
-window.StatusQuoutationConfirmed = 4;
-window.StatusWaitingForProcess = 5;
-window.StatusProcessing = 6;
-window.StatusDone = 7;
-window.StatusClosed = 8;
-window.StatusReopen = 9;
-window.StatusReject = 10;
-
-
-
+window.StatusProcessing = 2;
+window.StatusDone = 3;
+window.StatusClose = 4;
+window.StatusCancel = 5;
 
 function loadHelpdeskServiceType() {
     var action = "loadHdSrvCat";
@@ -65,9 +57,11 @@ function getHelpdeskServiceType(tagId, callback) {
             console.log(data.HdSrvCategories);
             var objList = data.HdSrvCategories;
             var selectTagList = [];
+            var selectTag = "<option value='' selected='selected'> Hãy chọn dịch vụ hổ trợ</option>";
+            selectTagList.push(selectTag);
             for (var i = 0; i < objList.length; i++) {
                 var obj = objList[i];
-                var selectTag = "<option value='" + obj.Id + "'>" + obj.Name + "</option>";
+                selectTag = "<option value='" + obj.Id + "'>" + obj.Name + "</option>";
                 selectTagList.push(selectTag);
             }
             $("#" + tagId).html(selectTagList);
@@ -278,7 +272,7 @@ function hdRequestDetail(id) {
     getHelpdeskDetail(id);
 }
 $(document).ready(function () {
-
+    $("#hdReqDueDateTime").timepicker({ "scrollDefault": "5:30 pm" });
     $("#addHelpdeskRequestForm").validate({
         rules: {
             hdSrvName: {
@@ -476,53 +470,72 @@ $(document).ready(function () {
     });
 
     $(document).on("change", "#hdSrvCatName", function () {
-        var selected = parseInt($(this).find("option:selected").val(), 10);
-        $("#hdSrvCatName").prop("disable", true);
-        $("#hdServiceId").prop("disabled", true);
+        
         $("#hdSrvPrice").val("");
         $("#hdSrvDesc").val("");
-        getHdSrvByCatId(selected, "hdServiceId", function () {
-            $("#hdSrvCatName").prop("disable", false);
-            $("#hdServiceId").prop("disabled", false);
-            $("select[name=HdServiceId]").val(-1);
+        if ($(this).find("option:selected").val()) {
+            var selected = parseInt($(this).find("option:selected").val(), 10);
+            $("#hdSrvCatName").prop("disable", true);
+            $("#hdServiceId").prop("disabled", true);
+            getHdSrvByCatId(selected, "hdServiceId", function() {
+                $("#hdSrvCatName").prop("disable", false);
+                $("#hdServiceId").prop("disabled", false);
+                $("select[name=HdServiceId]").val(-1);
+                $("#hdServiceId").selectpicker("refresh");
+            });
+        } else {
+            var selectTag = "<option value='' selected='selected'> " + "Hãy chọn dịch vụ hổ trợ" + " </option>";
+            $("#hdServiceId").html(selectTag);
             $("#hdServiceId").selectpicker("refresh");
-        });
+        }
     });
 
     $(document).on("change", "#hdServiceId", function () {
-        var selected = parseInt($(this).find("option:selected").val(), 10);
-
         $("#hdSrvPrice").val("");
         $("#hdSrvDesc").val("");
-
-        if (window.hdSrvList !== undefined || window.hdSrvList.length !== 0) {
-            for (var i = 0; i < window.hdSrvList.length; i++) {
-                if (window.hdSrvList[i].Id === selected) {
-                    $("#hdSrvPrice").val(window.hdSrvList[i].Price);
-                    $("#hdSrvDesc").val(window.hdSrvList[i].Description);
+        if ($(this).find("option:selected").val()) {
+            var selected = parseInt($(this).find("option:selected").val(), 10);
+            if (window.hdSrvList !== undefined || window.hdSrvList.length !== 0) {
+                for (var i = 0; i < window.hdSrvList.length; i++) {
+                    if (window.hdSrvList[i].Id === selected) {
+                        $("#hdSrvPrice").val(window.hdSrvList[i].Price);
+                        $("#hdSrvDesc").val(window.hdSrvList[i].Description);
+                    }
                 }
             }
         }
+        
+
+        
     });
     $("#addNewHdRequest").on("click", function () {
         console.log($("#createHdService").serialize());
         $("#createHdService").valid();
     });
-
-    var userId = document.getElementById("hdRequestTbl").dataset.userid;
-    $("#hdRequestTbl").DataTable({
+    $("#updateHdRequest").on("click", function () {
+        console.log($("#updateHelpdeskRequestForm").serialize());
+//        $("#createHdService").valid();
+        $("#createHdService").submit();
+    });
+    var userId = document.getElementById("hdRequestTbl");
+    if (null !== userId && undefined != userId) {
+        userId = userId.dataset.userid;
+    }
+    var datatable = $("#hdRequestTbl").DataTable({
         "ajax": {
             url: "/Home/HelpdeskRequest/GetListRequest?userId=" + userId,
             dataSrc: ""
         },
+
         "bLengthChange": false,
         "bInfo": false,
+
         //"serverSide": true,
         "columns": [
             { data: "HdReqTitle" },
+            { data: "HdReqTitle" },
             { data: "HdReqHouse" },
             { data: "HdReqSrvName" },
-            { data: "HdReqPrior" },
             { data: "HdReqStatus" },
             { data: "HdReqSupporter" },
             { data: "HdReqCreateDate" },
@@ -530,23 +543,11 @@ $(document).ready(function () {
             { data: "HdReqId" }
         ],
         "columnDefs": [
-           {
-               "targets": 3,
-               "data": "HdReqPrior",
-               "render": function (data, type, full, meta) {
-                   if (type === "display" || type === "filter") {
-                       if (data === 1) {
-                           return "<span class='btn btn-default btn-xs'><i class='fa fa-arrow-down'></i></span>";
-                       } else if (data === 2) {
-                           return "<span class='btn btn-info btn-xs '><i class='fa fa-minus'></i></span>";
-                       } else if (data === 3) {
-                           return "<span class='btn btn-danger btn-xs'><i class='fa fa-arrow-up'></i></span>";
-                       }
-
-                   }
-                   return data;
-               }
-           },
+            {
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+            },
             {
                 "targets": 4,
                 "data": "HdReqStatus",
@@ -554,45 +555,25 @@ $(document).ready(function () {
                     if (type === "display" || type === "filter") {
                         var msg = "";
                         if (data === window.StatusOpen) {
-                            msg = "Đã chuyển đến ban quản lý";
-                            return " <div class='col-sm-9'><span class='label label-info'>" +
-                                msg + "</span></div>";
-                        } else if (data === window.StatusWaitingForQuotation) {
-                            msg = "Chờ báo giá";
-                            return " <div class='col-sm-9'><span class='label label-default'>" +
-                                msg + "</span></div>";
-                        } else if (data === window.StatusWaitingQuoutationConfirming) {
-                            msg = "Chờ xác nhận giá";
-                            return " <div class='col-sm-9'><span class='label label-default'>" +
-                                msg + "</span></div>";
-                        } else if (data === window.StatusQuoutationConfirmed) {
-                            msg = "Chấp nhận sửa chữa";
-                            return " <div class='col-sm-9'><span class='label label-default'>" +
-                                msg + "</span></div>";
-                        } else if (data === window.StatusWaitingForProcess) {
-                            msg = "Chờ tiến hành";
-                            return " <div class='col-sm-9'><span class='label label-default'>" +
-                                msg + "</span></div>";
+                            msg = "Chưa giải quyết";
+                            return "<span class='label label-info'>" +
+                                msg + "</div>";
                         } else if (data === window.StatusProcessing) {
-                            msg = "Đang tiến hành";
-                            return " <div class='col-sm-9'><span class='label label-default'>" +
-                                msg + "</span></div>";
+                            msg = "Đang xử lý";
+                            return "<span class='label processing'>" +
+                                msg + "</div>";
                         } else if (data === window.StatusDone) {
                             msg = "Hoàn thành";
-                            return " <div class='col-sm-9'><span class='label label-default'>" +
-                                msg + "</span></div>";
-                        } else if (data === window.StatusClosed) {
-                            msg = "Xong và Đóng";
-                            return " <div class='col-sm-9'><span class='label label-default'>" +
-                                msg + "</span></div>";
-                        } else if (data === window.StatusReopen) {
-                            msg = "Mở lại";
-                            return " <div class='col-sm-9'><span class='label label-default'>" +
-                                msg + "</span></div>";
-                        } else if (data === window.StatusReject) {
-                            msg = "Hủy yêu cầu";
-                            return " <div class='col-sm-9'><span class='label label-default'>" +
-                                msg + "</span></div>";
+                            return "<span class='label label-success'>" +
+                                msg + "</div>";
+                        } else if (data === window.StatusClose) {
+                            msg = "Đóng";
+                            return "<span class='label label-danger'>" +
+                                msg + "</div>";
+                        } else if (data === window.StatusCancel) {
+                            msg = "Hủy";
+                            return "<span class='label label-gray'>" +
+                                msg + "</div>";
                         }
                     }
                     return data;
@@ -647,8 +628,15 @@ $(document).ready(function () {
                     return data;
                 }
             }
-        ]
+        ], "order": [[1, 'asc']]
     });
+    datatable.on('order.dt search.dt', function () {
+        datatable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
+
+    $.fn.datepicker.defaults.format = "dd/mm/yyyy";
 
 });
 
@@ -771,27 +759,23 @@ function getHelpdeskDetail(id) {
     location.href = "/Home/HelpdeskRequest/ViewDetail?hdReqId=" + id + "&userId=" + userId;
 }
 
-function changeHdReqStatus(id, fromStatus, toStatus, fromUseId, assigneeId, price, duedate) {
-    var action = "/Home/HelpdeskRequest/UpdateStatus";
+function changeHdReqStatus(id, fromStatus, toStatus, fromUseId) {
+    var action = "/Home/HelpdeskRequest/UpdateStatus?";
     var data = {
         HdReqId: id,
         FromUserId: fromUseId,
-        ToUserId: assigneeId,
         FromStatus: fromStatus,
-        Price: price,
-        ToStatus: toStatus,
-        DueDate: duedate
+        ToStatus: toStatus
     }
-    location.href = "/Home/HelpdeskRequest/UpdateStatus?" + $.param(data);
+    location.href = action + $.param(data);
 }
 
-function openModalAssignHdReq() {
+function openModalAssignHdReq(hdReqId) {
     var action = "GetSupporters";
-    var submitData = document.getElementById("assignHdReqBtn");
     $.ajax({
         url: "/Home/HelpdeskRequest/" + action,
         data: {
-            hdReqId: submitData.dataset.id
+            hdReqId: hdReqId
         },
         type: "get",
         success: function (data) {
@@ -824,15 +808,77 @@ function openModalAssignHdReq() {
 function submitAssignTask() {
     $("#assignTaskForm").submit();
 }
-function hdSentQuotation() {
-    var dataTag = document.getElementById("btnOpenQuotation");
-    var hdReq = dataTag.dataset.id;
-    var hdReqFromStatus = dataTag.dataset.fromstatus;
-    var hdReqToStatus = dataTag.dataset.tostatus;
-    var hdReqUserId = dataTag.dataset.userid;
-    var dueDate = $("#hdReqDueDate").val();
-    var price = $("#hdReqPrice").val();
-    changeHdReqStatus(hdReq, hdReqFromStatus, hdReqToStatus, hdReqUserId, "", price, dueDate);
+function setDueDate() {
+    var dataTag = document.getElementById("btnDuedate");
+    var hdReqId = dataTag.dataset.id;
+    var fromUserId = dataTag.dataset.userid;
+    $("#HdReqId_2").val(hdReqId);
+    $("#FromUserId_2").val(fromUserId);
+    var dueDate = $("#hdReqDueDateDate").val();
+    var dueTime = $("#hdReqDueDateTime").val();
+    $("#DueDate").val(dueDate + " " + dueTime);
+    $("#setDuedateForm").submit();
+}
+
+function showEditHdReqModal(id) {
+//    getHelpdeskServiceType("hdSrvCatName", function () {
+//        $("#hdSrvCatName").selectpicker("refresh");
+//        $("#updateHdRequestModal").modal("show");
+//    });
+    getHdReqDetail(id);
+
+}
+
+function getHdReqDetail(id) {
+    $.ajax({
+        type: "get",
+        url: "/Home/HelpdeskRequest/GetHdReqInfoDetail/" + id,
+        success: function (data) {
+
+            console.log(data.Data.HdReqInfoDetail);
+            console.log(data.Data.HdSrvCategories);
+            console.log(data.Data.ListHdSrvBySelectedCat);
+            console.log(data.Data.SelectedHdSrvCatId);
+            console.log(data.Data.SelectedHdSrvId);
+            
+            var objList = data.Data.HdSrvCategories;
+            var returnHtml = parseJsonToSelectTags(objList, data.Data.SelectedHdSrvCatId, "Hãy chọn loại dịch vụ hổ trợ");
+            $("#hdSrvCatName").html(returnHtml);
+            $("#hdSrvCatName").selectpicker("refresh");
+
+
+            objList = data.Data.ListHdSrvBySelectedCat;
+            var returnHtml2 = parseJsonToSelectTags(objList, data.Data.SelectedHdSrvId, "Hãy chọn dịch vụ hổ trợ");
+            $("#hdServiceId").html(returnHtml2);
+            $("#hdServiceId").selectpicker("refresh");
+
+            window.hdSrvList = objList;
+
+            $("#hdReqTitle").val(data.Data.HdReqInfoDetail.HdReqTitle);
+            $("#hdReqDesc").val(data.Data.HdReqInfoDetail.HdReqUserDesc);
+            $("#hdSrvPrice").val(data.Data.SelectedHdSrvPrice);
+
+            $("#updateHdRequestModal").modal("show");
+        }
+    });
+}
+
+function parseJsonToSelectTags(listJson, selectedId,msg)
+{
+    var objList = listJson;
+    var selectTagList = [];
+    var selectTag = "<option value='' selected='selected'> "+ msg+" </option>";
+    selectTagList.push(selectTag);
+    for (var i = 0; i < objList.length; i++) {
+        var obj = objList[i];
+        if (obj.Id === selectedId) {
+            selectTag = "<option selected value='" + obj.Id + "'>" + obj.Name + "</option>";
+        } else {
+            selectTag = "<option value='" + obj.Id + "'>" + obj.Name + "</option>";
+        }
+        selectTagList.push(selectTag);
+    }
+    return selectTagList;
 }
 /* Start Js for controller*/
 
