@@ -31,7 +31,6 @@ namespace AMS.Controllers
             List<string> listAnwsers = new List<string>(listAnwser);
             // count number anwser of question
             List<int> listCount = new List<int>();
-
             List<List<string>> totalAnsertGroup = new List<List<string>>();
             for (int i = 0; i < (listCountAnwsers.Count) - 1; i++)
             {
@@ -41,30 +40,12 @@ namespace AMS.Controllers
                 }
             }
             listCount.Add(Int32.Parse((listCountAnwsers[(listCountAnwsers.Count) - 1])));
-
-            //foreach (var count in listCount)
-            //{
-            //    foreach (var item in listAnwsers)
-            //    {
-            //        int countAneser = 1;
-            //        if (countAneser <= count)
-            //        {
-            //            listAnwserGroup.Add(item);
-
-
-            //        }
-            //        countAneser++;
-
-            //    }
-
-            //}
             for (int i = 0; i < listCount.Count; i++)
             {
                 List<string> listAnwserGroup = new List<string>();
                 int countAneser = 0;
                 for (int j = 0; j < listAnwsers.Count; j++)
                 {
-
                     if (countAneser != listCount[i] && countAneser < listCount[i])
                     {
                         listAnwserGroup.Add(listAnwsers[j]);
@@ -72,58 +53,41 @@ namespace AMS.Controllers
                         listAnwsers.Remove(listAnwsers[j]);
                         j = j - 1;
                     }
-
                 }
                 totalAnsertGroup.Add(listAnwserGroup);
             }
-
             Survey survey = new Survey();
             survey.Title = "Survey 1";
             surveyService.AddSurvey(survey);
             //add list question
             Question question = new Question();
             Answer answer = new Answer();
+            int number= totalAnsertGroup.Count;
+            int ii = 0;
             foreach (var content in listQuestions)
             {
-                question.QuestionContent = content;
-                question.SurveyId = survey.Id;
-                questionService.AddQuestion(question);
-
-
-                foreach (var item in totalAnsertGroup)
+                
+                if (ii < number)
                 {
-                    for (int j = 0; j < item.Count; j++)
+                    question.QuestionContent = content;
+                    question.SurveyId = survey.Id;
+                    questionService.AddQuestion(question);
+
+                    List<string> listAnwserGroupsub = totalAnsertGroup[ii];
+                    foreach (var item in listAnwserGroupsub)
                     {
                         answer.QuestionId = question.Id;
-                        answer.AnswerContent = item[j];
+                        answer.AnswerContent = item;
                         answerService.AddAnswer(answer);
+                       
                     }
-
+                    ii++;
                 }
+
+              
             }
-            //for (int i = 0; i < listQuestions.Count; i++)
-            //{
-            //    question.QuestionContent = listQuestions[i];
-            //    question.SurveyId = survey.Id;
-            //    questionService.AddQuestion(question);
-            //    int k = 0;
-            //    for (int j = 0; j < totalAnsertGroup.Count; j++)
-            //    {
-
-            //            answer.QuestionId = question.Id;
-            //            answer.AnswerContent = totalAnsertGroup[j];
-            //            answerService.AddAnswer(answer);
-            //            j--;
-
-
-
-            //    }
-            //}
-            //add list anwsers
-
-
-
-            int a = listCount.Count;
+           
+         //   int a = listCount.Count;
 
             return View("Survey");
         }
