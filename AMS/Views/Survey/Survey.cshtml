@@ -19,7 +19,7 @@
                     </tr>
                     <tr>
                         <td style="width: 200px;" align="right">
-                            Cau hoi
+                            Câu hỏi 1
 
                         </td>
                         <td>
@@ -31,7 +31,7 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td><button class="btn-primarys" id="">Thêm Câu Trả Lời</button></td>
+                        <td><button class="btn-primarys" id="">Tạo survey</button></td>
                     </tr>
 
                 </table>
@@ -42,14 +42,16 @@
 
 <script>
     var countComment = 0;
+    var countQuestion = 2;
     $('#add').click(function () {
        
         var table = $(this).closest('table');
         if (table.find('input:text').length < 7) {
-            table.append('<tr><td style="width:200px;" align="right">Name <td> <input type="text" id="question" name="question"/> </td></tr>');
+            table.append('<tr><td style="width:200px;" align="right">Câu hỏi'+countQuestion+' <td> <input type="text" id="question" name="question"/> </td></tr>');
             //table.append('<tr><td style="width:200px;" align="right">Name <td> <textarea rows="2" cols="30" id="question" name="question"></textarea> </td></tr>');
 
         }
+        countQuestion++;
         countComment = 0;
     });
 
@@ -77,7 +79,7 @@
         countComment++;
         var table = $(this).closest('table');
         if (table.find('input:text').length < 7) {
-            table.append('<tr><td style="width:200px;" align="right">Đáp án ' + countComment + ' <td> <input class="inputDisabled" type="radio" id="anwser" name="anwser" value="male"> Male<br></td></tr><tr><td><input type="text" id="count" name="count" value="' + countComment + '" /></td></tr>');
+            table.append('<tr><td style="width:200px;" align="right">Đáp án ' + countComment + ' <td> <input  type="radio" id="anwser" name="anwser"> <input type="text" id="anwser1" name="anwser1"/><br></td></tr><tr><td><input type="hidden" id="count" name="count" value="' + countComment + '" /></td></tr>');
         }
        
     });
