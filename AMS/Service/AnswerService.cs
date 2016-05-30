@@ -35,5 +35,10 @@ namespace AMS.Service
         {
             answerRepository.Add(obj);
         }
+        public void DeleteAnswer(Answer obj)
+        {
+
+            answerRepository.Delete(obj);
+        }
     }
 }

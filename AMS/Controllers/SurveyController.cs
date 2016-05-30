@@ -24,7 +24,7 @@ namespace AMS.Controllers
             ViewBag.ListSurvey = listSurveys;
             return View();
         }
-       
+
         public ActionResult DeleteSurvey(int surveyId)
         {
             Survey obj = surveyService.FindById(surveyId);
@@ -34,23 +34,23 @@ namespace AMS.Controllers
                 List<Answer> answers = answerService.FindByQuestionId(itemQuestion.Id);
                 foreach (var itemAnswer in answers)
                 {
-                    answerService.DeleteAnswerByQuestionId(itemAnswer.Id);
+                    answerService.DeleteAnswer(itemAnswer);
                 }
-                questionService.DeleteQuestionBySurvetId(itemQuestion.Id);
+                questionService.DeleteQuestion(itemQuestion);
             }
-          surveyService.DeleteSurvey(obj);
+            surveyService.DeleteSurvey(obj);
 
             return RedirectToAction("Survey");
         }
 
         public ActionResult DetailSurvey(int surveyId)
         {
-            
 
-            return RedirectToAction("Survey");
+
+            return View();
         }
         [HttpPost]
-        public ActionResult AddSurvey()
+        public ActionResult Surveys()
         {
            
            
@@ -118,7 +118,7 @@ namespace AMS.Controllers
 
               
             }
-
+          //  return View("Survey");
             return RedirectToAction("Survey");
         }
     }
