@@ -27,7 +27,7 @@ namespace AMS.Controllers
         }
 
         [HttpPost]
-        [ValidateInput(false)]
+       // [ValidateInput(false)]
         public ActionResult addHouse(String Block, String Floor, String HouseName,String Description,float Area)
         {
             bool isValid = true;
@@ -63,14 +63,14 @@ namespace AMS.Controllers
         }
 
         //Update House
-        [HttpPost]
-        public ActionResult updateHouse(String HouseName, String Description)
+        [HttpPut]
+        public ActionResult updateHouse(int Id , String HouseName, String Description)
         {
             bool isValid = true;
             isValid = !HouseName.Equals("");
             if (isValid)
             {
-                manageHouseInfo.updateHouse(HouseName, Description);
+                manageHouseInfo.updateHouse(Id,HouseName, Description);
             }
             return RedirectToAction("ManageHouse");
         }

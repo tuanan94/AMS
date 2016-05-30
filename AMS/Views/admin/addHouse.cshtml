@@ -4,6 +4,7 @@
 
 
     List<House> allHouseInfo = ViewBag.allHouseInfo;
+    List<House> allHouse = ViewBag.allHouse;
 }
 <div id="content">
 
@@ -42,3 +43,63 @@
 
 
 </div>
+
+<script>
+    //-------------------------------------------------------------
+    $(document).ready(function () {
+        console.log("document loaded");
+        loadHouseList();
+    });
+
+    // load house's list ------------------------------------------
+    function loadHouseList() {
+        clearHouseList();
+        $.ajax({
+            url: '/Admin/ManageHouse',
+            data: {
+            },
+            error: function () {
+                alert("error")
+                // $("#alertArea").html("Error occured!")
+            },
+            success: function (data) {
+                var obj = JSON.parse(data);
+                $.each(obj, function (index, jsonObject) {
+                    $("#housetablebody").append('<tr><td>' + jsonObject["Id"] + '</td><td>' + jsonObject["Block"] + '</td><td>' + jsonObject["Floor"] + '<td/><td>' + jsonObject["HouseName"] + '</td><td>' + jsonObject["Description"] + '</td><td>' + jsonObject["Area"] + '</td></tr>')
+                });
+
+            },
+            type: 'GET'
+        });
+    }
+    // clear house list show by talbe by reset button----------------------------
+    function clearHouseList() {
+        $("#housetablebody").html("");
+
+    }
+    //Add House
+    function addHouse(){
+        $.ajax({
+            url: '/Admin/addHouseAjax',
+            data: {
+                Id : $("#Id").val(),
+                Block: $("#Block").val(),
+                Floor: $("#Floor").val(),
+                HouseName: $("#HouseName").val(),
+                Description: $("#Description").val(),
+                Area : $("#Area").val()
+
+
+            },
+            error: function () {
+                alert("error can not add house")
+                // $("#alertArea").html("Error occured!")
+            },
+            success: function (data) {
+                clearHouseList();
+                loadHouseList();
+            },
+            type: 'POST'
+        });
+    }
+    </script>

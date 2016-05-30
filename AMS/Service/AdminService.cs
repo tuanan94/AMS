@@ -35,9 +35,10 @@ namespace AMS.Service
             allHouseInfo.Delete(allHouseInfo.FindById(deleteHouse.Id));
         }
         //update House
-        public void updateHouse(String HouseName, String Description)
+        public void updateHouse(int Id, String HouseName, String Description)
         {
             House house = new House();
+            house.Id = Id;
             house.HouseName = HouseName;
             house.Description = Description;
             allHouseInfo.Update(house);

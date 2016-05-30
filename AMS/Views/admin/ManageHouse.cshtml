@@ -11,6 +11,9 @@
 
     <table class="table">
         <thead>
+            <tr>@Html.ActionLink("AddHouse","addHouse")</tr>
+            <a href="@Url.Action("addHouse", "Admin")">AddHouse test 2</a>
+
             <tr>
                 <th>ID</th>
                 <th>Block</th>
@@ -39,9 +42,14 @@
                     <td>                
                         <input id="Delete" type="button" value="Delete" onclick="deleteHouse(@house.Id)" /> 
                           
-                    </td>      
-                        
-                    <td><input id="Update" type="button" value="Update" onclick="updateHouse(@house.HouseName,@house.Description)" /> </td>
+                    </td>   
+                    @*<td>
+                        @Html.ActionLink("updateHouse","updateHouse", new { Id =house.Id})
+                    </td>*@   
+                        <td>
+                            @Html.ActionLink("Update", "updateHouse", "Admin", @house.Id)
+                        </td>
+                    @*<td><input id="Update" type="button" value="Update" onclick="updateHouse(@house.HouseName,@house.Description)" /> </td>*@
                 </tr>
             }
 
@@ -85,7 +93,7 @@
 </div>
 @*//----------------------------------------------------------------------*@
 @* Button Delete byhouse Id *@
-<div id="content">
+@*<div id="content">
     <table class="table">
         <thead>
             <tr>
@@ -100,11 +108,11 @@
         <input class="form-control" name="Id" id="Id" />
         <input type="submit" class="btn btn-success" value="Delete" id="btnsubmit" />// button delete
     }
-</div>
+</div>*@
 
 @*//-----------------------------------------------------------------------*@
 @* Button Update by House ID *@
-<div id="content">
+@*<div id="content">
     <table class="table">
         <thead>
             <tr>
@@ -119,7 +127,7 @@
         <input class="form-control" name="Id" id="Id" />
         <input type="submit" class="btn btn-success" value="Update" id="btnsubmit" />// button Update
     }
-</div>
+</div>*@
 <script>
     //-------------------------------------------------------------
     $(document).ready(function () {
@@ -153,11 +161,36 @@
         $("#housetablebody").html("");
 
     }
+    //Add House
+    function addHouse(){
+        $.ajax({
+            url: '/Admin/addHouse',
+            data: {
+                Id : $("#Id").val(),
+                Block: $("#Block").val(),
+                Floor: $("#Floor").val(),
+                HouseName: $("#HouseName").val(),
+                Description: $("#Description").val(),
+                Area : $("#Area").val()
+
+
+            },
+            error: function () {
+                alert("error can not add house")
+                // $("#alertArea").html("Error occured!")
+            },
+            success: function (data) {
+                clearHouseList();
+                loadHouseList();
+            },
+            type: 'POST'
+        });
+    }
 
     //Delete house
     function deleteHouse(Id)
     {
-        alert('deleteFunction' + Id)
+        alert('deleteFunction ' + Id)
         $.ajax({
             url: '/Admin/deleteHouse',
             type: 'POST',
@@ -176,18 +209,19 @@
     }
 
     // update House 
-    function updateHosue (HouseName, Description){
-        alert  ( 'update' + HouseName + Description)
+    function updateHouse (Id,HouseName, Description){
+        alert  ( 'update'(" HouseName ")+ HouseName + (" and Description ") + Description)
         $.ajax (
             {
                 url: '/Admin/updateHouse',
                 type: 'POST',
                 data: {
+                    Id :Id,
                     HouseName: HouseName,
                     Description : Description 
                 },
                 error: function () {
-                    alert(" Cannot update " + HouseName + Description)
+                    alert(" Cannot update " +(" HouseName ")+ HouseName + (" and Description ") + Description)
                 },
                 success: function (data) {
                     alert(data)
