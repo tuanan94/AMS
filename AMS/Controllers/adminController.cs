@@ -55,11 +55,24 @@ namespace AMS.Controllers
         }
         // delete house
         [HttpPost]
-        public ActionResult deleteHouse(int Id)
+        public String deleteHouse(int Id)
         {
             manageHouseInfo.deleteHouse(Id);
-            return RedirectToAction("ManageHouse");
+            return "success";
             //return Json("Response from delete house");
+        }
+
+        //Update House
+        [HttpPost]
+        public ActionResult updateHouse(String HouseName, String Description)
+        {
+            bool isValid = true;
+            isValid = !HouseName.Equals("");
+            if (isValid)
+            {
+                manageHouseInfo.updateHouse(HouseName, Description);
+            }
+            return RedirectToAction("ManageHouse");
         }
    }
 }

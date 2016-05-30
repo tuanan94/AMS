@@ -431,7 +431,7 @@ namespace AMS.Controllers
                                             .First()
                                             .User;
                                     row.HdReqSupporter =
-                                    user.UserProfiles.Where(uProfile => uProfile.UserId == user.Id).First().Fullname;
+                                    user.Fullname;
                                 }
                                 rows.Add(row);
                             }
@@ -652,7 +652,7 @@ namespace AMS.Controllers
                 {
                     model = new HdSuporterModel();
                     model.UserId = s.Id;
-                    model.Fullname = s.UserProfiles.First().Fullname;
+                    model.Fullname = s.Fullname;
                     listSupporter.Add(model);
                 }
                 if (hdRequest.HelpdeskRequestHelpdeskSupporters.Count != 0)

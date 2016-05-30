@@ -15,7 +15,7 @@ namespace AMS.Service
         {
             return allHouseInfo.List.ToList();
         }
-
+        //add House
         public void addHouse(String Block, String Floor, String HouseName, String Description, float Area)
         {
             House house = new House();
@@ -27,11 +27,20 @@ namespace AMS.Service
 
             allHouseInfo.Add(house);    //Add to house object
         }
+        //delete House  
         public void deleteHouse(int Id)
         {
             House deleteHouse = new House();
             deleteHouse.Id = Id;
             allHouseInfo.Delete(allHouseInfo.FindById(deleteHouse.Id));
+        }
+        //update House
+        public void updateHouse(String HouseName, String Description)
+        {
+            House house = new House();
+            house.HouseName = HouseName;
+            house.Description = Description;
+            allHouseInfo.Update(house);
         }
     }
 

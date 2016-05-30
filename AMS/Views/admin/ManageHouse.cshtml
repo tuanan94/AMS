@@ -1,10 +1,11 @@
 ﻿
 @{
     ViewBag.Title = "View House Info";
- 
+
 
     List<House> allHouseInfo = ViewBag.allHouseInfo;
 }
+@*// table show house's info full-----------------------------------------*@
 <div id="content">
 
 
@@ -17,7 +18,7 @@
                 <th>House Name</th>
                 <th>Description</th>
                 <th>Area</th>
-                @*<th>Delete</th>*@
+            
 
             </tr>
         </thead>
@@ -25,20 +26,30 @@
         @{
             foreach (House house in allHouseInfo)
             {
+
                 <tr>
+                    
                     <td>@house.Id</td>
                     <td>@house.Block</td>
                     <td>@house.Floor</td>
                     <td>@house.HouseName</td>
                     <td>@house.Description</td>
                     <td>@house.Area</td>
-                    @*<td>@Html.ActionLink("DELETE", "deleteHouse", "Admin") </td>*@
+                    
+                    <td>                
+                        <input id="Delete" type="button" value="Delete" onclick="deleteHouse(@house.Id)" /> 
+                          
+                    </td>      
+                        
+                    <td><input id="Update" type="button" value="Update" onclick="updateHouse(@house.HouseName,@house.Description)" /> </td>
                 </tr>
             }
 
         }
     </table>
 </div>
+ 
+@*// add house --------------------------------------------*@
 @{
     List<House> allHouse = ViewBag.allHouse;
 }
@@ -67,11 +78,12 @@
         <input class="form-control" name="Area" id="Area" />
         <input type="reset" class="btn btn-default" value="Reset" />
         <input type="submit" class="btn btn-success" value="Thêm nhà vào hệ thống" id="btnsubmit" />
-        <input class="btn btn-success" onclick="addHouseByAjax()" value="Them nha bang Ajax" />
+        // <input class="btn btn-success" onclick="addHouseByAjax()" value="Them nha bang Ajax" />
     }
 
 
 </div>
+@*//----------------------------------------------------------------------*@
 @* Button Delete byhouse Id *@
 <div id="content">
     <table class="table">
@@ -90,6 +102,7 @@
     }
 </div>
 
+@*//-----------------------------------------------------------------------*@
 @* Button Update by House ID *@
 <div id="content">
     <table class="table">
@@ -108,10 +121,13 @@
     }
 </div>
 <script>
+    //-------------------------------------------------------------
     $(document).ready(function () {
         console.log("document loaded");
         loadHouseList();
     });
+   
+    // load house's list ------------------------------------------
     function loadHouseList() {
         clearHouseList();
         $.ajax({
@@ -132,11 +148,57 @@
             type: 'GET'
         });
     }
+    // clear house list show by talbe by reset button----------------------------
     function clearHouseList() {
         $("#housetablebody").html("");
 
     }
 
+    //Delete house
+    function deleteHouse(Id)
+    {
+        alert('deleteFunction' + Id)
+        $.ajax({
+            url: '/Admin/deleteHouse',
+            type: 'POST',
+            data: {
+                Id: Id
+            },
+            error: function () {
+                alert(" Cannot delete " + Id)
+            },
+            success: function (data) {
+                alert(data)
+                clearHouseList();
+                loadHouseList();
+            }
+        });
+    }
+
+    // update House 
+    function updateHosue (HouseName, Description){
+        alert  ( 'update' + HouseName + Description)
+        $.ajax (
+            {
+                url: '/Admin/updateHouse',
+                type: 'POST',
+                data: {
+                    HouseName: HouseName,
+                    Description : Description 
+                },
+                error: function () {
+                    alert(" Cannot update " + HouseName + Description)
+                },
+                success: function (data) {
+                    alert(data)
+                    clearHouseList();
+                    loadHouseList();
+                }
+
+            })
+    }
+
+    // add house by ajax---------------------------------------------------------
     function addHouseByAjax() {
         $.ajax({
             url: '/Admin/addHouseAjax',
