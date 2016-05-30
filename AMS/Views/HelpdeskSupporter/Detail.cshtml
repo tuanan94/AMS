@@ -45,20 +45,19 @@
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-3 control-label">Trạng thái</label>
                         <div class="col-sm-9">
-                            <div class="col-sm-9">
-                                @{
-                                    string message = null;
-                                    if (hr.Status == (int)StatusEnumNew.Open)
-                                    {
-                                        message = "Mở";
-                                    }
-                                    else if (hr.Status == (int)StatusEnumNew.Processing)
-                                    {
-                                        message = "Đang xử lý";
-                                    }
+                            @{
+                                string message = null;
+                                if (hr.Status == (int)StatusEnumNew.Open)
+                                {
+                                    message = "Mở";
                                 }
-                                <input type="email" readonly="readonly" class="form-control" id="status" value="@message">
-                            </div>
+                                else if (hr.Status == (int)StatusEnumNew.Processing)
+                                {
+                                    message = "Đang xử lý";
+                                }
+                            }
+                            <input type="email" readonly="readonly" class="form-control" id="status" value="@message">
+                            
                         </div>
                     </div>
                     <div class="form-group">
@@ -73,13 +72,17 @@
                             <input type="email" readonly="readonly" class="form-control" id="serviceName" value="@hr.HelpdeskServiceName">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <input hidden="hidden" id="hiddenId" />
-                        @*<a href="HelpdeskSupporter/Index" class="btn btn-danger" >Trở Về</a>*@
-                        <a href="HelpdeskSupporter/Detail?id=@hr.Id&status=3" class="btn btn-primary">Xong</a>
-                    </div>
+                </div>
+                <input type="hidden" name="hiddenId" value="@hr.Id" />
+                <input type="hidden" name="hiddenStatus" value="3" />
+                <input type="hidden" name="hiddenStatusFrom" value="@hr.Status" />
+                <input type="hidden" name="hiddenHelpdeskSupporterId" value="@hr.HelpdeskSupporterId" />
+                <div class="form-group">
+                    <a href="~/HelpdeskSupporter/Index" class="btn btn-danger">Trở Về</a>
+                    <button type="submit" class="btn btn-primary">Hoàn Thành!</button>
                 </div>
             </form>
+            
         </div>
     </div>
 </div>

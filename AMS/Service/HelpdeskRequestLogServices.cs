@@ -24,5 +24,11 @@ namespace AMS.Service
         {
             return logRepository.List.Where(l => l.HelpdeskRequestId == id).OrderBy(l => l.CreateDate).ToList();
         }
+
+        //GiangLVT - Log history: who did made change
+        public List<HelpdeskRequestLog> GetHelpdeskRequestLogByUser(int userId)
+        {
+            return logRepository.List.Where(l => l.ChangeFromUserId == userId).OrderBy(l => l.CreateDate).ToList();
+        }
     }
 }

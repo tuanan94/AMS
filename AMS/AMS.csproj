@@ -527,13 +527,13 @@
     <Content Include="Views\Home\TimeLine.cshtml" />
     <Content Include="Views\HelpdeskSupporter\Index.cshtml" />
     <Content Include="Views\HelpdeskSupporter\__HelpdeskSupporterLayout.cshtml" />
-    <Content Include="Views\HelpdeskSupporter\TestDataTables.cshtml" />
     <Content Include="Views\HelpdeskSupporter\Detail.cshtml" />
     <Content Include="Views\Home\_helpdeskRequestDetail.cshtml" />
     <Content Include="Views\Home\CommentView.cshtml" />
     <Content Include="Views\Admin\ManageHouse.cshtml" />
     <Content Include="Views\Admin\addHouse.cshtml" />
     <Content Include="Views\Admin\deleteHouse.cshtml" />
+    <Content Include="Views\HelpdeskSupporter\History.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

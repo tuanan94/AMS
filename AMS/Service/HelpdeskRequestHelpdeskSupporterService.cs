@@ -19,5 +19,11 @@ namespace AMS.Service
                    s.HelpdeskRequest.HelpdeskRequestHelpdeskSupporters.OrderByDescending(ee => ee.CreateDate).First().HelpdeskSupporterId == helpdeskSupporterId
                    ).ToList();
         }
+
+        public List<HelpdeskRequestHelpdeskSupporter> GetHelpdeskRequestById(int helpdeskSupporterId)
+        {
+            return _repository.List.Where(
+               s => s.HelpdeskSupporterId == helpdeskSupporterId).OrderByDescending(ee => ee.CreateDate).ToList();
+        }
     }
 }

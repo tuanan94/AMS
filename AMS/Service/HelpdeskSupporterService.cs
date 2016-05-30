@@ -42,21 +42,17 @@ namespace AMS.Service
         public bool UpdateStatus(int currId, int status)
         {
             HelpdeskRequest currRequest = GetHelpdeskRequest(currId);
-            if (status != null)
+            currRequest.Status = status;
+            try
             {
-                currRequest.Status = status;
-                try
-                {
-                    _helpdeskSupporterRepository.Update(currRequest);
-                    return true;
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    return false;
-                }
+                _helpdeskSupporterRepository.Update(currRequest);
+                return true;
             }
-            return false;
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
         }
     }
 }
