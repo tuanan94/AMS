@@ -39,4 +39,10 @@ namespace AMS.Models
         public string Area { get; set; }
 
     }
+
+   public class HouseModel
+    {
+        public List<string> BlockName { get; set; }
+        public List<string> HouseName { get; set; }
+    }
 }

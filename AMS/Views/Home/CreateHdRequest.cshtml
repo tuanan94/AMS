@@ -21,13 +21,10 @@
         <div class="collapse navbar-collapse" id="subnav">
             <ul class="nav navbar-nav">
                 <li class="active">
-                    <a href="../Create/@userId"><i class="fa fa-fw icon-ship-wheel"></i> Tạo yêu cầu hổ trợ</a>
+                    <a href="/Home/HelpdeskRequest/Create/@userId"><i class="fa fa-send"></i> Tạo yêu cầu hổ trợ</a>
                 </li>
                 <li>
-                    <a href="../ViewHistory/@userId"><i class="fa fa-fw icon-ship-wheel"></i> Lịch sử</a>
-                </li>
-                <li>
-                    <a href="./AdminView"><i class="fa fa-fw icon-ship-wheel"></i> Trang dành cho quản lý</a>
+                    <a href="/Home/HelpdeskRequest/ViewHistory/@userId"><i class="fa fa-history"></i> Quản lý yêu cầu</a>
                 </li>
             </ul>
         </div>
@@ -42,7 +39,7 @@
             <i class="fa fa-bookmark"></i> Tạo yêu cầu hổ trợ
         </div>
 
-        @*        <div class="panel-heading panel-heading-gray">Bảng yêu cầu dịch vụ Hỗ trợ</div>*@
+        @*        <div class="panel-heading panel-heading-gray">Bảng yêu cầu dịch vụ Hổ trợ</div>*@
         <div class="panel-body">
             <form class="form-horizontal" id="createHdService" role="form">
                 <div class="alert alert-info hide" id="createHdSrvSuccessNoti" @*style="display: none"*@>
@@ -121,8 +118,13 @@
                         </div>
                     </div>
                 </div>
-               
             </form>
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function(){
+        $("#slide-left").children().removeClass("active");
+        $($("#slide-left li")[4]).addClass("active");
+    });
+</script>

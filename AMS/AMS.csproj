@@ -215,6 +215,7 @@
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ManagementController.cs" />
+    <Compile Include="Controllers\ManageReceiptController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Constant\StatusEnum.cs" />
@@ -241,6 +242,9 @@
     <Compile Include="House.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Image.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Model1.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -262,6 +266,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MessageViewModels.cs" />
+    <Compile Include="Models\ReceiptViewModels.cs" />
     <Compile Include="Post.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -293,7 +298,10 @@
     <Compile Include="Service\HelpdeskRequestLogServices.cs" />
     <Compile Include="Service\HelpdeskServiceCatService.cs" />
     <Compile Include="Service\HelpdeskRequestServices.cs" />
+    <Compile Include="Service\HouseServices.cs" />
     <Compile Include="Service\PostService.cs" />
+    <Compile Include="Service\ReceiptServices.cs" />
+    <Compile Include="Service\ServiceChargeSevices.cs" />
     <Compile Include="Service\UserInHouseService.cs" />
     <Compile Include="Service\HelpdeskSupporterService.cs" />
     <Compile Include="Service\IHelpdeskSupporterService.cs" />
@@ -507,7 +515,7 @@
     <Content Include="Views\Management\__ManagementLayout.cshtml" />
     <Content Include="Views\Management\AdminBoard.cshtml" />
     <Content Include="Views\Management\ManageHousehold.cshtml" />
-    <Content Include="Views\Management\ManageRequest.cshtml" />
+    <Content Include="Views\Management\ManageHelpdeskService.cshtml" />
     <Content Include="Views\Management\ManageIncome.cshtml" />
     <Content Include="Views\Management\ManageReceipt.cshtml" />
     <Content Include="Views\Management\ViewReceipt.cshtml" />
@@ -516,9 +524,7 @@
     <Content Include="Views\Management\ManageSurvey.cshtml" />
     <Content Include="Views\Home\Test.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
-    <Content Include="Views\Management\HelpdeskServiceTabPartial.cshtml" />
     <Content Include="Views\Management\_helpdeskSeviceTablePartial.cshtml" />
-    <Content Include="Views\Management\_helpdeskServiceCategoryPartial.cshtml" />
     <Content Include="Views\Management\_helpdeskServiceCategoryTablePartial.cshtml" />
     <Content Include="Views\Home\CreateHdRequest.cshtml" />
     <Content Include="Views\Home\ViewRequestingHdRequestsOfManager.cshtml" />
@@ -533,11 +539,14 @@
     <Content Include="Views\Admin\ManageHouse.cshtml" />
     <Content Include="Views\Admin\addHouse.cshtml" />
     <Content Include="Views\Admin\deleteHouse.cshtml" />
+    <Content Include="Views\Management\ResidentApprovement.cshtml" />
+    <Content Include="Views\Management\ManageHelpdeskServiceCategory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="images\Post\Binh\" />
     <Folder Include="Views\Image\" />
+    <Folder Include="Views\ManageReceipt\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controllers\fonts\glyphicons-halflings-regular.woff" />

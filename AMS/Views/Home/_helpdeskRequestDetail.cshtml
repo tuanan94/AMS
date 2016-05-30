@@ -3,10 +3,6 @@
 @using AMS.Constant
 @using AMS.Enum
 @{
-    ViewBag.Title = "ManageMember";
-    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
-}
-@{
     HelpdeskRequest hd = null;
     List<HelpdeskRequestLog>
     helpdeskRequestLogs = null;
@@ -24,6 +20,18 @@
         helpdeskRequestLogs = ViewBag.helpdeskRequestLogs;
     }
 }
+@{
+    ViewBag.Title = "ManageMember";
+    if (roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT)
+    {
+        Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Management/__ManagementLayout.cshtml";
+    }
+}
+
 
 <nav class="navbar navbar-subnav navbar-static-top" role="navigation">
     <div class="container-fluid">
@@ -39,15 +47,25 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="subnav">
             <ul class="nav navbar-nav">
-                <li>
-                    <a href="./Create/@userId"><i class="fa fa-fw icon-ship-wheel"></i> Tạo yêu cầu hổ trợ</a>
-                </li>
+                @{
+                    if (roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT)
+                    {
+                        <li>
+                            <a href="/Home/HelpdeskRequest/Create/@userId"><i class="icon-plus-sign-alt"></i> Tạo yêu cầu hổ trợ</a>
+                        </li>
+                    }
+                }
                 <li class="active">
-                    <a href="./ViewHistory/@userId"><i class="fa fa-fw icon-ship-wheel"></i> Lịch sử</a>
+                    <a href="/Home/HelpdeskRequest/ViewHistory/@userId"><i class="fa icon-headphones"></i> Quản lý yêu cầu</a>
                 </li>
-                <li>
-                    <a href="./AdminView"><i class="fa fa-fw icon-ship-wheel"></i> Admin Page</a>
-                </li>
+                @{
+                    if (roleId == SLIM_CONFIG.USER_ROLE_MANAGER)
+                    {
+                        <li>
+                            <a href="/Management/ResidentApprovement/@userId"><i class="fa fa-group"></i> Quản lý xác nhận dân cư</a>
+                        </li>
+                    }
+                }
             </ul>
 
         </div>
@@ -69,14 +87,14 @@
             <i class="fa fa-bookmark"></i> Thông tin chi tiết yêu cầu hổ trợ
         </div>
         <div class="panel-body">
-            <div class="form-horizontal" id="searchHdSrv" role="form" onkeypress="return event.keyCode !== 13;">
+            <div class="form-horizontal" id="searchHdSrv" role="form">
                 <div class="form-group" style="padding-left: 0">
                     <div class="form-group">
                         <div class="col-md-1"></div>
                         @{
                             if (hd.Status == (int)StatusEnum.Open && roleId == SLIM_CONFIG.USER_ROLE_MANAGER)
                             {
-                                <span class="btn btn-info" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Processing), @userId)">Bắt đầu công việc</span>
+@*                                <span class="btn btn-info" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Processing), @userId)">Bắt đầu công việc</span>*@
                             }
                             else if (hd.Status == (int)StatusEnum.Processing && (roleId == SLIM_CONFIG.USER_ROLE_SUPPORTER || roleId == SLIM_CONFIG.USER_ROLE_MANAGER) && hd.HelpdeskRequestHelpdeskSupporters.Count != 0)
                             {
@@ -96,8 +114,8 @@
                             }
                             if ((hd.Status == (int)StatusEnum.Open || hd.Status == (int)StatusEnum.Processing) && roleId == (int)SLIM_CONFIG.USER_ROLE_MANAGER)
                             {
-                                <span id="btnDuedate" class="btn btn-white" data-id="@hd.Id" data-userid="@userId"
-                                      data-toggle="modal" data-target="#setDuedateModal"><i class="fa fa-clock-o" aria-hidden="true"></i>Cài đặt ngày hoàn thành</span>
+                                <span id="btnDuedate" class="btn btn-default" data-id="@hd.Id" data-userid="@userId"
+                                      data-toggle="modal" data-target="#setDuedateModal"><i class="fa fa-clock-o" aria-hidden="true"></i> Cài đặt ngày hoàn thành</span>
                                     <span id="assignHdReqBtn" data-id="@hd.Id" data-fromuser="@userId" class="btn btn-default" onclick="openModalAssignHdReq(@hd.Id)">
                                         <i class="fa fa-tasks" aria-hidden="true"></i> Giao việc
                                     </span>
@@ -106,7 +124,7 @@
                         @*                        <span class="btn btn-default" data-toggle="modal" data-target="#assignTaskModal" data-placement="center">Chia việc</span>*@
                     </div>
                     <div class="form-group">
-                        <div class="col-md-6">
+                        <div class="col-md-offset-1 col-md-5">
                             <fieldset class="scheduler-border less-padding border-top">
                                 <legend class="scheduler-border bold-black">Chi tiết</legend>
                                 <div class="form-group">
@@ -200,9 +218,7 @@
                                 </div>
                             </fieldset>
                         </div>
-                        <div class="col-md-6">
-
-
+                        <div class="col-md-5">
                             <fieldset class="scheduler-border less-padding border-top" style="margin-bottom: 0px !important">
                                 <legend class="scheduler-border bold-black">Người được giao</legend>
                                 <div class="form-group">
@@ -314,6 +330,12 @@
                                                                     Chuyển việc cho: [ @log.User.Fullname ]
                                                                 </td>
                                                             }
+                                                            else if (log.StatusFrom == (int)StatusEnum.Open && log.StatusFrom == (int)StatusEnum.Processing)
+                                                            {
+                                                                <td>
+                                                                    Việc được giao cho: [ @log.User.Fullname ]
+                                                                </td>
+                                                            }
                                                             else
                                                             {
                                                                 <td></td>
@@ -326,7 +348,7 @@
                                                             }
                                                             else if (log.StatusFrom == (int)StatusEnum.Open)
                                                             {
-                                                                <td><span class="label processing">Đang xử lý</span></td>
+                                                                <td><span class="label label-info">Chưa giải quyết</span></td>
                                                             }
                                                             else if (log.StatusFrom == (int)StatusEnum.Processing)
                                                             {

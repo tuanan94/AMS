@@ -109,4 +109,26 @@ namespace AMS.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
     }
+
+    public class UnapprovedResident
+    {
+        public int UserId { get; set; }
+        public string FullName { get; set; }
+        public int HouseId { get; set; }
+        public string HouseName { get; set; }
+        public string HouseHolderName { get; set; }
+        public string CreateDate { get; set; }
+    }
+
+    public class UnapprovedResidentDetail
+    {
+        public int UserId { get; set; }
+        public string FullName { get; set; }
+        public int HouseId { get; set; }
+        public string HouseName { get; set; }
+        public string HouseHolderName { get; set; }
+        public string CreateDate { get; set; }
+        public string Id { get; set; }
+        public int Gender { get; set; }
+    }
 }

@@ -1,5 +1,5 @@
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using AMS.Models;
 using AMS.Service;
+using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -17,7 +18,13 @@ namespace AMS.Controllers
     {
         HelpdeskServicesService _helpdeskServicesService = new HelpdeskServicesService();
         HelpdeskServiceCatService _helpdeskServiceCatService = new HelpdeskServiceCatService();
-        //
+        UserServices _userServices = new UserServices();
+        HouseServices _houseServices = new HouseServices();
+        ReceiptServices _receiptServices = new ReceiptServices();
+        ReceiptDetailServices _receiptDetailServices = new ReceiptDetailServices();
+        ServiceChargeSevices _serviceChargeSevices = new ServiceChargeSevices();
+        readonly string parternTime = "dd-MM-yyyy HH:mm";
+
         // GET: /Management/
         public ActionResult AdminBoard()
         {
@@ -28,23 +35,15 @@ namespace AMS.Controllers
             return View();
         }
 
+        
+
         public ActionResult ManageRequest()
         {
             String action = this.Request.QueryString["action"];
             if (null != action)
             {
                 String url = "";
-                if (action.Equals("helpdeskServiceManage"))
-                {
-                    url = "HelpdeskServiceTabPartial";
-                    ViewBag.helpdeskServices = _helpdeskServicesService.GetHelpdeskServices();
-                }
-                else if (action.Equals("hdSrvCategoryManage"))
-                {
-                    url = "_helpdeskServiceCategoryPartial";
-                    ViewBag.helpdeskServiceCategories = _helpdeskServiceCatService.GetAll();
-                }
-                else if (action.Equals("loadHdSrvCat"))
+                if (action.Equals("loadHdSrvCat"))
                 {
                     // Start load all service category
                     List<HelpdeskServiceCategory> hdSrvCategories = _helpdeskServiceCatService.GetAll();
@@ -102,7 +101,6 @@ namespace AMS.Controllers
                                 hdSrvCat.Name = hdSrvCategories[i].Name;
                                 hdSrvCats.Add(hdSrvCat);
                             }
-                            HelpdeskSerivceCatListModel hdSrvCatListModel = new HelpdeskSerivceCatListModel(hdSrvCats);
                             // Start load all service category
 
                             hdServiceModel.HdSrvCategories = hdSrvCats;
@@ -145,12 +143,7 @@ namespace AMS.Controllers
                     hdService.Description = desc;
                     _helpdeskServicesService.Add(hdService);
 
-                    List<String> listError = new List<string>();
                     MessageViewModels response = new MessageViewModels();
-                    //                    var message = new List<object>();
-                    //                    message.Add(new { txt_error = "MSG" });
-                    //                    message.Add(new { txt_error_2 = "MSG" });
-                    //                    response.Data = message;
 
                     return Json(response);
                 }
@@ -178,12 +171,6 @@ namespace AMS.Controllers
                             hdService.Description = desc;
                             _helpdeskServicesService.Update(hdService);
 
-                            //                            List<String> listError = new List<string>();
-                            //                            MessageViewModels response = new MessageViewModels();
-                            //                            var message = new List<object>();
-                            //                            message.Add(new {txt_error = "MSG"});
-                            //                            message.Add(new {txt_error_2 = "MSG"});
-                            //                            response.Data = message;
                         }
                         else
                         {
@@ -399,7 +386,7 @@ namespace AMS.Controllers
                         List<HelpdeskService> hdSrvsList = _helpdeskServicesService.FindByCategoryAndEnable(id);
                         List<HelpdeskServiceModel> hdServiceModels = new List<HelpdeskServiceModel>();
 
-                        
+
                         if (hdSrvsList != null && hdSrvsList.Count != 0)
                         {
                             HelpdeskServiceModel model = null;
@@ -429,16 +416,31 @@ namespace AMS.Controllers
                         response.Msg = "Lỗi cập nhật nhóm dịch vụ hổ trợ.";
                         return Json(response);
                     }
-
-
                 }
                 return PartialView(url);
             }
-            else
-            {
-                return View();
-            }
+            ViewBag.helpdeskServices = _helpdeskServicesService.GetHelpdeskServices();
+            return View("ManageHelpdeskService");
         }
+
+        [HttpGet]
+        [Route("Management/ManageRequestView/{userId}")]
+        public ActionResult ManageRequestView(int userId)
+        {
+            ViewBag.helpdeskServices = _helpdeskServicesService.GetHelpdeskServices();
+            ViewBag.userId = userId;
+            return View("ManageHelpdeskService");
+        }
+
+        [HttpGet]
+        [Route("Management/ViewHelpdeskServiceCategory/{userId}")]
+        public ActionResult ViewHelpdeskServiceCategory(int userId)
+        {
+            ViewBag.helpdeskServiceCategories = _helpdeskServiceCatService.GetAll();
+            ViewBag.userId = userId;
+            return View("ManageHelpdeskServiceCategory");
+        }
+
         public ActionResult ManageIncome()
         {
             return View();
@@ -451,10 +453,216 @@ namespace AMS.Controllers
         {
             return View();
         }
-        public ActionResult ManageReceipt()
+
+
+        [HttpGet]
+        [Route("Management/ManageReceipt/{userId}")]
+        public ActionResult ManageReceipt(int userId)
         {
+            List<House> block = _houseServices.GetAllBlock();
+            if (block != null && block.Count != 0)
+            {
+                List<House> floor = _houseServices.GetFloorInBlock(block[0].Block);
+                List<House> rooms = _houseServices.GetRoomsInFloor(block[0].Block, floor[0].Floor);
+                ViewBag.block = block;
+                ViewBag.firstBlockFloor = floor;
+                ViewBag.rooms = rooms;
+            }
+            ViewBag.userId = userId;
             return View();
         }
+
+        [HttpPost]
+        [Route("Management/ManageReceipt/AddNewReceipt")]
+        public ActionResult AddNewReceipt(ReceiptModel receipt)
+        {
+            MessageViewModels response = new MessageViewModels();
+            User u = _userServices.FindById(receipt.Creator);
+            if (null != u)
+            {
+                House house = _houseServices.FindByHouseName(receipt.ReceiptHouseName);
+                if (null != house)
+                {
+                    try
+                    {
+                        Receipt eReceipt = new Receipt();
+                        eReceipt.HouseId = house.Id;
+                        eReceipt.CreateDate = DateTime.Now;
+                        eReceipt.LastModified = DateTime.Now;
+                        eReceipt.ManagerId = u.Id;
+                        eReceipt.Description = receipt.ReceiptDesc;
+                        eReceipt.Title = receipt.ReceiptTitle;
+                        _receiptServices.Add(eReceipt);
+
+                        ServiceFee item = null;
+                        ReceiptDetail detail = null;
+                        foreach (var i in receipt.ListItem)
+                        {
+                            item = new ServiceFee();
+                            item.Name = i.Name;
+                            item.Price = i.UnitPrice;
+                            item.CreateDate = DateTime.Now;
+                            _serviceChargeSevices.Add(item);
+
+                            detail = new ReceiptDetail();
+                            detail.Quantity = i.Quantity;
+                            detail.ReceiptId = eReceipt.Id;
+                            detail.ServiceFeeId = item.Id;
+                            detail.UnitPrice = item.Price;
+                            _receiptDetailServices.Add(detail);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        response.Msg = "Tạo hóa đơn thất bại";
+                        response.StatusCode = -1;
+                        return Json(response);
+                    }
+                }
+            }
+            else
+            {
+                response.Msg = "Không tìm thấy người quản lý";
+                response.StatusCode = -1;
+            }
+            return Json(response);
+        }
+
+        [HttpGet]
+        [Route("Management/ManageReceipt/GetRoomAndFloor")]
+        public ActionResult GetRoomAndFloor(string blockName, string floorName)
+        {
+            MessageViewModels response = new MessageViewModels();
+            List<House> floor = _houseServices.GetFloorInBlock(blockName);
+            List<string> floorStr = new List<string>();
+            List<string> roomStr = new List<string>();
+
+            if (floor != null && floor.Count > 0)
+            {
+                foreach (var f in floor)
+                {
+                    floorStr.Add(f.Floor);
+                }
+
+                List<House> rooms = null;
+                if (floorName.IsNullOrWhiteSpace())
+                {
+                    rooms = _houseServices.GetRoomsInFloor(blockName, floor[0].Floor);
+                }
+                else
+                {
+                    rooms = _houseServices.GetRoomsInFloor(blockName, floorName);
+                }
+
+                if (rooms != null && rooms.Count > 0)
+                {
+                    foreach (var room in rooms)
+                    {
+                        roomStr.Add(room.HouseName);
+                    }
+                }
+                response.Data = new { Floor = floorStr, Room = roomStr };
+            }
+            else
+            {
+                response.Data = new { Floor = floorStr, Room = roomStr };
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpGet]
+        [Route("Management/ResidentApprovement/{userId}")]
+        public ActionResult ViewResidentApprovement(int userId)
+        {
+            ViewBag.userId = userId;
+            return View("ResidentApprovement");
+        }
+
+        [HttpGet]
+        [Route("Management/ResidentApprovement/GetResidentApprovementList")]
+        public ActionResult GetResidentApprovementList(int userId)
+        {
+            List<User> listUser = _userServices.GetAllUnapproveUsers();
+            List<UnapprovedResident> unapprovedResident = new List<UnapprovedResident>();
+            UnapprovedResident uResdident = null;
+            foreach (var u in listUser)
+            {
+                uResdident = new UnapprovedResident();
+                uResdident.UserId = u.Id;
+                uResdident.FullName = u.Fullname;
+                uResdident.HouseId = u.HouseId.Value;
+                uResdident.HouseName = u.House.HouseName;
+                uResdident.HouseHolderName = u.House.Users.First().Fullname;
+                uResdident.CreateDate = u.CreateDate.Value.ToString(parternTime);
+                unapprovedResident.Add(uResdident);
+            }
+            return Json(unapprovedResident, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        [Route("Management/ResidentApprovement/GetResidentInfo")]
+        public ActionResult GetResidentInfo(int userId)
+        {
+            User res = _userServices.FindById(userId);
+            MessageViewModels response = new MessageViewModels();
+            if (res != null)
+            {
+                UnapprovedResidentDetail resdident = new UnapprovedResidentDetail();
+                resdident.UserId = res.Id;
+                resdident.FullName = res.Fullname;
+                resdident.HouseId = res.HouseId.Value;
+                resdident.HouseName = res.House.HouseName;
+                resdident.HouseHolderName = res.House.Users.First().Fullname;
+                resdident.CreateDate = res.CreateDate.Value.ToString(parternTime);
+                response.Data = resdident;
+            }
+            else
+            {
+                response.Msg = "Không tìm thấy cư dân!";
+                response.StatusCode = -1;
+            }
+
+
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [Route("Management/ResidentApprovement/AcceptResidentApprovement")]
+        public ActionResult AcceptResidentApprovement(int resId, int fromUserId, int mode)
+        {
+            User res = _userServices.FindById(resId);
+            User fromUser = _userServices.FindById(fromUserId);
+            MessageViewModels response = new MessageViewModels();
+            if (res != null && fromUser != null && fromUser.RoleId == SLIM_CONFIG.USER_ROLE_MANAGER)
+            {
+                bool isUpdated = true;
+                if (mode == SLIM_CONFIG.USER_APPROVE_YES)
+                {
+                    res.IsApproved = SLIM_CONFIG.USER_APPROVE_YES;
+                }
+                else if (mode == SLIM_CONFIG.USER_APPROVE_REJECT)
+                {
+                    res.IsApproved = SLIM_CONFIG.USER_APPROVE_REJECT;
+                }
+                else
+                {
+                    isUpdated = false;
+                }
+                if (isUpdated)
+                {
+                    res.LastModified = DateTime.Now;
+                    _userServices.Update(res);
+                }
+            }
+            else
+            {
+                response.Msg = "Không tìm thấy cư dân hoặc người quản lý!";
+                response.StatusCode = -1;
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult ViewReceipt()
         {
             return View();
@@ -464,5 +672,6 @@ namespace AMS.Controllers
             return View();
         }
     }
+
 
 }
