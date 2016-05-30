@@ -23,6 +23,15 @@ namespace AMS.Service
             return questionRepository.List.Where(t=>t.SurveyId==id).ToList();
         }
 
+        public void DeleteQuestionBySurvetId(int id)
+        {
+            List<Question> obj = questionRepository.List.Where(t => t.SurveyId == id).ToList();
+            foreach (var item in obj)
+            {
+                questionRepository.Delete(item);
+            }
+          
+        }
         public void AddQuestion(Question obj)
         {
             questionRepository.Add(obj);

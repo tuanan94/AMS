@@ -18,11 +18,19 @@ namespace AMS.Service
         {
             return answerRepository.FindById(id);
         }
-        public List<Answer> FindByAnswerId(int id)
+        public List<Answer> FindByQuestionId(int id)
         {
             return answerRepository.List.Where(t => t.QuestionId == id).ToList();
         }
+        public void DeleteAnswerByQuestionId(int id)
+        {
+            List<Answer> obj = answerRepository.List.Where(t => t.QuestionId == id).ToList();
+            foreach (var item in obj)
+            {
+                answerRepository.Delete(item);
+            }
 
+        }
         public void AddAnswer(Answer obj)
         {
             answerRepository.Add(obj);

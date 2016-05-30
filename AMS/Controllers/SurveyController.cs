@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,18 +11,49 @@ namespace AMS.Controllers
 {
     public class SurveyController : Controller
     {
+        SurveyService surveyService = new SurveyService();
+        QuestionService questionService = new QuestionService();
+        AnswerService answerService = new AnswerService();
         //
         // GET: /Survey/
         public ActionResult Survey()
         {
+
+            List<Survey> listSurveys = surveyService.GetListSurveys();
+            //   int a = listCount.Count;
+            ViewBag.ListSurvey = listSurveys;
             return View();
         }
-        [HttpPost]
-        public ActionResult Surveys(SurveyViewModel model)
+       
+        public ActionResult DeleteSurvey(int surveyId)
         {
-            QuestionService questionService = new QuestionService();
-            AnswerService answerService = new AnswerService();
-            SurveyService surveyService = new SurveyService();
+            Survey obj = surveyService.FindById(surveyId);
+            List<Question> questions = questionService.FindBySurveyId(obj.Id);
+            foreach (var itemQuestion in questions)
+            {
+                List<Answer> answers = answerService.FindByQuestionId(itemQuestion.Id);
+                foreach (var itemAnswer in answers)
+                {
+                    answerService.DeleteAnswerByQuestionId(itemAnswer.Id);
+                }
+                questionService.DeleteQuestionBySurvetId(itemQuestion.Id);
+            }
+          surveyService.DeleteSurvey(obj);
+
+            return RedirectToAction("Survey");
+        }
+
+        public ActionResult DetailSurvey(int surveyId)
+        {
+            
+
+            return RedirectToAction("Survey");
+        }
+        [HttpPost]
+        public ActionResult AddSurvey()
+        {
+           
+           
             string[] listQuestion = Request.Form.GetValues("question");
             string[] listAnwser = Request.Form.GetValues("anwser1");
             string[] listCountAnwser = Request.Form.GetValues("count");
@@ -86,10 +118,8 @@ namespace AMS.Controllers
 
               
             }
-           
-         //   int a = listCount.Count;
 
-            return View("Survey");
+            return RedirectToAction("Survey");
         }
     }
 }

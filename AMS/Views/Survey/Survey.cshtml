@@ -1,53 +1,202 @@
 ﻿@{
     ViewBag.Title = "Survey";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
+    List<Survey> listSurveys = ViewBag.ListSurvey;
 }
+
 <script src="~/Scripts/jquery-1.10.2.js"></script>
 <div class="col-md-12">
     <div class="panel panel-default">
         <div class="panel-heading panel-heading-gray">Tao khao sat</div>
         <div class="panel-body">
-            @using (Html.BeginForm("Surveys", "Survey", FormMethod.Post))
-            {
+            <ul class="nav nav-tabs" role="tablist" id="rowTab">
+                <li class="active">
+                    <a href="#thismonth" role="tab" data-toggle="tab"><i class="fa-pencil-square-o"></i> Tạo survey</a>
+                </li>
 
-                <table border="0">
-                    <tr>
-                        <td>
-                            <button class="btn-primary" id="add">Thêm Câu Hỏi</button>
-                            <button class="btn-primary" id="addAnwser">Thêm Câu Trả Lời</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="width: 200px;" align="right">
-                            Câu hỏi 1
+                <li class="">
+                    <a href="#graph" role="tab" data-toggle="tab"><i class="fa-list"></i> Xem tất cả survey</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="thismonth">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <form class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label for="username" class="col-sm-3 control-label">Tiêu đề</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" disabled="disabled" class="form-control" id="Title">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Ngày đóng</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" id="CloseDate" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    @using (Html.BeginForm("AddSurvey", "Survey", FormMethod.Post))
+                                    {
+                                        <table border="0" class="table v-middle">
+                                            <thead>
+                                                <tr>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-9">
+                                                                <button class="btn-primary" id="add">Thêm Câu Hỏi</button>
 
-                        </td>
-                        <td>
-                            <input type="text" id="question" name="question" value=""/>
-                        </td>
-                    </tr>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-9">
 
-                    <tr style="background-color: #383838">
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><button class="btn-primarys" id="">Tạo survey</button></td>
-                    </tr>
+                                                                <button class="btn-primary" id="addAnwser">Thêm Câu Trả Lời</button>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-9">
 
-                </table>
-            }
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr border="0">
+                                                    <td style="width: 200px;" align="right">
+                                                        <h4> Câu hỏi 1</h4>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-9">
+                                                                <input type="text" id="question" name="question" value="" />
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><button class="btn-primarys" id="" type="submit" >Tạo survey</button></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    }
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="graph">
+                    <div class="panel panel-default">
+                        <div class="table-responsive">
+                            <table class="table v-middle">
+                                <thead>
+                                    <tr>
+
+                                        <th>Tiêu đề</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Ngày đóng</th>
+                                        <th>Trạng thái </th>
+                                        <th> </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (var item in listSurveys)
+                                        {
+                                            <tr>
+
+                                                <td>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-9">
+                                                            <input type="hidden" class="form-control" id="surveyId" value="@item.Id">
+                                                            <input type="text" class="form-control" id="fullname" value="@item.Title">
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control" id="fullname" value="@item.StartDate">
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control" id="fullname" value="@item.EndDate">
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    @{
+                                            if (@item.Status == ConstantB.Survey_Open)
+                                            {
+                                                <div class="form-group">
+                                                    <div class="col-sm-9">
+                                                        <input type="text" style="background-color: blue" class="form-control" id="fullname" value="Đang mở">
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="form-group">
+                                                    <div class="col-sm-9">
+                                                        <input type="text" style="background-color: red" class="form-control" id="fullname" value="Đã đóng">
+                                                    </div>
+                                                </div>
+                                            }
+                                                    }
+
+
+                                                </td>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-9">
+                                                            <a href="@Url.Action("DeleteSurvey", "Survey", new { surveyId = @item.Id })" class="fa fa-list-alt"></a>
+
+                                                            <a href="@Url.Action("DetailSurvey", "Survey", new { surveyId = @item.Id })" class="fa fa-list-alt"></a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                        }
+                                    }
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
 
 <script>
+
+
+
+
+
     var countComment = 0;
     var countQuestion = 2;
     $('#add').click(function () {
-       
+
         var table = $(this).closest('table');
         if (table.find('input:text').length < 7) {
-            table.append('<tr><td style="width:200px;" align="right">Câu hỏi'+countQuestion+' <td> <input type="text" id="question" name="question"/> </td></tr>');
+            table.append('<tr><td style="width:200px;" align="right">  <h4> Câu hỏi' + countQuestion + '</h4> <td> <input type="text" id="question" name="question"/> </td></tr>');
             //table.append('<tr><td style="width:200px;" align="right">Name <td> <textarea rows="2" cols="30" id="question" name="question"></textarea> </td></tr>');
 
         }
@@ -81,7 +230,7 @@
         if (table.find('input:text').length < 7) {
             table.append('<tr><td style="width:200px;" align="right">Đáp án ' + countComment + ' <td> <input  type="radio" id="anwser" name="anwser"> <input type="text" id="anwser1" name="anwser1"/><br></td></tr><tr><td><input type="hidden" id="count" name="count" value="' + countComment + '" /></td></tr>');
         }
-       
+
     });
 
 </script>

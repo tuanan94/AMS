@@ -24,5 +24,10 @@ namespace AMS.Service
         {
             surveyRepository.Add(obj);
         }
+        public void DeleteSurvey(Survey obj)
+        {
+           
+            surveyRepository.Delete(obj);
+        }
     }
 }
