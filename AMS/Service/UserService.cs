@@ -39,7 +39,12 @@ namespace AMS.Service
         public List<User> findByHouseId(int houseId)
         {
             return userRepository.findByHouseID(houseId);
-           
+
+        }
+        public void updateUser(User u)
+        {
+            userRepository.Update(u);
+
         }
 
         public SLIM_CONFIG.LoginResult login(string username, string password)

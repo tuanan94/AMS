@@ -35,7 +35,7 @@ namespace AMS.Helper
             if (File.Exists(oldFile))
             {
                 // Load the image.
-                var image = Image.FromFile(oldFile);
+                var image = System.Drawing.Image.FromFile(oldFile);
 
                 // Get encoder format
                 var jpgEncoder = GetEncoder(ImageFormat.Jpeg);

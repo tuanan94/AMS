@@ -20,6 +20,10 @@ namespace AMS
         public static int USER_ROLE_RESIDENT = 3;
         public static int USER_ROLE_HOUSEHOLDER = 4;
         public static int USER_ROLE_SUPPORTER = 5;
+        public static int POST_STATUS_PUBLIC = 0;
+        public static int POST_STATUS_PROTECTED = 1;
+        public static int POST_STATUS_HIDE = 2;
+        public static String dirPostImage = "postImage";
     }
 
 }

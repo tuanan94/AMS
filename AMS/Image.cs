@@ -12,14 +12,11 @@ namespace AMS
     using System;
     using System.Collections.Generic;
     
-    public partial class UserProfile
+    public partial class Image
     {
-        public int Id { get; set; }
-        public Nullable<System.DateTime> DateOfBirth { get; set; }
-        public Nullable<int> Gender { get; set; }
-        public string Fullname { get; set; }
-        public int UserId { get; set; }
-    
-        public virtual User User { get; set; }
+        public int id { get; set; }
+        public string url { get; set; }
+        public Nullable<System.DateTime> createdDate { get; set; }
+        public Nullable<int> postId { get; set; }
     }
 }

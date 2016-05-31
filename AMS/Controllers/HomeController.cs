@@ -49,6 +49,12 @@ namespace AMS.Controllers
 
         public ActionResult Index()
         {
+            User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
+            if(curUser == null)
+            {
+                return View("error");
+            }
+            ViewBag.curUser = curUser;
             return View();
         }
         [HttpPost]
@@ -203,6 +209,22 @@ namespace AMS.Controllers
 
             return View();
         }
+        [HttpPost]
+        [Authorize]
+        public String saveProfileImage(int userid, String url)
+        {
+            User user = userService.findById(userid);
+            if(user == null)
+            {
+                return "error";
+            }
+            else{
+                user.ProfileImage = url;
+            }
+            userService.updateUser(user);
+            return "success";
+        }
+
         [HttpGet]
         [Authorize]
         public ActionResult ManageMember()

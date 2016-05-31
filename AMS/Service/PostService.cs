@@ -26,6 +26,12 @@ namespace AMS.Service
 
             postRepository.Add(h);
         }
+        public int addPost(Post p)
+        {
+            postRepository.Add(p);
+            return p.Id;
+        }
+        
         public void CreatePosts(Post post)
         {
             
@@ -36,51 +42,48 @@ namespace AMS.Service
         {
             Post h = new Post();
             h.Title = Title;
-            h.PostId = PostId;
+          //  h.PostId = PostId;
 
             postRepository.Add(h);
         }
-        public IEnumerable<Post> getAllPost()
+        public Post findPostById(int id)
         {
-            return postRepository.List.OrderByDescending(t=>t.Id).ToList();
+            var result = postRepository.FindById(id);
+            return result;
+        }
+        public List<Post> getAllPost()
+        {
+            var result =  postRepository.List.OrderByDescending(t=>t.Id).ToList();
+            return result;
         }
         public IEnumerable<Post> getAllPostNotDe()
         {
             return postRepository.List.ToList();
         }
-        public IEnumerable<Post> getAllCommentBelongPost(long id)
-        {
-            return postRepository.List.ToList().Where(t=>t.PostId == id);
-        }
+      
         public IEnumerable<Post> getCommentBelongPost(int id)
         {
-             return postRepository.List.ToList().Where(t => t.PostId == id);
-           
+            //   return postRepository.List.ToList().Where(t => t.PostId == id);
+            return null;
         }
         public IEnumerable<Post> getCommentPostIdNotNull()
         {
-           return postRepository.List.ToList().Where(t => t.PostId.HasValue);
-           
+            //   return postRepository.List.ToList().Where(t => t.PostId.HasValue);
+            return null;
         }
         public Post getRowPostByPostId(int id)
         {
-            return postRepository.List.ToList().FirstOrDefault(t => t.PostId.HasValue);
-
+            //  return postRepository.List.ToList().FirstOrDefault(t => t.PostId.HasValue);
+            return null;
         }
         public int GetPostIdByPost(int id)
         {
-            int postId =0;
-            if (postRepository.FindById(id).PostId.HasValue)
-            {
-                postId = postRepository.FindById(id).PostId.Value;
-            }
-            return postId ;
+            return -1;
         }
 
         public int CountComment(int id)
         {
-            int count= postRepository.List.Count(t=>t.PostId==id);
-            return count;
+            return 0;
         }
     }
 }

@@ -6340,7 +6340,7 @@ input[type="button"].btn-block {
   transition: opacity 0.15s linear;
 }
 .fade.in {
-  opacity: 1;
+    opacity: 1;
 }
 .collapse {
   display: none;

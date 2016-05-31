@@ -34,6 +34,7 @@ namespace AMS
         public virtual DbSet<HelpdeskService> HelpdeskServices { get; set; }
         public virtual DbSet<HelpdeskServiceCategory> HelpdeskServiceCategories { get; set; }
         public virtual DbSet<House> Houses { get; set; }
+        public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<Post> Posts { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Receipt> Receipts { get; set; }
@@ -45,6 +46,5 @@ namespace AMS
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAnswerSurvey> UserAnswerSurveys { get; set; }
-        public virtual DbSet<UserProfile> UserProfiles { get; set; }
     }
 }

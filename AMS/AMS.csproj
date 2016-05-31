@@ -215,6 +215,7 @@
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ManagementController.cs" />
+    <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Constant\StatusEnum.cs" />
@@ -239,6 +240,9 @@
     <Compile Include="Helper\Util.cs" />
     <Compile Include="Helper\ViewHelper.cs" />
     <Compile Include="House.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Image.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Model1.Context.cs">
@@ -293,6 +297,7 @@
     <Compile Include="Service\HelpdeskRequestLogServices.cs" />
     <Compile Include="Service\HelpdeskServiceCatService.cs" />
     <Compile Include="Service\HelpdeskRequestServices.cs" />
+    <Compile Include="Service\ImageService.cs" />
     <Compile Include="Service\PostService.cs" />
     <Compile Include="Service\UserInHouseService.cs" />
     <Compile Include="Service\HelpdeskSupporterService.cs" />
@@ -344,8 +349,10 @@
     <Content Include="Content\css\thumbnails.css" />
     <Content Include="Content\css\_vendor.bundle.css" />
     <Content Include="Content\css\_vendor.min.css" />
+    <Content Include="Content\images\addimage.png" />
     <Content Include="Content\images\defaultProfile.png" />
     <Content Include="Content\images\guy-5.jpg" />
+    <Content Include="Content\images\delete.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -458,15 +465,6 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
@@ -531,11 +529,19 @@
     <Content Include="Views\Admin\ManageHouse.cshtml" />
     <Content Include="Views\Admin\addHouse.cshtml" />
     <Content Include="Views\Admin\deleteHouse.cshtml" />
+    <Content Include="web.config" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="images\Post\Binh\" />
     <Folder Include="Views\Image\" />
+    <Folder Include="Views\Post\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controllers\fonts\glyphicons-halflings-regular.woff" />
