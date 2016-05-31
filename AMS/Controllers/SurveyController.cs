@@ -123,6 +123,8 @@ namespace AMS.Controllers
                     a++;
                 }
             }
+            obj.Title = model.Title;
+            obj.StartDate = model.StartDate;
             surveyService.UpdateSurvey(obj);
             return RedirectToAction("DetailSurvey", new { surveyId =obj.Id});
         }
@@ -169,6 +171,7 @@ namespace AMS.Controllers
             }
             Survey survey = new Survey();
             survey.Title = model.Title;
+            survey.StartDate = DateTime.Now;
             surveyService.AddSurvey(survey);
             //add list question
             Question question = new Question();

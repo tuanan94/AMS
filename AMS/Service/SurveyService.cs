@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using AMS.Repository;
+using AMS.ViewModel;
 
 namespace AMS.Service
 {
@@ -31,7 +32,8 @@ namespace AMS.Service
         }
         public void UpdateSurvey(Survey obj)
         {
-
+            //Survey survey = new Survey();
+            //survey.Title = obj.Title;
             surveyRepository.Update(obj);
         }
     }

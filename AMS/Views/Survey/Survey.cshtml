@@ -3,6 +3,19 @@
     ViewBag.Title = "Survey";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
     List<Survey> listSurveys = ViewBag.ListSurvey;
+    <style>
+        .button {
+            display: block;
+            width: 70px;
+            height: 35px;
+            background: #4E9CAF;
+            padding: 7px;
+            text-align: center;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
 }
 
 <script src="~/Scripts/jquery-1.10.2.js"></script>
@@ -170,7 +183,7 @@
                                             <th>Ngày đóng</th>
                                             <th>Trạng thái </th>
                                             <th> </th>
-
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -181,7 +194,7 @@
                                                     <td>
                                                         <div class="form-group">
                                                             <div class="col-sm-9">
-                                                                <input type="text" class="form-control" id="fullname" value="@item.Id">
+                                                                <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.Id">
                                                             </div>
                                                         </div>
                                                     </td>
@@ -189,21 +202,21 @@
                                                         <div class="form-group">
                                                             <div class="col-sm-9">
                                                                 <input type="hidden" class="form-control" id="surveyId" value="@item.Id">
-                                                                <input type="text" class="form-control" id="fullname" value="@item.Title">
+                                                                <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.Title">
                                                             </div>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="form-group">
                                                             <div class="col-sm-9">
-                                                                <input type="text" class="form-control" id="fullname" value="@item.StartDate">
+                                                                <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.StartDate">
                                                             </div>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="form-group">
                                                             <div class="col-sm-9">
-                                                                <input type="text" class="form-control" id="fullname" value="@item.EndDate">
+                                                                <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.EndDate">
                                                             </div>
                                                         </div>
                                                     </td>
@@ -213,7 +226,7 @@
                                                 {
                                                     <div class="form-group">
                                                         <div class="col-sm-9">
-                                                            <input type="text" style="background-color: blue" class="form-control" id="fullname" value="Đang mở">
+                                                            <input type="text" disabled="disabled" style="background-color: blue" class="form-control" id="fullname" value="Đang mở">
                                                         </div>
                                                     </div>
                                                 }
@@ -221,7 +234,7 @@
                                                 {
                                                     <div class="form-group">
                                                         <div class="col-sm-9">
-                                                            <input type="text" style="background-color: red" class="form-control" id="fullname" value="Đã đóng">
+                                                            <input type="text" disabled="disabled" style="background-color: red" class="form-control" id="fullname" value="Đã đóng">
                                                         </div>
                                                     </div>
                                                 }
@@ -232,13 +245,19 @@
                                                     <td>
                                                         <div class="form-group">
                                                             <div class="col-sm-9">
-                                                                <a href="@Url.Action("DeleteSurvey", "Survey", new {surveyId = @item.Id})" class="fa fa-list-alt"></a>
+                                                                <a href="@Url.Action("DeleteSurvey", "Survey", new {surveyId = @item.Id})" onclick="return myFunction()" class="button">Xóa</a>
 
-                                                                <a href="@Url.Action("DetailSurvey", "Survey", new {surveyId = @item.Id})" class="fa fa-list-alt"></a>
                                                             </div>
                                                         </div>
                                                     </td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-9">
 
+                                                                <a href="@Url.Action("DetailSurvey", "Survey", new {surveyId = @item.Id})" class="button">Chi Tiết</a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             }
                                         }
@@ -272,7 +291,14 @@
 
 
 <script>
-
+    function myFunction() {
+        var x = confirm("Bạn chắc muốn xóa dòng này chứ?");
+        if (x)
+            return true;
+        else
+            return false;
+       
+    }
     pageSize = 4;
 
     showPage = function (page) {
