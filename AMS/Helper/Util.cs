@@ -26,39 +26,39 @@ namespace AMS.Helper
         {
             return (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         }
-        public static bool ConvertImageToJpg(string uploadDir, string fileName, long quality, string outputDir, string newFileName)
-        {
-            //Source file url
-            string oldFile = HttpContext.Current.Server.MapPath(Path.Combine(uploadDir, fileName));
-            //Destination file url
-            string newFile = HttpContext.Current.Server.MapPath(Path.Combine(outputDir, newFileName));
-            if (File.Exists(oldFile))
-            {
-                // Load the image.
-                var image = Image.FromFile(oldFile);
+        //public static bool ConvertImageToJpg(string uploadDir, string fileName, long quality, string outputDir, string newFileName)
+        //{
+        //    //Source file url
+        //    string oldFile = HttpContext.Current.Server.MapPath(Path.Combine(uploadDir, fileName));
+        //    //Destination file url
+        //    string newFile = HttpContext.Current.Server.MapPath(Path.Combine(outputDir, newFileName));
+        //    if (File.Exists(oldFile))
+        //    {
+        //        // Load the image.
+        //        var image = Image.FromFile(oldFile);
 
-                // Get encoder format
-                var jpgEncoder = GetEncoder(ImageFormat.Jpeg);
+        //        // Get encoder format
+        //        var jpgEncoder = GetEncoder(ImageFormat.Jpeg);
 
-                // Create an Encoder object based on the GUID for the Quality parameter category.
-                var myEncoder = Encoder.Quality;
+        //        // Create an Encoder object based on the GUID for the Quality parameter category.
+        //        var myEncoder = Encoder.Quality;
 
-                // Create an EncoderParameters object. An EncoderParameters object has an array of 
-                // EncoderParameter objects. In this case, there is only one EncoderParameter object in the array.
-                var myEncoderParameters = new EncoderParameters(1);
+        //        // Create an EncoderParameters object. An EncoderParameters object has an array of 
+        //        // EncoderParameter objects. In this case, there is only one EncoderParameter object in the array.
+        //        var myEncoderParameters = new EncoderParameters(1);
 
-                // Save the bitmap as a JPG file with a quality level compression.
-                var myEncoderParameter = new EncoderParameter(myEncoder, quality);
-                myEncoderParameters.Param[0] = myEncoderParameter;
-                image.Save(newFile, jpgEncoder, myEncoderParameters);
+        //        // Save the bitmap as a JPG file with a quality level compression.
+        //        var myEncoderParameter = new EncoderParameter(myEncoder, quality);
+        //        myEncoderParameters.Param[0] = myEncoderParameter;
+        //        image.Save(newFile, jpgEncoder, myEncoderParameters);
 
-                //Delete source file
-                image.Dispose();
-                File.Delete(oldFile);
-                return true;
-            }
-            return false;
-        }
+        //        //Delete source file
+        //        image.Dispose();
+        //        File.Delete(oldFile);
+        //        return true;
+        //    }
+        //    return false;
+        //}
 
         private static ImageCodecInfo GetEncoder(ImageFormat format)
         {

@@ -11,6 +11,16 @@
 
 <div class="col-md-12">
     <div class="panel panel-default">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+               
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/Survey/Survey">Trang chính</a></li>
+                    <li><a href="#">Page 1</a></li>
+                   
+                </ul>
+            </div>
+        </nav>
         <div class="panel-heading panel-heading-gray"><h4>Cập nhập chi tiết khảo sát</h4>
         </div>
         <div class="panel-body">
@@ -20,15 +30,39 @@
                 {
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-3 control-label">Tiêu đề</label>
-                        <div class="col-sm-9">
+                        <div class="col-sm-7">
                             <input type="text" class="form-control" id="Title" name="Title" style="width: 330px" value="@surveys.Title">
                         </div>
+                       
+                    </div>
+                    <div class="form-group">
                         <label for="inputEmail3" class="col-sm-3 control-label">Ngày bắt đầu</label>
-                        <div class="col-sm-9">
-                            @*@Html.EditorFor(m => m.CreateDate, new {@class = "form-control", @Value=surveys.StartDate})*@
-                            <input type="text" class="form-control" id="StarDate" name="StarDate" style="width: 330px" value="@surveys.StartDate">
+                        <div class="col-sm-7">
+                            @Html.TextBoxFor(m => m.StartDate, new {@class = "form-control", style = "width: 330px", @Value = surveys.StartDate})
                         </div>
                     </div>
+                     @*<div class="form-group">
+                         <label for="inputEmail3" class="col-sm-3 control-label">Ngày bắt đầu</label>
+                         @{
+                    List<SelectListItem> listItems = new List<SelectListItem>();
+                    listItems.Add(new SelectListItem
+                         {
+                             Text = "Đang mở",
+                             Value = "Đang mở"
+                         });
+                    listItems.Add(new SelectListItem
+                         {
+                             Text = "Đã đóng",
+                             Value = "Đã đóng",
+                             Selected = true
+                         });
+                   
+                         }
+                                <div class="col-sm-7">
+                                   @Html.DropDownListFor(model => model.Status, listItems, "-- Chon Status --")
+
+                                </div>
+                            </div>*@
                     int ii = 1;
 
                     int i = 0;
@@ -39,7 +73,7 @@
                         {
                             <div class="form-group">
                                 <label for="inputEmail3" class="col-sm-3 control-label">Câu Hỏi @ii:</label>
-                                <div class="col-sm-9">
+                                <div class="col-sm-7">
                                     <input type="text" class="form-control" style="width: 330px" id="question" name="question" value="@item.QuestionContent">
                                     @{
                                         List<Answer> a = answers.ElementAt(i);
@@ -62,7 +96,7 @@
 
                                 </div>
                             </div>
-
+                   
 
                         }
 
@@ -85,7 +119,7 @@
 </div>
 <script>
     $(function () {
-        $("#StarDate").datepicker();
-        $("#StarDate").attr('readOnly', 'true');
+        $("#StartDate").datepicker();
+        $("#StartDate").attr('readOnly', 'true');
     });
 </script>
