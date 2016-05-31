@@ -21,7 +21,7 @@
                     @Html.ActionLink("viewHouse", "viewHouse")
             </td></tr>
 
-            <tr>
+            @*<tr>
                 <th>ID</th>
                 <th>Block</th>
                 <th>Floor</th>
@@ -52,15 +52,15 @@
                     </td>   
                     @*<td>
                         @Html.ActionLink("updateHouse","updateHouse", new { Id =house.Id})
-                    </td>*@   
+                    </td> 
                         <td>
                             @Html.ActionLink("Update", "updateHouse", "Admin", @house.Id)
                         </td>
                     @*<td><input id="Update" type="button" value="Update" onclick="updateHouse(@house.HouseName,@house.Description)" /> </td>*@
-                </tr>
-            }
+              
+            
 
-        }
+        
     </table>
 </div>
  

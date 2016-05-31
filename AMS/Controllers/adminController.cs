@@ -23,13 +23,16 @@ namespace AMS.Controllers
         }
         public ActionResult viewHouse()
         {
+            List<House> allHouseInfo = manageHouseInfo.getAllHouseInfo();
+            ViewBag.allHouseInfo = allHouseInfo;
             return View();
+          
         }
 
         
         public ActionResult updateHouse()
         {
-            return RedirectToAction("ManageHouse");
+            return View();
         }
         [HttpGet]
         public Object allHouseInfo()
@@ -53,7 +56,7 @@ namespace AMS.Controllers
                 manageHouseInfo.addHouse(Block, Floor, HouseName,Description,Area);
             }
 
-            return RedirectToAction("ManageHouse");
+            return RedirectToAction("viewHouse");
         }
         [HttpPost]
         public void addHouseAjax(String Block, String Floor, String HouseName, String Description, float Area)
@@ -87,7 +90,7 @@ namespace AMS.Controllers
             {
                 manageHouseInfo.updateHouse(Id, HouseName, Description);
             }
-           // return  "success update House" ;
+          
            return RedirectToAction("ManageHouse");
         }
    }

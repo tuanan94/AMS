@@ -277,6 +277,7 @@
     <Compile Include="ReceiptDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Repository\AdminRepository.cs" />
     <Compile Include="Repository\GenericRepository.cs" />
     <Compile Include="Repository\HelpdeskSupporterRepository.cs" />
     <Compile Include="Repository\IHelpdeskSupporterRepository.cs" />

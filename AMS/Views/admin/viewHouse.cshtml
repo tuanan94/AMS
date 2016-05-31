@@ -1,12 +1,9 @@
 ﻿
 @{
-
     ViewBag.Title = "View House Info";
 
 
     List<House> allHouseInfo = ViewBag.allHouseInfo;
-
-
 }
 @*// table show house's info full-----------------------------------------*@
 <div id="content">
@@ -17,9 +14,16 @@
             @* this actionlink or a href here means I wanna link to addHouse.cshtml *@
             @* I think this link method not really link to addHouse.cshtml *@
             @* I think it link into controller instead *@
-           
-            
+            @*<tr>@Html.ActionLink("addHouse", "addHouse")</tr>
 
+            <tr>
+                <td>
+                    @Html.ActionLink("viewHouse", "viewHouse")
+                </td>
+            </tr>*@
+            <tr>
+                @Html.ActionLink("back to Manage Page","ManageHouse")
+            </tr>
             <tr>
                 <th>ID</th>
                 <th>Block</th>
@@ -53,7 +57,7 @@
                             @Html.ActionLink("updateHouse","updateHouse", new { Id =house.Id})
                         </td>*@
                     <td>
-                        @Html.ActionLink("Update", "updateHouse", "Admin", @house.Id)
+                        @Html.ActionLink("Update", "updateHouse", "Admin")
                     </td>
                     @*<td><input id="Update" type="button" value="Update" onclick="updateHouse(@house.HouseName,@house.Description)" /> </td>*@
                 </tr>
@@ -62,6 +66,7 @@
         }
     </table>
 </div>
+
 
 <script>
     //-------------------------------------------------------------
@@ -74,7 +79,7 @@
     function loadHouseList() {
         clearHouseList();
         $.ajax({
-            url: '/Admin/viewHouse',
+            url: '/Admin/ManageHouse',
             data: {
             },
             error: function () {
@@ -96,7 +101,31 @@
         $("#housetablebody").html("");
 
     }
-   
+    //Add House
+    function addHouse(){
+        $.ajax({
+            url: '/Admin/addHouse',
+            data: {
+                Id : $("#Id").val(),
+                Block: $("#Block").val(),
+                Floor: $("#Floor").val(),
+                HouseName: $("#HouseName").val(),
+                Description: $("#Description").val(),
+                Area : $("#Area").val()
+
+
+            },
+            error: function () {
+                alert("error can not add house")
+                // $("#alertArea").html("Error occured!")
+            },
+            success: function (data) {
+                clearHouseList();
+                loadHouseList();
+            },
+            type: 'POST'
+        });
+    }
 
     //Delete house
     function deleteHouse(Id)
@@ -143,5 +172,26 @@
             })
     }
 
-
+    // add house by ajax---------------------------------------------------------
+    function addHouseByAjax() {
+        $.ajax({
+            url: '/Admin/addHouseAjax',
+            data: {
+                Block: $("#Block").val(),
+                Floor: $("#Floor").val(),
+                HouseName: $("#HouseName").val(),
+                Description: $("#Description").val(),
+                Area: $("#Area").val()
+            },
+            error: function () {
+                alert("error")
+                // $("#alertArea").html("Error occured!")
+            },
+            success: function (data) {
+                clearHouseList();
+                loadHouseList();
+            },
+            type: 'POST'
+        });
+    }
 </script>

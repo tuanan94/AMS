@@ -35,15 +35,40 @@ namespace AMS.Service
             allHouseInfo.Delete(allHouseInfo.FindById(deleteHouse.Id));
         }
         //update House
-        public void updateHouse(int Id, String HouseName, String Description)
+        public String updateHouse(int Id, String HouseName, String Description)
         {
+            //    House house = new House();
+            //    //allHouseInfo.List.ToList<Id>;
+            //    house = allHouseInfo.FindById(house.Id);
+            //    house.Id = Id;
+
+            //    house.HouseName = HouseName;
+            //    house.Description = Description;
+
+            //    allHouseInfo.Update(house);
+            //  //  allHouseInfo.Update(allHouseInfo.FindById(house.Id));
+            bool isValid = true;
+            isValid = !HouseName.Equals("");
+
             House house = new House();
             house.Id = Id;
-            house.HouseName = HouseName;
-            house.Description = Description;
-            allHouseInfo.Update(house);
+            house = allHouseInfo.FindById(house.Id);
+            if (house != null && isValid == true)
+            {
+                house.HouseName = HouseName;
+                house.Description = Description;
+                allHouseInfo.Update(house);
+               return  "success update House" ;
+               // return RedirectToAction("ManageHouse");
+            }
+            else
+            {
+                return "Can not update! ";
+            }
+
+            return "Update failed";
         }
     }
 
-    
-}
+
+    }
