@@ -14,26 +14,17 @@ namespace AMS
     
     public partial class Post
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Post()
-        {
-            this.Post1 = new HashSet<Post>();
-        }
-    
         public int Id { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
         public string ImgUrl { get; set; }
-        public string PostStatus { get; set; }
+        public Nullable<int> PostStatus { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public Nullable<int> Status { get; set; }
-        public Nullable<int> PostId { get; set; }
         public Nullable<int> UserId { get; set; }
+        public string EmbedCode { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Post> Post1 { get; set; }
-        public virtual Post Post2 { get; set; }
         public virtual User User { get; set; }
     }
 }

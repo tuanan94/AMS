@@ -124,7 +124,7 @@ namespace AMS.Controllers
                 }
             }
             obj.Title = model.Title;
-            obj.StartDate = model.StartDate;
+        //    obj.StartDate = model.StartDate;
             surveyService.UpdateSurvey(obj);
             return RedirectToAction("DetailSurvey", new { surveyId =obj.Id});
         }

@@ -18,6 +18,7 @@ namespace AMS
         public House()
         {
             this.HelpdeskRequests = new HashSet<HelpdeskRequest>();
+            this.Receipts = new HashSet<Receipt>();
             this.Users = new HashSet<User>();
         }
     
@@ -31,7 +32,8 @@ namespace AMS
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HelpdeskRequest> HelpdeskRequests { get; set; }
-        public virtual Receipt Receipt { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Receipt> Receipts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<User> Users { get; set; }
     }
