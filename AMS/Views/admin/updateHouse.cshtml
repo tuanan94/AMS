@@ -2,9 +2,9 @@
 @{
     ViewBag.Title = "Update House";
 
-
+    List<House> allHouseInfo = ViewBag.allHouseInfo;
 }
- List<House> allHouseInfo = ViewBag.allHouseInfo;
+ 
          <div id="content">
              <table class="table">
                  <thead>
@@ -18,15 +18,15 @@
              {
                  <label>ID</label>
                 <input class="form-control" name="Id" id="Id" />
-                 
+
                  <label>House Name</label>
                  <input class="form-control" name="HouseName" id="HouseName" />
                  <label>Description</label>
                  <input class="form-control" name="Description" id="Description" />
-                
+
                  <input type="reset" class="btn btn-default" value="Reset" />
                  <input type="submit" class="btn btn-success" value="Update" id="btnsubmit" />
-                // <input type="submit" class="btn btn-success" value="Thêm nhà vào hệ thống" id="btnsubmit" />
-                 // <input class="btn btn-success" onclick="addHouseByAjax()" value="Them nha bang Ajax" />
+                 
+             }
 
 </div>

@@ -11,8 +11,15 @@
 
     <table class="table">
         <thead>
-            <tr>@Html.ActionLink("AddHouse","addHouse")</tr>
-            <a href="@Url.Action("addHouse", "Admin")">AddHouse test 2</a>
+           @* this actionlink or a href here means I wanna link to addHouse.cshtml *@
+            @* I think this link method not really link to addHouse.cshtml *@
+            @* I think it link into controller instead *@
+            <tr>@Html.ActionLink("addHouse","addHouse")</tr>
+            
+            <tr>
+                <td>
+                    @Html.ActionLink("viewHouse", "viewHouse")
+            </td></tr>
 
             <tr>
                 <th>ID</th>
@@ -58,7 +65,7 @@
 </div>
  
 @*// add house --------------------------------------------*@
-@{
+@*@{
     List<House> allHouse = ViewBag.allHouse;
 }
 <div id="content">
@@ -72,8 +79,8 @@
     </table>
     @using (Html.BeginForm("addHouse", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
-        @*<label>ID</label>
-        <input class="form-control" name="Id" id="Id" />*@
+        <label>ID</label>
+        <input class="form-control" name="Id" id="Id" />
         <label>Block</label>
         <input class="form-control" name="Block" id="Block" />
         <label>Floor</label>
@@ -90,7 +97,7 @@
     }
 
 
-</div>
+</div>*@
 @*//----------------------------------------------------------------------*@
 @* Button Delete byhouse Id *@
 @*<div id="content">

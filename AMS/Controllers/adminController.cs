@@ -17,6 +17,20 @@ namespace AMS.Controllers
             ViewBag.allHouseInfo = allHouseInfo;
             return View();
         }
+        public ActionResult addHouse()
+        {
+            return View();
+        }
+        public ActionResult viewHouse()
+        {
+            return View();
+        }
+
+        
+        public ActionResult updateHouse()
+        {
+            return RedirectToAction("ManageHouse");
+        }
         [HttpGet]
         public Object allHouseInfo()
         {
@@ -59,20 +73,22 @@ namespace AMS.Controllers
         {
             manageHouseInfo.deleteHouse(Id);
             return "success";
+
             //return Json("Response from delete house");
         }
 
         //Update House
         [HttpPut]
-        public ActionResult updateHouse(int Id , String HouseName, String Description)
+        public ActionResult updateHouse(int Id, String HouseName, String Description)
         {
             bool isValid = true;
             isValid = !HouseName.Equals("");
             if (isValid)
             {
-                manageHouseInfo.updateHouse(Id,HouseName, Description);
+                manageHouseInfo.updateHouse(Id, HouseName, Description);
             }
-            return RedirectToAction("ManageHouse");
+           // return  "success update House" ;
+           return RedirectToAction("ManageHouse");
         }
    }
 }
