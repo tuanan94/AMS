@@ -1,8 +1,77 @@
-﻿
+﻿@model AMS.ViewModel.SurveyViewModel
 @{
     ViewBag.Title = "DetailSurvey";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
+    Survey surveys = ViewBag.Survey;
+    List<Question> questions = ViewBag.Question;
+    List<List<Answer>> answers = ViewBag.Answer;
 }
 
-<h2>DetailSurvey</h2>
 
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-gray"><h4>Cập nhập chi tiết khảo sát</h4></div>
+        <div class="panel-body">
+            @*<form class="form-horizontal" role="form" method="post">*@
+            <div class="table-responsive">
+                @using (Html.BeginForm("UpdateSurvey", "Survey", FormMethod.Post))
+                {
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-3 control-label">Tiêu đề</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="Title" name="Title" style="width: 330px" value="@surveys.Title">
+                        </div>
+                    </div>
+                    int ii = 1;
+
+                    int i = 0;
+                    int count = answers.Count;
+                    foreach (var item in questions)
+                    {
+                        if (i < count)
+                        {
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">Câu Hỏi @ii:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" style="width: 330px" id="question" name="question" value="@item.QuestionContent">
+                                    @{
+                                        List<Answer> a = answers.ElementAt(i);
+                                        int counts = 1;
+                                        foreach (var b in a)
+                                        {
+                                            @Html.TextBoxFor(m =>m.Id, new{@type="hidden", @Value=surveys.Id})
+                                            <label for="inputEmail3" class="col-sm-2 control-label">Câu trả lời:</label>
+                                            <input type="hidden" id="count" name="count" value="@counts"/>
+                                            <input type="text" class="form-control" style="width: 200px" id="anwser1" name="anwser1" value="@b.AnswerContent">
+
+                                            counts++;
+                                        }
+                                        i++;
+                                        ii++;
+
+                                    }
+
+                                </div>
+                            </div>
+
+
+                        }
+
+                    }
+                    <div class="form-group">
+                        <div class="col-sm-9 col-lg-offset-3">
+                            @*<a href="@Url.Action("UpdateSurvey", "Survey", new { surveyId =@surveys.Id})" class="fa fa-list-alt">Lưu..</a>*@
+                            <button type="submit">Lưu</button>
+                        </div>
+                    </div>
+
+                }
+
+
+            </div>
+                @*</form>*@
+        </div>
+
+    </div>
+</div>

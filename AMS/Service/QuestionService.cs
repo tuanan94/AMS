@@ -40,5 +40,9 @@ namespace AMS.Service
         {
             questionRepository.Delete(obj);
         }
+        public void UpdateQuestion(Question obj)
+        {
+            questionRepository.Update(obj);
+        }
     }
 }

@@ -45,15 +45,94 @@ namespace AMS.Controllers
 
         public ActionResult DetailSurvey(int surveyId)
         {
+            SurveyViewModel model = new SurveyViewModel();
+            Survey survey = new Survey();
+            survey = surveyService.FindById(surveyId);
+            List<Question> listQuestions = questionService.FindBySurveyId(survey.Id);
+            
+           // List<Answer> listAnswers = new List<Answer>();
+            List<List<Answer>> list = new List<List<Answer>>();
+            foreach (var item in listQuestions)
+            {
+                List<Answer> listAnswers = answerService.FindByQuestionId(item.Id);
+                list.Add(listAnswers);
 
-
+            }
+            ViewBag.Survey = survey;
+            ViewBag.Question = listQuestions;
+            ViewBag.Answer = list;
             return View();
         }
         [HttpPost]
-        public ActionResult Surveys()
+        public ActionResult UpdateSurvey(SurveyViewModel model)
         {
+            string[] listQuestion = Request.Form.GetValues("question");
+            string[] listAnwser = Request.Form.GetValues("anwser1");
+            string[] listCountAnwser = Request.Form.GetValues("count");
+
+            List<string> listCountAnwsers = new List<string>(listCountAnwser);
+            List<string> listQuestions = new List<string>(listQuestion);
+            List<string> listAnwsers = new List<string>(listAnwser);
+
+            List<int> listCount = new List<int>();
+            List<List<string>> totalAnsertGroup = new List<List<string>>();
+            for (int i = 0; i < (listCountAnwsers.Count) - 1; i++)
+            {
+                if (Int32.Parse(listCountAnwsers[i]) > Int32.Parse(listCountAnwsers[i + 1]))
+                {
+                    listCount.Add(Int32.Parse(listCountAnwsers[i]));
+                }
+            }
+            listCount.Add(Int32.Parse((listCountAnwsers[(listCountAnwsers.Count) - 1])));
+            for (int i = 0; i < listCount.Count; i++)
+            {
+                List<string> listAnwserGroup = new List<string>();
+                int countAneser = 0;
+                for (int j = 0; j < listAnwsers.Count; j++)
+                {
+                    if (countAneser != listCount[i] && countAneser < listCount[i])
+                    {
+                        listAnwserGroup.Add(listAnwsers[j]);
+                        countAneser++;
+                        listAnwsers.Remove(listAnwsers[j]);
+                        j = j - 1;
+                    }
+                }
+                totalAnsertGroup.Add(listAnwserGroup);
+            }
+            //
+            int a = 0;
+            Survey obj = surveyService.FindById(model.Id);
+            List<Question> questions = questionService.FindBySurveyId(obj.Id);
            
-           
+            foreach (var itemQuestion in questions)
+            {
+                int ii = 0;
+                if (a < totalAnsertGroup.Count)
+                {
+                    List<string> listGroup = totalAnsertGroup[a];
+                    List<Answer> answers = answerService.FindByQuestionId(itemQuestion.Id);
+                    foreach (var itemAnswer in answers)
+                    {
+                        itemAnswer.AnswerContent = listGroup[ii];
+                        answerService.UpdateAnswer(itemAnswer);
+                        ii++;
+                    }
+                    itemQuestion.QuestionContent = listQuestion[a];
+                    questionService.UpdateQuestion(itemQuestion);
+                    a++;
+                }
+            }
+            surveyService.UpdateSurvey(obj);
+            return RedirectToAction("DetailSurvey", new { surveyId =obj.Id});
+        }
+
+        [HttpPost]
+        public ActionResult Surveys(SurveyViewModel model)
+        {
+
+        //    string[] title = Request.Form.GetValues("Title");
+            var ti = Request.QueryString["Title"];
             string[] listQuestion = Request.Form.GetValues("question");
             string[] listAnwser = Request.Form.GetValues("anwser1");
             string[] listCountAnwser = Request.Form.GetValues("count");
@@ -89,7 +168,7 @@ namespace AMS.Controllers
                 totalAnsertGroup.Add(listAnwserGroup);
             }
             Survey survey = new Survey();
-            survey.Title = "Survey 1";
+            survey.Title = model.Title;
             surveyService.AddSurvey(survey);
             //add list question
             Question question = new Question();

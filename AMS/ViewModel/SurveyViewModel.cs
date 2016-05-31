@@ -7,8 +7,10 @@ namespace AMS.ViewModel
 {
     public class SurveyViewModel
     {
+        public int Id { get; set; }
         public string Title { get; set; }
-
+        public List<QuestionViewModel> QuestionViewModels { get; set; }
+        public List<AnswerViewModel> AnswerViewModels { get; set; } 
     }
 
     public class AnswerViewModel
