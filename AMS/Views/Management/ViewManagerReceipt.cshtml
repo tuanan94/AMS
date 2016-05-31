@@ -1,0 +1,140 @@
+﻿@{
+    ViewBag.Title = "ReceiptView";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+    int userId = ViewBag.userId;
+}
+
+<nav class="navbar navbar-subnav navbar-static-top" role="navigation">
+    <div class="container-fluid">
+
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subnav">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="fa fa-ellipsis-h"></span>
+            </button>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="subnav">
+            <ul class="nav navbar-nav">
+                <li class="">
+                    <a href="/Management/ManageReceipt/View/@userId"><i class="fa fa-list-ul"></i> Quản lý hóa đơn</a>
+                </li>
+                <li class="active">
+                    <a href="/Management/ManageReceipt"><i class="fa fa-file-text-o"></i> Tạo hóa đơn thủ công</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</nav>
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-gray"><i style="color: #000" class="fa fa-list-ul"></i> Lịch sử hóa đơn</div>
+        <div class="panel-body">
+            <div class="form-horizontal" role="form">
+                <table id="managerOrderTbl" data-userid="@userId" class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Tiêu đề</th>
+                            <th>Căn hộ</th>
+                            <th>Tổng</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày tạo</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th>Tiêu đề</th>
+                            <th>Căn hộ</th>
+                            <th>Tổng</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày tạo</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                    <tbody></tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var fromUserId = document.getElementById("managerOrderTbl").dataset.userid;
+        var dataTable5 = $("#managerOrderTbl").DataTable({
+            "ajax": {
+                url: "/Management/ManageReceipt/Admin/GetManagerOrderList?userId=" + fromUserId,
+                dataSrc: ""
+            },
+            "bLengthChange": false,
+            "bInfo": false,
+            "columns": [
+                { data: "ReceiptTitle" },
+                { data: "ReceiptTitle" },
+                { data: "HouseName" },
+                { data: "TotalOrder" },
+                { data: "Status" },
+                { data: "CreateDate" },
+                { data: "ReceiptId" }
+            ],
+            "columnDefs": [
+            {
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+            },
+            {
+                "targets": 4,
+                "data": "Status",
+                "render": function (data, type, full) {
+                    if (type === "display" || type === "filter") {
+                        if (data === window.StatusUnpaid) {
+                            return "<span class='label label-danger'> Chưa thanh toán</div>";
+                        } else if (data === window.StatusPaid) {
+                            return "<span class='label label-info'>" + "Đã thanh toán" + "</div>";
+                        }
+                    }
+                    return data;
+                }
+            },
+            {
+                "targets": 5,
+                "data": "CreateDate",
+                "render": function (data, type, full) {
+                    if (type === "display" || type === "filter") {
+                        if (data !== null && data !== undefined) {
+                            var dateTime = data.split(" ");
+                            return "<span class='label date-color label-warning'>" + dateTime[0] +
+                                "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";
+                        }
+                    }
+                    return data;
+                }
+            }, {
+                "targets": 6,
+                "data": "ReceiptId",
+                "render": function (data, type, full) {
+                    if (type === "display" || type === "filter") {
+                        if (data !== null && data !== undefined) {
+                            return "<span onclick='editOrderDetail(" + data + "," + fromUserId + ")' class='btn btn-default btn-xs lbl-margin-right'>" +
+                                "<i class='fa fa-pencil'></i>" +
+                                "</span> ";
+                        }
+                    }
+                    return data;
+                }
+            }
+            ]
+        });
+        generateTableIndex(dataTable5);
+    });
+
+</script>

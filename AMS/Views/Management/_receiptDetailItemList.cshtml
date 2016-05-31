@@ -1,0 +1,29 @@
+﻿@{
+    Receipt receipt = ViewBag.receipt;
+}
+@{
+    int index = 0;
+    foreach (var detail in receipt.ReceiptDetails)
+    {
+        {
+            index++;
+        }
+
+        <div id="row_@index" class="form-group">
+            <div class="col-sm-6">
+                <input id="item_name_@index" value="@detail.ServiceFee.Name" name="" type="text" class="form-control order-item">
+            </div>
+            <div class="col-sm-1">
+                <input id="item_qty_@index" value="@detail.Quantity" type="text" class="form-control order-item-qty">
+            </div>
+            <div class="col-sm-2">
+                <input id="item_unit_price_@index" value="@detail.UnitPrice" type="text" class="form-control order-item-price">
+            </div>
+            <div class="col-sm-2">
+                <input id="item_qty_price_@index" readonly="readonly" value="@(detail.UnitPrice*detail.Quantity)" name="" type="text" class="form-control total-order">
+            </div>
+            <span class="btn btn-danger btn-xs" onclick="deleteItem(@index)"><i class="fa fa-times"></i></span>
+            <input type="hidden" id="item_id_@index" value="@detail.Id" name="" />
+        </div>
+    }
+}

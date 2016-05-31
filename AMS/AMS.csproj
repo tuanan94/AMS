@@ -518,8 +518,8 @@
     <Content Include="Views\Management\ManageHousehold.cshtml" />
     <Content Include="Views\Management\ManageHelpdeskService.cshtml" />
     <Content Include="Views\Management\ManageIncome.cshtml" />
-    <Content Include="Views\Management\ManageReceipt.cshtml" />
-    <Content Include="Views\Management\ViewReceipt.cshtml" />
+    <Content Include="Views\Management\CreateManualReceipt.cshtml" />
+    <Content Include="Views\Management\ViewManagerReceipt.cshtml" />
     <Content Include="Views\Management\CreateReceipt.cshtml" />
     <Content Include="Views\Management\ManageReport.cshtml" />
     <Content Include="Views\Management\ManageSurvey.cshtml" />
@@ -542,8 +542,10 @@
     <Content Include="Views\Admin\deleteHouse.cshtml" />
     <Content Include="Views\Management\ResidentApprovement.cshtml" />
     <Content Include="Views\Management\ManageHelpdeskServiceCategory.cshtml" />
-    <Content Include="Views\Home\ReceiptView.cshtml" />
+    <Content Include="Views\Home\ViewReceipt.cshtml" />
     <Content Include="Views\Home\ViewReceiptDetail.cshtml" />
+    <Content Include="Views\Management\UpdateReceipt.cshtml" />
+    <Content Include="Views\Management\_receiptDetailItemList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

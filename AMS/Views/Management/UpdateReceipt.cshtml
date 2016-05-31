@@ -1,0 +1,387 @@
+﻿@using AMS.Constant
+@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "ManageReipt";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+    List<House> block = ViewBag.block;
+    List<House> firstBlockFloor = ViewBag.firstBlockFloor;
+    List<House> rooms = ViewBag.rooms;
+    Receipt receipt = ViewBag.receipt;
+    int userId = ViewBag.userId;
+}
+
+<nav class="navbar navbar-subnav navbar-static-top" role="navigation">
+    <div class="container-fluid">
+
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subnav">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="fa fa-ellipsis-h"></span>
+            </button>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="subnav">
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a href="/Management/ManageReceipt/View/@userId"><i class="fa fa-list-ul"></i> Quản lý hóa đơn</a>
+                </li>
+                <li>
+                    <a href="/Management/ManageReceipt"><i class="fa fa-file-text-o"></i> Tạo hóa đơn thủ công</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</nav>
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-gray">Cập nhật hóa đơn</div>
+        <div class="panel-body">
+            <form id="updateOrder" class="form-horizontal" data-receiptid="@receipt.Id" role="form">
+
+                <div class="alert alert-info hide" id="createReceiptSuccessNoti" @*style="display: none"*@>
+                    <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <span>Hóa đơn được tạo thành công</span>
+                </div>
+                <div class="alert alert-danger hide" id="createReceiptFailedNoti">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                    <span>Việc tạo hóa đơn thất bại</span>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-8">
+                        <fieldset class="scheduler-border less-padding">
+                            <legend class="scheduler-border">Thông tin hóa đơn</legend>
+                            <div class="form-group">
+                                <label for="receiptTitle" class="col-md-2 control-label">Tiêu đề</label>
+                                <div class="col-md-10">
+                                    <input id="receiptTitle" value="@receipt.Title" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="houseName" class="col-md-2 control-label">Tòa nhà</label>
+                                <div class="col-md-3 full-width-select">
+                                    <select id="houseBlock" name="select" class="form-control">
+                                        @{
+                                            foreach (var b in block)
+                                            {
+                                                if (b.Block.Equals(receipt.House.Block))
+                                                {
+                                                    <option selected="selected" value="@b.Block">@b.Block</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@b.Block">@b.Block</option>
+                                                }
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <label for="houseName" class="col-md-1 control-label">Tầng</label>
+                                <div class="col-md-2">
+                                    <select id="houseFloor" name="select" class="form-control">
+                                        @{
+                                            foreach (var f in firstBlockFloor)
+                                            {
+                                                if (f.Floor.Equals(receipt.House.Floor))
+                                                {
+                                                    <option selected="selected" value="@f.Floor">@f.Floor</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@f.Floor">@f.Floor</option>
+                                                }
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <label for="houseName" class="col-md-1 control-label">Nhà</label>
+                                <div class="col-md-3">
+                                    <select id="houseName" name="select" class="form-control">
+                                        @{
+                                            foreach (var r in firstBlockFloor)
+                                            {
+                                                if (r.HouseName.Equals(receipt.House.HouseName))
+                                                {
+                                                    <option selected="selected" value="@r.HouseName">@r.HouseName</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@r.HouseName">@r.HouseName</option>
+                                                }
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="houseBlock" class="col-md-2 control-label">Người tạo</label>
+                                <div class="col-md-5">
+                                    <input readonly="readonly" value="@receipt.User.Fullname" id="creator" type="text" class="form-control">
+                                </div>
+                                <label for="createDate" class="col-md-2 control-label">Ngày tạo</label>
+                                <div class="col-md-3">
+                                    @{
+                                        string date = receipt.CreateDate.Value.ToString(AmsConstants.DateFormat);
+                                    }
+                                    <input readonly="readonly" value="@date" id="createDate" type="text" class="form-control">
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="houseBlock" class="col-md-2 control-label">Trạng thái</label>
+                                <div class="col-md-5">
+                                    @{
+                                        if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_PAID)
+                                        {
+                                            <span class="btn btn-info">Đã thanh toán</span>
+                                        }
+                                        else if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPAID)
+                                        {
+                                            <span id="unPaid" class="btn btn-danger">Chưa thanh toán</span>
+                                            <span id="paid" class="btn btn-info hide">Đã thanh toán</span>
+                                        }
+                                        else if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
+                                        {
+                                            <span id="unpublished"class="btn btn-inverse">Chưa công bố</span>
+                                            <span id="unPaid" class="btn btn-danger hide">Chưa thanh toán</span>
+                                            <span id="paid" class="btn btn-info hide">Đã thanh toán</span>
+                                        }
+                                    }
+                                </div>
+                                <label for="paidDate" class="col-md-2 control-label">Ngày thanh toán</label>
+                                <div class="col-md-3">
+                                    @{
+                                        string paidDateStr = "";
+                                        if (null == receipt.PaymentDate)
+                                        {
+                                            paidDateStr = "Chưa thanh toán";
+                                        }
+                                        else
+                                        {
+                                            paidDateStr = receipt.PaymentDate.Value.ToString(AmsConstants.DateFormat);
+                                        }
+                                    }
+                                    <input id="paidDate" type="text" value="@paidDateStr" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="receiptDesc" class="col-md-2 control-label">Mô tả</label>
+                                <div class="col-md-10">
+                                    <textarea id="receiptDesc" class="form-control" rows="3">@receipt.Description</textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <fieldset class="scheduler-border less-padding">
+                            <legend class="scheduler-border">Chi tiết hóa đơn</legend>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <strong style="align-content: center">Tên</strong>
+                                </div>
+                                <div class="col-sm-1">
+                                    <strong style="align-content: center">Số lượng</strong>
+                                </div>
+                                <div class="col-sm-2">
+                                    <strong style="align-content: center">Đơn giá</strong>
+                                </div>
+                                <div class="col-sm-2">
+                                    <strong style="align-content: center">Thành tiền</strong>
+                                </div>
+                            </div>
+                            <div id="receiptWrapper">
+                                @{
+                                    int index = 0;
+                                    foreach (var detail in receipt.ReceiptDetails)
+                                    {
+                                        {
+                                            index++;
+                                        }
+
+                                        <div id="row_@index" class="form-group">
+                                            <div class="col-sm-6">
+                                                <input id="item_name_@index" value="@detail.ServiceFee.Name" name="" type="text" class="form-control order-item">
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <input id="item_qty_@index" value="@detail.Quantity" type="text" class="form-control order-item-qty">
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input id="item_unit_price_@index" value="@detail.UnitPrice" type="text" class="form-control order-item-price">
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input id="item_qty_price_@index" readonly="readonly" value="@(detail.UnitPrice*detail.Quantity)" name="" type="text" class="form-control total-order">
+                                            </div>
+                                            <span class="btn btn-danger btn-xs" onclick="deleteItem(@index)"><i class="fa fa-times"></i></span>
+                                            <input type="hidden" id="item_id_@index" value="@detail.Id" name="" />
+                                        </div>
+                                    }
+                                }
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-3">
+                                    <span id="addNewRow" name="addNewRow" class="btn btn-info"><i class="fa fa-plus">Add new</i></span>
+                                </div>
+                            </div>
+                            <div class="form-group" style="font-size: 20px; text-align: right">
+                                <div class="col-sm-offset-7 col-sm-2">
+                                    <strong style="align-content: center">Tổng cộng</strong>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label id="total"></label>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            @{
+                                if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
+                                {
+                                    <div class="col-md-offset-8 col-md-2">
+                                        <span id="btnPublished" onclick="changeStatusReceipt(@receipt.Id,@userId,@SLIM_CONFIG.RECEIPT_STATUS_UNPAID)" class="btn btn-primary">Công bố</span>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <span id="btnUpdate"  onclick="updateReceipt(@userId)" class="btn btn-primary">Cập nhật</span>
+                                    </div>
+                                    <div class="col-md-offset-10 col-md-2">
+                                        <span id="btnPaid" onclick="changeStatusReceipt(@receipt.Id,@userId,@SLIM_CONFIG.RECEIPT_STATUS_PAID)" class="btn btn-primary hide">Thanh toán</span>
+                                    </div>
+                                }
+                                else if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPAID)
+                                {
+                                    <div class="col-md-offset-10 col-md-2">
+                                        <span onclick="changeStatusReceipt(@receipt.Id,@userId,@SLIM_CONFIG.RECEIPT_STATUS_PAID)" class="btn btn-primary">Thanh toán</span>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        window.index = (@index) ;
+        $("#addNewRow").on("click", function () {
+            window.index++;
+            var tag = "<div id=\"row_" + index + "\" class='form-group'>" +
+                            "<div class='col-sm-6'><input id=\"item_name_" + index + "\" type='text' class='form-control order-item'></div>" +
+                            "<div class='col-sm-1'><input type='text' id=\"item_qty_" + index + "\" class='form-control order-item-qty'></div>" +
+                            "<div class='col-sm-2'><input id=\"item_unit_price_" + index + "\"type='text' class='form-control order-item-price'></div>" +
+                            "<div class='col-sm-2'><input id=\"item_qty_price_" + index + "\" type='text' readonly='readonly' class='form-control'></div>" +
+                            "<input type='hidden' id=\"" + "item_id_" + index + "\" value='0'  />" +
+                            "<span class='btn btn-danger btn-xs' onclick='deleteItem(\"" + index + "\")'><i class='fa fa-times'></i></span>" +
+                        "</div>";
+            $("#receiptWrapper").append(tag);
+        });
+    });
+    function deleteItem(id) {
+        $("#row_" + id)[0].parentNode.removeChild($("#row_" + id)[0]);
+    }
+
+    function updateReceipt(fromUserId) {
+        var contentObj = $("#receiptWrapper > .form-group");
+        var numberOfRow = contentObj.length;
+        var receiptName = $("#receiptTitle").val();
+        var receiptDesc = $("#receiptDesc").val();
+        var receiptHouseName = $("#houseName").val();
+        var receiptId = document.getElementById("updateOrder").dataset.receiptid;
+        var userId = fromUserId;
+
+        var listItem = [];
+        if (numberOfRow !== 0) {
+            for (var i = 0; i < numberOfRow; i++) {
+                var rowIdStr = $(contentObj[i]).prop("id").split("row_");
+                var id = rowIdStr[1];
+                var name = $("#item_name_" + id).val();
+                var qty = $("#item_qty_" + id).val();
+                var unitPrice = $("#item_unit_price_" + id).val();
+                var receipDetailId = $("#item_id_" + id).val();
+                if (name && qty && unitPrice) {
+                    var item = {
+                        RecDetailId: receipDetailId,
+                        Name: name,
+                        UnitPrice: unitPrice,
+                        Quantity: qty
+                    };
+                    listItem.push(item);
+                }
+            }
+        }
+
+        var orderItem = {
+            Creator: userId,
+            ReceiptId: receiptId,
+            ReceiptTitle: receiptName,
+            ReceiptDesc: receiptDesc,
+            ReceiptHouseName: receiptHouseName,
+            ListItem: listItem
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/Management/ManageReceipt/UpdateReceipt",
+            data: $.param(orderItem),
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    $("#createReceiptSuccessNoti").removeClass("hide").addClass("show");
+                    setTimeout(function () {
+                        $("#createReceiptSuccessNoti").removeClass("show").addClass("hide");
+                        $("#createNewOrder").reset();
+                        $("#createNewOrder").closest('form').find("input[type=text], textarea").val("");
+                    }, 3000);
+
+                    $("#receiptWrapper").load("/Management/ManageReceipt/ReceiptDetailItemList?receiptId="+ document.getElementById("updateOrder").dataset.receiptid);
+
+                } else {
+                    $("#createReceiptFailedNoti").removeClass("hide").addClass("show");
+                    setTimeout(function () {
+                        $("#createReceiptFailedNoti").removeClass("show").addClass("hide");
+                    }, 3000);
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+    function changeStatusReceipt(receiptId,userId, mode) {
+        $.ajax({
+            type: "get",
+            url: "/Management/ManageReceipt/UpdateStatus",
+            data: {
+                ReceiptId: receiptId,
+                Status: mode,
+                UserId: userId
+            },
+            success: function(data) {
+                if (data.StatusCode !== -1) {
+                    if (data.Data.paymentDate === undefined) {
+                        $("#unpublished").removeClass("show").addClass("hide");
+                        $("#btnUpdate").removeClass("show").addClass("hide");
+                        $("#btnPublished").removeClass("show").addClass("hide");
+                            
+                        $("#unPaid").removeClass("hide").addClass("show");
+                        $("#btnPaid").removeClass("hide").addClass("show");
+                    }else {
+                        $("#unPaid").removeClass("show").addClass("hide");
+                        $("#paid").removeClass("hide").addClass("show");
+                        $("#btnPaid").removeClass("show").addClass("hide");
+                    }
+                }
+            }
+        });
+    }
+</script>

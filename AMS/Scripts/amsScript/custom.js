@@ -1077,9 +1077,151 @@ function acceptApproveUser() {
 function showOrderDetail(receiptId, userId) {
     location.href = "/Home/ManageReceipt/View/Detail?userId=" + userId + "&orderId=" + receiptId;
 }
-
+function editOrderDetail(receiptId, userId) {
+    location.href = "/Management/ManageReceipt/Edit/Detail?userId=" + userId + "&orderId=" + receiptId;
+}
 function approveResident(id) {
     $("#delHdSrvBtnGroup").removeClass("show").addClass("show");
     $("#rowHdSrvCat_" + id).css("display", "none");
     deleteHdSrvCatList.push(id);
 }
+
+
+// Receipt manager
+function calculateTotal() {
+    var contentObj = $("#receiptWrapper > .form-group");
+    var total = 0;
+    for (var i = 0; i < contentObj.length; i++) {
+        var rowIdStr = $(contentObj[i]).prop("id").split("row_");
+        var id = rowIdStr[1];
+        var currentPrice = $("#item_qty_price_" + id).val();
+        if (currentPrice && isNaN(currentPrice) === false) {
+            try {
+                currentPrice = parseFloat(currentPrice);
+                total += currentPrice;
+            } catch (e) {
+                $("#total").text("");
+                return;
+            }
+        }
+    }
+    $("#total").text(total);
+}
+
+
+window.getHouseMode = "";
+function parseJsonToSelectTag(floor, room) {
+    var selectTagList = [];
+    var selectTag = "";
+    if (getHouseMode !== "floor") {
+        for (var i = 0; i < floor.length; i++) {
+            var obj = floor[i];
+            selectTag = "<option value=\"" + obj + "\">" + obj + "</option>";
+            selectTagList.push(selectTag);
+        }
+        $("#houseFloor").html(selectTagList);
+    }
+
+    selectTagList = [];
+    for (var j = 0; j < room.length; j++) {
+        var obj2 = room[j];
+        selectTag = "<option value=\"" + obj2 + "\">" + obj2 + "</option>";
+        selectTagList.push(selectTag);
+    }
+    $("#houseName").html(selectTagList);
+}
+
+function getRoomAndFloor(blockName, floorName, mode) {
+    window.getHouseMode = mode;
+    $.ajax({
+        type: "GET",
+        url: "/Management/ManageReceipt/GetRoomAndFloor",
+        data: {
+            blockName: blockName,
+            floorName: floorName
+        },
+        success: function (data) {
+            var floor = data.Data.Floor;
+            var room = data.Data.Room;
+            var msg = "<option value=\"\">" + "Tòa nhà không có dân cư ở" + "</option>";
+            var msg2 = "<option value=\"\">" + "Tần của toàn nhà không có dân cư ở" + "</option>";
+            if (floor === undefined || floor === null || floor.length === 0) {
+                $("#houseFloor").html(msg);
+                $("#houseName").html(msg2);
+            } else if (room === undefined || room === null || room.length === 0) {
+                $("#houseName").html(msg2);
+            } else {
+                parseJsonToSelectTag(floor, room, mode);
+            }
+        },
+        error: function () {
+
+        }
+    });
+}
+
+
+$(document).ready(function () {
+    //        $("#createNewOrder").validate({
+    //            submitHandler: function () {
+    //                console.log("AAAAAAAA");
+    //            }
+    //        });
+
+    
+    $("#receiptWrapper").on("change", ".order-item-qty", function () {
+        console.log($(this).val());
+        var idStr = $(this).prop("id").split("item_qty_");
+        if ($(this).val() && (isNaN($(this).val()) === false)) {
+            var unitPriceValue = $("#item_unit_price_" + idStr[1]).val();
+            if (unitPriceValue && isNaN(unitPriceValue) === false) {
+                var unitPrice = parseFloat(unitPriceValue);
+                var qty = parseFloat($(this).val());
+                $("#item_qty_price_" + idStr[1]).val(unitPrice * qty);
+                calculateTotal();
+            } else {
+                $("#item_unit_price_" + idStr[1]).val("");
+            }
+        } else {
+            $("#item_qty_" + idStr[1]).val("");
+        }
+    });
+    $("#receiptWrapper").on("change", ".order-item-price", function () {
+        console.log($(this).val());
+        var idStr = $(this).prop("id").split("item_unit_price_");
+        if ($(this).val() && (isNaN($(this).val()) === false)) {
+            var qtyValue = $("#item_qty_" + idStr[1]).val();
+            if (qtyValue && isNaN(qtyValue) === false) {
+                var qty = parseFloat(qtyValue);
+                var unitPrice = parseFloat($(this).val());
+                $("#item_qty_price_" + idStr[1]).val(unitPrice * qty);
+                calculateTotal();
+            } else {
+                $("#item_qty_price_" + idStr[1]).val("");
+            }
+        } else {
+            $("#item_unit_price_" + idStr[1]).val("");
+        }
+    });
+    //        jQuery.validator.addClassRules("order-item-qty", {
+    //            required: true,
+    //            number: true
+    //        });
+    //        jQuery.validator.addClassRules("order-item-price", {
+    //            required: true,
+    //            number: true
+    //        });
+
+    $("#houseBlock").on("change", function () {
+        var selected = $(this).find("option:selected").val();
+        getRoomAndFloor(selected, "", "block");
+    });
+
+    $("#houseFloor").on("change", function () {
+        var selectedFloor = $(this).find("option:selected").val();
+        var selectedBlock = $("#houseBlock").find("option:selected").val();
+        getRoomAndFloor(selectedBlock, selectedFloor, "floor");
+    });
+});
+
+//Receipt manager

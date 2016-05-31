@@ -54,57 +54,57 @@ namespace AMS.Controllers
         [HttpPost]
         public void AddByAjax(string Title, int PostId)
         {
-            postService.createPost(Title, PostId);
+//            postService.createPost(Title, PostId);
 
         }
         [HttpPost]
         public ActionResult Index(string Title, int PostId)
         {
 
-            postService.createPost(Title, PostId);
+//            postService.createPost(Title, PostId);
             return RedirectToAction("TimeLine");
         }
         [HttpPost]
         public ActionResult Indexx(ListPostViewModel model, int postId)
         {
 
-            postService.createPost(model.Title, model.Id);
+//            postService.createPost(model.Title, model.Id);
             //return PartialView("TimeLine");
             return RedirectToAction("TimeLine");
         }
 
-        public ActionResult TimeLine()
-        {
-            // get all post
-            IEnumerable<Post> allPost = postService.getAllPost();
-            IEnumerable<Post> listComment = new List<Post>();
-            ListPostViewModel listPostViewModel = new ListPostViewModel();
-            listPostViewModel.listPost = new List<PostViewModel>();
-            foreach (var item in allPost)
-            {
-                PostViewModel postViewModel = new PostViewModel();
-                postViewModel.ImgUrl = item.ImgUrl;
-                postViewModel.Id = item.Id;
-                postViewModel.Title = item.Title;
-                postViewModel.CountComment = postService.CountComment(postViewModel.Id);
-                if (item.CreateDate.HasValue)
-                {
-                    postViewModel.CreateDate = item.CreateDate.Value;
-                }
-
-                //get list comment belong post
-                listComment = postService.getCommentBelongPost(postViewModel.Id);
-                if (listComment != null)
-                {
-                    postViewModel.Post = listComment;
-                }
-                listPostViewModel.listPost.Add(postViewModel);
-
-            }
-
-
-            return View(listPostViewModel);
-        }
+//        public ActionResult TimeLine()
+//        {
+//            // get all post
+////            IEnumerable<Post> allPost = postService.getAllPost();
+////            IEnumerable<Post> listComment = new List<Post>();
+////            ListPostViewModel listPostViewModel = new ListPostViewModel();
+////            listPostViewModel.listPost = new List<PostViewModel>();
+////            foreach (var item in allPost)
+////            {
+////                PostViewModel postViewModel = new PostViewModel();
+////                postViewModel.ImgUrl = item.ImgUrl;
+////                postViewModel.Id = item.Id;
+////                postViewModel.Title = item.Title;
+////                postViewModel.CountComment = postService.CountComment(postViewModel.Id);
+////                if (item.CreateDate.HasValue)
+////                {
+////                    postViewModel.CreateDate = item.CreateDate.Value;
+////                }
+////
+////                //get list comment belong post
+////                listComment = postService.getCommentBelongPost(postViewModel.Id);
+////                if (listComment != null)
+////                {
+////                    postViewModel.Post = listComment;
+////                }
+////                listPostViewModel.listPost.Add(postViewModel);
+////
+////            }
+//
+//
+////            return View(listPostViewModel);
+//        }
 
         [HttpPost]
         public ActionResult TimeLine(PostViewModel post, string Title, HttpPostedFileBase Media)
@@ -158,7 +158,7 @@ namespace AMS.Controllers
             post.Title = Title;
             post.ImgUrl = mediaUrl;
             post.CreateDate = DateTime.Now;
-            postService.createPost(post);
+//            postService.createPost(post);
             //}
             return RedirectToAction("TimeLine");
         }
@@ -177,7 +177,7 @@ namespace AMS.Controllers
             p.Title = post.Title;
             p.ImgUrl = post.ImgUrl;
 
-            postService.CreatePosts(p);
+//            postService.CreatePosts(p);
             //}
             return RedirectToAction("TimeLine");
         }
@@ -318,6 +318,7 @@ namespace AMS.Controllers
             if (u != null)
             {
                 ViewBag.userId = u.Id;
+                ViewBag.userRole = u.RoleId;
             }
             return View("ViewHistoryHdRequests");
         }
@@ -639,9 +640,17 @@ namespace AMS.Controllers
 
                     if (hdRequest.Status != (int)StatusEnum.Done && hdRequest.Status != (int)StatusEnum.Close)
                     {
+                        HelpdeskRequestLog hdRequestLog = new HelpdeskRequestLog();
+                        hdRequestLog.StatusFrom = (int)StatusEnum.AssignTask;
+                        hdRequestLog.StatusTo = (int)StatusEnum.AssignTask;
+
                         if (hdRequest.Status == (int)StatusEnum.Open)
                         {
                             hdRequest.AssignDate = DateTime.Now;
+                            hdRequest.Status = (int)StatusEnum.Processing;
+
+                            hdRequestLog.StatusFrom = (int)StatusEnum.Open;
+                            hdRequestLog.StatusTo = (int)StatusEnum.Processing;
                         }
                         hdRequest.ModifyDate = DateTime.Now;
                         _hdReqServices.Update(hdRequest);
@@ -652,12 +661,11 @@ namespace AMS.Controllers
                         hdReqHdSupporter.CreateDate = DateTime.Now;
                         _hdReqHdSupporterServices.Add(hdReqHdSupporter);
 
-                        HelpdeskRequestLog hdRequestLog = new HelpdeskRequestLog();
+
                         hdRequestLog.ChangeFromUserId = fromUser.Id;
                         hdRequestLog.HelpdeskRequestId = hdRequest.Id;
                         hdRequestLog.ChangeToUserId = toUser.Id;
-                        hdRequestLog.StatusFrom = (int)StatusEnum.AssignTask;
-                        hdRequestLog.StatusTo = (int)StatusEnum.AssignTask;
+
                         hdRequestLog.CreateDate = DateTime.Now;
                         _helpdeskRequestLogServices.Add(hdRequestLog);
 
@@ -768,6 +776,8 @@ namespace AMS.Controllers
 
             return View("ViewRequestingHdRequestsOfManager");
         }
+
+        
 
         [HttpPost]
         public ActionResult ManageMember(AddMemberViewModel member)
