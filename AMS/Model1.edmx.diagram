@@ -8,7 +8,7 @@
         <EntityTypeShape EntityType="AMSModel.UserProfile" Width="1.5" PointX="8.25" PointY="20.5" IsExpanded="true" />
         <AssociationConnector Association="AMSModel.FK_tbl_user_profile_tbl_user" ManuallyRouted="false" />
         <EntityTypeShape EntityType="AMSModel.Answer" Width="1.5" PointX="3" PointY="16" />
-        <EntityTypeShape EntityType="AMSModel.AroundProvider" Width="1.5" PointX="6" PointY="20.5" />
+        <EntityTypeShape EntityType="AMSModel.AroundProvider" Width="1.5" PointX="6" PointY="20.375" />
         <EntityTypeShape EntityType="AMSModel.AroundProviderCategory" Width="1.5" PointX="3.75" PointY="21.125" />
         <EntityTypeShape EntityType="AMSModel.HelpdeskRequest" Width="1.5" PointX="8" PointY="9.875" />
         <EntityTypeShape EntityType="AMSModel.HelpdeskRequestHelpdeskSupporter" Width="1.5" PointX="13.25" PointY="10.75" />

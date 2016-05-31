@@ -25,6 +25,7 @@
           <Property Name="GoogleMapUrl" Type="nvarchar" MaxLength="255" />
           <Property Name="ClickCount" Type="bigint" />
           <Property Name="AroundProviderCategoryId" Type="int" />
+          <Property Name="ImageUrl" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="AroundProviderCategory">
           <Key>
@@ -774,6 +775,7 @@
           <Property Name="GoogleMapUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="ClickCount" Type="Int64" />
           <Property Name="AroundProviderCategoryId" Type="Int32" />
+          <Property Name="ImageUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AroundProviderCategory" Relationship="AMSModel.FK_tbl_arround_srv_tbl_around_srv_cat" FromRole="AroundProvider" ToRole="AroundProviderCategory" />
           <NavigationProperty Name="ResidentRateAroundProviders" Relationship="AMSModel.FK_tbl_resident_rate_around_srv_tbl_arround_srv" FromRole="AroundProvider" ToRole="ResidentRateAroundProvider" />
         </EntityType>
@@ -1329,6 +1331,7 @@
           <EntitySetMapping Name="AroundProviders">
             <EntityTypeMapping TypeName="AMSModel.AroundProvider">
               <MappingFragment StoreEntitySet="AroundProvider">
+                <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
                 <ScalarProperty Name="AroundProviderCategoryId" ColumnName="AroundProviderCategoryId" />
                 <ScalarProperty Name="ClickCount" ColumnName="ClickCount" />
                 <ScalarProperty Name="GoogleMapUrl" ColumnName="GoogleMapUrl" />

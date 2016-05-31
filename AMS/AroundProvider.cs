@@ -28,6 +28,7 @@ namespace AMS
         public string GoogleMapUrl { get; set; }
         public Nullable<long> ClickCount { get; set; }
         public Nullable<int> AroundProviderCategoryId { get; set; }
+        public string ImageUrl { get; set; }
     
         public virtual AroundProviderCategory AroundProviderCategory { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
