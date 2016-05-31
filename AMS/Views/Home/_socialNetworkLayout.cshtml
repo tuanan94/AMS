@@ -1,4 +1,5 @@
-﻿@{ 
+﻿@using Microsoft.AspNet.Identity
+@{ 
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -22,8 +23,11 @@
                 <li class="">
                     <a href="user-private-messages.html"><i class="icon-comment-fill-1"></i> Tin nhắn</a>
                 </li>
-                <li class="active">
-                    <a href="/Home/HelpdeskRequest/View"><i class="fa fa-cogs"></i> Dịch vụ</a>
+                <li class="">
+                    <a href="/Home/HelpdeskRequest/Create/@User.Identity.GetUserId()"><i class="fa fa-cogs"></i> Dịch vụ</a>
+                </li>
+                <li class="">
+                    <a href="/Home/ManageReceipt/View/@User.Identity.GetUserId()"><i class="fa fa-file-text-o"></i> Hóa đơn</a>
                 </li>
                 <li>
                     <a href="login.html"><i class="icon-unlock-fill"></i> Logout</a>

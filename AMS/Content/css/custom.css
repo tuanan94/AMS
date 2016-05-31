@@ -70,3 +70,39 @@ fieldset.scheduler-border > legend {
     padding-left: 0;
 }
 
+.processing {
+    background-color: #FFCC00;
+    border-radius: 4px;
+}
+
+.status-label-size {
+    font-size: 15px;
+}
+
+.time-color {
+    color: #000;
+    border: 1px solid;
+    border-radius: 3px;
+    background-color: #e8d3a4;
+}
+
+.date-color {
+    color: #000;
+    border: 1px solid;
+    border-radius: 3px;
+    background-color: #c2e1f6;
+}
+
+.house-color {
+    color: #000;
+    border: 1px solid;
+    border-radius: 3px;
+    background-color: #fcd7c6;
+}
+td.highlight {
+    background-color: whitesmoke !important;
+}
+
+.lbl-margin-right {
+    margin-right: 5px;
+}

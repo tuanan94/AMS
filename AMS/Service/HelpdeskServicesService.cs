@@ -64,6 +64,12 @@ namespace AMS.Service
             return
                 hdServiceRepository.List.Where(s => s.HelpdeskServiceCategoryId == catId && s.Status == 1).OrderBy(s => s.LastModified).ToList();
         }
+
+        public List<HelpdeskService> FindByCategory(int catId)
+        {
+            return
+                hdServiceRepository.List.Where(s => s.HelpdeskServiceCategoryId == catId).OrderBy(s => s.LastModified).ToList();
+        }
     }
 
 }

@@ -1,11 +1,20 @@
 ﻿@using AMS.Enum
 @{
-    ViewBag.Title = "ManageMember";
-    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+    int userId = ViewBag.userId;
+    int roleId = 2;
 }
 @{
-    int userId = ViewBag.userId;
+    ViewBag.Title = "ManageMember";
+    if (roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT)
+    {
+        Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Management/__ManagementLayout.cshtml";
+    }
 }
+
 <nav class="navbar navbar-subnav navbar-static-top" role="navigation">
     <div class="container-fluid">
 
@@ -20,17 +29,26 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="subnav">
             <ul class="nav navbar-nav">
-                <li>
-                    <a href="../Create/@userId"><i class="fa fa-fw icon-ship-wheel"></i> Tạo yêu cầu hổ trợ</a>
-                </li>
+                @{
+                    if (roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT)
+                    {
+                        <li>
+                            <a href="/Home/HelpdeskRequest/Create/@userId"><i class="fa fa-send"></i> Tạo yêu cầu hổ trợ</a>
+                        </li>
+                    }
+                }
                 <li class="active">
-                    <a href="./@userId"><i class="fa fa-fw icon-ship-wheel"></i> Quản lý yêu cầu</a>
+                    <a href="/Home/HelpdeskRequest/ViewHistory/@userId"><i class="fa fa-history"></i> Quản lý yêu cầu</a>
                 </li>
-                <li>
-                    <a href="./AdminView"><i class="fa fa-fw icon-ship-wheel"></i> Admin Page</a>
-                </li>
+                @{
+                    if (roleId == SLIM_CONFIG.USER_ROLE_MANAGER)
+                    {
+                        <li>
+                            <a href="/Management/ResidentApprovement/@userId"><i class="fa fa-group"></i> Quản lý xác nhận dân cư</a>
+                        </li>
+                    }
+                }
             </ul>
-
         </div>
         <!-- /.navbar-collapse -->
     </div>
@@ -40,39 +58,42 @@
 
 <div class="col-md-12">
     <div class="panel panel-default">
+
+        <div class="panel-heading panel-heading-gray">
+            <i class="fa fa-bookmark"></i> Danh sách yêu cầu hổ trợ
+        </div>
+
         <div class="panel-body">
-            <div class="form-horizontal" id="searchHdSrv" role="form" onkeypress="return event.keyCode !== 13;">
+            <div class="form-horizontal" id="searchHdSrv" role="form">
                 <!-- Data table -->
-                <table id="hdRequestTbl" data-userid ="@userId" class="table">
+                <table id="hdRequestTbl" data-userid="@userId" class="table table-hover table-bordered">
                     <thead>
-                    <tr>
-                        <th>Tiêu đề</th>
-                        <th>Căn hộ</th>
-                        <th>DV hổ trợ</th>
-                        <th>Ưu tiên</th>
-                        <th>Trạng thái</th>
-                        <th>NV hổ trợ</th>
-                        <th>Ngày tạo</th>
-                        <th>Ngày H.Thành</th>
-                        <th></th>
-                    </tr>
+                        <tr>
+                            <th></th>
+                            <th>Tiêu đề</th>
+                            <th>Căn hộ</th>
+                            <th>DV hổ trợ</th>
+                            <th>Trạng thái</th>
+                            <th>NV hổ trợ</th>
+                            <th>Ngày tạo</th>
+                            <th>Ngày H.Thành</th>
+                            <th></th>
+                        </tr>
                     </thead>
                     <tfoot>
-                    <tr>
-                        <th>Tiêu đề</th>
-                        <th>Căn hộ</th>
-                        <th>DV hổ trợ</th>
-                        <th>Ưu tiên</th>
-                        <th>Trạng thái</th>
-                        <th>NV hổ trợ</th>
-                        <th>Ngày tạo</th>
-                        <th>Ngày H.Thành</th>
-                        <th></th>
-                    </tr>
+                        <tr>
+                            <th></th>
+                            <th>Tiêu đề</th>
+                            <th>Căn hộ</th>
+                            <th>DV hổ trợ</th>
+                            <th>Trạng thái</th>
+                            <th>NV hổ trợ</th>
+                            <th>Ngày tạo</th>
+                            <th>Ngày H.Thành</th>
+                            <th></th>
+                        </tr>
                     </tfoot>
-                    <tbody>
-
-                    </tbody>
+                    <tbody></tbody>
                 </table>
                 <!-- // Data table -->
             </div>
@@ -80,3 +101,9 @@
     </div>
 </div>
 
+<script>
+    $(document).ready(function () {
+        $("#slide-left").children().removeClass("active");
+        $($("#slide-left li")[4]).addClass("active");
+    });
+</script>

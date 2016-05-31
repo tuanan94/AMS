@@ -23,14 +23,14 @@ namespace AMS
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
             bundles.Add(new ScriptBundle("~/bundles/amsScript").Include("~/Scripts/amsScript/scripts.js", "~/Scripts/amsScript/vendor.js", "~/Scripts/amsScript/custom.js",
-                "~/Scripts/amsScript/additional-methods.min.js", "~/Scripts/amsScript/jquery.validate.min.js"));
+                "~/Scripts/amsScript/additional-methods.min.js", "~/Scripts/amsScript/jquery.timepicker.min.js"));
 
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
             bundles.Add(new StyleBundle("~/Content/css/css").Include("~/Content/css/default.css",
-                      "~/Content/css/custom.css"));
+                      "~/Content/css/custom.css", "~/Content/css/jquery.timepicker.css"));
 
         }
     }

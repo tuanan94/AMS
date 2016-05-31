@@ -1,156 +1,85 @@
-﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+﻿@using Microsoft.AspNet.Identity;
+@{
+    Layout = null;
+    var currentUser = User.Identity;
+    User curUser = ViewBag.curUser;
 }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Scripts.Render("~/bundles/jquery")
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/css/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
-<div class="sidebar left hidden-xs">
-    <div data-scrollable="" tabindex="0" style="overflow: hidden; outline: none;">
-        <div class="sidebar-block">
-            <div class="profile">
-                <img src="~/images/people/110/guy-5.jpg" alt="people" class="img-circle">
-                <h4>H101_AnTT</h4>
+</head>
+<body class="breakpoint-1024">
+    <div class="navbar navbar-main navbar-primary navbar-fixed-top" role="navigation" style="background-color:#339be7">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="#" data-toggle="sidebar-menu" id="toggle-sidebar-menu" class="visible-xs"><i class="fa fa-ellipsis-v"></i></a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a data-toggle="sidebar-chat" class="btn btn-link navbar-btn visible-xs"><i class="fa fa-comments"></i></a>
+                <a class="navbar-brand" href="index.html">QUẢN LÍ KHU CHUNG CƯ AMS</a>
             </div>
-        </div>
-        <div id="menu">
-            <ul>
-                <li class="category">Manager</li>
-                <li class="">
-                    <a href="ManageRequest"><i class="icon-user-1"></i> Yêu cầu helpdesk</a>
-                </li>
-                <li class="">
-                    <a href=""><i class="fa fa-group"></i> Yêu cầu từ thành viên</a>
-                </li>
-                <li class="">
-                    <a href="/Management/ManageHousehold"><i class="icon-comment-fill-1"></i> Thông tin hộ gia đình</a>
-                </li>
-                <li>
-                    <a href="/Management/ManageReceipt"><i class="icon-unlock-fill"></i> Quản lý hóa đơn</a>
-                </li>
-                <li>
-                    <a href="/Management/ManageIncome"><i class="icon-unlock-fill"></i> Quản lý thu chi</a>
-                </li>
-                <li>
-                    <a href="/Management/ManageReport"><i class="icon-unlock-fill"></i> Quản lý Báo cáo</a>
-                </li>
-                <li>
-                    <a href="login.html"><i class="icon-unlock-fill"></i> Khảo sát</a>
-                </li>
-                <li class="category">Admin</li>
-                <li>
-                    <a href="login.html"><i class="icon-unlock-fill"></i> Quản lý tài khoản</a>
-                </li>
-                <li>
-                    <a href="login.html"><i class="icon-unlock-fill"></i> Cấu hình</a>
-                </li>
-            </ul>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="navbar-collapse collapse" id="main-nav" style="height: 1px;">
+                <ul class="nav navbar-nav">
+
+
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                   
+                    <!-- User -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle user" data-toggle="dropdown">
+                            <img src="@((curUser==null||curUser.ProfileImage==null||curUser.ProfileImage.Equals(""))?"/Content/images/defaultProfile.png":curUser.ProfileImage)" class="img-circle" width="40"> @currentUser.GetUserName() <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="user-private-profile.html">Profile</a>
+                            </li>
+                            <li>
+                                <a href="user-private-messages.html">Messages</a>
+                            </li>
+                            <li>
+                                <a href="/Account/LogOff">Logout</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- /.navbar-collapse -->
         </div>
     </div>
-    <div id="ascrail2000" class="nicescroll-rails" style="width: 5px; z-index: 1; cursor: default; position: absolute; top: 0px; left: 245px; height: 638px; opacity: 0;"><div style="position: relative; top: 0px; float: right; width: 5px; height: 490px; border: 0px; border-radius: 5px; background-color: rgb(37, 173, 159); background-clip: padding-box;"></div></div><div id="ascrail2000-hr" class="nicescroll-rails" style="height: 5px; z-index: 1; top: 633px; left: 0px; position: absolute; cursor: default; display: none; width: 245px; opacity: 0;"><div style="position: absolute; top: 0px; height: 5px; width: 250px; border: 0px; border-radius: 5px; background-color: rgb(37, 173, 159); background-clip: padding-box;"></div></div>
-</div>
-<div class="sidebar right">
-    <div class="chat-search">
-        <input type="text" class="form-control" placeholder="Search">
+  
+    <div class="st-container">
+        @RenderBody()
+        <hr />
     </div>
-    <ul class="chat-filter nav nav-pills ">
-        <li class="active">
-            <a href="#" data-target="li">All</a>
-        </li>
-        <li>
-            <a href="#" data-target=".online">Online</a>
-        </li>
-        <li>
-            <a href="#" data-target=".offline">Offline</a>
-        </li>
-    </ul>
-    <ul class="chat-contacts">
-        <li class="online" data-user-id="1">
-            <a href="#">
-                <div class="media">
-                    <div class="pull-left">
-                        <span class="status"></span>
-                        <img src="images/people/110/guy-6.jpg" width="40" class="img-circle">
-                    </div>
-                    <div class="media-body">
-                        <div class="contact-name">Jonathan S.</div>
-                        <small>"Free Today"</small>
-                    </div>
-                </div>
-            </a>
-        </li>
-        <li class="online away" data-user-id="2">
-            <a href="#">
-                <div class="media">
-                    <div class="pull-left">
-                        <span class="status"></span>
-                        <img src="images/people/110/woman-5.jpg" width="40" class="img-circle">
-                    </div>
-                    <div class="media-body">
-                        <div class="contact-name">Mary A.</div>
-                        <small>"Feeling Groovy"</small>
-                    </div>
-                </div>
-            </a>
-        </li>
-        <li class="online" data-user-id="3">
-            <a href="#">
-                <div class="media">
-                    <div class="pull-left">
-                        <span class="status"></span>
-                        <img src="images/people/110/guy-3.jpg" width="40" class="img-circle">
-                    </div>
-                    <div class="media-body">
-                        <div class="contact-name">Adrian D.</div>
-                        <small>Busy</small>
-                    </div>
-                </div>
-            </a>
-        </li>
-        <li class="offline" data-user-id="4">
-            <a href="#">
-                <div class="media">
-                    <div class="pull-left">
-                        <img src="images/people/110/woman-6.jpg" width="40" class="img-circle">
-                    </div>
-                    <div class="media-body">
-                        <div class="contact-name">Michelle S.</div>
-                        <small>Offline</small>
-                    </div>
-                </div>
-            </a>
-        </li>
-    </ul>
-</div>
-<div id="content">
-    @*<nav class="navbar navbar-subnav navbar-static-top" role="navigation">
-        <div class="container-fluid">*@
 
-    <!-- Brand and toggle get grouped for better mobile display -->
-    @*<div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subnav">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="fa fa-ellipsis-h"></span>
-            </button>
-        </div>*@
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    @*<div class="collapse navbar-collapse" id="subnav">
-            <ul class="nav navbar-nav">
-                <li class="active">
-                    <a href="user-private-timeline.html"><i class="fa fa-fw icon-ship-wheel"></i> New feeds</a>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="login.html"> Logout<i class="fa fa-fw fa-sign-out"></i></a>
-                </li>
-            </ul>
-        </div>*@
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/amsScript/vendor.js"></script>
+    <script src="~/Scripts/amsScript/scripts.js"></script>
+    <script src="~/Scripts/amsScript/custom.js"></script>
+    <script src="~/Scripts/amsScript/additional-methods.min.js"></script>
+    <script src="~/Scripts/amsScript/jquery.validate.min.js"></script>
+    <script src="~/Scripts/amsScript/jquery.timepicker.min.js"></script>
+    @RenderSection("scripts", required: false)
 
-    <!-- /.navbar-collapse -->
-    @*</div>
-        </nav>*@
-    @RenderBody()
-    <!--Footer-->
-    <div class="footer">
-        Social Network Template © Copyright Notice
-    </div>
-</div>
+</body>
+</html>

@@ -24,6 +24,7 @@ namespace AMS
         public string ReceiptCode { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> LastModified { get; set; }
+        public Nullable<System.DateTime> PaymentDate { get; set; }
         public string Description { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<int> HouseId { get; set; }

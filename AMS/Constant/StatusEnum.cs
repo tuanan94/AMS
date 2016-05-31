@@ -9,14 +9,11 @@ namespace AMS.Enum
     public enum StatusEnum
     {
         Open = 1,
-        WaitingForQuotation = 2,
-        WaitingQuoutationConfirming = 3,
-        QuoutationConfirmed = 4,
-        WaitingForProcess = 5,
-        Processing = 6,
-        Done = 7,
-        Closed = 8,
-        Reopen = 9,
-        Reject = 10
+        Processing = 2,
+        Done = 3,
+        Close = 4,
+        Cancel = 5,
+        AssignTask = 6,
+
     }
 }

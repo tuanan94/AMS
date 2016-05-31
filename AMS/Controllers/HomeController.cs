@@ -274,7 +274,7 @@ namespace AMS.Controllers
                     hdRequest.Description = request.HdReqUserDesc;
                     hdRequest.ModifyDate = DateTime.Now;
                     hdRequest.Priority = request.HdReqPrior;
-                    hdRequest.Status = (int) StatusEnum.Open;
+                    hdRequest.Status = (int)StatusEnum.Open;
                     hdRequest.Title = request.HdReqTitle;
 
                     int id = _hdReqServices.Add(hdRequest);
@@ -299,6 +299,37 @@ namespace AMS.Controllers
                 return Json(response); ;
             }
             return Json(response);
+        }
+
+        [HttpPost]
+        [Route("Home/HelpdeskRequest/UpdateHdRequest")]
+        public ActionResult UpdateHdRequest(HelpdeskRequestModel request)
+        {
+            try
+            {
+                User u = _userServices.FindById(request.HdReqUserId);
+                HelpdeskRequest hdRequest = _hdReqServices.FindById(request.HdReqId);
+                if (u != null && hdRequest != null)
+                {
+                    HelpdeskService hdService = _helpdeskServices.FindById(request.HdServiceId);
+                    if (hdService != null && hdRequest.HelpdeskServiceId != hdService.Id)
+                    {
+                        hdRequest.HelpdeskServiceId = hdService.Id;
+                        hdRequest.Price = hdService.Price;
+                    }
+                    hdRequest.Title = request.HdReqTitle;
+                    hdRequest.Description = request.HdReqUserDesc;
+                    hdRequest.ModifyDate = DateTime.Now;
+                    _hdReqServices.Update(hdRequest);
+                    return RedirectToAction("ViewHdRequestDetail", new { hdReqId = hdRequest.Id, userId = u.Id });
+                }
+                // return to homepage
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("ViewHistoryHdRequest", new { userId = request.HdReqUserId });
+            }
+            return RedirectToAction("ViewHistoryHdRequest", new { userId = request.HdReqUserId });
         }
 
         [HttpGet]
@@ -444,16 +475,12 @@ namespace AMS.Controllers
                                 row.HdReqHouse = req.House.HouseName;
                                 row.HdReqPrior = req.Priority.Value;
                                 row.HdReqStatus = req.Status.Value;
-                                if (req.Status != (int)StatusEnum.Open)
+                                if (req.HelpdeskRequestHelpdeskSupporters.Count != 0)
                                 {
                                     User user =
-                                        req.HelpdeskRequestHelpdeskSupporters.Where(
-                                            hdSup => hdSup.HelpdeskRequestId == req.Id)
-                                            .OrderByDescending(hdSup1 => hdSup1.CreateDate)
-                                            .First()
-                                            .User;
-                                    row.HdReqSupporter =
-                                    user.Fullname;
+                                        req.HelpdeskRequestHelpdeskSupporters
+                                            .OrderByDescending(hdSup1 => hdSup1.CreateDate).First().User;
+                                    row.HdReqSupporter = user.Fullname;
                                 }
                                 rows.Add(row);
                             }
@@ -485,144 +512,71 @@ namespace AMS.Controllers
                     if (null != hdRequest)
                     {
                         bool statusIsChange = true;
-                        if (hdRequest.Status == (int)StatusEnum.WaitingForQuotation
+                        if (hdRequest.Status == (int)StatusEnum.Open
                             && hdReqChngStatus.FromStatus == hdRequest.Status
-                            && hdReqChngStatus.ToStatus == (int)StatusEnum.QuoutationConfirmed
+                            && hdReqChngStatus.ToStatus == (int)StatusEnum.Processing
                             )
                         {
-                            hdRequest.Status = (int)StatusEnum.QuoutationConfirmed;
-                            hdRequest.ModifyDate = DateTime.Now;
-                            _hdReqServices.Update(hdRequest);
-
-                        }
-                        else if (hdRequest.Status == (int)StatusEnum.Open
-                          && hdReqChngStatus.FromStatus == hdRequest.Status
-                           && hdReqChngStatus.ToStatus == (int)StatusEnum.WaitingForQuotation)
-                        {
-                            hdRequest.Status = (int)StatusEnum.WaitingForQuotation;
-                            hdRequest.AssignDate = DateTime.Now;
-                            hdRequest.ModifyDate = DateTime.Now;
-                            _hdReqServices.Update(hdRequest);
-
-
-                            HelpdeskRequestHelpdeskSupporter hdReqHdSupporter = new HelpdeskRequestHelpdeskSupporter();
-                            hdReqHdSupporter.HelpdeskRequestId = hdRequest.Id;
-                            hdReqHdSupporter.HelpdeskSupporterId = hdReqChngStatus.ToUserId; // must check if user is disable
-                            hdReqHdSupporter.CreateDate = DateTime.Now;
-                            _hdReqHdSupporterServices.Add(hdReqHdSupporter);
-
-                        }
-                        else if (hdRequest.Status == (int)StatusEnum.WaitingForQuotation
-                         && hdReqChngStatus.FromStatus == hdRequest.Status
-                          && hdReqChngStatus.ToStatus == (int)StatusEnum.WaitingQuoutationConfirming)
-                        {
-                            hdRequest.Status = (int)StatusEnum.WaitingQuoutationConfirming;
-                            hdRequest.ModifyDate = DateTime.Now;
-                            hdRequest.Price = hdReqChngStatus.Price;
-                            hdRequest.DueDate = DateTime.Parse(hdReqChngStatus.DueDate);
-                            /*Add them giá vào đây*/
-                            _hdReqServices.Update(hdRequest);
-
-                        }
-                        else if (hdRequest.Status == (int)StatusEnum.WaitingQuoutationConfirming
-                         && hdReqChngStatus.FromStatus == hdRequest.Status
-                          && hdReqChngStatus.ToStatus == (int)StatusEnum.QuoutationConfirmed)
-                        {
-                            hdRequest.Status = (int)StatusEnum.QuoutationConfirmed;
-                            hdRequest.ModifyDate = DateTime.Now;
-                            _hdReqServices.Update(hdRequest);
-
-                        }
-                        else if ((hdRequest.Status == (int)StatusEnum.QuoutationConfirmed
-                            || hdRequest.Status == (int)StatusEnum.Reopen)
-                        && hdReqChngStatus.FromStatus == hdRequest.Status
-                         && hdReqChngStatus.ToStatus == (int)StatusEnum.Processing)
-                        {
                             hdRequest.Status = (int)StatusEnum.Processing;
                             hdRequest.ModifyDate = DateTime.Now;
                             _hdReqServices.Update(hdRequest);
 
                         }
-                        else if ((hdRequest.Status == (int)StatusEnum.QuoutationConfirmed
-                            || hdRequest.Status == (int)StatusEnum.Reopen)
-                        && hdReqChngStatus.FromStatus == hdRequest.Status
-                         && hdReqChngStatus.ToStatus == (int)StatusEnum.WaitingForProcess)
-                        {
-                            hdRequest.Status = (int)StatusEnum.WaitingForProcess;
-                            hdRequest.ModifyDate = DateTime.Now;
-                            _hdReqServices.Update(hdRequest);
-
-                        }
-
-                        else if (hdRequest.Status == (int)StatusEnum.WaitingForProcess
-                        && hdReqChngStatus.FromStatus == hdRequest.Status
-                         && hdReqChngStatus.ToStatus == (int)StatusEnum.Processing)
-                        {
-                            hdRequest.Status = (int)StatusEnum.Processing;
-                            hdRequest.ModifyDate = DateTime.Now;
-                            _hdReqServices.Update(hdRequest);
-
-                        }
+                        //                        else if (hdRequest.Status == (int)StatusEnum.Open
+                        //                          && hdReqChngStatus.FromStatus == hdRequest.Status
+                        //                           && hdReqChngStatus.ToStatus == (int)StatusEnum.WaitingForQuotation)
+                        //                        {
+                        //                            hdRequest.Status = (int)StatusEnum.WaitingForQuotation;
+                        //                            hdRequest.AssignDate = DateTime.Now;
+                        //                            hdRequest.ModifyDate = DateTime.Now;
+                        //                            _hdReqServices.Update(hdRequest);
+                        //
+                        //
+                        //                            HelpdeskRequestHelpdeskSupporter hdReqHdSupporter = new HelpdeskRequestHelpdeskSupporter();
+                        //                            hdReqHdSupporter.HelpdeskRequestId = hdRequest.Id;
+                        //                            hdReqHdSupporter.HelpdeskSupporterId = hdReqChngStatus.ToUserId; // must check if user is disable
+                        //                            hdReqHdSupporter.CreateDate = DateTime.Now;
+                        //                            _hdReqHdSupporterServices.Add(hdReqHdSupporter);
+                        //
+                        //                        }
                         else if (hdRequest.Status == (int)StatusEnum.Processing
-                        && hdReqChngStatus.FromStatus == hdRequest.Status
-                         && hdReqChngStatus.ToStatus == (int)StatusEnum.Done)
+                         && hdReqChngStatus.FromStatus == hdRequest.Status
+                          && hdReqChngStatus.ToStatus == (int)StatusEnum.Done)
                         {
                             hdRequest.Status = (int)StatusEnum.Done;
                             hdRequest.ModifyDate = DateTime.Now;
+                            //                            hdRequest.Price = hdReqChngStatus.Price;
+                            //                            hdRequest.DueDate = DateTime.Parse(hdReqChngStatus.DueDate);
+                            /*Add them giá vào đây*/
                             _hdReqServices.Update(hdRequest);
-
                         }
                         else if (hdRequest.Status == (int)StatusEnum.Done
-                        && hdReqChngStatus.FromStatus == hdRequest.Status
-                         && hdReqChngStatus.ToStatus == (int)StatusEnum.Reopen)
+                         && hdReqChngStatus.FromStatus == hdRequest.Status
+                          && hdReqChngStatus.ToStatus == (int)StatusEnum.Close)
                         {
-                            hdRequest.Status = (int)StatusEnum.Reopen;
-                            hdRequest.ModifyDate = DateTime.Now;
-                            _hdReqServices.Update(hdRequest);
-
-                        }
-                        else if (hdRequest.Status == (int)StatusEnum.Done
-                        && hdReqChngStatus.FromStatus == hdRequest.Status
-                         && hdReqChngStatus.ToStatus == (int)StatusEnum.Closed)
-                        {
-                            hdRequest.Status = (int)StatusEnum.Closed;
-                            hdRequest.ModifyDate = DateTime.Now;
+                            hdRequest.Status = (int)StatusEnum.Close;
                             hdRequest.CloseDate = DateTime.Now;
+                            hdRequest.ModifyDate = DateTime.Now;
                             _hdReqServices.Update(hdRequest);
-
-                            HelpdeskRequestHelpdeskSupporter hdReqHdSupporter = hdRequest.HelpdeskRequestHelpdeskSupporters
-                                .Where(s => s.HelpdeskRequestId == hdRequest.Id).First();
-                            hdReqHdSupporter.Status = (int)StatusEnum.Closed;
-                            _hdReqHdSupporterServices.Update(hdReqHdSupporter);
                         }
-                        else if (hdReqChngStatus.ToStatus == (int)StatusEnum.Reject)
+                        else if (hdReqChngStatus.ToStatus == (int)StatusEnum.Cancel)
                         {
                             bool isOk = false;
-                            if (fromUser.RoleId == SLIM_CONFIG.USER_ROLE_MANAGER)
+                            if (fromUser.RoleId == SLIM_CONFIG.USER_ROLE_MANAGER &&
+                                (hdRequest.Status == (int)StatusEnum.Open || hdRequest.Status == (int)StatusEnum.Processing))
                             {
                                 isOk = true;
                             }
-                            else if (fromUser.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT && fromUser.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER &&
-                                      (hdRequest.Status == (int)StatusEnum.WaitingForQuotation
-                                      || hdRequest.Status == (int)StatusEnum.WaitingQuoutationConfirming
-                                      || hdRequest.Status == (int)StatusEnum.Open))
+                            else if (fromUser.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT || fromUser.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER &&
+                                      (hdRequest.Status == (int)StatusEnum.Open || hdRequest.Status == (int)StatusEnum.Processing))
                             {
                                 isOk = true;
                             }
                             if (isOk)
                             {
-                                hdRequest.Status = (int)StatusEnum.Reject;
+                                hdRequest.Status = (int)StatusEnum.Cancel;
                                 hdRequest.ModifyDate = DateTime.Now;
                                 _hdReqServices.Update(hdRequest);
-
-                                if (hdRequest.HelpdeskRequestHelpdeskSupporters.Count != 0)
-                                {
-                                    HelpdeskRequestHelpdeskSupporter hdReqHdSupporter =
-                                        hdRequest.HelpdeskRequestHelpdeskSupporters.OrderByDescending(s => s.CreateDate)
-                                            .First();
-                                    hdReqHdSupporter.Status = (int)StatusEnum.Reject;
-                                    _hdReqHdSupporterServices.Update(hdReqHdSupporter);
-                                }
                             }
                             else
                             {
@@ -705,10 +659,12 @@ namespace AMS.Controllers
                 {
                     HelpdeskRequest hdRequest = _hdReqServices.FindById(hdReqChngStatus.HdReqId);
 
-                    if (hdRequest.Status == (int)StatusEnum.Open)
+                    if (hdRequest.Status != (int)StatusEnum.Done && hdRequest.Status != (int)StatusEnum.Close)
                     {
-                        hdRequest.Status = (int)StatusEnum.WaitingForQuotation;
-                        hdRequest.AssignDate = DateTime.Now;
+                        if (hdRequest.Status == (int)StatusEnum.Open)
+                        {
+                            hdRequest.AssignDate = DateTime.Now;
+                        }
                         hdRequest.ModifyDate = DateTime.Now;
                         _hdReqServices.Update(hdRequest);
 
@@ -717,23 +673,15 @@ namespace AMS.Controllers
                         hdReqHdSupporter.HelpdeskSupporterId = hdReqChngStatus.ToUserId; // must check if user is disable
                         hdReqHdSupporter.CreateDate = DateTime.Now;
                         _hdReqHdSupporterServices.Add(hdReqHdSupporter);
-                        return RedirectToAction("ViewHdRequestDetail", new { hdReqId = hdRequest.Id, userId = fromUser.Id });
-                    }
-                    else if (hdRequest.Status != (int)StatusEnum.Reject && hdRequest.Status != (int)StatusEnum.Closed)
-                    {
-                        int curSupporterId = hdRequest.HelpdeskRequestHelpdeskSupporters.OrderByDescending(e => e.CreateDate).First().HelpdeskSupporterId.Value;
 
-                        if (curSupporterId != hdReqChngStatus.ToUserId)
-                        {
-                            hdRequest.ModifyDate = DateTime.Now;
-                            _hdReqServices.Update(hdRequest);
-
-                            HelpdeskRequestHelpdeskSupporter hdReqHdSupporter = new HelpdeskRequestHelpdeskSupporter();
-                            hdReqHdSupporter.HelpdeskRequestId = hdRequest.Id;
-                            hdReqHdSupporter.HelpdeskSupporterId = hdReqChngStatus.ToUserId; // must check if user is disable
-                            hdReqHdSupporter.CreateDate = DateTime.Now;
-                            _hdReqHdSupporterServices.Add(hdReqHdSupporter);
-                        }
+                        HelpdeskRequestLog hdRequestLog = new HelpdeskRequestLog();
+                        hdRequestLog.ChangeFromUserId = fromUser.Id;
+                        hdRequestLog.HelpdeskRequestId = hdRequest.Id;
+                        hdRequestLog.ChangeToUserId = toUser.Id;
+                        hdRequestLog.StatusFrom = (int)StatusEnum.AssignTask;
+                        hdRequestLog.StatusTo = (int)StatusEnum.AssignTask;
+                        hdRequestLog.CreateDate = DateTime.Now;
+                        _helpdeskRequestLogServices.Add(hdRequestLog);
 
                         return RedirectToAction("ViewHdRequestDetail", new { hdReqId = hdRequest.Id, userId = fromUser.Id });
                     }
@@ -745,6 +693,94 @@ namespace AMS.Controllers
             }/*Return to main page*/
 
             return RedirectToAction("ViewHistoryHdRequest", new { userId = hdReqChngStatus.FromUserId });
+        }
+
+        [HttpPost]
+        [Route("Home/HelpdeskRequest/SetDuedate")]
+        public ActionResult SetDuedate(HdRequestChangeStatusModel hdReqChngStatus)
+        {
+            try
+            {
+                User fromUser = _userServices.FindById(hdReqChngStatus.FromUserId);
+
+                if (fromUser != null)
+                {
+                    HelpdeskRequest hdRequest = _hdReqServices.FindById(hdReqChngStatus.HdReqId);
+
+                    if (hdRequest.Status != (int)StatusEnum.Done && hdRequest.Status != (int)StatusEnum.Close && fromUser.RoleId == SLIM_CONFIG.USER_ROLE_MANAGER)
+                    {
+                        hdRequest.DueDate = DateTime.Parse(hdReqChngStatus.DueDate);
+                        hdRequest.ModifyDate = DateTime.Now;
+                        _hdReqServices.Update(hdRequest);
+
+                        return RedirectToAction("ViewHdRequestDetail", new { hdReqId = hdRequest.Id, userId = fromUser.Id });
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("ViewHistoryHdRequest", new { userId = hdReqChngStatus.FromUserId });
+            }/*Return to main page*/
+
+            return RedirectToAction("ViewHistoryHdRequest", new { userId = hdReqChngStatus.FromUserId });
+        }
+
+        [HttpGet]
+        [Route("Home/HelpdeskRequest/GetHdReqInfoDetail/{hdReqId}")]
+        public ActionResult GetHdReqInfoDetail(int hdReqId)
+        {
+            MessageViewModels response = new MessageViewModels();
+
+            HelpdeskRequest hdRequest = _hdReqServices.FindById(hdReqId);
+            if (null != hdRequest)
+            {
+                HdReqDetailInfo hdReqDetailInfo = new HdReqDetailInfo();
+                hdReqDetailInfo.SelectedHdSrvCatId = hdRequest.HelpdeskService.HelpdeskServiceCategoryId.Value;
+                hdReqDetailInfo.SelectedHdSrvId = hdRequest.HelpdeskService.Id;
+                hdReqDetailInfo.SelectedHdSrvPrice = hdRequest.Price.Value;
+
+                List<HelpdeskServiceCategory> hdSrvCats = _helpdeskServiceCat.GetAll();
+
+                List<HelpdeskServiceCatModel> hdSrvCatModels = new List<HelpdeskServiceCatModel>();
+                HelpdeskServiceCatModel hdSrvCatModel = null;
+                foreach (var cat in hdSrvCats)
+                {
+                    hdSrvCatModel = new HelpdeskServiceCatModel();
+                    hdSrvCatModel.Id = cat.Id;
+                    hdSrvCatModel.Name = cat.Name;
+                    hdSrvCatModels.Add(hdSrvCatModel);
+                }
+
+                List<HelpdeskService> hdServices = _helpdeskServices.FindByCategory(hdReqDetailInfo.SelectedHdSrvCatId);
+                List<HelpdeskServiceModel> hdReqModels = new List<HelpdeskServiceModel>();
+                HelpdeskServiceModel hdSrvModel = null;
+                foreach (var hdSrv in hdServices)
+                {
+                    hdSrvModel = new HelpdeskServiceModel();
+                    hdSrvModel.Id = hdSrv.Id;
+                    hdSrvModel.Name = hdSrv.Name;
+                    hdSrvModel.Price = hdSrv.Price.Value;
+                    hdSrvModel.Description = hdSrv.Description;
+                    hdReqModels.Add(hdSrvModel);
+                }
+
+                HelpdeskRequestModel hdReqModel = new HelpdeskRequestModel();
+                hdReqModel.HdReqTitle = hdRequest.Title;
+                hdReqModel.HdReqUserDesc = hdRequest.Description;
+
+                hdReqDetailInfo.HdSrvCategories = hdSrvCatModels;
+                hdReqDetailInfo.ListHdSrvBySelectedCat = hdReqModels;
+                hdReqDetailInfo.HdReqInfoDetail = hdReqModel;
+
+                response.Data = hdReqDetailInfo;
+            }
+            else
+            {
+                response.StatusCode = -1;
+                response.Msg = "Not found !";
+            }
+
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

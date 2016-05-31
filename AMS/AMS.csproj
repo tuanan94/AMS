@@ -207,6 +207,7 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Constant.cs" />
+    <Compile Include="Constant\AmsConstants.cs" />
     <Compile Include="Constant\RoleEnum.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HelpdeskSupporterController.cs" />
@@ -216,6 +217,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ManagementController.cs" />
     <Compile Include="Controllers\PostController.cs" />
+    <Compile Include="Controllers\ReceiptManagerController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Constant\StatusEnum.cs" />
@@ -266,6 +268,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MessageViewModels.cs" />
+    <Compile Include="Models\ReceiptViewModels.cs" />
     <Compile Include="Post.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -298,7 +301,10 @@
     <Compile Include="Service\HelpdeskServiceCatService.cs" />
     <Compile Include="Service\HelpdeskRequestServices.cs" />
     <Compile Include="Service\ImageService.cs" />
+    <Compile Include="Service\HouseServices.cs" />
     <Compile Include="Service\PostService.cs" />
+    <Compile Include="Service\ReceiptServices.cs" />
+    <Compile Include="Service\ServiceChargeSevices.cs" />
     <Compile Include="Service\UserInHouseService.cs" />
     <Compile Include="Service\HelpdeskSupporterService.cs" />
     <Compile Include="Service\IHelpdeskSupporterService.cs" />
@@ -341,6 +347,7 @@
     <Content Include="Content\css\default-nav-inverse.min.css" />
     <Content Include="Content\css\default.css" />
     <Content Include="Content\css\default.min.css" />
+    <Content Include="Content\css\jquery.timepicker.css" />
     <Content Include="Content\css\media-upload.css" />
     <Content Include="Content\css\orange.css" />
     <Content Include="Content\css\orange.min.css" />
@@ -369,6 +376,7 @@
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\amsScript\additional-methods.min.js" />
+    <Content Include="Scripts\amsScript\jquery.timepicker.min.js" />
     <Content Include="Scripts\amsScript\jquery.validate.min.js" />
     <Content Include="Scripts\amsScript\scripts.js" />
     <Content Include="Scripts\amsScript\scripts.min.js" />
@@ -503,7 +511,7 @@
     <Content Include="Views\Management\__ManagementLayout.cshtml" />
     <Content Include="Views\Management\AdminBoard.cshtml" />
     <Content Include="Views\Management\ManageHousehold.cshtml" />
-    <Content Include="Views\Management\ManageRequest.cshtml" />
+    <Content Include="Views\Management\ManageHelpdeskService.cshtml" />
     <Content Include="Views\Management\ManageIncome.cshtml" />
     <Content Include="Views\Management\ManageReceipt.cshtml" />
     <Content Include="Views\Management\ViewReceipt.cshtml" />
@@ -512,9 +520,7 @@
     <Content Include="Views\Management\ManageSurvey.cshtml" />
     <Content Include="Views\Home\Test.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
-    <Content Include="Views\Management\HelpdeskServiceTabPartial.cshtml" />
     <Content Include="Views\Management\_helpdeskSeviceTablePartial.cshtml" />
-    <Content Include="Views\Management\_helpdeskServiceCategoryPartial.cshtml" />
     <Content Include="Views\Management\_helpdeskServiceCategoryTablePartial.cshtml" />
     <Content Include="Views\Home\CreateHdRequest.cshtml" />
     <Content Include="Views\Home\ViewRequestingHdRequestsOfManager.cshtml" />
@@ -530,12 +536,17 @@
     <Content Include="Views\Admin\addHouse.cshtml" />
     <Content Include="Views\Admin\deleteHouse.cshtml" />
     <Content Include="web.config" />
+    <Content Include="Views\Management\Index.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
     <None Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
+    <Content Include="Views\Management\ResidentApprovement.cshtml" />
+    <Content Include="Views\Management\ManageHelpdeskServiceCategory.cshtml" />
+    <Content Include="Views\Home\ReceiptView.cshtml" />
+    <Content Include="Views\Home\ViewReceiptDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

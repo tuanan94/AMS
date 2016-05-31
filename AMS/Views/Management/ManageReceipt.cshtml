@@ -1,122 +1,391 @@
-﻿
+﻿@using Microsoft.AspNet.Identity
+
 @{
     ViewBag.Title = "ManageReipt";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
+    List<House> block = ViewBag.block;
+    List<House> firstBlockFloor = ViewBag.firstBlockFloor;
+    List<House> rooms = ViewBag.rooms;
 }
+
+<nav class="navbar navbar-subnav navbar-static-top" role="navigation">
+    <div class="container-fluid">
+
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subnav">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="fa fa-ellipsis-h"></span>
+            </button>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="subnav">
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a href="/Management/ManageReceipt"><i class="fa fa-file-text-o"></i> Tạo hóa đơn thủ công</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</nav>
 
 <div class="col-md-12">
     <div class="panel panel-default">
-        <div class="panel-heading panel-heading-gray">Quản lý hóa đơn</div>
+        <div class="panel-heading panel-heading-gray">Tạo hóa đơn thủ công</div>
         <div class="panel-body">
+            <form id="createNewOrder" class="form-horizontal" role="form">
 
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="active">
-                    <a href="#thismonth" role="tab" data-toggle="tab"><i class="fa fa-fw fa-calendar"></i> Tự động</a>
-                </li>
-                <li class="">
-                    <a href="#all" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Thủ công</a>
-                </li>
-                
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane fade active in" id="thismonth">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <form class="form-horizontal" role="form"></form>
-                        </div>
+                <div class="alert alert-info hide" id="createReceiptSuccessNoti" @*style="display: none"*@>
+                    <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <span>Hóa đơn được tạo thành công</span>
+                </div>
+                <div class="alert alert-danger hide" id="createReceiptFailedNoti">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                    <span>Việc tạo hóa đơn thất bại</span>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-8">
+                        <fieldset class="scheduler-border less-padding">
+                            <legend class="scheduler-border">Thông tin hóa đơn</legend>
+                            <div class="form-group">
+                                <label for="receiptTitle" class="col-md-2 control-label">Tiêu đề</label>
+                                <div class="col-md-10">
+                                    <input id="receiptTitle" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="houseName" class="col-md-2 control-label">Tòa nhà</label>
+                                <div class="col-md-3 full-width-select">
+                                    <select id="houseBlock" name="select" class="form-control">
+                                        @{
+                                            foreach (var b in block)
+                                            {
+                                                <option value="@b.Block">@b.Block</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <label for="houseName" class="col-md-1 control-label">Tầng</label>
+                                <div class="col-md-2">
+                                    <select id="houseFloor" name="select" class="form-control">
+                                        @{
+                                            foreach (var f in firstBlockFloor)
+                                            {
+                                                <option value="@f.Floor">@f.Floor</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <label for="houseName" class="col-md-1 control-label">Nhà</label>
+                                <div class="col-md-3">
+                                    <select id="houseName" name="select" class="form-control">
+                                        @{
+                                            foreach (var r in firstBlockFloor)
+                                            {
+                                                <option value="@r.HouseName">@r.HouseName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="receiptDesc" class="col-md-2 control-label">Mô tả</label>
+                                <div class="col-md-10">
+                                    <textarea id="receiptDesc" class="form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="all">
-                  
-                  
-                    <div class="panel panel-default">
-                        <form class="form-horizontal" role="form">
+
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <fieldset class="scheduler-border less-padding">
+                            <legend class="scheduler-border">Chi tiết hóa đơn</legend>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">Tháng</label>
-                                <div class="col-sm-9">
-                                    <select name="select" class="selectpicker" data-size="3">
-                                        <option>Dịch vụ internet</option>
-                                        <option>Dịch vụ sữa chữa</option>
-                                        <option>Khác</option>
-                                    </select>
+                                <div class="col-sm-6">
+                                    <strong style="align-content: center">Tên</strong>
                                 </div>
-
+                                <div class="col-sm-1">
+                                    <strong style="align-content: center">Số lượng</strong>
+                                </div>
+                                <div class="col-sm-2">
+                                    <strong style="align-content: center">Đơn giá</strong>
+                                </div>
+                                <div class="col-sm-2">
+                                    <strong style="align-content: center">Thành tiền</strong>
+                                </div>
                             </div>
+                            <div id="receiptWrapper">
+                                <div id="row_1" class="form-group">
+                                    <div class="col-sm-6">
+                                        <input id="item_name_1" name="" type="text" class="form-control order-item">
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <input id="item_qty_1" name="" type="text" class="form-control order-item-qty">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input id="item_unit_price_1" name="" type="text" class="form-control order-item-price">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input id="item_qty_price_1" name="" type="text" class="form-control total-order">
+                                    </div>
+                                    <span class="btn btn-danger btn-xs" onclick="deleteItem(1)"><i class="fa fa-times"></i></span>
+                                </div>
+                                <div id="row_2" class="form-group">
+                                    <div class="col-sm-6">
+                                        <input id="item_name_2" name="" type="text" class="form-control order-item">
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <input id="item_qty_2" name="" type="text" class="form-control order-item-qty">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input id="item_unit_price_2" name="" type="text" class="form-control order-item-price">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input id="item_qty_price_2" name="" type="text" class="form-control total-order">
+                                    </div>
+                                    <span class="btn btn-danger btn-xs" onclick="deleteItem(1)"><i class="fa fa-times"></i></span>
+                                </div>
+                                <div id="row_3" class="form-group">
+                                    <div class="col-sm-6">
+                                        <input id="item_name_3" name="" type="text" class="form-control order-item">
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <input id="item_qty_3" name="" type="text" class="form-control order-item-qty">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input id="item_unit_price_3" name="" type="text" class="form-control order-item-price">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input id="item_qty_price_3" name="" type="text" class="form-control total-order">
+                                    </div>
+                                    <span class="btn btn-danger btn-xs" onclick="deleteItem(1)"><i class="fa fa-times"></i></span>
+                                </div>
+                            </div>
+
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">Tầng chung cư</label>
-                                <div class="col-sm-9">
-                                    <select name="select" class="selectpicker" data-size="3">
-                                        <option>Dịch vụ internet</option>
-                                        <option>Dịch vụ sữa chữa</option>
-                                        <option>Khác</option>
-                                    </select>
+                                <div class="col-sm-3">
+                                    <span id="addNewRow" name="addNewRow" class="btn btn-info"><i class="fa fa-plus">Add new</i></span>
                                 </div>
-
                             </div>
-                            <div class="form-group">
-
-                                <div class="col-sm-offset-3 col-md-2">
-                                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-                                </div>
-
-                            </div>
-                        </form>
-
-                        <div class="timeline row" data-toggle="gridalicious">
-
-                            <div class="timeline-block">
-                                <div class="panel panel-default user-box">
-                                    <div class="panel-body">
-                                        <div class="media">
-                                            <img src="/images/people/50/guy-6.jpg" alt="people" class="media-object img-circle pull-left"/>
-                                            <div class="media-body">
-                                                <a href="" class="username">Adrian D.</a>
-                                                <div class="form-group">
-
-                                                    <div class="col-sm-offset-0 col-md-1">
-                                                        <a href="#" class="btn btn-info" role="button">Tạo hóa đơn</a>                                                    </div>
-                                                    <div class="col-sm-offset-3 col-md-1">
-                                                        <a href="/Management/ViewReceipt" class="btn btn-info" role="button">Xem hóa đơn</a>                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
+                            <div class="panel-footer">
+                                <div class="form-group">
+                                    <div class="col-sm-2">
+                                        <strong style="align-content: center">Tổng cộng</strong>
+                                    </div>
+                                    <div class="col-sm-offset-7 col-sm-2">
+                                        <input id="total" name="" type="text" class="form-control order-item">
                                     </div>
                                 </div>
                             </div>
-
-
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-offset-10 col-md-2">
+                                <span onclick="getDataFromForm(@User.Identity.GetUserId())" class="btn btn-primary">Gửi yêu cầu</span>
+                            </div>
                         </div>
                     </div>
-
                 </div>
-        </div>
-        <div class="panel-footer padding-none text-center">
-            <ul class="pagination">
-                <li>
-                    <a href="#">«</a>
-                </li>
-                <li class="active">
-                    <a href="#">1</a>
-                </li>
-                <li>
-                    <a href="#">2</a>
-                </li>
-                <li>
-                    <a href="#">3</a>
-                </li>
-                <li>
-                    <a href="#">4</a>
-                </li>
-                <li>
-                    <a href="#">5</a>
-                </li>
-                <li>
-                    <a href="#">»</a>
-                </li>
-            </ul>
+            </form>
         </div>
     </div>
-
 </div>
-    </div>
+
+<script>
+    $(document).ready(function () {
+        //        $("#createNewOrder").validate({
+        //            submitHandler: function () {
+        //                console.log("AAAAAAAA");
+        //            }
+        //        });
+
+        window.index = 3;
+        $("#addNewRow").on("click", function () {
+            window.index++;
+            var tag = "<div id=\"row_" + index + "\" class='form-group'>" +
+                            "<div class='col-sm-6'><input id=\"item_name_" + index + "\" type='text' class='form-control order-item'></div>" +
+                            "<div class='col-sm-1'><input type='text' id=\"item_qty_" + index + "\" class='form-control order-item-qty'></div>" +
+                            "<div class='col-sm-2'><input id=\"item_unit_price_" + index + "\"type='text' class='form-control order-item-price'></div>" +
+                            "<div class='col-sm-2'><input id=\"item_qty_price_" + index + "\" type='text' readonly='readonly' class='form-control'></div>" +
+                            "<span class='btn btn-danger btn-xs' onclick='deleteItem(\"" + index + "\")'><i class='fa fa-times'></i></span>" +
+                        "</div>";
+            $("#receiptWrapper").append(tag);
+        });
+        $("#receiptWrapper").on("change", ".order-item-qty", function () {
+            console.log($(this).val());
+            var idStr = $(this).prop("id").split("item_qty_");
+            if ($(this).val() && (isNaN($(this).val()) === false)) {
+                var unitPriceValue = $("#item_unit_price_" + idStr[1]).val();
+                if (unitPriceValue && isNaN(unitPriceValue) === false) {
+                    var unitPrice = parseFloat(unitPriceValue);
+                    var qty = parseFloat($(this).val());
+                    $("#item_qty_price_" + idStr[1]).val(unitPrice * qty);
+                } else {
+                    $("#item_unit_price_" + idStr[1]).val("");
+                }
+            } else {
+                $("#item_qty_price_" + idStr[1]).val("");
+            }
+        });
+        $("#receiptWrapper").on("change", ".order-item-price", function () {
+            console.log($(this).val());
+            var idStr = $(this).prop("id").split("item_unit_price_");
+            if ($(this).val() && (isNaN($(this).val()) === false)) {
+                var qtyValue = $("#item_qty_" + idStr[1]).val();
+                if (qtyValue && isNaN(qtyValue) === false) {
+                    var qty = parseFloat(qtyValue);
+                    var unitPrice = parseFloat($(this).val());
+                    $("#item_qty_price_" + idStr[1]).val(unitPrice * qty);
+                } else {
+                    $("#item_qty_price_" + idStr[1]).val("");
+                }
+            } else {
+                $("#item_unit_price_" + idStr[1]).val("");
+            }
+        });
+        $("#receiptWrapper").on("change", ".total-order", function () {
+            console.log($(this).val());
+            var idStr = $(this).prop("id").split("item_qty_");
+        });
+
+        //        jQuery.validator.addClassRules("order-item-qty", {
+        //            required: true,
+        //            number: true
+        //        });
+        //        jQuery.validator.addClassRules("order-item-price", {
+        //            required: true,
+        //            number: true
+        //        });
+
+        $("#houseBlock").on("change", function () {
+            var selected = $(this).find("option:selected").val();
+            getRoomAndFloor(selected, "", "block");
+        });
+
+        $("#houseFloor").on("change", function () {
+            var selectedFloor = $(this).find("option:selected").val();
+            var selectedBlock = $("#houseBlock").find("option:selected").val();
+            getRoomAndFloor(selectedBlock, selectedFloor,"floor");
+        });
+    });
+
+    function getRoomAndFloor(blockName, floorName, mode) {
+        window.getHouseMode = mode;
+        $.ajax({
+            type: "GET",
+            url: "/Management/ManageReceipt/GetRoomAndFloor",
+            data: {
+                blockName: blockName,
+                floorName: floorName
+            },
+            success: function (data) {
+                var floor = data.Data.Floor;
+                var room = data.Data.Room;
+                var msg = "<option value=\"\">" + "Tòa nhà không có dân cư ở" + "</option>";
+                var msg2 = "<option value=\"\">" + "Tần của toàn nhà không có dân cư ở" + "</option>";
+                if(floor === undefined || floor === null || floor.length === 0)
+                {
+                    $("#houseFloor").html(msg);
+                    $("#houseName").html(msg2);
+                } else if (room === undefined || room === null || room.length === 0) {
+                    $("#houseName").html(msg2);
+                } else {
+                    parseJsonToSelectTag(floor, room,mode);
+                }
+            },
+            error: function () {
+
+            }
+        });
+    }
+
+    window.getHouseMode = "";
+    function parseJsonToSelectTag(floor, room) {
+        var selectTagList = [];
+        var selectTag = "";
+        if (getHouseMode !== "floor") {
+            for (var i = 0; i < floor.length; i++) {
+                var obj = floor[i];
+                selectTag = "<option value=\"" + obj + "\">" + obj + "</option>";
+                selectTagList.push(selectTag);
+            }
+            $("#houseFloor").html(selectTagList);
+        }
+
+        selectTagList = [];
+        for (var j = 0; j < room.length; j++) {
+            var obj2 = room[j];
+            selectTag = "<option value=\"" + obj2 + "\">" + obj2 + "</option>";
+            selectTagList.push(selectTag);
+        }
+        $("#houseName").html(selectTagList);
+    }
+    function deleteItem(id) {
+        if ($("#receiptWrapper").children().length > 1) {
+            $("#row_" + id)[0].parentNode.removeChild($("#row_" + id)[0]);
+        }
+    }
+    function getDataFromForm(fromUserId) {
+        var contentObj = $("#receiptWrapper > .form-group");
+        var numberOfRow = contentObj.length;
+        var receiptName = $("#receiptTitle").val();
+        var receiptDesc = $("#receiptDesc").val();
+        var receiptHouseName = $("#houseName").val();
+        var userId = fromUserId;
+
+        var listItem = [];
+        for (var i = 0; i < numberOfRow; i++) {
+            var rowIdStr = $(contentObj[i]).prop("id").split("row_");
+            var id = rowIdStr[1];
+            var name = $("#item_name_" + id).val();
+            var qty = $("#item_qty_" + id).val();
+            var unitPrice = $("#item_unit_price_" + id).val();
+            if (name && qty && unitPrice) {
+                var item = {
+                    Name: name,
+                    UnitPrice: unitPrice,
+                    Quantity: qty
+                };
+                listItem.push(item);
+            }
+        }
+        var orderItem = {
+            Creator: userId,
+            ReceiptTitle: receiptName,
+            ReceiptDesc: receiptDesc,
+            ReceiptHouseName: receiptHouseName,
+            ListItem: listItem
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/Management/ManageReceipt/AddNewReceipt",
+            data: $.param(orderItem),
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    $("#createReceiptSuccessNoti").removeClass("hide").addClass("show");
+                    setTimeout(function () {
+                        $("#createReceiptSuccessNoti").removeClass("show").addClass("hide");
+                        $("#createNewOrder").reset();
+                        $("#createNewOrder").closest('form').find("input[type=text], textarea").val("");
+                    }, 3000);
+                } else {
+                    $("#createReceiptFailedNoti").removeClass("hide").addClass("show");
+                    setTimeout(function () {
+                        $("#createReceiptFailedNoti").removeClass("show").addClass("hide");
+                    }, 3000);
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+</script>

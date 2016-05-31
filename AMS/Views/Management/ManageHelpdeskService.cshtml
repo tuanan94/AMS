@@ -1,0 +1,173 @@
+﻿
+@{
+    ViewBag.Title = "ManageRequest";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+}
+@{
+    List<HelpdeskService> helpdeskServices = ViewBag.helpdeskServices;
+    int userId = 2;
+}
+
+<nav class="navbar navbar-subnav navbar-static-top" role="navigation">
+    <div class="container-fluid">
+
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subnav">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="fa fa-ellipsis-h"></span>
+            </button>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="subnav">
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a href="/Management/ManageRequestView/@userId"><i class="fa fa-fw icon-ship-wheel"></i> Quản lý yêu cầu hổ trợ</a>
+                </li>
+                <li>
+                    <a href="/Management/ViewHelpdeskServiceCategory/@userId"><i class="fa fa fa-tags"></i> Quản lý danh mục yêu cầu hổ trợ</a>
+                </li>
+            </ul>
+
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</nav>
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-gray">Quản lý yêu cầu hổ trợ</div>
+        <div class="panel-body">
+            
+            <div class="panel panel-default" style="border-color: transparent">
+                <form class="form-horizontal" id="searchHdSrv" role="form" onkeypress="return event.keyCode !== 13;">
+                    <div class="form-group">
+                        <div class="col-md-1">
+                            <span class="btn btn-info" data-toggle="modal" data-target="#addHelpdeskRequestModal"
+                                  data-placement="top" title="Edit" onclick="loadHelpdeskServiceType()">
+                                <i class="fa fa-plus"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table v-middle table-bordered table-hover" id="hdSrvTable">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Tên</th>
+                                        <th>Nhóm</th>
+                                        <th>Giá tiền</th>
+                                        <th>Trạng thái</th>
+                                        <th class="text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="hdSrvTblBody">
+                                    @Html.Partial("_helpdeskSeviceTablePartial", helpdeskServices)
+                                </tbody>
+                            </table>
+                        </div>
+@*                        <div class="form-group" id="delBtnGroup" style="display: none">*@
+@*                            <span class="btn btn-primary col-sm-1 pull-right" style="margin-left: 5px" onclick="commitDeleteHelpdeskService()">*@
+@*                                <i class="fa fa-plus"></i> Delete*@
+@*                            </span>*@
+@*                            <span class="btn btn-inverse col-sm-1 pull-right" onclick="cancelDeleteHelpdeskService()"*@
+@*                                  style="background-color: transparent; color: #ab7a4b; border-color: transparent;">*@
+@*                                <i class="fa fa-plus"></i> Cancel*@
+@*                            </span>*@
+@*                        </div>*@
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="messageModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 id="hdSrvMsgModalTitle" class="modal-title">Thông Báo !</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="msgContent"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="addHelpdeskRequestModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 id="hdSrvModalTitle" class="modal-title">Thêm dịch vụ hổ trợ</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-body">
+
+                        <div class="alert alert-info" id="successNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Dịch vụ hổ trợ được khởi tạo thành công.</span>
+                        </div>
+                        <div class="alert alert-warning" id="failedNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Dịch vụ hổ trợ được khởi tạo thất bại.</span>
+                        </div>
+
+                        <form id="addHelpdeskRequestForm" class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label for="hdSrvName" class="col-sm-3 control-label">Tên </label>
+                                <div class="col-sm-9">
+                                    <input id="hdSrvName" type="text" name="hdSrvName" class="form-control" value="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="hdSrvCat" class="col-sm-3 control-label">Nhóm dịch vụ hổ trợ</label>
+                                <div class="col-sm-9">
+                                    <select id="hdSrvCat" name="hdSrvCat" class="form-control" data-size="3"></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="hdSrvPrice" class="col-sm-3 control-label">Giá tiền</label>
+                                <div class="col-sm-9">
+                                    <input id="hdSrvPrice" name="hdSrvPrice" type="text" type="text" class="form-control" value="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Trạng thái</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="hdSrvStatus" id="hdSrvStatusOn" checked value="1"> Hổ trợ
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="hdSrvStatus" id="hdSrvStatusOff" value="0"> Ngưng hổ trợ
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="hdSrvDesc" class="col-sm-3 control-label">Mô tả</label>
+                                <div class="col-sm-9">
+                                    <textarea id="hdSrvDesc" name="hdSrvDesc" class="form-control" rows="5"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-9 col-md-2">
+                                    @*                                    <button id="addHdSrv" name="addHdSrv" styletype="button"  class="btn btn-primary">Hoàn thành</button>*@
+                                    <button id="addHdSrv" name="addHdSrv" type="submit" class="btn btn-primary">Chấp nhận</button>
+                                </div>
+                            </div>
+                            <input type="hidden" id="hdSrvId" name="hdSrvId" value="" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

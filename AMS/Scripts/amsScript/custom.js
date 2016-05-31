@@ -19,18 +19,14 @@ window.deleteHdSrvList = new Array();
 window.deleteHdSrvCatList = new Array();
 
 window.StatusOpen = 1;
-window.StatusWaitingForQuotation = 2;
-window.StatusWaitingQuoutationConfirming = 3;
-window.StatusQuoutationConfirmed = 4;
-window.StatusWaitingForProcess = 5;
-window.StatusProcessing = 6;
-window.StatusDone = 7;
-window.StatusClosed = 8;
-window.StatusReopen = 9;
-window.StatusReject = 10;
+window.StatusProcessing = 2;
+window.StatusDone = 3;
+window.StatusClose = 4;
+window.StatusCancel = 5;
 
-
-
+window.StatusUnpublished = 1;
+window.StatusUnpaid = 2;
+window.StatusPaid = 3;
 
 function loadHelpdeskServiceType() {
     var action = "loadHdSrvCat";
@@ -65,9 +61,11 @@ function getHelpdeskServiceType(tagId, callback) {
             console.log(data.HdSrvCategories);
             var objList = data.HdSrvCategories;
             var selectTagList = [];
+            var selectTag = "<option value='' selected='selected'> Hãy chọn dịch vụ hổ trợ</option>";
+            selectTagList.push(selectTag);
             for (var i = 0; i < objList.length; i++) {
                 var obj = objList[i];
-                var selectTag = "<option value='" + obj.Id + "'>" + obj.Name + "</option>";
+                selectTag = "<option value='" + obj.Id + "'>" + obj.Name + "</option>";
                 selectTagList.push(selectTag);
             }
             $("#" + tagId).html(selectTagList);
@@ -82,7 +80,7 @@ function helpdeskServiceDetail(id) {
     window.POPUPMODE = window.UPDATEMODE;
     $("#hdSrvModalTitle").text(window.UPDATEMODALTITLE);
     $.ajax({
-        url: "ManageRequest?action=" + action,
+        url: "/Management/ManageRequest?action=" + action,
         type: "get",
         success: function (data) {
             $("#hdSrvName").val(data.Name);
@@ -103,7 +101,7 @@ function helpdeskServiceDetail(id) {
                 var obj = objList[i];
 
                 if (obj.Id === data.HelpdeskServiceCategoryId) {
-                    selectTag = "<option value='" + obj.Id + "' checked>" + obj.Name + "</option>";
+                    selectTag = "<option value='" + obj.Id + "' selected='selected'>" + obj.Name + "</option>";
                 } else {
                     selectTag = "<option value='" + obj.Id + "'>" + obj.Name + "</option>";
                 }
@@ -133,7 +131,7 @@ function commitDeleteHelpdeskService() {
     var postData = { hdSrvDeletedList: window.deleteHdSrvList }
     var action = "delHelpdeskSrv";
     $.ajax({
-        url: "ManageRequest?action=" + action,
+        url: "/Management/ManageRequest?action=" + action,
         type: "post",
         data: postData,
         dataType: "json",
@@ -159,7 +157,7 @@ function commitDeleteHelpdeskService() {
 }
 function reloadHdSrvTable() {
     var action = "loadHdSrvTable";
-    $("#hdSrvTblBody").load("ManageRequest?action=" + action);
+    $("#hdSrvTblBody").load("/Management/ManageRequest?action=" + action);
 }
 function searchHdSrv() {
     var mode = parseInt($("#hdReqFilterType").find("option:selected").val(), 10);
@@ -167,7 +165,7 @@ function searchHdSrv() {
     //    if (searchStr !== "" || (searchStr === "" && mode !== 0)) {
     var action = "searchHdSrv";
     $.ajax({
-        url: "ManageRequest?action=" + action,
+        url: "/Management/ManageRequest?action=" + action,
         type: "post",
         data: $("#searchHdSrv").serialize(),
         success: function (data) {
@@ -188,7 +186,7 @@ function hdSrvCategoryDetail(id) {
     window.POPUPMODE = window.UPDATEMODE;
     $("#hdSrvCateModalTitle").text(window.UpdateHdSrvCategoryModalTitle);
     $.ajax({
-        url: "ManageRequest?action=" + action,
+        url: "/Management/ManageRequest?action=" + action,
         type: "get",
         success: function (data) {
             if (data.StatusCode === 0) {
@@ -206,7 +204,7 @@ function hdSrvCategoryDetail(id) {
 }
 function reloadHdSrvCategoryTable() {
     var action = "loadHdSrvCatTable";
-    $("#hdSrvCatTblBody").load("ManageRequest?action=" + action);
+    $("#hdSrvCatTblBody").load("/Management/ManageRequest?action=" + action);
 }
 function deleteHdSrvCategory(id) {
     $("#delHdSrvBtnGroup").removeClass("show").addClass("show");
@@ -218,7 +216,7 @@ function searchHdSrvCategory() {
     //    if (searchStr !== "") {
     var action = "searchHdSrvCategory";
     $.ajax({
-        url: "ManageRequest?action=" + action,
+        url: "/Management/ManageRequest?action=" + action,
         type: "post",
         data: $("#searchStrHdSrvCatForm").serialize(),
         success: function (data) {
@@ -234,7 +232,7 @@ function commitDeleteHdSrvCategory() {
     var postData = { hdSrvCatDeletedList: window.deleteHdSrvCatList }
     var action = "delHdSrvCategory";
     $.ajax({
-        url: "ManageRequest?action=" + action,
+        url: "/Management/ManageRequest?action=" + action,
         type: "post",
         data: postData,
         dataType: "json",
@@ -278,7 +276,7 @@ function hdRequestDetail(id) {
     getHelpdeskDetail(id);
 }
 $(document).ready(function () {
-
+    $("#hdReqDueDateTime").timepicker({ "scrollDefault": "5:30 pm" });
     $("#addHelpdeskRequestForm").validate({
         rules: {
             hdSrvName: {
@@ -322,7 +320,7 @@ $(document).ready(function () {
                 action = "addHelpdeskSrv";
             }
             $.ajax({
-                url: "ManageRequest?action=" + action,
+                url: "/Management/ManageRequest?action=" + action,
                 type: "post",
                 data: $("#addHelpdeskRequestForm").serialize(),
                 success: function (data) {
@@ -374,7 +372,7 @@ $(document).ready(function () {
                 action = "addHdSrvCategory";
             }
             $.ajax({
-                url: "ManageRequest?action=" + action,
+                url: "/Management/ManageRequest?action=" + action,
                 type: "post",
                 data: $("#hdSrvCategoryForm").serialize(),
                 success: function (data) {
@@ -450,8 +448,6 @@ $(document).ready(function () {
         $("#hdSrvCategoryForm").valid();
     });
 
-
-
     $("#addHelpdeskRequestModal").on("hidden.bs.modal", function () {
         document.getElementById("addHelpdeskRequestForm").reset();
     });
@@ -476,53 +472,72 @@ $(document).ready(function () {
     });
 
     $(document).on("change", "#hdSrvCatName", function () {
-        var selected = parseInt($(this).find("option:selected").val(), 10);
-        $("#hdSrvCatName").prop("disable", true);
-        $("#hdServiceId").prop("disabled", true);
+
         $("#hdSrvPrice").val("");
         $("#hdSrvDesc").val("");
-        getHdSrvByCatId(selected, "hdServiceId", function () {
-            $("#hdSrvCatName").prop("disable", false);
-            $("#hdServiceId").prop("disabled", false);
-            $("select[name=HdServiceId]").val(-1);
+        if ($(this).find("option:selected").val()) {
+            var selected = parseInt($(this).find("option:selected").val(), 10);
+            $("#hdSrvCatName").prop("disable", true);
+            $("#hdServiceId").prop("disabled", true);
+            getHdSrvByCatId(selected, "hdServiceId", function () {
+                $("#hdSrvCatName").prop("disable", false);
+                $("#hdServiceId").prop("disabled", false);
+                $("select[name=HdServiceId]").val(-1);
+                $("#hdServiceId").selectpicker("refresh");
+            });
+        } else {
+            var selectTag = "<option value='' selected='selected'> " + "Hãy chọn dịch vụ hổ trợ" + " </option>";
+            $("#hdServiceId").html(selectTag);
             $("#hdServiceId").selectpicker("refresh");
-        });
+        }
     });
 
     $(document).on("change", "#hdServiceId", function () {
-        var selected = parseInt($(this).find("option:selected").val(), 10);
-
         $("#hdSrvPrice").val("");
         $("#hdSrvDesc").val("");
-
-        if (window.hdSrvList !== undefined || window.hdSrvList.length !== 0) {
-            for (var i = 0; i < window.hdSrvList.length; i++) {
-                if (window.hdSrvList[i].Id === selected) {
-                    $("#hdSrvPrice").val(window.hdSrvList[i].Price);
-                    $("#hdSrvDesc").val(window.hdSrvList[i].Description);
+        if ($(this).find("option:selected").val()) {
+            var selected = parseInt($(this).find("option:selected").val(), 10);
+            if (window.hdSrvList !== undefined || window.hdSrvList.length !== 0) {
+                for (var i = 0; i < window.hdSrvList.length; i++) {
+                    if (window.hdSrvList[i].Id === selected) {
+                        $("#hdSrvPrice").val(window.hdSrvList[i].Price);
+                        $("#hdSrvDesc").val(window.hdSrvList[i].Description);
+                    }
                 }
             }
         }
+
+
+
     });
     $("#addNewHdRequest").on("click", function () {
         console.log($("#createHdService").serialize());
         $("#createHdService").valid();
     });
-
-    var userId = document.getElementById("hdRequestTbl").dataset.userid;
-    $("#hdRequestTbl").DataTable({
+    $("#updateHdRequest").on("click", function () {
+        console.log($("#updateHelpdeskRequestForm").serialize());
+        //        $("#createHdService").valid();
+        $("#createHdService").submit();
+    });
+    var userId = document.getElementById("hdRequestTbl");
+    if (null !== userId && undefined != userId) {
+        userId = userId.dataset.userid;
+    }
+    var datatable = $("#hdRequestTbl").DataTable({
         "ajax": {
             url: "/Home/HelpdeskRequest/GetListRequest?userId=" + userId,
             dataSrc: ""
         },
+
         "bLengthChange": false,
         "bInfo": false,
+
         //"serverSide": true,
         "columns": [
             { data: "HdReqTitle" },
+            { data: "HdReqTitle" },
             { data: "HdReqHouse" },
             { data: "HdReqSrvName" },
-            { data: "HdReqPrior" },
             { data: "HdReqStatus" },
             { data: "HdReqSupporter" },
             { data: "HdReqCreateDate" },
@@ -530,23 +545,11 @@ $(document).ready(function () {
             { data: "HdReqId" }
         ],
         "columnDefs": [
-           {
-               "targets": 3,
-               "data": "HdReqPrior",
-               "render": function (data, type, full, meta) {
-                   if (type === "display" || type === "filter") {
-                       if (data === 1) {
-                           return "<span class='btn btn-default btn-xs'><i class='fa fa-arrow-down'></i></span>";
-                       } else if (data === 2) {
-                           return "<span class='btn btn-info btn-xs '><i class='fa fa-minus'></i></span>";
-                       } else if (data === 3) {
-                           return "<span class='btn btn-danger btn-xs'><i class='fa fa-arrow-up'></i></span>";
-                       }
-
-                   }
-                   return data;
-               }
-           },
+            {
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+            },
             {
                 "targets": 4,
                 "data": "HdReqStatus",
@@ -554,45 +557,25 @@ $(document).ready(function () {
                     if (type === "display" || type === "filter") {
                         var msg = "";
                         if (data === window.StatusOpen) {
-                            msg = "Đã chuyển đến ban quản lý";
-                            return " <div class='col-sm-9'><span class='label label-info'>" +
-                                msg + "</span></div>";
-                        } else if (data === window.StatusWaitingForQuotation) {
-                            msg = "Chờ báo giá";
-                            return " <div class='col-sm-9'><span class='label label-default'>" +
-                                msg + "</span></div>";
-                        } else if (data === window.StatusWaitingQuoutationConfirming) {
-                            msg = "Chờ xác nhận giá";
-                            return " <div class='col-sm-9'><span class='label label-default'>" +
-                                msg + "</span></div>";
-                        } else if (data === window.StatusQuoutationConfirmed) {
-                            msg = "Chấp nhận sửa chữa";
-                            return " <div class='col-sm-9'><span class='label label-default'>" +
-                                msg + "</span></div>";
-                        } else if (data === window.StatusWaitingForProcess) {
-                            msg = "Chờ tiến hành";
-                            return " <div class='col-sm-9'><span class='label label-default'>" +
-                                msg + "</span></div>";
+                            msg = "Chưa giải quyết";
+                            return "<span class='label label-info'>" +
+                                msg + "</div>";
                         } else if (data === window.StatusProcessing) {
-                            msg = "Đang tiến hành";
-                            return " <div class='col-sm-9'><span class='label label-default'>" +
-                                msg + "</span></div>";
+                            msg = "Đang xử lý";
+                            return "<span class='label processing'>" +
+                                msg + "</div>";
                         } else if (data === window.StatusDone) {
                             msg = "Hoàn thành";
-                            return " <div class='col-sm-9'><span class='label label-default'>" +
-                                msg + "</span></div>";
-                        } else if (data === window.StatusClosed) {
-                            msg = "Xong và Đóng";
-                            return " <div class='col-sm-9'><span class='label label-default'>" +
-                                msg + "</span></div>";
-                        } else if (data === window.StatusReopen) {
-                            msg = "Mở lại";
-                            return " <div class='col-sm-9'><span class='label label-default'>" +
-                                msg + "</span></div>";
-                        } else if (data === window.StatusReject) {
-                            msg = "Hủy yêu cầu";
-                            return " <div class='col-sm-9'><span class='label label-default'>" +
-                                msg + "</span></div>";
+                            return "<span class='label label-success'>" +
+                                msg + "</div>";
+                        } else if (data === window.StatusClose) {
+                            msg = "Đóng";
+                            return "<span class='label label-danger'>" +
+                                msg + "</div>";
+                        } else if (data === window.StatusCancel) {
+                            msg = "Hủy";
+                            return "<span class='label label-gray'>" +
+                                msg + "</div>";
                         }
                     }
                     return data;
@@ -616,8 +599,8 @@ $(document).ready(function () {
                 "render": function (data, type, full, meta) {
                     if (type === "display" || type === "filter") {
                         var dateTime = data.split(" ");
-                        return "<span class='label label-warning'>" + dateTime[0] +
-                            "</span>  <span class='label label-gray'>" + dateTime[1] + "</span>";
+                        return "<span class='label date-color label-warning'>" + dateTime[0] +
+                            "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";
                     }
                     return data;
                 }
@@ -629,8 +612,8 @@ $(document).ready(function () {
                     if (type === "display" || type === "filter") {
                         if (data !== null && data !== undefined) {
                             var dateTime = data.split(" ");
-                            return "<span class='label label-warning'>" + dateTime[0] +
-                                "</span>  <span class='label label-gray'>" + dateTime[1] + "</span>";
+                            return "<span class='label date-color label-warning'>" + dateTime[0] +
+                                "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";
                         }
                         return "Đang xác nhận";
                     }
@@ -647,12 +630,126 @@ $(document).ready(function () {
                     return data;
                 }
             }
-        ]
+        ], "order": [[1, 'asc']]
+    });
+    generateTableIndex(datatable);
+
+    userId = document.getElementById("residentApproveTbl");
+    if (userId) {
+        userId = userId.dataset.fromuserid;
+    }
+    window.dataTable2 = $("#residentApproveTbl").DataTable({
+        "ajax": {
+            url: "/Management/ResidentApprovement/GetResidentApprovementList?userId=" + userId,
+            dataSrc: ""
+        },
+        "rowId": 'UserId',
+        "bLengthChange": false,
+        "bInfo": false,
+        "columns": [
+            { data: "UserId" },
+            { data: "FullName" },
+            { data: "HouseName" },
+            { data: "HouseHolderName" },
+            { data: "CreateDate" },
+            { data: "UserId" }
+        ],
+        "columnDefs": [
+            {
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+            },
+            {
+                "targets": 2,
+                "data": "HouseName",
+                "render": function (data, type, full, meta) {
+                    if (type === "display" || type === "filter") {
+                        return "<span class='label house-color label-warning'>" + data + "</span>";
+                    }
+                    return data;
+                }
+            },
+            {
+                "targets": 4,
+                "data": "CreateDate",
+                "render": function (data, type, full, meta) {
+                    if (type === "display" || type === "filter") {
+                        if (data !== null && data !== undefined) {
+                            var dateTime = data.split(" ");
+                            return "<span class='label date-color label-warning'>" + dateTime[0] +
+                                "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";
+                        }
+                        return "Đang xác nhận";
+                    }
+                    return data;
+                }
+            },
+            {
+                "targets": 5,
+                "data": "UserId",
+                "render": function (data, type, full, meta) {
+                    if (type === "display" || type === "filter") {
+                        var test = data + ",'" + full.FullName + "','" + full.HouseName + ",";
+                        return "<td class='text-right'> " +
+                   "<span onclick='resInfoDetail(" + data + ")' class='btn btn-default btn-xs lbl-margin-right'>" +
+                    "<i class='fa fa-info-circle'></i>" +
+                   "</span> " +
+                    "<span class='btn btn-primary btn-xs lbl-margin-right' onclick='showConfirmMsg(\"" + "accept" + "\"," + "\"" + data + "\",\"" + full.FullName + "\"" + ",\"" + full.HouseName + "\"" + ")'>" +
+                        "<i class='fa fa-check-square-o'></i>" +
+                    "</span>" +
+                    "<span class='btn btn-danger btn-xs lbl-margin-right' onclick='showConfirmMsg(\"" + "reject" + "\"," + "\"" + data + "\",\"" + full.FullName + "\"" + ",\"" + full.HouseName + "\"" + ")'>" +
+                        "<i class='fa fa-times'></i>" +
+                    "</span>" +
+                "</td>";
+                    }
+                    return data;
+                }
+            }
+
+        ], "order": [[1, "asc"]]
+    });
+    generateTableIndex(dataTable2);
+    $('#residentApproveTbl').on('click', 'tr', function () {
+        window.currentRow = $(this);
+    });
+
+    var dataTable3 = $("#hdSrvCatTable").DataTable({
+        "bLengthChange": false,
+        "bInfo": false,
+        "drawCallback": function (settings) {
+            var html =
+            "<div class='hide' id='delHdSrvBtnGroup'>" +
+                "<span class='btn btn-inverse' onclick='cancelDeleteHdSrvCategory()'" +
+                    "style='color: #ab7a4b; border-color: transparent;'>" +
+                    "<i class='fa fa-plus'></i> Cancel" +
+                "</span>" +
+                "<span class='btn btn-primary' style='margin-left: 5px' onclick='commitDeleteHdSrvCategory()'>" +
+                    "<i class='fa fa-plus'></i> Delete" +
+                "</span>" +
+            "</div>";
+            $("#hdSrvCatTable_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(html);
+        }
+    });
+    var dataTable4 = $("#hdSrvTable").DataTable({
+        "bLengthChange": false,
+        "bInfo": false,
+        "drawCallback": function (settings) {
+            var html =
+            "<div class='hide' id='delBtnGroup'>" +
+                "<span class='btn btn-inverse' onclick='cancelDeleteHelpdeskService()'" +
+                    "style='color: #ab7a4b; border-color: transparent;'>" +
+                    "<i class='fa fa-plus'></i> Cancel" +
+                "</span>" +
+                "<span class='btn btn-primary' style='margin-left: 5px' onclick='commitDeleteHelpdeskService()'>" +
+                    "<i class='fa fa-plus'></i> Delete" +
+                "</span>" +
+            "</div>";
+            $("#hdSrvTable_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(html);
+        }
     });
 
 });
-
-
 
 function setModalMaxHeight(element) {
     this.$element = $(element);
@@ -771,27 +868,23 @@ function getHelpdeskDetail(id) {
     location.href = "/Home/HelpdeskRequest/ViewDetail?hdReqId=" + id + "&userId=" + userId;
 }
 
-function changeHdReqStatus(id, fromStatus, toStatus, fromUseId, assigneeId, price, duedate) {
-    var action = "/Home/HelpdeskRequest/UpdateStatus";
+function changeHdReqStatus(id, fromStatus, toStatus, fromUseId) {
+    var action = "/Home/HelpdeskRequest/UpdateStatus?";
     var data = {
         HdReqId: id,
         FromUserId: fromUseId,
-        ToUserId: assigneeId,
         FromStatus: fromStatus,
-        Price: price,
-        ToStatus: toStatus,
-        DueDate: duedate
+        ToStatus: toStatus
     }
-    location.href = "/Home/HelpdeskRequest/UpdateStatus?" + $.param(data);
+    location.href = action + $.param(data);
 }
 
-function openModalAssignHdReq() {
+function openModalAssignHdReq(hdReqId) {
     var action = "GetSupporters";
-    var submitData = document.getElementById("assignHdReqBtn");
     $.ajax({
         url: "/Home/HelpdeskRequest/" + action,
         data: {
-            hdReqId: submitData.dataset.id
+            hdReqId: hdReqId
         },
         type: "get",
         success: function (data) {
@@ -802,7 +895,7 @@ function openModalAssignHdReq() {
                 var obj = objList[i];
                 var selectTag = {};
                 if (data.Data.curUserId !== undefined && obj.UserId === data.Data.curUserId) {
-                    selectTag = "<option value='" + obj.UserId + "' selected>" + obj.Fullname + "</option>";
+                    selectTag = "<option value='" + obj.UserId + "' selected='selected'>" + obj.Fullname + "</option>";
                 } else {
                     selectTag = "<option value='" + obj.UserId + "'>" + obj.Fullname + "</option>";
                 }
@@ -824,15 +917,169 @@ function openModalAssignHdReq() {
 function submitAssignTask() {
     $("#assignTaskForm").submit();
 }
-function hdSentQuotation() {
-    var dataTag = document.getElementById("btnOpenQuotation");
-    var hdReq = dataTag.dataset.id;
-    var hdReqFromStatus = dataTag.dataset.fromstatus;
-    var hdReqToStatus = dataTag.dataset.tostatus;
-    var hdReqUserId = dataTag.dataset.userid;
-    var dueDate = $("#hdReqDueDate").val();
-    var price = $("#hdReqPrice").val();
-    changeHdReqStatus(hdReq, hdReqFromStatus, hdReqToStatus, hdReqUserId, "", price, dueDate);
+function setDueDate() {
+    var dataTag = document.getElementById("btnDuedate");
+    var hdReqId = dataTag.dataset.id;
+    var fromUserId = dataTag.dataset.userid;
+    $("#HdReqId_2").val(hdReqId);
+    $("#FromUserId_2").val(fromUserId);
+    var dueDate = $("#hdReqDueDateDate").val();
+    var dueTime = $("#hdReqDueDateTime").val();
+    $("#DueDate").val(dueDate + " " + dueTime);
+    $("#setDuedateForm").submit();
+}
+
+function showEditHdReqModal(id) {
+    //    getHelpdeskServiceType("hdSrvCatName", function () {
+    //        $("#hdSrvCatName").selectpicker("refresh");
+    //        $("#updateHdRequestModal").modal("show");
+    //    });
+    getHdReqDetail(id);
+
+}
+
+function getHdReqDetail(id) {
+    $.ajax({
+        type: "get",
+        url: "/Home/HelpdeskRequest/GetHdReqInfoDetail/" + id,
+        success: function (data) {
+
+            console.log(data.Data.HdReqInfoDetail);
+            console.log(data.Data.HdSrvCategories);
+            console.log(data.Data.ListHdSrvBySelectedCat);
+            console.log(data.Data.SelectedHdSrvCatId);
+            console.log(data.Data.SelectedHdSrvId);
+
+            var objList = data.Data.HdSrvCategories;
+            var returnHtml = parseJsonToSelectTags(objList, data.Data.SelectedHdSrvCatId, "Hãy chọn loại dịch vụ hổ trợ");
+            $("#hdSrvCatName").html(returnHtml);
+            $("#hdSrvCatName").selectpicker("refresh");
+
+
+            objList = data.Data.ListHdSrvBySelectedCat;
+            var returnHtml2 = parseJsonToSelectTags(objList, data.Data.SelectedHdSrvId, "Hãy chọn dịch vụ hổ trợ");
+            $("#hdServiceId").html(returnHtml2);
+            $("#hdServiceId").selectpicker("refresh");
+
+            window.hdSrvList = objList;
+
+            $("#hdReqTitle").val(data.Data.HdReqInfoDetail.HdReqTitle);
+            $("#hdReqDesc").val(data.Data.HdReqInfoDetail.HdReqUserDesc);
+            $("#hdSrvPrice").val(data.Data.SelectedHdSrvPrice);
+
+            $("#updateHdRequestModal").modal("show");
+        }
+    });
+}
+
+function generateTableIndex(datatable) {
+    datatable.on('order.dt search.dt', function () {
+        datatable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
+}
+function parseJsonToSelectTags(listJson, selectedId, msg) {
+    var objList = listJson;
+    var selectTagList = [];
+    var selectTag = "<option value='' selected='selected'> " + msg + " </option>";
+    selectTagList.push(selectTag);
+    for (var i = 0; i < objList.length; i++) {
+        var obj = objList[i];
+        if (obj.Id === selectedId) {
+            selectTag = "<option selected='selected' value='" + obj.Id + "'>" + obj.Name + "</option>";
+        } else {
+            selectTag = "<option value='" + obj.Id + "'>" + obj.Name + "</option>";
+        }
+        selectTagList.push(selectTag);
+    }
+    return selectTagList;
+}
+
+function resInfoDetail(id) {
+    var action = "GetResidentInfo";
+    $.ajax({
+        type: "get",
+        url: "/Management/ResidentApprovement/" + action,
+        data: { userId: id },
+        success: function (data) {
+            var obj = data.Data;
+            var fullName = obj.FullName;
+            var houseName = obj.HouseName;
+            var houseHolderName = obj.HouseHolderName;
+            var createDate = obj.CreateDate;
+            var id = obj.Id;
+            var gender = obj.Gender;
+
+            $("#resName").val(fullName);
+            $("#resHouseName").val(houseName);
+            $("#resId").val(id);
+            $("#resHouseHolder").val(houseHolderName);
+            $("#resCreateDate").val(createDate);
+
+            var genderText = "";
+            if (gender === 0) {
+                genderText = "Nữ";
+            } else if (gender === 1) {
+                genderText = "Nam";
+            } else {
+                genderText = "Chưa xác định";
+            }
+            $("#resGender").val(genderText);
+            $("#residentInfoDetail").modal("show");
+        },
+        error: function (data) {
+
+        }
+    });
 }
 /* Start Js for controller*/
+function showConfirmMsg(mode, id, userName, houseName) {
+    $("#residentId").val(id);
+    var modeNum = 0;
+    var msg = "";
+    if (mode === "accept") {
+        msg = "<strong>Chấp nhận</strong> yêu cầu cư dân <strong>" + userName + "</strong> là thành viên của căn hộ <strong>" + houseName + "</strong>";
+        modeNum = 1;
+    } else {
+        msg = "<strong>Từ chối</strong> yêu cầu cư dân <strong>" + userName + "</strong> là thành viên của căn hộ <strong>" + houseName + "</strong>";
+        modeNum = 2;
+    }
+    $("#mode").val(modeNum);
+    $("#msgConfirm").html(msg);
+    $("#confirmModal").modal("show");
+}
+function acceptApproveUser() {
+    var resId = $("#residentId").val();
+    var mode = $("#mode").val();
+    var action = "AcceptResidentApprovement";
+    var fromUserId = document.getElementById("residentApproveTbl").dataset.fromuserid;
+    $.ajax({
+        type: "post",
+        url: "/Management/ResidentApprovement/" + action,
+        data: {
+            resId: resId,
+            fromUserId: fromUserId,
+            mode: mode
+        },
+        success: function (data) {
+            console.log(data);
+            if (window.currentRow) {
+                window.dataTable2.row(window.currentRow).remove().draw();
+            }
+            $("#confirmModal").modal("hide");
+        },
+        error: function () {
 
+        }
+    });
+}
+function showOrderDetail(receiptId, userId) {
+    location.href = "/Home/ManageReceipt/View/Detail?userId=" + userId + "&orderId=" + receiptId;
+}
+
+function approveResident(id) {
+    $("#delHdSrvBtnGroup").removeClass("show").addClass("show");
+    $("#rowHdSrvCat_" + id).css("display", "none");
+    deleteHdSrvCatList.push(id);
+}
