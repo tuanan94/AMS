@@ -18,7 +18,15 @@ namespace AMS.Models
         public int Creator { get; set; }
         public List<OrderItemModel> ListItem { get; set; }
     }
-
+    public class ReceiptInfoModel
+    {
+        public int ReceiptId { get; set; }
+        public string ReceiptTitle { get; set; }
+        public double TotalOrder { get; set; }
+        public string CreateDate { get; set; }
+        public string HouseName { get; set; }
+        public int Status { get; set; }
+    }
     public class OrderItemModel
     {
         public string Name { get; set; }

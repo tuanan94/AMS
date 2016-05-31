@@ -207,6 +207,7 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Constant.cs" />
+    <Compile Include="Constant\AmsConstants.cs" />
     <Compile Include="Constant\RoleEnum.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HelpdeskSupporterController.cs" />
@@ -215,7 +216,7 @@
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ManagementController.cs" />
-    <Compile Include="Controllers\ManageReceiptController.cs" />
+    <Compile Include="Controllers\ReceiptManagerController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Constant\StatusEnum.cs" />
@@ -541,12 +542,13 @@
     <Content Include="Views\Admin\deleteHouse.cshtml" />
     <Content Include="Views\Management\ResidentApprovement.cshtml" />
     <Content Include="Views\Management\ManageHelpdeskServiceCategory.cshtml" />
+    <Content Include="Views\Home\ReceiptView.cshtml" />
+    <Content Include="Views\Home\ViewReceiptDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="images\Post\Binh\" />
     <Folder Include="Views\Image\" />
-    <Folder Include="Views\ManageReceipt\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controllers\fonts\glyphicons-halflings-regular.woff" />

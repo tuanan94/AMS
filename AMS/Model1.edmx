@@ -145,6 +145,7 @@
           <Property Name="ReceiptCode" Type="varchar" MaxLength="255" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="LastModified" Type="datetime" />
+          <Property Name="PaymentDate" Type="datetime" />
           <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="Status" Type="int" />
           <Property Name="HouseId" Type="int" />
@@ -914,6 +915,7 @@
           <Property Name="ReceiptCode" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="LastModified" Type="DateTime" Precision="3" />
+          <Property Name="PaymentDate" Type="DateTime" Precision="3" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Int32" />
           <Property Name="HouseId" Type="Int32" />
@@ -1467,6 +1469,7 @@
                 <ScalarProperty Name="HouseId" ColumnName="HouseId" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
                 <ScalarProperty Name="LastModified" ColumnName="LastModified" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="ReceiptCode" ColumnName="ReceiptCode" />

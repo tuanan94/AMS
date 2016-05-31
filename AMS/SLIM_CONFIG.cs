@@ -20,6 +20,10 @@ namespace AMS
         public static int USER_ROLE_RESIDENT = 3;
         public static int USER_ROLE_HOUSEHOLDER = 4;
         public static int USER_ROLE_SUPPORTER = 5;
+
+        public static int RECEIPT_STATUS_UNPUBLISHED = 1;
+        public static int RECEIPT_STATUS_UNPAID = 2;
+        public static int RECEIPT_STATUS_PAID = 3;
     }
 
 }

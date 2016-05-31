@@ -24,6 +24,10 @@ window.StatusDone = 3;
 window.StatusClose = 4;
 window.StatusCancel = 5;
 
+window.StatusUnpublished = 1;
+window.StatusUnpaid = 2;
+window.StatusPaid = 3;
+
 function loadHelpdeskServiceType() {
     var action = "loadHdSrvCat";
     //    $("#hdSrvType").load("ManageRequest?action=" + action);
@@ -744,7 +748,7 @@ $(document).ready(function () {
             $("#hdSrvTable_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(html);
         }
     });
-   
+
 });
 
 function setModalMaxHeight(element) {
@@ -1070,7 +1074,9 @@ function acceptApproveUser() {
         }
     });
 }
-
+function showOrderDetail(receiptId, userId) {
+    location.href = "/Home/ManageReceipt/View/Detail?userId=" + userId + "&orderId=" + receiptId;
+}
 
 function approveResident(id) {
     $("#delHdSrvBtnGroup").removeClass("show").addClass("show");
