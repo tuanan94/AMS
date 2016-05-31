@@ -18,11 +18,11 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="subnav">
             <ul class="nav navbar-nav">
-                <li class="">
-                    <a href="/Management/ManageReceipt/View/@userId"><i class="fa fa-list-ul"></i> Quản lý hóa đơn</a>
+                <li >
+                    <a href="/Management/ManageReceipt/@userId"><i class="fa fa-file-text-o"></i> Tạo hóa đơn thủ công</a>
                 </li>
                 <li class="active">
-                    <a href="/Management/ManageReceipt"><i class="fa fa-file-text-o"></i> Tạo hóa đơn thủ công</a>
+                    <a href="/Management/ManageReceipt/View/@userId"><i class="fa fa-list-ul"></i> Quản lý hóa đơn</a>
                 </li>
             </ul>
         </div>
@@ -100,6 +100,8 @@
                             return "<span class='label label-danger'> Chưa thanh toán</div>";
                         } else if (data === window.StatusPaid) {
                             return "<span class='label label-info'>" + "Đã thanh toán" + "</div>";
+                        } else if (data === window.StatusUnpublished) {
+                            return "<span class='label label-default'>" + "Chưa công bố" + "</div>";
                         }
                     }
                     return data;
