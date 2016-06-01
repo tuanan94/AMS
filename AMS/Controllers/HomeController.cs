@@ -780,5 +780,10 @@ namespace AMS.Controllers
             //pendingMemberService.addMemberRequest(member);
 
         }
+
+        public ActionResult ViewAroundProvider()
+        {
+            return View();
+        }
     }
 }

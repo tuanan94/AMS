@@ -327,6 +327,7 @@
     <Compile Include="ViewModel\PostViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\animations.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\blue.css" />
@@ -347,11 +348,17 @@
     <Content Include="Content\css\thumbnails.css" />
     <Content Include="Content\css\_vendor.bundle.css" />
     <Content Include="Content\css\_vendor.min.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\hover_pack.css" />
     <Content Include="Content\images\defaultProfile.png" />
     <Content Include="Content\images\guy-5.jpg" />
+    <Content Include="Content\main.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\port01.jpg" />
+    <Content Include="images\port02.jpg" />
+    <Content Include="images\port03.jpg" />
     <Content Include="Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
@@ -371,6 +378,7 @@
     <Content Include="Scripts\amsScript\Social.js" />
     <Content Include="Scripts\amsScript\vendor.js" />
     <Content Include="Scripts\amsScript\vendor.min.js" />
+    <Content Include="Scripts\AnimOnScroll.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config" />
@@ -446,8 +454,11 @@
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
     <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\amsScript\custom.js" />
+    <Content Include="Scripts\classie.js" />
     <Content Include="Scripts\datatables.js" />
     <Content Include="Scripts\graph.js" />
+    <Content Include="Scripts\hover_pack.js" />
+    <Content Include="Scripts\imagesloaded.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -458,8 +469,10 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\modernizr.custom.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\retina.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -534,6 +547,7 @@
     <Content Include="Views\Admin\addHouse.cshtml" />
     <Content Include="Views\Admin\deleteHouse.cshtml" />
     <Content Include="Views\HelpdeskSupporter\History.cshtml" />
+    <Content Include="Views\Home\ViewAroundProvider.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

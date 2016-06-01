@@ -13,10 +13,10 @@ namespace AMS.Views.HelpdeskSupporter
 {
     public class HelpdeskSupporterController : Controller
     {
-        private HelpdeskSupporterService _helpdeskSupporterService = new HelpdeskSupporterService();
-        private UserService _userService = new UserService();
-        private HelpdeskRequestHelpdeskSupporterService _hrhs = new HelpdeskRequestHelpdeskSupporterService();
-        private HelpdeskRequestLogServices _helpdeskRequestLogService = new HelpdeskRequestLogServices();
+        private readonly HelpdeskSupporterService _helpdeskSupporterService = new HelpdeskSupporterService();
+        private readonly UserService _userService = new UserService();
+        private readonly HelpdeskRequestHelpdeskSupporterService _hrhs = new HelpdeskRequestHelpdeskSupporterService();
+        private readonly HelpdeskRequestLogServices _helpdeskRequestLogService = new HelpdeskRequestLogServices();
         readonly string patternDate = "dd-MM-yyyy HH:mm";
 
         [HttpGet]
@@ -41,13 +41,18 @@ namespace AMS.Views.HelpdeskSupporter
         {
             HelpdeskRequest hr = _helpdeskSupporterService.GetHelpdeskRequest(requestId);
             HelpdeskRequestViewModel request = new HelpdeskRequestViewModel();
+
             request.Title = hr.Title;
             request.Description = hr.Description;
             //---Convert date to dd/MM/yyyy
             DateTime parsedCreateDate = (DateTime)hr.CreateDate;
             request.CreateDate = parsedCreateDate.ToString(patternDate);
-            DateTime parsedDueDate = (DateTime)hr.DueDate;
-            request.DueDate = parsedDueDate.ToString(patternDate);
+            if (hr.DueDate != null)
+            {
+                DateTime parsedDueDate = (DateTime)hr.DueDate;
+                request.DueDate = parsedDueDate.ToString(patternDate);
+            }
+            
             request.Status = hr.Status.Value;
             request.Price = hr.Price.Value;
             request.HouseName = hr.House.HouseName;
