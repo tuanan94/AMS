@@ -51,12 +51,12 @@
                     if (roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT)
                     {
                         <li>
-                            <a href="/Home/HelpdeskRequest/Create/@userId"><i class="icon-plus-sign-alt"></i> Tạo yêu cầu hổ trợ</a>
+                            <a href="/Home/HelpdeskRequest/Create"><i class="icon-plus-sign-alt"></i> Tạo yêu cầu hổ trợ</a>
                         </li>
                     }
                 }
                 <li class="active">
-                    <a href="/Home/HelpdeskRequest/ViewHistory/@userId"><i class="fa icon-headphones"></i> Quản lý yêu cầu</a>
+                    <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa icon-headphones"></i> Quản lý yêu cầu</a>
                 </li>
                 @{
                     if (roleId == SLIM_CONFIG.USER_ROLE_MANAGER)

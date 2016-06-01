@@ -38,7 +38,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label" >Ngày sinh</label>
                     <div class="col-sm-9">
-                        <input type="text" id="dateOfBirth" disabled="disabled"  class="form-control" value="@user.DateOfBirth.Value.ToString("dd-MM-yyyy")">
+                        <input type="text" id="dateOfBirth" disabled="disabled"  class="form-control" value="@(user.DateOfBirth.HasValue?user.DateOfBirth.Value.ToString("dd-MM-yyyy"):"")">
                     </div>
                 </div>
                 <div class="form-group">

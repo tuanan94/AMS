@@ -237,20 +237,25 @@ namespace AMS.Controllers
                 return View("error");
             }
             User user = userService.findById(userId);
-            List<User> members = userService.findByHouseId(user.Id);
+            List<User> members = userService.findByHouseId((user.HouseId.HasValue==true?user.HouseId.Value:-1));
             ViewBag.currentHouse = user.House;
             ViewBag.members = members;
             return View();
         }
-
+        [Authorize]
         [HttpGet]
-        [Route("Home/HelpdeskRequest/Create/{userId}")]
-        public ActionResult CreateNewHdRequest(int userId)
+        [Route("Home/HelpdeskRequest/Create")]
+        public ActionResult CreateNewHdRequest()
         {
 
             List<HelpdeskServiceCategory> hdSrvCats = _helpdeskServiceCat.GetAll();
             ViewBag.hdSrvCats = hdSrvCats;
-            ViewBag.userId = userId;
+            User u = _userServices.FindById(int.Parse(User.Identity.GetUserId()));
+            if (u == null)
+            {
+                return View("error");
+            }
+            ViewBag.curUser = u;
             return View("CreateHdRequest");
         }
 
@@ -332,15 +337,17 @@ namespace AMS.Controllers
             return RedirectToAction("ViewHistoryHdRequest", new { userId = request.HdReqUserId });
         }
 
+        [Authorize]
         [HttpGet]
-        [Route("Home/HelpdeskRequest/ViewHistory/{userId}")]
-        public ActionResult ViewHistoryHdRequest(int userId)
+        [Route("Home/HelpdeskRequest/ViewHistory")]
+        public ActionResult ViewHistoryHdRequest()
         {
-            User u = _userServices.FindById(userId);
-            if (u != null)
+            User u = _userServices.FindById(int.Parse(User.Identity.GetUserId()));
+            if (u == null)
             {
-                ViewBag.userId = u.Id;
+                return View("error");
             }
+            ViewBag.curUser = u;
             return View("ViewHistoryHdRequests");
         }
 

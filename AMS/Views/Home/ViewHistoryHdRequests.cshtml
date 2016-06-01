@@ -1,7 +1,8 @@
 ﻿@using AMS.Enum
 @{
-    int userId = ViewBag.userId;
-    int roleId = 2;
+    User u = ViewBag.curUser;
+    int userId = u.Id;
+    int roleId = u.RoleId;
 }
 @{
     ViewBag.Title = "ManageMember";
@@ -33,12 +34,12 @@
                     if (roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT)
                     {
                         <li>
-                            <a href="/Home/HelpdeskRequest/Create/@userId"><i class="fa fa-send"></i> Tạo yêu cầu hổ trợ</a>
+                            <a href="/Home/HelpdeskRequest/Create"><i class="fa fa-send"></i> Tạo yêu cầu hổ trợ</a>
                         </li>
                     }
                 }
                 <li class="active">
-                    <a href="/Home/HelpdeskRequest/ViewHistory/@userId"><i class="fa fa-history"></i> Quản lý yêu cầu</a>
+                    <a href="/Home/HelpdeskRequest/ViewHistory" ><i class="fa fa-history"></i> Quản lý yêu cầu</a>
                 </li>
                 @{
                     if (roleId == SLIM_CONFIG.USER_ROLE_MANAGER)
