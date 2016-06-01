@@ -278,15 +278,15 @@ namespace AMS.Controllers
                         if (null == receiptModel.ListItem)
                         {
                             List<ReceiptDetail> receiptDetails = receipt.ReceiptDetails.ToList();
+                            
+                            int receiptId = receipt.Id;
+                            _receiptServices.DeleteById(receiptId);
+                            receiptIsDeleted = true;
                             foreach (var recDetail in receiptDetails)
                             {
                                 _receiptDetailServices.DeleteById(recDetail.Id);
                                 _serviceChargeSevices.DeleteById(recDetail.ServiceFeeId.Value);
                             }
-                            int receiptId = receipt.Id;
-                            receipt = null;
-                            _receiptServices.DeleteById(receiptId);
-                            receiptIsDeleted = true;
                         }
                         else
                         {
@@ -362,6 +362,11 @@ namespace AMS.Controllers
                             receipt.LastModified = DateTime.Now;
                             _receiptServices.Update(receipt);
                         }
+                        else
+                        {
+                            response.StatusCode = 5;
+                            response.Msg = "Đã xóa thành công hóa đơn.";
+                        }
                     }
                     catch (Exception e)
                     {
@@ -407,7 +412,7 @@ namespace AMS.Controllers
                         data = new
                         {
                             status = SLIM_CONFIG.RECEIPT_STATUS_UNPAID
-                    };
+                        };
                     }
                     else if (Status == SLIM_CONFIG.RECEIPT_STATUS_PAID)
                     {
@@ -419,6 +424,7 @@ namespace AMS.Controllers
                             status = SLIM_CONFIG.RECEIPT_STATUS_UNPAID
                         };
                     }
+                    _receiptServices.Update(receipt);
                     response.Data = data;
                 }
                 else

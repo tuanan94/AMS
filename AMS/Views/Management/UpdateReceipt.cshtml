@@ -41,7 +41,7 @@
     <div class="panel panel-default">
         <div class="panel-heading panel-heading-gray">Cập nhật hóa đơn</div>
         <div class="panel-body">
-            <form id="updateOrder" class="form-horizontal" data-receiptid="@receipt.Id" role="form">
+            <form id="updateOrder" class="form-horizontal" data-receiptid="@receipt.Id" data-fromuserid="@userId" role="form">
 
                 <div class="alert alert-info hide" id="createReceiptSuccessNoti" @*style="display: none"*@>
                     <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -200,6 +200,7 @@
                             <div id="receiptWrapper">
                                 @{
                                     int index = 0;
+                                    double total = 0;
                                     foreach (var detail in receipt.ReceiptDetails)
                                     {
                                         {
@@ -220,8 +221,11 @@
                                                 <input id="item_qty_price_@index" readonly="readonly" value="@(detail.UnitPrice*detail.Quantity)" name="" type="text" class="form-control total-order">
                                             </div>
                                             <span class="btn btn-danger btn-xs" onclick="deleteItem(@index)"><i class="fa fa-times"></i></span>
-                                            <input type="hidden" id="item_id_@index" value="@detail.Id" name="" />
+                                            <input type="hidden" id="item_id_@index" value="@detail.Id" name=""/>
                                         </div>
+                                        {
+                                            total += (detail.UnitPrice*detail.Quantity).Value;
+                                        }
                                     }
                                 }
                             </div>
@@ -235,7 +239,7 @@
                                     <strong style="align-content: center">Tổng cộng</strong>
                                 </div>
                                 <div class="col-sm-2">
-                                    <label id="total"></label>
+                                    <label id="total">@total</label>
                                 </div>
                             </div>
                         </fieldset>
@@ -247,20 +251,20 @@
                             @{
                                 if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
                                 {
-                                    <div class="col-md-offset-8 col-md-2">
-                                        <span id="btnPublished" onclick="changeStatusReceipt(@receipt.Id,@userId,@SLIM_CONFIG.RECEIPT_STATUS_UNPAID)" class="btn btn-primary">Công bố</span>
+                                    <div class="col-md-offset-8 col-md-1">
+                                        <span id="btnPublished" onclick="changeStatusReceipt(@receipt.Id,@userId,@SLIM_CONFIG.RECEIPT_STATUS_UNPAID)" class="btn btn-warning">Công bố</span>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-1">
                                         <span id="btnUpdate"  onclick="updateReceipt(@userId)" class="btn btn-primary">Cập nhật</span>
                                     </div>
                                     <div class="col-md-offset-10 col-md-2">
-                                        <span id="btnPaid" onclick="changeStatusReceipt(@receipt.Id,@userId,@SLIM_CONFIG.RECEIPT_STATUS_PAID)" class="btn btn-primary hide">Thanh toán</span>
+                                        <span id="btnPaid" onclick="changeStatusReceipt(@receipt.Id,@userId,@SLIM_CONFIG.RECEIPT_STATUS_PAID)" class="btn btn-success hide">Thanh toán</span>
                                     </div>
                                 }
                                 else if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPAID)
                                 {
-                                    <div class="col-md-offset-10 col-md-2">
-                                        <span onclick="changeStatusReceipt(@receipt.Id,@userId,@SLIM_CONFIG.RECEIPT_STATUS_PAID)" class="btn btn-primary">Thanh toán</span>
+                                    <div class="col-md-offset-8 col-md-1">
+                                        <span id="btnPaid"  onclick="changeStatusReceipt(@receipt.Id,@userId,@SLIM_CONFIG.RECEIPT_STATUS_PAID)" class="btn btn-success">Thanh toán</span>
                                     </div>
                                 }
                             }
@@ -346,7 +350,9 @@
 
                     $("#receiptWrapper").load("/Management/ManageReceipt/ReceiptDetailItemList?receiptId="+ document.getElementById("updateOrder").dataset.receiptid);
 
-                } else {
+                } else if (data.StatusCode === 5) {
+                    location.href = "/Management/ManageReceipt/View/" + document.getElementById("updateOrder").dataset.fromuserid;
+                }else {
                     $("#createReceiptFailedNoti").removeClass("hide").addClass("show");
                     setTimeout(function () {
                         $("#createReceiptFailedNoti").removeClass("show").addClass("hide");
@@ -379,6 +385,7 @@
                         $("#unPaid").removeClass("show").addClass("hide");
                         $("#paid").removeClass("hide").addClass("show");
                         $("#btnPaid").removeClass("show").addClass("hide");
+                        $("#paidDate").val(data.Data.paymentDate);
                     }
                 }
             }
