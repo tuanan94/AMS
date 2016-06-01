@@ -211,6 +211,7 @@
     <Compile Include="Constant\RoleEnum.cs" />
     <Compile Include="Constant\StatusEnumNew.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\HelpdeskServiceController.cs" />
     <Compile Include="Controllers\HelpdeskSupporterController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -223,6 +224,7 @@
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Constant\StatusEnum.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -562,6 +564,8 @@
     <Content Include="Views\Survey\DetailSurvey.cshtml" />
     <Content Include="Views\Management\UpdateReceipt.cshtml" />
     <Content Include="Views\Management\_receiptDetailItemList.cshtml" />
+    <Content Include="Views\Admin\updateHouse.cshtml" />
+    <Content Include="Views\Admin\viewHouse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

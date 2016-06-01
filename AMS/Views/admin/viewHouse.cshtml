@@ -1,0 +1,147 @@
+﻿
+@{
+
+    ViewBag.Title = "View House Info";
+
+
+    List<House> allHouseInfo = ViewBag.allHouseInfo;
+
+
+}
+@*// table show house's info full-----------------------------------------*@
+<div id="content">
+
+
+    <table class="table">
+        <thead>
+            @* this actionlink or a href here means I wanna link to addHouse.cshtml *@
+            @* I think this link method not really link to addHouse.cshtml *@
+            @* I think it link into controller instead *@
+           
+            
+
+            <tr>
+                <th>ID</th>
+                <th>Block</th>
+                <th>Floor</th>
+                <th>House Name</th>
+                <th>Description</th>
+                <th>Area</th>
+
+
+            </tr>
+        </thead>
+        <tbody id="housetablebody"></tbody>
+        @{
+            foreach (House house in allHouseInfo)
+            {
+
+                <tr>
+
+                    <td>@house.Id</td>
+                    <td>@house.Block</td>
+                    <td>@house.Floor</td>
+                    <td>@house.HouseName</td>
+                    <td>@house.Description</td>
+                    <td>@house.Area</td>
+
+                    <td>
+                        <input id="Delete" type="button" value="Delete" onclick="deleteHouse(@house.Id)" />
+
+                    </td>
+                    @*<td>
+                            @Html.ActionLink("updateHouse","updateHouse", new { Id =house.Id})
+                        </td>*@
+                    <td>
+                        @Html.ActionLink("Update", "updateHouse", "Admin", @house.Id)
+                    </td>
+                    @*<td><input id="Update" type="button" value="Update" onclick="updateHouse(@house.HouseName,@house.Description)" /> </td>*@
+                </tr>
+            }
+
+        }
+    </table>
+</div>
+
+<script>
+    //-------------------------------------------------------------
+    $(document).ready(function () {
+        console.log("document loaded");
+        loadHouseList();
+    });
+
+    // load house's list ------------------------------------------
+    function loadHouseList() {
+        clearHouseList();
+        $.ajax({
+            url: '/Admin/viewHouse',
+            data: {
+            },
+            error: function () {
+                alert("error")
+                // $("#alertArea").html("Error occured!")
+            },
+            success: function (data) {
+                var obj = JSON.parse(data);
+                $.each(obj, function (index, jsonObject) {
+                    $("#housetablebody").append('<tr><td>' + jsonObject["Id"] + '</td><td>' + jsonObject["Block"] + '</td><td>' + jsonObject["Floor"] + '<td/><td>' + jsonObject["HouseName"] + '</td><td>' + jsonObject["Description"] + '</td><td>' + jsonObject["Area"] + '</td></tr>')
+                });
+
+            },
+            type: 'GET'
+        });
+    }
+    // clear house list show by talbe by reset button----------------------------
+    function clearHouseList() {
+        $("#housetablebody").html("");
+
+    }
+   
+
+    //Delete house
+    function deleteHouse(Id)
+    {
+        alert('deleteFunction ' + Id)
+        $.ajax({
+            url: '/Admin/deleteHouse',
+            type: 'POST',
+            data: {
+                Id: Id
+            },
+            error: function () {
+                alert(" Cannot delete " + Id)
+            },
+            success: function (data) {
+                alert(data)
+                clearHouseList();
+                loadHouseList();
+            }
+        });
+    }
+
+    // update House
+    function updateHouse (Id,HouseName, Description){
+        alert  ( 'update'(" HouseName ")+ HouseName + (" and Description ") + Description)
+        $.ajax (
+            {
+                url: '/Admin/updateHouse',
+                type: 'POST',
+                data: {
+                    Id :Id,
+                    HouseName: HouseName,
+                    Description : Description
+                },
+                error: function () {
+                    alert(" Cannot update " +(" HouseName ")+ HouseName + (" and Description ") + Description)
+                },
+                success: function (data) {
+                    alert(data)
+                    clearHouseList();
+                    loadHouseList();
+                }
+
+            })
+    }
+
+
+</script>

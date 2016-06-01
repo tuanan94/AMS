@@ -485,8 +485,7 @@ namespace AMS.Controllers
                                 row.HdReqStatus = req.Status.Value;
                                 if (req.HelpdeskRequestHelpdeskSupporters.Count != 0)
                                 {
-                                    User user =
-                                        req.HelpdeskRequestHelpdeskSupporters
+                                    User user = req.HelpdeskRequestHelpdeskSupporters
                                             .OrderByDescending(hdSup1 => hdSup1.CreateDate).First().User;
                                     row.HdReqSupporter = user.Fullname;
                                 }

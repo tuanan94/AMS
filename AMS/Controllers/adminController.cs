@@ -1,3 +1,4 @@
+
 ﻿using AMS.Service;
 using Newtonsoft.Json;
 using System;
@@ -17,6 +18,20 @@ namespace AMS.Controllers
             ViewBag.allHouseInfo = allHouseInfo;
             return View();
         }
+        public ActionResult addHouse()
+        {
+            return View();
+        }
+        public ActionResult viewHouse()
+        {
+            return View();
+        }
+
+        
+        public ActionResult updateHouse()
+        {
+            return RedirectToAction("ManageHouse");
+        }
         [HttpGet]
         public Object allHouseInfo()
         {
@@ -27,7 +42,7 @@ namespace AMS.Controllers
         }
 
         [HttpPost]
-        [ValidateInput(false)]
+       // [ValidateInput(false)]
         public ActionResult addHouse(String Block, String Floor, String HouseName,String Description,float Area)
         {
             bool isValid = true;
@@ -55,11 +70,26 @@ namespace AMS.Controllers
         }
         // delete house
         [HttpPost]
-        public ActionResult deleteHouse(int Id)
+        public String deleteHouse(int Id)
         {
             manageHouseInfo.deleteHouse(Id);
-            return RedirectToAction("ManageHouse");
+            return "success";
+
             //return Json("Response from delete house");
+        }
+
+        //Update House
+        [HttpPut]
+        public ActionResult updateHouse(int Id, String HouseName, String Description)
+        {
+            bool isValid = true;
+            isValid = !HouseName.Equals("");
+            if (isValid)
+            {
+                manageHouseInfo.updateHouse(Id, HouseName, Description);
+            }
+           // return  "success update House" ;
+           return RedirectToAction("ManageHouse");
         }
    }
 }
