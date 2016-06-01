@@ -1,9 +1,9 @@
-﻿@using AMS.Constant;
+﻿@using AMS.Enum
 @{
     ViewBag.Title = "History";
     Layout = "~/Views/HelpdeskSupporter/__HelpdeskSupporterLayout.cshtml";
     int count = 0;
-    List<List<HelpdeskRequestLog>> allLog = ViewBag.listLog;
+    List<HelpdeskRequestLog> allLog = ViewBag.listLog;
 }
 
 <div class="col-md-12">
@@ -25,45 +25,70 @@
                         </thead>
                         <tbody>
                             @{
-                                foreach (List<HelpdeskRequestLog> log in allLog)
+                                foreach (HelpdeskRequestLog logOfCurrRequest in allLog)
                                 {
-                                    foreach (HelpdeskRequestLog logOfCurrRequest in log)
-                                    {
-                                        <tr data-id="@(++count)">
-                                            <td class="text-center">
-                                                <span class="label label-gray">@count</span>
-                                            </td>
-                                            <td>
-                                                <span class="label label-gray">@logOfCurrRequest.HelpdeskRequest.Title</span>
-                                            </td>
-                                            <td>
-                                                @logOfCurrRequest.User.Username
-                                            </td>
-                                            <td>
-                                                <span class="label label-primary">@Convert.ToString(string.Format("{0:dd/MM/yyyy HH:mm}", @logOfCurrRequest.CreateDate))</span>
-                                            </td>
-                                            <td>
-                                                @{
-                                                    if (logOfCurrRequest.StatusFrom == (int)StatusEnumNew.Open)
-                                                    {
-                                                        @Html.Label("Mở")
-                                                    }
-                                                    if (logOfCurrRequest.StatusFrom == (int)StatusEnumNew.Processing)
-                                                    {
-                                                        @Html.Label("Đang xử lý")
-                                                    }
+                                    <tr data-id="@(++count)">
+                                        <td class="text-center">
+                                            <span class="label label-gray">@count</span>
+                                        </td>
+                                        <td>
+                                            <span class="label label-gray">@logOfCurrRequest.HelpdeskRequest.Title</span>
+                                        </td>
+                                        <td>
+                                            @logOfCurrRequest.User.Username
+                                        </td>
+                                        <td>
+                                            <span class="label label-primary">@Convert.ToString(string.Format("{0:dd/MM/yyyy HH:mm}", @logOfCurrRequest.CreateDate))</span>
+                                        </td>
+                                        <td>
+                                            @{
+                                                if (logOfCurrRequest.StatusFrom == (int)StatusEnum.Open)
+                                                {
+                                                    @Html.Label("Mở")
                                                 }
-                                            </td>
-                                            <td>
-                                                @{
-                                                    if (logOfCurrRequest.StatusTo == (int)StatusEnumNew.Done)
-                                                    {
-                                                        @Html.Label("Hoàn Thành")
-                                                    }
+                                                if (logOfCurrRequest.StatusFrom == (int)StatusEnum.Processing)
+                                                {
+                                                    @Html.Label("Đang xử lý")
                                                 }
-                                            </td>
-                                        </tr>
-                                    }
+                                                if (logOfCurrRequest.StatusFrom == (int)StatusEnum.Done)
+                                                {
+                                                    @Html.Label("Xong")
+                                                }
+                                                if (logOfCurrRequest.StatusFrom == (int)StatusEnum.Close)
+                                                {
+                                                    @Html.Label("Đóng")
+                                                }
+                                                if (logOfCurrRequest.StatusFrom == (int)StatusEnum.Cancel)
+                                                {
+                                                    @Html.Label("Hủy")
+                                                }
+                                            }
+                                        </td>
+                                        <td>
+                                            @{
+                                                if (logOfCurrRequest.StatusTo == (int)StatusEnum.Open)
+                                                {
+                                                    @Html.Label("Mở")
+                                                }
+                                                if (logOfCurrRequest.StatusTo == (int)StatusEnum.Processing)
+                                                {
+                                                    @Html.Label("Đang xử lý")
+                                                }
+                                                if (logOfCurrRequest.StatusTo == (int)StatusEnum.Done)
+                                                {
+                                                    @Html.Label("Xong")
+                                                }
+                                                if (logOfCurrRequest.StatusTo == (int)StatusEnum.Close)
+                                                {
+                                                    @Html.Label("Đóng")
+                                                }
+                                                if (logOfCurrRequest.StatusTo == (int)StatusEnum.Cancel)
+                                                {
+                                                    @Html.Label("Hủy")
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
                                 }
                             }
                         </tbody>

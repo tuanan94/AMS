@@ -1,4 +1,4 @@
-﻿@using AMS.Constant;
+﻿@using AMS.Enum
 @{
     ViewBag.Title = "Trang Chủ";
     Layout = "~/Views/HelpdeskSupporter/__HelpdeskSupporterLayout.cshtml";
@@ -51,14 +51,14 @@
                                         </td>
                                         <td>
                                             @{
-                                    if (hr.Status == (int)StatusEnumNew.Open)
-                                    {
-                                        @Html.Label("Mở")
-                                    }
-                                    else if (hr.Status == (int)StatusEnumNew.Processing)
-                                    {
-                                        @Html.Label("Đang xử lý")
-                                    }
+                                                if (hr.Status == (int)StatusEnum.Open)
+                                                {
+                                                    @Html.Label("Mở")
+                                                }
+                                                else if (hr.Status == (int)StatusEnum.Processing)
+                                                {
+                                                    @Html.Label("Đang xử lý")
+                                                }
                                             }
                                         </td>
                                         <td class="text-center">

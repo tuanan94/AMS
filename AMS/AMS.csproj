@@ -209,7 +209,6 @@
     <Compile Include="Constant.cs" />
     <Compile Include="Constant\AmsConstants.cs" />
     <Compile Include="Constant\RoleEnum.cs" />
-    <Compile Include="Constant\StatusEnumNew.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HelpdeskServiceController.cs" />
     <Compile Include="Controllers\HelpdeskSupporterController.cs" />
