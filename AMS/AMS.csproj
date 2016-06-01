@@ -216,6 +216,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ManagementController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
+    <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Constant\StatusEnum.cs" />
     <Compile Include="Global.asax.cs">
@@ -239,6 +240,9 @@
     <Compile Include="Helper\Util.cs" />
     <Compile Include="Helper\ViewHelper.cs" />
     <Compile Include="House.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Image.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Model1.Context.cs">
@@ -289,11 +293,14 @@
     <Compile Include="ServiceFee.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Service\AnswerService.cs" />
     <Compile Include="Service\HdReqHdSupporterServices.cs" />
     <Compile Include="Service\HelpdeskRequestLogServices.cs" />
     <Compile Include="Service\HelpdeskServiceCatService.cs" />
     <Compile Include="Service\HelpdeskRequestServices.cs" />
     <Compile Include="Service\PostService.cs" />
+    <Compile Include="Service\QuestionService.cs" />
+    <Compile Include="Service\SurveyService.cs" />
     <Compile Include="Service\UserInHouseService.cs" />
     <Compile Include="Service\HelpdeskSupporterService.cs" />
     <Compile Include="Service\IHelpdeskSupporterService.cs" />
@@ -322,6 +329,7 @@
     <Compile Include="ViewModel\HelpdeskSupporterViewModel.cs" />
     <Compile Include="ViewModel\MemberViewModel.cs" />
     <Compile Include="ViewModel\PostViewModel.cs" />
+    <Compile Include="ViewModel\SurveyViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -531,6 +539,8 @@
     <Content Include="Views\Admin\ManageHouse.cshtml" />
     <Content Include="Views\Admin\addHouse.cshtml" />
     <Content Include="Views\Admin\deleteHouse.cshtml" />
+    <Content Include="Views\Survey\Survey.cshtml" />
+    <Content Include="Views\Survey\DetailSurvey.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
