@@ -66,7 +66,7 @@ namespace AMS.Service
                 return "Can not update! ";
             }
 
-            return "Update failed";
+          //  return "Update failed";
         }
     }
 
