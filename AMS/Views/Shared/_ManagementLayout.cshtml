@@ -1,0 +1,142 @@
+﻿
+@using Microsoft.AspNet.Identity;
+@{
+    Layout = null;
+    var currentUser = User.Identity;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Scripts.Render("~/bundles/jquery")
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/css/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+</head>
+<body class="breakpoint-1024">
+    <div class="navbar navbar-main navbar-primary navbar-fixed-top navbar-primary-manager" role="navigation">
+        <div class="container-fluid">
+@*            <div class="navbar-header">*@
+@*                <a class="navbar-brand" href="index.html">AMS</a>*@
+@*            </div>*@
+            <div class="navbar-header">
+
+                <ul class="nav navbar-nav navbar-nav-manager">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle user" data-toggle="dropdown">
+                            <img src="/images/people/110/guy-5.jpg" alt="Bill" class="img-circle" width="40"> @currentUser.GetUserName() <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="user-private-profile.html">Profile</a>
+                            </li>
+                            <li>
+                                <a href="user-private-messages.html">Messages</a>
+                            </li>
+                            <li>
+                                <a href="/Account/LogOff">Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="navbar-collapse collapse" id="main-nav" style="height: 1px;">
+                <ul class="nav navbar-nav manager-header">
+                    <li class="">
+                        <a style="color: #303030" href="/Home/HelpdeskRequest/ViewHistory/@User.Identity.GetUserId()"><i class="fa icon-headphones"></i>Yêu cầu</a>
+                    </li>
+                    <li class="">
+                        <a href="/Management/ManageRequestView/@User.Identity.GetUserId()"><i class="fa fa-cogs"></i> Sửa chữa</a>
+                    </li>
+                    <li>
+                        <a href="/Management/ManageReceipt/@User.Identity.GetUserId()"><i class="fa fa-file-text-o"></i> Hóa đơn</a>
+                    </li>
+                    <li>
+                        <a href="/Management/ManageIncome"><i class="fa fa-dollar"></i> Thu chi</a>
+                    </li>
+                    <li>
+                        <a href="/Management/ManageReport"><i class="fa fa-dollar"></i> Báo cáo</a>
+                    </li>
+                    <li>
+                        <a href="login.html"><i class="fa fa-list-ol"></i> Khảo sát</a>
+                    </li>
+                </ul>
+            </div>
+
+            @**@
+            @*            <div class="navbar-header navbar-right">*@
+            @*                <ul class="nav navbar-nav navbar-right">*@
+            @*                    <li class="hidden-xs">*@
+            @*                        <a href="#" data-toggle="sidebar-chat">*@
+            @*                            <i class="fa fa-comments"></i>*@
+            @*                        </a>*@
+            @*                    </li>*@
+            @*                    <!-- User -->*@
+            @*                    <li class="dropdown">*@
+            @*                        <a href="#" class="dropdown-toggle user" data-toggle="dropdown">*@
+            @*                            <img src="/images/people/110/guy-5.jpg" alt="Bill" class="img-circle" width="40"> @currentUser.GetUserName() <span class="caret"></span>*@
+            @*                        </a>*@
+            @*                        <ul class="dropdown-menu" role="menu">*@
+            @*                            <li>*@
+            @*                                <a href="user-private-profile.html">Profile</a>*@
+            @*                            </li>*@
+            @*                            <li>*@
+            @*                                <a href="user-private-messages.html">Messages</a>*@
+            @*                            </li>*@
+            @*                            <li>*@
+            @*                                <a href="/Account/LogOff">Logout</a>*@
+            @*                            </li>*@
+            @*                        </ul>*@
+            @*                    </li>*@
+            @*                </ul>*@
+            @*            </div>*@
+            @*            *@
+        </div>
+    </div>
+    <!--
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Application name", "Index", "Home", new {area = ""}, new {@class = "navbar-brand"})
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    -->
+    <div class="st-container">
+        @RenderBody()
+        <hr />
+    </div>
+
+
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/amsScript/vendor.js"></script>
+    <script src="~/Scripts/amsScript/scripts.js"></script>
+    <script src="~/Scripts/amsScript/custom.js"></script>
+    <script src="~/Scripts/amsScript/additional-methods.min.js"></script>
+    <script src="~/Scripts/amsScript/jquery.validate.min.js"></script>
+    <script src="~/Scripts/amsScript/jquery.timepicker.min.js"></script>
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

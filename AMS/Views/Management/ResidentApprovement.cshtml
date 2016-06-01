@@ -1,11 +1,9 @@
 ﻿
 @using AMS.Enum
+@using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "ManageMember";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
-}
-@{
-    int userId = ViewBag.userId;
 }
 <nav class="navbar navbar-subnav navbar-static-top" role="navigation">
     <div class="container-fluid">
@@ -22,10 +20,10 @@
         <div class="collapse navbar-collapse" id="subnav">
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="/Home/HelpdeskRequest/ViewHistory/@userId"><i class="fa icon-headphones"></i> Quản lý yêu cầu</a>
+                    <a href="/Home/HelpdeskRequest/ViewHistory/@User.Identity.GetUserId()"><i class="fa icon-headphones"></i> Quản lý yêu cầu</a>
                 </li>
                 <li class="active">
-                    <a href="/Management/ResidentApprovement/@userId"><i class="fa fa-group"></i> Quản lý xác nhận dân cư</a>
+                    <a href="/Management/ResidentApprovement/@User.Identity.GetUserId()"><i class="fa fa-group"></i> Quản lý xác nhận dân cư</a>
                 </li>
             </ul>
 
@@ -44,7 +42,7 @@
         <div class="panel-body">
             <div class="form-horizontal" id="searchHdSrv" role="form">
                 <!-- Data table -->
-                <table id="residentApproveTbl" data-fromuserid="@userId" class="table table-hover table-bordered">
+                <table id="residentApproveTbl" data-fromuserid="@User.Identity.GetUserId()" class="table table-hover table-bordered">
                     <thead>
                         <tr>
                             <th></th>

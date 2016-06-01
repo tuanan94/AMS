@@ -1,7 +1,7 @@
-﻿@{
+﻿@using Microsoft.AspNet.Identity
+@{
     ViewBag.Title = "ReceiptView";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
-    int userId = ViewBag.userId;
 }
 
 <nav class="navbar navbar-subnav navbar-static-top" role="navigation">
@@ -19,7 +19,7 @@
         <div class="collapse navbar-collapse" id="subnav">
             <ul class="nav navbar-nav">
                 <li class="active">
-                    <a href="/Home/ManageReceipt/View/@userId"><i class="fa fa-file-text-o"></i> Hóa đơn</a>
+                    <a href="/Home/ManageReceipt/View/@User.Identity.GetUserId()"><i class="fa fa-file-text-o"></i> Hóa đơn</a>
                 </li>
             </ul>
         </div>
@@ -32,7 +32,7 @@
         <div class="panel-heading panel-heading-gray"><i style="color: #000" class="fa fa-list-ul"></i> Lịch sử hóa đơn</div>
         <div class="panel-body">
             <div class="form-horizontal" role="form">
-                <table id="houseOrderTbl" data-userid="@userId" class="table table-hover table-bordered">
+                <table id="houseOrderTbl" data-userid="@User.Identity.GetUserId()" class="table table-hover table-bordered">
                     <thead>
                     <tr>
                         <th></th>

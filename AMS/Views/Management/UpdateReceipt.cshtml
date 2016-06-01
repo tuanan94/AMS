@@ -8,7 +8,6 @@
     List<House> firstBlockFloor = ViewBag.firstBlockFloor;
     List<House> rooms = ViewBag.rooms;
     Receipt receipt = ViewBag.receipt;
-    int userId = ViewBag.userId;
 }
 
 <nav class="navbar navbar-subnav navbar-static-top" role="navigation">
@@ -26,7 +25,7 @@
         <div class="collapse navbar-collapse" id="subnav">
             <ul class="nav navbar-nav">
                 <li class="active">
-                    <a href="/Management/ManageReceipt/View/@userId"><i class="fa fa-list-ul"></i> Quản lý hóa đơn</a>
+                    <a href="/Management/ManageReceipt/View/@User.Identity.GetUserId()"><i class="fa fa-list-ul"></i> Quản lý hóa đơn</a>
                 </li>
                 <li>
                     <a href="/Management/ManageReceipt"><i class="fa fa-file-text-o"></i> Tạo hóa đơn thủ công</a>
@@ -41,7 +40,7 @@
     <div class="panel panel-default">
         <div class="panel-heading panel-heading-gray">Cập nhật hóa đơn</div>
         <div class="panel-body">
-            <form id="updateOrder" class="form-horizontal" data-receiptid="@receipt.Id" data-fromuserid="@userId" role="form">
+            <form id="updateOrder" class="form-horizontal" data-receiptid="@receipt.Id" data-fromuserid="@User.Identity.GetUserId()" role="form">
 
                 <div class="alert alert-info hide" id="createReceiptSuccessNoti" @*style="display: none"*@>
                     <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -252,19 +251,19 @@
                                 if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
                                 {
                                     <div class="col-md-offset-8 col-md-1">
-                                        <span id="btnPublished" onclick="changeStatusReceipt(@receipt.Id,@userId,@SLIM_CONFIG.RECEIPT_STATUS_UNPAID)" class="btn btn-warning">Công bố</span>
+                                        <span id="btnPublished" onclick="changeStatusReceipt(@receipt.Id,@User.Identity.GetUserId(),@SLIM_CONFIG.RECEIPT_STATUS_UNPAID)" class="btn btn-warning">Công bố</span>
                                     </div>
                                     <div class="col-md-1">
-                                        <span id="btnUpdate"  onclick="updateReceipt(@userId)" class="btn btn-primary">Cập nhật</span>
+                                        <span id="btnUpdate"  onclick="updateReceipt(@User.Identity.GetUserId())" class="btn btn-primary">Cập nhật</span>
                                     </div>
                                     <div class="col-md-offset-10 col-md-2">
-                                        <span id="btnPaid" onclick="changeStatusReceipt(@receipt.Id,@userId,@SLIM_CONFIG.RECEIPT_STATUS_PAID)" class="btn btn-success hide">Thanh toán</span>
+                                        <span id="btnPaid" onclick="changeStatusReceipt(@receipt.Id,@User.Identity.GetUserId(),@SLIM_CONFIG.RECEIPT_STATUS_PAID)" class="btn btn-success hide">Thanh toán</span>
                                     </div>
                                 }
                                 else if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPAID)
                                 {
                                     <div class="col-md-offset-8 col-md-1">
-                                        <span id="btnPaid"  onclick="changeStatusReceipt(@receipt.Id,@userId,@SLIM_CONFIG.RECEIPT_STATUS_PAID)" class="btn btn-success">Thanh toán</span>
+                                        <span id="btnPaid"  onclick="changeStatusReceipt(@receipt.Id,@User.Identity.GetUserId(),@SLIM_CONFIG.RECEIPT_STATUS_PAID)" class="btn btn-success">Thanh toán</span>
                                     </div>
                                 }
                             }

@@ -2,6 +2,7 @@
 @using System.Runtime.CompilerServices
 @using AMS.Constant
 @using AMS.Enum
+@using Microsoft.AspNet.Identity
 @{
     HelpdeskRequest hd = null;
     List<HelpdeskRequestLog>
@@ -16,7 +17,6 @@
     {
         hd = ViewBag.hdRequest;
         roleId = ViewBag.roleId;
-        userId = ViewBag.userId;
         helpdeskRequestLogs = ViewBag.helpdeskRequestLogs;
     }
 }
@@ -51,18 +51,18 @@
                     if (roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT)
                     {
                         <li>
-                            <a href="/Home/HelpdeskRequest/Create/@userId"><i class="icon-plus-sign-alt"></i> Tạo yêu cầu hổ trợ</a>
+                            <a href="/Home/HelpdeskRequest/Create/@User.Identity.GetUserId()"><i class="icon-plus-sign-alt"></i> Tạo yêu cầu hổ trợ</a>
                         </li>
                     }
                 }
                 <li class="active">
-                    <a href="/Home/HelpdeskRequest/ViewHistory/@userId"><i class="fa icon-headphones"></i> Quản lý yêu cầu</a>
+                    <a href="/Home/HelpdeskRequest/ViewHistory/@User.Identity.GetUserId()"><i class="fa icon-headphones"></i> Quản lý yêu cầu</a>
                 </li>
                 @{
                     if (roleId == SLIM_CONFIG.USER_ROLE_MANAGER)
                     {
                         <li>
-                            <a href="/Management/ResidentApprovement/@userId"><i class="fa fa-group"></i> Quản lý xác nhận dân cư</a>
+                            <a href="/Management/ResidentApprovement/@User.Identity.GetUserId()"><i class="fa fa-group"></i> Quản lý xác nhận dân cư</a>
                         </li>
                     }
                 }
@@ -94,29 +94,29 @@
                         @{
                             if (hd.Status == (int)StatusEnum.Open && roleId == SLIM_CONFIG.USER_ROLE_MANAGER)
                             {
-@*                                <span class="btn btn-info" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Processing), @userId)">Bắt đầu công việc</span>*@
+@*                                <span class="btn btn-info" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Processing), @User.Identity.GetUserId())">Bắt đầu công việc</span>*@
                             }
                             else if (hd.Status == (int)StatusEnum.Processing && (roleId == SLIM_CONFIG.USER_ROLE_SUPPORTER || roleId == SLIM_CONFIG.USER_ROLE_MANAGER) && hd.HelpdeskRequestHelpdeskSupporters.Count != 0)
                             {
-                                <span class="btn btn-default" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Done), @userId)">
+                                <span class="btn btn-default" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Done), @User.Identity.GetUserId())">
                                     Hoàn thành
                                 </span>
                             }
                             else if (hd.Status == (int)StatusEnum.Done && (roleId == SLIM_CONFIG.USER_ROLE_RESIDENT || roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER))
                             {
-                                <span class="btn btn-success" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Close ), @userId)">Đóng</span>
+                                <span class="btn btn-success" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Close ), @User.Identity.GetUserId())">Đóng</span>
                             }
                             if (hd.Status == (int)StatusEnum.Open || hd.Status == (int)StatusEnum.Processing && (roleId == SLIM_CONFIG.USER_ROLE_SUPPORTER
                                 || roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT))
                             {
-                                <span class="btn btn-danger" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Cancel ), @userId)">Hủy</span>
+                                <span class="btn btn-danger" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Cancel ), @User.Identity.GetUserId())">Hủy</span>
                                 <span class="btn btn-default" onclick="showEditHdReqModal(@hd.Id)"><i class="fa fa-pencil-square-o"></i> Chỉnh sửa</span>
                             }
                             if ((hd.Status == (int)StatusEnum.Open || hd.Status == (int)StatusEnum.Processing) && roleId == (int)SLIM_CONFIG.USER_ROLE_MANAGER)
                             {
-                                <span id="btnDuedate" class="btn btn-default" data-id="@hd.Id" data-userid="@userId"
+                                <span id="btnDuedate" class="btn btn-default" data-id="@hd.Id" data-userid="@User.Identity.GetUserId()"
                                       data-toggle="modal" data-target="#setDuedateModal"><i class="fa fa-clock-o" aria-hidden="true"></i> Cài đặt ngày hoàn thành</span>
-                                    <span id="assignHdReqBtn" data-id="@hd.Id" data-fromuser="@userId" class="btn btn-default" onclick="openModalAssignHdReq(@hd.Id)">
+                                    <span id="assignHdReqBtn" data-id="@hd.Id" data-fromuser="@User.Identity.GetUserId()" class="btn btn-default" onclick="openModalAssignHdReq(@hd.Id)">
                                         <i class="fa fa-tasks" aria-hidden="true"></i> Giao việc
                                     </span>
                             }
@@ -474,7 +474,7 @@
                             </div>
                         </div>
                         <input type="hidden" name="HdReqId" value="@hd.Id"/>
-                        <input type="hidden" name="HdReqUserId" value="@userId"/>
+                        <input type="hidden" name="HdReqUserId" value="@User.Identity.GetUserId()"/>
                     </form>
                 </div>
             </div>

@@ -546,6 +546,7 @@
     <Content Include="Views\Home\ViewReceiptDetail.cshtml" />
     <Content Include="Views\Management\UpdateReceipt.cshtml" />
     <Content Include="Views\Management\_receiptDetailItemList.cshtml" />
+    <Content Include="Views\Shared\_ManagementLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

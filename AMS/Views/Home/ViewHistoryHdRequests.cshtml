@@ -1,6 +1,6 @@
-﻿@using AMS.Enum
+﻿@using Microsoft.AspNet.Identity
+@using AMS.Enum
 @{
-    int userId = ViewBag.userId;
     int roleId = ViewBag.userRole;
 }
 @{
@@ -33,18 +33,18 @@
                     if (roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT)
                     {
                         <li>
-                            <a href="/Home/HelpdeskRequest/Create/@userId"><i class="fa fa-send"></i> Tạo yêu cầu hổ trợ</a>
+                            <a href="/Home/HelpdeskRequest/Create/@User.Identity.GetUserId()"><i class="fa fa-send"></i> Tạo yêu cầu hổ trợ</a>
                         </li>
                     }
                 }
                 <li class="active">
-                    <a href="/Home/HelpdeskRequest/ViewHistory/@userId"><i class="fa fa-history"></i> Quản lý yêu cầu</a>
+                    <a href="/Home/HelpdeskRequest/ViewHistory/@User.Identity.GetUserId()"><i class="fa fa-history"></i> Quản lý yêu cầu</a>
                 </li>
                 @{
                     if (roleId == SLIM_CONFIG.USER_ROLE_MANAGER)
                     {
                         <li>
-                            <a href="/Management/ResidentApprovement/@userId"><i class="fa fa-group"></i> Quản lý xác nhận dân cư</a>
+                            <a href="/Management/ResidentApprovement/@User.Identity.GetUserId()"><i class="fa fa-group"></i> Quản lý xác nhận dân cư</a>
                         </li>
                     }
                 }
@@ -66,7 +66,7 @@
         <div class="panel-body">
             <div class="form-horizontal" id="searchHdSrv" role="form">
                 <!-- Data table -->
-                <table id="hdRequestTbl" data-userid="@userId" class="table table-hover table-bordered">
+                <table id="hdRequestTbl" data-userid="@User.Identity.GetUserId()" class="table table-hover table-bordered">
                     <thead>
                         <tr>
                             <th></th>

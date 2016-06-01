@@ -1,10 +1,10 @@
-﻿@{
+﻿@using Microsoft.AspNet.Identity
+@{
     ViewBag.Title = "ManageMember";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
 }
 @{
     List<HelpdeskServiceCategory> hdSrvCats = ViewBag.hdSrvCats;
-    int userId = ViewBag.userId;
 }
 <nav class="navbar navbar-subnav navbar-static-top" role="navigation">
     <div class="container-fluid">
@@ -21,10 +21,10 @@
         <div class="collapse navbar-collapse" id="subnav">
             <ul class="nav navbar-nav">
                 <li class="active">
-                    <a href="/Home/HelpdeskRequest/Create/@userId"><i class="fa fa-send"></i> Tạo yêu cầu hổ trợ</a>
+                    <a href="/Home/HelpdeskRequest/Create/@User.Identity.GetUserId()"><i class="fa fa-send"></i> Tạo yêu cầu hổ trợ</a>
                 </li>
                 <li>
-                    <a href="/Home/HelpdeskRequest/ViewHistory/@userId"><i class="fa fa-history"></i> Quản lý yêu cầu</a>
+                    <a href="/Home/HelpdeskRequest/ViewHistory/@User.Identity.GetUserId()"><i class="fa fa-history"></i> Quản lý yêu cầu</a>
                 </li>
             </ul>
         </div>
@@ -89,7 +89,7 @@
                                 </div>
                             </div>
                             @*Test hard code user 3*@
-                            <input type="hidden" name="hdReqUserId" value="@userId"/>
+                            <input type="hidden" name="hdReqUserId" value="@User.Identity.GetUserId()"/>
                         </fieldset>
                     </div>
                     <div class="col-sm-6">

@@ -1,9 +1,8 @@
 ﻿@using AMS.Constant
-
+@using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "ViewReceiptDetail";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
-    int userId = ViewBag.userId;
     Receipt receipt = ViewBag.receipt;
 }
 <nav class="navbar navbar-subnav navbar-static-top" role="navigation">
@@ -21,7 +20,7 @@
         <div class="collapse navbar-collapse" id="subnav">
             <ul class="nav navbar-nav">
                 <li class="active">
-                    <a href="/Home/ManageReceipt/View/@userId"><i class="fa fa-file-text-o"></i> Hóa đơn</a>
+                    <a href="/Home/ManageReceipt/View/@User.Identity.GetUserId()"><i class="fa fa-file-text-o"></i> Hóa đơn</a>
                 </li>
             </ul>
         </div>

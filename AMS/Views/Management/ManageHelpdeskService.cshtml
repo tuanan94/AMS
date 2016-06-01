@@ -1,11 +1,10 @@
-﻿
+﻿@using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "ManageRequest";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
 }
 @{
     List<HelpdeskService> helpdeskServices = ViewBag.helpdeskServices;
-    int userId = ViewBag.userId;
 }
 
 <nav class="navbar navbar-subnav navbar-static-top" role="navigation">
@@ -23,10 +22,10 @@
         <div class="collapse navbar-collapse" id="subnav">
             <ul class="nav navbar-nav">
                 <li class="active">
-                    <a href="/Management/ManageRequestView/@userId"><i class="fa fa-fw icon-ship-wheel"></i> Quản lý yêu cầu hổ trợ</a>
+                    <a href="/Management/ManageRequestView/@User.Identity.GetUserId()"><i class="fa fa-fw icon-ship-wheel"></i> Quản lý yêu cầu hổ trợ</a>
                 </li>
                 <li>
-                    <a href="/Management/ViewHelpdeskServiceCategory/@userId"><i class="fa fa fa-tags"></i> Quản lý danh mục yêu cầu hổ trợ</a>
+                    <a href="/Management/ViewHelpdeskServiceCategory/@User.Identity.GetUserId()"><i class="fa fa fa-tags"></i> Quản lý danh mục yêu cầu hổ trợ</a>
                 </li>
             </ul>
 

@@ -1,70 +1,88 @@
-﻿@{
+﻿@using Microsoft.AspNet.Identity
+@{
     ViewBag.Title = "ReceiptView";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
-    int userId = ViewBag.userId;
 }
 
-<nav class="navbar navbar-subnav navbar-static-top" role="navigation">
-    <div class="container-fluid">
+@*<nav class="navbar navbar-subnav navbar-static-top" role="navigation">*@
+@*    <div class="container-fluid">*@
+@**@
+@*        <!-- Brand and toggle get grouped for better mobile display -->*@
+@*        <div class="navbar-header">*@
+@*            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subnav">*@
+@*                <span class="sr-only">Toggle navigation</span>*@
+@*                <span class="fa fa-ellipsis-h"></span>*@
+@*            </button>*@
+@*        </div>*@
+@**@
+@*        <!-- Collect the nav links, forms, and other content for toggling -->*@
+@*        <div class="collapse navbar-collapse" id="subnav">*@
+@*            <ul class="nav navbar-nav">*@
+@*                <li >*@
+@*                    <a href="/Management/ManageReceipt/@User.Identity.GetUserId()"><i class="fa fa-file-text-o"></i> Tạo hóa đơn thủ công</a>*@
+@*                </li>*@
+@*                <li class="active">*@
+@*                    <a href="/Management/ManageReceipt/View/@User.Identity.GetUserId()"><i class="fa fa-list-ul"></i> Quản lý hóa đơn</a>*@
+@*                </li>*@
+@*            </ul>*@
+@*        </div>*@
+@*        <!-- /.navbar-collapse -->*@
+@*    </div>*@
+@*</nav>*@
 
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subnav">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="fa fa-ellipsis-h"></span>
-            </button>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="subnav">
-            <ul class="nav navbar-nav">
-                <li >
-                    <a href="/Management/ManageReceipt/@userId"><i class="fa fa-file-text-o"></i> Tạo hóa đơn thủ công</a>
-                </li>
-                <li class="active">
-                    <a href="/Management/ManageReceipt/View/@userId"><i class="fa fa-list-ul"></i> Quản lý hóa đơn</a>
-                </li>
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-</nav>
 
 <div class="col-md-12">
     <div class="panel panel-default">
-        <div class="panel-heading panel-heading-gray"><i style="color: #000" class="fa fa-list-ul"></i> Lịch sử hóa đơn</div>
+        @*        <div class="panel-heading panel-heading-gray"><i style="color: #000" class="fa fa-list-ul"></i> Lịch sử hóa đơn</div>*@
         <div class="panel-body">
-            <div class="form-horizontal" role="form">
-                <table id="managerOrderTbl" data-userid="@userId" class="table table-hover table-bordered">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Tiêu đề</th>
-                            <th>Căn hộ</th>
-                            <th>Tổng</th>
-                            <th>Trạng thái</th>
-                            <th>Ngày tạo</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th></th>
-                            <th>Tiêu đề</th>
-                            <th>Căn hộ</th>
-                            <th>Tổng</th>
-                            <th>Trạng thái</th>
-                            <th>Ngày tạo</th>
-                            <th></th>
-                        </tr>
-                    </tfoot>
-                    <tbody></tbody>
-                </table>
 
+            <ul class="nav nav-pills" role="tablist">
+                <li>
+                    <a href="/Management/ManageReceipt/@User.Identity.GetUserId()"><i class="fa fa-file-text-o"></i> Tạo hóa đơn thủ công</a>
+                </li>
+                <li class="active">
+                    <a href="/Management/ManageReceipt/View/@User.Identity.GetUserId()"><i class="fa fa-list-ul"></i> Quản lý hóa đơn</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="thismonth">
+
+                    <div class="form-horizontal" role="form">
+                        <table id="managerOrderTbl" data-userid="@User.Identity.GetUserId()" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Tiêu đề</th>
+                                    <th>Căn hộ</th>
+                                    <th>Tổng</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ngày tạo</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th></th>
+                                    <th>Tiêu đề</th>
+                                    <th>Căn hộ</th>
+                                    <th>Tổng</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ngày tạo</th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                            <tbody></tbody>
+                        </table>
+
+                    </div>
+
+                </div>
             </div>
+
         </div>
     </div>
 </div>
+
 
 <script>
     $(document).ready(function () {

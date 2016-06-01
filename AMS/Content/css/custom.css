@@ -99,10 +99,62 @@ fieldset.scheduler-border > legend {
     border-radius: 3px;
     background-color: #fcd7c6;
 }
+
 td.highlight {
     background-color: whitesmoke !important;
 }
 
 .lbl-margin-right {
     margin-right: 5px;
+}
+
+.manager-header {
+    float: none;
+    text-align: center;
+}
+
+    .manager-header > li {
+        float: none;
+        display: inline-block;
+    }
+
+        .manager-header > li > a {
+            margin: 0 auto 2px;
+            display: block;
+            height: 100%;
+            text-align: center;
+            padding: 10px 15px 9px;
+            font-weight: 400;
+            -webkit-transition: all 0.3s;
+            -moz-transition: all 0.3s;
+            transition: all 0.3s;
+        }
+
+            .manager-header > li > a > i {
+                font-size: 28px;
+                width: 28px;
+                height: 28px;
+                display: block;
+                margin: 0 auto 2px;
+            }
+
+.navbar-primary-manager {
+    background-color: #428bca;
+}
+
+.navbar-nav-manager .open .dropdown-menu > li > a {
+        color: #428bca !important;
+}
+.navbar-nav-manager .open > a {
+        color: #428bca !important;
+        background: #428bca !important;
+}
+.navbar-nav-manager > li > a.dropdown-toggle {
+    padding: 0 15px;
+    height: 71px;
+    line-height: 70px;
+}
+.navbar-nav-manager .open .dropdown-menu > li > a,
+.navbar-nav-manager .open .dropdown-menu > li > a:focus {
+  color: #428bca !important;
 }

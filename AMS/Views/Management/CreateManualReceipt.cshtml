@@ -5,7 +5,6 @@
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
     List<House> block = ViewBag.block;
     List<House> firstBlockFloor = ViewBag.firstBlockFloor;
-    int userId = ViewBag.userId;
     List<House> rooms = ViewBag.rooms;
 }
 
@@ -24,10 +23,10 @@
         <div class="collapse navbar-collapse" id="subnav">
             <ul class="nav navbar-nav">
                 <li class="active">
-                    <a href="/Management/ManageReceipt/@userId"><i class="fa fa-file-text-o"></i> Tạo hóa đơn thủ công</a>
+                    <a href="/Management/ManageReceipt/@User.Identity.GetUserId()"><i class="fa fa-file-text-o"></i> Tạo hóa đơn thủ công</a>
                 </li>
                 <li>
-                    <a href="/Management/ManageReceipt/View/@userId"><i class="fa fa-list-ul"></i> Quản lý hóa đơn</a>
+                    <a href="/Management/ManageReceipt/View/@User.Identity.GetUserId()"><i class="fa fa-list-ul"></i> Quản lý hóa đơn</a>
                 </li>
             </ul>
         </div>
@@ -191,7 +190,7 @@
                     <div class="form-horizontal">
                         <div class="form-group">
                             <div class="col-md-offset-10 col-md-2">
-                                <span onclick="createReceipt(@userId)" class="btn btn-primary">Gửi yêu cầu</span>
+                                <span onclick="createReceipt(@User.Identity.GetUserId())" class="btn btn-primary">Gửi yêu cầu</span>
                             </div>
                         </div>
                     </div>
