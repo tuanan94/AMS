@@ -6,103 +6,104 @@ using System.Web.Mvc;
 using AMS.Service;
 using AMS.ViewModel;
 using System.Globalization;
+using Microsoft.AspNet.Identity;
+
 
 namespace AMS.Views.HelpdeskSupporter
 {
     public class HelpdeskSupporterController : Controller
     {
         private HelpdeskSupporterService _helpdeskSupporterService = new HelpdeskSupporterService();
-        // GET: HelpdeskSupporter
+        private UserService _userService = new UserService();
+        private HelpdeskRequestHelpdeskSupporterService _hrhs = new HelpdeskRequestHelpdeskSupporterService();
+        private HelpdeskRequestLogServices _helpdeskRequestLogService = new HelpdeskRequestLogServices();
+        readonly string patternDate = "dd-MM-yyyy HH:mm";
+
+        [HttpGet]
+        [ValidateInput(false)]
         public ActionResult Index()
         {
-            //IEnumerable<HelpdeskRequest> allRequest = _helpdeskSupporterService.ListAllRequest();
-            //HelpdeskRequestViewModel viewModel = new HelpdeskRequestViewModel();
-            //List<HelpdeskRequestViewModel> allViewModel = new List<HelpdeskRequestViewModel>();
-            //foreach (var request in allRequest)
-            //{
-            //    if(request.Status == 1)
-            //    {
-            //        viewModel.Id = request.Id;
-            //        viewModel.Title = request.Title;
-            //        viewModel.Description = request.Description;
-            //        DateTime parsedCreateDate = (DateTime)request.CreateDate;
-            //        viewModel.CreateDate = parsedCreateDate.ToString("dd/MM/yyyy");
-            //        DateTime parsedCloseDate = (DateTime)request.CloseDate;
-            //        viewModel.CloseDate = parsedCloseDate.ToString("dd/MM/yyyy");
-            //        viewModel.Status = (int) request.Status;
-            //        viewModel.Price = (double) request.Price;
-            //        viewModel.HouseName = request.House.HouseName;
-            //        viewModel.HelpdeskServiceName = request.HelpdeskService.Name;
-            //        allViewModel.Add(viewModel);
-            //    }
-            //}
-            IEnumerable<HelpdeskRequest> allRequest = _helpdeskSupporterService.ListAllRequest();
-            List<HelpdeskRequest> openRequest = new List<HelpdeskRequest>();
+            User currUser = _userService.findById(int.Parse(User.Identity.GetUserId()));
+            List<HelpdeskRequestHelpdeskSupporter> allRequest = _hrhs.GetCurrentHelpdeskRequest(currUser.Id);
+            List<HelpdeskRequest> hr = new List<HelpdeskRequest>();
             foreach (var request in allRequest)
             {
-                if (request.Status == 1)
-                {
-                    openRequest.Add(request);
-                }
+                hr.Add(request.HelpdeskRequest);
             }
-            ViewBag.openRequest = openRequest;
+            ViewBag.hr = hr;
+            ViewBag.currHelpdeskSupporterId = currUser.Id;
             return View();
         }
 
-        [HttpPost]
+        [HttpGet]
         [ValidateInput(false)]
-        public ActionResult GetHelpdeskRequest(int selectedId)
+        public ActionResult Detail(int currHelpdeskSupporterId, int requestId)
         {
-            HelpdeskRequest hr = _helpdeskSupporterService.GetHelpdeskRequest(selectedId);
+            HelpdeskRequest hr = _helpdeskSupporterService.GetHelpdeskRequest(requestId);
             HelpdeskRequestViewModel request = new HelpdeskRequestViewModel();
             request.Title = hr.Title;
             request.Description = hr.Description;
-            //Convert date to dd/MM/yyyy
-            DateTime parsedCreateDate = (DateTime) hr.CreateDate;
-            request.CreateDate = parsedCreateDate.ToString("dd/MM/yyyy");
-            DateTime parsedAssignDate = (DateTime)hr.AssignDate;
-            request.AssignDate = parsedAssignDate.ToString("dd/MM/yyyy");
-            request.Status = hr.Status.Value;
-            request.Price = hr.Price.Value;
-            request.HouseName = hr.House.HouseName;
-            request.HelpdeskServiceName = hr.HelpdeskService.Name;
-            request.Id = hr.Id;
-            return Json(request);
-        }
-
-        [HttpPost]
-        [ValidateInput(false)]
-        public ActionResult Detail(int id)
-        {
-            HelpdeskRequest hr = _helpdeskSupporterService.GetHelpdeskRequest(id);
-            HelpdeskRequestViewModel request = new HelpdeskRequestViewModel();
-            request.Title = hr.Title;
-            request.Description = hr.Description;
-            //Convert date to dd/MM/yyyy
+            //---Convert date to dd/MM/yyyy
             DateTime parsedCreateDate = (DateTime)hr.CreateDate;
-            request.CreateDate = parsedCreateDate.ToString("dd/MM/yyyy");
-            DateTime parsedCloseDate = (DateTime)hr.CloseDate;
-            request.CloseDate = parsedCloseDate.ToString("dd/MM/yyyy");
+            request.CreateDate = parsedCreateDate.ToString(patternDate);
+            DateTime parsedDueDate = (DateTime)hr.DueDate;
+            request.DueDate = parsedDueDate.ToString(patternDate);
             request.Status = hr.Status.Value;
             request.Price = hr.Price.Value;
             request.HouseName = hr.House.HouseName;
             request.HelpdeskServiceName = hr.HelpdeskService.Name;
             request.Id = hr.Id;
+            request.HelpdeskSupporterId = currHelpdeskSupporterId;
             ViewBag.currRequest = request;
             return View();
         }
 
-        public ActionResult Detail()
-        {
-            return View();
-        }
-
         [HttpPost]
         [ValidateInput(false)]
-        public bool UpdateRequest(int id, int status)
+        public ActionResult Detail()
         {
-            bool result = _helpdeskSupporterService.UpdateStatus(id, status);
-            return result;
+            int currRequestId = int.Parse(Request["hiddenId"]);
+            int status = int.Parse(Request["hiddenStatus"]);
+            int currHelpdeskSupporterId = int.Parse(Request["hiddenHelpdeskSupporterId"]);
+            HelpdeskRequest currHelpdeskRequest = _helpdeskSupporterService.GetHelpdeskRequest(currRequestId);
+
+            bool result = _helpdeskSupporterService.UpdateStatus(currRequestId, status);
+            if (result)
+            {
+                //if update sucessfully, log this request.
+                HelpdeskRequestLog helpdeskRequestLog = new HelpdeskRequestLog();
+                helpdeskRequestLog.HelpdeskRequestId = currRequestId;
+                helpdeskRequestLog.ChangeFromUserId = currHelpdeskSupporterId;
+                helpdeskRequestLog.CreateDate = DateTime.Now;
+                helpdeskRequestLog.StatusFrom = int.Parse(Request["hiddenStatusFrom"]);
+                helpdeskRequestLog.StatusTo = status;
+                _helpdeskRequestLogService.Add(helpdeskRequestLog);
+
+                ViewBag.messageSuccess = "Đã xử lý thành công!";
+                return Redirect("~/HelpdeskSupporter/Index?id=" + currHelpdeskSupporterId);
+            }
+            return Redirect("~/View/Shared/Error");
+        }
+
+        public ActionResult History()
+        {
+            User currUser = _userService.findById(int.Parse(User.Identity.GetUserId()));
+            int currUserId = currUser.Id;
+            List<HelpdeskRequestHelpdeskSupporter> allRequest = _hrhs.GetHelpdeskRequestById(currUserId);
+            List<HelpdeskRequest> hr = new List<HelpdeskRequest>();
+            foreach (var request in allRequest)
+            {
+                hr.Add(request.HelpdeskRequest);
+            }
+            List<HelpdeskRequestLog> logOfCurrRequest = new List<HelpdeskRequestLog>();
+            List<List<HelpdeskRequestLog>> listLog = new List<List<HelpdeskRequestLog>>();
+            foreach(var request in hr)
+            {
+                logOfCurrRequest = _helpdeskRequestLogService.GetHelpdeskRequestLogByUser(currUserId);
+                listLog.Add(logOfCurrRequest);
+            }
+            ViewBag.listLog = listLog;
+            return View();
         }
     }
 }

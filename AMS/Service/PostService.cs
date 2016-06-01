@@ -55,7 +55,11 @@ namespace AMS.Service
         {
             var result =  postRepository.List.OrderByDescending(t=>t.Id).ToList();
             return result;
+          //  h.PostId = PostId;
+
+         //   postRepository.Add(h);
         }
+
         public IEnumerable<Post> getAllPostNotDe()
         {
             return postRepository.List.ToList();
@@ -80,10 +84,7 @@ namespace AMS.Service
         {
             return -1;
         }
-
-        public int CountComment(int id)
-        {
-            return 0;
-        }
+       
+       
     }
 }

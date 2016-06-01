@@ -1,7 +1,9 @@
-﻿@{
+﻿@using AMS.Constant;
+@{
     ViewBag.Title = "Chi tiết";
     Layout = "~/Views/HelpdeskSupporter/__HelpdeskSupporterLayout.cshtml";
-    HelpdeskRequest hr = ViewBag.currRequest;
+    AMS.ViewModel.HelpdeskRequestViewModel hr = ViewBag.currRequest;
+
 }
 
 <div class="col-md-12">
@@ -19,7 +21,7 @@
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-3 control-label">Căn hộ</label>
                         <div class="col-sm-9">
-                            <input type="email" readonly="readonly" class="form-control" id="houseName" value="@hr.House.HouseName">
+                            <input type="email" readonly="readonly" class="form-control" id="houseName" value="@hr.HouseName">
                         </div>
                     </div>
                     <div class="form-group">
@@ -35,30 +37,27 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-3 control-label">Ngày đóng</label>
+                        <label for="inputEmail3" class="col-sm-3 control-label">Ngày hết hạn</label>
                         <div class="col-sm-9">
-                            <input type="email" readonly="readonly" class="form-control" id="assignDate" value="@hr.CloseDate">
+                            <input type="email" readonly="readonly" class="form-control" id="assignDate" value="@hr.DueDate">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-3 control-label">Trạng thái</label>
                         <div class="col-sm-9">
-                            <div class="col-sm-9">
-                                <select id="status" name="select" class="selectpicker" data-style="btn-white" data-size="5">
-                                    @{
-                                        if (@hr.Status == 1)
-                                        {
-                                            <option value="@hr.Status" selected="selected">Assigned</option>
-                                        }
-                                        else if (@hr.Status == 2)
-                                        {
-                                            <option value="2" selected="selected">Done</option>
-                                        }
-                                    }
-                                    @*<option value="1">Assigned</option>*@
-                                    @*<option value="2">Done</option>*@
-                                </select>
-                            </div>
+                            @{
+                                string message = null;
+                                if (hr.Status == (int)StatusEnumNew.Open)
+                                {
+                                    message = "Mở";
+                                }
+                                else if (hr.Status == (int)StatusEnumNew.Processing)
+                                {
+                                    message = "Đang xử lý";
+                                }
+                            }
+                            <input type="email" readonly="readonly" class="form-control" id="status" value="@message">
+                            
                         </div>
                     </div>
                     <div class="form-group">
@@ -70,16 +69,20 @@
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-3 control-label">Thuộc dịch vụ</label>
                         <div class="col-sm-9">
-                            <input type="email" readonly="readonly" class="form-control" id="serviceName" value="@hr.HelpdeskService.Name">
+                            <input type="email" readonly="readonly" class="form-control" id="serviceName" value="@hr.HelpdeskServiceName">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <input hidden="hidden" id="hiddenId" />
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Trở Về</button>
-                        <button type="submit" onclick="updateRequest(hiddenId.value, status.value)" class="btn btn-primary">Cập Nhật</button>
-                    </div>
+                </div>
+                <input type="hidden" name="hiddenId" value="@hr.Id" />
+                <input type="hidden" name="hiddenStatus" value="3" />
+                <input type="hidden" name="hiddenStatusFrom" value="@hr.Status" />
+                <input type="hidden" name="hiddenHelpdeskSupporterId" value="@hr.HelpdeskSupporterId" />
+                <div class="form-group">
+                    <a href="~/HelpdeskSupporter/Index" class="btn btn-danger">Trở Về</a>
+                    <button type="submit" class="btn btn-primary">Hoàn Thành!</button>
                 </div>
             </form>
+            
         </div>
     </div>
 </div>

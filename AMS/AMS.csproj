@@ -209,6 +209,7 @@
     <Compile Include="Constant.cs" />
     <Compile Include="Constant\AmsConstants.cs" />
     <Compile Include="Constant\RoleEnum.cs" />
+    <Compile Include="Constant\StatusEnumNew.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HelpdeskSupporterController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
@@ -297,11 +298,13 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Service\HdReqHdSupporterServices.cs" />
+    <Compile Include="Service\HelpdeskRequestHelpdeskSupporterService.cs" />
     <Compile Include="Service\HelpdeskRequestLogServices.cs" />
     <Compile Include="Service\HelpdeskServiceCatService.cs" />
     <Compile Include="Service\HelpdeskRequestServices.cs" />
     <Compile Include="Service\ImageService.cs" />
     <Compile Include="Service\HouseServices.cs" />
+    <Compile Include="Service\IHelpdeskRequestHelpdeskSupporterService.cs" />
     <Compile Include="Service\PostService.cs" />
     <Compile Include="Service\ReceiptServices.cs" />
     <Compile Include="Service\ServiceChargeSevices.cs" />
@@ -528,15 +531,18 @@
     <Content Include="Views\Home\TimeLine.cshtml" />
     <Content Include="Views\HelpdeskSupporter\Index.cshtml" />
     <Content Include="Views\HelpdeskSupporter\__HelpdeskSupporterLayout.cshtml" />
-    <Content Include="Views\HelpdeskSupporter\TestDataTables.cshtml" />
     <Content Include="Views\HelpdeskSupporter\Detail.cshtml" />
-    <Content Include="Views\Home\_helpdeskRequestDetail.cshtml" />
+    <Content Include="Views\Home\_helpdeskRequestDetail2.cshtml" />
     <Content Include="Views\Home\CommentView.cshtml" />
     <Content Include="Views\Admin\ManageHouse.cshtml" />
     <Content Include="Views\Admin\addHouse.cshtml" />
     <Content Include="Views\Admin\deleteHouse.cshtml" />
     <Content Include="web.config" />
     <Content Include="Views\Management\Index.cshtml" />
+    <Content Include="Views\Management\_helpdeskServiceCategoryPartial.cshtml" />
+    <Content Include="Views\Management\HelpdeskServiceTabPartial.cshtml" />
+    <Content Include="Views\Management\ManageRequest.cshtml" />
+    <Content Include="Views\Home\_helpdeskRequestDetail.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -547,6 +553,7 @@
     <Content Include="Views\Management\ManageHelpdeskServiceCategory.cshtml" />
     <Content Include="Views\Home\ReceiptView.cshtml" />
     <Content Include="Views\Home\ViewReceiptDetail.cshtml" />
+    <Content Include="Views\HelpdeskSupporter\History.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,349 @@
+﻿
+@{
+    ViewBag.Title = "ManageRequest";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+}
+@{
+    List<HelpdeskService> helpdeskServices = ViewBag.helpdeskServices;
+}
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-gray">Yêu cầu hổ trợ</div>
+        <div class="panel-body">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active">
+                    <a href="#h_desk_req_list" role="tab" data-toggle="tab"><i class="fa fa-fw fa-calendar"></i> Danh sách yêu cầu hỗ từ dân cư</a>
+                </li>
+                <li class="" id="helpdeskServiceManage">
+                    <a onclick="loadTab(this, 'helpdeskServiceManage')" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Quản lý yêu cầu hổ trợ</a>
+                </li>
+                <li class="">
+                    <a onclick="loadTab(this, 'hdSrvCategoryManage')" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Quản lý yêu cầu hổ trợ</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade" id="h_desk_req_list">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <form class="form-horizontal" role="form">
+                                <div class="table-responsive">
+                                    <table class="table v-middle">
+                                        <thead>
+                                            <tr>
+                                                <th width="20">
+                                                    <input type="checkbox" name="checkbox" id="checkAll" />
+                                                </th>
+                                                <th>Date</th>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Location</th>
+                                                <th>Progress</th>
+                                                <th class="text-right">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" />
+                                                </td>
+                                                <td>
+                                                    <span class="label label-gray">19/09/2014</span>
+                                                </td>
+                                                <td>
+                                                    <img src="/images/people/110/guy-5.jpg" width="40" class="img-circle" /> Jonathan Smith
+                                                </td>
+                                                <td>
+                                                    <a href="#">contact@mosaicpro.biz</a>
+                                                </td>
+                                                <td>
+                                                    Miami, FL<a href="#"><i class="fa fa-map-marker fa-fw text-muted"></i></a>
+                                                </td>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-right">
+                                                    <a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
+                                                    <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" />
+                                                </td>
+                                                <td>
+                                                    <span class="label label-primary">19/09/2014</span>
+                                                </td>
+                                                <td>
+                                                    <img src="/images/people/110/woman-4.jpg" width="40" class="img-circle" /> Michelle Smith
+                                                </td>
+                                                <td>
+                                                    <a href="#">contact@mosaicpro.biz</a>
+                                                </td>
+                                                <td>
+                                                    Amsterdam, EU <a href="#"><i class="fa fa-map-marker fa-fw text-muted"></i></a>
+                                                </td>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100">
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-right">
+                                                    <a href="#" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a>
+                                                    <a href="#" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-times"></i></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- // Progress table -->
+                                <div class="panel-footer padding-none text-center">
+                                    <ul class="pagination">
+                                        <li>
+                                            <a href="#">&laquo;</a>
+                                        </li>
+                                        <li class="active">
+                                            <a href="#">1</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">2</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">3</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">4</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">5</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">&raquo;</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade active in" id="helpdeskServiceManageTab">
+
+                </div>
+
+                <div class="tab-pane fade" id="hdSrvCategoryManageTab">
+                    
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Chi tiết </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">Tên yêu cầu</label>
+                                <div class="col-sm-9">
+                                    <input type="email" readonly="readonly" class="form-control" id="inputEmail3" value="Mr. A">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">Nội dung</label>
+                                <div class="col-sm-9">
+                                    <input type="email" readonly="readonly" class="form-control" id="inputEmail3" value="30 kw">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">Ngày bắt đầu</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control datepicker" value="12/12/1993">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">Ngày kết thúc</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control datepicker" value="12/12/1993">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">Người thực hiện</label>
+                                <div class="col-sm-9">
+                                    <select name="select" class="selectpicker" data-style="btn-white" data-size="5">
+                                        <option>Mr. A</option>
+                                        <option>Mr. B</option>
+                                        <option>Mr. C</option>
+                                        <option>Mr. D</option>
+                                        <option>Mr. E</option>
+                                        <option>Mr. F</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <div class="col-sm-offset-9 col-md-2">
+                                    <button type="submit" class="btn btn-primary">Hoàn thành</button>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="messageModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 id="hdSrvMsgModalTitle" class="modal-title">Thông Báo !</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="msgContent"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="addHelpdeskRequestModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 id="hdSrvModalTitle" class="modal-title">Thêm dịch vụ hổ trợ</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-body">
+
+                        <div class="alert alert-info" id="successNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Dịch vụ hổ trợ được khởi tạo thành công.</span>
+                        </div>
+                        <div class="alert alert-warning" id="failedNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Dịch vụ hổ trợ được khởi tạo thất bại.</span>
+                        </div>
+
+                        <form id="addHelpdeskRequestForm" class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label for="HdSrvName" class="col-sm-3 control-label">Tên </label>
+                                <div class="col-sm-9">
+                                    <input id="hdSrvName" type="text" name="hdSrvName" class="form-control" value="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="hdSrvCat" class="col-sm-3 control-label">Nhóm dịch vụ hổ trợ</label>
+                                <div class="col-sm-9">
+                                    <select id="hdSrvCat" name="hdSrvCat" class="form-control" data-size="3">
+                                        @*                                        <option value="1">Điện công cộng</option>*@
+                                        @*                                        <option value="2">Nước</option>*@
+                                        @*                                        <option value="3">Khác</option>*@
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="hdSrvPrice" class="col-sm-3 control-label">Giá tiền</label>
+                                <div class="col-sm-9">
+                                    <input id="hdSrvPrice" name="hdSrvPrice" type="text" type="text" class="form-control" value="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Trạng thái</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="hdSrvStatus" id="hdSrvStatusOn" checked value="1"> Hổ trợ
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="hdSrvStatus" id="hdSrvStatusOff" value="0"> Ngưng hổ trợ
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="hdSrvDesc" class="col-sm-3 control-label">Mô tả</label>
+                                <div class="col-sm-9">
+                                    <textarea id="hdSrvDesc" name="hdSrvDesc" class="form-control" rows="5"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-9 col-md-2">
+                                    @*                                    <button id="addHdSrv" name="addHdSrv" styletype="button"  class="btn btn-primary">Hoàn thành</button>*@
+                                    <button id="addHdSrv" name="addHdSrv" type="submit" class="btn btn-primary">Chấp nhận</button>
+                                </div>
+                            </div>
+                            <input type="hidden" id="hdSrvId" name="hdSrvId" value="" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="hdSrvCategoryModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 id="hdSrvCateModalTitle" class="modal-title">Thêm loại dịch vụ hổ trợ</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <div class="alert alert-info" id="hdSrvCatSuccessNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Nhóm dịch vụ hổ trợ được khởi tạo thành công.</span>
+                        </div>
+                        <div class="alert alert-warning" id="hdSrvCatFailedNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Nhóm dịch vụ hổ trợ được khởi tạo thất bại.</span>
+                        </div>
+                        <form id="hdSrvCategoryForm" class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label for="hdSrvCatName" class="col-sm-3 control-label">Tên </label>
+                                <div class="col-sm-9">
+                                    <input id="hdSrvCatName" type="text" name="hdSrvCatName" class="form-control" value="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-9 col-md-2">
+                                    <button id="addHdSrvCat" name="addHdSrvCat" type="submit" class="btn btn-primary">Chấp nhận</button>
+                                </div>
+                            </div>
+                            <input type="hidden" id="hdSrvCatId" name="hdSrvCatId" value="" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    function loadTab(e, viewName) {
+        if (!$("#" + viewName).hasClass("active")) {
+            window.currentTab = viewName;
+            $('#' + window.currentTab + 'Tab').load("ManageRequest?action=" + viewName);
+            $(".tab-pane.fade").removeClass("test active in");
+            $('#' + window.currentTab + 'Tab').addClass("active in");
+        }
+    }
+
+</script>

@@ -17,6 +17,7 @@ namespace AMS.ViewModel
         public string Description { get; set; }
         public string CreateDate { get; set; }
         public string CloseDate { get; set; }
+        public string DueDate { get; set; }
         public string AssignDate { get; set; }
         public int Status { get; set; }
         public double Price { get; set; }

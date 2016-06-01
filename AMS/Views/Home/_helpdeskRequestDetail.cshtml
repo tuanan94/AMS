@@ -32,10 +32,8 @@
     }
 }
 
-
 <nav class="navbar navbar-subnav navbar-static-top" role="navigation">
     <div class="container-fluid">
-
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subnav">
@@ -43,7 +41,6 @@
                 <span class="fa fa-ellipsis-h"></span>
             </button>
         </div>
-
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="subnav">
             <ul class="nav navbar-nav">
@@ -51,12 +48,12 @@
                     if (roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT)
                     {
                         <li>
-                            <a href="/Home/HelpdeskRequest/Create"><i class="icon-plus-sign-alt"></i> Tạo yêu cầu hổ trợ</a>
+                            <a href="/Home/HelpdeskRequest/Create/@userId"><i class="icon-plus-sign-alt"></i> Tạo yêu cầu hổ trợ</a>
                         </li>
                     }
                 }
                 <li class="active">
-                    <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa icon-headphones"></i> Quản lý yêu cầu</a>
+                    <a href="/Home/HelpdeskRequest/ViewHistory/@userId"><i class="fa icon-headphones"></i> Quản lý yêu cầu</a>
                 </li>
                 @{
                     if (roleId == SLIM_CONFIG.USER_ROLE_MANAGER)
@@ -67,12 +64,10 @@
                     }
                 }
             </ul>
-
         </div>
         <!-- /.navbar-collapse -->
     </div>
 </nav>
-
 <div class="col-md-12">
     <div class="panel panel-default">
         <div class="alert alert-info" id="updateStatusSuccessNoti" style="display: none">
@@ -94,7 +89,7 @@
                         @{
                             if (hd.Status == (int)StatusEnum.Open && roleId == SLIM_CONFIG.USER_ROLE_MANAGER)
                             {
-@*                                <span class="btn btn-info" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Processing), @userId)">Bắt đầu công việc</span>*@
+                                @*                                <span class="btn btn-info" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Processing), @userId)">Bắt đầu công việc</span>*@
                             }
                             else if (hd.Status == (int)StatusEnum.Processing && (roleId == SLIM_CONFIG.USER_ROLE_SUPPORTER || roleId == SLIM_CONFIG.USER_ROLE_MANAGER) && hd.HelpdeskRequestHelpdeskSupporters.Count != 0)
                             {
@@ -115,7 +110,7 @@
                             if ((hd.Status == (int)StatusEnum.Open || hd.Status == (int)StatusEnum.Processing) && roleId == (int)SLIM_CONFIG.USER_ROLE_MANAGER)
                             {
                                 <span id="btnDuedate" class="btn btn-default" data-id="@hd.Id" data-userid="@userId"
-                                      data-toggle="modal" data-target="#setDuedateModal"><i class="fa fa-clock-o" aria-hidden="true"></i> Cài đặt ngày hoàn thành</span>
+                                      data-toggle="modal" data-target="#setDuedateModal"><i class="fa fa-clock-o" aria-hidden="true"></i>Cài đặt ngày hoàn thành</span>
                                     <span id="assignHdReqBtn" data-id="@hd.Id" data-fromuser="@userId" class="btn btn-default" onclick="openModalAssignHdReq(@hd.Id)">
                                         <i class="fa fa-tasks" aria-hidden="true"></i> Giao việc
                                     </span>
@@ -193,7 +188,6 @@
                                             </h4>
                                         </div>
                                     }
-
                                 </div>
                                 <div class="form-group">
                                     <span for="HdReqPrice" class="col-sm-3 control-label">Giá tiền</span>
@@ -207,13 +201,12 @@
                                             }
                                             <input id="HdReqPrice" type="text" name="HdReqPrice" class="form-control" value="@strPrice">
                                         }
-
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <span for="HdReqDesc" class="col-sm-3 control-label">Miêu tả</span>
                                     <div class="col-sm-9">
-                                        <textarea name="HdReqDesc" id="HdReqDesc"  class="form-control" rows="3">@hd.Description</textarea>
+                                        <textarea name="HdReqDesc" id="HdReqDesc" class="form-control" rows="3">@hd.Description</textarea>
                                     </div>
                                 </div>
                             </fieldset>
@@ -236,7 +229,6 @@
                                             }
                                             <input id="HdReqSupporter" name="HdReqSupporter" class="form-control" value="@assignee" />
                                         }
-
                                     </div>
                                 </div>
                             </fieldset>
@@ -282,7 +274,6 @@
                                         </div>
                                     }
                                 }
-
                                 @{
                                     if (hd.CloseDate != null)
                                     {
@@ -314,7 +305,6 @@
                                             </tr>
                                         </thead>
                                         <tbody id="hdReqLogTblBody">
-
                                             @{foreach (var log in helpdeskRequestLogs)
                                                 {
                                                     <tr>
@@ -371,7 +361,6 @@
                                                                 <td></td>
                                                             }
                                                         }
-
                                                         @{
                                                             if (log.StatusFrom == (int)StatusEnum.Open && log.StatusTo == (int)StatusEnum.Open)
                                                             {
@@ -406,7 +395,6 @@
                                                             strDate = log.CreateDate.Value.ToString(parternDate);
                                                             strTime = log.CreateDate.Value.ToString(parternTime);
                                                         }
-
                                                         <td><span class="label date-color" style="margin-right: 5px">@strDate</span> <span class="label time-color">@strTime</span></td>
                                                     </tr>
                                                             }
@@ -422,7 +410,6 @@
         </div>
     </div>
 </div>
-
 
 <div id="updateHdRequestModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -473,15 +460,14 @@
                                 <button id="updateHdRequest" name="HdReqUserDesc" type="submit" class="btn btn-primary">Chấp nhận</button>
                             </div>
                         </div>
-                        <input type="hidden" name="HdReqId" value="@hd.Id"/>
-                        <input type="hidden" name="HdReqUserId" value="@userId"/>
+                        <input type="hidden" name="HdReqId" value="@hd.Id" />
+                        <input type="hidden" name="HdReqUserId" value="@userId" />
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <div id="assignTaskModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -511,7 +497,6 @@
         </div>
     </div>
 </div>
-
 <div id="setDuedateModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -527,7 +512,6 @@
                             <div class="col-sm-6">
                                 <input id="hdReqDueDateDate" type="text" data-provide="datepicker" data-date-start-date="0d" class="form-control datepicker">
                             </div>
-
                         </div>
                         <div class="form-group">
                             <label for="hdSrvCat" class="col-sm-3 control-label">Giờ</label>

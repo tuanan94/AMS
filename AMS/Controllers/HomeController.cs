@@ -92,7 +92,7 @@ namespace AMS.Controllers
                 postViewModel.ImgUrl = item.ImgUrl;
                 postViewModel.Id = item.Id;
                 postViewModel.Title = item.Title;
-                postViewModel.CountComment = postService.CountComment(postViewModel.Id);
+               // postViewModel.CountComment = postService.CountComment(postViewModel.Id);
                 if (item.CreateDate.HasValue)
                 {
                     postViewModel.CreateDate = item.CreateDate.Value;

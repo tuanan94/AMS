@@ -1,0 +1,81 @@
+﻿@using AMS.Constant;
+@{
+    ViewBag.Title = "History";
+    Layout = "~/Views/HelpdeskSupporter/__HelpdeskSupporterLayout.cshtml";
+    int count = 0;
+    List<List<HelpdeskRequestLog>> allLog = ViewBag.listLog;
+}
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-gray">Lịch sử hoạt động</div>
+        <div class="panel-body">
+            <form class="form-horizontal" role="form" method="post">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="myTable">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Thứ tự</th>
+                                <th>Tiêu đề</th>
+                                <th>Username</th>
+                                <th>Ngày tạo</th>
+                                <th>Từ trạng thái</th>
+                                <th>Sang trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (List<HelpdeskRequestLog> log in allLog)
+                                {
+                                    foreach (HelpdeskRequestLog logOfCurrRequest in log)
+                                    {
+                                        <tr data-id="@(++count)">
+                                            <td class="text-center">
+                                                <span class="label label-gray">@count</span>
+                                            </td>
+                                            <td>
+                                                <span class="label label-gray">@logOfCurrRequest.HelpdeskRequest.Title</span>
+                                            </td>
+                                            <td>
+                                                @logOfCurrRequest.User.Username
+                                            </td>
+                                            <td>
+                                                <span class="label label-primary">@Convert.ToString(string.Format("{0:dd/MM/yyyy HH:mm}", @logOfCurrRequest.CreateDate))</span>
+                                            </td>
+                                            <td>
+                                                @{
+                                                    if (logOfCurrRequest.StatusFrom == (int)StatusEnumNew.Open)
+                                                    {
+                                                        @Html.Label("Mở")
+                                                    }
+                                                    if (logOfCurrRequest.StatusFrom == (int)StatusEnumNew.Processing)
+                                                    {
+                                                        @Html.Label("Đang xử lý")
+                                                    }
+                                                }
+                                            </td>
+                                            <td>
+                                                @{
+                                                    if (logOfCurrRequest.StatusTo == (int)StatusEnumNew.Done)
+                                                    {
+                                                        @Html.Label("Hoàn Thành")
+                                                    }
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+</script>

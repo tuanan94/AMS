@@ -1,9 +1,10 @@
-﻿@{
+﻿@using AMS.Constant;
+@{
     ViewBag.Title = "Trang Chủ";
     Layout = "~/Views/HelpdeskSupporter/__HelpdeskSupporterLayout.cshtml";
     int count = 0;
-    List<HelpdeskRequest> openRequest = ViewBag.openRequest;
-
+    List<HelpdeskRequest> allRequest = ViewBag.hr;
+    int currHelpdeskSupporterId = ViewBag.currHelpdeskSupporterId;
 }
 
 <div class="col-md-12">
@@ -20,15 +21,14 @@
                                 <th>Căn hộ</th>
                                 <th>Nội dung</th>
                                 <th>Ngày tạo</th>
-                                <th>Ngày đóng</th>
+                                <th>Ngày hết hạn</th>
                                 <th>Trạng thái</th>
-                                @*<th>Nhân viên đã thực hiện</th>*@
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
                             @{
-                                foreach (HelpdeskRequest hr in openRequest)
+                                foreach (HelpdeskRequest hr in allRequest)
                                 {
                                     <tr data-id="@(++count)">
                                         <td class="text-center">
@@ -44,25 +44,25 @@
                                             @hr.Description
                                         </td>
                                         <td>
-                                            <span class="label label-primary">@Convert.ToString(string.Format("{0:dd/MM/yyyy}", @hr.CreateDate))</span>
+                                            <span class="label label-primary">@Convert.ToString(string.Format("{0:dd/MM/yyyy HH:mm}", @hr.CreateDate))</span>
                                         </td>
                                         <td>
-                                            <span class="label label-success">@Convert.ToString(string.Format("{0:dd/MM/yyyy}", @hr.CloseDate))</span>
+                                            <span class="label label-warning">@Convert.ToString(string.Format("{0:dd/MM/yyyy HH:mm}", @hr.DueDate))</span>
                                         </td>
                                         <td>
                                             @{
-                                                    if (hr.Status == 1)
-                                                    {
-                                                        @Html.Label("Assigned")
-                                                    }
-                                                    if (hr.Status == 2)
-                                                    {
-                                                        @Html.Label("Done")
-                                                    }
-                                                }
+                                    if (hr.Status == (int)StatusEnumNew.Open)
+                                    {
+                                        @Html.Label("Mở")
+                                    }
+                                    else if (hr.Status == (int)StatusEnumNew.Processing)
+                                    {
+                                        @Html.Label("Đang xử lý")
+                                    }
+                                            }
                                         </td>
                                         <td class="text-center">
-                                            <a class="btn btn-default btn-xs" title="Chi tiết"><i class="fa fa-eye"></i></a>
+                                            <a class="btn btn-default btn-xs" href="/HelpdeskSupporter/Detail?currHelpdeskSupporterId=@currHelpdeskSupporterId&requestId=@hr.Id" title="Chi tiết"><i class="fa fa-pencil"></i></a>
                                         </td>
                                     </tr>
                                 }
@@ -75,7 +75,22 @@
     </div>
 </div>
 
-<div id="loadData" class="modal fade">
+@if (ViewBag.messageSuccess != null)
+{
+    <script>
+        $(document).ready(function () {
+            alert('@ViewBag.messageSuccess');
+        });
+    </script>
+}
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+</script>
+
+<!--<div id="loadData" class="modal fade">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -150,13 +165,11 @@
             </div>
         </div>
     </div>
-</div>
-
+</div>-->
 <!--Script Region-->
-<script>
-    $(document).ready(function () {
-        $('#myTable').DataTable();
-    });
+
+<!--
+    <script>
     function getSelectedRequest(selectedId) {
         loadSelectedRequest(selectedId);
     }
@@ -170,16 +183,16 @@
                 alert("Xảy ra lỗi trong quá trình tải dữ liệu!")
             },
             success: function (request) {
-                //$("#title").val(request.Title)
-                //$("#houseName").val(request.HouseName)
-                //$("#description").val(request.Description)
-                //$("#createDate").val(request.CreateDate)
-                //$("#assignDate").val(request.AssignDate)
-                //$("#status").val(request.Status)
-                //$("#price").val(request.Price)
-                //$("#serviceName").val(request.HelpdeskServiceName)
-                //$("#hiddenId").val(request.Id)
-                //location.href = "HelpdeskSupporter/Detail";
+                $("#title").val(request.Title)
+                $("#houseName").val(request.HouseName)
+                $("#description").val(request.Description)
+                $("#createDate").val(request.CreateDate)
+                $("#assignDate").val(request.AssignDate)
+                $("#status").val(request.Status)
+                $("#price").val(request.Price)
+                $("#serviceName").val(request.HelpdeskServiceName)
+                $("#hiddenId").val(request.Id)
+                location.href = "HelpdeskSupporter/Detail";
             },
             type: 'POST'
         });
@@ -212,6 +225,5 @@
             type: 'POST'
         });
     }
-</script>
+</script>-->
 <!--End Script Region-->
-
