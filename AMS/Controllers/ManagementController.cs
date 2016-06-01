@@ -20,10 +20,7 @@ namespace AMS.Controllers
         HelpdeskServicesService _helpdeskServicesService = new HelpdeskServicesService();
         HelpdeskServiceCatService _helpdeskServiceCatService = new HelpdeskServiceCatService();
         UserServices _userServices = new UserServices();
-        HouseServices _houseServices = new HouseServices();
-        ReceiptServices _receiptServices = new ReceiptServices();
-        ReceiptDetailServices _receiptDetailServices = new ReceiptDetailServices();
-        ServiceChargeSevices _serviceChargeSevices = new ServiceChargeSevices();
+        
         readonly string parternTime = "dd-MM-yyyy HH:mm";
         [Authorize]
         public ActionResult Index()
@@ -42,8 +39,6 @@ namespace AMS.Controllers
         {
             return View();
         }
-
-        
 
         public ActionResult ManageRequest()
         {
@@ -463,120 +458,7 @@ namespace AMS.Controllers
         }
 
 
-        [HttpGet]
-        [Route("Management/ManageReceipt/{userId}")]
-        public ActionResult ManageReceipt(int userId)
-        {
-            List<House> block = _houseServices.GetAllBlock();
-            if (block != null && block.Count != 0)
-            {
-                List<House> floor = _houseServices.GetFloorInBlock(block[0].Block);
-                List<House> rooms = _houseServices.GetRoomsInFloor(block[0].Block, floor[0].Floor);
-                ViewBag.block = block;
-                ViewBag.firstBlockFloor = floor;
-                ViewBag.rooms = rooms;
-            }
-            ViewBag.userId = userId;
-            return View();
-        }
-
-        [HttpPost]
-        [Route("Management/ManageReceipt/AddNewReceipt")]
-        public ActionResult AddNewReceipt(ReceiptModel receipt)
-        {
-            MessageViewModels response = new MessageViewModels();
-            User u = _userServices.FindById(receipt.Creator);
-            if (null != u)
-            {
-                House house = _houseServices.FindByHouseName(receipt.ReceiptHouseName);
-                if (null != house)
-                {
-                    try
-                    {
-                        Receipt eReceipt = new Receipt();
-                        eReceipt.HouseId = house.Id;
-                        eReceipt.CreateDate = DateTime.Now;
-                        eReceipt.LastModified = DateTime.Now;
-                        eReceipt.ManagerId = u.Id;
-                        eReceipt.Description = receipt.ReceiptDesc;
-                        eReceipt.Title = receipt.ReceiptTitle;
-                        _receiptServices.Add(eReceipt);
-
-                        ServiceFee item = null;
-                        ReceiptDetail detail = null;
-                        foreach (var i in receipt.ListItem)
-                        {
-                            item = new ServiceFee();
-                            item.Name = i.Name;
-                            item.Price = i.UnitPrice;
-                            item.CreateDate = DateTime.Now;
-                            _serviceChargeSevices.Add(item);
-
-                            detail = new ReceiptDetail();
-                            detail.Quantity = i.Quantity;
-                            detail.ReceiptId = eReceipt.Id;
-                            detail.ServiceFeeId = item.Id;
-                            detail.UnitPrice = item.Price;
-                            _receiptDetailServices.Add(detail);
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        response.Msg = "Tạo hóa đơn thất bại";
-                        response.StatusCode = -1;
-                        return Json(response);
-                    }
-                }
-            }
-            else
-            {
-                response.Msg = "Không tìm thấy người quản lý";
-                response.StatusCode = -1;
-            }
-            return Json(response);
-        }
-
-        [HttpGet]
-        [Route("Management/ManageReceipt/GetRoomAndFloor")]
-        public ActionResult GetRoomAndFloor(string blockName, string floorName)
-        {
-            MessageViewModels response = new MessageViewModels();
-            List<House> floor = _houseServices.GetFloorInBlock(blockName);
-            List<string> floorStr = new List<string>();
-            List<string> roomStr = new List<string>();
-
-            if (floor != null && floor.Count > 0)
-            {
-                foreach (var f in floor)
-                {
-                    floorStr.Add(f.Floor);
-                }
-
-                List<House> rooms = null;
-                if (floorName.IsNullOrWhiteSpace())
-                {
-                    rooms = _houseServices.GetRoomsInFloor(blockName, floor[0].Floor);
-                }
-                else
-                {
-                    rooms = _houseServices.GetRoomsInFloor(blockName, floorName);
-                }
-
-                if (rooms != null && rooms.Count > 0)
-                {
-                    foreach (var room in rooms)
-                    {
-                        roomStr.Add(room.HouseName);
-                    }
-                }
-                response.Data = new { Floor = floorStr, Room = roomStr };
-            }
-            else
-            {
-                response.Data = new { Floor = floorStr, Room = roomStr };
-            }
-            return Json(response, JsonRequestBehavior.AllowGet);
-        }
+        
 
 
         [HttpGet]
@@ -630,8 +512,6 @@ namespace AMS.Controllers
                 response.Msg = "Không tìm thấy cư dân!";
                 response.StatusCode = -1;
             }
-
-
             return Json(response, JsonRequestBehavior.AllowGet);
         }
 
@@ -669,11 +549,6 @@ namespace AMS.Controllers
                 response.StatusCode = -1;
             }
             return Json(response, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult ViewReceipt()
-        {
-            return View();
         }
         public ActionResult CreateReceipt()
         {
