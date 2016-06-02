@@ -9,6 +9,7 @@ namespace AMS.Service
     public class AdminService
     {
         GenericRepository<House> allHouseInfo = new GenericRepository<House>();
+        
         // get house's info
         // return list house's info
         public List<House> getAllHouseInfo()
@@ -28,7 +29,15 @@ namespace AMS.Service
 
             allHouseInfo.Add(house);    //Add to house object
         }
+
         #endregion
+        //public AdminService FindById(int Id)
+        //{
+        //    var result = allHouseInfo.FindById(Id);
+        //    return result;
+        //}
+       
+       
         #region delete House
         //delete House  
         public void deleteHouse(int Id)
@@ -98,5 +107,5 @@ namespace AMS.Service
         #endregion
     }
 
-
+    
 }

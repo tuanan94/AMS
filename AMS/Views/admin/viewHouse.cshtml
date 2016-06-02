@@ -4,6 +4,7 @@
 
 
     List<House> allHouseInfo = ViewBag.allHouseInfo;
+   
 }
 @*// table show house's info full-----------------------------------------*@
 <div id="content">
@@ -22,7 +23,7 @@
                 </td>
             </tr>*@
             <tr>
-                @Html.ActionLink("back to Manage Page","ManageHouse")
+                @Html.ActionLink("back to Admin Page","AdminPage")
             </tr>
             <tr>
                 <th>ID</th>
@@ -55,9 +56,9 @@
                     </td>
                     
                     <td>
-                        @Html.ActionLink("Update", "updateHouse", "Admin")
+                        @Html.ActionLink("Update", "updateHouse2", "Admin")
                     </td>
-                    <td><input id="Update" type="button" value="Update" onclick="updateHouse(@house.Id,@house.HouseName,@house.Description)" /> </td>
+                    @*<td><input id="Update" type="button" value="Update" onclick="updateHouse(@house.Id,@house.HouseName,@house.Description)" /> </td>*@
                 </tr>
             }
 
@@ -151,7 +152,7 @@
         alert  ( 'update'(" HouseName ")+ HouseName + (" and Description ") + Description)
         $.ajax (
             {
-                url: '/Admin/updateHouse',
+                url: '/Admin/updateHouse2',
                 type: 'POST',
                 data: {
                     Id :Id,

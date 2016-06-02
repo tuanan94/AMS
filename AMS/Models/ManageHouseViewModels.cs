@@ -11,7 +11,7 @@ namespace AMS.Models
         [Required]
         [StringLength(10, ErrorMessage ="The {0} must be at least {2} characters long.",MinimumLength =5)]
         [Display(Name = "HouseID")]
-        public string HouseID { get; set; }
+        public string Id { get; set; }
 
         [Required]
         [StringLength(10, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 1)]
@@ -44,7 +44,7 @@ namespace AMS.Models
         [Required]
         [StringLength(10, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 5)]
         [Display(Name = "HouseID")]
-        public string HouseID { get; set; }
+        public string Id { get; set; }
         [Required]
         [StringLength(10, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 1)]
         [Display(Name = "HouseName")]

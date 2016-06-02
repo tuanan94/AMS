@@ -107,6 +107,8 @@ namespace AMS.Controllers
         
         public ActionResult updateHouse2(int Id, String HouseName, String Description)
         {
+            List<House> allHouseInfo = manageHouseInfo.getAllHouseInfo();
+            ViewBag.allHouseInfo = allHouseInfo;
             bool isValid = true;
             isValid = !HouseName.Equals("");
             if (isValid) {
@@ -116,6 +118,17 @@ namespace AMS.Controllers
             return RedirectToAction("viewHouse");
         } 
      
-
+        public ActionResult AdminPage()
+        {
+            return View();
+        }
+        public ActionResult BlockSetup()
+        {
+            return View();
+        }
+        public ActionResult FloorSetup()
+        {
+            return View();
+        }
     }
 }

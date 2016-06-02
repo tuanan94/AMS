@@ -21,48 +21,11 @@
                     @Html.ActionLink("viewHouse", "viewHouse")
             </td></tr>
 
-            @*<tr>
-                <th>ID</th>
-                <th>Block</th>
-                <th>Floor</th>
-                <th>House Name</th>
-                <th>Description</th>
-                <th>Area</th>
-            
-
-            </tr>
-        </thead>
-        <tbody id="housetablebody"></tbody>
-        @{
-            foreach (House house in allHouseInfo)
-            {
-
-                <tr>
-                    
-                    <td>@house.Id</td>
-                    <td>@house.Block</td>
-                    <td>@house.Floor</td>
-                    <td>@house.HouseName</td>
-                    <td>@house.Description</td>
-                    <td>@house.Area</td>
-                    
-                    <td>                
-                        <input id="Delete" type="button" value="Delete" onclick="deleteHouse(@house.Id)" /> 
-                          
-                    </td>   
-                    @*<td>
-                        @Html.ActionLink("updateHouse","updateHouse", new { Id =house.Id})
-                    </td> 
-                        <td>
-                            @Html.ActionLink("Update", "updateHouse", "Admin", @house.Id)
-                        </td>
-                    @*<td><input id="Update" type="button" value="Update" onclick="updateHouse(@house.HouseName,@house.Description)" /> </td>*@
-              
-            
-
         
     </table>
 </div>
+
+    
  
 @*// add house --------------------------------------------*@
 @*@{

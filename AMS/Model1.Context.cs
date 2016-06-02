@@ -45,5 +45,6 @@ namespace AMS
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAnswerSurvey> UserAnswerSurveys { get; set; }
+        
     }
 }

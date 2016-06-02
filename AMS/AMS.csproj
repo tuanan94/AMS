@@ -548,11 +548,15 @@
     <Content Include="Views\Management\ResidentApprovement.cshtml" />
     <Content Include="Views\Management\ViewManagerReceipt.cshtml" />
     <Content Include="Views\Management\_receiptDetailItemList.cshtml" />
+    <Content Include="Views\Admin\AdminPage.cshtml" />
+    <Content Include="Views\Admin\BlockSetup.cshtml" />
+    <Content Include="Views\Admin\FloorSetup.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="AdminIconImages\" />
     <Folder Include="App_Data\" />
     <Folder Include="images\Post\Binh\" />
-    <Folder Include="Views\Image\" />
+    <Folder Include="Views\Image\AdminIconImages\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controllers\fonts\glyphicons-halflings-regular.woff" />
