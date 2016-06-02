@@ -37,6 +37,7 @@ namespace AMS.Controllers
         HelpdeskRequestServices _hdReqServices = new HelpdeskRequestServices();
         HelpdeskRequestLogServices _helpdeskRequestLogServices = new HelpdeskRequestLogServices();
         HdReqHdSupporterServices _hdReqHdSupporterServices = new HdReqHdSupporterServices();
+        AroundProviderService _aroundProviderService = new AroundProviderService();
         readonly string parternTime = "dd-MM-yyyy HH:mm";
 
         public ActionResult Test()
@@ -853,6 +854,17 @@ namespace AMS.Controllers
             return View();
             //pendingMemberService.addMemberRequest(member);
 
+        }
+
+        public ActionResult ViewAroundProvider()
+        {
+            const int foodId = 1;
+            const int entertainId = 2;
+            const int kidCornerId = 3;
+            ViewBag.AllFoods = _aroundProviderService.GetProvidersByCategory(foodId);
+            ViewBag.AllEntertain = _aroundProviderService.GetProvidersByCategory(entertainId);
+            ViewBag.AllKidCorners = _aroundProviderService.GetProvidersByCategory(kidCornerId);
+            return View();
         }
     }
 }

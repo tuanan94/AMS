@@ -290,9 +290,6 @@
     <Compile Include="Repository\IHelpdeskSupporterRepository.cs" />
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Repository\UserRepository.cs" />
-    <Compile Include="ResidentRateAroundProvider.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Role.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -300,6 +297,7 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Service\AnswerService.cs" />
+    <Compile Include="Service\AroundProviderService.cs" />
     <Compile Include="Service\HdReqHdSupporterServices.cs" />
     <Compile Include="Service\HelpdeskRequestHelpdeskSupporterService.cs" />
     <Compile Include="Service\HelpdeskRequestLogServices.cs" />
@@ -336,6 +334,9 @@
     <Compile Include="UserAnswerSurvey.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="UserRateAroundProvider.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\AddMemberViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\HelpdeskSupporterViewModel.cs" />
@@ -344,6 +345,7 @@
     <Compile Include="ViewModel\SurveyViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\animations.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\blue.css" />
@@ -365,13 +367,20 @@
     <Content Include="Content\css\thumbnails.css" />
     <Content Include="Content\css\_vendor.bundle.css" />
     <Content Include="Content\css\_vendor.min.css" />
+    <Content Include="Content\hover_pack.css" />
     <Content Include="Content\images\addimage.png" />
     <Content Include="Content\images\defaultProfile.png" />
     <Content Include="Content\images\guy-5.jpg" />
     <Content Include="Content\images\delete.png" />
+    <Content Include="Content\main.css" />
+    <Content Include="Content\rating.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\port01.jpg" />
+    <Content Include="images\port02.jpg" />
+    <Content Include="images\port03.jpg" />
+    <Content Include="images\rating.png" />
     <Content Include="Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
@@ -469,9 +478,11 @@
     <Content Include="Scripts\amsScript\custom.js" />
     <Content Include="Scripts\datatables.js" />
     <Content Include="Scripts\graph.js" />
+    <Content Include="Scripts\hover_pack.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -479,8 +490,10 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\rating.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\retina.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -548,6 +561,7 @@
     <Content Include="Views\Management\HelpdeskServiceTabPartial.cshtml" />
     <Content Include="Views\Management\ManageRequest.cshtml" />
     <Content Include="Views\Home\_helpdeskRequestDetail.cshtml" />
+    <Content Include="Views\Home\ViewAroundProvider.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

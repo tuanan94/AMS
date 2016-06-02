@@ -1,0 +1,242 @@
+﻿@{
+    ViewBag.Title = "Dịch vụ xung quanh";
+    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+    List<AroundProvider> allFoods = ViewBag.AllFoods;
+    List<AroundProvider> allEntertain = ViewBag.AllEntertain;
+    List<AroundProvider> allKidCorners = ViewBag.AllKidCorners;
+}
+
+@*<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">*@
+<!-- Bootstrap core CSS -->
+@*<link href="~/Content/bootstrap.css" rel="stylesheet" />*@
+<!-- Custom styles for this template -->
+@*<link href="~/Content/font-awesome.min.css" rel="stylesheet" />*@
+@*<link href="assets/css/colors/color-74c9be.css" rel="stylesheet">*@
+
+<link href="~/Content/hover_pack.css" rel="stylesheet" />
+<link href="~/Content/main.css" rel="stylesheet" />
+<link href="~/Content/animations.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="~/Content/rating.css" />
+<!-- Main Jquery & Hover Effects. Should load first -->
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/hover_pack.js"></script>
+<script src="~/Scripts/rating.js" type="text/javascript"></script>
+<script src="~/Scripts/jquery.js" type="text/javascript"></script>
+
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-gray">Dịch vụ xung quanh</div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped" id="food">
+                    <thead>
+                    <tr>
+                        <th class="text-center" style="border-bottom-style: none" colspan="3">
+                            <div class="row mt centered ">
+                                <div class="col-lg-4 col-lg-offset-4">
+                                    <h3>ĐỒ ĂN</h3>
+                                    <hr>
+                                    <button type="submit" class="btn btn-primary">Xem toàn bộ</button>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="text-center">
+                        @{
+                            for (int i = 0; i < 3; i++)
+                            {
+                                <td class="text-center" style="border-top: none">
+                                    <div class="row mt centered">
+                                        <a class="b-link-fade b-animate-go" href="#">
+                                            <img width="300" src="~/images/port01.jpg"/>
+                                            <div class="b-wrapper">
+                                                <h4 class="b-from-left b-animate b-delay03">@allFoods[i].Name</h4>
+                                                <p class="b-from-right b-animate b-delay03">Xem chi tiết</p>
+                                            </div>
+                                        </a>
+                                        <div class="items-name">@allFoods[i].Name</div>
+                                        <div class="items-address">@allFoods[i].Address</div>
+                                        <div class="items-rate">
+                                            <input type="text" class="rating" style="display: none"/>
+                                            <ul class="rating">
+                                                <li>
+                                                    <a href="javascript:void(0);" title="1">1</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0);" title="2">2</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0);" title="3">3</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0);" title="4">4</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0);" title="5">5</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            }
+                        }
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table class="table table-striped" id="entertain">
+                    <thead>
+                    <tr>
+                        <th class="text-center" style="border-bottom-style: none" colspan="3">
+                            <div class="row mt centered ">
+                                <div class="col-lg-4 col-lg-offset-4">
+                                    <h3>GIẢI TRÍ</h3>
+                                    <hr>
+                                    <button type="submit" class="btn btn-primary">Xem toàn bộ</button>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="text-center">
+                        @{
+                            for (int i = 0; i < 3; i++)
+                            {
+                                <td class="text-center" style="border-top: none">
+                                    <div class="row mt centered">
+                                        <a class="b-link-fade b-animate-go" href="#">
+                                            <img width="300" src="~/images/port02.jpg"/>
+                                            <div class="b-wrapper">
+                                                <h4 class="b-from-left b-animate b-delay03">@allEntertain[i].Name</h4>
+                                                <p class="b-from-right b-animate b-delay03">Xem chi tiết</p>
+                                            </div>
+                                        </a>
+                                        <div class="items-name">@allEntertain[i].Name</div>
+                                        <div class="items-address">@allEntertain[i].Address</div>
+                                        <div class="items-rate">
+                                            <input type="text" class="rating" style="display: none"/>
+                                            <ul class="rating">
+                                                <li>
+                                                    <a href="javascript:void(0);" title="1">1</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0);" title="2">2</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0);" title="3">3</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0);" title="4">4</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0);" title="5">5</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            }
+                        }
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table class="table table-striped" id="kidCorner">
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="border-bottom-style: none" colspan="3">
+                                <div class="row mt centered ">
+                                    <div class="col-lg-4 col-lg-offset-4">
+                                        <h3>GÓC CỦA BÉ</h3>
+                                        <hr>
+                                        <button type="submit" class="btn btn-primary">Xem toàn bộ</button>
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="text-center">
+                            @{
+                                for (int i = 0; i < 3; i++)
+                                {
+                                    <td class="text-center" style="border-top: none">
+                                        <div class="row mt centered">
+                                            <a class="b-link-fade b-animate-go" href="#">
+                                                <img width="300" src="~/images/port03.jpg" />
+                                                <div class="b-wrapper">
+                                                    <h4 class="b-from-left b-animate b-delay03">@allKidCorners[i].Name</h4>
+                                                    <p class="b-from-right b-animate b-delay03">Xem chi tiết</p>
+                                                </div>
+                                            </a>
+                                            <div class="items-name">@allKidCorners[i].Name</div>
+                                            <div class="items-address">@allKidCorners[i].Address</div>
+                                            <div class="items-rate">
+                                                <input type="text" class="rating" style="display: none" />
+                                                <ul class="rating">
+                                                    <li>
+                                                        <a href="javascript:void(0);" title="1">1</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="javascript:void(0);" title="2">2</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="javascript:void(0);" title="3">3</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="javascript:void(0);" title="4">4</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="javascript:void(0);" title="5">5</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </td>
+                                }
+                            }
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="~/Scripts/retina.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script>
+    //$(function () {
+    //    $('.rating').rating();
+    //});
+
+    $(function () {
+        $('.rating').rating();
+
+        $('.ratingEvent').rating({ rateEnd: function (v) { $('#result').text(v); } });
+    });
+
+    //$(window).scroll(function () {
+    //    $('.si').each(function () {
+    //        var imagePos = $(this).offset().top;
+
+    //        var topOfWindow = $(window).scrollTop();
+    //        if (imagePos < topOfWindow + 400) {
+    //            $(this).addClass("slideUp");
+    //        }
+    //    });
+    //});
+</script>
+
