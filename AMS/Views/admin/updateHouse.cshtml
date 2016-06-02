@@ -3,6 +3,7 @@
     ViewBag.Title = "Update House";
 
     List<House> allHouseInfo = ViewBag.allHouseInfo;
+    House house = ViewBag.allHouseInfo;
 }
  
          <div id="content">
@@ -14,19 +15,44 @@
                  </thead>
                  <tbody id="housetablebody"></tbody>
              </table>
-             @using (Html.BeginForm("updateHouse", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+             @using (Html.BeginForm("updateHouse", "Admin", FormMethod.Get, new { enctype = "multipart/form-data" }))
              {
-                 <label>ID</label>
-                <input class="form-control" name="Id" id="Id" />
 
-                 <label>House Name</label>
-                 <input class="form-control" name="HouseName" id="HouseName" />
-                 <label>Description</label>
-                 <input class="form-control" name="Description" id="Description" />
+                <label>ID</label>
+                <input class="form-control" name="Id" id="Id" value="@house.Id" />
+               
 
-                 <input type="reset" class="btn btn-default" value="Reset" />
-                 <input type="submit" class="btn btn-success" value="Update" id="btnsubmit" />
-                 
+                <label>House Name</label>
+                <input class="form-control" name="HouseName" id="HouseName" value="@house.HouseName" />
+                <label>Description</label>
+                <input class="form-control" name="Description" id="Description" value="@house.Description" />
+
+                <input type="reset" class="btn btn-default" value="Reset" />
+                <input type="submit" class="btn btn-success" value="Update" id="btnsubmit" />
              }
 
 </div>
+<script>
+    function updateHouse(Id, HouseName, Description) {
+        alert('update'(" HouseName ") + HouseName + (" and Description ") + Description)
+        $.ajax(
+            {
+                url: '/Admin/updateHouse',
+                type: 'POST',
+                data: {
+                    Id: Id,
+                    HouseName: HouseName,
+                    Description: Description
+                },
+                error: function () {
+                    alert(" Cannot update " + (" HouseName ") + HouseName + (" and Description ") + Description)
+                },
+                success: function (data) {
+                    alert(data)
+                    clearHouseList();
+                    loadHouseList();
+                }
+
+            })
+    }
+</script>

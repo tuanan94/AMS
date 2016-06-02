@@ -10,6 +10,7 @@ namespace AMS.Controllers
     public class AdminController : Controller
     {
         AdminService manageHouseInfo = new AdminService();// manageHouseInfo mangage all house info in database
+       
         // GET: admin
         public ActionResult manageHouse()
         {
@@ -17,10 +18,13 @@ namespace AMS.Controllers
             ViewBag.allHouseInfo = allHouseInfo;
             return View();
         }
+      
         public ActionResult addHouse()
         {
             return View();
         }
+       
+      
         public ActionResult viewHouse()
         {
             List<House> allHouseInfo = manageHouseInfo.getAllHouseInfo();
@@ -29,6 +33,7 @@ namespace AMS.Controllers
           
         }
 
+        
         
         public ActionResult updateHouse()
         {
@@ -42,7 +47,7 @@ namespace AMS.Controllers
             });
 
         }
-
+       
         [HttpPost]
        // [ValidateInput(false)]
         public ActionResult addHouse(String Block, String Floor, String HouseName,String Description,float Area)
@@ -58,6 +63,8 @@ namespace AMS.Controllers
 
             return RedirectToAction("viewHouse");
         }
+      
+        
         [HttpPost]
         public void addHouseAjax(String Block, String Floor, String HouseName, String Description, float Area)
         {
@@ -70,16 +77,19 @@ namespace AMS.Controllers
                 manageHouseInfo.addHouse(Block, Floor, HouseName, Description, Area);
             }
         }
+        
+       
         // delete house
         [HttpPost]
         public String deleteHouse(int Id)
         {
             manageHouseInfo.deleteHouse(Id);
             return "success";
-
+            
             //return Json("Response from delete house");
         }
-
+       
+        
         //Update House
         [HttpPut]
         public ActionResult updateHouse(int Id, String HouseName, String Description)
@@ -91,7 +101,21 @@ namespace AMS.Controllers
                 manageHouseInfo.updateHouse(Id, HouseName, Description);
             }
           
-           return RedirectToAction("ManageHouse");
+           return RedirectToAction("viewHouse");
         }
-   }
+        
+        
+        public ActionResult updateHouse2(int Id, String HouseName, String Description)
+        {
+            bool isValid = true;
+            isValid = !HouseName.Equals("");
+            if (isValid) {
+                manageHouseInfo.updateHouse2(Id, HouseName, Description);
+
+            }
+            return RedirectToAction("viewHouse");
+        } 
+     
+
+    }
 }

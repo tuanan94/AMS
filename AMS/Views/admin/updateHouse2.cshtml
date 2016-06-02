@@ -1,0 +1,43 @@
+﻿@{ 
+    ViewBag.Title = "update House version 2";
+
+    List<House> allHouseInfo = ViewBag.allHouseInfo;
+    List<House> allHouse = ViewBag.allHouse;
+    House house = ViewBag.allHouseInfo;
+}
+
+
+<div id="content">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Update House</th>
+            </tr>
+        </thead>
+        <tbody id="housetablebody"></tbody>
+    </table>
+    @using (Html.BeginForm("updateHouse2", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @*@Html.HiddenFor(allHouse => allHouse.Id)*@
+    @*foreach (House house in allHouseInfo)
+    {
+        <label for="inputEmail3" class="col-sm-3 control-label">Tiêu đề</label>
+        <div class="col-sm-9">
+            <input type="email" readonly="readonly" class="form-control" id="title" value="@hr.Title">
+        </div>*@
+    }
+                 <label>ID</label>
+                <input class="form-control" name="Id" id="Id" value="@house.Id" />
+                @*<td>@Html.TextBoxFor(house.Id) </td>*@
+
+                <label>House Name</label>
+                <input class="form-control" name="HouseName" id="HouseName" value="@house.HouseName" />
+                <label>Description</label>
+                <input class="form-control" name="Description" id="Description" value="@house.Description" />
+
+                <input type="reset" class="btn btn-default" value="Reset" />
+                <input type="submit" class="btn btn-success" value="Update" id="btnsubmit" />
+
+    }
+
+</div>

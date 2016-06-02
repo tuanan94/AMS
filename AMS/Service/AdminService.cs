@@ -15,6 +15,7 @@ namespace AMS.Service
         {
             return allHouseInfo.List.ToList();
         }
+        #region add House
         //add House
         public void addHouse(String Block, String Floor, String HouseName, String Description, float Area)
         {
@@ -27,6 +28,8 @@ namespace AMS.Service
 
             allHouseInfo.Add(house);    //Add to house object
         }
+        #endregion
+        #region delete House
         //delete House  
         public void deleteHouse(int Id)
         {
@@ -34,6 +37,8 @@ namespace AMS.Service
             deleteHouse.Id = Id;
             allHouseInfo.Delete(allHouseInfo.FindById(deleteHouse.Id));
         }
+        #endregion
+        #region update House
         //update House
         public String updateHouse(int Id, String HouseName, String Description)
         {
@@ -68,7 +73,30 @@ namespace AMS.Service
 
           //  return "Update failed";
         }
+        #endregion
+
+        #region update House 2
+        public String updateHouse2(int Id,String HouseName, String Description)
+        {
+            bool isValid = true;
+            House house = new House();
+            house = allHouseInfo.FindById(house.Id);
+            house.Id = Id;
+            if (house != null && isValid == true)
+            {
+                house.HouseName = HouseName;
+                house.Description = Description;
+                allHouseInfo.Update(house);
+               return  "success update House" ;
+               // return RedirectToAction("ManageHouse");
+            }
+            else
+            {
+                return "Can not update! ";
+            }
+        }
+        #endregion
     }
 
 
-    }
+}

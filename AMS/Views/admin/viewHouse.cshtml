@@ -53,13 +53,11 @@
                         <input id="Delete" type="button" value="Delete" onclick="deleteHouse(@house.Id)" />
 
                     </td>
-                    @*<td>
-                            @Html.ActionLink("updateHouse","updateHouse", new { Id =house.Id})
-                        </td>*@
+                    
                     <td>
                         @Html.ActionLink("Update", "updateHouse", "Admin")
                     </td>
-                    @*<td><input id="Update" type="button" value="Update" onclick="updateHouse(@house.HouseName,@house.Description)" /> </td>*@
+                    <td><input id="Update" type="button" value="Update" onclick="updateHouse(@house.Id,@house.HouseName,@house.Description)" /> </td>
                 </tr>
             }
 

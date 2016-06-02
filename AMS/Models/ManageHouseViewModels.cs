@@ -39,4 +39,21 @@ namespace AMS.Models
         public string Area { get; set; }
 
     }
+    public class updateHouse
+    {
+        [Required]
+        [StringLength(10, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 5)]
+        [Display(Name = "HouseID")]
+        public string HouseID { get; set; }
+        [Required]
+        [StringLength(10, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 1)]
+        [Display(Name = "HouseName")]
+        public string HouseName { get; set; }
+
+        // [Required]
+        [StringLength(10, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 1)]
+        [Display(Name = "Discription")]
+        public string Discription { get; set; }
+
+    }
 }
