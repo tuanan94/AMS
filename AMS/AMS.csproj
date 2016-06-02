@@ -549,6 +549,7 @@
     <Content Include="Views\Management\HelpdeskServiceTabPartial.cshtml" />
     <Content Include="Views\Management\ManageRequest.cshtml" />
     <Content Include="Views\Home\_helpdeskRequestDetail.cshtml" />
+    <Content Include="Views\Survey\View1.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

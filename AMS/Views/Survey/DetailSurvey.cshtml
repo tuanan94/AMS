@@ -9,94 +9,111 @@
 
 
 
-<div class="col-md-12">
+<div class="col-sm-offset-1 col-sm-10">
     <div class="panel panel-default">
         <nav class="navbar navbar-default">
             <div class="container-fluid">
-               
+
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="/Survey/Survey">Trang chính</a></li>
                     <li><a href="#">Page 1</a></li>
-                   
+
                 </ul>
             </div>
         </nav>
-        <div class="panel-heading panel-heading-gray"><h4>Cập nhập chi tiết khảo sát</h4>
+        <div class="panel-heading panel-heading-gray">
+            <h4>Cập nhập chi tiết khảo sát</h4>
         </div>
         <div class="panel-body">
-            @*<form class="form-horizontal" role="form" method="post">*@
-            <div class="table-responsive">
-                @using (Html.BeginForm("UpdateSurvey", "Survey", FormMethod.Post))
-                {
-                    <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-3 control-label">Tiêu đề</label>
-                        <div class="col-sm-7">
-                            <input type="text" class="form-control" id="Title" name="Title" style="width: 330px" value="@surveys.Title">
-                        </div>
-                       
-                    </div>
-                    <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-3 control-label">Ngày bắt đầu</label>
-                        <div class="col-sm-7">
-                            @Html.TextBoxFor(m => m.StartDate, new {@class = "form-control", style = "width: 330px", @Value = surveys.StartDate})
-                        </div>
-                    </div>
-                   
-                    int ii = 1;
-
-                    int i = 0;
-                    int count = answers.Count;
-                    foreach (var item in questions)
+            <fieldset class="scheduler-border less-padding">
+                @*<form class="form-horizontal" role="form" method="post">*@
+                <div class="table-responsive">
+                    @using (Html.BeginForm("UpdateSurvey", "Survey", FormMethod.Post))
                     {
-                        if (i < count)
-                        {
-                            <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-3 control-label">Câu Hỏi @ii:</label>
-                                <div class="col-sm-7">
-                                    <input type="text" class="form-control" style="width: 330px" id="question" name="question" value="@item.QuestionContent">
-                                   
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-8">
+                                <legend class="scheduler-border">Thông tin survey</legend>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-3 control-label">Tiêu đề</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" id="Title" name="Title" style="width: 330px" value="@surveys.Title"><br>
+                                    </div>
 
                                 </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-3 control-label">Ngày bắt đầu</label>
+                                    <div class="col-sm-7">
+                                        @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control", style = "width: 330px", @Value = surveys.StartDate })
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                               
-                                @{
-                                    List<Answer> a = answers.ElementAt(i);
-                                    int counts = 1;
-                                    foreach (var b in a)
-                                    {
-                                         <label for="inputEmail3" class="col-sm-3 control-label">Câu trả lời:</label>
-                                        <div class="col-sm-7">
-                                            @Html.TextBoxFor(m => m.Id, new {@type = "hidden", @Value = surveys.Id})
+                        </div>
+                        int ii = 1;
 
-                                            <input type="hidden" id="count" name="count" value="@counts"/>
-                                            <input type="text" class="form-control" style="width: 200px" id="anwser1" name="anwser1" value="@b.AnswerContent">
+                        int i = 0;
+                        int count = answers.Count;
+                        foreach (var item in questions)
+                        {
+                            if (i < count)
+                            {
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-8">
+                                        <fieldset class="scheduler-border less-padding">
+                                            <legend class="scheduler-border">Câu hỏi</legend>
+                                            <div class="form-group">
+                                                <label for="inputEmail3" class="col-sm-3 control-label">Câu Hỏi @ii:</label>
+                                                <div class="col-sm-7">
+                                                    <input type="text" class="form-control" style="width: 330px" id="question" name="question" value="@item.QuestionContent"><br>
 
 
-                                        </div>
-                                        counts++;
-                                    }
-                                    i++;
-                                    ii++;
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
 
+                                                @{
+                                List<Answer> a = answers.ElementAt(i);
+                                int counts = 1;
+                                foreach (var b in a)
+                                {
+                                    <label for="inputEmail3" class="col-sm-3 control-label">Câu trả lời:</label>
+                                                    <div class="col-sm-7">
+                                                        @Html.TextBoxFor(m => m.Id, new { @type = "hidden", @Value = surveys.Id })
+
+                                                        <input type="hidden" id="count" name="count" value="@counts" />
+                                                    <input type="text" class="form-control" style="width: 200px" id="anwser1" name="anwser1" value="@b.AnswerContent">
+
+
+                                                    </div>
+                                    counts++;
                                 }
-                            </div>
+                                i++;
+                                ii++;
+
+                                                }
+                                            </div>
+
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            }
 
                         }
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-8">
+                                @*<a href="@Url.Action("UpdateSurvey", "Survey", new { surveyId =@surveys.Id})" class="fa fa-list-alt">Lưu..</a>*@
+                                <button type="submit" class="btn btn-primary">Lưu</button>
+                                <button type="reset" class="btn btn-primary">Xóa hết</button>
+                            </div>
+                           
+                        </div>
 
                     }
-                    <div class="form-group">
-                        <div class="col-sm-9 col-lg-offset-3">
-                            @*<a href="@Url.Action("UpdateSurvey", "Survey", new { surveyId =@surveys.Id})" class="fa fa-list-alt">Lưu..</a>*@
-                            <button type="submit" class="btn btn-primary">Lưu</button>
-                        </div>
-                    </div>
-
-                }
 
 
-            </div>
-            @*</form>*@
+                </div>
+
+                @*</form>*@
+            </fieldset>
         </div>
 
     </div>

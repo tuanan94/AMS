@@ -24,7 +24,12 @@ namespace AMS.Controllers
             ViewBag.ListSurvey = listSurveys;
             return View();
         }
+        public ActionResult View1()
+        {
 
+           
+            return View();
+        }
         public ActionResult DeleteSurvey(int surveyId)
         {
             Survey obj = surveyService.FindById(surveyId);
