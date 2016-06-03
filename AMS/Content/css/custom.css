@@ -99,6 +99,7 @@ fieldset.scheduler-border > legend {
     border-radius: 3px;
     background-color: #fcd7c6;
 }
+
 td.highlight {
     background-color: whitesmoke !important;
 }
@@ -106,7 +107,69 @@ td.highlight {
 .lbl-margin-right {
     margin-right: 5px;
 }
-﻿.slide-left-active {
+
+
+
+.manager-header {
+    float: none;
+    text-align: center;
+}
+
+    .manager-header > li {
+        float: none;
+        display: inline-block;
+    }
+
+        .manager-header > li > a {
+            margin: 0 auto 2px;
+            display: block;
+            height: 100%;
+            text-align: center;
+            padding: 10px 15px 9px;
+            font-weight: 400;
+            -webkit-transition: all 0.3s;
+            -moz-transition: all 0.3s;
+            transition: all 0.3s;
+        }
+
+        .manager-header > li.active > a > i {
+            /*color: #333333;*/
+            color: #af1b1b;
+        }
+
+        .manager-header > li > a > i {
+            font-size: 28px;
+            width: 28px;
+            height: 28px;
+            display: block;
+            margin: 0 auto 2px;
+        }
+
+.navbar-primary-manager {
+    background-color: #428bca;
+}
+
+.navbar-nav-manager .open .dropdown-menu > li > a {
+    color: #428bca !important;
+}
+
+.navbar-nav-manager .open > a {
+    color: #428bca !important;
+    background: #428bca !important;
+}
+
+.navbar-nav-manager > li > a.dropdown-toggle {
+    padding: 0 15px;
+    height: 71px;
+    line-height: 70px;
+}
+
+.navbar-nav-manager .open .dropdown-menu > li > a,
+.navbar-nav-manager .open .dropdown-menu > li > a:focus {
+    color: #428bca !important;
+}
+
+.slide-left-active {
     background-color: #424242;
 }
 
@@ -178,3 +241,37 @@ fieldset.scheduler-border > legend {
     padding-left: 0;
 }
 
+.heading-tab {
+    background: #f9f9f9;
+    height: 50px;
+    padding: 15px 15px;
+    color: #428bca;
+    font-size: 15px;
+    width: 100%;
+    font-weight: 400;
+    margin: 0;
+    background: whitesmoke;
+    border-bottom: 1px solid #efefef;
+}
+
+    .heading-tab i {
+        font-size: 19px;
+    }
+
+    .heading-tab ul.nav-tabs {
+        margin-top: -8px;
+        background-color: transparent;
+    }
+
+        .heading-tab ul.nav-tabs li {
+            margin-bottom: -2px;
+        }
+
+    .heading-tab ul li a, .heading-tab ul li a i {
+        color: #428bca;
+    }
+
+    .heading-tab ul li.active a, .heading-tab ul li.active a i {
+        /*color: #428bca;*/
+        color: #555;
+    }

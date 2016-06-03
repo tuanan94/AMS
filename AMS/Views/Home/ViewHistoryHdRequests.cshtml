@@ -1,7 +1,8 @@
-﻿@using AMS.Enum
+﻿@using Microsoft.AspNet.Identity
+@using AMS.Enum
 @{
+
     User u = ViewBag.curUser;
-    int userId = u.Id;
     int roleId = u.RoleId;
 }
 @{
@@ -16,88 +17,75 @@
     }
 }
 
-<nav class="navbar navbar-subnav navbar-static-top" role="navigation">
-    <div class="container-fluid">
 
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subnav">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="fa fa-ellipsis-h"></span>
-            </button>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="subnav">
-            <ul class="nav navbar-nav">
+<div class="col-md-12">
+    <div class="panel panel-default">
+        
+        <div class="heading-tab">
+            <i class="fa fa-list"> Danh sách yêu cầu</i>
+            <ul class="nav nav-tabs pull-right" role="tablist">
                 @{
                     if (roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT)
                     {
                         <li>
-                            <a href="/Home/HelpdeskRequest/Create"><i class="fa fa-send"></i> Tạo yêu cầu hổ trợ</a>
+                            <a href="/Home/HelpdeskRequest/Create"><i class="fa fa-send"></i> Tạo yêu cầu sửa chữa</a>
                         </li>
                     }
                 }
                 <li class="active">
-                    <a href="/Home/HelpdeskRequest/ViewHistory" ><i class="fa fa-history"></i> Quản lý yêu cầu</a>
+                    <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-life-ring"></i> Yêu cầu sửa chữa</a>
                 </li>
                 @{
                     if (roleId == SLIM_CONFIG.USER_ROLE_MANAGER)
                     {
                         <li>
-                            <a href="/Management/ResidentApprovement/@userId"><i class="fa fa-group"></i> Quản lý xác nhận dân cư</a>
+                            <a href="/Management/ResidentApprovement/@User.Identity.GetUserId()"><i class="fa fa-group"></i> Xác nhận dân cư</a>
                         </li>
                     }
                 }
             </ul>
         </div>
-        <!-- /.navbar-collapse -->
-    </div>
-</nav>
-
-
-
-<div class="col-md-12">
-    <div class="panel panel-default">
-
-        <div class="panel-heading panel-heading-gray">
-            <i class="fa fa-bookmark"></i> Danh sách yêu cầu hổ trợ
-        </div>
-
         <div class="panel-body">
-            <div class="form-horizontal" id="searchHdSrv" role="form">
-                <!-- Data table -->
-                <table id="hdRequestTbl" data-userid="@userId" class="table table-hover table-bordered">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Tiêu đề</th>
-                            <th>Căn hộ</th>
-                            <th>DV hổ trợ</th>
-                            <th>Trạng thái</th>
-                            <th>NV hổ trợ</th>
-                            <th>Ngày tạo</th>
-                            <th>Ngày H.Thành</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th></th>
-                            <th>Tiêu đề</th>
-                            <th>Căn hộ</th>
-                            <th>DV hổ trợ</th>
-                            <th>Trạng thái</th>
-                            <th>NV hổ trợ</th>
-                            <th>Ngày tạo</th>
-                            <th>Ngày H.Thành</th>
-                            <th></th>
-                        </tr>
-                    </tfoot>
-                    <tbody></tbody>
-                </table>
-                <!-- // Data table -->
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="">
+                    <div class="form-horizontal" id="searchHdSrv" role="form">
+                        <!-- Data table -->
+                        <table id="hdRequestTbl" data-userid="@User.Identity.GetUserId()" class="table table-hover table-bordered">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Tiêu đề</th>
+                                <th>Căn hộ</th>
+                                <th>DV hổ trợ</th>
+                                <th>Trạng thái</th>
+                                <th>NV hổ trợ</th>
+                                <th>Ngày tạo</th>
+                                <th>Ngày H.Thành</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th></th>
+                                <th>Tiêu đề</th>
+                                <th>Căn hộ</th>
+                                <th>DV hổ trợ</th>
+                                <th>Trạng thái</th>
+                                <th>NV hổ trợ</th>
+                                <th>Ngày tạo</th>
+                                <th>Ngày H.Thành</th>
+                                <th></th>
+                            </tr>
+                            </tfoot>
+                            <tbody></tbody>
+                        </table>
+                        <!-- // Data table -->
+                    </div>
+
+                </div>
             </div>
+
+
         </div>
     </div>
 </div>

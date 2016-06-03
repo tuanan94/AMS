@@ -35,6 +35,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <IncludeIisSettings>true</IncludeIisSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -542,12 +543,14 @@
     <Content Include="Views\Admin\ManageHouse.cshtml" />
     <Content Include="Views\Admin\addHouse.cshtml" />
     <Content Include="Views\Admin\deleteHouse.cshtml" />
-    <Content Include="web.config" />
+    <Content Include="web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\Management\Index.cshtml" />
     <Content Include="Views\Management\_helpdeskServiceCategoryPartial.cshtml" />
     <Content Include="Views\Management\HelpdeskServiceTabPartial.cshtml" />
     <Content Include="Views\Management\ManageRequest.cshtml" />
-    <Content Include="Views\Home\_helpdeskRequestDetail.cshtml" />
+    <Content Include="Views\Home\ViewHistoryHdRequestDetail.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -564,6 +567,7 @@
     <Content Include="Views\Management\UpdateReceipt.cshtml" />
     <Content Include="Views\Management\_receiptDetailItemList.cshtml" />
     <Content Include="Views\Admin\updateHouse.cshtml" />
+    <Content Include="Views\Shared\_ManagementLayout.cshtml" />
     <Content Include="Views\Admin\viewHouse.cshtml" />
   </ItemGroup>
   <ItemGroup>

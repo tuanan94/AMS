@@ -551,6 +551,16 @@ $(document).ready(function () {
                 "targets": 0
             },
             {
+                "targets": 2,
+                "data": "HdReqHouse",
+                "render": function (data, type, full, meta) {
+                    if (type === "display" || type === "filter") {
+                        return "<span class='label house-color label-warning'>" + data + "</span>";
+                    }
+                    return data;
+                }
+            },
+            {
                 "targets": 4,
                 "data": "HdReqStatus",
                 "render": function (data, type, full) {
@@ -729,6 +739,13 @@ $(document).ready(function () {
                 "</span>" +
             "</div>";
             $("#hdSrvCatTable_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(html);
+
+            var addBtn = "<div class='col-md-1'>" +
+                            "<span class='btn btn-info' data-toggle='modal' data-target='#hdSrvCategoryModal' data-placement='top' onclick='openHdSrvCategoryModal()'>" +
+                        "<i class='fa fa-plus'></i>" +
+                            "</span>" +
+                        "</div>";
+            $("#hdSrvCatTable_wrapper > div:nth-child(1) > div:nth-child(1)").html(addBtn);
         }
     });
     var dataTable4 = $("#hdSrvTable").DataTable({
@@ -746,6 +763,13 @@ $(document).ready(function () {
                 "</span>" +
             "</div>";
             $("#hdSrvTable_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(html);
+
+            var addBtn = "<div class='col-md-1'>" +
+                            "<span class='btn btn-info' data-toggle='modal' data-target='#addHelpdeskRequestModal' data-placement='top' title='Edit' onclick='loadHelpdeskServiceType()'>" +
+                                "<i class='fa fa-plus'></i>" +
+                            "</span>" +
+                        "</div>";
+            $("#hdSrvTable_wrapper > div:nth-child(1) > div:nth-child(1)").html(addBtn);
         }
     });
 
@@ -1169,7 +1193,7 @@ $(document).ready(function () {
     //            }
     //        });
 
-    
+
     $("#receiptWrapper").on("change", ".order-item-qty", function () {
         console.log($(this).val());
         var idStr = $(this).prop("id").split("item_qty_");
