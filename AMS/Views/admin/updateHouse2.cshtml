@@ -93,3 +93,60 @@
         </div>
     </div>
 </div>
+@*tham khảo from UpdateReceipt*@
+@*<div class="form-group">
+    <label for="houseName" class="col-md-2 control-label">House Block</label>
+    <div class="col-md-3 full-width-select">
+        <select id="HouseId" name="select" class="form-control">
+            @{
+                foreach (var b in house.Block)
+                {
+                    if (b.Block.Equals(house.Block))
+                    {
+                        <option selected="selected" value="@house.Block">@house.Block</option>
+                    }
+                    else
+                    {
+                        <option value="@house.Block">@house.Block</option>
+                    }
+                }
+            }
+        </select>
+    </div>
+    <label for="houseName" class="col-md-1 control-label">Description</label>
+    <div class="col-md-2">
+        <select id="houseFloor" name="select" class="form-control">
+            @{
+                foreach (var d in house.Description)
+                {
+                    if (d.Floor.Equals(house.Description))
+                    {
+                        <option selected="selected" value="@house.Description">@house.Description</option>
+                    }
+                    else
+                    {
+                        <option value="@house.Description">@house.Description</option>
+                    }
+                }
+            }
+        </select>
+    </div>
+    <label for="houseName" class="col-md-1 control-label">Nhà</label>
+    <div class="col-md-3">
+        <select id="houseName" name="select" class="form-control">
+            @{
+                foreach (var housename in house.HouseName)
+                {
+                    if (housename.HouseName.Equals(house.HouseName))
+                    {
+                        <option selected="selected" value="@housename.HouseName">@housename.HouseName</option>
+                    }
+                    else
+                    {
+                        <option value="@housename.HouseName">@housename.HouseName</option>
+                    }
+                }
+            }
+        </select>
+    </div>
+</div>*@
