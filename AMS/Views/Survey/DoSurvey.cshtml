@@ -1,0 +1,167 @@
+﻿
+@{
+    ViewBag.Title = "DoSurvey";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+    List<Survey> listSurveys = ViewBag.ListSurvey;
+    <style>
+        .button {
+            display: block;
+            width: 70px;
+            height: 35px;
+            background: #4E9CAF;
+            padding: 7px;
+            text-align: center;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+}
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<body onload="paging()">
+<div class="col-sm-offset-2 col-sm-8">
+    <div class="panel panel-default">
+        <div class="table-responsive">
+            <table class="table v-middle">
+                <thead>
+                <tr>
+                    <th>Số Thứ tự</th>
+                    <th>Tiêu đề</th>
+                    <th>Ngày tạo</th>
+                    <th>Ngày đóng</th>
+                    <th>Trạng thái </th>
+
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                @{
+                    foreach (var item in listSurveys)
+                    {
+                        <tr class="aass">
+                            <td>
+                                <div class="form-group">
+                                    <div class="col-sm-9">
+                                        <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.Id">
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <div class="col-sm-9">
+                                        <input type="hidden" class="form-control" id="surveyId" value="@item.Id">
+                                        <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.Title">
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <div class="col-sm-9">
+                                        <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.StartDate">
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <div class="col-sm-9">
+                                        <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.EndDate">
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                @{
+                                    if (@item.Status == ConstantB.Survey_Open)
+                                    {
+                                        <div class="form-group">
+                                            <div class="col-sm-9">
+                                                <input type="text" disabled="disabled" style="background-color: blue" class="form-control" id="fullname" value="Đang mở">
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-group">
+                                            <div class="col-sm-9">
+                                                <input type="text" disabled="disabled" style="background-color: red" class="form-control" id="fullname" value="Đã đóng">
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+
+                            </td>
+
+                            <td>
+                                <div class="form-group">
+                                    <div class="col-sm-9">
+
+                                        <a href="@Url.Action("DoDetailSurvey", "Survey", new {surveyId = @item.Id})" class="button">Chi Tiết</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+
+
+
+                </tbody>
+            </table>
+            <div class="w100 categoryFooter">
+
+                <ul class="pagination" id="paginations">
+
+                    <li class="current"><a href="#">1</a></li>
+                    <li> <a href="#">2</a></li>
+                    <li> <a href="#">3</a></li>
+                    <li> <a href="#">4</a></li>
+                    <li> <a href="#">5</a></li>
+
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</div>
+    </body>
+    <script>
+        pageSize = 4;
+
+        showPage = function (page) {
+            $(".content").hide();
+            $(".content").each(function (n) {
+                if (n >= pageSize * (page - 1) && n < pageSize * page)
+                    $(this).show();
+            });
+        }
+
+        showPage(1);
+
+        $("#pagin li a").click(function () {
+            $("#pagin li a").removeClass("current");
+            $(this).addClass("current");
+            showPage(parseInt($(this).text()))
+        });
+
+
+        function paging() {
+            var pageSize = 4;
+
+            var showPage = function (page) {
+                $(".aass").hide();
+                $(".aass").each(function (n) {
+                    if (n >= pageSize * (page - 1) && n < pageSize * page)
+                        $(this).show();
+                });
+            }
+
+            showPage(1);
+
+            $("#paginations li a").click(function () {
+                $("#paginations li a").removeClass("current");
+                $(this).addClass("current");
+                showPage(parseInt($(this).text()))
+            });
+        }
+    </script>
+

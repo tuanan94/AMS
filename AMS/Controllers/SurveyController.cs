@@ -14,6 +14,7 @@ namespace AMS.Controllers
         SurveyService surveyService = new SurveyService();
         QuestionService questionService = new QuestionService();
         AnswerService answerService = new AnswerService();
+        UserAnswerService userAnswerService = new UserAnswerService();
         //
         // GET: /Survey/
         public ActionResult Survey()
@@ -26,9 +27,57 @@ namespace AMS.Controllers
         }
         public ActionResult View1()
         {
-
+         
            
             return View();
+        }
+        public ActionResult Graph()
+        {
+
+
+            return View();
+        }
+        public ActionResult DoSurvey()
+        {
+            List<Survey> listSurveys = surveyService.GetListSurveys();
+            //   int a = listCount.Count;
+            ViewBag.ListSurvey = listSurveys;
+
+            return View();
+        }
+        public ActionResult DoDetailSurvey(int surveyId)
+        {
+             Survey survey = surveyService.FindById(surveyId);
+           List<int> listCount = new List<int>();
+            int a = userAnswerService.CountAnswer(332);
+            List<Answer> listAnswers = answerService.FindByQuestionId(survey.Id);
+            foreach (var item in listAnswers)
+            {
+                
+            }
+            ViewBag.Survey = survey;
+            ViewBag.Answer = listAnswers;
+
+            return View();
+        }
+        [HttpPost]
+        public ActionResult DoDetailSurvey(SurveyViewModel model, string choiceId)
+        {
+           //string a= model.AnswerContent;
+            string[] listQuestion = Request.Form.GetValues("question");
+
+
+            string[] choice = Request.Form.GetValues("AnswerContent");
+            string[] choiceIds = Request.Form.GetValues("answerId");
+            List<string> listChoice = new List<string>(choice);
+            List<string> listQuestions = new List<string>(listQuestion);
+            int answerId = answerService.FindByContent(choice[0]);
+            UserAnswerSurvey userAnswerSurvey = new UserAnswerSurvey();
+            userAnswerSurvey.SurveyId = model.Id;
+            userAnswerSurvey.UserId = 16;
+            userAnswerSurvey.AnswerId = answerId;
+            userAnswerService.AddUserAnswerSurvey(userAnswerSurvey);
+           return RedirectToAction("DoDetailSurvey", new { surveyId = @model.Id });
         }
         public ActionResult DeleteSurvey(int surveyId)
         {
@@ -50,22 +99,29 @@ namespace AMS.Controllers
 
         public ActionResult DetailSurvey(int surveyId)
         {
-            SurveyViewModel model = new SurveyViewModel();
-            Survey survey = new Survey();
-            survey = surveyService.FindById(surveyId);
-            List<Question> listQuestions = questionService.FindBySurveyId(survey.Id);
-            
-           // List<Answer> listAnswers = new List<Answer>();
-            List<List<Answer>> list = new List<List<Answer>>();
-            foreach (var item in listQuestions)
-            {
-                List<Answer> listAnswers = answerService.FindByQuestionId(item.Id);
-                list.Add(listAnswers);
+         
 
-            }
+             Survey survey = surveyService.FindById(surveyId);
+             List<Double> listCount = new List<Double>();
+             List<Double> listCounts = new List<Double>();
+             int a = userAnswerService.CountAnswer(332);
+             List<Answer> listAnswers = answerService.FindByQuestionId(survey.Id);
+             foreach (var item in listAnswers)
+             {
+                
+                 listCount.Add(userAnswerService.CountAnswer(item.Id));
+             }
+             Double count = listCount.Sum();
+             foreach (var item in listAnswers)
+             {
+                 Double answerCount = userAnswerService.CountAnswer(item.Id);
+                 Double percent = (answerCount / count) * 100;
+                 listCounts.Add(percent);
+             }
+           
+             ViewBag.CountAnswer = listCounts;
             ViewBag.Survey = survey;
-            ViewBag.Question = listQuestions;
-            ViewBag.Answer = list;
+            ViewBag.Answer = listAnswers;
             return View();
         }
         [HttpPost]
@@ -108,27 +164,29 @@ namespace AMS.Controllers
             //
             int a = 0;
             Survey obj = surveyService.FindById(model.Id);
-            List<Question> questions = questionService.FindBySurveyId(obj.Id);
+           // List<Question> questions = questionService.FindBySurveyId(obj.Id);
            
-            foreach (var itemQuestion in questions)
-            {
+            //foreach (var itemQuestion in questions)
+            //{
                 int ii = 0;
                 if (a < totalAnsertGroup.Count)
                 {
-                    List<string> listGroup = totalAnsertGroup[a];
-                    List<Answer> answers = answerService.FindByQuestionId(itemQuestion.Id);
+                    //List<string> listGroup = totalAnsertGroup[a];
+                    List<Answer> answers = answerService.FindByQuestionId(obj.Id);
                     foreach (var itemAnswer in answers)
                     {
-                        itemAnswer.AnswerContent = listGroup[ii];
+                      //  itemAnswer.AnswerContent = listGroup[ii];
+                        itemAnswer.AnswerContent = listAnwser[ii];
                         answerService.UpdateAnswer(itemAnswer);
                         ii++;
                     }
-                    itemQuestion.QuestionContent = listQuestion[a];
-                    questionService.UpdateQuestion(itemQuestion);
+                    //itemQuestion.QuestionContent = listQuestion[a];
+                    //questionService.UpdateQuestion(itemQuestion);
                     a++;
-                }
+                //}
             }
             obj.Title = model.Title;
+            obj.Question = listQuestion[0];
             obj.StartDate = model.StartDate;
             surveyService.UpdateSurvey(obj);
             return RedirectToAction("DetailSurvey", new { surveyId =obj.Id});
@@ -175,13 +233,13 @@ namespace AMS.Controllers
                 totalAnsertGroup.Add(listAnwserGroup);
             }
             Survey survey = new Survey();
-            survey.Title = model.Title;
-            string today = DateTime.Now.ToString("MM/dd/yyyy");
-            survey.StartDate = DateTime.Parse(today); 
-            survey.Status = 1;
-            surveyService.AddSurvey(survey);
+            //survey.Title = model.Title;
+            //string today = DateTime.Now.ToString("MM/dd/yyyy");
+            //survey.StartDate = DateTime.Parse(today); 
+            //survey.Status = 1;
+            //surveyService.AddSurvey(survey);
             //add list question
-            Question question = new Question();
+            //Question question = new Question();
             Answer answer = new Answer();
             int number= totalAnsertGroup.Count;
             int ii = 0;
@@ -190,14 +248,20 @@ namespace AMS.Controllers
                 
                 if (ii < number)
                 {
-                    question.QuestionContent = content;
-                    question.SurveyId = survey.Id;
-                    questionService.AddQuestion(question);
+                    survey.Title = model.Title;
+                    string today = DateTime.Now.ToString("MM/dd/yyyy");
+                    survey.StartDate = DateTime.Parse(today);
+                    survey.Status = 1;
+                    survey.Question = content;
+                    surveyService.AddSurvey(survey);
+                    //question.QuestionContent = content;
+                    //question.SurveyId = survey.Id;
+                    //questionService.AddQuestion(question);
 
                     List<string> listAnwserGroupsub = totalAnsertGroup[ii];
                     foreach (var item in listAnwserGroupsub)
                     {
-                        answer.QuestionId = question.Id;
+                        answer.QuestionId = survey.Id;
                         answer.AnswerContent = item;
                         answerService.AddAnswer(answer);
                        

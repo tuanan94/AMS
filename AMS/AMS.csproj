@@ -291,9 +291,6 @@
     <Compile Include="Repository\IHelpdeskSupporterRepository.cs" />
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Repository\UserRepository.cs" />
-    <Compile Include="ResidentRateAroundProvider.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Role.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -314,6 +311,7 @@
     <Compile Include="Service\ServiceChargeSevices.cs" />
     <Compile Include="Service\QuestionService.cs" />
     <Compile Include="Service\SurveyService.cs" />
+    <Compile Include="Service\UserAnswerService.cs" />
     <Compile Include="Service\UserInHouseService.cs" />
     <Compile Include="Service\HelpdeskSupporterService.cs" />
     <Compile Include="Service\IHelpdeskSupporterService.cs" />
@@ -335,6 +333,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="UserAnswerSurvey.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserRateAroundProvider.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\AddMemberViewModel.cs" />
@@ -386,6 +387,7 @@
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\amsScript\additional-methods.min.js" />
+    <Content Include="Scripts\amsScript\canvasjs.min.js" />
     <Content Include="Scripts\amsScript\jquery.timepicker.min.js" />
     <Content Include="Scripts\amsScript\jquery.validate.min.js" />
     <Content Include="Scripts\amsScript\scripts.js" />
@@ -550,6 +552,9 @@
     <Content Include="Views\Management\ManageRequest.cshtml" />
     <Content Include="Views\Home\_helpdeskRequestDetail.cshtml" />
     <Content Include="Views\Survey\View1.cshtml" />
+    <Content Include="Views\Survey\DoSurvey.cshtml" />
+    <Content Include="Views\Survey\DoDetailSurvey.cshtml" />
+    <Content Include="Views\Survey\Graph.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
