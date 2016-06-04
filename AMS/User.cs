@@ -22,7 +22,7 @@ namespace AMS
             this.HelpdeskRequestLogs1 = new HashSet<HelpdeskRequestLog>();
             this.Posts = new HashSet<Post>();
             this.Receipts = new HashSet<Receipt>();
-            this.ResidentRateAroundProviders = new HashSet<ResidentRateAroundProvider>();
+            this.UserRateAroundProviders = new HashSet<UserRateAroundProvider>();
             this.UserAnswerSurveys = new HashSet<UserAnswerSurvey>();
         }
     
@@ -53,9 +53,9 @@ namespace AMS
         public virtual ICollection<Post> Posts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Receipt> Receipts { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ResidentRateAroundProvider> ResidentRateAroundProviders { get; set; }
         public virtual Role Role { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserRateAroundProvider> UserRateAroundProviders { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserAnswerSurvey> UserAnswerSurveys { get; set; }
     }

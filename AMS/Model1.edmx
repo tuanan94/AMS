@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="AMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="AMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Answer">
           <Key>
             <PropertyRef Name="Id" />
@@ -105,6 +105,8 @@
           <Property Name="Description" Type="nvarchar" MaxLength="255" />
           <Property Name="Area" Type="float" />
           <Property Name="OwnerID" Type="int" />
+          <Property Name="ProfileImage" Type="nvarchar(max)" />
+          <Property Name="CoverImage" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Image">
           <Key>
@@ -165,15 +167,6 @@
           <Property Name="ServiceFeeId" Type="int" />
           <Property Name="ReceiptId" Type="int" />
         </EntityType>
-        <EntityType Name="ResidentRateAroundProvider">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UserId" Type="int" />
-          <Property Name="AroundProviderId" Type="int" />
-          <Property Name="Point" Type="int" />
-        </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="Id" />
@@ -203,6 +196,7 @@
           <Property Name="EndDate" Type="datetime" />
           <Property Name="PublishDate" Type="datetime" />
           <Property Name="Status" Type="int" />
+          <Property Name="Question" Type="nvarchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -243,11 +237,20 @@
           <Property Name="UserId" Type="int" />
           <Property Name="AnswerId" Type="int" />
         </EntityType>
-        <Association Name="FK_Answer_Question">
-          <End Role="Question" Type="Self.Question" Multiplicity="0..1" />
+        <EntityType Name="UserRateAroundProvider">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="AroundProviderId" Type="int" />
+          <Property Name="Point" Type="int" />
+        </EntityType>
+        <Association Name="FK_Answer_Survey">
+          <End Role="Survey" Type="Self.Survey" Multiplicity="0..1" />
           <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Question">
+            <Principal Role="Survey">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Answer">
@@ -312,18 +315,6 @@
             </Principal>
             <Dependent Role="HelpdeskService">
               <PropertyRef Name="HelpdeskServiceCategoryId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Question_Survey">
-          <End Role="Survey" Type="Self.Survey" Multiplicity="0..1" />
-          <End Role="Question" Type="Self.Question" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Survey">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Question">
-              <PropertyRef Name="SurveyId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -437,24 +428,24 @@
         </Association>
         <Association Name="FK_tbl_resident_rate_around_srv_tbl_arround_srv">
           <End Role="AroundProvider" Type="Self.AroundProvider" Multiplicity="0..1" />
-          <End Role="ResidentRateAroundProvider" Type="Self.ResidentRateAroundProvider" Multiplicity="*" />
+          <End Role="UserRateAroundProvider" Type="Self.UserRateAroundProvider" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AroundProvider">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="ResidentRateAroundProvider">
+            <Dependent Role="UserRateAroundProvider">
               <PropertyRef Name="AroundProviderId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tbl_resident_rate_around_srv_tbl_user">
           <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="ResidentRateAroundProvider" Type="Self.ResidentRateAroundProvider" Multiplicity="*" />
+          <End Role="UserRateAroundProvider" Type="Self.UserRateAroundProvider" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="ResidentRateAroundProvider">
+            <Dependent Role="UserRateAroundProvider">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
@@ -534,15 +525,15 @@
           <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Receipt" EntityType="Self.Receipt" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReceiptDetail" EntityType="Self.ReceiptDetail" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ResidentRateAroundProvider" EntityType="Self.ResidentRateAroundProvider" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ServiceFee" EntityType="Self.ServiceFee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Survey" EntityType="Self.Survey" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserAnswerSurvey" EntityType="Self.UserAnswerSurvey" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Answer_Question" Association="Self.FK_Answer_Question">
-            <End Role="Question" EntitySet="Question" />
+          <EntitySet Name="UserRateAroundProvider" EntityType="Self.UserRateAroundProvider" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Answer_Survey" Association="Self.FK_Answer_Survey">
+            <End Role="Survey" EntitySet="Survey" />
             <End Role="Answer" EntitySet="Answer" />
           </AssociationSet>
           <AssociationSet Name="FK_HelpdeskRequest_HelpdeskService" Association="Self.FK_HelpdeskRequest_HelpdeskService">
@@ -564,10 +555,6 @@
           <AssociationSet Name="FK_HelpdeskService_HelpdeskServiceCategory" Association="Self.FK_HelpdeskService_HelpdeskServiceCategory">
             <End Role="HelpdeskServiceCategory" EntitySet="HelpdeskServiceCategory" />
             <End Role="HelpdeskService" EntitySet="HelpdeskService" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Question_Survey" Association="Self.FK_Question_Survey">
-            <End Role="Survey" EntitySet="Survey" />
-            <End Role="Question" EntitySet="Question" />
           </AssociationSet>
           <AssociationSet Name="FK_Receipt_User" Association="Self.FK_Receipt_User">
             <End Role="User" EntitySet="User" />
@@ -607,11 +594,11 @@
           </AssociationSet>
           <AssociationSet Name="FK_tbl_resident_rate_around_srv_tbl_arround_srv" Association="Self.FK_tbl_resident_rate_around_srv_tbl_arround_srv">
             <End Role="AroundProvider" EntitySet="AroundProvider" />
-            <End Role="ResidentRateAroundProvider" EntitySet="ResidentRateAroundProvider" />
+            <End Role="UserRateAroundProvider" EntitySet="UserRateAroundProvider" />
           </AssociationSet>
           <AssociationSet Name="FK_tbl_resident_rate_around_srv_tbl_user" Association="Self.FK_tbl_resident_rate_around_srv_tbl_user">
             <End Role="User" EntitySet="User" />
-            <End Role="ResidentRateAroundProvider" EntitySet="ResidentRateAroundProvider" />
+            <End Role="UserRateAroundProvider" EntitySet="UserRateAroundProvider" />
           </AssociationSet>
           <AssociationSet Name="FK_tbl_user_tbl_role" Association="Self.FK_tbl_user_tbl_role">
             <End Role="Role" EntitySet="Role" />
@@ -634,11 +621,121 @@
             <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurvey" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="AMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="AMSEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Answers" EntityType="AMSModel.Answer" />
+          <EntitySet Name="AroundProviders" EntityType="AMSModel.AroundProvider" />
+          <EntitySet Name="AroundProviderCategories" EntityType="AMSModel.AroundProviderCategory" />
+          <EntitySet Name="HelpdeskRequests" EntityType="AMSModel.HelpdeskRequest" />
+          <EntitySet Name="HelpdeskRequestHelpdeskSupporters" EntityType="AMSModel.HelpdeskRequestHelpdeskSupporter" />
+          <EntitySet Name="HelpdeskRequestLogs" EntityType="AMSModel.HelpdeskRequestLog" />
+          <EntitySet Name="HelpdeskServices" EntityType="AMSModel.HelpdeskService" />
+          <EntitySet Name="HelpdeskServiceCategories" EntityType="AMSModel.HelpdeskServiceCategory" />
+          <EntitySet Name="Houses" EntityType="AMSModel.House" />
+          <EntitySet Name="Images" EntityType="AMSModel.Image" />
+          <EntitySet Name="Posts" EntityType="AMSModel.Post" />
+          <EntitySet Name="Questions" EntityType="AMSModel.Question" />
+          <EntitySet Name="Receipts" EntityType="AMSModel.Receipt" />
+          <EntitySet Name="ReceiptDetails" EntityType="AMSModel.ReceiptDetail" />
+          <EntitySet Name="Roles" EntityType="AMSModel.Role" />
+          <EntitySet Name="ServiceFees" EntityType="AMSModel.ServiceFee" />
+          <EntitySet Name="Surveys" EntityType="AMSModel.Survey" />
+          <EntitySet Name="sysdiagrams" EntityType="AMSModel.sysdiagram" />
+          <EntitySet Name="Users" EntityType="AMSModel.User" />
+          <EntitySet Name="UserAnswerSurveys" EntityType="AMSModel.UserAnswerSurvey" />
+          <EntitySet Name="UserRateAroundProviders" EntityType="AMSModel.UserRateAroundProvider" />
+          <AssociationSet Name="FK_Answer_Survey" Association="AMSModel.FK_Answer_Survey">
+            <End Role="Survey" EntitySet="Surveys" />
+            <End Role="Answer" EntitySet="Answers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserDoServey_Answer" Association="AMSModel.FK_UserDoServey_Answer">
+            <End Role="Answer" EntitySet="Answers" />
+            <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurveys" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_arround_srv_tbl_around_srv_cat" Association="AMSModel.FK_tbl_arround_srv_tbl_around_srv_cat">
+            <End Role="AroundProviderCategory" EntitySet="AroundProviderCategories" />
+            <End Role="AroundProvider" EntitySet="AroundProviders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_resident_rate_around_srv_tbl_arround_srv" Association="AMSModel.FK_tbl_resident_rate_around_srv_tbl_arround_srv">
+            <End Role="AroundProvider" EntitySet="AroundProviders" />
+            <End Role="UserRateAroundProvider" EntitySet="UserRateAroundProviders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HelpdeskRequest_HelpdeskService" Association="AMSModel.FK_HelpdeskRequest_HelpdeskService">
+            <End Role="HelpdeskService" EntitySet="HelpdeskServices" />
+            <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HelpdeskRequestLog_HelpdeskReq" Association="AMSModel.FK_HelpdeskRequestLog_HelpdeskReq">
+            <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
+            <End Role="HelpdeskRequestLog" EntitySet="HelpdeskRequestLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_h_desk_req_h_desk_tbl_h_desk_request" Association="AMSModel.FK_tbl_h_desk_req_h_desk_tbl_h_desk_request">
+            <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
+            <End Role="HelpdeskRequestHelpdeskSupporter" EntitySet="HelpdeskRequestHelpdeskSupporters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_h_desk_request_tbl_house" Association="AMSModel.FK_tbl_h_desk_request_tbl_house">
+            <End Role="House" EntitySet="Houses" />
+            <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_h_desk_req_h_desk_tbl_user" Association="AMSModel.FK_tbl_h_desk_req_h_desk_tbl_user">
+            <End Role="User" EntitySet="Users" />
+            <End Role="HelpdeskRequestHelpdeskSupporter" EntitySet="HelpdeskRequestHelpdeskSupporters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HelpdeskRequestLog_User1" Association="AMSModel.FK_HelpdeskRequestLog_User1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="HelpdeskRequestLog" EntitySet="HelpdeskRequestLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HelpdeskRequestLog_User2" Association="AMSModel.FK_HelpdeskRequestLog_User2">
+            <End Role="User" EntitySet="Users" />
+            <End Role="HelpdeskRequestLog" EntitySet="HelpdeskRequestLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HelpdeskService_HelpdeskServiceCategory" Association="AMSModel.FK_HelpdeskService_HelpdeskServiceCategory">
+            <End Role="HelpdeskServiceCategory" EntitySet="HelpdeskServiceCategories" />
+            <End Role="HelpdeskService" EntitySet="HelpdeskServices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_receipt_tbl_house" Association="AMSModel.FK_tbl_receipt_tbl_house">
+            <End Role="House" EntitySet="Houses" />
+            <End Role="Receipt" EntitySet="Receipts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_House" Association="AMSModel.FK_User_House">
+            <End Role="House" EntitySet="Houses" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_post_tbl_user" Association="AMSModel.FK_tbl_post_tbl_user">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Receipt_User" Association="AMSModel.FK_Receipt_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Receipt" EntitySet="Receipts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_receipt_detail_tbl_receipt" Association="AMSModel.FK_tbl_receipt_detail_tbl_receipt">
+            <End Role="Receipt" EntitySet="Receipts" />
+            <End Role="ReceiptDetail" EntitySet="ReceiptDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_receipt_detail_tbl_service_fee" Association="AMSModel.FK_tbl_receipt_detail_tbl_service_fee">
+            <End Role="ServiceFee" EntitySet="ServiceFees" />
+            <End Role="ReceiptDetail" EntitySet="ReceiptDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_user_tbl_role" Association="AMSModel.FK_tbl_user_tbl_role">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserDoServey_Survey" Association="AMSModel.FK_UserDoServey_Survey">
+            <End Role="Survey" EntitySet="Surveys" />
+            <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurveys" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_resident_rate_around_srv_tbl_user" Association="AMSModel.FK_tbl_resident_rate_around_srv_tbl_user">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserRateAroundProvider" EntitySet="UserRateAroundProviders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserDoServey_User" Association="AMSModel.FK_UserDoServey_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurveys" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="Answer">
           <Key>
             <PropertyRef Name="Id" />
@@ -646,8 +743,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AnswerContent" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="QuestionId" Type="Int32" />
-          <NavigationProperty Name="Question" Relationship="Self.FK_Answer_Question" FromRole="Answer" ToRole="Question" />
-          <NavigationProperty Name="UserAnswerSurveys" Relationship="Self.FK_UserDoServey_Answer" FromRole="Answer" ToRole="UserAnswerSurvey" />
+          <NavigationProperty Name="Survey" Relationship="AMSModel.FK_Answer_Survey" FromRole="Answer" ToRole="Survey" />
+          <NavigationProperty Name="UserAnswerSurveys" Relationship="AMSModel.FK_UserDoServey_Answer" FromRole="Answer" ToRole="UserAnswerSurvey" />
         </EntityType>
         <EntityType Name="AroundProvider">
           <Key>
@@ -662,8 +759,8 @@
           <Property Name="ClickCount" Type="Int64" />
           <Property Name="AroundProviderCategoryId" Type="Int32" />
           <Property Name="ImageUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AroundProviderCategory" Relationship="Self.FK_tbl_arround_srv_tbl_around_srv_cat" FromRole="AroundProvider" ToRole="AroundProviderCategory" />
-          <NavigationProperty Name="ResidentRateAroundProviders" Relationship="Self.FK_tbl_resident_rate_around_srv_tbl_arround_srv" FromRole="AroundProvider" ToRole="ResidentRateAroundProvider" />
+          <NavigationProperty Name="AroundProviderCategory" Relationship="AMSModel.FK_tbl_arround_srv_tbl_around_srv_cat" FromRole="AroundProvider" ToRole="AroundProviderCategory" />
+          <NavigationProperty Name="UserRateAroundProviders" Relationship="AMSModel.FK_tbl_resident_rate_around_srv_tbl_arround_srv" FromRole="AroundProvider" ToRole="UserRateAroundProvider" />
         </EntityType>
         <EntityType Name="AroundProviderCategory">
           <Key>
@@ -671,7 +768,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AroundProviders" Relationship="Self.FK_tbl_arround_srv_tbl_around_srv_cat" FromRole="AroundProviderCategory" ToRole="AroundProvider" />
+          <NavigationProperty Name="AroundProviders" Relationship="AMSModel.FK_tbl_arround_srv_tbl_around_srv_cat" FromRole="AroundProviderCategory" ToRole="AroundProvider" />
         </EntityType>
         <EntityType Name="HelpdeskRequest">
           <Key>
@@ -690,10 +787,10 @@
           <Property Name="HelpdeskServiceId" Type="Int32" />
           <Property Name="HouseId" Type="Int32" />
           <Property Name="Priority" Type="Int32" />
-          <NavigationProperty Name="HelpdeskService" Relationship="Self.FK_HelpdeskRequest_HelpdeskService" FromRole="HelpdeskRequest" ToRole="HelpdeskService" />
-          <NavigationProperty Name="HelpdeskRequestLogs" Relationship="Self.FK_HelpdeskRequestLog_HelpdeskReq" FromRole="HelpdeskRequest" ToRole="HelpdeskRequestLog" />
-          <NavigationProperty Name="HelpdeskRequestHelpdeskSupporters" Relationship="Self.FK_tbl_h_desk_req_h_desk_tbl_h_desk_request" FromRole="HelpdeskRequest" ToRole="HelpdeskRequestHelpdeskSupporter" />
-          <NavigationProperty Name="House" Relationship="Self.FK_tbl_h_desk_request_tbl_house" FromRole="HelpdeskRequest" ToRole="House" />
+          <NavigationProperty Name="HelpdeskService" Relationship="AMSModel.FK_HelpdeskRequest_HelpdeskService" FromRole="HelpdeskRequest" ToRole="HelpdeskService" />
+          <NavigationProperty Name="HelpdeskRequestLogs" Relationship="AMSModel.FK_HelpdeskRequestLog_HelpdeskReq" FromRole="HelpdeskRequest" ToRole="HelpdeskRequestLog" />
+          <NavigationProperty Name="HelpdeskRequestHelpdeskSupporters" Relationship="AMSModel.FK_tbl_h_desk_req_h_desk_tbl_h_desk_request" FromRole="HelpdeskRequest" ToRole="HelpdeskRequestHelpdeskSupporter" />
+          <NavigationProperty Name="House" Relationship="AMSModel.FK_tbl_h_desk_request_tbl_house" FromRole="HelpdeskRequest" ToRole="House" />
         </EntityType>
         <EntityType Name="HelpdeskRequestHelpdeskSupporter">
           <Key>
@@ -704,8 +801,8 @@
           <Property Name="HelpdeskRequestId" Type="Int32" />
           <Property Name="Status" Type="Int32" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="HelpdeskRequest" Relationship="Self.FK_tbl_h_desk_req_h_desk_tbl_h_desk_request" FromRole="HelpdeskRequestHelpdeskSupporter" ToRole="HelpdeskRequest" />
-          <NavigationProperty Name="User" Relationship="Self.FK_tbl_h_desk_req_h_desk_tbl_user" FromRole="HelpdeskRequestHelpdeskSupporter" ToRole="User" />
+          <NavigationProperty Name="HelpdeskRequest" Relationship="AMSModel.FK_tbl_h_desk_req_h_desk_tbl_h_desk_request" FromRole="HelpdeskRequestHelpdeskSupporter" ToRole="HelpdeskRequest" />
+          <NavigationProperty Name="User" Relationship="AMSModel.FK_tbl_h_desk_req_h_desk_tbl_user" FromRole="HelpdeskRequestHelpdeskSupporter" ToRole="User" />
         </EntityType>
         <EntityType Name="HelpdeskRequestLog">
           <Key>
@@ -718,9 +815,9 @@
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="StatusFrom" Type="Int32" />
           <Property Name="StatusTo" Type="Int32" />
-          <NavigationProperty Name="HelpdeskRequest" Relationship="Self.FK_HelpdeskRequestLog_HelpdeskReq" FromRole="HelpdeskRequestLog" ToRole="HelpdeskRequest" />
-          <NavigationProperty Name="User" Relationship="Self.FK_HelpdeskRequestLog_User1" FromRole="HelpdeskRequestLog" ToRole="User" />
-          <NavigationProperty Name="User1" Relationship="Self.FK_HelpdeskRequestLog_User2" FromRole="HelpdeskRequestLog" ToRole="User" />
+          <NavigationProperty Name="HelpdeskRequest" Relationship="AMSModel.FK_HelpdeskRequestLog_HelpdeskReq" FromRole="HelpdeskRequestLog" ToRole="HelpdeskRequest" />
+          <NavigationProperty Name="User" Relationship="AMSModel.FK_HelpdeskRequestLog_User1" FromRole="HelpdeskRequestLog" ToRole="User" />
+          <NavigationProperty Name="User1" Relationship="AMSModel.FK_HelpdeskRequestLog_User2" FromRole="HelpdeskRequestLog" ToRole="User" />
         </EntityType>
         <EntityType Name="HelpdeskService">
           <Key>
@@ -733,8 +830,8 @@
           <Property Name="Status" Type="Int32" />
           <Property Name="HelpdeskServiceCategoryId" Type="Int32" />
           <Property Name="LastModified" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="HelpdeskRequests" Relationship="Self.FK_HelpdeskRequest_HelpdeskService" FromRole="HelpdeskService" ToRole="HelpdeskRequest" />
-          <NavigationProperty Name="HelpdeskServiceCategory" Relationship="Self.FK_HelpdeskService_HelpdeskServiceCategory" FromRole="HelpdeskService" ToRole="HelpdeskServiceCategory" />
+          <NavigationProperty Name="HelpdeskRequests" Relationship="AMSModel.FK_HelpdeskRequest_HelpdeskService" FromRole="HelpdeskService" ToRole="HelpdeskRequest" />
+          <NavigationProperty Name="HelpdeskServiceCategory" Relationship="AMSModel.FK_HelpdeskService_HelpdeskServiceCategory" FromRole="HelpdeskService" ToRole="HelpdeskServiceCategory" />
         </EntityType>
         <EntityType Name="HelpdeskServiceCategory">
           <Key>
@@ -743,7 +840,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="LastModified" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="HelpdeskServices" Relationship="Self.FK_HelpdeskService_HelpdeskServiceCategory" FromRole="HelpdeskServiceCategory" ToRole="HelpdeskService" />
+          <NavigationProperty Name="HelpdeskServices" Relationship="AMSModel.FK_HelpdeskService_HelpdeskServiceCategory" FromRole="HelpdeskServiceCategory" ToRole="HelpdeskService" />
         </EntityType>
         <EntityType Name="House">
           <Key>
@@ -756,9 +853,11 @@
           <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Area" Type="Double" />
           <Property Name="OwnerID" Type="Int32" />
-          <NavigationProperty Name="HelpdeskRequests" Relationship="Self.FK_tbl_h_desk_request_tbl_house" FromRole="House" ToRole="HelpdeskRequest" />
-          <NavigationProperty Name="Receipts" Relationship="Self.FK_tbl_receipt_tbl_house" FromRole="House" ToRole="Receipt" />
-          <NavigationProperty Name="Users" Relationship="Self.FK_User_House" FromRole="House" ToRole="User" />
+          <Property Name="ProfileImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CoverImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="HelpdeskRequests" Relationship="AMSModel.FK_tbl_h_desk_request_tbl_house" FromRole="House" ToRole="HelpdeskRequest" />
+          <NavigationProperty Name="Receipts" Relationship="AMSModel.FK_tbl_receipt_tbl_house" FromRole="House" ToRole="Receipt" />
+          <NavigationProperty Name="Users" Relationship="AMSModel.FK_User_House" FromRole="House" ToRole="User" />
         </EntityType>
         <EntityType Name="Image">
           <Key>
@@ -783,7 +882,7 @@
           <Property Name="Status" Type="Int32" />
           <Property Name="UserId" Type="Int32" />
           <Property Name="EmbedCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="User" Relationship="Self.FK_tbl_post_tbl_user" FromRole="Post" ToRole="User" />
+          <NavigationProperty Name="User" Relationship="AMSModel.FK_tbl_post_tbl_user" FromRole="Post" ToRole="User" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -792,8 +891,6 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="QuestionContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="SurveyId" Type="Int32" />
-          <NavigationProperty Name="Answers" Relationship="Self.FK_Answer_Question" FromRole="Question" ToRole="Answer" />
-          <NavigationProperty Name="Survey" Relationship="Self.FK_Question_Survey" FromRole="Question" ToRole="Survey" />
         </EntityType>
         <EntityType Name="Receipt">
           <Key>
@@ -809,9 +906,9 @@
           <Property Name="HouseId" Type="Int32" />
           <Property Name="ManagerId" Type="Int32" />
           <Property Name="Title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="House" Relationship="Self.FK_tbl_receipt_tbl_house" FromRole="Receipt" ToRole="House" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Receipt_User" FromRole="Receipt" ToRole="User" />
-          <NavigationProperty Name="ReceiptDetails" Relationship="Self.FK_tbl_receipt_detail_tbl_receipt" FromRole="Receipt" ToRole="ReceiptDetail" />
+          <NavigationProperty Name="House" Relationship="AMSModel.FK_tbl_receipt_tbl_house" FromRole="Receipt" ToRole="House" />
+          <NavigationProperty Name="User" Relationship="AMSModel.FK_Receipt_User" FromRole="Receipt" ToRole="User" />
+          <NavigationProperty Name="ReceiptDetails" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_receipt" FromRole="Receipt" ToRole="ReceiptDetail" />
         </EntityType>
         <EntityType Name="ReceiptDetail">
           <Key>
@@ -824,19 +921,8 @@
           <Property Name="Unit" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="ServiceFeeId" Type="Int32" />
           <Property Name="ReceiptId" Type="Int32" />
-          <NavigationProperty Name="Receipt" Relationship="Self.FK_tbl_receipt_detail_tbl_receipt" FromRole="ReceiptDetail" ToRole="Receipt" />
-          <NavigationProperty Name="ServiceFee" Relationship="Self.FK_tbl_receipt_detail_tbl_service_fee" FromRole="ReceiptDetail" ToRole="ServiceFee" />
-        </EntityType>
-        <EntityType Name="ResidentRateAroundProvider">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserId" Type="Int32" />
-          <Property Name="AroundProviderId" Type="Int32" />
-          <Property Name="Point" Type="Int32" />
-          <NavigationProperty Name="AroundProvider" Relationship="Self.FK_tbl_resident_rate_around_srv_tbl_arround_srv" FromRole="ResidentRateAroundProvider" ToRole="AroundProvider" />
-          <NavigationProperty Name="User" Relationship="Self.FK_tbl_resident_rate_around_srv_tbl_user" FromRole="ResidentRateAroundProvider" ToRole="User" />
+          <NavigationProperty Name="Receipt" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_receipt" FromRole="ReceiptDetail" ToRole="Receipt" />
+          <NavigationProperty Name="ServiceFee" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_service_fee" FromRole="ReceiptDetail" ToRole="ServiceFee" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -844,7 +930,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RoleName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Users" Relationship="Self.FK_tbl_user_tbl_role" FromRole="Role" ToRole="User" />
+          <NavigationProperty Name="Users" Relationship="AMSModel.FK_tbl_user_tbl_role" FromRole="Role" ToRole="User" />
         </EntityType>
         <EntityType Name="ServiceFee">
           <Key>
@@ -856,7 +942,7 @@
           <Property Name="Price" Type="Double" />
           <Property Name="Unit" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="ReceiptDetails" Relationship="Self.FK_tbl_receipt_detail_tbl_service_fee" FromRole="ServiceFee" ToRole="ReceiptDetail" />
+          <NavigationProperty Name="ReceiptDetails" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_service_fee" FromRole="ServiceFee" ToRole="ReceiptDetail" />
         </EntityType>
         <EntityType Name="Survey">
           <Key>
@@ -869,14 +955,15 @@
           <Property Name="EndDate" Type="DateTime" Precision="3" />
           <Property Name="PublishDate" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="Int32" />
-          <NavigationProperty Name="Questions" Relationship="Self.FK_Question_Survey" FromRole="Survey" ToRole="Question" />
-          <NavigationProperty Name="UserAnswerSurveys" Relationship="Self.FK_UserDoServey_Survey" FromRole="Survey" ToRole="UserAnswerSurvey" />
+          <Property Name="Question" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Answers" Relationship="AMSModel.FK_Answer_Survey" FromRole="Survey" ToRole="Answer" />
+          <NavigationProperty Name="UserAnswerSurveys" Relationship="AMSModel.FK_UserDoServey_Survey" FromRole="Survey" ToRole="UserAnswerSurvey" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
             <PropertyRef Name="diagram_id" />
           </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="principal_id" Type="Int32" Nullable="false" />
           <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="version" Type="Int32" />
@@ -889,7 +976,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Username" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="RoleId" Type="Int32" Nullable="false" />
           <Property Name="IsApproved" Type="Int32" />
           <Property Name="HouseId" Type="Int32" />
@@ -901,15 +988,15 @@
           <Property Name="Fullname" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="LastModified" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="HelpdeskRequestHelpdeskSupporters" Relationship="Self.FK_tbl_h_desk_req_h_desk_tbl_user" FromRole="User" ToRole="HelpdeskRequestHelpdeskSupporter" />
-          <NavigationProperty Name="HelpdeskRequestLogs" Relationship="Self.FK_HelpdeskRequestLog_User1" FromRole="User" ToRole="HelpdeskRequestLog" />
-          <NavigationProperty Name="HelpdeskRequestLogs1" Relationship="Self.FK_HelpdeskRequestLog_User2" FromRole="User" ToRole="HelpdeskRequestLog" />
-          <NavigationProperty Name="House" Relationship="Self.FK_User_House" FromRole="User" ToRole="House" />
-          <NavigationProperty Name="Posts" Relationship="Self.FK_tbl_post_tbl_user" FromRole="User" ToRole="Post" />
-          <NavigationProperty Name="Receipts" Relationship="Self.FK_Receipt_User" FromRole="User" ToRole="Receipt" />
-          <NavigationProperty Name="ResidentRateAroundProviders" Relationship="Self.FK_tbl_resident_rate_around_srv_tbl_user" FromRole="User" ToRole="ResidentRateAroundProvider" />
-          <NavigationProperty Name="Role" Relationship="Self.FK_tbl_user_tbl_role" FromRole="User" ToRole="Role" />
-          <NavigationProperty Name="UserAnswerSurveys" Relationship="Self.FK_UserDoServey_User" FromRole="User" ToRole="UserAnswerSurvey" />
+          <NavigationProperty Name="HelpdeskRequestHelpdeskSupporters" Relationship="AMSModel.FK_tbl_h_desk_req_h_desk_tbl_user" FromRole="User" ToRole="HelpdeskRequestHelpdeskSupporter" />
+          <NavigationProperty Name="HelpdeskRequestLogs" Relationship="AMSModel.FK_HelpdeskRequestLog_User1" FromRole="User" ToRole="HelpdeskRequestLog" />
+          <NavigationProperty Name="HelpdeskRequestLogs1" Relationship="AMSModel.FK_HelpdeskRequestLog_User2" FromRole="User" ToRole="HelpdeskRequestLog" />
+          <NavigationProperty Name="House" Relationship="AMSModel.FK_User_House" FromRole="User" ToRole="House" />
+          <NavigationProperty Name="Posts" Relationship="AMSModel.FK_tbl_post_tbl_user" FromRole="User" ToRole="Post" />
+          <NavigationProperty Name="Receipts" Relationship="AMSModel.FK_Receipt_User" FromRole="User" ToRole="Receipt" />
+          <NavigationProperty Name="Role" Relationship="AMSModel.FK_tbl_user_tbl_role" FromRole="User" ToRole="Role" />
+          <NavigationProperty Name="UserRateAroundProviders" Relationship="AMSModel.FK_tbl_resident_rate_around_srv_tbl_user" FromRole="User" ToRole="UserRateAroundProvider" />
+          <NavigationProperty Name="UserAnswerSurveys" Relationship="AMSModel.FK_UserDoServey_User" FromRole="User" ToRole="UserAnswerSurvey" />
         </EntityType>
         <EntityType Name="UserAnswerSurvey">
           <Key>
@@ -919,15 +1006,26 @@
           <Property Name="SurveyId" Type="Int32" />
           <Property Name="UserId" Type="Int32" />
           <Property Name="AnswerId" Type="Int32" />
-          <NavigationProperty Name="Answer" Relationship="Self.FK_UserDoServey_Answer" FromRole="UserAnswerSurvey" ToRole="Answer" />
-          <NavigationProperty Name="Survey" Relationship="Self.FK_UserDoServey_Survey" FromRole="UserAnswerSurvey" ToRole="Survey" />
-          <NavigationProperty Name="User" Relationship="Self.FK_UserDoServey_User" FromRole="UserAnswerSurvey" ToRole="User" />
+          <NavigationProperty Name="Answer" Relationship="AMSModel.FK_UserDoServey_Answer" FromRole="UserAnswerSurvey" ToRole="Answer" />
+          <NavigationProperty Name="Survey" Relationship="AMSModel.FK_UserDoServey_Survey" FromRole="UserAnswerSurvey" ToRole="Survey" />
+          <NavigationProperty Name="User" Relationship="AMSModel.FK_UserDoServey_User" FromRole="UserAnswerSurvey" ToRole="User" />
         </EntityType>
-        <Association Name="FK_Answer_Question">
-          <End Role="Question" Type="Self.Question" Multiplicity="0..1" />
-          <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
+        <EntityType Name="UserRateAroundProvider">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="AroundProviderId" Type="Int32" />
+          <Property Name="Point" Type="Int32" />
+          <NavigationProperty Name="AroundProvider" Relationship="AMSModel.FK_tbl_resident_rate_around_srv_tbl_arround_srv" FromRole="UserRateAroundProvider" ToRole="AroundProvider" />
+          <NavigationProperty Name="User" Relationship="AMSModel.FK_tbl_resident_rate_around_srv_tbl_user" FromRole="UserRateAroundProvider" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Answer_Survey">
+          <End Type="AMSModel.Survey" Role="Survey" Multiplicity="0..1" />
+          <End Type="AMSModel.Answer" Role="Answer" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Question">
+            <Principal Role="Survey">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Answer">
@@ -936,8 +1034,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserDoServey_Answer">
-          <End Role="Answer" Type="Self.Answer" Multiplicity="0..1" />
-          <End Role="UserAnswerSurvey" Type="Self.UserAnswerSurvey" Multiplicity="*" />
+          <End Type="AMSModel.Answer" Role="Answer" Multiplicity="0..1" />
+          <End Type="AMSModel.UserAnswerSurvey" Role="UserAnswerSurvey" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Answer">
               <PropertyRef Name="Id" />
@@ -948,8 +1046,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tbl_arround_srv_tbl_around_srv_cat">
-          <End Role="AroundProviderCategory" Type="Self.AroundProviderCategory" Multiplicity="0..1" />
-          <End Role="AroundProvider" Type="Self.AroundProvider" Multiplicity="*" />
+          <End Type="AMSModel.AroundProviderCategory" Role="AroundProviderCategory" Multiplicity="0..1" />
+          <End Type="AMSModel.AroundProvider" Role="AroundProvider" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AroundProviderCategory">
               <PropertyRef Name="Id" />
@@ -960,20 +1058,20 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tbl_resident_rate_around_srv_tbl_arround_srv">
-          <End Role="AroundProvider" Type="Self.AroundProvider" Multiplicity="0..1" />
-          <End Role="ResidentRateAroundProvider" Type="Self.ResidentRateAroundProvider" Multiplicity="*" />
+          <End Type="AMSModel.AroundProvider" Role="AroundProvider" Multiplicity="0..1" />
+          <End Type="AMSModel.UserRateAroundProvider" Role="UserRateAroundProvider" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AroundProvider">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="ResidentRateAroundProvider">
+            <Dependent Role="UserRateAroundProvider">
               <PropertyRef Name="AroundProviderId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_HelpdeskRequest_HelpdeskService">
-          <End Role="HelpdeskService" Type="Self.HelpdeskService" Multiplicity="0..1" />
-          <End Role="HelpdeskRequest" Type="Self.HelpdeskRequest" Multiplicity="*" />
+          <End Type="AMSModel.HelpdeskService" Role="HelpdeskService" Multiplicity="0..1" />
+          <End Type="AMSModel.HelpdeskRequest" Role="HelpdeskRequest" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="HelpdeskService">
               <PropertyRef Name="Id" />
@@ -984,8 +1082,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_HelpdeskRequestLog_HelpdeskReq">
-          <End Role="HelpdeskRequest" Type="Self.HelpdeskRequest" Multiplicity="0..1" />
-          <End Role="HelpdeskRequestLog" Type="Self.HelpdeskRequestLog" Multiplicity="*" />
+          <End Type="AMSModel.HelpdeskRequest" Role="HelpdeskRequest" Multiplicity="0..1" />
+          <End Type="AMSModel.HelpdeskRequestLog" Role="HelpdeskRequestLog" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="HelpdeskRequest">
               <PropertyRef Name="Id" />
@@ -996,8 +1094,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tbl_h_desk_req_h_desk_tbl_h_desk_request">
-          <End Role="HelpdeskRequest" Type="Self.HelpdeskRequest" Multiplicity="0..1" />
-          <End Role="HelpdeskRequestHelpdeskSupporter" Type="Self.HelpdeskRequestHelpdeskSupporter" Multiplicity="*" />
+          <End Type="AMSModel.HelpdeskRequest" Role="HelpdeskRequest" Multiplicity="0..1" />
+          <End Type="AMSModel.HelpdeskRequestHelpdeskSupporter" Role="HelpdeskRequestHelpdeskSupporter" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="HelpdeskRequest">
               <PropertyRef Name="Id" />
@@ -1008,8 +1106,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tbl_h_desk_request_tbl_house">
-          <End Role="House" Type="Self.House" Multiplicity="0..1" />
-          <End Role="HelpdeskRequest" Type="Self.HelpdeskRequest" Multiplicity="*" />
+          <End Type="AMSModel.House" Role="House" Multiplicity="0..1" />
+          <End Type="AMSModel.HelpdeskRequest" Role="HelpdeskRequest" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="House">
               <PropertyRef Name="Id" />
@@ -1020,8 +1118,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tbl_h_desk_req_h_desk_tbl_user">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="HelpdeskRequestHelpdeskSupporter" Type="Self.HelpdeskRequestHelpdeskSupporter" Multiplicity="*" />
+          <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="AMSModel.HelpdeskRequestHelpdeskSupporter" Role="HelpdeskRequestHelpdeskSupporter" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="Id" />
@@ -1032,8 +1130,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_HelpdeskRequestLog_User1">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="HelpdeskRequestLog" Type="Self.HelpdeskRequestLog" Multiplicity="*" />
+          <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="AMSModel.HelpdeskRequestLog" Role="HelpdeskRequestLog" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="Id" />
@@ -1044,8 +1142,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_HelpdeskRequestLog_User2">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="HelpdeskRequestLog" Type="Self.HelpdeskRequestLog" Multiplicity="*" />
+          <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="AMSModel.HelpdeskRequestLog" Role="HelpdeskRequestLog" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="Id" />
@@ -1056,8 +1154,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_HelpdeskService_HelpdeskServiceCategory">
-          <End Role="HelpdeskServiceCategory" Type="Self.HelpdeskServiceCategory" Multiplicity="0..1" />
-          <End Role="HelpdeskService" Type="Self.HelpdeskService" Multiplicity="*" />
+          <End Type="AMSModel.HelpdeskServiceCategory" Role="HelpdeskServiceCategory" Multiplicity="0..1" />
+          <End Type="AMSModel.HelpdeskService" Role="HelpdeskService" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="HelpdeskServiceCategory">
               <PropertyRef Name="Id" />
@@ -1068,8 +1166,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tbl_receipt_tbl_house">
-          <End Role="House" Type="Self.House" Multiplicity="0..1" />
-          <End Role="Receipt" Type="Self.Receipt" Multiplicity="*" />
+          <End Type="AMSModel.House" Role="House" Multiplicity="0..1" />
+          <End Type="AMSModel.Receipt" Role="Receipt" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="House">
               <PropertyRef Name="Id" />
@@ -1080,8 +1178,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_User_House">
-          <End Role="House" Type="Self.House" Multiplicity="0..1" />
-          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <End Type="AMSModel.House" Role="House" Multiplicity="0..1" />
+          <End Type="AMSModel.User" Role="User" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="House">
               <PropertyRef Name="Id" />
@@ -1092,8 +1190,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tbl_post_tbl_user">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="AMSModel.Post" Role="Post" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="Id" />
@@ -1103,21 +1201,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Question_Survey">
-          <End Role="Survey" Type="Self.Survey" Multiplicity="0..1" />
-          <End Role="Question" Type="Self.Question" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Survey">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Question">
-              <PropertyRef Name="SurveyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Receipt_User">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="Receipt" Type="Self.Receipt" Multiplicity="*" />
+          <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="AMSModel.Receipt" Role="Receipt" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="Id" />
@@ -1128,8 +1214,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tbl_receipt_detail_tbl_receipt">
-          <End Role="Receipt" Type="Self.Receipt" Multiplicity="0..1" />
-          <End Role="ReceiptDetail" Type="Self.ReceiptDetail" Multiplicity="*" />
+          <End Type="AMSModel.Receipt" Role="Receipt" Multiplicity="0..1" />
+          <End Type="AMSModel.ReceiptDetail" Role="ReceiptDetail" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Receipt">
               <PropertyRef Name="Id" />
@@ -1140,8 +1226,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tbl_receipt_detail_tbl_service_fee">
-          <End Role="ServiceFee" Type="Self.ServiceFee" Multiplicity="0..1" />
-          <End Role="ReceiptDetail" Type="Self.ReceiptDetail" Multiplicity="*" />
+          <End Type="AMSModel.ServiceFee" Role="ServiceFee" Multiplicity="0..1" />
+          <End Type="AMSModel.ReceiptDetail" Role="ReceiptDetail" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ServiceFee">
               <PropertyRef Name="Id" />
@@ -1151,21 +1237,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tbl_resident_rate_around_srv_tbl_user">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="ResidentRateAroundProvider" Type="Self.ResidentRateAroundProvider" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ResidentRateAroundProvider">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_tbl_user_tbl_role">
-          <End Role="Role" Type="Self.Role" Multiplicity="1" />
-          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <End Type="AMSModel.Role" Role="Role" Multiplicity="1" />
+          <End Type="AMSModel.User" Role="User" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Role">
               <PropertyRef Name="Id" />
@@ -1176,8 +1250,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserDoServey_Survey">
-          <End Role="Survey" Type="Self.Survey" Multiplicity="0..1" />
-          <End Role="UserAnswerSurvey" Type="Self.UserAnswerSurvey" Multiplicity="*" />
+          <End Type="AMSModel.Survey" Role="Survey" Multiplicity="0..1" />
+          <End Type="AMSModel.UserAnswerSurvey" Role="UserAnswerSurvey" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Survey">
               <PropertyRef Name="Id" />
@@ -1187,9 +1261,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tbl_resident_rate_around_srv_tbl_user">
+          <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="AMSModel.UserRateAroundProvider" Role="UserRateAroundProvider" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserRateAroundProvider">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_UserDoServey_User">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="UserAnswerSurvey" Type="Self.UserAnswerSurvey" Multiplicity="*" />
+          <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="AMSModel.UserAnswerSurvey" Role="UserAnswerSurvey" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="Id" />
@@ -1199,121 +1285,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="AMSEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Answers" EntityType="Self.Answer" />
-          <EntitySet Name="AroundProviders" EntityType="Self.AroundProvider" />
-          <EntitySet Name="AroundProviderCategories" EntityType="Self.AroundProviderCategory" />
-          <EntitySet Name="HelpdeskRequests" EntityType="Self.HelpdeskRequest" />
-          <EntitySet Name="HelpdeskRequestHelpdeskSupporters" EntityType="Self.HelpdeskRequestHelpdeskSupporter" />
-          <EntitySet Name="HelpdeskRequestLogs" EntityType="Self.HelpdeskRequestLog" />
-          <EntitySet Name="HelpdeskServices" EntityType="Self.HelpdeskService" />
-          <EntitySet Name="HelpdeskServiceCategories" EntityType="Self.HelpdeskServiceCategory" />
-          <EntitySet Name="Houses" EntityType="Self.House" />
-          <EntitySet Name="Images" EntityType="Self.Image" />
-          <EntitySet Name="Posts" EntityType="Self.Post" />
-          <EntitySet Name="Questions" EntityType="Self.Question" />
-          <EntitySet Name="Receipts" EntityType="Self.Receipt" />
-          <EntitySet Name="ReceiptDetails" EntityType="Self.ReceiptDetail" />
-          <EntitySet Name="ResidentRateAroundProviders" EntityType="Self.ResidentRateAroundProvider" />
-          <EntitySet Name="Roles" EntityType="Self.Role" />
-          <EntitySet Name="ServiceFees" EntityType="Self.ServiceFee" />
-          <EntitySet Name="Surveys" EntityType="Self.Survey" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
-          <EntitySet Name="Users" EntityType="Self.User" />
-          <EntitySet Name="UserAnswerSurveys" EntityType="Self.UserAnswerSurvey" />
-          <AssociationSet Name="FK_Answer_Question" Association="Self.FK_Answer_Question">
-            <End Role="Question" EntitySet="Questions" />
-            <End Role="Answer" EntitySet="Answers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserDoServey_Answer" Association="Self.FK_UserDoServey_Answer">
-            <End Role="Answer" EntitySet="Answers" />
-            <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurveys" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tbl_arround_srv_tbl_around_srv_cat" Association="Self.FK_tbl_arround_srv_tbl_around_srv_cat">
-            <End Role="AroundProviderCategory" EntitySet="AroundProviderCategories" />
-            <End Role="AroundProvider" EntitySet="AroundProviders" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tbl_resident_rate_around_srv_tbl_arround_srv" Association="Self.FK_tbl_resident_rate_around_srv_tbl_arround_srv">
-            <End Role="AroundProvider" EntitySet="AroundProviders" />
-            <End Role="ResidentRateAroundProvider" EntitySet="ResidentRateAroundProviders" />
-          </AssociationSet>
-          <AssociationSet Name="FK_HelpdeskRequest_HelpdeskService" Association="Self.FK_HelpdeskRequest_HelpdeskService">
-            <End Role="HelpdeskService" EntitySet="HelpdeskServices" />
-            <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
-          </AssociationSet>
-          <AssociationSet Name="FK_HelpdeskRequestLog_HelpdeskReq" Association="Self.FK_HelpdeskRequestLog_HelpdeskReq">
-            <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
-            <End Role="HelpdeskRequestLog" EntitySet="HelpdeskRequestLogs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tbl_h_desk_req_h_desk_tbl_h_desk_request" Association="Self.FK_tbl_h_desk_req_h_desk_tbl_h_desk_request">
-            <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
-            <End Role="HelpdeskRequestHelpdeskSupporter" EntitySet="HelpdeskRequestHelpdeskSupporters" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tbl_h_desk_request_tbl_house" Association="Self.FK_tbl_h_desk_request_tbl_house">
-            <End Role="House" EntitySet="Houses" />
-            <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tbl_h_desk_req_h_desk_tbl_user" Association="Self.FK_tbl_h_desk_req_h_desk_tbl_user">
-            <End Role="User" EntitySet="Users" />
-            <End Role="HelpdeskRequestHelpdeskSupporter" EntitySet="HelpdeskRequestHelpdeskSupporters" />
-          </AssociationSet>
-          <AssociationSet Name="FK_HelpdeskRequestLog_User1" Association="Self.FK_HelpdeskRequestLog_User1">
-            <End Role="User" EntitySet="Users" />
-            <End Role="HelpdeskRequestLog" EntitySet="HelpdeskRequestLogs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_HelpdeskRequestLog_User2" Association="Self.FK_HelpdeskRequestLog_User2">
-            <End Role="User" EntitySet="Users" />
-            <End Role="HelpdeskRequestLog" EntitySet="HelpdeskRequestLogs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_HelpdeskService_HelpdeskServiceCategory" Association="Self.FK_HelpdeskService_HelpdeskServiceCategory">
-            <End Role="HelpdeskServiceCategory" EntitySet="HelpdeskServiceCategories" />
-            <End Role="HelpdeskService" EntitySet="HelpdeskServices" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tbl_receipt_tbl_house" Association="Self.FK_tbl_receipt_tbl_house">
-            <End Role="House" EntitySet="Houses" />
-            <End Role="Receipt" EntitySet="Receipts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_User_House" Association="Self.FK_User_House">
-            <End Role="House" EntitySet="Houses" />
-            <End Role="User" EntitySet="Users" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tbl_post_tbl_user" Association="Self.FK_tbl_post_tbl_user">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Post" EntitySet="Posts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Question_Survey" Association="Self.FK_Question_Survey">
-            <End Role="Survey" EntitySet="Surveys" />
-            <End Role="Question" EntitySet="Questions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Receipt_User" Association="Self.FK_Receipt_User">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Receipt" EntitySet="Receipts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tbl_receipt_detail_tbl_receipt" Association="Self.FK_tbl_receipt_detail_tbl_receipt">
-            <End Role="Receipt" EntitySet="Receipts" />
-            <End Role="ReceiptDetail" EntitySet="ReceiptDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tbl_receipt_detail_tbl_service_fee" Association="Self.FK_tbl_receipt_detail_tbl_service_fee">
-            <End Role="ServiceFee" EntitySet="ServiceFees" />
-            <End Role="ReceiptDetail" EntitySet="ReceiptDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tbl_resident_rate_around_srv_tbl_user" Association="Self.FK_tbl_resident_rate_around_srv_tbl_user">
-            <End Role="User" EntitySet="Users" />
-            <End Role="ResidentRateAroundProvider" EntitySet="ResidentRateAroundProviders" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tbl_user_tbl_role" Association="Self.FK_tbl_user_tbl_role">
-            <End Role="Role" EntitySet="Roles" />
-            <End Role="User" EntitySet="Users" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserDoServey_Survey" Association="Self.FK_UserDoServey_Survey">
-            <End Role="Survey" EntitySet="Surveys" />
-            <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurveys" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserDoServey_User" Association="Self.FK_UserDoServey_User">
-            <End Role="User" EntitySet="Users" />
-            <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurveys" />
-          </AssociationSet>
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1323,259 +1294,262 @@
           <EntitySetMapping Name="Answers">
             <EntityTypeMapping TypeName="AMSModel.Answer">
               <MappingFragment StoreEntitySet="Answer">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="AnswerContent" ColumnName="AnswerContent" />
                 <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
+                <ScalarProperty Name="AnswerContent" ColumnName="AnswerContent" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AroundProviders">
             <EntityTypeMapping TypeName="AMSModel.AroundProvider">
               <MappingFragment StoreEntitySet="AroundProvider">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Tel" ColumnName="Tel" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="GoogleMapUrl" ColumnName="GoogleMapUrl" />
-                <ScalarProperty Name="ClickCount" ColumnName="ClickCount" />
-                <ScalarProperty Name="AroundProviderCategoryId" ColumnName="AroundProviderCategoryId" />
                 <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
+                <ScalarProperty Name="AroundProviderCategoryId" ColumnName="AroundProviderCategoryId" />
+                <ScalarProperty Name="ClickCount" ColumnName="ClickCount" />
+                <ScalarProperty Name="GoogleMapUrl" ColumnName="GoogleMapUrl" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AroundProviderCategories">
             <EntityTypeMapping TypeName="AMSModel.AroundProviderCategory">
               <MappingFragment StoreEntitySet="AroundProviderCategory">
-                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="HelpdeskRequests">
             <EntityTypeMapping TypeName="AMSModel.HelpdeskRequest">
               <MappingFragment StoreEntitySet="HelpdeskRequest">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="CloseDate" ColumnName="CloseDate" />
-                <ScalarProperty Name="AssignDate" ColumnName="AssignDate" />
-                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
-                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="HelpdeskServiceId" ColumnName="HelpdeskServiceId" />
-                <ScalarProperty Name="HouseId" ColumnName="HouseId" />
                 <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="HouseId" ColumnName="HouseId" />
+                <ScalarProperty Name="HelpdeskServiceId" ColumnName="HelpdeskServiceId" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="AssignDate" ColumnName="AssignDate" />
+                <ScalarProperty Name="CloseDate" ColumnName="CloseDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="HelpdeskRequestHelpdeskSupporters">
             <EntityTypeMapping TypeName="AMSModel.HelpdeskRequestHelpdeskSupporter">
               <MappingFragment StoreEntitySet="HelpdeskRequestHelpdeskSupporter">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="HelpdeskSupporterId" ColumnName="HelpdeskSupporterId" />
-                <ScalarProperty Name="HelpdeskRequestId" ColumnName="HelpdeskRequestId" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="HelpdeskRequestId" ColumnName="HelpdeskRequestId" />
+                <ScalarProperty Name="HelpdeskSupporterId" ColumnName="HelpdeskSupporterId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="HelpdeskRequestLogs">
             <EntityTypeMapping TypeName="AMSModel.HelpdeskRequestLog">
               <MappingFragment StoreEntitySet="HelpdeskRequestLog">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="HelpdeskRequestId" ColumnName="HelpdeskRequestId" />
-                <ScalarProperty Name="ChangeFromUserId" ColumnName="ChangeFromUserId" />
-                <ScalarProperty Name="ChangeToUserId" ColumnName="ChangeToUserId" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="StatusFrom" ColumnName="StatusFrom" />
                 <ScalarProperty Name="StatusTo" ColumnName="StatusTo" />
+                <ScalarProperty Name="StatusFrom" ColumnName="StatusFrom" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="ChangeToUserId" ColumnName="ChangeToUserId" />
+                <ScalarProperty Name="ChangeFromUserId" ColumnName="ChangeFromUserId" />
+                <ScalarProperty Name="HelpdeskRequestId" ColumnName="HelpdeskRequestId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="HelpdeskServices">
             <EntityTypeMapping TypeName="AMSModel.HelpdeskService">
               <MappingFragment StoreEntitySet="HelpdeskService">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="HelpdeskServiceCategoryId" ColumnName="HelpdeskServiceCategoryId" />
                 <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="HelpdeskServiceCategoryId" ColumnName="HelpdeskServiceCategoryId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="HelpdeskServiceCategories">
             <EntityTypeMapping TypeName="AMSModel.HelpdeskServiceCategory">
               <MappingFragment StoreEntitySet="HelpdeskServiceCategory">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Houses">
             <EntityTypeMapping TypeName="AMSModel.House">
               <MappingFragment StoreEntitySet="House">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Block" ColumnName="Block" />
-                <ScalarProperty Name="Floor" ColumnName="Floor" />
-                <ScalarProperty Name="HouseName" ColumnName="HouseName" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="CoverImage" ColumnName="CoverImage" />
+                <ScalarProperty Name="ProfileImage" ColumnName="ProfileImage" />
                 <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="HouseName" ColumnName="HouseName" />
+                <ScalarProperty Name="Floor" ColumnName="Floor" />
+                <ScalarProperty Name="Block" ColumnName="Block" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Images">
             <EntityTypeMapping TypeName="AMSModel.Image">
               <MappingFragment StoreEntitySet="Image">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="url" ColumnName="url" />
-                <ScalarProperty Name="createdDate" ColumnName="createdDate" />
                 <ScalarProperty Name="postId" ColumnName="postId" />
+                <ScalarProperty Name="createdDate" ColumnName="createdDate" />
+                <ScalarProperty Name="url" ColumnName="url" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Posts">
             <EntityTypeMapping TypeName="AMSModel.Post">
               <MappingFragment StoreEntitySet="Post">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Body" ColumnName="Body" />
-                <ScalarProperty Name="ImgUrl" ColumnName="ImgUrl" />
-                <ScalarProperty Name="PostStatus" ColumnName="PostStatus" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="EmbedCode" ColumnName="EmbedCode" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="PostStatus" ColumnName="PostStatus" />
+                <ScalarProperty Name="ImgUrl" ColumnName="ImgUrl" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Questions">
             <EntityTypeMapping TypeName="AMSModel.Question">
               <MappingFragment StoreEntitySet="Question">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="QuestionContent" ColumnName="QuestionContent" />
                 <ScalarProperty Name="SurveyId" ColumnName="SurveyId" />
+                <ScalarProperty Name="QuestionContent" ColumnName="QuestionContent" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Receipts">
             <EntityTypeMapping TypeName="AMSModel.Receipt">
               <MappingFragment StoreEntitySet="Receipt">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ReceiptCode" ColumnName="ReceiptCode" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
-                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="HouseId" ColumnName="HouseId" />
-                <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
+                <ScalarProperty Name="HouseId" ColumnName="HouseId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="ReceiptCode" ColumnName="ReceiptCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ReceiptDetails">
             <EntityTypeMapping TypeName="AMSModel.ReceiptDetail">
               <MappingFragment StoreEntitySet="ReceiptDetail">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="TotalBill" ColumnName="TotalBill" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
-                <ScalarProperty Name="ServiceFeeId" ColumnName="ServiceFeeId" />
                 <ScalarProperty Name="ReceiptId" ColumnName="ReceiptId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ResidentRateAroundProviders">
-            <EntityTypeMapping TypeName="AMSModel.ResidentRateAroundProvider">
-              <MappingFragment StoreEntitySet="ResidentRateAroundProvider">
+                <ScalarProperty Name="ServiceFeeId" ColumnName="ServiceFeeId" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="TotalBill" ColumnName="TotalBill" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="AroundProviderId" ColumnName="AroundProviderId" />
-                <ScalarProperty Name="Point" ColumnName="Point" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Roles">
             <EntityTypeMapping TypeName="AMSModel.Role">
               <MappingFragment StoreEntitySet="Role">
-                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ServiceFees">
             <EntityTypeMapping TypeName="AMSModel.ServiceFee">
               <MappingFragment StoreEntitySet="ServiceFee">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Surveys">
             <EntityTypeMapping TypeName="AMSModel.Survey">
               <MappingFragment StoreEntitySet="Survey">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="PublishDate" ColumnName="PublishDate" />
+                <ScalarProperty Name="Question" ColumnName="Question" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="PublishDate" ColumnName="PublishDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
             <EntityTypeMapping TypeName="AMSModel.sysdiagram">
               <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
                 <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="AMSModel.User">
               <MappingFragment StoreEntitySet="User">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
-                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
-                <ScalarProperty Name="HouseId" ColumnName="HouseId" />
-                <ScalarProperty Name="Creator" ColumnName="Creator" />
-                <ScalarProperty Name="ProfileImage" ColumnName="ProfileImage" />
-                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
-                <ScalarProperty Name="IDNumber" ColumnName="IDNumber" />
-                <ScalarProperty Name="Gender" ColumnName="Gender" />
-                <ScalarProperty Name="Fullname" ColumnName="Fullname" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Fullname" ColumnName="Fullname" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="IDNumber" ColumnName="IDNumber" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="ProfileImage" ColumnName="ProfileImage" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="HouseId" ColumnName="HouseId" />
+                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="UserAnswerSurveys">
             <EntityTypeMapping TypeName="AMSModel.UserAnswerSurvey">
               <MappingFragment StoreEntitySet="UserAnswerSurvey">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="SurveyId" ColumnName="SurveyId" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="AnswerId" ColumnName="AnswerId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="SurveyId" ColumnName="SurveyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRateAroundProviders">
+            <EntityTypeMapping TypeName="AMSModel.UserRateAroundProvider">
+              <MappingFragment StoreEntitySet="UserRateAroundProvider">
+                <ScalarProperty Name="Point" ColumnName="Point" />
+                <ScalarProperty Name="AroundProviderId" ColumnName="AroundProviderId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

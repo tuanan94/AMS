@@ -13,7 +13,10 @@ namespace AMS.ViewModel
         public DateTime StartDate { get; set; }
         public DateTime CloseDate { get; set; }
         public List<QuestionViewModel> QuestionViewModels { get; set; }
-        public List<AnswerViewModel> AnswerViewModels { get; set; } 
+        public List<AnswerViewModel> AnswerViewModels { get; set; }
+        public string AnswerContent { get; set; }
+        public int AnswerId { get; set; }
+
     }
 
     public class AnswerViewModel
@@ -25,5 +28,11 @@ namespace AMS.ViewModel
     {
         public string QuestionContent { get; set; }
         public int SurveyId { get; set; }
+    }
+
+    public class UserAnser
+    {
+        public int AnswerId { get; set; }
+        public int CountAnswer { get; set; }
     }
 }

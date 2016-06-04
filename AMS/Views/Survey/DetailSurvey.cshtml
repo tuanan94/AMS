@@ -3,12 +3,48 @@
     ViewBag.Title = "DetailSurvey";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
     Survey surveys = ViewBag.Survey;
-    List<Question> questions = ViewBag.Question;
-    List<List<Answer>> answers = ViewBag.Answer;
+ //   List<Question> questions = ViewBag.Question;
+    List<Answer>  answers = ViewBag.Answer;
+    List<Double> listAnswer = ViewBag.CountAnswer;
 }
+<script src="http://code.jquery.com/jquery-1.6.3.min.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
 
-
-
+<script src="~/Scripts/amsScript/canvasjs.min.js"></script>
+<script type="text/javascript">
+    window.onload = function () {
+        $("#chartContainer").CanvasJSChart({
+            title: {
+                text: "Worldwide Smartphone sales by brand - 2012",
+                fontSize: 24
+            },
+            axisY: {
+                title: "Products in %"
+            },
+            legend: {
+                verticalAlign: "center",
+                horizontalAlign: "right"
+            },
+            data: [
+            {
+                type: "pie",
+                showInLegend: true,
+                toolTipContent: "{label} <br/> {y} %",
+                indexLabel: "{y} %",
+                dataPoints: [
+                    { label: "Samsung", y: 30.3, legendText: "Samsung" },
+                    { label: "Apple", y: 19.1, legendText: "Apple" },
+                    { label: "Huawei", y: 4.0, legendText: "Huawei" },
+                    { label: "LG", y: 3.8, legendText: "LG Electronics" },
+                    { label: "Lenovo", y: 3.2, legendText: "Lenovo" },
+                    { label: "Others", y: 39.6, legendText: "Others" }
+                ]
+            }
+            ]
+        });
+    }
+</script>
 <div class="col-sm-offset-1 col-sm-10">
     <div class="panel panel-default">
         <nav class="navbar navbar-default">
@@ -50,12 +86,9 @@
                         </div>
                         int ii = 1;
 
-                        int i = 0;
-                        int count = answers.Count;
-                        foreach (var item in questions)
-                        {
-                            if (i < count)
-                            {
+                        //int i = 0;
+                       // int count = answers.Count;
+                      
                                 <div class="form-group">
                                     <div class="col-sm-offset-2 col-sm-8">
                                         <fieldset class="scheduler-border less-padding">
@@ -63,7 +96,7 @@
                                             <div class="form-group">
                                                 <label for="inputEmail3" class="col-sm-3 control-label">Câu Hỏi @ii:</label>
                                                 <div class="col-sm-7">
-                                                    <input type="text" class="form-control" style="width: 330px" id="question" name="question" value="@item.QuestionContent"><br>
+                                                    <input type="text" class="form-control" style="width: 330px" id="question" name="question" value="@surveys.Question"><br>
 
 
                                                 </div>
@@ -71,23 +104,22 @@
                                             <div class="form-group">
 
                                                 @{
-                                List<Answer> a = answers.ElementAt(i);
+                              
                                 int counts = 1;
-                                foreach (var b in a)
+                                foreach (var b in answers)
                                 {
                                     <label for="inputEmail3" class="col-sm-3 control-label">Câu trả lời:</label>
                                                     <div class="col-sm-7">
                                                         @Html.TextBoxFor(m => m.Id, new { @type = "hidden", @Value = surveys.Id })
 
                                                         <input type="hidden" id="count" name="count" value="@counts" />
-                                                    <input type="text" class="form-control" style="width: 200px" id="anwser1" name="anwser1" value="@b.AnswerContent">
+                                                    <input type="text" class="form-control" style="width: 200px" id="anwserr_@counts" name="anwser1" value="@b.AnswerContent">
 
 
                                                     </div>
                                     counts++;
                                 }
-                                i++;
-                                ii++;
+                             
 
                                                 }
                                             </div>
@@ -95,9 +127,9 @@
                                         </fieldset>
                                     </div>
                                 </div>
-                            }
+                            ////}
 
-                        }
+                        
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-8">
                                 @*<a href="@Url.Action("UpdateSurvey", "Survey", new { surveyId =@surveys.Id})" class="fa fa-list-alt">Lưu..</a>*@
@@ -113,6 +145,18 @@
                 </div>
 
                 @*</form>*@
+                @{
+                    int abc = 1;
+    foreach (var item in listAnswer)
+    {
+        <input type="hidden" id="answer_@abc" name="countAnser" value="@item"/>
+        abc++;
+    }
+                    <fieldset>
+                        @*<div id="chartContainer" style="width: 100%; height: 300px"></div>*@ 
+                        <div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+                    </fieldset>
+}
             </fieldset>
         </div>
 
@@ -122,5 +166,65 @@
     $(function () {
         $("#StartDate").datepicker();
         $("#StartDate").attr('readOnly', 'true');
+    });
+    //var b = $("#answerr_2").val()
+    //var a = $("#answerr_1").val()
+    //var c = $("#answerr_3").val()
+    var total14dayago2 = parseFloat($("#answer_2").val())
+    var total14dayago1 = parseFloat($("#answer_1").val())
+    var total14dayago3 = parseFloat($("#answer_3").val())
+   
+    var a = "a"
+    var b = "aa"
+    var c ="b"
+    $(document).ready(function () {
+        //var a = document.getElementById('#answerr_1').value;
+        //var b = document.getElementById('#answerr_2').value;
+        //var c = document.getElementById('#answerr_3').value;
+       
+        RenderPieChart('container', [
+            [a, total14dayago1],
+            [b, total14dayago2],
+            [c, total14dayago3]
+           
+        ]);
+
+    
+        function RenderPieChart(elementId, dataList) {
+            new Highcharts.Chart({
+                chart: {
+                    renderTo: elementId,
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                }, title: {
+                    text: 'Biểu đồ kết quả khảo sát'
+                },
+                tooltip: {
+                    formatter: function () {
+                        return '<b>' + this.point.name + '</b>: ' + this.percentage + ' %';
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            color: '#000000',
+                            connectorColor: '#000000',
+                            formatter: function () {
+                                return '<b>' + this.point.name + '</b>: ' + this.percentage + ' %';
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    name: 'Browser share',
+                    data: dataList
+                }]
+            });
+        };
     });
 </script>
