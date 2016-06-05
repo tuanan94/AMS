@@ -60,7 +60,7 @@ namespace AMS.Controllers
                         double total = 0;
                         foreach (var od in orderDetails)
                         {
-                            total = od.UnitPrice.Value * od.Quantity.Value;
+                            total += od.UnitPrice.Value * od.Quantity.Value;
                         }
                         model.TotalOrder = total;
                         receiptModel.Add(model);
@@ -135,7 +135,7 @@ namespace AMS.Controllers
                         double total = 0;
                         foreach (var od in orderDetails)
                         {
-                            total = od.UnitPrice.Value * od.Quantity.Value;
+                            total += od.UnitPrice.Value * od.Quantity.Value;
                         }
                         model.TotalOrder = total;
                         receiptModel.Add(model);

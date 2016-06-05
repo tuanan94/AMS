@@ -968,11 +968,11 @@ function getHdReqDetail(id) {
         url: "/Home/HelpdeskRequest/GetHdReqInfoDetail/" + id,
         success: function (data) {
 
-            console.log(data.Data.HdReqInfoDetail);
-            console.log(data.Data.HdSrvCategories);
-            console.log(data.Data.ListHdSrvBySelectedCat);
-            console.log(data.Data.SelectedHdSrvCatId);
-            console.log(data.Data.SelectedHdSrvId);
+//            console.log(data.Data.HdReqInfoDetail);
+//            console.log(data.Data.HdSrvCategories);
+//            console.log(data.Data.ListHdSrvBySelectedCat);
+//            console.log(data.Data.SelectedHdSrvCatId);
+//            console.log(data.Data.SelectedHdSrvId);
 
             var objList = data.Data.HdSrvCategories;
             var returnHtml = parseJsonToSelectTags(objList, data.Data.SelectedHdSrvCatId, "Hãy chọn loại dịch vụ hổ trợ");
@@ -989,7 +989,6 @@ function getHdReqDetail(id) {
 
             $("#hdReqTitle").val(data.Data.HdReqInfoDetail.HdReqTitle);
             $("#hdReqDesc").val(data.Data.HdReqInfoDetail.HdReqUserDesc);
-            $("#hdSrvPrice").val(data.Data.SelectedHdSrvPrice);
 
             $("#updateHdRequestModal").modal("show");
         }
@@ -1120,6 +1119,7 @@ function calculateTotal() {
         var rowIdStr = $(contentObj[i]).prop("id").split("row_");
         var id = rowIdStr[1];
         var currentPrice = $("#item_qty_price_" + id).val();
+        currentPrice = replaceCommaNumber(currentPrice);
         if (currentPrice && isNaN(currentPrice) === false) {
             try {
                 currentPrice = parseFloat(currentPrice);
@@ -1130,6 +1130,7 @@ function calculateTotal() {
             }
         }
     }
+    total = numberWithCommas(total);
     $("#total").text(total);
 }
 
@@ -1197,13 +1198,19 @@ $(document).ready(function () {
     $("#receiptWrapper").on("change", ".order-item-qty", function () {
         console.log($(this).val());
         var idStr = $(this).prop("id").split("item_qty_");
-        if ($(this).val() && (isNaN($(this).val()) === false)) {
+        if ($(this).val() && (isNaN(replaceCommaNumber($(this).val())) === false)) {
+            $("#item_qty_" + idStr[1]).val(numberWithCommas($(this).val()));
             var unitPriceValue = $("#item_unit_price_" + idStr[1]).val();
+            unitPriceValue = replaceCommaNumber(unitPriceValue);
+
             if (unitPriceValue && isNaN(unitPriceValue) === false) {
                 var unitPrice = parseFloat(unitPriceValue);
-                var qty = parseFloat($(this).val());
-                $("#item_qty_price_" + idStr[1]).val(unitPrice * qty);
+                var qty = parseFloat(replaceCommaNumber($(this).val()));
+
+                var formatedMoney = numberWithCommas(unitPrice * qty);
+                $("#item_qty_price_" + idStr[1]).val(formatedMoney);
                 calculateTotal();
+
             } else {
                 $("#item_unit_price_" + idStr[1]).val("");
             }
@@ -1214,12 +1221,18 @@ $(document).ready(function () {
     $("#receiptWrapper").on("change", ".order-item-price", function () {
         console.log($(this).val());
         var idStr = $(this).prop("id").split("item_unit_price_");
-        if ($(this).val() && (isNaN($(this).val()) === false)) {
+        if ($(this).val() && (isNaN(replaceCommaNumber($(this).val())) === false)) {
+            $("#item_unit_price_" + idStr[1]).val(numberWithCommas($(this).val()));
             var qtyValue = $("#item_qty_" + idStr[1]).val();
+            qtyValue = replaceCommaNumber(qtyValue);
             if (qtyValue && isNaN(qtyValue) === false) {
+
                 var qty = parseFloat(qtyValue);
-                var unitPrice = parseFloat($(this).val());
-                $("#item_qty_price_" + idStr[1]).val(unitPrice * qty);
+                var unitPrice = parseFloat(replaceCommaNumber($(this).val()));
+
+                var formatedMoney = numberWithCommas(unitPrice * qty);
+                $("#item_qty_price_" + idStr[1]).val(formatedMoney);
+                $("#item_unit_price_" + idStr[1]).val(numberWithCommas(unitPrice));
                 calculateTotal();
             } else {
                 $("#item_qty_price_" + idStr[1]).val("");
@@ -1250,3 +1263,17 @@ $(document).ready(function () {
 });
 
 //Receipt manager
+//http://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
+function numberWithCommas(x) {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+}
+function replaceCommaNumber(x) {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/,/g, "");
+    return parts.join(".");
+}
+function resetFormData(id) {
+    $("#" + id).closest("form").find("input[type=text], textarea").val("");
+}
