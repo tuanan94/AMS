@@ -6,22 +6,38 @@ using System.Web;
 using System.Web.Mvc;
 using AMS.Service;
 using AMS.ViewModel;
+using Microsoft.AspNet.Identity;
 
 namespace AMS.Controllers
 {
     public class SurveyController : Controller
     {
+        HouseServices houseServices = new HouseServices();
         SurveyService surveyService = new SurveyService();
         QuestionService questionService = new QuestionService();
         AnswerService answerService = new AnswerService();
         UserAnswerService userAnswerService = new UserAnswerService();
+        UserServices userService = new UserServices();
         //
         // GET: /Survey/
         public ActionResult Survey()
         {
-
+            List<House> listHouseBlock = userAnswerService.GetListBlock();
+            List<string> listBlock = new List<string>();
+            List<House> listHouseFloor = userAnswerService.GetListBlock();
+            List<string> listFloor = new List<string>();
+            foreach (var item in listHouseBlock)
+            {
+                listBlock.Add(item.Block);
+            }
+            foreach (var item in listHouseFloor)
+            {
+                listFloor.Add(item.Floor);
+            }
             List<Survey> listSurveys = surveyService.GetListSurveys();
             //   int a = listCount.Count;
+            ViewBag.ListBlock = listBlock;
+            ViewBag.ListFloor = listFloor;
             ViewBag.ListSurvey = listSurveys;
             return View();
         }
@@ -39,10 +55,13 @@ namespace AMS.Controllers
         }
         public ActionResult DoSurvey()
         {
+            User currentUser = userService.FindById(int.Parse(User.Identity.GetUserId()));
+            House currentHouse = houseServices.FindById(currentUser.HouseId.Value);
             List<Survey> listSurveys = surveyService.GetListSurveys();
             //   int a = listCount.Count;
             ViewBag.ListSurvey = listSurveys;
-
+            ViewBag.currentUser = currentUser;
+            ViewBag.currentHouse = currentHouse;
             return View();
         }
         public ActionResult DoDetailSurvey(int surveyId)
@@ -65,18 +84,28 @@ namespace AMS.Controllers
         {
            //string a= model.AnswerContent;
             string[] listQuestion = Request.Form.GetValues("question");
+            User currentUser = userService.FindById(int.Parse(User.Identity.GetUserId()));
+            String action = this.Request.QueryString["AnswerContent"];
+            string[] choice = new string[1] { Request.Form.Get("AnswerContent") };
+            //string choice = Request.Form.Get("AnswerContent");
+           // choice = Request.Form.GetValues("AnswerContent");
+            //string[] choiceIds = Request.Form.GetValues("answerId");
+            //List<string> listChoice = new List<string>(choice);
+            //List<string> listQuestions = new List<string>(listQuestion);
 
-
-            string[] choice = Request.Form.GetValues("AnswerContent");
-            string[] choiceIds = Request.Form.GetValues("answerId");
-            List<string> listChoice = new List<string>(choice);
-            List<string> listQuestions = new List<string>(listQuestion);
-            int answerId = answerService.FindByContent(choice[0]);
-            UserAnswerSurvey userAnswerSurvey = new UserAnswerSurvey();
-            userAnswerSurvey.SurveyId = model.Id;
-            userAnswerSurvey.UserId = 16;
-            userAnswerSurvey.AnswerId = answerId;
-            userAnswerService.AddUserAnswerSurvey(userAnswerSurvey);
+            string a = choice[0];
+                UserAnswerSurvey userAnswerSurvey = new UserAnswerSurvey();
+                userAnswerSurvey.SurveyId = model.Id;
+                userAnswerSurvey.UserId = currentUser.Id;
+             //   int answerId = answerService.FindByContent(choice[0]).Id;
+                int answerId = answerService.FindByContent(model.AnswerContent).Id;
+                userAnswerSurvey.AnswerId = answerId;
+                userAnswerService.AddUserAnswerSurvey(userAnswerSurvey);
+        
+           
+           
+           
+           
            return RedirectToAction("DoDetailSurvey", new { surveyId = @model.Id });
         }
         public ActionResult DeleteSurvey(int surveyId)
@@ -99,11 +128,22 @@ namespace AMS.Controllers
 
         public ActionResult DetailSurvey(int surveyId)
         {
-         
 
+            List<House> listHouseBlock = userAnswerService.GetListBlock();
+            List<string> listBlock = new List<string>();
+            List<House> listHouseFloor = userAnswerService.GetListBlock();
+            List<string> listFloor = new List<string>();
+            foreach (var item in listHouseBlock)
+            {
+                listBlock.Add(item.Block);
+            }
+            foreach (var item in listHouseFloor)
+            {
+                listFloor.Add(item.Floor);
+            }
              Survey survey = surveyService.FindById(surveyId);
              List<Double> listCount = new List<Double>();
-             List<Double> listCounts = new List<Double>();
+             List<string> listCounts = new List<string>();
              int a = userAnswerService.CountAnswer(332);
              List<Answer> listAnswers = answerService.FindByQuestionId(survey.Id);
              foreach (var item in listAnswers)
@@ -115,10 +155,12 @@ namespace AMS.Controllers
              foreach (var item in listAnswers)
              {
                  Double answerCount = userAnswerService.CountAnswer(item.Id);
-                 Double percent = (answerCount / count) * 100;
+                // Double percent = Math.Round(((answerCount / count) * 100), 2);
+                 string percent = string.Format("{0:00.0}", (answerCount / count * 100));
                  listCounts.Add(percent);
              }
-           
+            ViewBag.ListBlock = listBlock;
+            ViewBag.ListFloor = listFloor;
              ViewBag.CountAnswer = listCounts;
             ViewBag.Survey = survey;
             ViewBag.Answer = listAnswers;
@@ -134,7 +176,9 @@ namespace AMS.Controllers
             List<string> listCountAnwsers = new List<string>(listCountAnwser);
             List<string> listQuestions = new List<string>(listQuestion);
             List<string> listAnwsers = new List<string>(listAnwser);
-
+            string[] listBlock = Request.Form.GetValues("selectItemBlock");
+            string[] listFloor = Request.Form.GetValues("selectItemFloor");
+            string[] member = Request.Form.GetValues("people");
             List<int> listCount = new List<int>();
             List<List<string>> totalAnsertGroup = new List<List<string>>();
             for (int i = 0; i < (listCountAnwsers.Count) - 1; i++)
@@ -188,6 +232,11 @@ namespace AMS.Controllers
             obj.Title = model.Title;
             obj.Question = listQuestion[0];
             obj.StartDate = model.StartDate;
+            obj.EndDate = model.EndDate;
+            obj.PublishDate = model.PublishDate;
+            obj.Member = int.Parse(member[0]);
+            obj.Block = listBlock[0];
+            obj.Floor = listFloor[0];
             surveyService.UpdateSurvey(obj);
             return RedirectToAction("DetailSurvey", new { surveyId =obj.Id});
         }
@@ -201,6 +250,10 @@ namespace AMS.Controllers
             string[] listQuestion = Request.Form.GetValues("question");
             string[] listAnwser = Request.Form.GetValues("anwser1");
             string[] listCountAnwser = Request.Form.GetValues("count");
+            string[] listBlock = Request.Form.GetValues("selectItemBlock");
+            string[] listFloor = Request.Form.GetValues("selectItemFloor");
+            string[] member = Request.Form.GetValues("people");
+           // string[] listMem = Request.Form.GetValues("count");
             //  string[] listCountAnwser = {"1", "2", "3","1","2","1","2","3","4"};
             List<string> listCountAnwsers = new List<string>(listCountAnwser);
             List<string> listQuestions = new List<string>(listQuestion);
@@ -249,9 +302,15 @@ namespace AMS.Controllers
                 if (ii < number)
                 {
                     survey.Title = model.Title;
-                    string today = DateTime.Now.ToString("MM/dd/yyyy");
-                    survey.StartDate = DateTime.Parse(today);
+                   // string today = DateTime.Now.ToString("MM/dd/yyyy");
+                 //   survey.StartDate = DateTime.Parse(today);
+                    survey.StartDate = model.StartDate;
+                    survey.EndDate = model.EndDate;
+                    survey.PublishDate = model.PublishDate;
                     survey.Status = 1;
+                    survey.Block = listBlock[0];
+                    survey.Floor = listFloor[0];
+                    survey.Member = int.Parse(member[0]);
                     survey.Question = content;
                     surveyService.AddSurvey(survey);
                     //question.QuestionContent = content;

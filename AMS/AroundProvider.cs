@@ -17,6 +17,7 @@ namespace AMS
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AroundProvider()
         {
+            this.AroundProviderProducts = new HashSet<AroundProviderProduct>();
             this.UserRateAroundProviders = new HashSet<UserRateAroundProvider>();
         }
     
@@ -30,6 +31,8 @@ namespace AMS
         public Nullable<int> AroundProviderCategoryId { get; set; }
         public string ImageUrl { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AroundProviderProduct> AroundProviderProducts { get; set; }
         public virtual AroundProviderCategory AroundProviderCategory { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserRateAroundProvider> UserRateAroundProviders { get; set; }

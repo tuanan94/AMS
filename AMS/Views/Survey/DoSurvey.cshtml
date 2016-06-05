@@ -3,6 +3,8 @@
     ViewBag.Title = "DoSurvey";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
     List<Survey> listSurveys = ViewBag.ListSurvey;
+    User currentUser = ViewBag.currentUser;
+    House currentHouse = ViewBag.currentHouse;
     <style>
         .button {
             display: block;
@@ -38,68 +40,153 @@
                 @{
                     foreach (var item in listSurveys)
                     {
-                        <tr class="aass">
-                            <td>
-                                <div class="form-group">
-                                    <div class="col-sm-9">
-                                        <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.Id">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <div class="col-sm-9">
-                                        <input type="hidden" class="form-control" id="surveyId" value="@item.Id">
-                                        <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.Title">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <div class="col-sm-9">
-                                        <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.StartDate">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <div class="col-sm-9">
-                                        <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.EndDate">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                @{
-                                    if (@item.Status == ConstantB.Survey_Open)
-                                    {
-                                        <div class="form-group">
-                                            <div class="col-sm-9">
-                                                <input type="text" disabled="disabled" style="background-color: blue" class="form-control" id="fullname" value="Đang mở">
-                                            </div>
+                        if (listSurveys.Count != 0)
+                        {
+                            if (item.Member == currentUser.RoleId)
+                        {
+                            <tr class="aass">
+                                <td>
+                                    <div class="form-group">
+                                        <div class="col-sm-9">
+                                            <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.Id">
                                         </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="form-group">
-                                            <div class="col-sm-9">
-                                                <input type="text" disabled="disabled" style="background-color: red" class="form-control" id="fullname" value="Đã đóng">
-                                            </div>
-                                        </div>
-                                    }
-                                }
-
-
-                            </td>
-
-                            <td>
-                                <div class="form-group">
-                                    <div class="col-sm-9">
-
-                                        <a href="@Url.Action("DoDetailSurvey", "Survey", new {surveyId = @item.Id})" class="button">Chi Tiết</a>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <div class="col-sm-9">
+                                            <input type="hidden" class="form-control" id="surveyId" value="@item.Id">
+                                            <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.Title">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <div class="col-sm-9">
+                                            <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.StartDate">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <div class="col-sm-9">
+                                            <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.EndDate">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    @{
+                                        if (@item.Status == ConstantB.Survey_Open)
+                                        {
+                                            <div class="form-group">
+                                                <div class="col-sm-9">
+                                                    <input type="text" disabled="disabled" style="background-color: blue" class="form-control" id="fullname" value="Đang mở">
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="form-group">
+                                                <div class="col-sm-9">
+                                                    <input type="text" disabled="disabled" style="background-color: red" class="form-control" id="fullname" value="Đã đóng">
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+
+
+                                </td>
+
+                                <td>
+                                    <div class="form-group">
+                                        <div class="col-sm-9">
+
+                                            <a href="@Url.Action("DoDetailSurvey", "Survey", new {surveyId = @item.Id})" class="button">Chi Tiết</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                            if (item.Block == currentHouse.Block && item.Floor == currentHouse.Floor)
+                            {
+                               <tr class="aass">
+                                <td>
+                                    <div class="form-group">
+                                        <div class="col-sm-9">
+                                            <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.Id">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <div class="col-sm-9">
+                                            <input type="hidden" class="form-control" id="surveyId" value="@item.Id">
+                                            <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.Title">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <div class="col-sm-9">
+                                            <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.StartDate">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <div class="col-sm-9">
+                                            <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.EndDate">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    @{
+                                        if (@item.Status == ConstantB.Survey_Open)
+                                        {
+                                            <div class="form-group">
+                                                <div class="col-sm-9">
+                                                    <input type="text" disabled="disabled" style="background-color: blue" class="form-control" id="fullname" value="Đang mở">
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="form-group">
+                                                <div class="col-sm-9">
+                                                    <input type="text" disabled="disabled" style="background-color: red" class="form-control" id="fullname" value="Đã đóng">
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+
+
+                                </td>
+
+                                <td>
+                                    <div class="form-group">
+                                        <div class="col-sm-9">
+
+                                            <a href="@Url.Action("DoDetailSurvey", "Survey", new {surveyId = @item.Id})" class="button">Chi Tiết</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>  
+                            }
+                        }
+                       
+                        else if(listSurveys.Count ==0)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <div class="col-sm-9">
+                                            <span class="label date-color label-warning">Hien tai khong co khao sat nao!</span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                       
                     }
                 }
 

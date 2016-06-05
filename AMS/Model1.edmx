@@ -34,6 +34,20 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" />
         </EntityType>
+        <EntityType Name="AroundProviderProduct">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Price" Type="nvarchar" MaxLength="255" />
+          <Property Name="ViewIndex" Type="int" />
+          <Property Name="ImgUrl" Type="varchar" MaxLength="255" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="LastModified" Type="date" />
+          <Property Name="AroundProviderId" Type="int" />
+        </EntityType>
         <EntityType Name="HelpdeskRequest">
           <Key>
             <PropertyRef Name="Id" />
@@ -197,6 +211,9 @@
           <Property Name="PublishDate" Type="datetime" />
           <Property Name="Status" Type="int" />
           <Property Name="Question" Type="nvarchar" MaxLength="255" />
+          <Property Name="Block" Type="nvarchar" MaxLength="50" />
+          <Property Name="Floor" Type="nvarchar" MaxLength="50" />
+          <Property Name="Member" Type="int" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -207,6 +224,42 @@
           <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Transaction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeId" Type="int" />
+          <Property Name="Title" Type="nvarchar" MaxLength="255" />
+          <Property Name="ForMonth" Type="datetime" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="LastModified" Type="datetime" />
+          <Property Name="ManagerId" Type="int" />
+          <Property Name="Status" Type="int" />
+        </EntityType>
+        <EntityType Name="TransactionItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="TotalAmount" Type="float" />
+          <Property Name="PaidAmount" Type="float" />
+          <Property Name="CategoryId" Type="int" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="LastModified" Type="datetime" />
+          <Property Name="TransactionId" Type="int" />
+        </EntityType>
+        <EntityType Name="TransactionItemCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Type" Type="int" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -255,6 +308,18 @@
             </Principal>
             <Dependent Role="Answer">
               <PropertyRef Name="QuestionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AroundServiceProduct_AroundProvider">
+          <End Role="AroundProvider" Type="Self.AroundProvider" Multiplicity="0..1" />
+          <End Role="AroundProviderProduct" Type="Self.AroundProviderProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AroundProvider">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AroundProviderProduct">
+              <PropertyRef Name="AroundProviderId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -462,6 +527,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Transaction_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Transaction" Type="Self.Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="ManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TransactionItem_Transaction">
+          <End Role="Transaction" Type="Self.Transaction" Multiplicity="0..1" />
+          <End Role="TransactionItem" Type="Self.TransactionItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Transaction">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TransactionItem">
+              <PropertyRef Name="TransactionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TransactionItem_TransactionItemCategory">
+          <End Role="TransactionItemCategory" Type="Self.TransactionItemCategory" Multiplicity="0..1" />
+          <End Role="TransactionItem" Type="Self.TransactionItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TransactionItemCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TransactionItem">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_User_House">
           <End Role="House" Type="Self.House" Multiplicity="0..1" />
           <End Role="User" Type="Self.User" Multiplicity="*" />
@@ -514,6 +615,7 @@
           <EntitySet Name="Answer" EntityType="Self.Answer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AroundProvider" EntityType="Self.AroundProvider" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AroundProviderCategory" EntityType="Self.AroundProviderCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AroundProviderProduct" EntityType="Self.AroundProviderProduct" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HelpdeskRequest" EntityType="Self.HelpdeskRequest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HelpdeskRequestHelpdeskSupporter" EntityType="Self.HelpdeskRequestHelpdeskSupporter" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HelpdeskRequestLog" EntityType="Self.HelpdeskRequestLog" Schema="dbo" store:Type="Tables" />
@@ -529,12 +631,19 @@
           <EntitySet Name="ServiceFee" EntityType="Self.ServiceFee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Survey" EntityType="Self.Survey" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Transaction" EntityType="Self.Transaction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TransactionItem" EntityType="Self.TransactionItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TransactionItemCategory" EntityType="Self.TransactionItemCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserAnswerSurvey" EntityType="Self.UserAnswerSurvey" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRateAroundProvider" EntityType="Self.UserRateAroundProvider" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Answer_Survey" Association="Self.FK_Answer_Survey">
             <End Role="Survey" EntitySet="Survey" />
             <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AroundServiceProduct_AroundProvider" Association="Self.FK_AroundServiceProduct_AroundProvider">
+            <End Role="AroundProvider" EntitySet="AroundProvider" />
+            <End Role="AroundProviderProduct" EntitySet="AroundProviderProduct" />
           </AssociationSet>
           <AssociationSet Name="FK_HelpdeskRequest_HelpdeskService" Association="Self.FK_HelpdeskRequest_HelpdeskService">
             <End Role="HelpdeskService" EntitySet="HelpdeskService" />
@@ -604,6 +713,18 @@
             <End Role="Role" EntitySet="Role" />
             <End Role="User" EntitySet="User" />
           </AssociationSet>
+          <AssociationSet Name="FK_Transaction_User" Association="Self.FK_Transaction_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Transaction" EntitySet="Transaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TransactionItem_Transaction" Association="Self.FK_TransactionItem_Transaction">
+            <End Role="Transaction" EntitySet="Transaction" />
+            <End Role="TransactionItem" EntitySet="TransactionItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TransactionItem_TransactionItemCategory" Association="Self.FK_TransactionItem_TransactionItemCategory">
+            <End Role="TransactionItemCategory" EntitySet="TransactionItemCategory" />
+            <End Role="TransactionItem" EntitySet="TransactionItem" />
+          </AssociationSet>
           <AssociationSet Name="FK_User_House" Association="Self.FK_User_House">
             <End Role="House" EntitySet="House" />
             <End Role="User" EntitySet="User" />
@@ -629,6 +750,7 @@
           <EntitySet Name="Answers" EntityType="AMSModel.Answer" />
           <EntitySet Name="AroundProviders" EntityType="AMSModel.AroundProvider" />
           <EntitySet Name="AroundProviderCategories" EntityType="AMSModel.AroundProviderCategory" />
+          <EntitySet Name="AroundProviderProducts" EntityType="AMSModel.AroundProviderProduct" />
           <EntitySet Name="HelpdeskRequests" EntityType="AMSModel.HelpdeskRequest" />
           <EntitySet Name="HelpdeskRequestHelpdeskSupporters" EntityType="AMSModel.HelpdeskRequestHelpdeskSupporter" />
           <EntitySet Name="HelpdeskRequestLogs" EntityType="AMSModel.HelpdeskRequestLog" />
@@ -644,6 +766,9 @@
           <EntitySet Name="ServiceFees" EntityType="AMSModel.ServiceFee" />
           <EntitySet Name="Surveys" EntityType="AMSModel.Survey" />
           <EntitySet Name="sysdiagrams" EntityType="AMSModel.sysdiagram" />
+          <EntitySet Name="Transactions" EntityType="AMSModel.Transaction" />
+          <EntitySet Name="TransactionItems" EntityType="AMSModel.TransactionItem" />
+          <EntitySet Name="TransactionItemCategories" EntityType="AMSModel.TransactionItemCategory" />
           <EntitySet Name="Users" EntityType="AMSModel.User" />
           <EntitySet Name="UserAnswerSurveys" EntityType="AMSModel.UserAnswerSurvey" />
           <EntitySet Name="UserRateAroundProviders" EntityType="AMSModel.UserRateAroundProvider" />
@@ -654,6 +779,10 @@
           <AssociationSet Name="FK_UserDoServey_Answer" Association="AMSModel.FK_UserDoServey_Answer">
             <End Role="Answer" EntitySet="Answers" />
             <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurveys" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AroundServiceProduct_AroundProvider" Association="AMSModel.FK_AroundServiceProduct_AroundProvider">
+            <End Role="AroundProvider" EntitySet="AroundProviders" />
+            <End Role="AroundProviderProduct" EntitySet="AroundProviderProducts" />
           </AssociationSet>
           <AssociationSet Name="FK_tbl_arround_srv_tbl_around_srv_cat" Association="AMSModel.FK_tbl_arround_srv_tbl_around_srv_cat">
             <End Role="AroundProviderCategory" EntitySet="AroundProviderCategories" />
@@ -727,6 +856,18 @@
             <End Role="Survey" EntitySet="Surveys" />
             <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurveys" />
           </AssociationSet>
+          <AssociationSet Name="FK_Transaction_User" Association="AMSModel.FK_Transaction_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Transaction" EntitySet="Transactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TransactionItem_Transaction" Association="AMSModel.FK_TransactionItem_Transaction">
+            <End Role="Transaction" EntitySet="Transactions" />
+            <End Role="TransactionItem" EntitySet="TransactionItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TransactionItem_TransactionItemCategory" Association="AMSModel.FK_TransactionItem_TransactionItemCategory">
+            <End Role="TransactionItemCategory" EntitySet="TransactionItemCategories" />
+            <End Role="TransactionItem" EntitySet="TransactionItems" />
+          </AssociationSet>
           <AssociationSet Name="FK_tbl_resident_rate_around_srv_tbl_user" Association="AMSModel.FK_tbl_resident_rate_around_srv_tbl_user">
             <End Role="User" EntitySet="Users" />
             <End Role="UserRateAroundProvider" EntitySet="UserRateAroundProviders" />
@@ -759,6 +900,7 @@
           <Property Name="ClickCount" Type="Int64" />
           <Property Name="AroundProviderCategoryId" Type="Int32" />
           <Property Name="ImageUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AroundProviderProducts" Relationship="AMSModel.FK_AroundServiceProduct_AroundProvider" FromRole="AroundProvider" ToRole="AroundProviderProduct" />
           <NavigationProperty Name="AroundProviderCategory" Relationship="AMSModel.FK_tbl_arround_srv_tbl_around_srv_cat" FromRole="AroundProvider" ToRole="AroundProviderCategory" />
           <NavigationProperty Name="UserRateAroundProviders" Relationship="AMSModel.FK_tbl_resident_rate_around_srv_tbl_arround_srv" FromRole="AroundProvider" ToRole="UserRateAroundProvider" />
         </EntityType>
@@ -769,6 +911,21 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AroundProviders" Relationship="AMSModel.FK_tbl_arround_srv_tbl_around_srv_cat" FromRole="AroundProviderCategory" ToRole="AroundProvider" />
+        </EntityType>
+        <EntityType Name="AroundProviderProduct">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ViewIndex" Type="Int32" />
+          <Property Name="ImgUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="LastModified" Type="DateTime" Precision="0" />
+          <Property Name="AroundProviderId" Type="Int32" />
+          <NavigationProperty Name="AroundProvider" Relationship="AMSModel.FK_AroundServiceProduct_AroundProvider" FromRole="AroundProviderProduct" ToRole="AroundProvider" />
         </EntityType>
         <EntityType Name="HelpdeskRequest">
           <Key>
@@ -956,6 +1113,9 @@
           <Property Name="PublishDate" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="Int32" />
           <Property Name="Question" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Block" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Floor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Member" Type="Int32" />
           <NavigationProperty Name="Answers" Relationship="AMSModel.FK_Answer_Survey" FromRole="Survey" ToRole="Answer" />
           <NavigationProperty Name="UserAnswerSurveys" Relationship="AMSModel.FK_UserDoServey_Survey" FromRole="Survey" ToRole="UserAnswerSurvey" />
         </EntityType>
@@ -968,6 +1128,47 @@
           <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Transaction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeId" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ForMonth" Type="DateTime" Precision="3" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="LastModified" Type="DateTime" Precision="3" />
+          <Property Name="ManagerId" Type="Int32" />
+          <Property Name="Status" Type="Int32" />
+          <NavigationProperty Name="User" Relationship="AMSModel.FK_Transaction_User" FromRole="Transaction" ToRole="User" />
+          <NavigationProperty Name="TransactionItems" Relationship="AMSModel.FK_TransactionItem_Transaction" FromRole="Transaction" ToRole="TransactionItem" />
+        </EntityType>
+        <EntityType Name="TransactionItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TotalAmount" Type="Double" />
+          <Property Name="PaidAmount" Type="Double" />
+          <Property Name="CategoryId" Type="Int32" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="LastModified" Type="DateTime" Precision="3" />
+          <Property Name="TransactionId" Type="Int32" />
+          <NavigationProperty Name="Transaction" Relationship="AMSModel.FK_TransactionItem_Transaction" FromRole="TransactionItem" ToRole="Transaction" />
+          <NavigationProperty Name="TransactionItemCategory" Relationship="AMSModel.FK_TransactionItem_TransactionItemCategory" FromRole="TransactionItem" ToRole="TransactionItemCategory" />
+        </EntityType>
+        <EntityType Name="TransactionItemCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="Int32" />
+          <NavigationProperty Name="TransactionItems" Relationship="AMSModel.FK_TransactionItem_TransactionItemCategory" FromRole="TransactionItemCategory" ToRole="TransactionItem" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -995,6 +1196,7 @@
           <NavigationProperty Name="Posts" Relationship="AMSModel.FK_tbl_post_tbl_user" FromRole="User" ToRole="Post" />
           <NavigationProperty Name="Receipts" Relationship="AMSModel.FK_Receipt_User" FromRole="User" ToRole="Receipt" />
           <NavigationProperty Name="Role" Relationship="AMSModel.FK_tbl_user_tbl_role" FromRole="User" ToRole="Role" />
+          <NavigationProperty Name="Transactions" Relationship="AMSModel.FK_Transaction_User" FromRole="User" ToRole="Transaction" />
           <NavigationProperty Name="UserRateAroundProviders" Relationship="AMSModel.FK_tbl_resident_rate_around_srv_tbl_user" FromRole="User" ToRole="UserRateAroundProvider" />
           <NavigationProperty Name="UserAnswerSurveys" Relationship="AMSModel.FK_UserDoServey_User" FromRole="User" ToRole="UserAnswerSurvey" />
         </EntityType>
@@ -1042,6 +1244,18 @@
             </Principal>
             <Dependent Role="UserAnswerSurvey">
               <PropertyRef Name="AnswerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AroundServiceProduct_AroundProvider">
+          <End Type="AMSModel.AroundProvider" Role="AroundProvider" Multiplicity="0..1" />
+          <End Type="AMSModel.AroundProviderProduct" Role="AroundProviderProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AroundProvider">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AroundProviderProduct">
+              <PropertyRef Name="AroundProviderId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1261,6 +1475,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Transaction_User">
+          <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="AMSModel.Transaction" Role="Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="ManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TransactionItem_Transaction">
+          <End Type="AMSModel.Transaction" Role="Transaction" Multiplicity="0..1" />
+          <End Type="AMSModel.TransactionItem" Role="TransactionItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Transaction">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TransactionItem">
+              <PropertyRef Name="TransactionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TransactionItem_TransactionItemCategory">
+          <End Type="AMSModel.TransactionItemCategory" Role="TransactionItemCategory" Multiplicity="0..1" />
+          <End Type="AMSModel.TransactionItem" Role="TransactionItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TransactionItemCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TransactionItem">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tbl_resident_rate_around_srv_tbl_user">
           <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
           <End Type="AMSModel.UserRateAroundProvider" Role="UserRateAroundProvider" Multiplicity="*" />
@@ -1285,7 +1535,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -1318,6 +1568,21 @@
           <EntitySetMapping Name="AroundProviderCategories">
             <EntityTypeMapping TypeName="AMSModel.AroundProviderCategory">
               <MappingFragment StoreEntitySet="AroundProviderCategory">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AroundProviderProducts">
+            <EntityTypeMapping TypeName="AMSModel.AroundProviderProduct">
+              <MappingFragment StoreEntitySet="AroundProviderProduct">
+                <ScalarProperty Name="AroundProviderId" ColumnName="AroundProviderId" />
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ImgUrl" ColumnName="ImgUrl" />
+                <ScalarProperty Name="ViewIndex" ColumnName="ViewIndex" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -1490,6 +1755,9 @@
           <EntitySetMapping Name="Surveys">
             <EntityTypeMapping TypeName="AMSModel.Survey">
               <MappingFragment StoreEntitySet="Survey">
+                <ScalarProperty Name="Member" ColumnName="Member" />
+                <ScalarProperty Name="Floor" ColumnName="Floor" />
+                <ScalarProperty Name="Block" ColumnName="Block" />
                 <ScalarProperty Name="Question" ColumnName="Question" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="PublishDate" ColumnName="PublishDate" />
@@ -1509,6 +1777,45 @@
                 <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
                 <ScalarProperty Name="principal_id" ColumnName="principal_id" />
                 <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transactions">
+            <EntityTypeMapping TypeName="AMSModel.Transaction">
+              <MappingFragment StoreEntitySet="Transaction">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ForMonth" ColumnName="ForMonth" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TransactionItems">
+            <EntityTypeMapping TypeName="AMSModel.TransactionItem">
+              <MappingFragment StoreEntitySet="TransactionItem">
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TransactionItemCategories">
+            <EntityTypeMapping TypeName="AMSModel.TransactionItemCategory">
+              <MappingFragment StoreEntitySet="TransactionItemCategory">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

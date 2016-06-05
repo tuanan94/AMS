@@ -5,29 +5,34 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="bda7a928963940adb4bf47003152b986" Name="Diagram1">
-        <EntityTypeShape EntityType="AMSModel.Answer" Width="1.5" PointX="9" PointY="3" />
-        <EntityTypeShape EntityType="AMSModel.AroundProvider" Width="1.5" PointX="9" PointY="20.375" />
-        <EntityTypeShape EntityType="AMSModel.AroundProviderCategory" Width="1.5" PointX="6.75" PointY="21.125" />
-        <EntityTypeShape EntityType="AMSModel.HelpdeskRequest" Width="1.5" PointX="3" PointY="9.875" />
-        <EntityTypeShape EntityType="AMSModel.HelpdeskRequestHelpdeskSupporter" Width="1.5" PointX="11.25" PointY="10.75" />
-        <EntityTypeShape EntityType="AMSModel.HelpdeskRequestLog" Width="1.5" PointX="8.25" PointY="6.5" />
-        <EntityTypeShape EntityType="AMSModel.HelpdeskService" Width="1.5" PointX="0.75" PointY="6.625" />
-        <EntityTypeShape EntityType="AMSModel.HelpdeskServiceCategory" Width="1.5" PointX="1.5" PointY="3.125" />
-        <EntityTypeShape EntityType="AMSModel.House" Width="1.5" PointX="0.75" PointY="10.25" />
-        <EntityTypeShape EntityType="AMSModel.Image" Width="1.5" PointX="3.75" PointY="0.75" />
-        <EntityTypeShape EntityType="AMSModel.Post" Width="1.5" PointX="8.25" PointY="16.375" />
-        <EntityTypeShape EntityType="AMSModel.Question" Width="1.5" PointX="3.75" PointY="3.75" />
-        <EntityTypeShape EntityType="AMSModel.Receipt" Width="1.5" PointX="8.25" PointY="10.25" />
-        <EntityTypeShape EntityType="AMSModel.ReceiptDetail" Width="1.5" PointX="13.5" PointY="10.625" />
-        <EntityTypeShape EntityType="AMSModel.Role" Width="1.5" PointX="3.75" PointY="7.125" />
-        <EntityTypeShape EntityType="AMSModel.ServiceFee" Width="1.5" PointX="11.25" PointY="17.75" />
-        <EntityTypeShape EntityType="AMSModel.Survey" Width="1.5" PointX="6.75" PointY="2.5" />
-        <EntityTypeShape EntityType="AMSModel.sysdiagram" Width="1.5" PointX="11.75" PointY="0.75" />
-        <EntityTypeShape EntityType="AMSModel.User" Width="1.5" PointX="6" PointY="9.125" />
-        <EntityTypeShape EntityType="AMSModel.UserAnswerSurvey" Width="1.5" PointX="11.25" PointY="6.75" />
-        <EntityTypeShape EntityType="AMSModel.UserRateAroundProvider" Width="1.5" PointX="11.25" PointY="13.875" />
+        <EntityTypeShape EntityType="AMSModel.Answer" Width="1.5" PointX="6" PointY="24.125" />
+        <EntityTypeShape EntityType="AMSModel.AroundProvider" Width="1.5" PointX="3" PointY="1.375" />
+        <EntityTypeShape EntityType="AMSModel.AroundProviderCategory" Width="1.5" PointX="0.75" PointY="2.25" />
+        <EntityTypeShape EntityType="AMSModel.AroundProviderProduct" Width="1.5" PointX="5.25" PointY="0.75" />
+        <EntityTypeShape EntityType="AMSModel.HelpdeskRequest" Width="1.5" PointX="6" PointY="12.875" />
+        <EntityTypeShape EntityType="AMSModel.HelpdeskRequestHelpdeskSupporter" Width="1.5" PointX="11.25" PointY="10.5" />
+        <EntityTypeShape EntityType="AMSModel.HelpdeskRequestLog" Width="1.5" PointX="8.25" PointY="11.25" />
+        <EntityTypeShape EntityType="AMSModel.HelpdeskService" Width="1.5" PointX="3.75" PointY="30.625" />
+        <EntityTypeShape EntityType="AMSModel.HelpdeskServiceCategory" Width="1.5" PointX="1.5" PointY="31.125" />
+        <EntityTypeShape EntityType="AMSModel.House" Width="1.5" PointX="0.75" PointY="13.375" />
+        <EntityTypeShape EntityType="AMSModel.Image" Width="1.5" PointX="7.75" PointY="1.75" />
+        <EntityTypeShape EntityType="AMSModel.Post" Width="1.5" PointX="5.25" PointY="8.625" />
+        <EntityTypeShape EntityType="AMSModel.Question" Width="1.5" PointX="7.75" PointY="4.75" />
+        <EntityTypeShape EntityType="AMSModel.Receipt" Width="1.5" PointX="3" PointY="13.25" />
+        <EntityTypeShape EntityType="AMSModel.ReceiptDetail" Width="1.5" PointX="10.25" PointY="15.625" />
+        <EntityTypeShape EntityType="AMSModel.Role" Width="1.5" PointX="0.75" PointY="8.25" />
+        <EntityTypeShape EntityType="AMSModel.ServiceFee" Width="1.5" PointX="8" PointY="26.875" />
+        <EntityTypeShape EntityType="AMSModel.Survey" Width="1.5" PointX="3.75" PointY="23.25" />
+        <EntityTypeShape EntityType="AMSModel.sysdiagram" Width="1.5" PointX="9.75" PointY="1.75" />
+        <EntityTypeShape EntityType="AMSModel.Transaction" Width="1.5" PointX="5.25" PointY="18.5" />
+        <EntityTypeShape EntityType="AMSModel.TransactionItem" Width="1.5" PointX="7.5" PointY="18.5" />
+        <EntityTypeShape EntityType="AMSModel.TransactionItemCategory" Width="1.5" PointX="5.25" PointY="28.125" />
+        <EntityTypeShape EntityType="AMSModel.User" Width="1.5" PointX="3" PointY="6.125" />
+        <EntityTypeShape EntityType="AMSModel.UserAnswerSurvey" Width="1.5" PointX="8.25" PointY="7.875" />
+        <EntityTypeShape EntityType="AMSModel.UserRateAroundProvider" Width="1.5" PointX="5.25" PointY="5" />
         <AssociationConnector Association="AMSModel.FK_Answer_Survey" />
         <AssociationConnector Association="AMSModel.FK_UserDoServey_Answer" />
+        <AssociationConnector Association="AMSModel.FK_AroundServiceProduct_AroundProvider" />
         <AssociationConnector Association="AMSModel.FK_tbl_arround_srv_tbl_around_srv_cat" />
         <AssociationConnector Association="AMSModel.FK_tbl_resident_rate_around_srv_tbl_arround_srv" />
         <AssociationConnector Association="AMSModel.FK_HelpdeskRequest_HelpdeskService" />
@@ -46,6 +51,9 @@
         <AssociationConnector Association="AMSModel.FK_tbl_receipt_detail_tbl_service_fee" />
         <AssociationConnector Association="AMSModel.FK_tbl_user_tbl_role" />
         <AssociationConnector Association="AMSModel.FK_UserDoServey_Survey" />
+        <AssociationConnector Association="AMSModel.FK_Transaction_User" />
+        <AssociationConnector Association="AMSModel.FK_TransactionItem_Transaction" />
+        <AssociationConnector Association="AMSModel.FK_TransactionItem_TransactionItemCategory" />
         <AssociationConnector Association="AMSModel.FK_tbl_resident_rate_around_srv_tbl_user" />
         <AssociationConnector Association="AMSModel.FK_UserDoServey_User" />
       </Diagram>

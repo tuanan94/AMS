@@ -3,6 +3,8 @@
     ViewBag.Title = "Survey";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
     List<Survey> listSurveys = ViewBag.ListSurvey;
+    List<string> listBlock = ViewBag.ListBlock;
+    List<string> listFloor = ViewBag.ListFloor;
     <style>
         .button {
             display: block;
@@ -56,29 +58,76 @@
 
         <div class="col-sm-offset-2 col-sm-8">
             <fieldset class="scheduler-border less-padding">
-                <legend class="scheduler-border">Chi tiết hóa đơn</legend>
+                <legend class="scheduler-border">Chi tiết </legend>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-3 control-label">Tiêu đề</label>
                     <div class="col-sm-7">
                         @*<input type="text" class="form-control" id="Title" name="Title" style="width: 330px"><br>*@
-                        @Html.TextBoxFor(m => m.Title, new { style = "width: 330px", @class = "form-control", @name = "Title", @id = "Title" })
+                        @Html.TextBoxFor(m => m.Title, new {style = "width: 330px", @class = "form-control", @name = "Title", @id = "Title"})
                     </div>
 
                 </div>
-                @*<div class="form-group">
-                        <label for="inputEmail3" class="col-sm-3 control-label">Câu trả lời</label>
-                        <div class="col-sm-7">
-                            <input type="text" class="form-control" id="Title" name="Title" style="width: 330px"><br>
-                        </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-3 control-label">Ngày tạo</label>
+                    <div class="col-sm-7">
+                        @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control", style = "width: 330px" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-3 control-label">Ngày bắt đầu</label>
+                    <div class="col-sm-7">
+                        @Html.TextBoxFor(m => m.PublishDate, new { @class = "form-control", style = "width: 330px"})
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-3 control-label">Ngày kết thúc</label>
+                    <div class="col-sm-7">
+                        @Html.TextBoxFor(m => m.EndDate, new { @class = "form-control", style = "width: 330px" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-3 control-label">Khu</label>
+                    <div class="col-sm-7">
+                        <select class="form-control" name="selectItemBlock" style="width: 330px">
+                            @{
+    foreach (var item in listBlock)
+    {
+                    <option style="width: 330px" value="@item">@item</option>
+    }
+                            }
+                        </select>
 
                     </div>
-                    <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-3 control-label">Câu trả lời</label>
-                        <div class="col-sm-7">
-                            <input type="text" class="form-control" id="Title" name="Title" style="width: 330px"><br>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-3 control-label">Tầng</label>
+                    <div class="col-sm-7">
+                        <select class="form-control" name="selectItemFloor" style="width: 330px">
+                            @{
+    foreach (var item in listFloor)
+    {
+                    <option style="width: 330px" value="@item">@item</option>
+    }
+                            }
+                        </select>
 
-                    </div>*@
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-3 control-label">Đối tượng</label>
+                    <div class="col-sm-7">
+                        <select class="form-control" name="people" style="width: 330px">
+
+                            <option style="width: 330px" value="1">Admin</option>
+                            <option style="width: 330px" value="2">Manager</option>
+                            <option style="width: 330px" value="3">Resident</option>
+                            <option style="width: 330px" value="4">Househoulder</option>
+                            <option style="width: 330px" value="5">Supporter</option>
+                        </select>
+
+                    </div>
+                </div>
+
 
                 <div class="form-group">
                     <div class="col-sm-3">
@@ -141,14 +190,16 @@
                                                     <td>
                                                         <div class="form-group">
                                                             <div class="col-sm-9">
-                                                                <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.StartDate">
-                                                            </div>
+                                                                <span class="label date-color label-warning">@item.StartDate</span>
+                                                                @*<input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.StartDate">*@
+</div>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="form-group">
                                                             <div class="col-sm-9">
-                                                                <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.EndDate">
+                                                                <span class="label date-color label-gray">@item.EndDate</span>
+                                                                @*<input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.EndDate">*@
                                                             </div>
                                                         </div>
                                                     </td>
@@ -158,7 +209,7 @@
                                                 {
                                                     <div class="form-group">
                                                         <div class="col-sm-9">
-                                                            <input type="text" disabled="disabled" style="background-color: blue" class="form-control" id="fullname" value="Đang mở">
+                                                            <input type="text" disabled="disabled" style="background-color: #3366ff" class="form-control" id="fullname" value="Đang mở">
                                                         </div>
                                                     </div>
                                                 }
@@ -166,7 +217,7 @@
                                                 {
                                                     <div class="form-group">
                                                         <div class="col-sm-9">
-                                                            <input type="text" disabled="disabled" style="background-color: red" class="form-control" id="fullname" value="Đã đóng">
+                                                            <input type="text" disabled="disabled" style="background-color: #ff9999" class="form-control" id="fullname" value="Đã đóng">
                                                         </div>
                                                     </div>
                                                 }
@@ -223,6 +274,18 @@
 
 
 <script>
+    $(function () {
+        $("#StartDate").datepicker();
+        //$("#StartDate").attr('readOnly', 'false');
+    });
+    $(function () {
+        $("#PublishDate").datepicker();
+        //$("#PublishDate").attr('readOnly', 'false');
+    });
+    $(function () {
+        $("#EndDate").datepicker();
+        //$("#EndDate").attr('readOnly', 'false');
+    });
     function myFunction() {
         var x = confirm("Bạn chắc muốn xóa dòng này chứ?");
         if (x)
@@ -274,46 +337,46 @@
         $("#addNewRow").on("click", function () {
             window.index++;
             var tag = "<div id=\"row_" + index + "\" class='form-group'>" +
-                            "<div class='col-sm-6'><input id=\"item_name_" + index + "\" type='text' class='form-control order-item'></div>" +
+                "<div class='col-sm-6'><input id=\"item_name_" + index + "\" type='text' class='form-control order-item'></div>" +
 
-                            "<span class='btn btn-danger btn-xs' onclick='deleteItem(\"" + index + "\")'><i class='fa fa-times'></i></span>" +
-                        "</div>";
+                "<span class='btn btn-danger btn-xs' onclick='deleteItem(\"" + index + "\")'><i class='fa fa-times'></i></span>" +
+                "</div>";
             $("#receiptWrapper").append(tag);
         });
         window.i = 0;
         $("#addNewForm").on("click", function () {
             window.i++;
             var tag = "<div class='col-sm-offset-3 col-sm-6'>" +
-       "<fieldset class='scheduler-border less-padding' id=\"row" + i + "\">" +
-           "<legend class='scheduler-border' id=\"row" + i + "\">\"Câu hỏi " + i + "\"</legend> " +
-              " <div class='form-group'>" +
+                "<fieldset class='scheduler-border less-padding' id=\"row" + i + "\">" +
+                "<legend class='scheduler-border' id=\"row" + i + "\">\"Câu hỏi " + i + "\"</legend> " +
+                " <div class='form-group'>" +
                 "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu hỏi</label>" +
                 "  <div class='col-sm-7'>" +
                 "      <input type='text' class='form-control'  name='question' style='width: 330px'><br>" +
                 "   </div>" +
                 " </div>" +
                 " <div class='form-group'>" +
-               "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>" +
-               "  <div class='col-sm-7'>" +
-               "      <input type='text' class='form-control'  name='anwser1' style='width: 330px'><br>" +
+                "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>" +
+                "  <div class='col-sm-7'>" +
+                "      <input type='text' class='form-control'  name='anwser1' style='width: 330px'><br>" +
                 "<input type='hidden'  name='count' value='1' />" +
-               "   </div>" +
-               " </div>" +
+                "   </div>" +
+                " </div>" +
                 " <div class='form-group'>" +
-              "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>" +
-              "  <div class='col-sm-7'>" +
-              "      <input type='text' class='form-control'  name='anwser1' style='width: 330px'><br>" +
-              "<input type='hidden'  name='count' value='2' />" +
-              "   </div>" +
-              " </div>" +
-               " <div class='form-group'>" +
-              "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>" +
-              "  <div class='col-sm-7'>" +
-              "      <input type='text' class='form-control'  name='anwser1' style='width: 330px'><br>" +
-              "<input type='hidden'  name='count' value='3' />" +
-              "   </div>" +
-              " </div>" +
-           "</fieldset></div>";
+                "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>" +
+                "  <div class='col-sm-7'>" +
+                "      <input type='text' class='form-control'  name='anwser1' style='width: 330px'><br>" +
+                "<input type='hidden'  name='count' value='2' />" +
+                "   </div>" +
+                " </div>" +
+                " <div class='form-group'>" +
+                "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>" +
+                "  <div class='col-sm-7'>" +
+                "      <input type='text' class='form-control'  name='anwser1' style='width: 330px'><br>" +
+                "<input type='hidden'  name='count' value='3' />" +
+                "   </div>" +
+                " </div>" +
+                "</fieldset></div>";
 
             $("#form").append(tag);
             $("#addNewRow" + i).on("click", function () {
@@ -321,44 +384,44 @@
                 var tags =
 
 
-                //      " <div class='form-group'>" +
-                //      " <div class='col-sm-6'>" +
-                //      "  <strong style='align-content: center'>Tên</strong>" +
-                //      " </div>" +
-                //"<div class='col-sm-1'>" +
-                //" <strong style='align-content: center'>Số lượng</strong>" +
-                //" </div>" +
+                    //      " <div class='form-group'>" +
+                    //      " <div class='col-sm-6'>" +
+                    //      "  <strong style='align-content: center'>Tên</strong>" +
+                    //      " </div>" +
+                    //"<div class='col-sm-1'>" +
+                    //" <strong style='align-content: center'>Số lượng</strong>" +
+                    //" </div>" +
 
 
-                //" </div>" +
-                //"<div>" +
-                //" <div  class='form-group'>" +
-                //"<div class='col-sm-6'>" +
-                //" <input  type='text' class='form-control order-item'>" +
-                //" </div>" +
+                    //" </div>" +
+                    //"<div>" +
+                    //" <div  class='form-group'>" +
+                    //"<div class='col-sm-6'>" +
+                    //" <input  type='text' class='form-control order-item'>" +
+                    //" </div>" +
 
-                //"  <span class='btn btn-danger btn-xs' ><i class='fa fa-times'></i></span>" +
-                //" </div>" +
+                    //"  <span class='btn btn-danger btn-xs' ><i class='fa fa-times'></i></span>" +
+                    //" </div>" +
 
-                //"  </div>";
-                " <div class='form-group'>" +
-                "  <label for='inputEmail3' class='col-sm-3 control-label'>Tiêu đề</label>" +
-                "  <div class='col-sm-7'>" +
-                "      <input type='text' class='form-control'  name='Title' style='width: 330px'><br>" +
-                "   </div>" +
-                " </div>" +
-                " <div class='form-group'>" +
-               "  <label for='inputEmail3' class='col-sm-3 control-label'>Tiêu đề</label>" +
-               "  <div class='col-sm-7'>" +
-               "      <input type='text' class='form-control'  name='Title' style='width: 330px'><br>" +
-               "   </div>" +
-               " </div>" +
-                " <div class='form-group'>" +
-              "  <label for='inputEmail3' class='col-sm-3 control-label'>Tiêu đề</label>" +
-              "  <div class='col-sm-7'>" +
-              "      <input type='text' class='form-control'  name='Title' style='width: 330px'><br>" +
-              "   </div>" +
-              " </div>";
+                    //"  </div>";
+                    " <div class='form-group'>" +
+                        "  <label for='inputEmail3' class='col-sm-3 control-label'>Tiêu đề</label>" +
+                        "  <div class='col-sm-7'>" +
+                        "      <input type='text' class='form-control'  name='Title' style='width: 330px'><br>" +
+                        "   </div>" +
+                        " </div>" +
+                        " <div class='form-group'>" +
+                        "  <label for='inputEmail3' class='col-sm-3 control-label'>Tiêu đề</label>" +
+                        "  <div class='col-sm-7'>" +
+                        "      <input type='text' class='form-control'  name='Title' style='width: 330px'><br>" +
+                        "   </div>" +
+                        " </div>" +
+                        " <div class='form-group'>" +
+                        "  <label for='inputEmail3' class='col-sm-3 control-label'>Tiêu đề</label>" +
+                        "  <div class='col-sm-7'>" +
+                        "      <input type='text' class='form-control'  name='Title' style='width: 330px'><br>" +
+                        "   </div>" +
+                        " </div>";
 
 
                 $("#row" + i).append(tags);

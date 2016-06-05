@@ -29,6 +29,9 @@ namespace AMS
         public Nullable<System.DateTime> PublishDate { get; set; }
         public Nullable<int> Status { get; set; }
         public string Question { get; set; }
+        public string Block { get; set; }
+        public string Floor { get; set; }
+        public Nullable<int> Member { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Answer> Answers { get; set; }
