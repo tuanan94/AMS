@@ -17,6 +17,14 @@
             color: white;
             font-weight: bold;
         }
+        .form-control:focus {
+            border-color: #1ABC9C;
+            box-shadow: none;
+        }
+         .binh {
+            border-color: #1ABC9C;
+            box-shadow: none;
+        }
     </style>
 }
 
@@ -63,70 +71,70 @@
                     <label for="inputEmail3" class="col-sm-3 control-label">Tiêu đề</label>
                     <div class="col-sm-7">
                         @*<input type="text" class="form-control" id="Title" name="Title" style="width: 330px"><br>*@
-                        @Html.TextBoxFor(m => m.Title, new {style = "width: 330px", @class = "form-control", @name = "Title", @id = "Title"})
+                        @Html.TextBoxFor(m => m.Title, new { style = "width: 330px", @class = "form-control binh", @name = "Title", @id = "Title" })<br>
                     </div>
 
-                </div>
+                </div><br>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-3 control-label">Ngày tạo</label>
                     <div class="col-sm-7">
-                        @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control", style = "width: 330px" })
+                        @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control binh", style = "width: 330px" })<br>
                     </div>
-                </div>
+                </div><br>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-3 control-label">Ngày bắt đầu</label>
                     <div class="col-sm-7">
-                        @Html.TextBoxFor(m => m.PublishDate, new { @class = "form-control", style = "width: 330px"})
+                        @Html.TextBoxFor(m => m.PublishDate, new { @class = "form-control binh", style = "width: 330px"})<br>
                     </div>
-                </div>
+                </div><br>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-3 control-label">Ngày kết thúc</label>
                     <div class="col-sm-7">
-                        @Html.TextBoxFor(m => m.EndDate, new { @class = "form-control", style = "width: 330px" })
+                        @Html.TextBoxFor(m => m.EndDate, new { @class = "form-control binh", style = "width: 330px" })<br>
                     </div>
-                </div>
+                </div><br>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-3 control-label">Khu</label>
                     <div class="col-sm-7">
-                        <select class="form-control" name="selectItemBlock" style="width: 330px">
+                        <select class="form-control binh" name="selectItemBlock" style="width: 330px">
                             @{
     foreach (var item in listBlock)
     {
-                    <option style="width: 330px" value="@item">@item</option>
+                    <option  value="@item">@item</option>
     }
                             }
-                        </select>
+                        </select><br>
 
                     </div>
-                </div>
+                </div><br>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-3 control-label">Tầng</label>
                     <div class="col-sm-7">
-                        <select class="form-control" name="selectItemFloor" style="width: 330px">
+                        <select class="form-control binh" name="selectItemFloor" style="width: 330px">
                             @{
     foreach (var item in listFloor)
     {
-                    <option style="width: 330px" value="@item">@item</option>
+                    <option value="@item">@item</option>
     }
                             }
-                        </select>
+                        </select><br>
 
                     </div>
-                </div>
+                </div><br>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-3 control-label">Đối tượng</label>
                     <div class="col-sm-7">
-                        <select class="form-control" name="people" style="width: 330px">
+                        <select class="form-control binh" name="people" style="width: 330px">
 
-                            <option style="width: 330px" value="1">Admin</option>
-                            <option style="width: 330px" value="2">Manager</option>
-                            <option style="width: 330px" value="3">Resident</option>
-                            <option style="width: 330px" value="4">Househoulder</option>
-                            <option style="width: 330px" value="5">Supporter</option>
-                        </select>
+                            <option value="1">Admin</option>
+                            <option value="2">Manager</option>
+                            <option value="3">Resident</option>
+                            <option value="4">Househoulder</option>
+                            <option value="5">Supporter</option>
+                        </select><br>
 
                     </div>
-                </div>
+                </div><br>
 
 
                 <div class="form-group">
@@ -175,7 +183,7 @@
                                                     <td>
                                                         <div class="form-group">
                                                             <div class="col-sm-9">
-                                                                <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.Id">
+                                                                <input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.Id">
                                                             </div>
                                                         </div>
                                                     </td>
@@ -183,7 +191,7 @@
                                                         <div class="form-group">
                                                             <div class="col-sm-9">
                                                                 <input type="hidden" class="form-control" id="surveyId" value="@item.Id">
-                                                                <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.Title">
+                                                                <input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.Title">
                                                             </div>
                                                         </div>
                                                     </td>
@@ -209,7 +217,7 @@
                                                 {
                                                     <div class="form-group">
                                                         <div class="col-sm-9">
-                                                            <input type="text" disabled="disabled" style="background-color: #3366ff" class="form-control" id="fullname" value="Đang mở">
+                                                            <input type="text" disabled="disabled" style="background-color: #3366ff" class="form-control binh" id="fullname" value="Đang mở">
                                                         </div>
                                                     </div>
                                                 }
@@ -217,7 +225,7 @@
                                                 {
                                                     <div class="form-group">
                                                         <div class="col-sm-9">
-                                                            <input type="text" disabled="disabled" style="background-color: #ff9999" class="form-control" id="fullname" value="Đã đóng">
+                                                            <input type="text" disabled="disabled" style="background-color: #ff9999" class="form-control binh" id="fullname" value="Đã đóng">
                                                         </div>
                                                     </div>
                                                 }
@@ -352,27 +360,27 @@
                 " <div class='form-group'>" +
                 "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu hỏi</label>" +
                 "  <div class='col-sm-7'>" +
-                "      <input type='text' class='form-control'  name='question' style='width: 330px'><br>" +
+                "      <input type='text' class='form-control binh'  name='question' style='width: 330px'><br>" +
                 "   </div>" +
                 " </div>" +
                 " <div class='form-group'>" +
                 "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>" +
                 "  <div class='col-sm-7'>" +
-                "      <input type='text' class='form-control'  name='anwser1' style='width: 330px'><br>" +
+                "      <input type='text' class='form-control binh'  name='anwser1' style='width: 330px'><br>" +
                 "<input type='hidden'  name='count' value='1' />" +
                 "   </div>" +
                 " </div>" +
                 " <div class='form-group'>" +
                 "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>" +
                 "  <div class='col-sm-7'>" +
-                "      <input type='text' class='form-control'  name='anwser1' style='width: 330px'><br>" +
+                "      <input type='text' class='form-control binh'  name='anwser1' style='width: 330px'><br>" +
                 "<input type='hidden'  name='count' value='2' />" +
                 "   </div>" +
                 " </div>" +
                 " <div class='form-group'>" +
                 "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>" +
                 "  <div class='col-sm-7'>" +
-                "      <input type='text' class='form-control'  name='anwser1' style='width: 330px'><br>" +
+                "      <input type='text' class='form-control binh'  name='anwser1' style='width: 330px'><br>" +
                 "<input type='hidden'  name='count' value='3' />" +
                 "   </div>" +
                 " </div>" +

@@ -18,9 +18,9 @@ namespace AMS.Service
         {
             return answerRepository.FindById(id);
         }
-        public Answer FindByContent(string content)
+        public Answer FindByContent(string content, int questionId)
         {
-            return answerRepository.List.FirstOrDefault(t => t.AnswerContent == content);
+            return answerRepository.List.FirstOrDefault(t => t.AnswerContent == content && t.QuestionId ==questionId);
         }
         public List<Answer> FindByQuestionId(int id)
         {

@@ -17,7 +17,14 @@
 <script src="~/Scripts/amsScript/canvasjs.min.js"></script>
 <script type="text/javascript">
 
+
 </script>
+<style>
+    .binh {
+        border-color: #1ABC9C;
+        box-shadow: none;
+    }
+</style>
 <div class="col-sm-offset-1 col-sm-10">
     <div class="panel panel-default">
         <nav class="navbar navbar-default">
@@ -45,91 +52,97 @@
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Tiêu đề</label>
                                     <div class="col-sm-7">
-                                        <input type="text" class="form-control" id="Title" name="Title" style="width: 330px" value="@surveys.Title"><br>
+                                        <input type="text" class="form-control binh" id="Title" name="Title" style="width: 330px" value="@surveys.Title"><br>
                                     </div>
 
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Ngày tạo</label>
                                     <div class="col-sm-7">
-                                        @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control", style = "width: 330px", @Value = surveys.StartDate })
+                                        @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control binh", style = "width: 330px", @Value = surveys.StartDate })<br>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Ngày bắt đầu</label>
                                     <div class="col-sm-7">
-                                        @Html.TextBoxFor(m => m.PublishDate, new { @class = "form-control", style = "width: 330px", @Value = surveys.PublishDate })
+                                        @Html.TextBoxFor(m => m.PublishDate, new { @class = "form-control binh", style = "width: 330px", @Value = surveys.PublishDate })<br>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Ngày kết thúc</label>
                                     <div class="col-sm-7">
-                                        @Html.TextBoxFor(m => m.EndDate, new { @class = "form-control", style = "width: 330px", @Value = surveys.EndDate })
+                                        @Html.TextBoxFor(m => m.EndDate, new { @class = "form-control binh", style = "width: 330px", @Value = surveys.EndDate })<br>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Khu</label>
                                     <div class="col-sm-7">
-                                        <select class="form-control" name="selectItemBlock">
+                                        <select class="form-control binh" name="selectItemBlock" style="width: 330px">
                                             <option value="@surveys.Block">@surveys.Block</option>
                                             @{
-                                                foreach (var item in listBlock)
-                                                {
-                                                    <option value="@item">@item</option>
-                                                }
+                        foreach (var item in listBlock)
+                        {
+                                    <option value="@item">@item</option>
+                        }
                                             }
-                                        </select>
+                                        </select><br>
+
+
 
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Tầng</label>
                                     <div class="col-sm-7">
-                                        <select class="form-control" name="selectItemFloor">
+                                        <select class="form-control binh" name="selectItemFloor" style="width: 330px">
                                             <option value="@surveys.Floor">@surveys.Floor</option>
                                             @{
-                                                foreach (var item in listFloor)
-                                                {
-                                                    <option value="@item">@item</option>
-                                                }
+                        foreach (var item in listFloor)
+                        {
+                                    <option value="@item">@item</option>
+                        }
                                             }
-                                        </select>
+                                        </select><br>
+
+
 
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Đối tượng</label>
                                     <div class="col-sm-7">
-                                        <select class="form-control" name="people" style="width: 330px">
+                                        <select class="form-control binh" name="people" style="width: 330px">
                                             @{
-                                                if (SLIM_CONFIG.USER_ROLE_ADMIN == surveys.Member)
-                                                {
-                                                       <option style="width: 330px" value="1">Admin</option>
-                                                }
-                                                else if (SLIM_CONFIG.USER_ROLE_RESIDENT == surveys.Member)
-                                                {
-                                                       <option style="width: 330px" value="3">Resident</option>
-                                                }
-                                                else if (SLIM_CONFIG.USER_ROLE_MANAGER == surveys.Member)
-                                                {
-                                                     <option style="width: 330px" value="2">Manager</option>
-                                                }
-                                                else if (SLIM_CONFIG.USER_ROLE_HOUSEHOLDER == surveys.Member)
-                                                {
-                                                     <option style="width: 330px" value="4">Househoulder</option>
-                                                }
-                                                else if (SLIM_CONFIG.USER_ROLE_SUPPORTER == surveys.Member)
-                                                {
-                                                     <option style="width: 330px" value="5">Supporter</option>
-                                                }
+                        if (SLIM_CONFIG.USER_ROLE_ADMIN == surveys.Member)
+                        {
+                                    <option  value="1">Admin</option>
+                        }
+                        else if (SLIM_CONFIG.USER_ROLE_RESIDENT == surveys.Member)
+                        {
+                                    <option value="3">Resident</option>
+                        }
+                        else if (SLIM_CONFIG.USER_ROLE_MANAGER == surveys.Member)
+                        {
+                                    <option  value="2">Manager</option>
+                        }
+                        else if (SLIM_CONFIG.USER_ROLE_HOUSEHOLDER == surveys.Member)
+                        {
+                                    <option value="4">Househoulder</option>
+                        }
+                        else if (SLIM_CONFIG.USER_ROLE_SUPPORTER == surveys.Member)
+                        {
+                                    <option  value="5">Supporter</option>
+                        }
                                             }
-                                            
-                                            <option style="width: 330px" value="1">Admin</option>
-                                            <option style="width: 330px" value="2">Manager</option>
-                                            <option style="width: 330px" value="3">Resident</option>
-                                            <option style="width: 330px" value="4">Househoulder</option>
-                                            <option style="width: 330px" value="5">Supporter</option>
-                                        </select>
+
+                                            <option  value="1">Admin</option>
+                                            <option  value="2">Manager</option>
+                                            <option  value="3">Resident</option>
+                                            <option value="4">Househoulder</option>
+                                            <option value="5">Supporter</option>
+                                        </select><br>
+
+
 
                                     </div>
                                 </div>
@@ -147,7 +160,7 @@
                                     <div class="form-group">
                                         <label for="inputEmail3" class="col-sm-3 control-label">Câu Hỏi @ii:</label>
                                         <div class="col-sm-7">
-                                            <input type="text" class="form-control" style="width: 330px" id="question" name="question" value="@surveys.Question"><br>
+                                            <input type="text" class="form-control binh" style="width: 330px" id="question" name="question" value="@surveys.Question"><br>
 
 
                                         </div>
@@ -164,7 +177,7 @@
                                                 @Html.TextBoxFor(m => m.Id, new { @type = "hidden", @Value = surveys.Id })
 
                                                 <input type="hidden" id="count" name="count" value="@counts" />
-                                                <input type="text" class="form-control" style="width: 200px" id="anwserr_@counts" name="anwser1" value="@b.AnswerContent">
+                                                <input type="text" class="form-control binh" style="width: 200px" id="anwserr_@counts" name="anwser1" value="@b.AnswerContent">
 
 
                                             </div>

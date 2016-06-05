@@ -98,7 +98,7 @@ namespace AMS.Controllers
                 userAnswerSurvey.SurveyId = model.Id;
                 userAnswerSurvey.UserId = currentUser.Id;
              //   int answerId = answerService.FindByContent(choice[0]).Id;
-                int answerId = answerService.FindByContent(model.AnswerContent).Id;
+                int answerId = answerService.FindByContent(model.AnswerContent, model.Id).Id;
                 userAnswerSurvey.AnswerId = answerId;
                 userAnswerService.AddUserAnswerSurvey(userAnswerSurvey);
         
