@@ -1,0 +1,82 @@
+﻿@{
+    ViewBag.Title = "ViewAroundProviderFood";
+    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+    List<AroundProvider> allFoods = ViewBag.AllFoods;
+}
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-gray">Dịch vụ xung quanh</div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped" id="food">
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="border-bottom-style: none" colspan="3">
+                                <div class="row mt centered ">
+                                    <div class="col-lg-4 col-lg-offset-4">
+                                        <h3>ĐỒ ĂN</h3>
+                                        <hr>
+                                        @*<button type="submit" class="btn btn-primary">Xem toàn bộ</button>*@
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            for (int count = 0; count < allFoods.Count; count++)
+                            {
+                                for (int i = count; i < allFoods.Count; i++)
+                                {
+                                    if (count % 3 == 0)
+                                    {
+                                        <tr class="text-center">
+                                            <td class="text-center" style="border-top: none">
+                                                <div class="row mt centered">
+                                                    <a class="b-link-fade b-animate-go" href="#">
+                                                        <img width="300" src="~/images/port01.jpg" />
+                                                        <div class="b-wrapper">
+                                                            <h4 class="b-from-left b-animate b-delay03">@allFoods[i].Name</h4>
+                                                            <p class="b-from-right b-animate b-delay03">Xem chi tiết</p>
+                                                        </div>
+                                                    </a>
+                                                    <div class="items-name">@allFoods[i].Name</div>
+                                                    <div class="items-address">@allFoods[i].Address</div>
+                                                    <div class="items-rate">
+                                                        <input type="text" class="rating" style="display: none" />
+                                                        <ul class="rating">
+                                                            <li>
+                                                                <a href="javascript:void(0);" title="1">1</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="javascript:void(0);" title="2">2</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="javascript:void(0);" title="3">3</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="javascript:void(0);" title="4">4</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="javascript:void(0);" title="5">5</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        }
+
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+

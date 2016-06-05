@@ -206,6 +206,9 @@
     <Compile Include="AroundProviderCategory.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="AroundProviderProduct.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Constant.cs" />
     <Compile Include="Constant\AmsConstants.cs" />
     <Compile Include="Constant\RoleEnum.cs" />
@@ -328,6 +331,15 @@
     <Compile Include="sysdiagram.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Transaction.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TransactionItem.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TransactionItemCategory.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="User.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -345,7 +357,11 @@
     <Compile Include="ViewModel\SurveyViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\animations.css" />
+    <Content Include="Content\aroundProvider\animate.min.css" />
+    <Content Include="Content\aroundProvider\font-awesome.min.css" />
+    <Content Include="Content\aroundProvider\main.css" />
+    <Content Include="Content\aroundProvider\owl.carousel.css" />
+    <Content Include="Content\aroundProvider\responsive.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\blue.css" />
@@ -367,19 +383,21 @@
     <Content Include="Content\css\thumbnails.css" />
     <Content Include="Content\css\_vendor.bundle.css" />
     <Content Include="Content\css\_vendor.min.css" />
-    <Content Include="Content\hover_pack.css" />
     <Content Include="Content\images\addimage.png" />
     <Content Include="Content\images\defaultProfile.png" />
     <Content Include="Content\images\guy-5.jpg" />
     <Content Include="Content\images\delete.png" />
-    <Content Include="Content\main.css" />
     <Content Include="Content\rating.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="images\port01.jpg" />
-    <Content Include="images\port02.jpg" />
-    <Content Include="images\port03.jpg" />
+    <Content Include="images\aroundProvider\blog-bg.jpg" />
+    <Content Include="images\aroundProvider\blog-img-1.jpg" />
+    <Content Include="images\aroundProvider\blog-img-2.jpg" />
+    <Content Include="images\aroundProvider\blog-img-3.jpg" />
+    <Content Include="images\aroundProvider\blog-img-4.jpg" />
+    <Content Include="images\aroundProvider\blog-img-5.jpg" />
+    <Content Include="images\aroundProvider\blog-img-6.jpg" />
     <Content Include="images\rating.png" />
     <Content Include="Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -401,6 +419,12 @@
     <Content Include="Scripts\amsScript\Social.js" />
     <Content Include="Scripts\amsScript\vendor.js" />
     <Content Include="Scripts\amsScript\vendor.min.js" />
+    <Content Include="Scripts\aroundProvider\jquery.nav.js" />
+    <Content Include="Scripts\aroundProvider\jquery.sticky.js" />
+    <Content Include="Scripts\aroundProvider\main.js" />
+    <Content Include="Scripts\aroundProvider\main.min.js" />
+    <Content Include="Scripts\aroundProvider\plugins.js" />
+    <Content Include="Scripts\aroundProvider\wow.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config" />
@@ -478,11 +502,9 @@
     <Content Include="Scripts\amsScript\custom.js" />
     <Content Include="Scripts\datatables.js" />
     <Content Include="Scripts\graph.js" />
-    <Content Include="Scripts\hover_pack.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -493,7 +515,6 @@
     <Content Include="Scripts\rating.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\retina.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -562,6 +583,7 @@
     <Content Include="Views\Management\ManageRequest.cshtml" />
     <Content Include="Views\Home\_helpdeskRequestDetail.cshtml" />
     <Content Include="Views\Home\ViewAroundProvider.cshtml" />
+    <Content Include="Views\Home\ViewAroundProviderFood.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

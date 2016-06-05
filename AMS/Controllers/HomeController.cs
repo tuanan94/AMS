@@ -39,6 +39,9 @@ namespace AMS.Controllers
         HdReqHdSupporterServices _hdReqHdSupporterServices = new HdReqHdSupporterServices();
         AroundProviderService _aroundProviderService = new AroundProviderService();
         readonly string parternTime = "dd-MM-yyyy HH:mm";
+        private const int foodId = 1;
+        private const int entertainId = 2;
+        private const int kidCornerId = 3;
 
         public ActionResult Test()
         {
@@ -858,12 +861,13 @@ namespace AMS.Controllers
 
         public ActionResult ViewAroundProvider()
         {
-            const int foodId = 1;
-            const int entertainId = 2;
-            const int kidCornerId = 3;
+            ViewBag.AllProviders = _aroundProviderService.GetAllProviders();
+            return View();
+        }
+
+        public ActionResult ViewAroundProviderFood()
+        {
             ViewBag.AllFoods = _aroundProviderService.GetProvidersByCategory(foodId);
-            ViewBag.AllEntertain = _aroundProviderService.GetProvidersByCategory(entertainId);
-            ViewBag.AllKidCorners = _aroundProviderService.GetProvidersByCategory(kidCornerId);
             return View();
         }
     }
