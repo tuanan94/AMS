@@ -32,31 +32,31 @@
 <body onload="paging()">
     <div class="col-md-12">
 
-        <div class="panel panel-default">
-            <nav class="navbar navbar-default">
-                <div class="container-fluid">
+        <div class="panel panel-default binh">
+            <nav class="navbar navbar-default binh">
+                <div class="container-fluid binh">
 
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="/Survey/Survey">Trang chính</a></li>
-                        <li><a href="#">Page 1</a></li>
+                    <ul class="nav navbar-nav binh">
+                        <li class="active binh"><a href="/Survey/Survey"><i class="glyphicon glyphicon-home"></i><b>Trang chính</b></a></li>
+                      
 
                     </ul>
                 </div>
             </nav>
           
-            <div class="panel-body">
+            <div class="panel-body binh">
                
-                <ul class="nav nav-tabs" role="tablist" id="rowTab">
-                    <li class="active">
-                        <a href="#thismonth" role="tab" data-toggle="tab"><i class="fa-pencil-square-o"></i> Tạo survey</a>
+                <ul class="nav nav-tabs binh" role="tablist" id="rowTab">
+                    <li class="active binh">
+                        <a href="#thismonth" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-pencil"></i> <b>Tạo survey</b></a>
                     </li>
 
-                    <li class="">
-                        <a href="#graph" role="tab" data-toggle="tab"><i class="fa-list"></i> Xem tất cả survey</a>
+                    <li class="binh">
+                        <a href="#graph" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-list"></i> <b>Xem tất cả survey</b></a>
                     </li>
-                    <li class="">
+                    @*<li class="binh">
                         <a href="#list" role="tab" data-toggle="tab"><i class="fa-list"></i> Thống kê</a>
-                    </li>
+                    </li>*@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade active in" id="thismonth">
@@ -161,9 +161,9 @@
                     </div>
 
                     <div class="tab-pane fade" id="graph">
-                        <div class="panel panel-default">
-                            <div class="table-responsive">
-                                <table class="table v-middle">
+                        <div class="panel panel-default binh">
+                            <div class="table-responsive binh">
+                                <table class="table v-middle binh">
                                     <thead>
                                         <tr>
                                             <th>Số Thứ tự</th>
@@ -257,16 +257,16 @@
 
                                     </tbody>
                                 </table>
-                                <div class="w100 categoryFooter">
+                                <div class="w100 categoryFooter binh">
 
-                                    <ul class="pagination" id="paginations">
+                                    <ul class="pagination binh" id="paginations">
 
-                                        <li class="current"><a href="#">1</a></li>
-                                        <li> <a href="#">2</a></li>
-                                        <li> <a href="#">3</a></li>
-                                        <li> <a href="#">4</a></li>
-                                        <li> <a href="#">5</a></li>
-
+                                        <li class="current binh"><a href="#">1</a></li>
+                                        <li class="binh"> <a href="#">2</a></li>
+                                        <li class="binh"> <a href="#">3</a></li>
+                                        <li class="binh"> <a href="#">4</a></li>
+                                        <li class="binh"> <a href="#">5</a></li>
+                                      
                                     </ul>
 
                                 </div>
@@ -282,6 +282,10 @@
 
 
 <script>
+   
+
+
+
     $(function () {
         $("#StartDate").datepicker();
         //$("#StartDate").attr('readOnly', 'false');
@@ -360,27 +364,27 @@
                 " <div class='form-group'>" +
                 "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu hỏi</label>" +
                 "  <div class='col-sm-7'>" +
-                "      <input type='text' class='form-control binh'  name='question' style='width: 330px'><br>" +
+                "      <input type='text' class='form-control binh'   name='question' style='width: 330px'><br>" +
                 "   </div>" +
                 " </div>" +
                 " <div class='form-group'>" +
                 "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>" +
                 "  <div class='col-sm-7'>" +
-                "      <input type='text' class='form-control binh'  name='anwser1' style='width: 330px'><br>" +
+                "      <input type='text' class='form-control binh' id='id1' name='anwser1' style='width: 330px'>  <label id='label1'></label><br>" +
                 "<input type='hidden'  name='count' value='1' />" +
                 "   </div>" +
                 " </div>" +
                 " <div class='form-group'>" +
                 "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>" +
                 "  <div class='col-sm-7'>" +
-                "      <input type='text' class='form-control binh'  name='anwser1' style='width: 330px'><br>" +
+                "      <input type='text' class='form-control binh'id='id2'  name='anwser1' style='width: 330px'><br>" +
                 "<input type='hidden'  name='count' value='2' />" +
                 "   </div>" +
                 " </div>" +
                 " <div class='form-group'>" +
                 "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>" +
                 "  <div class='col-sm-7'>" +
-                "      <input type='text' class='form-control binh'  name='anwser1' style='width: 330px'><br>" +
+                "      <input type='text' class='form-control binh' id='id3' name='anwser1' style='width: 330px'><br>" +
                 "<input type='hidden'  name='count' value='3' />" +
                 "   </div>" +
                 " </div>" +
@@ -486,6 +490,25 @@
 
         $(this).closest('tr').remove();
         return false;
+    });
+    //$("input").blur(function () {
+    //    if ($("#id1").attr("value") === $("#id2").attr("value")) {
+    //        alert('Same Value');
+    //        $("#label1").text("Hãy nhập giá trị khác!");
+    //        return false;
+    //    } else if ($('#id1').attr('value') === $('#id3').attr('value')) {
+    //        alert('Same Value');
+    //        return false;
+    //    } else if ($('#id2').attr('value') === $('#id3').attr('value')) {
+    //        alert('Same Value');
+    //        return false;
+    //    }
+    //    else { return true; }
+    //});
+    $('input').blur(function () {
+        if ($('#id1').attr('value') === $('#id2').attr('value')) {
+            alert('Same Value'); return false;
+        } else { return true; }
     });
 </script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
