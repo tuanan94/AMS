@@ -31,7 +31,7 @@
                                 <th></th>
                                 <th>Tiêu đề</th>
                                 <th>Căn hộ</th>
-                                <th>Tổng</th>
+                                <th>Tổng (đồng)</th>
                                 <th>Trạng thái</th>
                                 <th>Ngày tạo</th>
                                 <th></th>
@@ -42,7 +42,7 @@
                                 <th></th>
                                 <th>Tiêu đề</th>
                                 <th>Căn hộ</th>
-                                <th>Tổng</th>
+                                <th>Tổng (đồng)</th>
                                 <th>Trạng thái</th>
                                 <th>Ngày tạo</th>
                                 <th></th>
@@ -97,6 +97,16 @@
                 }
             },
             {
+                "targets": 3,
+                "data": "TotalOrder",
+                "render": function (data, type, full, meta) {
+                    if (type === "display" || type === "filter") {
+                        return numberWithCommas(data);
+                    }
+                    return data;
+                }
+            },
+            {
                 "targets": 4,
                 "data": "Status",
                 "render": function (data, type, full) {
@@ -104,7 +114,7 @@
                         if (data === window.StatusUnpaid) {
                             return "<span class='label label-danger'> Chưa thanh toán</div>";
                         } else if (data === window.StatusPaid) {
-                            return "<span class='label label-info'>" + "Đã thanh toán" + "</div>";
+                            return "<span class='label label-success'>" + "Đã thanh toán" + "</div>";
                         } else if (data === window.StatusUnpublished) {
                             return "<span class='label label-default'>" + "Chưa công bố" + "</div>";
                         }

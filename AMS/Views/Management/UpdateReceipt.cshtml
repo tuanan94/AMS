@@ -126,18 +126,18 @@
                                             @{
                                                 if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_PAID)
                                                 {
-                                                    <span class="btn btn-info">Đã thanh toán</span>
+                                                    <span class="btn btn-success">Đã thanh toán</span>
                                                 }
                                                 else if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPAID)
                                                 {
-                                                    <span id="unPaid" class="btn btn-danger">Chưa thanh toán</span>
-                                                    <span id="paid" class="btn btn-info hide">Đã thanh toán</span>
+                                                    <span id="unPaid" class="btn btn-default">Chưa thanh toán</span>
+                                                    <span id="paid" class="btn btn-success hide">Đã thanh toán</span>
                                                 }
                                                 else if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
                                                 {
                                                     <span id="unpublished" class="btn btn-inverse">Chưa công bố</span>
-                                                    <span id="unPaid" class="btn btn-danger hide">Chưa thanh toán</span>
-                                                    <span id="paid" class="btn btn-info hide">Đã thanh toán</span>
+                                                    <span id="unPaid" class="btn btn-default hide">Chưa thanh toán</span>
+                                                    <span id="paid" class="btn btn-success hide">Đã thanh toán</span>
                                                 }
                                             }
                                         </div>
@@ -154,7 +154,7 @@
                                                     paidDateStr = receipt.PaymentDate.Value.ToString(AmsConstants.DateFormat);
                                                 }
                                             }
-                                            <input id="paidDate" type="text" value="@paidDateStr" class="form-control">
+                                            <input id="paidDate" readonly="readonly" type="text" value="@paidDateStr" class="form-control">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -189,6 +189,7 @@
                                         @{
                                             int index = 0;
                                             double total = 0;
+                                            double qtyPrice = 0;
                                             foreach (var detail in receipt.ReceiptDetails)
                                             {
                                                 {
@@ -200,15 +201,24 @@
                                                         <input id="item_name_@index" value="@detail.ServiceFee.Name" name="" type="text" class="form-control order-item">
                                                     </div>
                                                     <div class="col-sm-1">
-                                                        <input id="item_qty_@index" value="@detail.Quantity" type="text" class="form-control order-item-qty">
+                                                        <input id="item_qty_@index" value="@detail.Quantity.Value.ToString("N0")" type="text" class="form-control order-item-qty">
                                                     </div>
                                                     <div class="col-sm-2">
-                                                        <input id="item_unit_price_@index" value="@detail.UnitPrice" type="text" class="form-control order-item-price">
+                                                        <input id="item_unit_price_@index" value="@detail.UnitPrice.Value.ToString("N0")" type="text" class="form-control order-item-price">
                                                     </div>
                                                     <div class="col-sm-2">
-                                                        <input id="item_qty_price_@index" readonly="readonly" value="@(detail.UnitPrice*detail.Quantity)" name="" type="text" class="form-control total-order">
+                                                        @{
+                                                qtyPrice = (detail.UnitPrice * detail.Quantity).Value;
+                                                        }
+                                                        <input id="item_qty_price_@index" readonly="readonly" value="@qtyPrice.ToString("N0")" name="" type="text" class="form-control total-order">
                                                     </div>
-                                                    <span class="btn btn-danger btn-xs" onclick="deleteItem(@index)"><i class="fa fa-times"></i></span>
+                                                    @{
+                                                if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
+                                                {
+                                                    <span class="btn btn-danger btn-xs rmv-order-item" onclick="deleteItem(@index)"><i class="fa fa-times"></i></span>
+                                                }
+                                                    }
+
                                                     <input type="hidden" id="item_id_@index" value="@detail.Id" name="" />
                                                 </div>
                                                 {
@@ -219,7 +229,13 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="col-sm-3">
-                                            <span id="addNewRow" name="addNewRow" class="btn btn-info"><i class="fa fa-plus">Add new</i></span>
+                                            @{
+                                                if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
+                                                {
+                                                    <span id="addNewRow" name="addNewRow" class="btn btn-stroke btn-primary"><i class="fa fa-plus"> Thêm</i></span>
+                                                }
+                                            }
+
                                         </div>
                                     </div>
                                     <div class="form-group" style="font-size: 20px; text-align: right">
@@ -227,36 +243,34 @@
                                             <strong style="align-content: center">Tổng cộng</strong>
                                         </div>
                                         <div class="col-sm-2">
-                                            <label id="total">@total</label>
+                                            <label id="total">@total.ToString("N0")</label>
                                         </div>
                                     </div>
                                 </fieldset>
                             </div>
                         </div>
-                        <div class="panel-footer">
-                            <div class="form-horizontal">
-                                <div class="form-group">
-                                    @{
-                                        if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
-                                        {
-                                            <div class="col-md-offset-8 col-md-1">
-                                                <span id="btnPublished" onclick="changeStatusReceipt(@receipt.Id, @User.Identity.GetUserId(), @SLIM_CONFIG.RECEIPT_STATUS_UNPAID)" class="btn btn-warning">Công bố</span>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <span id="btnUpdate" onclick="updateReceipt(@User.Identity.GetUserId())" class="btn btn-primary">Cập nhật</span>
-                                            </div>
-                                            <div class="col-md-offset-10 col-md-2">
-                                                <span id="btnPaid" onclick="changeStatusReceipt(@receipt.Id, @User.Identity.GetUserId(), @SLIM_CONFIG.RECEIPT_STATUS_PAID)" class="btn btn-success hide">Thanh toán</span>
-                                            </div>
-                                        }
-                                        else if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPAID)
-                                        {
-                                            <div class="col-md-offset-8 col-md-1">
-                                                <span id="btnPaid" onclick="changeStatusReceipt(@receipt.Id, @User.Identity.GetUserId(), @SLIM_CONFIG.RECEIPT_STATUS_PAID)" class="btn btn-success">Thanh toán</span>
-                                            </div>
-                                        }
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                @{
+                                    if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
+                                    {
+                                        <div class="col-md-offset-9 col-md-1">
+                                            <span id="btnPublished" onclick="changeStatusReceipt(@receipt.Id, @User.Identity.GetUserId(), @SLIM_CONFIG.RECEIPT_STATUS_UNPAID)" class="btn btn-info"><i class="fa fa-reply"></i> Công bố</span>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <span id="btnUpdate" onclick="updateReceipt(@User.Identity.GetUserId())" class="btn btn-primary"><i class="fa fa-pencil"></i> Cập nhật</span>
+                                        </div>
+                                        <div class="col-md-offset-10 col-md-2">
+                                            <span id="btnPaid" onclick="changeStatusReceipt(@receipt.Id, @User.Identity.GetUserId(), @SLIM_CONFIG.RECEIPT_STATUS_PAID)" class="btn btn-success hide"><i class="fa fa-check"></i> Thanh toán</span>
+                                        </div>
                                     }
-                                </div>
+                                    else if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPAID)
+                                    {
+                                        <div class="col-md-offset-10 col-md-2">
+                                            <span id="btnPaid" onclick="changeStatusReceipt(@receipt.Id, @User.Identity.GetUserId(), @SLIM_CONFIG.RECEIPT_STATUS_PAID)" class="btn btn-success"><i class="fa fa-check"></i> Thanh toán</span>
+                                        </div>
+                                    }
+                                }
                             </div>
                         </div>
                     </form>
@@ -270,7 +284,7 @@
 
 <script>
     $(document).ready(function() {
-        window.index = (@index) ;
+        window.index = (@index);
         $("#addNewRow").on("click", function () {
             window.index++;
             var tag = "<div id=\"row_" + index + "\" class='form-group'>" +
@@ -367,16 +381,19 @@
             success: function(data) {
                 if (data.StatusCode !== -1) {
                     if (data.Data.paymentDate === undefined) {
-                        $("#unpublished").removeClass("show").addClass("hide");
-                        $("#btnUpdate").removeClass("show").addClass("hide");
-                        $("#btnPublished").removeClass("show").addClass("hide");
+                        $("#unpublished").addClass("hide");
+                        $("#btnUpdate").addClass("hide");
+                        $("#btnPublished").addClass("hide");
 
-                        $("#unPaid").removeClass("hide").addClass("show");
-                        $("#btnPaid").removeClass("hide").addClass("show");
+                        $("#unPaid").removeClass("hide");
+                        $("#btnPaid").removeClass("hide");
+                        $(".rmv-order-item").addClass("hide");
+                        $("#addNewRow").addClass("hide");
+
                     }else {
-                        $("#unPaid").removeClass("show").addClass("hide");
-                        $("#paid").removeClass("hide").addClass("show");
-                        $("#btnPaid").removeClass("show").addClass("hide");
+                        $("#unPaid").addClass("hide");
+                        $("#paid").removeClass("hide");
+                        $("#btnPaid").addClass("hide");
                         $("#paidDate").val(data.Data.paymentDate);
                     }
                 }

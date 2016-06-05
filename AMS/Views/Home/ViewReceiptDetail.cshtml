@@ -63,11 +63,11 @@
                                     @{
                                         if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_PAID)
                                         {
-                                            <span class="btn btn-info">Đã thanh toán</span>
+                                            <span class="btn btn-success">Đã thanh toán</span>
                                         }
                                         else if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPAID)
                                         {
-                                            <span class="btn btn-danger">Chưa thanh toán</span>
+                                            <span class="btn btn-danger ">Chưa thanh toán</span>
                                         }
                                     }
                                 </div>
@@ -90,7 +90,7 @@
                             <div class="form-group">
                                 <label for="receiptDesc" class="col-md-2 control-label">Mô tả</label>
                                 <div class="col-md-10">
-                                    <textarea id="receiptDesc" class="form-control" rows="3">@receipt.Description</textarea>
+                                    <textarea id="receiptDesc" readonly="readonly" class="form-control" rows="3">@receipt.Description</textarea>
                                 </div>
                             </div>
                         </fieldset>
@@ -115,14 +115,18 @@
                                     <tbody>
                                         @{
                                             double total = 0;
+                                            double qtyPrice = 0;
                                             foreach (var detail in receipt.ReceiptDetails)
                                             {
                                                 <tr>
                                                     <td></td>
                                                     <td>@detail.ServiceFee.Name</td>
-                                                    <td>@detail.Quantity</td>
-                                                    <td>@detail.UnitPrice</td>
-                                                    <td>@(detail.UnitPrice*detail.Quantity)</td>
+                                                    <td>@detail.Quantity.Value.ToString("N0")</td>
+                                                    <td>@detail.UnitPrice.Value.ToString("N0")</td>
+                                                    @{
+                                                        qtyPrice = (detail.UnitPrice*detail.Quantity).Value; 
+                                                    }
+                                                    <td>@(qtyPrice.ToString("N0"))</td>
                                                 </tr>
                                                 {
                                                     total += (detail.UnitPrice*detail.Quantity).Value;
@@ -138,7 +142,7 @@
                                         <strong style="align-content: center">Tổng cộng</strong>
                                     </div>
                                     <div class="col-sm-2">
-                                        <label class="lbl">@total</label>
+                                        <label class="lbl">@total.ToString("N0")</label>
                                     </div>
                                 </div>
                             </div>
