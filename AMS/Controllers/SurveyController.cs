@@ -108,7 +108,7 @@ namespace AMS.Controllers
             //string[] choiceIds = Request.Form.GetValues("answerId");
             //List<string> listChoice = new List<string>(choice);
             //List<string> listQuestions = new List<string>(listQuestion);
-
+            
             string a = choice[0];
                 UserAnswerSurvey userAnswerSurvey = new UserAnswerSurvey();
                 userAnswerSurvey.SurveyId = model.Id;
