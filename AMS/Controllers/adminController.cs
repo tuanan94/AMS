@@ -103,18 +103,17 @@ namespace AMS.Controllers
           
            return RedirectToAction("viewHouse");
         }
-        
-        
-        public ActionResult updateHouse2(int Id, String HouseName, String Description)
+    
+        public ActionResult updateHouse2(int Id)
         {
-            List<House> allHouseInfo = manageHouseInfo.getAllHouseInfo();
-            ViewBag.allHouseInfo = allHouseInfo;
-            bool isValid = true;
-            isValid = !HouseName.Equals("");
-            if (isValid) {
-                manageHouseInfo.updateHouse2(Id, HouseName, Description);
+            //List<House> allHouseInfo = manageHouseInfo.getAllHouseInfo();
+            //ViewBag.allHouseInfo = allHouseInfo;
+            //bool isValid = true;
+            //isValid = !HouseName.Equals("");
+            //if (isValid) {
+            //    manageHouseInfo.updateHouse2(Id, HouseName, Description);
 
-            }
+            //}
             return RedirectToAction("viewHouse");
         } 
      
@@ -127,6 +126,14 @@ namespace AMS.Controllers
             return View();
         }
         public ActionResult FloorSetup()
+        {
+            return View();
+        }
+        public ActionResult addHouseStep1()
+        {
+            return View();
+        }
+        public ActionResult addHouseStep2()
         {
             return View();
         }

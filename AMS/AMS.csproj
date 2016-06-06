@@ -551,6 +551,8 @@
     <Content Include="Views\Admin\AdminPage.cshtml" />
     <Content Include="Views\Admin\BlockSetup.cshtml" />
     <Content Include="Views\Admin\FloorSetup.cshtml" />
+    <Content Include="Views\Admin\addHouseStep1.cshtml" />
+    <Content Include="Views\Admin\addHouseStep2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AdminIconImages\" />

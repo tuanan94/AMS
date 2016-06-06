@@ -31,13 +31,13 @@ namespace AMS.Service
         }
 
         #endregion
-        //public AdminService FindById(int Id)
-        //{
-        //    var result = allHouseInfo.FindById(Id);
-        //    return result;
-        //}
-       
-       
+        public House FindById(int Id)
+        {
+            var result = allHouseInfo.FindById(Id);
+            return result;
+        }
+
+
         #region delete House
         //delete House  
         public void deleteHouse(int Id)
