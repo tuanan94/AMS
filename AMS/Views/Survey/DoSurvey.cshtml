@@ -5,6 +5,8 @@
     List<Survey> listSurveys = ViewBag.ListSurvey;
     User currentUser = ViewBag.currentUser;
     House currentHouse = ViewBag.currentHouse;
+    List<int> listSurveyId = ViewBag.ListUserAnswer;
+    List<UserAnswerSurvey> listUserAnswer = ViewBag.ListUserAnswerSurvey;
     <style>
         .button {
             display: block;
@@ -17,14 +19,18 @@
             color: white;
             font-weight: bold;
         }
+        .binh {
+            border-color: #1ABC9C;
+            box-shadow: none;
+        }
     </style>
 }
 <script src="~/Scripts/jquery-1.10.2.js"></script>
 <body onload="paging()">
-<div class="col-sm-offset-2 col-sm-8">
-    <div class="panel panel-default">
+<div class="col-sm-offset-0 col-sm-12">
+    <div class="panel panel-default binh">
         <div class="table-responsive">
-            <table class="table v-middle">
+            <table class="table v-middle binh">
                 <thead>
                 <tr>
                     <th>Số Thứ tự</th>
@@ -40,6 +46,14 @@
                 @{
                     foreach (var item in listSurveys)
                     {
+                        foreach (var obj in listUserAnswer)
+                        {
+                            if (obj.UserId != currentUser.Id)
+                            {
+    
+                            }
+                           
+                        }
                         if (listSurveys.Count != 0)
                         {
                             if (item.Member == currentUser.RoleId)
@@ -48,29 +62,29 @@
                                 <td>
                                     <div class="form-group">
                                         <div class="col-sm-9">
-                                            <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.Id">
+                                            <input type="text" disabled="disabled" class="form-control binh binh" id="fullname" value="@item.Id">
                                         </div>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
                                         <div class="col-sm-9">
-                                            <input type="hidden" class="form-control" id="surveyId" value="@item.Id">
-                                            <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.Title">
+                                            <input type="hidden" class="form-control binh" id="surveyId" value="@item.Id">
+                                            <input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.Title">
                                         </div>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
                                         <div class="col-sm-9">
-                                            <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.StartDate">
+                                            <input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.StartDate">
                                         </div>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
                                         <div class="col-sm-9">
-                                            <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.EndDate">
+                                            <input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.EndDate">
                                         </div>
                                     </div>
                                 </td>
@@ -80,7 +94,7 @@
                                         {
                                             <div class="form-group">
                                                 <div class="col-sm-9">
-                                                    <input type="text" disabled="disabled" style="background-color: blue" class="form-control" id="fullname" value="Đang mở">
+                                                    <input type="text" disabled="disabled" style="background-color: blue" class="form-control binh" id="fullname" value="Đang mở">
                                                 </div>
                                             </div>
                                         }
@@ -88,7 +102,7 @@
                                         {
                                             <div class="form-group">
                                                 <div class="col-sm-9">
-                                                    <input type="text" disabled="disabled" style="background-color: red" class="form-control" id="fullname" value="Đã đóng">
+                                                    <input type="text" disabled="disabled" style="background-color: red" class="form-control binh" id="fullname" value="Đã đóng">
                                                 </div>
                                             </div>
                                         }
@@ -113,29 +127,29 @@
                                 <td>
                                     <div class="form-group">
                                         <div class="col-sm-9">
-                                            <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.Id">
+                                            <input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.Id">
                                         </div>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
                                         <div class="col-sm-9">
-                                            <input type="hidden" class="form-control" id="surveyId" value="@item.Id">
-                                            <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.Title">
+                                            <input type="hidden" class="form-control binh" id="surveyId" value="@item.Id">
+                                            <input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.Title">
                                         </div>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
                                         <div class="col-sm-9">
-                                            <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.StartDate">
+                                            <input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.StartDate">
                                         </div>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
                                         <div class="col-sm-9">
-                                            <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.EndDate">
+                                            <input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.EndDate">
                                         </div>
                                     </div>
                                 </td>
@@ -145,7 +159,7 @@
                                         {
                                             <div class="form-group">
                                                 <div class="col-sm-9">
-                                                    <input type="text" disabled="disabled" style="background-color: blue" class="form-control" id="fullname" value="Đang mở">
+                                                    <input type="text" disabled="disabled" style="background-color: blue" class="form-control binh" id="fullname" value="Đang mở">
                                                 </div>
                                             </div>
                                         }
@@ -153,7 +167,7 @@
                                         {
                                             <div class="form-group">
                                                 <div class="col-sm-9">
-                                                    <input type="text" disabled="disabled" style="background-color: red" class="form-control" id="fullname" value="Đã đóng">
+                                                    <input type="text" disabled="disabled" style="background-color: red" class="form-control binh" id="fullname" value="Đã đóng">
                                                 </div>
                                             </div>
                                         }
@@ -172,6 +186,7 @@
                                 </td>
                             </tr>  
                             }
+                            
                         }
                        
                         else if(listSurveys.Count ==0)
@@ -186,8 +201,8 @@
                                 </td>
                             </tr>
                         }
-                       
-                    }
+                        }
+                    
                 }
 
 

@@ -44,5 +44,14 @@ namespace AMS.Service
                     
             return a;
         }
+
+        public List<UserAnswerSurvey> GetListUserAnswerSurveysBySurveyId()
+        {
+            return userAnswerRepository.List.ToList().DistinctBy(t => t.SurveyId).ToList();
+        }
+        public List<UserAnswerSurvey> GetListUserAnswerSurveysBySurveyId(int id)
+        {
+            return userAnswerRepository.List.Where(t => t.SurveyId ==id).ToList();
+        }
     }
 }

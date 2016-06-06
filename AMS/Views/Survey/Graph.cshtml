@@ -8,12 +8,20 @@
 <script src="http://code.jquery.com/jquery-1.6.3.min.js"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="http://code.highcharts.com/modules/exporting.js"></script>
-
+<input type="text" id="id1"/>
+<input type="text" id="id2" /><label id="label"></label>
 <div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
 <input type="button" id="btnPieChart" value="Pie Chart" />
 <script>
-     $(document).ready(function () {
-         var a = "Firefox";
+    $('input').blur(function () {
+        if ($('#id1').attr('value') == $('#id2').attr('value')) {
+           
+            $('#label').text("Hãy nhập giá trị khác!"); return false;
+           
+        } else { return true; }
+    });
+    $(document).ready(function () {
+        var a = "Firefox";
         RenderPieChart('container', [
             [a, 45.0],
             ['IE', 26.8],

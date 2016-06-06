@@ -58,8 +58,24 @@ namespace AMS.Controllers
             User currentUser = userService.FindById(int.Parse(User.Identity.GetUserId()));
             House currentHouse = houseServices.FindById(currentUser.HouseId.Value);
             List<Survey> listSurveys = surveyService.GetListSurveys();
+            List<UserAnswerSurvey> listUserAnswerSurveys = userAnswerService.GetListUserAnswerSurveysBySurveyId();
+            List<UserAnswerSurvey> listAnswerSurveys = userAnswerService.GetListUserAnswerSurvey();
+            List<UserAnswerSurvey> list = new List<UserAnswerSurvey>();
+            List<int> listSurveyId = new List<int>();
+            foreach (var o in listUserAnswerSurveys)
+            {
+                listSurveyId.Add(o.SurveyId.Value);
+                
+            }
+            foreach (var obj in listSurveyId)
+            {
+                list = userAnswerService.GetListUserAnswerSurveysBySurveyId(obj);
+            }
             //   int a = listCount.Count;
+            ViewBag.ListUserAnswerSurvey = listAnswerSurveys;
+            ViewBag.List = list;
             ViewBag.ListSurvey = listSurveys;
+            ViewBag.ListUserAnswer = listSurveyId;
             ViewBag.currentUser = currentUser;
             ViewBag.currentHouse = currentHouse;
             return View();
