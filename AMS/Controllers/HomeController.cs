@@ -348,7 +348,7 @@ namespace AMS.Controllers
                 return View("error");
 
             }
-            ViewBag.curUser = u;
+            ViewBag.roleId = u.RoleId;
             return View("ViewHistoryHdRequests");
         }
 

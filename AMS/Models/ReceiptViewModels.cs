@@ -15,7 +15,10 @@ namespace AMS.Models
         public string ReceiptTitle { get; set; }
         public string ReceiptDesc { get; set; }
         public string ReceiptHouseName { get; set; }
+        public int ReceiptType { get; set; }
+        public string PublishDate { get; set; }
         public int Creator { get; set; }
+        public int Mode { get; set; }
         public List<OrderItemModel> ListItem { get; set; }
     }
     public class ReceiptInfoModel

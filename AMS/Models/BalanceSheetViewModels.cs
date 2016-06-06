@@ -10,31 +10,42 @@ namespace AMS.Models
     {
     }
 
-    public class TransItemCatModel
+    public class TransCategoryModel
     {
-        public int TransItemCatId { get; set; }
-        public string TransItemCatName { get; set; }
+        public int TransCategoryId { get; set; }
+        public string TransCategoryName { get; set; }
         public int TransItemType { get; set; }
     }
 
-    public class ShortTransItemCatModel
+    public class ShortTransCategoryModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
     }
 
-    public class TransItemModel
+    public class TransactionModel
     {
-        public int TransactionId { get; set; }
-        public int TransItemId { get; set; }
-        public string TransItemCatName { get; set; }
-        public int TransItemCatId { get; set; }
-        public string TransItemForMonth { get; set; }
-        public double TransItemTotalAmount { get; set; }
-        public double TransItemPaidAmount { get; set; }
-        public double TransItemUnpaidAmount { get; set; }
-        public string TransItemTitle { get; set; }
-        public string TransItemDesc { get; set; }
-        public string TransItemCreateDate { get; set; }
+        public int BalanceSheetId { get; set; }
+        public int TransId { get; set; }
+        public string TransCatName { get; set; }
+        public int TransCatId { get; set; }
+        public int TransType { get; set; }
+        public string TransForMonth { get; set; }
+        public double TransTotalAmount { get; set; }
+        public double TransPaidAmount { get; set; }
+        public double TransUnpaidAmount { get; set; }
+        public string TransTitle { get; set; }
+        public string TransDesc { get; set; }
+        public string TransCreateDate { get; set; }
+        public string DT_RowId { get; set; }
+    }
+
+    public class AmountGroupByTransCategory
+    {
+        public int Id { get; set; }
+        public string Name  { get; set; }
+        public double TotalAmount { get; set; }
+        public double PaidAmount { get; set; }
+        public double UnpaidAmount { get; set; }
     }
 }

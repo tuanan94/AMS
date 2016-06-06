@@ -210,6 +210,9 @@
     <Compile Include="AroundProviderProduct.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="BalanceSheet.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Constant.cs" />
     <Compile Include="Constant\AmsConstants.cs" />
     <Compile Include="Constant\RoleEnum.cs" />
@@ -337,10 +340,7 @@
     <Compile Include="Transaction.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="TransactionItem.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="TransactionItemCategory.cs">
+    <Compile Include="TransactionCategory.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="User.cs">

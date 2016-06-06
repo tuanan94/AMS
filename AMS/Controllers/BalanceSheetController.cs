@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using AMS.Constant;
@@ -14,14 +15,241 @@ namespace AMS.Controllers
     public class BalanceSheetController : Controller
     {
         readonly UserServices _userServices = new UserServices();
+        readonly BalanceSheetService _balanceSheetService = new BalanceSheetService();
+        readonly TransactionCategoryService _transCategoryService = new TransactionCategoryService();
         readonly TransactionService _transactionService = new TransactionService();
-        readonly TransItemCategoryService _transItemCategoryService = new TransItemCategoryService();
-        readonly TransItemService _transItemService = new TransItemService();
+        readonly ReceiptServices _receiptService = new ReceiptServices();
 
         [HttpGet]
         [Route("Management/BalanceSheet/View")]
-        public ActionResult ViewBalanceSheet()
+        public ActionResult ViewBalanceSheet(string month)
         {
+            DateTime requestMonth = new DateTime();
+            if (null == month)
+            {
+                requestMonth = DateTime.Today;
+            }
+            else
+            {
+                requestMonth = DateTime.ParseExact(month, "MM-yyyy", CultureInfo.CurrentCulture);
+            }
+
+            double totalIncome = 0;
+            double totalPaidIncome = 0;
+
+            double totalExpense = 0;
+            double totalPaidExpense = 0;
+
+
+            /*Start process balance sheet*/
+             
+            BalanceSheet thisMonthBS = _balanceSheetService.GetBalanceSheetForMonth(requestMonth);
+            if (null == thisMonthBS)
+            {
+                ViewBag.balanceSheetIsCreated = false;
+                return View("BalanceSheet");
+            }
+
+
+            List<Transaction> thisMonthIncome =
+                thisMonthBS.Transactions.Where(tr => tr.Type == SLIM_CONFIG.TRANSACTION_TYPE_INCOME).ToList();
+            foreach (var iTrans in thisMonthIncome)
+            {
+                totalIncome += iTrans.TotalAmount.Value;
+                totalPaidIncome += iTrans.PaidAmount.Value;
+            }
+
+            // Get all income transaction category that existed in one month
+            List<Transaction> inMonthIncomeCategory = thisMonthIncome.GroupBy(h => h.CategoryId).Select(h => h.First()).ToList();
+            List<AmountGroupByTransCategory> listIncomeGroupByCategories = new List<AmountGroupByTransCategory>();
+            foreach (var transCat in inMonthIncomeCategory)
+            {
+                AmountGroupByTransCategory income = new AmountGroupByTransCategory();
+                income.Name = transCat.TransactionCategory.Name;
+                double total = 0;
+                double paid = 0;
+                double unpaid = 0;
+
+                List<Transaction> groupedByCatTransaction = thisMonthIncome.Where(tc => transCat.CategoryId == tc.TransactionCategory.Id).ToList();
+
+                foreach (var iTrans in groupedByCatTransaction)
+                {
+                    total += iTrans.TotalAmount.Value;
+                    paid += iTrans.PaidAmount.Value;
+                    unpaid = total - paid;
+                }
+                income.TotalAmount = total;
+                income.PaidAmount = paid;
+                income.UnpaidAmount = unpaid;
+                listIncomeGroupByCategories.Add(income);
+            }
+
+            List<Transaction> thisMonthExpense =
+                thisMonthBS.Transactions.Where(tr => tr.Type == SLIM_CONFIG.TRANSACTION_TYPE_EXPENSE).ToList();
+            foreach (var e in thisMonthExpense)
+            {
+                totalExpense += e.TotalAmount.Value;
+                totalPaidExpense += e.PaidAmount.Value;
+            }
+
+            // Get all expense transaction category that existed in one month
+            List<Transaction> inMonthExpensseCategory = thisMonthExpense.GroupBy(h => h.CategoryId).Select(h => h.First()).ToList();
+            List<AmountGroupByTransCategory> listExpenseGroupByCategories = new List<AmountGroupByTransCategory>();
+            foreach (var transCat in inMonthExpensseCategory)
+            {
+                AmountGroupByTransCategory expense = new AmountGroupByTransCategory();
+                expense.Name = transCat.TransactionCategory.Name;
+                double total = 0;
+                double paid = 0;
+                double unpaid = 0;
+                List<Transaction> groupedByCatTransaction = thisMonthExpense.Where(tc => transCat.CategoryId == tc.TransactionCategory.Id).ToList();
+                foreach (var eTrans in groupedByCatTransaction)
+                {
+                    total += eTrans.TotalAmount.Value;
+                    paid += eTrans.PaidAmount.Value;
+                    unpaid = total - paid;
+                }
+                expense.TotalAmount = total;
+                expense.PaidAmount = paid;
+                expense.UnpaidAmount = unpaid;
+                listExpenseGroupByCategories.Add(expense);
+            }
+
+            
+            ///Start process receipt
+            /// 
+            List<Receipt> publishedReceipt = _receiptService.GetReceiptInMounth(requestMonth).Where(r => r.Status != SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED).ToList();
+            List<Receipt> publishedReceiptGroupByType = publishedReceipt.GroupBy(r => r.Type).Select(r => r.First()).ToList();
+
+            List<AmountGroupByTransCategory> totalAmountPubReceiptGroupByType = new List<AmountGroupByTransCategory>();
+            foreach (var recType in publishedReceiptGroupByType)
+            {
+                AmountGroupByTransCategory pubReceip = new AmountGroupByTransCategory();
+                string catName = "";
+                int id = 0;
+                if (recType.Type == SLIM_CONFIG.RECEIPT_TYPE_HD_REQUEST)
+                {
+                    id = 1;
+                    catName = "Dịch vụ sửa chữa";
+                }
+                else if (recType.Type == SLIM_CONFIG.RECEIPT_TYPE_WATER)
+                {
+                    id = 2;
+                    catName = "Nước";
+                }
+                else if (recType.Type == SLIM_CONFIG.RECEIPT_TYPE_ELECTRIC)
+                {
+                    id = 3;
+                    catName = "Điện";
+                }
+                else if (recType.Type == SLIM_CONFIG.RECEIPT_TYPE_HOUSE_RENT)
+                {
+                    id = 4;
+                    catName = "Cho thuê nhà";
+                }
+
+                pubReceip.Name = catName;
+                pubReceip.Id = id;
+
+                List<Receipt> groupByTypeReceipts = publishedReceipt.Where(r => r.Type == recType.Type).ToList();
+                List<ReceiptDetail> listReceiptDetails = null;
+                double total = 0;
+                foreach (var rec in groupByTypeReceipts)
+                {
+                    listReceiptDetails = rec.ReceiptDetails.ToList();
+                    foreach (var detail in listReceiptDetails)
+                    {
+                        total += detail.Quantity.Value * detail.UnitPrice.Value;
+                    }
+                }
+                totalIncome += total;
+                pubReceip.TotalAmount = total;
+                pubReceip.UnpaidAmount = total;
+                totalAmountPubReceiptGroupByType.Add(pubReceip);
+            }
+
+            List<Receipt> paidReceipt = _receiptService.GetReceiptInMounth(requestMonth).Where(r => r.Status == SLIM_CONFIG.RECEIPT_STATUS_PAID).ToList();
+            List<Receipt> paidReceiptGroupByType = paidReceipt.GroupBy(r => r.Type).Select(r => r.First()).ToList();
+
+            foreach (var recType in paidReceiptGroupByType)
+            {
+                AmountGroupByTransCategory pubReceip = new AmountGroupByTransCategory();
+                string catName = "";
+                int id = 0;
+                if (recType.Type == SLIM_CONFIG.RECEIPT_TYPE_HD_REQUEST)
+                {
+                    id = 1;
+                }
+                else if (recType.Type == SLIM_CONFIG.RECEIPT_TYPE_WATER)
+                {
+                    id = 2;
+                }
+                else if (recType.Type == SLIM_CONFIG.RECEIPT_TYPE_ELECTRIC)
+                {
+                    id = 3;
+                }
+                else if (recType.Type == SLIM_CONFIG.RECEIPT_TYPE_HOUSE_RENT)
+                {
+                    id = 4;
+                }
+
+                pubReceip.Name = catName;
+                List<Receipt> groupByTypeReceipts = paidReceipt.Where(r => r.Type == recType.Type).ToList();
+                List<ReceiptDetail> listReceiptDetails = null;
+                double total = 0;
+                foreach (var rec in groupByTypeReceipts)
+                {
+                    listReceiptDetails = rec.ReceiptDetails.ToList();
+                    foreach (var detail in listReceiptDetails)
+                    {
+                        total += detail.Quantity.Value * detail.UnitPrice.Value;
+                    }
+                }
+                totalPaidIncome += total;
+
+                // Find this category in published receipt to update paid amount
+                AmountGroupByTransCategory pubReceipt = null;
+                for (int i = 0; i < totalAmountPubReceiptGroupByType.Count; i++)
+                {
+                    pubReceipt = totalAmountPubReceiptGroupByType[i];
+                    if (id == pubReceipt.Id)
+                    {
+                        pubReceipt.PaidAmount = total;
+                        pubReceipt.UnpaidAmount = pubReceipt.TotalAmount - total;
+                        totalAmountPubReceiptGroupByType[i] = pubReceipt;
+                        break;
+                    }
+                }
+            }
+
+            if (requestMonth.Date.Month == DateTime.Today.Date.Month &&
+                requestMonth.Date.Year == DateTime.Today.Date.Year)
+            {
+                ViewBag.balanceSheetStatus = 1;
+            }
+            else
+            {
+                ViewBag.balanceSheetStatus = -1;
+            }
+
+            ViewBag.thisMonth = requestMonth.ToString("MM-yyyy");
+            ViewBag.createDate = thisMonthBS.CreateDate.Value.ToString(AmsConstants.DateFormat);
+            ViewBag.lastUpdate = thisMonthBS.LastModified.Value.ToString(AmsConstants.DateFormat);
+            ViewBag.description = thisMonthBS.Description;
+            ViewBag.balanceSheetId = thisMonthBS.Id;
+
+            ViewBag.totalIncome = totalIncome;
+            ViewBag.totalPaidIncome = totalPaidIncome;
+            ViewBag.totalUnpaidIncome = totalIncome - totalPaidIncome;
+
+            ViewBag.totalExpense = totalExpense;
+            ViewBag.totalPaidExpense = totalPaidExpense;
+            ViewBag.totalUnpaidExpense = totalExpense - totalPaidExpense;
+
+            ViewBag.listExpenseGroupByCategories = listExpenseGroupByCategories;
+            ViewBag.listIncomeGroupByCategories = listIncomeGroupByCategories;
+            ViewBag.totalAmountPubReceiptGroupByType = totalAmountPubReceiptGroupByType;
+
             return View("BalanceSheet");
         }
 
@@ -36,30 +264,21 @@ namespace AMS.Controllers
         [Route("Management/BalanceSheet/ManageLiabilities")]
         public ActionResult ViewManageLiabilities()
         {
+
             return View("BalanceSheet");
         }
 
         [HttpPost]
         [Route("Management/BalanceSheet/AddTransactionType")]
-        public ActionResult AddTransactionType(TransItemCatModel transItemCat)
+        public ActionResult AddTransactionType(TransCategoryModel transCategory)
         {
             MessageViewModels response = new MessageViewModels();
             User u = _userServices.FindById(Int32.Parse(User.Identity.GetUserId()));
             if (u != null)
             {
-                if (transItemCat.TransItemType == SLIM_CONFIG.TRANSACTION_TYPE_EXPENSE ||
-                    transItemCat.TransItemType == SLIM_CONFIG.TRANSACTION_TYPE_INCOME)
-                {
-                    TransactionItemCategory transItemCatE = new TransactionItemCategory();
-                    transItemCatE.Name = transItemCat.TransItemCatName;
-                    transItemCatE.Type = transItemCat.TransItemType;
-                    _transItemCategoryService.Add(transItemCatE);
-                }
-                else
-                {
-                    response.StatusCode = -1;
-                    response.Msg = "Tìm thấy loại chuyển nhượng";
-                }
+                TransactionCategory transItemCatE = new TransactionCategory();
+                transItemCatE.Name = transCategory.TransCategoryName;
+                _transCategoryService.Add(transItemCatE);
             }
             else
             {
@@ -71,52 +290,50 @@ namespace AMS.Controllers
 
         [HttpPost]
         [Route("Management/BalanceSheet/AddTransactionItem")]
-        public ActionResult AddTransactionItem(TransItemModel transItem)
+        public ActionResult AddTransactionItem(TransactionModel transaction)
         {
             MessageViewModels response = new MessageViewModels();
             User u = _userServices.FindById(Int32.Parse(User.Identity.GetUserId()));
             if (u != null)
             {
-                TransactionItemCategory transCat = _transItemCategoryService.FindById(transItem.TransItemCatId);
+                TransactionCategory transCat = _transCategoryService.FindById(transaction.TransCatId);
                 if (null != transCat)
                 {
-
-                    DateTime transInMonth = DateTime.ParseExact(transItem.TransItemForMonth, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
+                    DateTime transInMonth = DateTime.ParseExact(transaction.TransForMonth, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
                     DateTime today = DateTime.Now;
                     DateTime firstDateOfThisMounth = new DateTime(today.Year, today.Month, 1);
-                    Transaction existedTrans = _transactionService.FindByMonthYear(transInMonth);
-                    TransactionItem transItemE = new TransactionItem();
+                    BalanceSheet existedTrans = _balanceSheetService.FindByMonthYear(transInMonth);
+                    Transaction transEntity = new Transaction();
 
-                    if (null != existedTrans && existedTrans.Status == SLIM_CONFIG.BALANCE_SHEET_CLOSED)
+                    if (null != existedTrans && (existedTrans.ForMonth != firstDateOfThisMounth))
                     {
                         response.StatusCode = -1;
                         response.Msg = "Khai báo thu chi đã đóng";
                         return Json(response);
                     }
-                    else if (null != existedTrans && existedTrans.Status == SLIM_CONFIG.BALANCE_SHEET_OPEN)
+                    else if (null != existedTrans && (existedTrans.ForMonth == firstDateOfThisMounth))
                     {
-                        transItemE.TransactionId = existedTrans.Id;
+                        transEntity.TransactionId = existedTrans.Id;
                     }
-                    else if (null == existedTrans && transInMonth.AddMonths(3) <= firstDateOfThisMounth && firstDateOfThisMounth.AddMonths(1) >= transInMonth)
+                    else if (null == existedTrans && transInMonth == firstDateOfThisMounth)
                     {
-                        Transaction newTransaction = new Transaction();
-                        newTransaction.ForMonth = transInMonth;
-                        newTransaction.Status = SLIM_CONFIG.BALANCE_SHEET_OPEN;
-                        newTransaction.CreateDate = DateTime.Now;
-                        newTransaction.LastModified = DateTime.Now;
-                        newTransaction.TypeId = SLIM_CONFIG.TRANSACTION_TYPE_INCOME;
-                        _transactionService.Add(newTransaction);
-                        transItemE.TransactionId = newTransaction.Id;
+                        BalanceSheet newBalanceSheet = new BalanceSheet();
+                        newBalanceSheet.ForMonth = transInMonth;
+                        newBalanceSheet.CreateDate = DateTime.Now;
+                        newBalanceSheet.LastModified = DateTime.Now;
+                        _balanceSheetService.Add(newBalanceSheet);
+                        transEntity.TransactionId = newBalanceSheet.Id;
                     }
-                    transItemE.CategoryId = transCat.Id;
-                    transItemE.TotalAmount = transItem.TransItemTotalAmount;
-                    transItemE.PaidAmount = transItem.TransItemPaidAmount;
-                    transItemE.Description = transItem.TransItemDesc;
-                    transItemE.CreateDate = DateTime.Now;
-                    transItemE.LastModified = DateTime.Now;
-                    transItemE.Name = transItem.TransItemTitle;
+                    transEntity.Type = transaction.TransType;
+                    transEntity.CategoryId = transCat.Id;
+                    transEntity.TotalAmount = transaction.TransTotalAmount;
+                    transEntity.PaidAmount = transaction.TransPaidAmount;
+                    transEntity.Description = transaction.TransDesc;
+                    transEntity.CreateDate = DateTime.Now;
+                    transEntity.LastModified = DateTime.Now;
+                    transEntity.Name = transaction.TransTitle;
 
-                    _transItemService.Add(transItemE);
+                    _transactionService.Add(transEntity);
                 }
                 else
                 {
@@ -134,58 +351,39 @@ namespace AMS.Controllers
 
         [HttpPost]
         [Route("Management/BalanceSheet/UpdateTransactionItem")]
-        public ActionResult UpdateTransactionItem(TransItemModel transItem)
+        public ActionResult UpdateTransactionItem(TransactionModel transModel)
         {
             MessageViewModels response = new MessageViewModels();
             User u = _userServices.FindById(Int32.Parse(User.Identity.GetUserId()));
             if (u != null)
             {
-                TransactionItem oldTransItem = _transItemService.FindById(transItem.TransItemId);
+                Transaction trans = _transactionService.FindById(transModel.TransId);
+                DateTime today = DateTime.Now;
+                DateTime firstDateOfThisMounth = new DateTime(today.Year, today.Month, 1);
 
-                if (null == oldTransItem)
+                if (null == trans)
                 {
                     response.StatusCode = -1;
-                    response.Msg = AmsConstants.MsgUserNotFound;
+                    response.Msg = "Không tìm thấy giao dịch";
                     return Json(response);
                 }
-                else if (oldTransItem.Transaction.Status == SLIM_CONFIG.BALANCE_SHEET_CLOSED)
+                if (trans.BalanceSheet.ForMonth != firstDateOfThisMounth)
                 {
                     response.StatusCode = -1;
                     response.Msg = "Khai báo thu chi đã đóng";
                     return Json(response);
                 }
-                TransactionItemCategory transCat = _transItemCategoryService.FindById(transItem.TransItemCatId);
+                TransactionCategory transCat = _transCategoryService.FindById(transModel.TransCatId);
                 if (null != transCat)
                 {
-
-                    DateTime transInMonth = DateTime.ParseExact(transItem.TransItemForMonth, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
-                    DateTime today = DateTime.Now;
-                    DateTime firstDateOfThisMounth = new DateTime(today.Year, today.Month, 1);
-                    Transaction existedTrans = _transactionService.FindByMonthYear(transInMonth);
-
-                    if (null != existedTrans && existedTrans.Status == SLIM_CONFIG.BALANCE_SHEET_OPEN)
-                    {
-                        oldTransItem.TransactionId = existedTrans.Id;
-                    }
-                    else if (null == existedTrans && transInMonth.AddMonths(3) <= firstDateOfThisMounth || firstDateOfThisMounth.AddMonths(1) >= transInMonth)
-                    {
-                        Transaction newTransaction = new Transaction();
-                        newTransaction.ForMonth = transInMonth;
-                        newTransaction.Status = SLIM_CONFIG.BALANCE_SHEET_OPEN;
-                        newTransaction.CreateDate = DateTime.Now;
-                        newTransaction.LastModified = DateTime.Now;
-                        newTransaction.TypeId = SLIM_CONFIG.TRANSACTION_TYPE_INCOME;
-                        _transactionService.Add(newTransaction);
-                        oldTransItem.TransactionId = newTransaction.Id;
-                    }
-                    oldTransItem.CategoryId = transCat.Id;
-                    oldTransItem.TotalAmount = transItem.TransItemTotalAmount;
-                    oldTransItem.PaidAmount = transItem.TransItemPaidAmount;
-                    oldTransItem.Description = transItem.TransItemDesc;
-                    oldTransItem.LastModified = DateTime.Now;
-                    oldTransItem.Name = transItem.TransItemTitle;
-
-                    _transItemService.Update(oldTransItem);
+                    trans.CategoryId = transCat.Id;
+                    trans.Type = transModel.TransType;
+                    trans.TotalAmount = transModel.TransTotalAmount;
+                    trans.PaidAmount = transModel.TransPaidAmount;
+                    trans.Description = transModel.TransDesc;
+                    trans.LastModified = DateTime.Now;
+                    trans.Name = transModel.TransTitle;
+                    _transactionService.Update(trans);
                 }
                 else
                 {
@@ -193,6 +391,32 @@ namespace AMS.Controllers
                     response.Msg = "Tìm thấy loại chuyển nhượng";
                 }
 
+            }
+            else
+            {
+                response.StatusCode = -1;
+                response.Msg = AmsConstants.MsgUserNotFound;
+            }
+            return Json(response);
+        }
+
+        [HttpPost]
+        [Route("Management/BalanceSheet/DeleteTransactions")]
+        public ActionResult DeleteTransactions(List<int> transDeletedList)
+        {
+            MessageViewModels response = new MessageViewModels();
+            User u = _userServices.FindById(Int32.Parse(User.Identity.GetUserId()));
+            if (u != null)
+            {
+                foreach (var transId in transDeletedList)
+                {
+                    Transaction transaction = _transactionService.FindById(transId);
+                    DateTime today  = DateTime.Today;
+                    if (transaction != null && transaction.BalanceSheet.ForMonth.Value.Month == today.Month && transaction.BalanceSheet.ForMonth.Value.Year == today.Year)
+                    {
+                        _transactionService.Delete(transaction);
+                    }
+                }
             }
             else
             {
@@ -211,12 +435,12 @@ namespace AMS.Controllers
             if (u != null)
             {
 
-                List<TransactionItemCategory> list = _transItemCategoryService.GetByTransType(type);
-                List<ShortTransItemCatModel> modelList = new List<ShortTransItemCatModel>();
-                ShortTransItemCatModel m = null;
+                List<TransactionCategory> list = _transCategoryService.GetAll();
+                List<ShortTransCategoryModel> modelList = new List<ShortTransCategoryModel>();
+                ShortTransCategoryModel m = null;
                 foreach (var i in list)
                 {
-                    m = new ShortTransItemCatModel();
+                    m = new ShortTransCategoryModel();
                     m.Name = i.Name;
                     m.Id = i.Id;
                     modelList.Add(m);
@@ -240,19 +464,21 @@ namespace AMS.Controllers
             if (u != null)
             {
 
-                List<TransactionItem> list = _transItemService.GetByTransType(SLIM_CONFIG.TRANSACTION_TYPE_INCOME);
-                List<TransItemModel> modelList = new List<TransItemModel>();
-                TransItemModel m = null;
+                List<Transaction> list = _transactionService.GetByTransType();
+                List<TransactionModel> modelList = new List<TransactionModel>();
+                TransactionModel m = null;
                 foreach (var i in list)
                 {
-                    m = new TransItemModel();
-                    m.TransItemCatName = i.TransactionItemCategory.Name;
-                    m.TransItemId = i.Id;
-                    m.TransItemForMonth = i.Transaction.ForMonth.Value.ToString("MM-yyyy");
-                    m.TransItemTitle = i.Name;
-                    m.TransItemTotalAmount = i.TotalAmount.Value;
-                    m.TransItemPaidAmount = i.PaidAmount.Value;
-                    m.TransItemCreateDate = i.CreateDate.Value.ToString(AmsConstants.DateFormat);
+                    m = new TransactionModel();
+                    m.TransCatName = i.TransactionCategory.Name;
+                    m.TransId = i.Id;
+                    m.DT_RowId = new StringBuilder("trans_").Append(i.Id).ToString();
+                    m.TransForMonth = i.BalanceSheet.ForMonth.Value.ToString("MM-yyyy");
+                    m.TransTitle = i.Name;
+                    m.TransTotalAmount = i.TotalAmount.Value;
+                    m.TransPaidAmount = i.PaidAmount.Value;
+                    m.TransCreateDate = i.CreateDate.Value.ToString(AmsConstants.DateFormat);
+                    m.TransType = i.Type.Value;
                     modelList.Add(m);
                 }
                 return Json(modelList, JsonRequestBehavior.AllowGet);
@@ -275,28 +501,28 @@ namespace AMS.Controllers
             if (u != null)
             {
 
-                TransactionItem transcItem = _transItemService.FindById(id);
-                if (null != transcItem)
+                Transaction transaction = _transactionService.FindById(id);
+                if (null != transaction)
                 {
-                    if (transcItem.Transaction.Status != SLIM_CONFIG.BALANCE_SHEET_CLOSED)
-                    {
-                        TransItemModel model = new TransItemModel();
-                        model.TransItemCatName = transcItem.TransactionItemCategory.Name;
-                        model.TransItemCatId = transcItem.TransactionItemCategory.Id;
-                        model.TransItemDesc = transcItem.Description;
-                        model.TransItemForMonth = transcItem.Transaction.ForMonth.Value.ToString("MM-yyyy");
-                        model.TransItemTitle = transcItem.Name;
-                        model.TransItemTotalAmount = transcItem.TotalAmount.Value;
-                        model.TransItemPaidAmount = transcItem.PaidAmount.Value;
-                        model.TransItemId = transcItem.Id;
 
-                        response.Data = model;
-                    }
-                    else
-                    {
-                        response.StatusCode = 5;
-                        response.Msg = "Bảng thu chi đã đóng";
-                    }
+                    TransactionModel model = new TransactionModel();
+                    model.TransCatName = transaction.TransactionCategory.Name;
+                    model.TransCatId = transaction.TransactionCategory.Id;
+                    model.TransDesc = transaction.Description;
+                    model.TransForMonth = transaction.BalanceSheet.ForMonth.Value.ToString("MM-yyyy");
+                    model.TransTitle = transaction.Name;
+                    model.TransTotalAmount = transaction.TotalAmount.Value;
+                    model.TransPaidAmount = transaction.PaidAmount.Value;
+                    model.TransId = transaction.Id;
+                    model.TransType = transaction.Type.Value;
+
+                    response.Data = model;
+                    //                    }
+                    //                    else
+                    //                    {
+                    //                        response.StatusCode = 5;
+                    //                        response.Msg = "Bảng thu chi đã đóng";
+                    //                    }
                 }
                 else
                 {

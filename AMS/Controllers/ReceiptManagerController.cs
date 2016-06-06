@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -217,10 +218,19 @@ namespace AMS.Controllers
                         eReceipt.HouseId = house.Id;
                         eReceipt.CreateDate = DateTime.Now;
                         eReceipt.LastModified = DateTime.Now;
+                        eReceipt.PublishDate = DateTime.ParseExact(receipt.PublishDate,AmsConstants.DateFormat,CultureInfo.CurrentCulture);
+                        eReceipt.Type = receipt.ReceiptType;
                         eReceipt.ManagerId = u.Id;
                         eReceipt.Description = receipt.ReceiptDesc;
                         eReceipt.Title = receipt.ReceiptTitle;
-                        eReceipt.Status = SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED;
+                        if (receipt.Mode == SLIM_CONFIG.RECEIPT_ADD_MODE_SAVE_PUBLISH)
+                        {
+                            eReceipt.Status = SLIM_CONFIG.RECEIPT_STATUS_UNPAID;
+                        }
+                        else
+                        {
+                            eReceipt.Status = SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED;
+                        }
                         _receiptServices.Add(eReceipt);
 
                         ServiceFee item = null;

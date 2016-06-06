@@ -28,6 +28,12 @@ window.StatusUnpublished = 1;
 window.StatusUnpaid = 2;
 window.StatusPaid = 3;
 
+
+window.Transaction_Type_Income = 1;
+window.Transaction_Type_Expense = 2;
+
+
+
 function loadHelpdeskServiceType() {
     var action = "loadHdSrvCat";
     //    $("#hdSrvType").load("ManageRequest?action=" + action);
@@ -125,7 +131,6 @@ function cancelDeleteHelpdeskService() {
     }
     window.deleteHdSrvList = new Array();
     $("#delBtnGroup").removeClass("show").addClass("hide");;
-
 }
 function commitDeleteHelpdeskService() {
     var postData = { hdSrvDeletedList: window.deleteHdSrvList }

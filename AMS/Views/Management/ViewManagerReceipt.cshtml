@@ -6,7 +6,7 @@
 
 <div class="col-md-12" @*style="-webkit-transition: all 0.3s;-moz-transition: all 0.3s;transition: all 0.3s;"*@>
     <div class="panel panel-default">
-        
+
         <div class="heading-tab">
             <i class="fa fa-list"> Danh sách hóa đơn</i>
             <ul class="nav nav-tabs pull-right" role="tablist">
@@ -27,26 +27,26 @@
                     <div class="form-horizontal" role="form">
                         <table id="managerOrderTbl" data-userid="@User.Identity.GetUserId()" class="table table-hover table-bordered">
                             <thead>
-                            <tr>
-                                <th></th>
-                                <th>Tiêu đề</th>
-                                <th>Căn hộ</th>
-                                <th>Tổng (đồng)</th>
-                                <th>Trạng thái</th>
-                                <th>Ngày tạo</th>
-                                <th></th>
-                            </tr>
+                                <tr>
+                                    <th></th>
+                                    <th>Tiêu đề</th>
+                                    <th>Căn hộ</th>
+                                    <th>Tổng (đồng)</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ngày tạo</th>
+                                    <th></th>
+                                </tr>
                             </thead>
                             <tfoot>
-                            <tr>
-                                <th></th>
-                                <th>Tiêu đề</th>
-                                <th>Căn hộ</th>
-                                <th>Tổng (đồng)</th>
-                                <th>Trạng thái</th>
-                                <th>Ngày tạo</th>
-                                <th></th>
-                            </tr>
+                                <tr>
+                                    <th></th>
+                                    <th>Tiêu đề</th>
+                                    <th>Căn hộ</th>
+                                    <th>Tổng (đồng)</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ngày tạo</th>
+                                    <th></th>
+                                </tr>
                             </tfoot>
                             <tbody></tbody>
                         </table>
@@ -69,6 +69,7 @@
                 url: "/Management/ManageReceipt/Admin/GetManagerOrderList?userId=" + fromUserId,
                 dataSrc: ""
             },
+            "order": [["5", "desc"]],
             "bLengthChange": false,
             "bInfo": false,
             "columns": [

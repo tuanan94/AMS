@@ -48,6 +48,18 @@
           <Property Name="LastModified" Type="date" />
           <Property Name="AroundProviderId" Type="int" />
         </EntityType>
+        <EntityType Name="BalanceSheet">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="255" />
+          <Property Name="ForMonth" Type="datetime" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="LastModified" Type="datetime" />
+          <Property Name="ManagerId" Type="int" />
+        </EntityType>
         <EntityType Name="HelpdeskRequest">
           <Key>
             <PropertyRef Name="Id" />
@@ -159,15 +171,17 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="255" />
+          <Property Name="Type" Type="int" />
           <Property Name="ReceiptCode" Type="varchar" MaxLength="255" />
-          <Property Name="CreateDate" Type="datetime" />
-          <Property Name="LastModified" Type="datetime" />
+          <Property Name="PublishDate" Type="datetime" />
           <Property Name="PaymentDate" Type="datetime" />
-          <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="Status" Type="int" />
           <Property Name="HouseId" Type="int" />
+          <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="ManagerId" Type="int" />
-          <Property Name="Title" Type="nvarchar" MaxLength="255" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="LastModified" Type="datetime" />
         </EntityType>
         <EntityType Name="ReceiptDetail">
           <Key>
@@ -230,20 +244,6 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TypeId" Type="int" />
-          <Property Name="Title" Type="nvarchar" MaxLength="255" />
-          <Property Name="ForMonth" Type="datetime" />
-          <Property Name="Description" Type="nvarchar(max)" />
-          <Property Name="CreateDate" Type="datetime" />
-          <Property Name="LastModified" Type="datetime" />
-          <Property Name="ManagerId" Type="int" />
-          <Property Name="Status" Type="int" />
-        </EntityType>
-        <EntityType Name="TransactionItem">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" />
           <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="TotalAmount" Type="float" />
@@ -252,14 +252,14 @@
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="LastModified" Type="datetime" />
           <Property Name="TransactionId" Type="int" />
+          <Property Name="Type" Type="int" />
         </EntityType>
-        <EntityType Name="TransactionItemCategory">
+        <EntityType Name="TransactionCategory">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" />
-          <Property Name="Type" Type="int" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -529,36 +529,36 @@
         </Association>
         <Association Name="FK_Transaction_User">
           <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="Transaction" Type="Self.Transaction" Multiplicity="*" />
+          <End Role="BalanceSheet" Type="Self.BalanceSheet" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Transaction">
+            <Dependent Role="BalanceSheet">
               <PropertyRef Name="ManagerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_TransactionItem_Transaction">
-          <End Role="Transaction" Type="Self.Transaction" Multiplicity="0..1" />
-          <End Role="TransactionItem" Type="Self.TransactionItem" Multiplicity="*" />
+          <End Role="BalanceSheet" Type="Self.BalanceSheet" Multiplicity="0..1" />
+          <End Role="Transaction" Type="Self.Transaction" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Transaction">
+            <Principal Role="BalanceSheet">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="TransactionItem">
+            <Dependent Role="Transaction">
               <PropertyRef Name="TransactionId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_TransactionItem_TransactionItemCategory">
-          <End Role="TransactionItemCategory" Type="Self.TransactionItemCategory" Multiplicity="0..1" />
-          <End Role="TransactionItem" Type="Self.TransactionItem" Multiplicity="*" />
+          <End Role="TransactionCategory" Type="Self.TransactionCategory" Multiplicity="0..1" />
+          <End Role="Transaction" Type="Self.Transaction" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="TransactionItemCategory">
+            <Principal Role="TransactionCategory">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="TransactionItem">
+            <Dependent Role="Transaction">
               <PropertyRef Name="CategoryId" />
             </Dependent>
           </ReferentialConstraint>
@@ -616,6 +616,7 @@
           <EntitySet Name="AroundProvider" EntityType="Self.AroundProvider" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AroundProviderCategory" EntityType="Self.AroundProviderCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AroundProviderProduct" EntityType="Self.AroundProviderProduct" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BalanceSheet" EntityType="Self.BalanceSheet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HelpdeskRequest" EntityType="Self.HelpdeskRequest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HelpdeskRequestHelpdeskSupporter" EntityType="Self.HelpdeskRequestHelpdeskSupporter" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HelpdeskRequestLog" EntityType="Self.HelpdeskRequestLog" Schema="dbo" store:Type="Tables" />
@@ -632,8 +633,7 @@
           <EntitySet Name="Survey" EntityType="Self.Survey" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Transaction" EntityType="Self.Transaction" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="TransactionItem" EntityType="Self.TransactionItem" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="TransactionItemCategory" EntityType="Self.TransactionItemCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TransactionCategory" EntityType="Self.TransactionCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserAnswerSurvey" EntityType="Self.UserAnswerSurvey" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRateAroundProvider" EntityType="Self.UserRateAroundProvider" Schema="dbo" store:Type="Tables" />
@@ -715,15 +715,15 @@
           </AssociationSet>
           <AssociationSet Name="FK_Transaction_User" Association="Self.FK_Transaction_User">
             <End Role="User" EntitySet="User" />
-            <End Role="Transaction" EntitySet="Transaction" />
+            <End Role="BalanceSheet" EntitySet="BalanceSheet" />
           </AssociationSet>
           <AssociationSet Name="FK_TransactionItem_Transaction" Association="Self.FK_TransactionItem_Transaction">
+            <End Role="BalanceSheet" EntitySet="BalanceSheet" />
             <End Role="Transaction" EntitySet="Transaction" />
-            <End Role="TransactionItem" EntitySet="TransactionItem" />
           </AssociationSet>
           <AssociationSet Name="FK_TransactionItem_TransactionItemCategory" Association="Self.FK_TransactionItem_TransactionItemCategory">
-            <End Role="TransactionItemCategory" EntitySet="TransactionItemCategory" />
-            <End Role="TransactionItem" EntitySet="TransactionItem" />
+            <End Role="TransactionCategory" EntitySet="TransactionCategory" />
+            <End Role="Transaction" EntitySet="Transaction" />
           </AssociationSet>
           <AssociationSet Name="FK_User_House" Association="Self.FK_User_House">
             <End Role="House" EntitySet="House" />
@@ -751,6 +751,7 @@
           <EntitySet Name="AroundProviders" EntityType="AMSModel.AroundProvider" />
           <EntitySet Name="AroundProviderCategories" EntityType="AMSModel.AroundProviderCategory" />
           <EntitySet Name="AroundProviderProducts" EntityType="AMSModel.AroundProviderProduct" />
+          <EntitySet Name="BalanceSheets" EntityType="AMSModel.BalanceSheet" />
           <EntitySet Name="HelpdeskRequests" EntityType="AMSModel.HelpdeskRequest" />
           <EntitySet Name="HelpdeskRequestHelpdeskSupporters" EntityType="AMSModel.HelpdeskRequestHelpdeskSupporter" />
           <EntitySet Name="HelpdeskRequestLogs" EntityType="AMSModel.HelpdeskRequestLog" />
@@ -767,8 +768,7 @@
           <EntitySet Name="Surveys" EntityType="AMSModel.Survey" />
           <EntitySet Name="sysdiagrams" EntityType="AMSModel.sysdiagram" />
           <EntitySet Name="Transactions" EntityType="AMSModel.Transaction" />
-          <EntitySet Name="TransactionItems" EntityType="AMSModel.TransactionItem" />
-          <EntitySet Name="TransactionItemCategories" EntityType="AMSModel.TransactionItemCategory" />
+          <EntitySet Name="TransactionCategories" EntityType="AMSModel.TransactionCategory" />
           <EntitySet Name="Users" EntityType="AMSModel.User" />
           <EntitySet Name="UserAnswerSurveys" EntityType="AMSModel.UserAnswerSurvey" />
           <EntitySet Name="UserRateAroundProviders" EntityType="AMSModel.UserRateAroundProvider" />
@@ -791,6 +791,14 @@
           <AssociationSet Name="FK_tbl_resident_rate_around_srv_tbl_arround_srv" Association="AMSModel.FK_tbl_resident_rate_around_srv_tbl_arround_srv">
             <End Role="AroundProvider" EntitySet="AroundProviders" />
             <End Role="UserRateAroundProvider" EntitySet="UserRateAroundProviders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transaction_User" Association="AMSModel.FK_Transaction_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="BalanceSheet" EntitySet="BalanceSheets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TransactionItem_Transaction" Association="AMSModel.FK_TransactionItem_Transaction">
+            <End Role="BalanceSheet" EntitySet="BalanceSheets" />
+            <End Role="Transaction" EntitySet="Transactions" />
           </AssociationSet>
           <AssociationSet Name="FK_HelpdeskRequest_HelpdeskService" Association="AMSModel.FK_HelpdeskRequest_HelpdeskService">
             <End Role="HelpdeskService" EntitySet="HelpdeskServices" />
@@ -856,17 +864,9 @@
             <End Role="Survey" EntitySet="Surveys" />
             <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurveys" />
           </AssociationSet>
-          <AssociationSet Name="FK_Transaction_User" Association="AMSModel.FK_Transaction_User">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Transaction" EntitySet="Transactions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TransactionItem_Transaction" Association="AMSModel.FK_TransactionItem_Transaction">
-            <End Role="Transaction" EntitySet="Transactions" />
-            <End Role="TransactionItem" EntitySet="TransactionItems" />
-          </AssociationSet>
           <AssociationSet Name="FK_TransactionItem_TransactionItemCategory" Association="AMSModel.FK_TransactionItem_TransactionItemCategory">
-            <End Role="TransactionItemCategory" EntitySet="TransactionItemCategories" />
-            <End Role="TransactionItem" EntitySet="TransactionItems" />
+            <End Role="TransactionCategory" EntitySet="TransactionCategories" />
+            <End Role="Transaction" EntitySet="Transactions" />
           </AssociationSet>
           <AssociationSet Name="FK_tbl_resident_rate_around_srv_tbl_user" Association="AMSModel.FK_tbl_resident_rate_around_srv_tbl_user">
             <End Role="User" EntitySet="Users" />
@@ -926,6 +926,20 @@
           <Property Name="LastModified" Type="DateTime" Precision="0" />
           <Property Name="AroundProviderId" Type="Int32" />
           <NavigationProperty Name="AroundProvider" Relationship="AMSModel.FK_AroundServiceProduct_AroundProvider" FromRole="AroundProviderProduct" ToRole="AroundProvider" />
+        </EntityType>
+        <EntityType Name="BalanceSheet">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ForMonth" Type="DateTime" Precision="3" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="LastModified" Type="DateTime" Precision="3" />
+          <Property Name="ManagerId" Type="Int32" />
+          <NavigationProperty Name="User" Relationship="AMSModel.FK_Transaction_User" FromRole="BalanceSheet" ToRole="User" />
+          <NavigationProperty Name="Transactions" Relationship="AMSModel.FK_TransactionItem_Transaction" FromRole="BalanceSheet" ToRole="Transaction" />
         </EntityType>
         <EntityType Name="HelpdeskRequest">
           <Key>
@@ -1054,15 +1068,17 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="Int32" />
           <Property Name="ReceiptCode" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <Property Name="LastModified" Type="DateTime" Precision="3" />
+          <Property Name="PublishDate" Type="DateTime" Precision="3" />
           <Property Name="PaymentDate" Type="DateTime" Precision="3" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Int32" />
           <Property Name="HouseId" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ManagerId" Type="Int32" />
-          <Property Name="Title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="LastModified" Type="DateTime" Precision="3" />
           <NavigationProperty Name="House" Relationship="AMSModel.FK_tbl_receipt_tbl_house" FromRole="Receipt" ToRole="House" />
           <NavigationProperty Name="User" Relationship="AMSModel.FK_Receipt_User" FromRole="Receipt" ToRole="User" />
           <NavigationProperty Name="ReceiptDetails" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_receipt" FromRole="Receipt" ToRole="ReceiptDetail" />
@@ -1134,22 +1150,6 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TypeId" Type="Int32" />
-          <Property Name="Title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="ForMonth" Type="DateTime" Precision="3" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <Property Name="LastModified" Type="DateTime" Precision="3" />
-          <Property Name="ManagerId" Type="Int32" />
-          <Property Name="Status" Type="Int32" />
-          <NavigationProperty Name="User" Relationship="AMSModel.FK_Transaction_User" FromRole="Transaction" ToRole="User" />
-          <NavigationProperty Name="TransactionItems" Relationship="AMSModel.FK_TransactionItem_Transaction" FromRole="Transaction" ToRole="TransactionItem" />
-        </EntityType>
-        <EntityType Name="TransactionItem">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="TotalAmount" Type="Double" />
@@ -1158,17 +1158,17 @@
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="LastModified" Type="DateTime" Precision="3" />
           <Property Name="TransactionId" Type="Int32" />
-          <NavigationProperty Name="Transaction" Relationship="AMSModel.FK_TransactionItem_Transaction" FromRole="TransactionItem" ToRole="Transaction" />
-          <NavigationProperty Name="TransactionItemCategory" Relationship="AMSModel.FK_TransactionItem_TransactionItemCategory" FromRole="TransactionItem" ToRole="TransactionItemCategory" />
+          <Property Name="Type" Type="Int32" />
+          <NavigationProperty Name="BalanceSheet" Relationship="AMSModel.FK_TransactionItem_Transaction" FromRole="Transaction" ToRole="BalanceSheet" />
+          <NavigationProperty Name="TransactionCategory" Relationship="AMSModel.FK_TransactionItem_TransactionItemCategory" FromRole="Transaction" ToRole="TransactionCategory" />
         </EntityType>
-        <EntityType Name="TransactionItemCategory">
+        <EntityType Name="TransactionCategory">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Type" Type="Int32" />
-          <NavigationProperty Name="TransactionItems" Relationship="AMSModel.FK_TransactionItem_TransactionItemCategory" FromRole="TransactionItemCategory" ToRole="TransactionItem" />
+          <NavigationProperty Name="Transactions" Relationship="AMSModel.FK_TransactionItem_TransactionItemCategory" FromRole="TransactionCategory" ToRole="Transaction" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -1189,6 +1189,7 @@
           <Property Name="Fullname" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="LastModified" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="BalanceSheets" Relationship="AMSModel.FK_Transaction_User" FromRole="User" ToRole="BalanceSheet" />
           <NavigationProperty Name="HelpdeskRequestHelpdeskSupporters" Relationship="AMSModel.FK_tbl_h_desk_req_h_desk_tbl_user" FromRole="User" ToRole="HelpdeskRequestHelpdeskSupporter" />
           <NavigationProperty Name="HelpdeskRequestLogs" Relationship="AMSModel.FK_HelpdeskRequestLog_User1" FromRole="User" ToRole="HelpdeskRequestLog" />
           <NavigationProperty Name="HelpdeskRequestLogs1" Relationship="AMSModel.FK_HelpdeskRequestLog_User2" FromRole="User" ToRole="HelpdeskRequestLog" />
@@ -1196,7 +1197,6 @@
           <NavigationProperty Name="Posts" Relationship="AMSModel.FK_tbl_post_tbl_user" FromRole="User" ToRole="Post" />
           <NavigationProperty Name="Receipts" Relationship="AMSModel.FK_Receipt_User" FromRole="User" ToRole="Receipt" />
           <NavigationProperty Name="Role" Relationship="AMSModel.FK_tbl_user_tbl_role" FromRole="User" ToRole="Role" />
-          <NavigationProperty Name="Transactions" Relationship="AMSModel.FK_Transaction_User" FromRole="User" ToRole="Transaction" />
           <NavigationProperty Name="UserRateAroundProviders" Relationship="AMSModel.FK_tbl_resident_rate_around_srv_tbl_user" FromRole="User" ToRole="UserRateAroundProvider" />
           <NavigationProperty Name="UserAnswerSurveys" Relationship="AMSModel.FK_UserDoServey_User" FromRole="User" ToRole="UserAnswerSurvey" />
         </EntityType>
@@ -1280,6 +1280,30 @@
             </Principal>
             <Dependent Role="UserRateAroundProvider">
               <PropertyRef Name="AroundProviderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transaction_User">
+          <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="AMSModel.BalanceSheet" Role="BalanceSheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BalanceSheet">
+              <PropertyRef Name="ManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TransactionItem_Transaction">
+          <End Type="AMSModel.BalanceSheet" Role="BalanceSheet" Multiplicity="0..1" />
+          <End Type="AMSModel.Transaction" Role="Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BalanceSheet">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="TransactionId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1475,38 +1499,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Transaction_User">
-          <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+        <Association Name="FK_TransactionItem_TransactionItemCategory">
+          <End Type="AMSModel.TransactionCategory" Role="TransactionCategory" Multiplicity="0..1" />
           <End Type="AMSModel.Transaction" Role="Transaction" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="User">
+            <Principal Role="TransactionCategory">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Transaction">
-              <PropertyRef Name="ManagerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TransactionItem_Transaction">
-          <End Type="AMSModel.Transaction" Role="Transaction" Multiplicity="0..1" />
-          <End Type="AMSModel.TransactionItem" Role="TransactionItem" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Transaction">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TransactionItem">
-              <PropertyRef Name="TransactionId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TransactionItem_TransactionItemCategory">
-          <End Type="AMSModel.TransactionItemCategory" Role="TransactionItemCategory" Multiplicity="0..1" />
-          <End Type="AMSModel.TransactionItem" Role="TransactionItem" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TransactionItemCategory">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TransactionItem">
               <PropertyRef Name="CategoryId" />
             </Dependent>
           </ReferentialConstraint>
@@ -1584,6 +1584,19 @@
                 <ScalarProperty Name="ViewIndex" ColumnName="ViewIndex" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BalanceSheets">
+            <EntityTypeMapping TypeName="AMSModel.BalanceSheet">
+              <MappingFragment StoreEntitySet="BalanceSheet">
+                <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ForMonth" ColumnName="ForMonth" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1706,15 +1719,17 @@
           <EntitySetMapping Name="Receipts">
             <EntityTypeMapping TypeName="AMSModel.Receipt">
               <MappingFragment StoreEntitySet="Receipt">
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
-                <ScalarProperty Name="HouseId" ColumnName="HouseId" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
                 <ScalarProperty Name="LastModified" ColumnName="LastModified" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="HouseId" ColumnName="HouseId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+                <ScalarProperty Name="PublishDate" ColumnName="PublishDate" />
                 <ScalarProperty Name="ReceiptCode" ColumnName="ReceiptCode" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1783,21 +1798,7 @@
           <EntitySetMapping Name="Transactions">
             <EntityTypeMapping TypeName="AMSModel.Transaction">
               <MappingFragment StoreEntitySet="Transaction">
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
-                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="ForMonth" ColumnName="ForMonth" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="TransactionItems">
-            <EntityTypeMapping TypeName="AMSModel.TransactionItem">
-              <MappingFragment StoreEntitySet="TransactionItem">
+                <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
                 <ScalarProperty Name="LastModified" ColumnName="LastModified" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
@@ -1810,10 +1811,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="TransactionItemCategories">
-            <EntityTypeMapping TypeName="AMSModel.TransactionItemCategory">
-              <MappingFragment StoreEntitySet="TransactionItemCategory">
-                <ScalarProperty Name="Type" ColumnName="Type" />
+          <EntitySetMapping Name="TransactionCategories">
+            <EntityTypeMapping TypeName="AMSModel.TransactionCategory">
+              <MappingFragment StoreEntitySet="TransactionCategory">
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

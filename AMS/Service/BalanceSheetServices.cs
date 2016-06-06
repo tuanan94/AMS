@@ -10,74 +10,84 @@ namespace AMS.Service
     {
     }
 
-    public class TransactionService
+    public class BalanceSheetService
     {
-        GenericRepository<Transaction> _trasactionRepository = new GenericRepository<Transaction>();
+        GenericRepository<BalanceSheet> _trasactionRepository = new GenericRepository<BalanceSheet>();
 
-        public Transaction FindById(int id)
+        public BalanceSheet FindById(int id)
         {
             return _trasactionRepository.FindById(id);
         }
-        public void Add(Transaction transaction)
+        public void Add(BalanceSheet transaction)
         {
             _trasactionRepository.Add(transaction);
         }
-        public void Update(Transaction transaction)
+        public void Update(BalanceSheet transaction)
         {
             _trasactionRepository.Update(transaction);
         }
-        public Transaction FindByMonthYear(DateTime monthYear)
+        public BalanceSheet FindByMonthYear(DateTime monthYear)
         {
-            IEnumerable<Transaction> listTrans = _trasactionRepository.List.Where(r => r.ForMonth.Value != null &&
+            IEnumerable<BalanceSheet> listTrans = _trasactionRepository.List.Where(r => r.ForMonth.Value != null &&
                                                    r.ForMonth.Value.Month == monthYear.Month &&
                                                    r.ForMonth.Value.Year == monthYear.Year).ToList();
             return listTrans.Count() == 0 ? null : listTrans.First();
         }
-    }
 
-    public class TransItemCategoryService
-    {
-        GenericRepository<TransactionItemCategory> _transItemCatRepository = new GenericRepository<TransactionItemCategory>();
-
-        public TransactionItemCategory FindById(int id)
+        public BalanceSheet GetBalanceSheetForMonth(DateTime thisMonth)
         {
-            return _transItemCatRepository.FindById(id);
-        }
-        public List<TransactionItemCategory> GetByTransType(int type)
-        {
-            return _transItemCatRepository.List.Where(e => e.Type == type).ToList();
-        }
-        public void Add(TransactionItemCategory transaction)
-        {
-            _transItemCatRepository.Add(transaction);
-        }
-        public void Update(TransactionItemCategory transaction)
-        {
-            _transItemCatRepository.Update(transaction);
+            IEnumerable<BalanceSheet> balanceSheets = _trasactionRepository.List.Where(r => r.ForMonth.Value.Date.Month == thisMonth.Month
+                && r.ForMonth.Value.Date.Year == thisMonth.Year).ToList();
+            return balanceSheets.Count() == 0 ? null : balanceSheets.ToList().First();
         }
     }
 
-    public class TransItemService
+    public class TransactionCategoryService
     {
-        GenericRepository<TransactionItem> _transItemRepository = new GenericRepository<TransactionItem>();
+        GenericRepository<TransactionCategory> _transCatRepository = new GenericRepository<TransactionCategory>();
 
-        public TransactionItem FindById(int id)
+        public TransactionCategory FindById(int id)
         {
-            return _transItemRepository.FindById(id);
+            return _transCatRepository.FindById(id);
         }
-        public void Add(TransactionItem transactionItem)
+        public List<TransactionCategory> GetAll()
         {
-            _transItemRepository.Add(transactionItem);
+            return _transCatRepository.List.ToList();
         }
-        public void Update(TransactionItem transactionItem)
+        public void Add(TransactionCategory transaction)
         {
-            _transItemRepository.Update(transactionItem);
+            _transCatRepository.Add(transaction);
         }
-        public List<TransactionItem> GetByTransType(int type)
+        public void Update(TransactionCategory transaction)
+        {
+            _transCatRepository.Update(transaction);
+        }
+    }
+
+    public class TransactionService
+    {
+        GenericRepository<Transaction> _transactionRepository = new GenericRepository<Transaction>();
+
+        public Transaction FindById(int id)
+        {
+            return _transactionRepository.FindById(id);
+        }
+        public void Add(Transaction transactionItem)
+        {
+            _transactionRepository.Add(transactionItem);
+        }
+        public void Delete(Transaction transactionItem)
+        {
+            _transactionRepository.Delete(transactionItem);
+        }
+        public void Update(Transaction transactionItem)
+        {
+            _transactionRepository.Update(transactionItem);
+        }
+        public List<Transaction> GetByTransType()
         {
             return
-                _transItemRepository.List.Where(
-                    tr => tr.TransactionItemCategory.Type == type).ToList();
+                _transactionRepository.List.OrderByDescending(tr => tr.BalanceSheet.ForMonth).ToList();
         }
     }
 }

@@ -8,16 +8,13 @@
     <div class="panel panel-default">
 
         <div class="heading-tab">
-            <i class="fa fa-list"> Danh sách dịch vụ sửa chữa</i>
+            <i class="fa fa-list"> Quản lý thu chi</i>
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li>
                     <a href="/Management/BalanceSheet/View"><i class="fa fa-file-text-o"></i> Thu chi theo tháng</a>
                 </li>
                 <li class="active">
-                    <a href="/Management/BalanceSheet/ManageIncomeView"><i class="fa fa fa-plus"></i> Quản lý thu</a>
-                </li>
-                <li class="">
-                    <a href="/Management/BalanceSheet/ManageLiabilities"><i class="fa fa fa-plus"></i> Quản lý chi</a>
+                    <a href="/Management/BalanceSheet/ManageIncomeView"><i class="fa fa fa-plus"></i> Quản lý thu chi</a>
                 </li>
                 <li class="">
                     <a href="/Management/BalanceSheet/"><i class="fa fa fa-plus"></i> Biểu đồ</a>
@@ -37,6 +34,7 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Tên</th>
+                                                <th>Loại</th>
                                                 <th>Nhóm</th>
                                                 <th>Cho tháng</th>
                                                 <th>Giá tiền</th>
@@ -77,54 +75,65 @@
 
                     <form id="addIncomeLineForm" class="form-horizontal" role="form">
                         <div class="form-group">
-                            <label for="transItemTitle" class="col-sm-3 control-label">Tên </label>
+                            <label for="transTitle" class="col-sm-3 control-label">Tên </label>
                             <div class="col-sm-9">
-                                <input id="transItemTitle" type="text" name="TransItemTitle" class="form-control" value="">
+                                <input id="transTitle" type="text" name="TransTitle" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Loại </label>
+                            <div class="col-sm-9">
+                                <label class="radio-inline">
+                                    <input type="radio" value="1" checked="checked" name="TransType" />Thu
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" value="2" name="TransType" />Chi
+                                </label>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="transCat" class="col-sm-3 control-label">Nhóm </label>
                             <div class="col-sm-7">
-                                <select id="transCat" name="TransItemCatId" class="form-control" data-size="3"></select>
+                                <select id="transCat" name="TransCatId" class="form-control" data-size="3"></select>
                             </div>
                             <span class="btn btn-stroke btn-info btn-sm" onclick="closePopupAndShowOther()"><i class="fa fa-plus"></i> Nhóm</span>
                         </div>
                         <div class="form-group">
-                            <label for="transItemForMonthView" class="col-sm-3 control-label">Cho tháng</label>
+                            <label for="BalanceSheetForMonthView" class="col-sm-3 control-label">Cho tháng</label>
                             <div class="col-sm-9">
-                                <input id="transItemForMonthView" type="text" class="form-control"
+                                <input id="BalanceSheetForMonthView" type="text" class="form-control"
                                        data-date-start-view="1" data-date-format="mm-yyyy" data-date-language="vi"
-                                       data-date-min-view-mode="1" data-date-end-date="+1m" data-date-start-date="-3m" />
+                                       data-date-min-view-mode="1" data-date-end-date="0m" data-date-start-date="0m" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="transItemTotalAmount" class="col-sm-3 control-label">Tổng thanh toán</label>
+                            <label for="transTotalAmount" class="col-sm-3 control-label">Tổng thanh toán</label>
                             <div class="col-sm-9">
-                                <input id="transItemTotalAmount" name="TransItemTotalAmount" type="text" class="form-control" value="">
+                                <input id="transTotalAmount" name="TransTotalAmount" type="text" class="form-control" value="">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="transItemPaidAmount" class="col-sm-3 control-label">Đã thanh toán</label>
+                            <label for="transPaidAmount" class="col-sm-3 control-label">Đã thanh toán</label>
                             <div class="col-sm-9">
-                                <input id="transItemPaidAmount" name="TransItemPaidAmount" type="text" class="form-control" value="">
+                                <input id="transPaidAmount" name="TransPaidAmount" type="text" class="form-control" value="">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="transItemDesc" class="col-sm-3 control-label">Mô tả</label>
+                            <label for="transDesc" class="col-sm-3 control-label">Mô tả</label>
                             <div class="col-sm-9">
-                                <textarea id="transItemDesc" name="TransItemDesc" class="form-control" rows="3"></textarea>
+                                <textarea id="transDesc" name="TransDesc" class="form-control" rows="3"></textarea>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-offset-9 col-md-2">
                                 <span id="addIncomeTrans" onclick="addIncomeTransaction()" class="btn btn-primary">Chấp nhận</span>
                             </div>
-                            <div class="col-sm-offset-9 col-md-2 ">
+                            <div class="col-md-2 ">
                                 <span id="updateIncomeTrans" onclick="updateIncomeTransaction()" class="btn btn-primary hide">Chấp nhận</span>
                             </div>
                         </div>
-                        <input type="hidden" id="transItemForMonth" name="TransItemForMonth" value="" />
-                        <input type="hidden" id="transItemId" name="TransItemId" value="" />
+                        <input type="hidden" id="transForMonth" name="TransForMonth" value="" />
+                        <input type="hidden" id="transId" name="TransId" value="" />
                     </form>
                 </div>
             </div>
@@ -153,22 +162,12 @@
 
                     <form id="addTransactionTypeForm" class="form-horizontal" role="form">
                         <div class="form-group">
-                            <label for="transTypeName" class="col-sm-3 control-label">Tên </label>
+                            <label for="transCategoryName" class="col-sm-3 control-label">Tên </label>
                             <div class="col-sm-9">
-                                <input id="transTypeName" type="text" name="TransItemCatName" class="form-control" value="">
+                                <input id="transCategoryName" type="text" name="TransCategoryName" class="form-control" value="">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Loại </label>
-                            <div class="col-sm-9">
-                                <label class="radio-inline">
-                                    <input type="radio" value="1" checked="checked" name="TransItemType" />Thu
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" value="2" name="TransItemType" />Chi
-                                </label>
-                            </div>
-                        </div>
+                        
                         <div class="form-group">
                             <div class="col-sm-offset-9 col-md-2">
                                 <span id="addHdSrv" onclick="addTransactionItemCat()" class="btn btn-primary">Chấp nhận</span>
@@ -182,8 +181,10 @@
 </div>
 
 <script>
+    
     $(document).ready(function () {
-        $("#transItemForMonthView").datepicker();
+        $("#BalanceSheetForMonthView").datepicker();
+        window.deleteTransList = [];
 
         window.listIncomeTable = $("#listIncomeTbl").DataTable({
             "bLengthChange": false,
@@ -192,6 +193,7 @@
                 url: "/Management/BalanceSheet/GetIncomeTransItems",
                 dataSrc: ""
             },
+            rowId: 'TransId',
             "drawCallback": function (settings) {
                 var addBtn = "<div class='col-md-1'>" +
                     "<span class='btn btn-info' onclick='openAddIncomeLineModal()'>" +
@@ -199,15 +201,27 @@
                     "</span>" +
                     "</div>";
                 $("#listIncomeTbl_wrapper > div:nth-child(1) > div:nth-child(1)").html(addBtn);
+
+                var deleteBtn =
+            "<div class='hide' id='delHdSrvBtnGroup'>" +
+                "<span class='btn btn-warning btn-stroke' onclick='cancelDeleteTrans()'>" +
+                    "<i class='fa fa-plus'></i> Hủy" +
+                "</span>" +
+                "<span class='btn btn-primary' style='margin-left: 5px' onclick='commitDeleteTrans()'>" +
+                    "<i class='fa fa-plus'></i> Chấp nhận" +
+                "</span>" +
+            "</div>";
+                $("#listIncomeTbl_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(deleteBtn);
             },
             "columns": [
-            { data: "TransItemTitle" },
-            { data: "TransItemTitle" },
-            { data: "TransItemCatName" },
-            { data: "TransItemForMonth" },
-            { data: "TransItemTotalAmount" },
-            { data: "TransItemCreateDate" },
-            { data: "TransItemId" }
+                { data: "TransTitle" },
+                { data: "TransTitle" },
+                { data: "TransType" },
+                { data: "TransCatName" },
+                { data: "TransForMonth" },
+                { data: "TransTotalAmount" },
+                { data: "TransCreateDate" },
+                { data: "TransId" }
             ],
             "columnDefs": [
                 {
@@ -216,23 +230,38 @@
                     "targets": 0
                 },
                 {
-                    "targets": 3,
-                    "data": "TransItemForMonth",
+                    "targets": 2,
+                    "data": "TransType",
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
-                            var dateMonth = data.split("-");
-
-                            return "<td>" +
-                                        "<span class='label date-color' style='margin-right: 5px'>" + dateMonth[0] + "</span>" +
-                                        "<span class='label time-color'>" + +dateMonth[1] + "</span>" +
-                                    "</td>";
+                            if (data === window.Transaction_Type_Income) {
+                                return "<span class='btn btn-success btn-xs' style='margin-right: 5px'>Thu</span>";
+                            } else {
+                                return "<span class='btn btn-warning btn-xs' style='margin-right: 5px'>Chi</span>";
+                            }
+                            
                         }
                         return data;
                     }
                 },
                 {
                     "targets": 4,
-                    "data": "TransItemTotalAmount",
+                    "data": "TransForMonth",
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            var dateMonth = data.split("-");
+
+                            return "<td>" +
+                                "<span class='label date-color' style='margin-right: 5px'>" + dateMonth[0] + "</span>" +
+                                "<span class='label time-color'>" + +dateMonth[1] + "</span>" +
+                                "</td>";
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "targets": 5,
+                    "data": "TransTotalAmount",
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
                             return numberWithCommas(data);
@@ -241,15 +270,15 @@
                     }
                 },
                 {
-                    "targets": 6,
-                    "data": "TransItemId",
+                    "targets": 7,
+                    "data": "TransId",
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
                             return "<div class='text-right'>" +
                                 " <span onclick='openUpdateIncomeLineModal(\"" + data + "\")' class='btn btn-default btn-xs'> " +
-                                    " <i class='fa fa-pencil'></i> " +
+                                " <i class='fa fa-pencil'></i> " +
                                 " </span> " +
-                                " <span href='#' class='btn btn-danger btn-xs' onclick='deleteHelpdeskService(\"" + data + "\")'> " +
+                                " <span href='#' class='btn btn-danger btn-xs' onclick='deleteTrans(\"" + data + "\")'> " +
                                 "    <i class='fa fa-times'></i> " +
                                 "  </span> " +
                                 " </div>";
@@ -260,7 +289,7 @@
                 {
                     "searchable": false,
                     "orderable": false,
-                    "targets": 6
+                    "targets": 7
                 }
             ]
         });
@@ -329,15 +358,19 @@
             data: { id: id },
             success: function (data) {
                 var obj = data.Data;
-                $("#transItemTitle").val(obj.TransItemTitle);
-                $("#transCat").val(obj.TransItemCatName);
-                $("#transItemForMonthView").val(obj.TransItemForMonth);
-                $("#transItemTotalAmount").val(obj.TransItemTotalAmount);
-                $("#transItemPaidAmount").val(obj.TransItemPaidAmount);
-                $("#transItemDesc").val(obj.TransItemDesc);
-                $("#transItemId").val(obj.TransItemId);
+                $("#transTitle").val(obj.TransTitle);
+                $("#transCat").val(obj.TransCatName);
+                $("#BalanceSheetForMonthView").val(obj.TransForMonth);
+                $("#transTotalAmount").val(obj.TransTotalAmount);
+                $("#transPaidAmount").val(obj.TransPaidAmount);
+                $("#transDesc").val(obj.TransDesc);
+                $("#transId").val(obj.TransId);
+                var dbId = obj.TransType;
+                $("input:radio[name=TransType]").filter("[value="+ dbId+"]").prop("checked","true");
 
-                getTransactionItemCat(1, obj.TransItemCatId, function (data) {
+                window.Transaction_Type_Income = 1;
+                window.Transaction_Type_Expense = 2;
+                getTransactionItemCat(1, obj.TransCatId, function (data) {
                     $("#transCat").html(data);
 
                     $("#addIncomeTrans").removeClass("hide").addClass("hide");
@@ -350,8 +383,8 @@
     }
 
     function updateIncomeTransaction() {
-        var forMounth = "01-" + $("#transItemForMonthView").val();
-        $("#transItemForMonth").val(forMounth);
+        var forMounth = "01-" + $("#BalanceSheetForMonthView").val();
+        $("#transForMonth").val(forMounth);
         $.ajax({
             url: "/Management/BalanceSheet/UpdateTransactionItem",
             type: "POST",
@@ -373,12 +406,12 @@
                 console.log(data);
             }
         });
-        $("#transItemForMonth").val("");
+        $("#transForMonth").val("");
     }
 
     function addIncomeTransaction() {
-        var forMounth = "01-" + $("#transItemForMonthView").val();
-        $("#transItemForMonth").val(forMounth);
+        var forMounth = "01-" + $("#BalanceSheetForMonthView").val();
+        $("#transForMonth").val(forMounth);
         $.ajax({
             url: "/Management/BalanceSheet/AddTransactionItem",
             type: "POST",
@@ -400,6 +433,42 @@
                 console.log(data);
             }
         });
-        $("#transItemForMonth").val("");
+        $("#transForMonth").val("");
+    }
+    function deleteTrans(id) {
+        $("#delHdSrvBtnGroup").removeClass("show").addClass("show");
+        $("#trans_" + id).css("display", "none");
+        window.deleteTransList.push(id);
+    }
+    function cancelDeleteTrans() {
+        for (var i = 0; i < window.deleteTransList.length; i++) {
+            $("#trans_" + window.deleteTransList[i]).css("display", "table-row");
+        }
+        window.deleteTransList = new Array();
+        $("#delBtnGroup").removeClass("show").addClass("hide");;
+    }
+    function commitDeleteTrans() {
+        var postData = { transDeletedList: window.deleteTransList }
+        $.ajax({
+            url: "/Management/BalanceSheet/DeleteTransactions",
+            type: "post",
+            data: postData,
+            dataType: "json",
+            traditional: true,
+            success: function (data) {
+                reloadHdSrvTable();
+                if (data.StatusCode === 0) {
+                    window.listIncomeTable.ajax.reload();
+                    window.deleteHdSrvList = new Array();
+                } else {
+                    $("#delBtnGroup").removeClass("show");
+                    $("#delBtnGroup").addClass("hide");
+                    $("#messageModal .msgContent").text("Xóa dịch vụ hổ trợ thất bại!");
+                }
+            },
+            error: function () {
+
+            }
+        });
     }
 </script>
