@@ -11,10 +11,13 @@
             <i class="fa fa-list"> Quản lý thu chi</i>
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li>
-                    <a href="/Management/BalanceSheet/View"><i class="fa fa-file-text-o"></i> Thu chi theo tháng</a>
+                    <a href="/Management/BalanceSheet/View"><i class="fa fa-file-text-o"></i> Báo cáo thu chi</a>
                 </li>
                 <li class="active">
                     <a href="/Management/BalanceSheet/ManageIncomeView"><i class="fa fa fa-plus"></i> Quản lý thu chi</a>
+                </li>
+                <li>
+                    <a href="/Management/BalanceSheet/ManageTransactionCatView"><i class="fa fa fa-plus"></i> Quản lý nhóm thu chi</a>
                 </li>
                 <li class="">
                     <a href="/Management/BalanceSheet/"><i class="fa fa fa-plus"></i> Biểu đồ</a>
@@ -59,7 +62,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Thêm khoản thu</h4>
+                <h4 id="incomeLineModalTitle" class="modal-title">Thêm giao dịch</h4>
             </div>
             <div class="modal-body">
                 <div class="panel-body">
@@ -109,13 +112,13 @@
                         <div class="form-group">
                             <label for="transTotalAmount" class="col-sm-3 control-label">Tổng thanh toán</label>
                             <div class="col-sm-9">
-                                <input id="transTotalAmount" name="TransTotalAmount" type="text" class="form-control" value="">
+                                <input id="transTotalAmountView" type="text" class="form-control" value="">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="transPaidAmount" class="col-sm-3 control-label">Đã thanh toán</label>
                             <div class="col-sm-9">
-                                <input id="transPaidAmount" name="TransPaidAmount" type="text" class="form-control" value="">
+                                <input id="transPaidAmountView" type="text" class="form-control" value="">
                             </div>
                         </div>
                         <div class="form-group">
@@ -128,11 +131,13 @@
                             <div class="col-sm-offset-9 col-md-2">
                                 <span id="addIncomeTrans" onclick="addIncomeTransaction()" class="btn btn-primary">Chấp nhận</span>
                             </div>
-                            <div class="col-md-2 ">
+                            <div class="col-sm-offset-9 col-md-2">
                                 <span id="updateIncomeTrans" onclick="updateIncomeTransaction()" class="btn btn-primary hide">Chấp nhận</span>
                             </div>
                         </div>
                         <input type="hidden" id="transForMonth" name="TransForMonth" value="" />
+                        <input type="hidden" id="transPaidAmount" name="TransPaidAmount" value="" />
+                        <input type="hidden" id="transTotalAmount" name="TransTotalAmount" value="" />
                         <input type="hidden" id="transId" name="TransId" value="" />
                     </form>
                 </div>
@@ -167,7 +172,7 @@
                                 <input id="transCategoryName" type="text" name="TransCategoryName" class="form-control" value="">
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <div class="col-sm-offset-9 col-md-2">
                                 <span id="addHdSrv" onclick="addTransactionItemCat()" class="btn btn-primary">Chấp nhận</span>
@@ -181,7 +186,7 @@
 </div>
 
 <script>
-    
+
     $(document).ready(function () {
         $("#BalanceSheetForMonthView").datepicker();
         window.deleteTransList = [];
@@ -239,7 +244,7 @@
                             } else {
                                 return "<span class='btn btn-warning btn-xs' style='margin-right: 5px'>Chi</span>";
                             }
-                            
+
                         }
                         return data;
                     }
@@ -274,6 +279,13 @@
                     "data": "TransId",
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
+                            if (full.TransEditable === -1) {
+                                return "<div class='text-right'>" +
+                                " <span onclick='openViewIncomeLineModal(\"" + data + "\")' class='btn btn-info btn-stroke btn-xs'> " +
+                                " <i class='fa fa-info'></i> " +
+                                " </span> " +
+                                " </div>";
+                            }
                             return "<div class='text-right'>" +
                                 " <span onclick='openUpdateIncomeLineModal(\"" + data + "\")' class='btn btn-default btn-xs'> " +
                                 " <i class='fa fa-pencil'></i> " +
@@ -301,6 +313,26 @@
         $("#addTransactionTypeModal").on("hidden.bs.modal", function () {
             resetFormData("addTransactionTypeForm");
         });
+
+        $("#transTotalAmountView").on("keyup", function () {
+            console.log($(this).val());
+            if ($(this).val() && (isNaN(replaceCommaNumber($(this).val())) === false)) {
+                var value = replaceCommaNumber($(this).val());
+                $(this).val(numberWithCommas(value));
+            } else {
+                $(this).val("");
+            }
+        });
+        $("#transPaidAmountView").on("keyup", function () {
+            console.log($(this).val());
+            if ($(this).val() && (isNaN(replaceCommaNumber($(this).val())) === false)) {
+                var value = replaceCommaNumber($(this).val());
+                $(this).val(numberWithCommas(value));
+            } else {
+                $(this).val("");
+            }
+        });
+
     });
 
     function closePopupAndShowOther() {
@@ -347,11 +379,40 @@
             $("#updateIncomeTrans").removeClass("hide").addClass("hide");
             $("#addIncomeTrans").removeClass("hide");
 
+            $("#incomeLineModalTitle").text("Thêm giao dịch");
+            $("#successAddTransNotify").text("Thêm giao dịch thành công");
+            $("#failedAddTransTypeNotify").text("Thêm giao dịch thất bại");
+
+            $("#addIncomeLineModal").modal("show");
+        });
+    }
+    function openUpdateIncomeLineModal(id) {
+        getTransItemDetail(id, function (data) {
+            $("#transCat").html(data);
+
+            $("#addIncomeTrans").removeClass("hide").addClass("hide");
+            $("#updateIncomeTrans").removeClass("hide");
+
+            $("#incomeLineModalTitle").text("Cập nhật giao dịch");
+            $("#successAddTransNotify").text("Cập nhật giao dịch thành công");
+            $("#failedAddTransTypeNotify").text("Cập nhật giao dịch thất bại");
+
             $("#addIncomeLineModal").modal("show");
         });
     }
 
-    function openUpdateIncomeLineModal(id) {
+    function openViewIncomeLineModal(id) {
+        getTransItemDetail(id, function (data) {
+            $("#transCat").html(data);
+
+            $("#addIncomeTrans").removeClass("hide").addClass("hide");
+            $("#updateIncomeTrans").removeClass("hide").addClass("hide");
+            $("#incomeLineModalTitle").text("Thông tin giao dịch");
+
+            $("#addIncomeLineModal").modal("show");
+        });
+    }
+    function getTransItemDetail(id, callback) {
         $.ajax({
             url: "/Management/BalanceSheet/GetTransItemDetail",
             type: "GET",
@@ -361,30 +422,30 @@
                 $("#transTitle").val(obj.TransTitle);
                 $("#transCat").val(obj.TransCatName);
                 $("#BalanceSheetForMonthView").val(obj.TransForMonth);
-                $("#transTotalAmount").val(obj.TransTotalAmount);
-                $("#transPaidAmount").val(obj.TransPaidAmount);
+                $("#transTotalAmountView").val(numberWithCommas(obj.TransTotalAmount));
+                $("#transPaidAmountView").val(numberWithCommas(obj.TransPaidAmount));
                 $("#transDesc").val(obj.TransDesc);
                 $("#transId").val(obj.TransId);
                 var dbId = obj.TransType;
-                $("input:radio[name=TransType]").filter("[value="+ dbId+"]").prop("checked","true");
+                $("input:radio[name=TransType]").filter("[value=" + dbId + "]").prop("checked", "true");
 
-                window.Transaction_Type_Income = 1;
-                window.Transaction_Type_Expense = 2;
                 getTransactionItemCat(1, obj.TransCatId, function (data) {
-                    $("#transCat").html(data);
-
-                    $("#addIncomeTrans").removeClass("hide").addClass("hide");
-                    $("#updateIncomeTrans").removeClass("hide");
-
-                    $("#addIncomeLineModal").modal("show");
+                    callback(data);
                 });
             }
         });
     }
 
+
     function updateIncomeTransaction() {
         var forMounth = "01-" + $("#BalanceSheetForMonthView").val();
         $("#transForMonth").val(forMounth);
+
+        var transTotalAmount = replaceCommaNumber($("#transTotalAmountView").val());
+        var transPaidAmount = replaceCommaNumber($("#transPaidAmountView").val());
+        $("#transTotalAmount").val(transTotalAmount);
+        $("#transPaidAmount").val(transPaidAmount);
+
         $.ajax({
             url: "/Management/BalanceSheet/UpdateTransactionItem",
             type: "POST",
@@ -406,12 +467,20 @@
                 console.log(data);
             }
         });
-        $("#transForMonth").val("");
+//        $("#transForMonth").val("");
+//        $("#transTotalAmount").val("");
+//        $("#transPaidAmount").val("");
     }
 
     function addIncomeTransaction() {
         var forMounth = "01-" + $("#BalanceSheetForMonthView").val();
         $("#transForMonth").val(forMounth);
+
+        var transTotalAmount = replaceCommaNumber($("#transTotalAmountView").val());
+        var transPaidAmount = replaceCommaNumber($("#transPaidAmountView").val());
+        $("#transTotalAmount").val(transTotalAmount);
+        $("#transPaidAmount").val(transPaidAmount);
+
         $.ajax({
             url: "/Management/BalanceSheet/AddTransactionItem",
             type: "POST",
@@ -445,7 +514,7 @@
             $("#trans_" + window.deleteTransList[i]).css("display", "table-row");
         }
         window.deleteTransList = new Array();
-        $("#delBtnGroup").removeClass("show").addClass("hide");;
+        $("#delHdSrvBtnGroup").removeClass("show").addClass("hide");;
     }
     function commitDeleteTrans() {
         var postData = { transDeletedList: window.deleteTransList }

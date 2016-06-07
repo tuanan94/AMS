@@ -1282,3 +1282,65 @@ function replaceCommaNumber(x) {
 function resetFormData(id) {
     $("#" + id).closest("form").find("input[type=text], textarea").val("");
 }
+
+function removeHiddenBackgroundPopup() {
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
+}
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+function createChart(id, data) {
+    var obj = {};
+    var listLbl = [];
+    var listVal = [];
+    var bgColorList = [];
+
+    for (var i = 0; i < data.length; i++) {
+        obj = data[i];
+        listLbl.push(obj.Name);
+        listVal.push(obj.TotalAmount);
+        bgColorList.push(randomColor2());
+    }
+    var config = {
+        type: 'pie',
+        data: {
+            labels: listLbl,
+            datasets: [
+                {
+                    data: listVal,
+                    backgroundColor: bgColorList
+                }
+            ]
+        },
+        options: {
+            tooltips: {
+                enabled: false
+            },
+            legend: {
+                display: true,
+                labels: {
+                    fontSize: 15
+                },
+                position: "bottom"
+            }
+        }
+    };
+    var ctx2 = document.getElementById(id).getContext("2d");
+    return new Chart(ctx2, config);
+}
+function randomColor2() {
+    var r = Math.floor(Math.random() * 200);
+    var g = Math.floor(Math.random() * 250);
+    var b = Math.floor(Math.random() * 400);
+    var v = Math.floor(Math.random() * 500);
+    var c = 'rgb(' + r + ', ' + g + ', ' + b + ')';
+    return c;
+}

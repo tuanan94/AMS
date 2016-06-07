@@ -1,0 +1,272 @@
+﻿
+@{
+    ViewBag.Title = "ManageTransactionCategory";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+}
+<div class="col-md-12">
+    <div class="panel panel-default">
+
+        <div class="heading-tab">
+            <i class="fa fa-list"> Quản lý thu chi</i>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li>
+                    <a href="/Management/BalanceSheet/View"><i class="fa fa-file-text-o"></i> Báo cáo thu chi</a>
+                </li>
+                <li >
+                    <a href="/Management/BalanceSheet/ManageIncomeView"><i class="fa fa fa-plus"></i> Quản lý thu chi</a>
+                </li>
+                <li class="active">
+                    <a href="/Management/BalanceSheet/ManageTransactionCatView"><i class="fa fa fa-plus"></i> Quản lý nhóm thu chi</a>
+                </li>
+                <li class="">
+                    <a href="/Management/BalanceSheet/"><i class="fa fa fa-plus"></i> Biểu đồ</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="panel-body">
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="">
+                    <div class="panel panel-default" style="border-color: transparent">
+                        <form class="form-horizontal" role="form">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table id="listTransTypeTbl" class="table v-middle table-striped table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Tên</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="addTransactionTypeModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 id="addTransactionTypeModalTitle" class="modal-title">Thêm loại giao dịch</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+
+                    <div class="alert alert-info" id="successAddTransTypeNotify" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span>Thêm loại giao dịch thành công.</span>
+                    </div>
+                    <div class="alert alert-warning" id="failedAddTransTypeNotify" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span>Thêm loại giao dịch thất bại.</span>
+                    </div>
+
+                    <form id="addTransactionTypeForm" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="transCategoryName" class="col-sm-3 control-label">Tên </label>
+                            <div class="col-sm-9">
+                                <input id="transCategoryName" type="text" name="TransCategoryName" class="form-control" value="">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-9 col-md-2">
+                                <span id="addTransCatBtn" onclick="addTransactionItemCat()" class="btn btn-primary">Chấp nhận</span>
+                            </div>
+                            <div class="col-sm-offset-9 col-md-2">
+                                <span id="updateTransCatBtn" onclick="updateTransactionItemCat()" class="btn btn-primary hide">Chấp nhận</span>
+                            </div>
+                        </div>
+                        <input type="hidden" name="TransCategoryId" id="transCategoryId" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        window.deleteTransCatList = [];
+        window.lstTransCatTable = $("#listTransTypeTbl").DataTable({
+            "bLengthChange": false,
+            "bInfo": false,
+            "ajax": {
+                url: "/Management/BalanceSheet/GetAllTransactionTypeFull",
+                dataSrc: ""
+            },
+            rowId: 'TransId',
+            "drawCallback": function (settings) {
+                var addBtn = "<div class='col-md-1'>" +
+                    "<span class='btn btn-info' onclick='openAddTransCatModal()'>" +
+                    "<i class='fa fa-plus'></i>" +
+                    "</span>" +
+                    "</div>";
+                $("#listTransTypeTbl_wrapper > div:nth-child(1) > div:nth-child(1)").html(addBtn);
+                var deleteBtn =
+            "<div class='hide' id='delHdSrvBtnGroup'>" +
+                "<span class='btn btn-warning btn-stroke' onclick='cancelDeleteTransCat()'>" +
+                    "<i class='fa fa-plus'></i> Hủy" +
+                "</span>" +
+                "<span class='btn btn-primary' style='margin-left: 5px' onclick='commitDeleteTransCat()'>" +
+                    "<i class='fa fa-plus'></i> Chấp nhận" +
+                "</span>" +
+            "</div>";
+                $("#listTransTypeTbl_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(deleteBtn);
+            },
+            "columns": [
+                { data: "TransCategoryName" },
+                { data: "TransCategoryName" },
+                { data: "TransCategoryId" }
+            ],
+            "columnDefs": [
+                {
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0
+                },
+                {
+                    "targets": 2,
+                    "data": "TransCategoryId",
+                    "searchable": false,
+                    "orderable": false,
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            return "<div class='text-right'>" +
+                                " <span onclick='openUpdateTransCatModal(\"" + data + "\")' class='btn btn-default btn-xs'> " +
+                                " <i class='fa fa-pencil'></i> " +
+                                " </span> " +
+                                " <span href='#' class='btn btn-danger btn-xs' onclick='deleteTransCat(\"" + data + "\")'> " +
+                                "    <i class='fa fa-times'></i> " +
+                                "  </span> " +
+                                " </div>";
+                        }
+                        return data;
+                    }
+                }
+            ]
+        });
+        generateTableIndex(lstTransCatTable);
+        $("#addTransactionTypeModal").on("hidden.bs.modal", function () {
+            resetFormData("addTransactionTypeForm");
+            removeHiddenBackgroundPopup();
+        });
+    });
+
+    function deleteTransCat(id) {
+        $("#delHdSrvBtnGroup").removeClass("show").addClass("show");
+        $("#trans_cat_" + id).css("display", "none");
+        window.deleteTransCatList.push(id);
+    }
+    function cancelDeleteTransCat() {
+        for (var i = 0; i < window.deleteTransCatList.length; i++) {
+            $("#trans_cat_" + window.deleteTransCatList[i]).css("display", "table-row");
+        }
+        window.deleteTransCatList = new Array();
+        $("#delHdSrvBtnGroup").removeClass("show").addClass("hide");;
+    }
+
+    function openUpdateTransCatModal(id) {
+        $.ajax({
+            url: "/Management/BalanceSheet/GetDetailTransCat?transCat="+id,
+            type: "Get",
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    $("#transCategoryName").val(data.Data.TransCategoryName);
+                    $("#transCategoryId").val(data.Data.TransCategoryId);
+                    $("#addTransactionTypeModal").modal("show");
+
+
+                    $("#updateTransCatBtn").removeClass("hide");
+                    $("#addTransCatBtn").addClass("hide");
+                    $("#addTransactionTypeModalTitle").text("Cập nhật loại giao dịch");
+                    $("#successAddTransTypeNotify").text("Cập nhật loại giao dịch thành công.");
+                    $("#failedAddTransTypeNotify").text("Cập nhật loại giao dịch thất bại.");
+
+                } 
+            },
+            error: function () {
+
+            }
+        });
+    }
+
+    function commitDeleteTransCat() {
+        var postData = { transCatDeletedList: window.deleteTransCatList }
+        $.ajax({
+            url: "/Management/BalanceSheet/DeleteTransCat",
+            type: "post",
+            data: postData,
+            dataType: "json",
+            traditional: true,
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    window.lstTransCatTable.ajax.reload(); 
+                    window.deleteTransCatList = new Array();
+                } else {
+                    $("#delBtnGroup").removeClass("show");
+                    $("#delBtnGroup").addClass("hide");
+                    $("#messageModal .msgContent").text("Xóa dịch vụ hổ trợ thất bại!");
+                }
+            },
+            error: function () {
+
+            }
+        });
+    }
+    function openAddTransCatModal() {
+        $("#updateTransCatBtn").addClass("hide");
+        $("#addTransCatBtn").removeClass("hide");
+        $("#addTransactionTypeModalTitle").text("Thêm loại giao dịch");
+        $("#successAddTransTypeNotify").text("Thêm loại giao dịch thành công.");
+        $("#failedAddTransTypeNotify").text("Thêm loại giao dịch thất bại.");
+
+        $("#addTransactionTypeModal").modal("show");
+    }
+    function addTransactionItemCat() {
+        $.ajax({
+            "url": "/Management/BalanceSheet/AddTransactionType",
+            "type": "POST",
+            "data": $("#addTransactionTypeForm").serialize(),
+            "success": function (data) {
+                if (data.StatusCode === 0) {
+                    $("#successAddTransTypeNotify").fadeIn("fast");
+                    window.lstTransCatTable.ajax.reload();
+                    setTimeout(function () {
+                        $("#successAddTransTypeNotify").fadeOut("fast");
+                        resetFormData("addTransactionTypeForm");
+                    }, 3000);
+                }
+            }
+        });
+    }
+    function updateTransactionItemCat() {
+        $.ajax({
+            "url": "/Management/BalanceSheet/UpdateTransactionType",
+            "type": "POST",
+            "data": $("#addTransactionTypeForm").serialize(),
+            "success": function (data) {
+                if (data.StatusCode === 0) {
+                    $("#successAddTransTypeNotify").fadeIn("fast");
+                    window.lstTransCatTable.ajax.reload();
+                    setTimeout(function () {
+                        $("#successAddTransTypeNotify").fadeOut("fast");
+                        $("#addTransactionTypeModal").modal("hide");
+                        resetFormData("addTransactionTypeForm");
+                    }, 3000);
+                }
+            }
+        });
+    }
+    
+</script>

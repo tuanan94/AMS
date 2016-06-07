@@ -219,4 +219,14 @@ textarea {
     resize: none;
 }
 
-
+canvas{
+        width: 100% !important;
+        max-width: 300px;
+        height: auto !important;
+    }
+.align-middle {
+position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);    
+}

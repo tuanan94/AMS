@@ -14,7 +14,7 @@ namespace AMS.Models
     {
         public int TransCategoryId { get; set; }
         public string TransCategoryName { get; set; }
-        public int TransItemType { get; set; }
+        public string DT_RowId { get; set; }
     }
 
     public class ShortTransCategoryModel
@@ -38,6 +38,7 @@ namespace AMS.Models
         public string TransDesc { get; set; }
         public string TransCreateDate { get; set; }
         public string DT_RowId { get; set; }
+        public int TransEditable { get; set; }
     }
 
     public class AmountGroupByTransCategory

@@ -62,6 +62,10 @@ namespace AMS.Service
         {
             _transCatRepository.Update(transaction);
         }
+        public void Delete(TransactionCategory transaction)
+        {
+            _transCatRepository.Delete(transaction);
+        }
     }
 
     public class TransactionService

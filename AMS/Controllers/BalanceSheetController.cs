@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using AMS.Constant;
 using AMS.Models;
 using AMS.Service;
@@ -232,6 +233,13 @@ namespace AMS.Controllers
                 ViewBag.balanceSheetStatus = -1;
             }
 
+            List<AmountGroupByTransCategory> incomeTransactions = new List<AmountGroupByTransCategory>();
+            incomeTransactions.AddRange(listIncomeGroupByCategories);
+            incomeTransactions.AddRange(totalAmountPubReceiptGroupByType);
+
+            var incomeTransactionsJson = new JavaScriptSerializer().Serialize(incomeTransactions);
+            var expenseTransactionsJson = new JavaScriptSerializer().Serialize(listExpenseGroupByCategories);
+
             ViewBag.thisMonth = requestMonth.ToString("MM-yyyy");
             ViewBag.createDate = thisMonthBS.CreateDate.Value.ToString(AmsConstants.DateFormat);
             ViewBag.lastUpdate = thisMonthBS.LastModified.Value.ToString(AmsConstants.DateFormat);
@@ -247,8 +255,10 @@ namespace AMS.Controllers
             ViewBag.totalUnpaidExpense = totalExpense - totalPaidExpense;
 
             ViewBag.listExpenseGroupByCategories = listExpenseGroupByCategories;
-            ViewBag.listIncomeGroupByCategories = listIncomeGroupByCategories;
-            ViewBag.totalAmountPubReceiptGroupByType = totalAmountPubReceiptGroupByType;
+            ViewBag.incomeTransactions = incomeTransactions;
+
+            ViewBag.incomeTransactionsJson = incomeTransactionsJson;
+            ViewBag.expenseTransactionsJson = expenseTransactionsJson;
 
             return View("BalanceSheet");
         }
@@ -257,7 +267,14 @@ namespace AMS.Controllers
         [Route("Management/BalanceSheet/ManageIncomeView")]
         public ActionResult ViewManageIncome()
         {
-            return View("ManageIncome");
+            return View("ManageTransaction");
+        }
+
+        [HttpGet]
+        [Route("Management/BalanceSheet/ManageTransactionCatView")]
+        public ActionResult ViewManageTransactionCat()
+        {
+            return View("ManageTransactionCategory");
         }
 
         [HttpGet]
@@ -285,6 +302,28 @@ namespace AMS.Controllers
                 response.StatusCode = -1;
                 response.Msg = AmsConstants.MsgUserNotFound;
             }
+            return Json(response);
+        }
+
+        [HttpPost]
+        [Route("Management/BalanceSheet/UpdateTransactionType")]
+        public ActionResult UpdateTransactionType(TransCategoryModel transCategory)
+        {
+            MessageViewModels response = new MessageViewModels();
+
+            TransactionCategory transItemCatE = _transCategoryService.FindById(transCategory.TransCategoryId);
+            if (null != transItemCatE)
+            {
+                transItemCatE.Name = transCategory.TransCategoryName;
+                _transCategoryService.Update(transItemCatE);
+            }
+            else
+            {
+                response.StatusCode = -1;
+                response.Msg = AmsConstants.MsgUserNotFound;
+            }
+                
+            
             return Json(response);
         }
 
@@ -428,7 +467,7 @@ namespace AMS.Controllers
 
         [HttpGet]
         [Route("Management/BalanceSheet/GetAllTransactionType")]
-        public ActionResult AddTransactionType(int type)
+        public ActionResult GetTransactionType(int type)
         {
             MessageViewModels response = new MessageViewModels();
             User u = _userServices.FindById(Int32.Parse(User.Identity.GetUserId()));
@@ -456,6 +495,36 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
+        [Route("Management/BalanceSheet/GetAllTransactionTypeFull")]
+        public ActionResult GetTransactionTypeFull()
+        {
+            MessageViewModels response = new MessageViewModels();
+            User u = _userServices.FindById(Int32.Parse(User.Identity.GetUserId()));
+            if (u != null)
+            {
+
+                List<TransactionCategory> list = _transCategoryService.GetAll();
+                List<TransCategoryModel> modelList = new List<TransCategoryModel>();
+                TransCategoryModel m = null;
+                foreach (var i in list)
+                {
+                    m = new TransCategoryModel();
+                    m.DT_RowId = new StringBuilder("trans_cat_").Append(i.Id).ToString();
+                    m.TransCategoryId = i.Id;
+                    m.TransCategoryName = i.Name;
+                    modelList.Add(m);
+                }
+                return Json(modelList, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                response.StatusCode = -1;
+                response.Msg = AmsConstants.MsgUserNotFound;
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
         [Route("Management/BalanceSheet/GetIncomeTransItems")]
         public ActionResult GetIncomeTransItems()
         {
@@ -467,6 +536,7 @@ namespace AMS.Controllers
                 List<Transaction> list = _transactionService.GetByTransType();
                 List<TransactionModel> modelList = new List<TransactionModel>();
                 TransactionModel m = null;
+                DateTime now = DateTime.Today.Date;
                 foreach (var i in list)
                 {
                     m = new TransactionModel();
@@ -478,6 +548,17 @@ namespace AMS.Controllers
                     m.TransTotalAmount = i.TotalAmount.Value;
                     m.TransPaidAmount = i.PaidAmount.Value;
                     m.TransCreateDate = i.CreateDate.Value.ToString(AmsConstants.DateFormat);
+
+                    if (i.BalanceSheet.ForMonth.Value.Date.Month == now.Month &&
+                        i.BalanceSheet.ForMonth.Value.Year == now.Year)
+                    {
+                        m.TransEditable = 1;
+                    }
+                    else
+                    {
+                        m.TransEditable = -1;
+                    }
+                    
                     m.TransType = i.Type.Value;
                     modelList.Add(m);
                 }
@@ -537,5 +618,52 @@ namespace AMS.Controllers
             }
             return Json(response, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpGet]
+        [Route("Management/BalanceSheet/GetDetailTransCat")]
+        public ActionResult GetDetailTransCat(int transCat)
+        {
+            MessageViewModels response = new MessageViewModels();
+            TransactionCategory transaction = _transCategoryService.FindById(transCat);
+                if (null != transaction)
+                {
+                    TransCategoryModel model = new TransCategoryModel();
+                    model.TransCategoryId = transaction.Id;
+                    model.TransCategoryName = transaction.Name;
+                    response.Data = model;
+                }
+                else
+                {
+                    response.StatusCode = -1;
+                    response.Msg = AmsConstants.MsgUserNotFound;
+                }
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [Route("Management/BalanceSheet/DeleteTransCat")]
+        public ActionResult DeleteTransactionCategory(List<int> transCatDeletedList)
+        {
+            MessageViewModels response = new MessageViewModels();
+            User u = _userServices.FindById(Int32.Parse(User.Identity.GetUserId()));
+            if (u != null)
+            {
+                foreach (var transId in transCatDeletedList)
+                {
+                    TransactionCategory transactionCat = _transCategoryService.FindById(transId);
+                    if (transactionCat != null)
+                    {
+                        _transCategoryService.Delete(transactionCat);
+                    }
+                }
+            }
+            else
+            {
+                response.StatusCode = -1;
+                response.Msg = AmsConstants.MsgUserNotFound;
+            }
+            return Json(response);
+        }
     }
+
 }
