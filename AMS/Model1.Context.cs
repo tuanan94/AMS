@@ -29,6 +29,7 @@ namespace AMS
         public virtual DbSet<AroundProvider> AroundProviders { get; set; }
         public virtual DbSet<AroundProviderCategory> AroundProviderCategories { get; set; }
         public virtual DbSet<AroundProviderProduct> AroundProviderProducts { get; set; }
+        public virtual DbSet<BalanceSheet> BalanceSheets { get; set; }
         public virtual DbSet<HelpdeskRequest> HelpdeskRequests { get; set; }
         public virtual DbSet<HelpdeskRequestHelpdeskSupporter> HelpdeskRequestHelpdeskSupporters { get; set; }
         public virtual DbSet<HelpdeskRequestLog> HelpdeskRequestLogs { get; set; }
@@ -45,8 +46,7 @@ namespace AMS
         public virtual DbSet<Survey> Surveys { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
-        public virtual DbSet<TransactionItem> TransactionItems { get; set; }
-        public virtual DbSet<TransactionItemCategory> TransactionItemCategories { get; set; }
+        public virtual DbSet<TransactionCategory> TransactionCategories { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAnswerSurvey> UserAnswerSurveys { get; set; }
         public virtual DbSet<UserRateAroundProvider> UserRateAroundProviders { get; set; }
