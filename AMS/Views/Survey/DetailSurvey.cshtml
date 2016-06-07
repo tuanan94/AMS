@@ -8,6 +8,7 @@
     List<string> listAnswer = ViewBag.CountAnswer;
     List<string> listBlock = ViewBag.ListBlock;
     List<string> listFloor = ViewBag.ListFloor;
+    string alert = ViewBag.alert;
 }
 <script src="http://code.jquery.com/jquery-1.6.3.min.js"></script>
 @*<script src="http://code.highcharts.com/highcharts.js"></script>*@
@@ -20,10 +21,40 @@
 
 </script>
 <style>
-    .binh {
-        border-color: #1ABC9C;
-        box-shadow: none;
+    .isa_info, .isa_success, .isa_warning, .isa_error {
+        margin: 10px 0px;
+        padding: 12px;
     }
+
+    .isa_info {
+        color: #00529B;
+        background-color: #BDE5F8;
+    }
+
+    .isa_success {
+        color: #4F8A10;
+        background-color: #DFF2BF;
+    }
+
+    .isa_warning {
+        color: #9F6000;
+        background-color: #FEEFB3;
+    }
+
+    .isa_error {
+        color: #D8000C;
+        background-color: #FFBABA;
+    }
+
+        .isa_info i, .isa_success i, .isa_warning i, .isa_error i {
+            margin: 10px 22px;
+            font-size: 2em;
+            vertical-align: middle;
+        }
+     .binh {
+         border-color: #1ABC9C;
+         box-shadow: none;
+     }
 </style>
 <div class="col-sm-offset-1 col-sm-10">
     <div class="panel panel-default binh">
@@ -48,6 +79,24 @@
                     {
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-8">
+                                @{
+                        if (alert != null)
+                        {
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label"></label>
+                                <div class="col-sm-7" id="label1">
+                                    @*<div class="alert alert-success" style="width: 330px">
+                <strong><span class="label date-color label-gray center">Tao thanh cong</span></strong>
+            </div>*@
+                                    <div class="isa_success" style="width: 330px">
+                                        <i class="fa fa-check"></i>
+                                        @alert
+                                    </div>
+                                </div>
+
+                            </div><br>
+                        }
+                                }
                                 <legend class="scheduler-border">Thông tin survey</legend>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Tiêu đề</label>
@@ -59,19 +108,19 @@
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Ngày tạo</label>
                                     <div class="col-sm-7">
-                                        @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control binh", style = "width: 330px", @Value = surveys.StartDate })<br>
+                                        @Html.TextBoxFor(m => m.StartDate, new {@class = "form-control binh", style = "width: 330px", @Value = surveys.StartDate})<br>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Ngày bắt đầu</label>
                                     <div class="col-sm-7">
-                                        @Html.TextBoxFor(m => m.PublishDate, new { @class = "form-control binh", style = "width: 330px", @Value = surveys.PublishDate })<br>
+                                        @Html.TextBoxFor(m => m.PublishDate, new {@class = "form-control binh", style = "width: 330px", @Value = surveys.PublishDate})<br>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Ngày kết thúc</label>
                                     <div class="col-sm-7">
-                                        @Html.TextBoxFor(m => m.EndDate, new { @class = "form-control binh", style = "width: 330px", @Value = surveys.EndDate })<br>
+                                        @Html.TextBoxFor(m => m.EndDate, new {@class = "form-control binh", style = "width: 330px", @Value = surveys.EndDate})<br>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -81,11 +130,11 @@
                                             <option value="@surveys.Block">@surveys.Block</option>
                                             <option value="NULL">Tất cả</option>
                                             @{
-                        foreach (var item in listBlock)
-                        {
-                            
-                                    <option value="@item">@item</option>
-                        }
+                                                foreach (var item in listBlock)
+                                                {
+
+                                                    <option value="@item">@item</option>
+                                                }
                                             }
                                         </select><br>
 
@@ -100,11 +149,11 @@
                                             <option value="@surveys.Floor">@surveys.Floor</option>
                                             <option value="NULL">Tất cả</option>
                                             @{
-                        foreach (var item in listFloor)
-                        {
-                           
-                                    <option value="@item">@item</option>
-                        }
+                                                foreach (var item in listFloor)
+                                                {
+
+                                                    <option value="@item">@item</option>
+                                                }
                                             }
                                         </select><br>
 
@@ -154,21 +203,21 @@
                                     <label for="inputEmail3" class="col-sm-3 control-label">Chế độ bảo mật</label>
                                     <div class="col-sm-7">
                                         <select class="form-control binh" name="privacy" style="width: 330px">
-                                            
+
                                             @{
-                         if ( surveys.Privacy ==1)
+                                                if (surveys.Privacy == 1)
                                                 {
                                                     <option value="1">Công khai</option>
-                                                 <option value="2">Bảo mật</option>
+                                                    <option value="2">Bảo mật</option>
                                                 }
-                                                else if (surveys.Privacy==2)
+                                                else if (surveys.Privacy == 2)
                                                 {
                                                     <option value="2">Bảo mật</option>
-                                                 <option value="1">Công khai</option>
+                                                    <option value="1">Công khai</option>
                                                 }
                                             }
-                                           
-                                           
+
+
                                         </select><br>
 
 
@@ -257,6 +306,7 @@
     </div>
 </div>
 <script>
+    $('#label1').delay(2500).fadeOut('slow');
     $(function () {
         $("#StartDate").datepicker();
         //$("#StartDate").attr('readOnly', 'false');

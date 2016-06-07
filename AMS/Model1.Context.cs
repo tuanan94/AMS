@@ -25,11 +25,17 @@ namespace AMS
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
         public virtual DbSet<Answer> Answers { get; set; }
         public virtual DbSet<AroundProvider> AroundProviders { get; set; }
         public virtual DbSet<AroundProviderCategory> AroundProviderCategories { get; set; }
         public virtual DbSet<AroundProviderProduct> AroundProviderProducts { get; set; }
+        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
+        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
+        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
+        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<BalanceSheet> BalanceSheets { get; set; }
+        public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<HelpdeskRequest> HelpdeskRequests { get; set; }
         public virtual DbSet<HelpdeskRequestHelpdeskSupporter> HelpdeskRequestHelpdeskSupporters { get; set; }
         public virtual DbSet<HelpdeskRequestLog> HelpdeskRequestLogs { get; set; }

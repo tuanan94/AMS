@@ -20,7 +20,7 @@ namespace AMS.Controllers
         UserServices userService = new UserServices();
         //
         // GET: /Survey/
-        public ActionResult Survey()
+        public ActionResult Survey(string alerts)
         {
             List<House> listHouseBlock = userAnswerService.GetListBlock();
             List<string> listBlock = new List<string>();
@@ -36,6 +36,7 @@ namespace AMS.Controllers
             }
             List<Survey> listSurveys = surveyService.GetListSurveys();
             //   int a = listCount.Count;
+            ViewBag.alerts = alerts;
             ViewBag.ListBlock = listBlock;
             ViewBag.ListFloor = listFloor;
             ViewBag.ListSurvey = listSurveys;
@@ -168,7 +169,7 @@ namespace AMS.Controllers
             return RedirectToAction("Survey");
         }
 
-        public ActionResult DetailSurvey(int surveyId)
+        public ActionResult DetailSurvey(int surveyId, string alert)
         {
 
             List<House> listHouseBlock = userAnswerService.GetListBlock();
@@ -201,6 +202,7 @@ namespace AMS.Controllers
                  string percent = string.Format("{0:00.0}", (answerCount / count * 100));
                  listCounts.Add(percent);
              }
+            ViewBag.alert = alert;
             ViewBag.ListBlock = listBlock;
             ViewBag.ListFloor = listFloor;
              ViewBag.CountAnswer = listCounts;
@@ -282,7 +284,7 @@ namespace AMS.Controllers
             obj.Floor = listFloor[0];
             obj.Privacy = int.Parse(privacy[0]);
             surveyService.UpdateSurvey(obj);
-            return RedirectToAction("DetailSurvey", new { surveyId =obj.Id});
+            return RedirectToAction("DetailSurvey", new { surveyId =obj.Id, alert ="Cập nhật thành công!"});
         }
 
         [HttpPost]
@@ -380,7 +382,7 @@ namespace AMS.Controllers
             }
             ViewBag.Alert = "Tạo survey thành công!!";
           //  return View("Survey");
-            return RedirectToAction("Survey");
+            return RedirectToAction("Survey", new { alerts = "Tạo survey thành công!!" });
         }
     }
 }

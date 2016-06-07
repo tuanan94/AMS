@@ -5,7 +5,7 @@
     List<Survey> listSurveys = ViewBag.ListSurvey;
     List<string> listBlock = ViewBag.ListBlock;
     List<string> listFloor = ViewBag.ListFloor;
-    string alert = ViewBag.Alert;
+    string alerts = ViewBag.alerts;
     <style>
         .button {
             display: block;
@@ -96,7 +96,7 @@ padding:12px;
                         <div class="col-sm-offset-2 col-sm-8">
                             <fieldset class="scheduler-border less-padding">
                                 @{
-                                    if (alert != null)
+                    if (alerts != null)
                                     {
                                        <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label"></label>
@@ -106,7 +106,7 @@ padding:12px;
                                         </div>*@
                                         <div class="isa_success" style="width: 330px">
                                             <i class="fa fa-check"></i>
-                                            @alert
+                                            @alerts
                                         </div>
                                     </div>
 
@@ -344,7 +344,7 @@ padding:12px;
 
 <script>
    
-    $('#label1').delay(2000).fadeOut('slow');
+    $('#label1').delay(2500).fadeOut('slow');
 
 
     $(function () {
@@ -367,7 +367,7 @@ padding:12px;
             return false;
 
     }
-    pageSize = 4;
+    pageSize = 6;
 
     showPage = function (page) {
         $(".content").hide();

@@ -18,6 +18,7 @@ namespace AMS
         public User()
         {
             this.BalanceSheets = new HashSet<BalanceSheet>();
+            this.Comments = new HashSet<Comment>();
             this.HelpdeskRequestHelpdeskSupporters = new HashSet<HelpdeskRequestHelpdeskSupporter>();
             this.HelpdeskRequestLogs = new HashSet<HelpdeskRequestLog>();
             this.HelpdeskRequestLogs1 = new HashSet<HelpdeskRequestLog>();
@@ -45,6 +46,8 @@ namespace AMS
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BalanceSheet> BalanceSheets { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Comment> Comments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HelpdeskRequestHelpdeskSupporter> HelpdeskRequestHelpdeskSupporters { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
