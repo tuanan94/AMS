@@ -2,13 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
+using System.Web.Mvc;
 
 namespace AMS.Service
 {
     public class AdminService
     {
         GenericRepository<House> allHouseInfo = new GenericRepository<House>();
+        House house = new House();
         
         // get house's info
         // return list house's info
@@ -20,7 +23,6 @@ namespace AMS.Service
         //add House
         public void addHouse(String Block, String Floor, String HouseName, String Description, float Area)
         {
-            House house = new House();
             house.Block = Block;
             house.Floor = Floor;
             house.HouseName = HouseName;
@@ -36,6 +38,24 @@ namespace AMS.Service
             var result = allHouseInfo.FindById(Id);
             return result;
         }
+
+        // GET: Admin/updateHouse2
+        public House getDetail(int Id)
+        {
+            if (Id == 0)
+            {
+                return null;
+            }
+
+            house = allHouseInfo.FindById(Id);
+            if (house == null)
+            {
+                return null;
+            }
+
+            return house;
+        }
+
 
 
         #region delete House
@@ -64,7 +84,6 @@ namespace AMS.Service
             bool isValid = true;
             isValid = !HouseName.Equals("");
 
-            House house = new House();
             house.Id = Id;
             house = allHouseInfo.FindById(house.Id);
             if (house != null && isValid == true)
@@ -88,7 +107,6 @@ namespace AMS.Service
         public String updateHouse2(int Id,String HouseName, String Description)
         {
             bool isValid = true;
-            House house = new House();
             house = allHouseInfo.FindById(house.Id);
             house.Id = Id;
             if (house != null && isValid == true)

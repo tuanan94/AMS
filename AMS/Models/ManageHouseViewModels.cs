@@ -39,21 +39,13 @@ namespace AMS.Models
         public string Area { get; set; }
 
     }
-    public class updateHouse
+    public class AdminManageHouseViewModel
     {
-        [Required]
-        [StringLength(10, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 5)]
-        [Display(Name = "HouseID")]
-        public string Id { get; set; }
-        [Required]
-        [StringLength(10, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 1)]
-        [Display(Name = "HouseName")]
+        public int Id { get; set; }
+        public string Block { get; set; }
+        public string Description { get; set; }
+        public string Floor { get; set; }
         public string HouseName { get; set; }
-
-        // [Required]
-        [StringLength(10, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 1)]
-        [Display(Name = "Discription")]
-        public string Discription { get; set; }
-
+        public float Area { get; set; }
     }
 }

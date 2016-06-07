@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 namespace AMS.Controllers
@@ -24,16 +25,23 @@ namespace AMS.Controllers
             return View();
         }
        
-      
+        [HttpGet]
+        // GET : Admin/updateHouse2
+        public ActionResult Edit(int Id )
+        {
+            House house  = manageHouseInfo.getDetail(Id);
+            ViewBag.houseInfo = house;
+            return View(house);
+          
+        }
         public ActionResult viewHouse()
         {
             List<House> allHouseInfo = manageHouseInfo.getAllHouseInfo();
             ViewBag.allHouseInfo = allHouseInfo;
+
             return View();
-          
         }
 
-        
         
         public ActionResult updateHouse()
         {

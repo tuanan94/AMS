@@ -1,9 +1,7 @@
-﻿@{ 
-    ViewBag.Title = "update House version 2";
+﻿@{
+    ViewBag.Title = "updateHouse";
 
-    List<House> allHouseInfo = ViewBag.allHouseInfo;
-    List<House> allHouse = ViewBag.allHouse;
-    House house = ViewBag.allHouseInfo;
+    House houseInfo = ViewBag.houseInfo;
 }
 @*@{
     int index = 0;
@@ -62,7 +60,7 @@
     <div class="panel panel-default">
         <div class="panel-heading panel-heading-gray">Update House</div>
         <div class="panel-body">
-            <form class="form-horizontal" role="form" method="post">
+            <form class="form-horizontal" action="" role="form" method="post">
                 <div class="table-responsive">
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-3 control-label">House Id</label>

@@ -13,7 +13,5 @@ namespace AMS.ViewModel
         public string Floor { get; set; }
         public string HouseName { get; set; }
         public float Area { get; set; }
-
-      
     }
 }
