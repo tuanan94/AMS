@@ -24,6 +24,7 @@ namespace AMS
         public static int POST_STATUS_PROTECTED = 1;
         public static int POST_STATUS_HIDE = 2;
         public static String dirPostImage = "postImage";
+        public static String dirHouseProfileImage = "houseImage";
         public static int RECEIPT_STATUS_UNPUBLISHED = 1;
         public static int RECEIPT_STATUS_UNPAID = 2;
         public static int RECEIPT_STATUS_PAID = 3;

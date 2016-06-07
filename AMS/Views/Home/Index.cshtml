@@ -5,7 +5,7 @@
 }
 <div class="container-fluid">
         <div class="cover overlay">
-            <img src="images/profile-cover.jpg" alt="cover">
+            <img src="~/images/profile-cover.jpg" alt="cover">
             <a href="#" class="btn btn-cover"><i class="fa fa-pencil fa-fw"></i></a>
         </div>
         <div class="row">
@@ -156,7 +156,7 @@
 
     $("#uploadEditorImage").change(function () {
         var data = new FormData();
-        data.append("dir","@SLIM_CONFIG.dirPostImage");
+        data.append("dir","@SLIM_CONFIG.dirHouseProfileImage");
         var files = $("#uploadEditorImage").get(0).files;
         if (files.length > 0) {
             data.append("HelpSectionImages", files[0]);
@@ -202,6 +202,7 @@
                     addPostToTimeline(index, jsonObject);
                     getImagesForPost(index, jsonObject["Id"]);
                     getUserProfileForPost(index, jsonObject["Id"]);
+                    getCommentsForPost(jsonObject["Id"]);
                 });
             },
             error: function (er) {
@@ -231,6 +232,7 @@
 
                 }
                 $('#userNamePost' + id).html(obj["Username"])
+                $('#userHrefPost' + id).attr("href","/Profile/"+obj["Id"])
             },
             error: function (er) {
                 alert(er)
@@ -240,10 +242,14 @@
     }
     function addPostToTimeline(index, postObject) {
         $("#timeline").append('<li class="media">'
-                       +'<div class="pull-left">'
+                       
+                       + '<div class="pull-left">'
+                        + '<a id="userHrefPost'+postObject['Id']+'" href="">'
                             + '<img id="userImagePost' + postObject['Id'] + '" src="images/people/110/woman-5.jpg" alt="people" class="img-circle" width="80">'
-                            +'<div id="userNamePost'+postObject['Id']+'" class="date">3 MAY</div>'
-                        +'</div>'
+                            + '<div id="userNamePost' + postObject['Id'] + '" class="date">3 MAY</div>'
+                             + '</a>'
+                        + '</div>'
+                       
                         +'<div class="media-body">'
                             +'<div class="panel panel-default">'
                                 +'<div class="panel-body" >'
@@ -254,45 +260,118 @@
                                     + postObject['EmbedCode']
                                     +'</div>'
                                 +'</div>'
-                                +'<div class="view-all-comments"><a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments</div>'
-                                +'<ul class="comments">'
-                                    +'<li>'
-                                        +'<div class="media">'
-                                            +'<a href="" class="pull-left">'
-                                                +'<img  src="images/people/50/woman-5.jpg" class="media-object">'
-                                            +'</a>'
-                                            +'<div class="media-body">'
-                                                +'<a href="" class="comment-author">Mary</a>'
-                                                +'<span>Thanks Bill</span>'
-                                                +'<div class="comment-date">2 days</div>'
-                                            +'</div>'
-                                        +'</div>'
-                                    +'</li>'
-                                    +'<li>'
-                                        +'<div class="media">'
-                                            +'<a href="" class="pull-left">'
-                                                +'<img src="images/people/50/guy-5.jpg" class="media-object">'
-                                            +'</a>'
-                                            +'<div class="media-body">'
-                                                +'<a href="" class="comment-author">Bill D.</a>'
-                                                +'<span>What time did it finish?</span>'
-                                                +'<div class="comment-date">14 min</div>'
-                                            +'</div>'
-                                        +'</div>'
-                                    +'</li>'
-                                    +'<li class="comment-form">'
-                                        +'<div class="input-group">'
-                                            + '<input type="text" class="form-control">'
-                                            +'<span class="input-group-addon">'
-                                                +'<a href=""><i class="fa fa-photo"></i></a>'
-                                            +'</span>'
-                                        +'</div>'
-                                    +'</li>'
-                                +'</ul>'
+                                +'<div class="view-all-comments" id="countComment'+postObject['Id']+'"><a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments</div>'
+                                +'<ul class="comments" id="commentsArea'+postObject['Id']+'">'
+                                   
+                                + '</ul>'
+                                + '<ul class="comments">'
+                                 + '<li class="comment-form">'
+                                        + '<div class="input-group">'
+                                            + '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control">'
+                                            + '<span class="input-group-addon">'
+                                                + '<button class="btn btn-success" onclick="addComment(' + postObject['Id'] + ')">Bình luận</button>'
+                                            + '</span>'
+                                        + '</div>'
+                                    + '</li>'
+                                + '</ul>'
                             +'</div>'
                         +'</div>'
                     +'</li>')
     }
+
+    function addComment(postId) {
+        $.ajax({
+            url: "/Post/CreateComment",
+            type: "POST",
+            data: {
+                detail: $("#contentDetail" + postId).val(),
+                postId: postId,
+            },
+            success: function (successData) {
+                if (successData === 'success') {
+                    $("#commentsArea" + postId).html("");
+                    getCommentsForPost(postId)
+                    $("#contentDetail" + postId).val("")
+                } else {
+                    alert(successData)
+                }
+            },
+            error: function (er) {
+                alert(er)
+            }
+
+        });
+    }
+
+    function getCommentsForPost(postid) {
+        if (postid == null) {
+            alert("postid == null");
+            return;
+        }
+        $.ajax({
+            url: "/Post/getCommentsForPost",
+            type: "GET",
+            data: {
+                postId: postid,
+            },
+            success: function (successData) {
+                var obj = JSON.parse(successData);
+                $("#countComment"+postid).html(obj.length + " bình luận")
+                $.each(obj, function (index, comment) {
+                    addCommentToCommentArea(postid,comment)
+                });
+            },
+            error: function (er) {
+                alert(er)
+            }
+
+        });
+    }
+    function addCommentToCommentArea(postId, comment) {
+        $("#commentsArea"+postId).append('<li>'
+                                        +'<div class="media">'
+                                            +'<a href="" class="pull-left">'
+                                                + '<img  src="' + comment['userProfile'] + '" class="media-object" style="width:50px">'
+                                            +'</a>'
+                                            +'<div class="media-body">'
+                                                + '<a href="/Profile/' + comment['userId'] + '" class="comment-author">' + comment['username'] + ': </a>' 
+                                                + '<span>' + comment['detail'] + '</span>'
+                                                + '<div class="comment-date">' + timeSince(new Date(comment['createdDate'])) + ' trước </div>'
+                                            +'</div>'
+                                        +'</div>'
+                                    + '</li>')
+       
+    }
+
+
+    function timeSince(date) {
+
+        var seconds = Math.floor((new Date() - date) / 1000);
+
+        var interval = Math.floor(seconds / 31536000);
+
+        if (interval >= 1) {
+            return interval + " năm";
+        }
+        interval = Math.floor(seconds / 2592000);
+        if (interval >= 1) {
+            return interval + " tháng";
+        }
+        interval = Math.floor(seconds / 86400);
+        if (interval >= 1) {
+            return interval + " ngày";
+        }
+        interval = Math.floor(seconds / 3600);
+        if (interval >= 1) {
+            return interval + " giờ";
+        }
+        interval = Math.floor(seconds / 60);
+        if (interval >= 1) {
+            return interval + " phút";
+        }
+        return Math.floor(seconds) + " giây";
+    }
+
 
 
     function getImagesForPost(index, id) {

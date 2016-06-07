@@ -25,9 +25,16 @@ namespace AMS
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
         public virtual DbSet<Answer> Answers { get; set; }
         public virtual DbSet<AroundProvider> AroundProviders { get; set; }
         public virtual DbSet<AroundProviderCategory> AroundProviderCategories { get; set; }
+        public virtual DbSet<AroundProviderProduct> AroundProviderProducts { get; set; }
+        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
+        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
+        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
+        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+        public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<HelpdeskRequest> HelpdeskRequests { get; set; }
         public virtual DbSet<HelpdeskRequestHelpdeskSupporter> HelpdeskRequestHelpdeskSupporters { get; set; }
         public virtual DbSet<HelpdeskRequestLog> HelpdeskRequestLogs { get; set; }
@@ -39,12 +46,15 @@ namespace AMS
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Receipt> Receipts { get; set; }
         public virtual DbSet<ReceiptDetail> ReceiptDetails { get; set; }
-        public virtual DbSet<ResidentRateAroundProvider> ResidentRateAroundProviders { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<ServiceFee> ServiceFees { get; set; }
         public virtual DbSet<Survey> Surveys { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
+        public virtual DbSet<Transaction> Transactions { get; set; }
+        public virtual DbSet<TransactionItem> TransactionItems { get; set; }
+        public virtual DbSet<TransactionItemCategory> TransactionItemCategories { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAnswerSurvey> UserAnswerSurveys { get; set; }
+        public virtual DbSet<UserRateAroundProvider> UserRateAroundProviders { get; set; }
     }
 }

@@ -1,0 +1,83 @@
+﻿    
+@{  
+    ViewBag.Title = "Nhà";
+    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+    User user = ViewBag.user;
+}
+<div class="container-fluid">
+    <div class="media user-profile">
+        <div class="media-object pull-left">
+            <div class="panel panel-default profile-user-box">
+                <div class="avatar">
+                    <img style="width:200px" src="@(user.ProfileImage==null||user.ProfileImage.Equals("")?"/Content/images/defaultProfile.png":user.ProfileImage)" alt="" class="img-circle">
+                    <h3>@user.Username</h3>
+                    <a href="/House/@user.HouseId" class="btn btn-success">Nhà @user.House.HouseName <i class="fa fa-check-circle fa-fw"></i></a>
+                </div>
+                <div class="profile-icons" style="height:auto">
+                    <span><i class="fa fa-users"></i>Nhà @user.House.HouseName</span> <br /><span><i class="fa fa-photo"></i> Block @user.House.Block</span> <span><i class="fa fa-video-camera"></i> Tầng @user.House.Floor </span>
+                </div>
+            </div>
+
+         
+        </div>
+        <div class="media-body">
+            <div class="row">
+                <div class="col-md-6">
+
+                    <!--Friends -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading panel-heading-gray">
+                            <a href="#" class="btn btn-white btn-xs pull-right"><i class="fa fa-pencil"></i></a>
+                            <i class="fa fa-info-circle"></i> Thông tin cá nhân
+                        </div>
+                        <div class="panel-body">
+                            <ul class="list-unstyled profile-about">
+                                <li>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <span class="text-muted">Họ và tên</span>
+                                        </div>
+                                        <div class="col-sm-8">@user.Fullname</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <span class="text-muted">Ngày sinh</span>
+                                        </div>
+                                        <div class="col-sm-8">@user.DateOfBirth</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <span class="text-muted">Giới tính</span>
+                                        </div>
+                                        <div class="col-sm-8">@(user.Gender.Value==SLIM_CONFIG.USER_SEX_FEMALE?"Nữ":"Nam")</div>
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                    <!--Friends -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading panel-heading-gray">
+                            <i class="icon-user-1"></i> Các hoạt động gần đây
+                        </div>
+                        <ul class="list" style="margin-top:10px">
+                            <li class="list-group-item-text">
+                                <a style="font-size:larger" href="/Profile/@user.Id">@user.Username</a> đã đăng <a href="#">bài viết</a> (6/6/2016PM)
+                            </li>
+                         
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

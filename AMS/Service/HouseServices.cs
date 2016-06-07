@@ -34,5 +34,9 @@ namespace AMS.Service
             return _houseRepository.List.Where(h => h.Floor.Contains(floorName) && h.Block.Contains(blockName) && h.OwnerID != null).
                 OrderBy(h => h.HouseName).ToList();
         }
+        public void updateHouse(House h)
+        {
+            _houseRepository.Update(h);
+        }
     }
 }

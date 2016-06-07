@@ -12,10 +12,11 @@ namespace AMS
     using System;
     using System.Collections.Generic;
     
-    public partial class Question
+    public partial class C__MigrationHistory
     {
-        public int Id { get; set; }
-        public string QuestionContent { get; set; }
-        public Nullable<int> SurveyId { get; set; }
+        public string MigrationId { get; set; }
+        public string ContextKey { get; set; }
+        public byte[] Model { get; set; }
+        public string ProductVersion { get; set; }
     }
 }

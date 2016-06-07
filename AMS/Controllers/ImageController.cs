@@ -18,6 +18,11 @@ namespace AMS.Controllers
             {
                 folderDir = "PostImages";
             }//AnTT
+
+            if (SLIM_CONFIG.dirHouseProfileImage.Equals(dir))
+            {
+                folderDir = "HouseProfileImages";
+            }
             String filePath = "";
             if (System.Web.HttpContext.Current.Request.Files.AllKeys.Any())
             {

@@ -29,6 +29,10 @@ namespace AMS
         public string Description { get; set; }
         public Nullable<double> Area { get; set; }
         public Nullable<int> OwnerID { get; set; }
+        public string ProfileImage { get; set; }
+        public string CoverImage { get; set; }
+        public Nullable<bool> DisplayMember { get; set; }
+        public Nullable<bool> AllowOtherView { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HelpdeskRequest> HelpdeskRequests { get; set; }

@@ -12,10 +12,15 @@ namespace AMS
     using System;
     using System.Collections.Generic;
     
-    public partial class Question
+    public partial class Comment
     {
-        public int Id { get; set; }
-        public string QuestionContent { get; set; }
-        public Nullable<int> SurveyId { get; set; }
+        public int id { get; set; }
+        public Nullable<int> postId { get; set; }
+        public Nullable<int> userId { get; set; }
+        public string detail { get; set; }
+        public Nullable<System.DateTime> createdDate { get; set; }
+    
+        public virtual Post Post { get; set; }
+        public virtual User User { get; set; }
     }
 }

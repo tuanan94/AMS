@@ -37,6 +37,7 @@ namespace AMS.Controllers
         HelpdeskRequestServices _hdReqServices = new HelpdeskRequestServices();
         HelpdeskRequestLogServices _helpdeskRequestLogServices = new HelpdeskRequestLogServices();
         HdReqHdSupporterServices _hdReqHdSupporterServices = new HdReqHdSupporterServices();
+        HouseServices houseService = new HouseServices();
         readonly string parternTime = "dd-MM-yyyy HH:mm";
 
         public ActionResult Test()
@@ -55,6 +56,7 @@ namespace AMS.Controllers
                 return View("error");
             }
             ViewBag.curUser = curUser;
+            ViewBag.curHouse = curUser.House;
             return View();
         }
         [HttpPost]
@@ -852,6 +854,74 @@ namespace AMS.Controllers
             ViewBag.members = members;
             return View();
             //pendingMemberService.addMemberRequest(member);
+
+        }
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult Setting()
+        {
+            User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
+            if(curUser == null)
+            {
+                return View("error");
+            }
+            House curHouse = curUser.House;
+            ViewBag.curHouse = curHouse;
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize]
+        public String ChangeProfile(int houseId, String dir)
+        {
+            House h = houseService.FindById(houseId);
+            if (h == null)
+            {
+                return "error";
+            }
+            else
+            {
+                h.ProfileImage = dir;
+            }
+            houseService.updateHouse(h);
+            return "success";
+
+        }
+
+        [HttpPost]
+        [Authorize]
+        public String UpdateDisplayMember(int houseId, bool display)
+        {
+            House h = houseService.FindById(houseId);
+            if (h == null)
+            {
+                return "error";
+            }
+            else
+            {
+                h.DisplayMember = display;
+            }
+            houseService.updateHouse(h);
+            return "success";
+
+        }
+
+        [HttpPost]
+        [Authorize]
+        public String UpdateAllowOtherView(int houseId, bool display)
+        {
+            House h = houseService.FindById(houseId);
+            if (h == null)
+            {
+                return "error";
+            }
+            else
+            {
+                h.AllowOtherView = display;
+            }
+            houseService.updateHouse(h);
+            return "success";
 
         }
     }

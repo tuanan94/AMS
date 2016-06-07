@@ -17,7 +17,7 @@ namespace AMS
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Survey()
         {
-            this.Questions = new HashSet<Question>();
+            this.Answers = new HashSet<Answer>();
             this.UserAnswerSurveys = new HashSet<UserAnswerSurvey>();
         }
     
@@ -28,9 +28,13 @@ namespace AMS
         public Nullable<System.DateTime> EndDate { get; set; }
         public Nullable<System.DateTime> PublishDate { get; set; }
         public Nullable<int> Status { get; set; }
+        public string Question { get; set; }
+        public string Block { get; set; }
+        public string Floor { get; set; }
+        public Nullable<int> Member { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Question> Questions { get; set; }
+        public virtual ICollection<Answer> Answers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserAnswerSurvey> UserAnswerSurveys { get; set; }
     }

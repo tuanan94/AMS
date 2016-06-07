@@ -34,7 +34,7 @@
                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                             @Html.TextBoxFor(m => m.username, new { @class = "form-control", @placeholder = "Username" })
                             @Html.ValidationMessageFor(m => m.username, "", new { @class = "text-danger" })
-                            @Html.TextBoxFor(m => m.password, new { @class = "form-control", @placeholder = "Password" })
+                            @Html.PasswordFor(m => m.password, new { @class = "form-control", @placeholder = "Password" })
                             @Html.ValidationMessageFor(m => m.password, "", new { @class = "text-danger" })
                             <input type="submit" value="Log in" class="btn btn-primary" />
 

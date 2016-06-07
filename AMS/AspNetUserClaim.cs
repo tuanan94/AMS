@@ -12,10 +12,13 @@ namespace AMS
     using System;
     using System.Collections.Generic;
     
-    public partial class Question
+    public partial class AspNetUserClaim
     {
         public int Id { get; set; }
-        public string QuestionContent { get; set; }
-        public Nullable<int> SurveyId { get; set; }
+        public string UserId { get; set; }
+        public string ClaimType { get; set; }
+        public string ClaimValue { get; set; }
+    
+        public virtual AspNetUser AspNetUser { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace AMS
     using System;
     using System.Collections.Generic;
     
-    public partial class ResidentRateAroundProvider
+    public partial class UserRateAroundProvider
     {
         public int Id { get; set; }
         public Nullable<int> UserId { get; set; }

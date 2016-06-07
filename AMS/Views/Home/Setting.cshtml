@@ -1,0 +1,252 @@
+﻿
+@{
+    ViewBag.Title = "Setting";
+    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+    House curHouse = ViewBag.curHouse;
+}
+
+<div class="container-fluid">
+    <div class="media user-profile">
+        <div class="media-object pull-left">
+            <div class="panel panel-default profile-user-box">
+                <div class="avatar">
+                    <img id="@("houseProfile"+curHouse.Id)" style="width:200px" src="@(curHouse.ProfileImage==null||curHouse.ProfileImage.Equals("")?"/Content/Images/home_default.jpg":curHouse.ProfileImage)" alt="" class="img-circle"  onclick="chooseProfile()">
+                    <button id="saveProfileBtn" class="btn btn-primary" onclick="saveHomeProfile()" style="margin-top:10px;display:none">Lưu thay đổi</button>   
+                    <h3>Nhà @curHouse.HouseName</h3>
+                    <a href="#" class="btn btn-success">Following <i class="fa fa-check-circle fa-fw"></i></a>
+                    <input style="visibility:hidden" type="file" id="uploadEditorImage" />
+                    <div id="progressBar" class="progress" style="width:200px" hidden="hidden">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:200px">
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="profile-icons">
+                    <span><i class="fa fa-users"></i> @curHouse.Users.Count</span> <span><i class="fa fa-photo"></i> Block: @curHouse.Block</span> <span><i class="fa fa-video-camera"></i> 3 </span>
+                </div>
+                <p>
+                    Hi! I'm Adrian the Senior UI Designer at
+                    <strong>MOSAICPRO</strong>. We hope you enjoy the design and quality of Social.
+                </p>
+            </div>
+
+            <!-- Contact -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Contact
+                </div>
+                <ul class="icon-list block bordered">
+                    <li>
+                        <i class="fa fa-envelope fa-fw"></i> <a href="#">contact@mosaicpro.biz</a>
+                    </li>
+                    <li>
+                        <i class="fa fa-facebook fa-fw"></i> <a href="#">/facebook</a>
+                    </li>
+                    <li>
+                        <i class="fa fa-behance fa-fw"></i> <a href="#">/user</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="media-body">
+            <div class="row">
+                <div class="col-md-4">
+
+                    <!--Friends -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading panel-heading-gray">
+                            <a href="#" class="btn btn-white btn-xs pull-right"><i class="fa fa-pencil"></i></a>
+                            <i class="fa fa-info-circle"></i> Riêng tư
+                        </div>
+                        <div class="panel-body">
+                            <ul class="list-unstyled profile-about">
+                                <li>
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <span class="text-muted" style="word-break:break-word">Cho phép người khác đến thăm</span>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <input id="allowOtherView" class="form-control" type="checkbox" name="my-checkbox" @(curHouse.AllowOtherView == false ? "" : "checked")>
+
+
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <span class="text-muted" style="word-break:break-word">Cho phép hiện thông tin thành viên</span>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <input id="allowDisplayMember" class="form-control"  type="checkbox" name="my-checkbox" @(curHouse.DisplayMember==false?"":"checked") >
+
+                                           
+                                        </div>
+                                    </div>
+                                </li>
+                               
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+
+                    <!--Friends -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading panel-heading-gray">
+                            <a href="#" class="btn btn-primary btn-xs pull-right">Thêm thành viên <i class="fa fa-plus"></i></a>
+                            <i class="icon-user-1"></i> Thành viên
+                        </div>
+                        <ul class="list-unstyled friends-list">
+                            @foreach (User u in curHouse.Users)
+                            {
+                                <li style="width:30%">
+                                    <a href="#" style="text-align:center">
+                                        <img style="float:left;width:100%" src="@(u.ProfileImage==null||u.ProfileImage.Equals("")?"/Content/images/defaultProfile.png":u.ProfileImage)" alt="image" class="img-responsive">
+                                        <h4 style="">@u.Username</h4>
+                                     </a>
+                                </li>
+
+                            }
+
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading panel-heading-gray">
+                    <i class="fa fa-bookmark"></i> Các dịch vụ quan tâm
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#allowDisplayMember').change(function() {
+            if($(this).is(":checked")) {
+                updateAllowDisplayMember(true);
+            }
+            else{
+                updateAllowDisplayMember(false);
+            }
+        });
+        $('#allowOtherView').change(function() {
+            if($(this).is(":checked")) {
+                updateAllowOtherView(true);
+            }
+            else{
+                updateAllowOtherView(false);
+            }
+        });
+    });
+
+    function updateAllowOtherView(isDisplay){
+        $.ajax({
+            url: "/Home/UpdateAllowOtherView/",
+            type: "POST",
+            data: {
+                houseId: "@curHouse.Id",
+                display: isDisplay,
+
+            },
+            success: function(successData){
+                alert("Đã cập nhật thành công")
+            },
+            error: function(er){
+                alert(er);
+            }
+        });
+    }
+
+    function updateAllowDisplayMember(isDisplay){
+        $.ajax({
+            url: "/Home/UpdateDisplayMember/",
+            type: "POST",
+            data: {
+                houseId: "@curHouse.Id",
+                display: isDisplay,
+
+            },
+            success: function(successData){
+                alert("Đã cập nhật thành công")
+            },
+            error: function(er){
+                alert(er);
+            }
+        });
+    }
+
+
+    function progessBar(isShow) {
+        if (isShow == true) {
+            $("#progressBar").removeAttr("hidden");
+        } else {
+            $("#progressBar").attr("hidden", "hidden");
+        }
+    }
+    function chooseProfile() {
+        $("#uploadEditorImage").click();
+    }
+    function saveHomeProfile() {
+        $.ajax({
+            url: "/Home/ChangeProfile/",
+            type: "POST",
+            data: {
+                houseId: "@curHouse.Id",
+                dir: $("#houseProfile"+@curHouse.Id).attr('src'),
+
+            },
+            success: function(successData){
+                document.getElementById("saveProfileBtn").style.display="none";
+
+
+            },
+            error: function(er){
+                alert(er);
+            }
+        });
+    }
+
+    $("#uploadEditorImage").change(function () {
+        var data = new FormData();
+        data.append("dir", "@SLIM_CONFIG.dirPostImage");
+        var files = $("#uploadEditorImage").get(0).files;
+        if (files.length > 0) {
+            data.append("HelpSectionImages", files[0]);
+        }
+        progessBar(true);
+        $.ajax({
+            url: "/Image/Upload/",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: data,
+            success: function (successData) {
+                alert(successData)
+                changeImageURL(successData);
+                progessBar(false);
+
+            },
+            error: function (er) {
+                alert(er);
+                progessBar(false);
+            }
+
+        });
+    });
+
+    function changeImageURL(dir) {
+        $("#houseProfile"+@curHouse.Id).attr("src", dir);
+        document.getElementById("saveProfileBtn").style.display="inline";
+    }
+</script>

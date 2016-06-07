@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Reflection;
 using AMS;
+using AMS.ObjectMapping;
 
 namespace AMS.Controllers
 {
@@ -39,11 +40,33 @@ namespace AMS.Controllers
             imageService.saveListImage(images,postId);
             return "success";
         }
+        [HttpPost]
+        [Authorize]
+        [ValidateInput(false)]
+        public String CreateComment(String detail, int postId)
+        {
+            User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
+            if (curUser == null)
+            {
+                return "error";
+            }
+            Comment c = new Comment();
+            c.postId = postId;
+            c.userId = curUser.Id;
+            c.detail = detail;
+            c.createdDate = DateTime.Now;
+            postService.addComment(c);
+            return "success";
+
+        }
+
+
         [HttpGet]
         [Authorize]
-        public Object getPost(int? idToken)
+        public Object getPost(int? idToken, int? houseId)
         {
-            List<Post> all = postService.getAllPost();
+            
+            List<Post> all = postService.getAllPost(idToken,houseId);
             
             // Serializer settings
             JsonSerializerSettings settings = new JsonSerializerSettings();
@@ -96,6 +119,45 @@ namespace AMS.Controllers
             string json = JsonConvert.SerializeObject(p.User, settings);
             return json;
         }
+        [HttpGet]
+        [Authorize]
+        public Object getUserForComment(int? commentId)
+        {
+            if (commentId == null)
+            {
+                return null;
+            }
+            Comment c = postService.findCommentById(commentId.Value);
+            if (c == null)
+            {
+                return null;
+            }
+            // Serializer settings
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.ContractResolver = new CustomResolver(typeof(User));
+            settings.PreserveReferencesHandling = PreserveReferencesHandling.None;
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            settings.Formatting = Formatting.Indented;
+
+            // Do the serialization and output to the console
+            string json = JsonConvert.SerializeObject(c.User, settings);
+            return json;
+        }
+        [HttpGet]
+        [Authorize]
+        public Object getCommentsForPost(int? postId)
+        {
+            // Serializer settings
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.ContractResolver = new CustomResolver(typeof(CommentMapping));
+            settings.PreserveReferencesHandling = PreserveReferencesHandling.None;
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            settings.Formatting = Formatting.Indented;
+
+            // Do the serialization and output to the console
+            string json = JsonConvert.SerializeObject(postService.comments(postId.Value), settings);
+            return json;
+        }
 
         [HttpGet]
         [Authorize]
@@ -108,6 +170,8 @@ namespace AMS.Controllers
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects
             });
         }
+
+        
         // GET: Post
         public ActionResult Index()
         {

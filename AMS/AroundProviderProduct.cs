@@ -12,10 +12,18 @@ namespace AMS
     using System;
     using System.Collections.Generic;
     
-    public partial class Question
+    public partial class AroundProviderProduct
     {
         public int Id { get; set; }
-        public string QuestionContent { get; set; }
-        public Nullable<int> SurveyId { get; set; }
+        public string Name { get; set; }
+        public string Price { get; set; }
+        public Nullable<int> ViewIndex { get; set; }
+        public string ImgUrl { get; set; }
+        public string Description { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
+        public Nullable<System.DateTime> LastModified { get; set; }
+        public Nullable<int> AroundProviderId { get; set; }
+    
+        public virtual AroundProvider AroundProvider { get; set; }
     }
 }

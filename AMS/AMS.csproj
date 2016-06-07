@@ -206,6 +206,24 @@
     <Compile Include="AroundProviderCategory.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="AroundProviderProduct.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetRole.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUser.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUserClaim.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUserLogin.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Comment.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Constant.cs" />
     <Compile Include="Constant\AmsConstants.cs" />
     <Compile Include="Constant\RoleEnum.cs" />
@@ -214,16 +232,21 @@
     <Compile Include="Controllers\HelpdeskSupporterController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HouseController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ManagementController.cs" />
     <Compile Include="Controllers\PostController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\ReceiptManagerController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Constant\StatusEnum.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="C__MigrationHistory.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -272,6 +295,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MessageViewModels.cs" />
     <Compile Include="Models\ReceiptViewModels.cs" />
+    <Compile Include="ObjectMapping\CommentMapping.cs" />
     <Compile Include="Post.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -290,9 +314,6 @@
     <Compile Include="Repository\IHelpdeskSupporterRepository.cs" />
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Repository\UserRepository.cs" />
-    <Compile Include="ResidentRateAroundProvider.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Role.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -330,10 +351,22 @@
     <Compile Include="sysdiagram.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Transaction.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TransactionItem.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TransactionItemCategory.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="User.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="UserAnswerSurvey.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserRateAroundProvider.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\AddMemberViewModel.cs" />
@@ -348,6 +381,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\blue.css" />
     <Content Include="Content\css\blue.min.css" />
+    <Content Include="Content\css\bootstrap-switch.css" />
     <Content Include="Content\css\brown.css" />
     <Content Include="Content\css\brown.min.css" />
     <Content Include="Content\css\custom.css" />
@@ -367,11 +401,15 @@
     <Content Include="Content\css\_vendor.min.css" />
     <Content Include="Content\images\addimage.png" />
     <Content Include="Content\images\defaultProfile.png" />
+    <Content Include="Content\images\familycover.jpg" />
     <Content Include="Content\images\guy-5.jpg" />
     <Content Include="Content\images\delete.png" />
+    <Content Include="Content\images\home_default.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\HouseProfile\family.jpg" />
+    <Content Include="images\HouseProfile\nhatui.png" />
     <Content Include="Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
@@ -392,6 +430,7 @@
     <Content Include="Scripts\amsScript\Social.js" />
     <Content Include="Scripts\amsScript\vendor.js" />
     <Content Include="Scripts\amsScript\vendor.min.js" />
+    <Content Include="Scripts\bootstrap-switch.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config" />
@@ -548,6 +587,9 @@
     <Content Include="Views\Management\HelpdeskServiceTabPartial.cshtml" />
     <Content Include="Views\Management\ManageRequest.cshtml" />
     <Content Include="Views\Home\_helpdeskRequestDetail.cshtml" />
+    <Content Include="Views\House\Index.cshtml" />
+    <Content Include="Views\Profile\Index.cshtml" />
+    <Content Include="Views\Home\Setting.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
