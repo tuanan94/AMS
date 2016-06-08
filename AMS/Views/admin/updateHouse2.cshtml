@@ -1,7 +1,9 @@
-﻿@{
+﻿@model IEnumerable<AMS.Models.EditHouse>
+@{
     ViewBag.Title = "updateHouse";
 
     House houseInfo = ViewBag.houseInfo;
+    House house = new House();
 }
 @*@{
     int index = 0;
@@ -66,6 +68,8 @@
                         <label for="inputEmail3" class="col-sm-3 control-label">House Id</label>
                         <div class="col-sm-9">
                             <input type="email" readonly="readonly" class="form-control" id="title" value="@house.Id">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            
                         </div>
                     </div>
                     <div class="form-group">

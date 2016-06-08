@@ -39,9 +39,9 @@ namespace AMS.Models
         public string Area { get; set; }
 
     }
-    public class AdminManageHouseViewModel
+    public class EditHouse
     {
-        public int Id { get; set; }
+        public int Id { get;  }
         public string Block { get; set; }
         public string Description { get; set; }
         public string Floor { get; set; }
