@@ -1,155 +1,140 @@
 ﻿@model AMS.ViewModel.SurveyViewModel
 @{
     ViewBag.Title = "View1";
-    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
 }
-@using (Html.BeginForm("Surveys", "Survey", FormMethod.Post))
-{
-    <div class="form-group" id="form">
-
-        <div class="col-sm-offset-2 col-sm-8">
-            <fieldset class="scheduler-border less-padding">
-                <legend class="scheduler-border">Chi tiết hóa đơn</legend>
-                <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-3 control-label">Tiêu đề</label>
-                    <div class="col-sm-7">
-                        @*<input type="text" class="form-control" id="Title" name="Title" style="width: 330px"><br>*@
-                        @Html.TextBoxFor(m => m.Title, new {style = "width: 330px", @class = "form-control", @name = "Title", @id = "Title"})
+<style>
+    .media-item-ctr-1 {
+        border-bottom: 1px solid #e5e3da;
+        padding-bottom: 1em;
+        margin-top: 1em;
+        width: 100%;
+        position: relative;
+        float: left;
+    }
+    .media-item-ctr-1 .media-item-thumbnail {
+        display: block;
+        position: relative;
+    }
+    .media-ribbon {
+        position: absolute;
+        top: 15px;
+        left: -8px;
+        background-color: #ff4500;
+        padding: 0 3px;
+        font-family: 'Montserrat', sans-serif;
+        color: #fff;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        line-height: 24px;
+        font-size: 11px;
+    }
+    .media-item-ctr-1 .media-item-overview {
+        position: relative;
+        min-height: 140px;
+        padding-bottom: 15px;
+    }
+        .media-item-ctr-1 .media-item-overview .media-item-cat {
+            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+        }
+        .media-item-ctr-1 .media-item-overview .media-meta-data {
+            margin-top: 10px;
+            color: #b5b3ac;
+            font-size: 11px;
+        }
+    .media-item-ctr-1 .social-share-ctr {
+        position: absolute;
+        right: 10px;
+        bottom: 20px;
+    }
+    .btn-facebook {
+        background-color: #395693;
+        color: #fff;
+    }
+    .btn-twitter {
+        background-color: #00acee;
+        color: #fff;
+    }
+</style>
+<div class="col-sm-offset-1 col-md-8">
+    <fieldset class="scheduler-border less-padding">
+        <div class="media-item-ctr-1">
+            <div class="col-xs-5 col-sm-3">
+                <a class="media-item-thumbnail" href="http://rocketeer.jaskokoyn.cc/poll/which-contestant-should-ben-higgins-pick-on-the-bachelor-131">
+                    <img class="img-responsive" src="http://rocketeer.jaskokoyn.cc/public/uploads/a/1/admin/MROiA11Fqg1z9hyd.jpg">
+                    <div class="media-ribbon">
+                        <i class="fa fa-heart"></i> 8
                     </div>
-
-                </div>
-                @*<div class="form-group">
-                <label for="inputEmail3" class="col-sm-3 control-label">Câu trả lời</label>
-                <div class="col-sm-7">
-                    <input type="text" class="form-control" id="Title" name="Title" style="width: 330px"><br>
-                </div>
-
+                </a>
             </div>
-            <div class="form-group">
-                <label for="inputEmail3" class="col-sm-3 control-label">Câu trả lời</label>
-                <div class="col-sm-7">
-                    <input type="text" class="form-control" id="Title" name="Title" style="width: 330px"><br>
-                </div>
-
-            </div>*@
-
-                <div class="form-group">
-                    <div class="col-sm-3">
-                        <span id="addNewForm" name="addNewForm" class="btn btn-info"><i class="fa fa-plus">Tạo câu hỏi</i></span>
-                    </div>
-                </div>
-
-            </fieldset>
-        </div>
-
-    </div>
-    <div class="panel-footer">
-        <div class="form-horizontal">
-            <div class="form-group">
-                <div class="col-md-offset-9 col-md-2">
-                    @*<span class="btn btn-primary">Gửi yêu cầu</span>*@
-                    <button type="submit" class="btn btn-primary">Tạo Survey</button>
-                </div>
-            </div>
-        </div>
-    </div>
-}
-<script>
-    $(document).ready(function () {
-        window.index = 3;
-        $("#addNewRow").on("click", function () {
-            window.index++;
-            var tag = "<div id=\"row_" + index + "\" class='form-group'>" +
-                            "<div class='col-sm-6'><input id=\"item_name_" + index + "\" type='text' class='form-control order-item'></div>" +
-                           
-                            "<span class='btn btn-danger btn-xs' onclick='deleteItem(\"" + index + "\")'><i class='fa fa-times'></i></span>" +
-                        "</div>";
-            $("#receiptWrapper").append(tag);
-        });
-        window.i = 0;
-        $("#addNewForm").on("click", function () {
-            window.i++;
-            var tag = "<div class='col-sm-offset-3 col-sm-6'>" +
-       "<fieldset class='scheduler-border less-padding' id=\"row" + i + "\">" +
-           "<legend class='scheduler-border' id=\"row" + i + "\">\"Câu hỏi " + i+"\"</legend> " +
-              " <div class='form-group'>" +
-                "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu hỏi</label>" +
-                "  <div class='col-sm-7'>" +
-                "      <input type='text' class='form-control'  name='question' style='width: 330px'><br>" +
-                "   </div>" +
-                " </div>" +
-                " <div class='form-group'>" +
-               "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>" +
-               "  <div class='col-sm-7'>" +
-               "      <input type='text' class='form-control'  name='anwser1' style='width: 330px'><br>" +
-                "<input type='hidden'  name='count' value='1' />" +
-               "   </div>" +
-               " </div>" +
-                " <div class='form-group'>" +
-              "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>" +
-              "  <div class='col-sm-7'>" +
-              "      <input type='text' class='form-control'  name='anwser1' style='width: 330px'><br>" +
-              "<input type='hidden'  name='count' value='2' />"+
-              "   </div>" +
-              " </div>" +
-               " <div class='form-group'>" +
-              "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>" +
-              "  <div class='col-sm-7'>" +
-              "      <input type='text' class='form-control'  name='anwser1' style='width: 330px'><br>" +
-              "<input type='hidden'  name='count' value='3' />" +
-              "   </div>" +
-              " </div>" +
-           "</fieldset></div>";
-           
-            $("#form").append(tag);
-            $("#addNewRow"+i).on("click", function () {
-
-                var tags =
-                   
-                    
-                //      " <div class='form-group'>" +
-                //      " <div class='col-sm-6'>" +
-                //      "  <strong style='align-content: center'>Tên</strong>" +
-                //      " </div>" +
-                //"<div class='col-sm-1'>" +
-                //" <strong style='align-content: center'>Số lượng</strong>" +
-                //" </div>" +
-            
+            <div class="col-xs-7 col-sm-9 media-item-overview">
                
-                //" </div>" +
-                //"<div>" +
-                //" <div  class='form-group'>" +
-                //"<div class='col-sm-6'>" +
-                //" <input  type='text' class='form-control order-item'>" +
-                //" </div>" +
+                <h3>
+                    <a href="http://rocketeer.jaskokoyn.cc/poll/which-contestant-should-ben-higgins-pick-on-the-bachelor-131">Bạn chọn phe Iron Man hay là Captain America?”</a>
+                </h3>
+               
+                <div class="media-meta-data">
+                    <a href="http://rocketeer.jaskokoyn.cc/profile/admin">BinhHT</a> - 30 phút trước
+                </div>
+            </div>
+            <div class="social-share-ctr hidden-xs">
+                <button type="button" class="btn btn-primary"><i class="fa fa-pencil-square"> Làm survey</i></button>
+              
+            </div>
+        </div>
+    </fieldset>
+    <fieldset class="scheduler-border less-padding">
+        <div class="media-item-ctr-1">
+            <div class="col-xs-5 col-sm-3">
+                <a class="media-item-thumbnail" href="http://rocketeer.jaskokoyn.cc/poll/which-contestant-should-ben-higgins-pick-on-the-bachelor-131">
+                    <img class="img-responsive" src="http://www.shandonpres.org/public/files/img/survey-icon.png">
+                    <div class="media-ribbon">
+                        <i class="fa fa-heart"></i> 8
+                    </div>
+                </a>
+            </div>
+            <div class="col-xs-7 col-sm-9 media-item-overview">
+                
+                <h3>
+                    <a href="http://rocketeer.jaskokoyn.cc/poll/which-contestant-should-ben-higgins-pick-on-the-bachelor-131">Bạn có muôn anh A làm tổ trưởng?</a>
+                </h3>
+              
+                <div class="media-meta-data">
+                    <a href="http://rocketeer.jaskokoyn.cc/profile/admin">BinhHT</a> - 30 phút trước
+                </div>
+            </div>
+            <div class="social-share-ctr hidden-xs">
+                <button type="button" class="btn btn-primary"><i class="fa fa-pencil-square"> Làm survey</i></button>
 
-                //"  <span class='btn btn-danger btn-xs' ><i class='fa fa-times'></i></span>" +
-                //" </div>" +
+            </div>
+        </div>
+    </fieldset>
+    <fieldset class="scheduler-border less-padding">
+        <div class="media-item-ctr-1">
+            <div class="col-xs-5 col-sm-3">
+                <a class="media-item-thumbnail" href="http://rocketeer.jaskokoyn.cc/poll/which-contestant-should-ben-higgins-pick-on-the-bachelor-131">
+                    <img class="img-responsive" src="http://www.shandonpres.org/public/files/img/survey-icon.png">
+                    <div class="media-ribbon">
+                        <i class="fa fa-heart"></i> 8
+                    </div>
+                </a>
+            </div>
+            <div class="col-xs-7 col-sm-9 media-item-overview">
+              
+                <h3>
+                    <a href="http://rocketeer.jaskokoyn.cc/poll/which-contestant-should-ben-higgins-pick-on-the-bachelor-131">Khảo sát về việc tăng tiền rác</a>
+                </h3>
+               
+                <div class="media-meta-data">
+                    <a href="http://rocketeer.jaskokoyn.cc/profile/admin">BinhHT</a> - 30 phút trước
+                </div>
+            </div>
+            <div class="social-share-ctr hidden-xs">
+                <button type="button" class="btn btn-primary"><i class="fa fa-pencil-square"> Làm survey</i></button>
 
-                //"  </div>";
-                " <div class='form-group'>" +
-                "  <label for='inputEmail3' class='col-sm-3 control-label'>Tiêu đề</label>" +
-                "  <div class='col-sm-7'>" +
-                "      <input type='text' class='form-control'  name='Title' style='width: 330px'><br>" +
-                "   </div>" +
-                " </div>"+
-                " <div class='form-group'>" +
-               "  <label for='inputEmail3' class='col-sm-3 control-label'>Tiêu đề</label>" +
-               "  <div class='col-sm-7'>" +
-               "      <input type='text' class='form-control'  name='Title' style='width: 330px'><br>" +
-               "   </div>" +
-               " </div>"+
-                " <div class='form-group'>" +
-              "  <label for='inputEmail3' class='col-sm-3 control-label'>Tiêu đề</label>" +
-              "  <div class='col-sm-7'>" +
-              "      <input type='text' class='form-control'  name='Title' style='width: 330px'><br>" +
-              "   </div>" +
-              " </div>";
-            
-
-                $("#row" + i).append(tags);
-             
-            });
-        });
-    });
-</script>
+            </div>
+        </div>
+    </fieldset>
+</div>

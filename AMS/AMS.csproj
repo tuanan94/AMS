@@ -587,6 +587,7 @@
     <Content Include="Views\Survey\DoSurvey.cshtml" />
     <Content Include="Views\Survey\DoDetailSurvey.cshtml" />
     <Content Include="Views\Survey\Graph.cshtml" />
+    <Content Include="Views\Survey\View2.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

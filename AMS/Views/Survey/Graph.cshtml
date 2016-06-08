@@ -8,82 +8,19 @@
 <script src="http://code.jquery.com/jquery-1.6.3.min.js"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="http://code.highcharts.com/modules/exporting.js"></script>
-<input type="text" id="id1"/>
-<input type="text" id="id2" /><label id="label"></label>
-<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
-<input type="button" id="btnPieChart" value="Pie Chart" />
+<input type="text" id="id1" onblur="bInfo()" />
+<input type="text" id="id2" onblur="bInfo()" />
+
+
+
 <script>
-    $('input').blur(function () {
-        if ($('#id1').attr('value') == $('#id2').attr('value')) {
-           
-            $('#label').text("Hãy nhập giá trị khác!"); return false;
-           
+    function bInfo() {
+        in1 = document.getElementById('id1').value;
+        in2 = document.getElementById('id2').value;
+        if (in1 == in2 && in1 !="" && in2 != "") {
+            alert('Same Value'); return false;
         } else { return true; }
-    });
-    $(document).ready(function () {
-        var a = "Firefox";
-        RenderPieChart('container', [
-            [a, 45.0],
-            ['IE', 26.8],
-            ['Chrome', 12.8],
-            ['Safari', 8.5],
-            ['Opera', 6.2],
-            ['Others', 0.7]
-        ]);
+    }
+   
 
-        //$('#btnPieChart').live('click', function () {
-        //    var data = [
-        //        ['Firefox', 42.0],
-        //        ['IE', 26.8],
-        //        {
-        //            name: 'Chrome',
-        //            y: 14.8,
-        //            sliced: true,
-        //            selected: true
-        //        },
-        //        ['Safari', 6.5],
-        //        ['Opera', 8.2],
-        //        ['Others', 0.7]
-        //    ];
-
-        //    RenderPieChart('container', data);
-        //});
-
-        function RenderPieChart(elementId, dataList) {
-            new Highcharts.Chart({
-                chart: {
-                    renderTo: elementId,
-                    plotBackgroundColor: null,
-                    plotBorderWidth: null,
-                    plotShadow: false
-                }, title: {
-                    text: 'Browser market shares at a specific website, 2010'
-                },
-                tooltip: {
-                    formatter: function () {
-                        return '<b>' + this.point.name + '</b>: ' + this.percentage + ' %';
-                    }
-                },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            color: '#000000',
-                            connectorColor: '#000000',
-                            formatter: function () {
-                                return '<b>' + this.point.name + '</b>: ' + this.percentage + ' %';
-                            }
-                        }
-                    }
-                },
-                series: [{
-                    type: 'pie',
-                    name: 'Browser share',
-                    data: dataList
-                }]
-            });
-        };
-    });
 </script>

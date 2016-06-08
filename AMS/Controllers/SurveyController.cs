@@ -48,6 +48,11 @@ namespace AMS.Controllers
            
             return View();
         }
+
+        public ActionResult View2()
+        {
+            return View();
+        }
         public ActionResult Graph()
         {
 

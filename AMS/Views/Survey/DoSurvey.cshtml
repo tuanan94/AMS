@@ -1,4 +1,5 @@
-﻿
+﻿@using AMS.Service
+
 @{
     ViewBag.Title = "DoSurvey";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
@@ -6,7 +7,8 @@
     User currentUser = ViewBag.currentUser;
     House currentHouse = ViewBag.currentHouse;
     List<int> listSurveyId = ViewBag.ListUserAnswer;
-    List<UserAnswerSurvey> listUserAnswer = ViewBag.ListUserAnswerSurvey;
+    List<UserAnswerSurvey> listUserAnswer = new List<UserAnswerSurvey>();
+    UserAnswerService userAnswerService = new UserAnswerService();
     <style>
         .button {
             display: block;
@@ -44,21 +46,31 @@
                 </thead>
                 <tbody>
                 @{
+                    
                     foreach (var item in listSurveys)
                     {
-                        foreach (var obj in listUserAnswer)
-                        {
-                            if (obj.UserId != currentUser.Id)
-                            {
-    
-                            }
-                           
-                        }
+                        listUserAnswer=(userAnswerService.GetListUserAnswerSurveysBySurveyId(item.Id));
+                        int k = 0;
+                       
+                      
+                       
                         if (listSurveys.Count != 0)
                         {
                             if (item.Member == currentUser.RoleId && item.Block == "NULL" && item.Floor == "NULL")
                         {
-                            <tr class="aass">
+                             foreach (var VARIABLE in listUserAnswer)
+                        {
+                            
+                           
+                            if (VARIABLE.UserId == currentUser.Id)
+                            {
+                                k++;
+                            }
+                           
+                        }
+                         if (k !=1)
+                            {
+                                  <tr class="aass">
                                 <td>
                                     <div class="form-group">
                                         <div class="col-sm-9">
@@ -120,14 +132,28 @@
                                     </div>
                                 </td>
                             </tr>
+
+                            }
                         }
                              if (item.Block == currentHouse.Block && item.Floor == currentHouse.Floor && item.Member ==currentUser.RoleId)
                             {
-                               <tr class="aass">
+                               foreach (var VARIABLE in listUserAnswer)
+                        {
+                            
+                           
+                            if (VARIABLE.UserId == currentUser.Id)
+                            {
+                                k++;
+                            }
+                           
+                        }
+                         if (k !=1)
+                            {
+                                  <tr class="aass">
                                 <td>
                                     <div class="form-group">
                                         <div class="col-sm-9">
-                                            <input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.Id">
+                                            <input type="text" disabled="disabled" class="form-control binh binh" id="fullname" value="@item.Id">
                                         </div>
                                     </div>
                                 </td>
@@ -184,15 +210,29 @@
                                         </div>
                                     </div>
                                 </td>
-                            </tr>  
+                            </tr>
+
+                            }
                             }
                             if (item.Member == 6 && item.Block == currentHouse.Block && item.Floor == "NULL")
                             {
-                                 <tr class="aass">
+                                  foreach (var VARIABLE in listUserAnswer)
+                        {
+                            
+                           
+                            if (VARIABLE.UserId == currentUser.Id)
+                            {
+                                k++;
+                            }
+                           
+                        }
+                         if (k !=1)
+                            {
+                                  <tr class="aass">
                                 <td>
                                     <div class="form-group">
                                         <div class="col-sm-9">
-                                            <input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.Id">
+                                            <input type="text" disabled="disabled" class="form-control binh binh" id="fullname" value="@item.Id">
                                         </div>
                                     </div>
                                 </td>
@@ -249,15 +289,29 @@
                                         </div>
                                     </div>
                                 </td>
-                            </tr>  
+                            </tr>
+
+                            }
                             }
                             if (item.Member == 6 && item.Block == "NULL" && item.Floor == "NULL")
                             {
-                                 <tr class="aass">
+                                  foreach (var VARIABLE in listUserAnswer)
+                        {
+                            
+                           
+                            if (VARIABLE.UserId == currentUser.Id)
+                            {
+                                k++;
+                            }
+                           
+                        }
+                         if (k !=1)
+                            {
+                                  <tr class="aass">
                                 <td>
                                     <div class="form-group">
                                         <div class="col-sm-9">
-                                            <input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.Id">
+                                            <input type="text" disabled="disabled" class="form-control binh binh" id="fullname" value="@item.Id">
                                         </div>
                                     </div>
                                 </td>
@@ -314,15 +368,29 @@
                                         </div>
                                     </div>
                                 </td>
-                            </tr>  
+                            </tr>
+
+                            }
                             }
                             if (item.Member == 6 && item.Block == "NULL" && item.Floor == currentHouse.Floor)
                             {
-                                 <tr class="aass">
+                                  foreach (var VARIABLE in listUserAnswer)
+                        {
+                            
+                           
+                            if (VARIABLE.UserId == currentUser.Id)
+                            {
+                                k++;
+                            }
+                           
+                        }
+                         if (k !=1)
+                            {
+                                  <tr class="aass">
                                 <td>
                                     <div class="form-group">
                                         <div class="col-sm-9">
-                                            <input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.Id">
+                                            <input type="text" disabled="disabled" class="form-control binh binh" id="fullname" value="@item.Id">
                                         </div>
                                     </div>
                                 </td>
@@ -379,16 +447,30 @@
                                         </div>
                                     </div>
                                 </td>
-                            </tr>  
+                            </tr>
+
+                            }
 
                             }
                             if (item.Block == null && item.Floor == currentHouse.Floor && item.Member == currentUser.RoleId)
                             {
-                                 <tr class="aass">
+                                foreach (var VARIABLE in listUserAnswer)
+                        {
+                            
+                           
+                            if (VARIABLE.UserId == currentUser.Id)
+                            {
+                                k++;
+                            }
+                           
+                        }
+                         if (k !=1)
+                            {
+                                  <tr class="aass">
                                 <td>
                                     <div class="form-group">
                                         <div class="col-sm-9">
-                                            <input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.Id">
+                                            <input type="text" disabled="disabled" class="form-control binh binh" id="fullname" value="@item.Id">
                                         </div>
                                     </div>
                                 </td>
@@ -445,15 +527,29 @@
                                         </div>
                                     </div>
                                 </td>
-                            </tr>  
+                            </tr>
+
+                            }
                             }
                             if (item.Block == currentHouse.Block && item.Floor == "NULL" && item.Member == currentUser.RoleId)
                             {
-                                 <tr class="aass">
+                                 foreach (var VARIABLE in listUserAnswer)
+                        {
+                            
+                           
+                            if (VARIABLE.UserId == currentUser.Id)
+                            {
+                                k++;
+                            }
+                           
+                        }
+                         if (k !=1)
+                            {
+                                  <tr class="aass">
                                 <td>
                                     <div class="form-group">
                                         <div class="col-sm-9">
-                                            <input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.Id">
+                                            <input type="text" disabled="disabled" class="form-control binh binh" id="fullname" value="@item.Id">
                                         </div>
                                     </div>
                                 </td>
@@ -510,15 +606,29 @@
                                         </div>
                                     </div>
                                 </td>
-                            </tr>  
+                            </tr>
+
+                            }
                             }
                             if (item.Block == currentHouse.Block && item.Floor == currentHouse.Floor && item.Member == 6)
                             {
-                                 <tr class="aass">
+                                 foreach (var VARIABLE in listUserAnswer)
+                        {
+                            
+                           
+                            if (VARIABLE.UserId == currentUser.Id)
+                            {
+                                k++;
+                            }
+                           
+                        }
+                         if (k !=1)
+                            {
+                                  <tr class="aass">
                                 <td>
                                     <div class="form-group">
                                         <div class="col-sm-9">
-                                            <input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.Id">
+                                            <input type="text" disabled="disabled" class="form-control binh binh" id="fullname" value="@item.Id">
                                         </div>
                                     </div>
                                 </td>
@@ -575,11 +685,13 @@
                                         </div>
                                     </div>
                                 </td>
-                            </tr>  
+                            </tr>
+
+                            }
                             }
                         }
                        
-                        else if(listSurveys.Count ==0)
+                        else if(listSurveys.Count == 0)
                         {
                             <tr>
                                 <td>
