@@ -14,24 +14,18 @@ namespace AMS
     
     public partial class Transaction
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Transaction()
-        {
-            this.TransactionItems = new HashSet<TransactionItem>();
-        }
-    
         public int Id { get; set; }
-        public Nullable<int> TypeId { get; set; }
-        public string Title { get; set; }
-        public Nullable<System.DateTime> ForMonth { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
+        public Nullable<double> TotalAmount { get; set; }
+        public Nullable<double> PaidAmount { get; set; }
+        public Nullable<int> CategoryId { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> LastModified { get; set; }
-        public Nullable<int> ManagerId { get; set; }
-        public Nullable<int> Status { get; set; }
+        public Nullable<int> TransactionId { get; set; }
+        public Nullable<int> Type { get; set; }
     
-        public virtual User User { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TransactionItem> TransactionItems { get; set; }
+        public virtual BalanceSheet BalanceSheet { get; set; }
+        public virtual TransactionCategory TransactionCategory { get; set; }
     }
 }

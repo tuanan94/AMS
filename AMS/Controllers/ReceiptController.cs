@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
+using System.Globalization;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using AMS.Constant;
 using AMS.Models;
 using AMS.Service;
 using Microsoft.Ajax.Utilities;
-using Newtonsoft.Json.Linq;
 
 namespace AMS.Controllers
 {
-    public class ReceiptManagerController : Controller
+    public class ReceiptController : Controller
     {
         //        // GET: ReceiptManager
         //        public ActionResult Index()
@@ -31,7 +29,14 @@ namespace AMS.Controllers
         public ActionResult GetUserReceipt(int userId)
         {
             ViewBag.userId = userId;
-            return View("~/Views/Home/ViewReceipt.cshtml");
+            return View("ViewReceipt");
+        }
+
+        [HttpGet]
+        [Route("Home/ManageReceipt/View/HouseExpenseStatus")]
+        public ActionResult ViewHouseExpenseStatus()
+        {
+            return View("HouseExpenseStatus");
         }
 
         [HttpGet]
@@ -60,7 +65,7 @@ namespace AMS.Controllers
                         double total = 0;
                         foreach (var od in orderDetails)
                         {
-                            total = od.UnitPrice.Value * od.Quantity.Value;
+                            total += od.UnitPrice.Value * od.Quantity.Value;
                         }
                         model.TotalOrder = total;
                         receiptModel.Add(model);
@@ -93,11 +98,11 @@ namespace AMS.Controllers
                 if (null != receipt)
                 {
                     ViewBag.receipt = receipt;
-                    return View("~/Views/Home/ViewReceiptDetail.cshtml");
+                    return View("ViewReceiptDetail");
                 }
-                return View("~/Views/Home/ViewReceipt.cshtml");
+                return View("ViewReceipt");
             }
-            return View("~/Views/Home/ViewReceipt.cshtml");
+            return View("ViewReceipt");
         }
 
         [HttpGet]
@@ -105,7 +110,7 @@ namespace AMS.Controllers
         public ActionResult ViewManagerOrderList(int userId)
         {
             ViewBag.userId = userId;
-            return View("~/Views/Management/ViewManagerReceipt.cshtml");
+            return View("ViewManagerReceipt");
         }
 
 
@@ -135,7 +140,7 @@ namespace AMS.Controllers
                         double total = 0;
                         foreach (var od in orderDetails)
                         {
-                            total = od.UnitPrice.Value * od.Quantity.Value;
+                            total += od.UnitPrice.Value * od.Quantity.Value;
                         }
                         model.TotalOrder = total;
                         receiptModel.Add(model);
@@ -176,11 +181,11 @@ namespace AMS.Controllers
                     }
 
                     ViewBag.receipt = receipt;
-                    return View("~/Views/Management/UpdateReceipt.cshtml");
+                    return View("UpdateReceipt");
                 }
-                return View("~/Views/Home/ViewReceipt.cshtml");
+                return View("ViewReceipt");
             }
-            return View("~/Views/Home/ViewReceipt.cshtml");
+            return View("ViewReceipt");
         }
 
         [HttpGet]
@@ -197,7 +202,7 @@ namespace AMS.Controllers
                 ViewBag.rooms = rooms;
             }
             ViewBag.userId = userId;
-            return View("~/Views/Management/CreateManualReceipt.cshtml");
+            return View("CreateManualReceipt");
         }
 
         [HttpPost]
@@ -217,10 +222,19 @@ namespace AMS.Controllers
                         eReceipt.HouseId = house.Id;
                         eReceipt.CreateDate = DateTime.Now;
                         eReceipt.LastModified = DateTime.Now;
+                        eReceipt.PublishDate = DateTime.ParseExact(receipt.PublishDate, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
+                        eReceipt.Type = receipt.ReceiptType;
                         eReceipt.ManagerId = u.Id;
                         eReceipt.Description = receipt.ReceiptDesc;
                         eReceipt.Title = receipt.ReceiptTitle;
-                        eReceipt.Status = SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED;
+                        if (receipt.Mode == SLIM_CONFIG.RECEIPT_ADD_MODE_SAVE_PUBLISH)
+                        {
+                            eReceipt.Status = SLIM_CONFIG.RECEIPT_STATUS_UNPAID;
+                        }
+                        else
+                        {
+                            eReceipt.Status = SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED;
+                        }
                         _receiptServices.Add(eReceipt);
 
                         ServiceFee item = null;
@@ -271,14 +285,14 @@ namespace AMS.Controllers
                 {
                     try
                     {
-                        
+
                         ServiceFee item = null;
                         ReceiptDetail detail = null;
                         bool receiptIsDeleted = false;
                         if (null == receiptModel.ListItem)
                         {
                             List<ReceiptDetail> receiptDetails = receipt.ReceiptDetails.ToList();
-                            
+
                             int receiptId = receipt.Id;
                             _receiptServices.DeleteById(receiptId);
                             receiptIsDeleted = true;
@@ -390,7 +404,7 @@ namespace AMS.Controllers
         {
             Receipt receipt = _receiptServices.FindById(receiptId);
             ViewBag.receipt = receipt;
-            return PartialView("~/Views/Management/_receiptDetailItemList.cshtml");
+            return PartialView("_receiptDetailItemList");
         }
 
         [HttpGet]
@@ -483,5 +497,5 @@ namespace AMS.Controllers
             }
             return Json(response, JsonRequestBehavior.AllowGet);
         }
-    }
+	}
 }

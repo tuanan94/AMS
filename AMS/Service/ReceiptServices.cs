@@ -28,12 +28,35 @@ namespace AMS.Service
         }
         public List<Receipt> GetReceiptByHouseId(int houseId)
         {
-            return _receiptRepository.List.Where(r => r.HouseId == houseId && r.Status != SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED).OrderByDescending(r => r.CreateDate).ToList();
+            return _receiptRepository.List.Where(r => r.HouseId == houseId 
+                && r.Status != SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED 
+                && DateTime.Today.Date >= r.PublishDate.Value.Date).OrderByDescending(r => r.CreateDate).ToList();
         }
-
+        public List<Receipt> GetReceiptInMounth(DateTime month)
+        {
+            DateTime firstDateOfThisMounth = new DateTime(month.Year, month.Month, 1);
+            DateTime endDateOfThisMounth = new DateTime(month.Year, month.Month, DateTime.DaysInMonth(month.Year, month.Month));
+            return _receiptRepository.List.Where(r => r.PublishDate.Value.Date.Date >= firstDateOfThisMounth.Date && r.PublishDate.Value.Date.Date <= endDateOfThisMounth.Date).OrderByDescending(r => r.CreateDate).ToList();
+        }
+        public List<Receipt> GetPublishedReceiptInMounth(DateTime month)
+        {
+            DateTime firstDateOfThisMounth = new DateTime(month.Year, month.Month, 1);
+            DateTime endDateOfThisMounth = new DateTime(month.Year, month.Month, DateTime.DaysInMonth(month.Year, month.Month));
+            return _receiptRepository.List.Where(r => r.Status != SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED 
+                && r.PublishDate.Value.Date.Date >= firstDateOfThisMounth.Date 
+                && r.PublishDate.Value.Date.Date <= endDateOfThisMounth.Date).ToList();
+        }
+        public List<Receipt> GetPaidReceiptInMounth(DateTime month)
+        {
+            DateTime firstDateOfThisMounth = new DateTime(month.Year, month.Month, 1);
+            DateTime endDateOfThisMounth = new DateTime(month.Year, month.Month, DateTime.DaysInMonth(month.Year, month.Month));
+            return _receiptRepository.List.Where(r => r.Status == SLIM_CONFIG.RECEIPT_STATUS_PAID 
+                && r.PublishDate.Value.Date.Date >= firstDateOfThisMounth.Date
+                && r.PublishDate.Value.Date.Date <= endDateOfThisMounth.Date).ToList();
+        }
         public List<Receipt> GetAllReceipts()
         {
-            return _receiptRepository.List.OrderByDescending(r => r.CreateDate).ToList();
+            return _receiptRepository.List.OrderByDescending(r => r.CreateDate.Value).ToList();
         }
 
         public Receipt FindById(int id)

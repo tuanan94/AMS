@@ -12,19 +12,24 @@ namespace AMS
     using System;
     using System.Collections.Generic;
     
-    public partial class TransactionItemCategory
+    public partial class BalanceSheet
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public TransactionItemCategory()
+        public BalanceSheet()
         {
-           // this.TransactionItems = new HashSet<TransactionItem>();
+            this.Transactions = new HashSet<Transaction>();
         }
     
         public int Id { get; set; }
-        public string Name { get; set; }
-        public Nullable<int> Type { get; set; }
+        public string Title { get; set; }
+        public Nullable<System.DateTime> ForMonth { get; set; }
+        public string Description { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
+        public Nullable<System.DateTime> LastModified { get; set; }
+        public Nullable<int> ManagerId { get; set; }
     
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-       // public virtual ICollection<TransactionItem> TransactionItems { get; set; }
+        public virtual User User { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Transaction> Transactions { get; set; }
     }
 }

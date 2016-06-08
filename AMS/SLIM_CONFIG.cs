@@ -28,6 +28,22 @@ namespace AMS
         public static int RECEIPT_STATUS_UNPUBLISHED = 1;
         public static int RECEIPT_STATUS_UNPAID = 2;
         public static int RECEIPT_STATUS_PAID = 3;
+
+        public static int RECEIPT_TYPE_HD_REQUEST = 1;
+        public static int RECEIPT_TYPE_ELECTRIC = 2;
+        public static int RECEIPT_TYPE_WATER = 3;
+        public static int RECEIPT_TYPE_HOUSE_RENT = 4;
+
+
+        public static int TRANSACTION_TYPE_INCOME = 1;
+        public static int TRANSACTION_TYPE_EXPENSE = 2;
+
+        public static int RECEIPT_ADD_MODE_SAVE = 1;
+        public static int RECEIPT_ADD_MODE_SAVE_PUBLISH = 2;
+
+
+
+
     }
 
 }

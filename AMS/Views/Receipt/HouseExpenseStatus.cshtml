@@ -1,0 +1,235 @@
+﻿@using Microsoft.AspNet.Identity
+<script src="~/Scripts/Chart.min.js"></script>
+@{
+    ViewBag.Title = "HouseExpenseStatus";
+    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+}
+
+<nav class="navbar navbar-subnav navbar-static-top" role="navigation">
+    <div class="container-fluid">
+
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subnav">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="fa fa-ellipsis-h"></span>
+            </button>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="subnav">
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a href="/Home/ManageReceipt/View/HouseExpenseStatus"><i class="fa fa-file-text-o"></i> Khoản thu</a>
+                </li>
+                <li class="">
+                    <a href="/Home/ManageReceipt/View/@User.Identity.GetUserId()"><i class="fa fa-file-text-o"></i> Hóa đơn</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</nav>
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-gray"><i style="color: #000" class="fa fa-list-ul"></i> Lịch sử hóa đơn</div>
+        <div class="panel-body">
+            <div class="form-horizontal" role="form">
+
+                <div class="form-group">
+                    <label class="control-label col-md-offset-3 col-md-1">Tháng</label>
+                    <div class="col-md-3">
+                        <input id="bsheetMonth" type="text" class="form-control" data-date-default-date="+0d" value=""
+                               data-date-start-view="1" data-date-format="mm-yyyy" data-date-default-date="0d" data-date-language="vi"
+                               data-date-min-view-mode="1" data-date-end-date="0m" />
+                    </div>
+                    <div class="col-md-2">
+                        <span class="btn btn-primary" onclick="viewBalanceSheetMonth()">Xem</span>
+                    </div>
+                </div>
+
+                <div class="form-group" id="rightCol">
+                    <div class="col-md-6">
+                        <fieldset class="scheduler-border less-padding border-top">
+                            <legend class="scheduler-border bold-black">Hóa đơn đẵ thanh toán</legend>
+                            <div class="table-responsive">
+                                <table class="table v-middle table-bordered table-striped balance-sheet">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Hóa đơn chưa thanh toán</th>
+                                            <th>Số tiền</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Kim khí điện máy</td>
+                                            <td>400,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Kim khí điện máy</td>
+                                            <td>800,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Kim khí điện máy</td>
+                                            <td>800,000</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <div class="col-md-6">
+                        <fieldset class="scheduler-border less-padding border-top">
+                            <legend class="scheduler-border bold-black">Hóa đơn chưa thanh toán</legend>
+                            <div class="table-responsive">
+                                <table class="table v-middle table-bordered table-striped balance-sheet">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Hóa đơn chưa thanh toán</th>
+                                            <th>Số tiền</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Kim khí điện máy</td>
+                                            <td>400,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Kim khí điện máy</td>
+                                            <td>800,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Kim khí điện máy</td>
+                                            <td>800,000</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div id="leftCol" class="form-group" style="text-align: center;">
+                    <canvas id="expenseStatus" width="100%" height="100%"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        //        var rightHeight = $("#rightCol").outerHeight(true);
+        //        $("#leftCol").css("height", rightHeight);
+        //        $("#leftCol > canvas").addClass("align-middle");
+        var temp = [
+        {
+            Name: "05-2015",
+            TotalAmount: 3000000
+        },
+        {
+            Name: "06-2015",
+            TotalAmount: 4000000
+        },
+        {
+            Name: "07-2015",
+            TotalAmount: 1500000
+        },
+        {
+            Name: "09-2015",
+            TotalAmount: 1500000
+        },
+        {
+            Name: "12-2016",
+            TotalAmount: 1500000
+        },
+        ];
+        var expenseChart = createChartbar("expenseStatus", temp);
+    });
+
+    function createChartbar(id, data) {
+        var obj = {};
+        var listLbl = [];
+        var listVal = [];
+        var bgColorList = [];
+
+        for (var i = 0; i < data.length; i++) {
+            obj = data[i];
+            listLbl.push(obj.Name);
+            listVal.push(obj.TotalAmount);
+            bgColorList.push(randomColor2());
+        }
+        var config = {
+            type: 'line',
+            data: {
+                labels: listLbl,
+                datasets: [
+                    {
+                        label: "My First dataset",
+                        fill: false,
+                        lineTension: 0.1,
+                        borderColor: "rgba(75,192,192,1)",
+                        borderCapStyle: 'butt',
+                        borderDash: [],
+                        borderDashOffset: 0.0,
+                        borderJoinStyle: 'miter',
+                        pointBorderColor: "rgba(75,192,192,1)",
+                        pointBackgroundColor: "#fff",
+                        pointBorderWidth: 1,
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                        pointHoverBorderColor: "rgba(220,220,220,1)",
+                        pointHoverBorderWidth: 2,
+                        pointRadius: 1,
+                        pointHitRadius: 10,
+                        data: listVal,
+                        backgroundColor: bgColorList
+                    }
+                ]
+            },
+            options: {
+                tooltips: {
+                    enabled: false
+                },
+                legend: {
+                    display: true,
+                    labels: {
+                        fontSize: 15
+                    },
+                    position: "bottom"
+                },
+                scales: {
+                    xAxes: [{
+                        time: {
+                            unit: 'month'
+                        }
+                    }, {
+                        type: 'logarithmic',
+                        position: 'bottom',
+                        ticks: {
+                            min: 1,
+                            max: 1000
+                        }
+                    }
+                    ]
+                }
+            }
+        };
+        var ctx2 = document.getElementById(id).getContext("2d");
+        return new Chart(ctx2, config);
+    }
+</script>

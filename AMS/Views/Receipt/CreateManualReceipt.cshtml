@@ -1,0 +1,299 @@
+﻿@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "ManageReipt";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+    List<House> block = ViewBag.block;
+    List<House> firstBlockFloor = ViewBag.firstBlockFloor;
+    List<House> rooms = ViewBag.rooms;
+}
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="heading-tab">
+            <i class="fa fa-list"> Tạo hóa đơn thủ công</i>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li>
+                    <a href="/Management/ManageReceipt/View/@User.Identity.GetUserId()"><i class="fa fa-file-text-o"></i> Quản lý hóa đơn</a>
+                </li>
+                <li class="active">
+                    <a href="/Management/ManageReceipt/@User.Identity.GetUserId()"><i class="fa fa fa-plus"></i> Tạo hóa đơn thủ công</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="panel-body">
+
+            <form id="createNewOrder" class="form-horizontal" role="form">
+
+                <div class="alert alert-info hide" id="createReceiptSuccessNoti" @*style="display: none"*@>
+                    <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <span>Hóa đơn được tạo thành công</span>
+                </div>
+                <div class="alert alert-danger hide" id="createReceiptFailedNoti">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                    <span>Việc tạo hóa đơn thất bại</span>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane fade active in" id="">
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-8">
+                                <fieldset class="scheduler-border less-padding">
+                                    <legend class="scheduler-border">Thông tin hóa đơn</legend>
+                                    <div class="form-group">
+                                        <label for="receiptTitle" class="col-md-2 control-label">Tiêu đề</label>
+                                        <div class="col-md-10">
+                                            <input id="receiptTitle" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="houseName" class="col-md-2 control-label">Tòa nhà</label>
+                                        <div class="col-md-3 full-width-select">
+                                            <select id="houseBlock" name="select" class="form-control">
+                                                @{
+                                                    foreach (var b in block)
+                                                    {
+                                                        <option value="@b.Block">@b.Block</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                        <label for="houseName" class="col-md-1 control-label">Tầng</label>
+                                        <div class="col-md-2">
+                                            <select id="houseFloor" name="select" class="form-control">
+                                                @{
+                                                    foreach (var f in firstBlockFloor)
+                                                    {
+                                                        <option value="@f.Floor">@f.Floor</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                        <label for="houseName" class="col-md-1 control-label">Nhà</label>
+                                        <div class="col-md-3">
+                                            <select id="houseName" name="select" class="form-control">
+                                                @{
+                                                    foreach (var r in firstBlockFloor)
+                                                    {
+                                                        <option value="@r.HouseName">@r.HouseName</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="receiptDesc" class="col-md-2 control-label">Loại hóa đơn</label>
+                                        <div class="col-md-4">
+                                            <select class="form-control" id="receiptType" name="ReceiptType">
+                                                <option selected="selected" value="1">Sửa chữa</option>
+                                                <option value="2">Điện</option>
+                                                <option value="3">Nước</option>
+                                                <option value="4">Tiền thuê nhà</option>
+                                            </select>
+                                        </div>
+                                        <label for="receiptDesc" class="col-md-2 control-label">Ngày phát hành</label>
+                                        <div class="col-md-4">
+                                            <input type="text" id="publishDate" class="form-control datepicker" data-date-format="dd-mm-yyyy" data-date-language="vi"
+                                                   data-date-min-view-mode="0" data-date-today-highlight="true" data-date-start-date="0m" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="receiptDesc" class="col-md-2 control-label">Mô tả</label>
+                                        <div class="col-md-10">
+                                            <textarea id="receiptDesc" class="form-control" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <fieldset class="scheduler-border less-padding">
+                                    <legend class="scheduler-border">Chi tiết hóa đơn</legend>
+                                    <div class="form-group">
+                                        <div class="col-sm-6">
+                                            <strong style="align-content: center">Tên</strong>
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <strong style="align-content: center">Số lượng</strong>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <strong style="align-content: center">Đơn giá</strong>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <strong style="align-content: center">Thành tiền</strong>
+                                        </div>
+                                    </div>
+                                    <div id="receiptWrapper">
+                                        <div id="row_1" class="form-group">
+                                            <div class="col-sm-6">
+                                                <input id="item_name_1" name="" type="text" class="form-control order-item">
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <input id="item_qty_1" name="" type="text" class="form-control order-item-qty">
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input id="item_unit_price_1" name="" type="text" class="form-control order-item-price">
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input id="item_qty_price_1" readonly="readonly" name="" type="text" class="form-control total-order">
+                                            </div>
+                                            <span class="btn btn-danger btn-xs" onclick="deleteItem(1)"><i class="fa fa-times"></i></span>
+                                        </div>
+                                        <div id="row_2" class="form-group">
+                                            <div class="col-sm-6">
+                                                <input id="item_name_2" name="" type="text" class="form-control order-item">
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <input id="item_qty_2" name="" type="text" class="form-control order-item-qty">
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input id="item_unit_price_2" name="" type="text" class="form-control order-item-price">
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input id="item_qty_price_2" readonly="readonly" name="" type="text" class="form-control total-order">
+                                            </div>
+                                            <span class="btn btn-danger btn-xs" onclick="deleteItem(2)"><i class="fa fa-times"></i></span>
+                                        </div>
+                                        <div id="row_3" class="form-group">
+                                            <div class="col-sm-6">
+                                                <input id="item_name_3" name="" type="text" class="form-control order-item">
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <input id="item_qty_3" name="" type="text" class="form-control order-item-qty">
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input id="item_unit_price_3" name="" type="text" class="form-control order-item-price">
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input id="item_qty_price_3" readonly="readonly" name="" type="text" class="form-control total-order">
+                                            </div>
+                                            <span class="btn btn-danger btn-xs" onclick="deleteItem(3)"><i class="fa fa-times"></i></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-3">
+                                            <span id="addNewRow" name="addNewRow" class="btn btn-stroke btn-primary"><i class="fa fa-plus"> Thêm</i></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="font-size: 20px; text-align: right">
+                                        <div class="col-sm-offset-7 col-sm-2">
+                                            <strong style="align-content: center">Tổng cộng</strong>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label id="total"></label>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-offset-9">
+                                    <span onclick="createReceipt(@User.Identity.GetUserId(),1)" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Lưu</span>
+                                    <span onclick="createReceipt(@User.Identity.GetUserId(),2)" class="btn btn-info">Lưu và Công bố</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    var oneDay = 24 * 60 * 60 * 1000;
+    var today = new Date();
+    var lastDate = new Date(today.getFullYear(), today.getMonth(0) + 1, 0);
+    var diffDays = Math.round(Math.abs(lastDate.getTime() - today.getTime()) / (oneDay));
+    document.getElementById("publishDate").dataset.dateEndDate = "+" + diffDays + "d";
+
+    $(document).ready(function () {
+        $("#publishDate").datepicker({
+        });
+
+
+        window.index = 3;
+        $("#addNewRow").on("click", function () {
+            window.index++;
+            var tag = "<div id=\"row_" + index + "\" class='form-group'>" +
+                "<div class='col-sm-6'><input id=\"item_name_" + index + "\" type='text' class='form-control order-item'></div>" +
+                "<div class='col-sm-1'><input type='text' id=\"item_qty_" + index + "\" class='form-control order-item-qty'></div>" +
+                "<div class='col-sm-2'><input id=\"item_unit_price_" + index + "\"type='text' class='form-control order-item-price'></div>" +
+                "<div class='col-sm-2'><input id=\"item_qty_price_" + index + "\" type='text' readonly='readonly' class='form-control'></div>" +
+                "<span class='btn btn-danger btn-xs' onclick='deleteItem(\"" + index + "\")'><i class='fa fa-times'></i></span>" +
+                "</div>";
+            $("#receiptWrapper").append(tag);
+        });
+    });
+    function deleteItem(id) {
+        if ($("#receiptWrapper").children().length > 1) {
+            $("#row_" + id)[0].parentNode.removeChild($("#row_" + id)[0]);
+        }
+    }
+    function createReceipt(fromUserId,mode) {
+        var contentObj = $("#receiptWrapper > .form-group");
+        var numberOfRow = contentObj.length;
+        var receiptName = $("#receiptTitle").val();
+        var receiptDesc = $("#receiptDesc").val();
+        var receiptHouseName = $("#houseName").val();
+        var receiptType = $("#receiptType").val();
+        var publishDate = $("#publishDate").val();
+
+        var userId = fromUserId;
+
+        var listItem = [];
+        for (var i = 0; i < numberOfRow; i++) {
+            var rowIdStr = $(contentObj[i]).prop("id").split("row_");
+            var id = rowIdStr[1];
+            var name = $("#item_name_" + id).val();
+            var qty = replaceCommaNumber($("#item_qty_" + id).val());
+            var unitPrice = replaceCommaNumber($("#item_unit_price_" + id).val());
+            if (name && qty && unitPrice) {
+                var item = {
+                    Name: name,
+                    UnitPrice: unitPrice,
+                    Quantity: qty
+                };
+                listItem.push(item);
+            }
+        }
+        var orderItem = {
+            Creator: userId,
+            ReceiptTitle: receiptName,
+            ReceiptDesc: receiptDesc,
+            ReceiptHouseName: receiptHouseName,
+            ReceiptType: receiptType,
+            PublishDate: publishDate,
+            ListItem: listItem,
+            Mode: mode
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/Management/ManageReceipt/AddNewReceipt",
+            data: $.param(orderItem),
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    $("#createReceiptSuccessNoti").removeClass("hide").addClass("show");
+                    setTimeout(function () {
+                        $("#createReceiptSuccessNoti").removeClass("show").addClass("hide");
+                        resetFormData("createNewOrder");
+                    }, 3000);
+                } else {
+                    $("#createReceiptFailedNoti").removeClass("hide").addClass("show");
+                    setTimeout(function () {
+                        $("#createReceiptFailedNoti").removeClass("show").addClass("hide");
+                    }, 3000);
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+</script>

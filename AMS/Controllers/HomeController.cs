@@ -350,7 +350,7 @@ namespace AMS.Controllers
                 return View("error");
 
             }
-            ViewBag.curUser = u;
+            ViewBag.roleId = u.RoleId;
             return View("ViewHistoryHdRequests");
         }
 
@@ -406,7 +406,7 @@ namespace AMS.Controllers
                             ViewBag.roleId = u.RoleId;
                             ViewBag.userId = u.Id;
                             ViewBag.helpdeskRequestLogs = helpdeskRequestLogs;
-                            return View("_helpdeskRequestDetail");
+                            return View("ViewHistoryHdRequestDetail");
                         }
                         return RedirectToAction("ViewHistoryHdRequest", new { userId = u.Id });
 

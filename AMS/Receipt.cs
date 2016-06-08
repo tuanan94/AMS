@@ -21,15 +21,17 @@ namespace AMS
         }
     
         public int Id { get; set; }
+        public string Title { get; set; }
+        public Nullable<int> Type { get; set; }
         public string ReceiptCode { get; set; }
-        public Nullable<System.DateTime> CreateDate { get; set; }
-        public Nullable<System.DateTime> LastModified { get; set; }
+        public Nullable<System.DateTime> PublishDate { get; set; }
         public Nullable<System.DateTime> PaymentDate { get; set; }
-        public string Description { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<int> HouseId { get; set; }
+        public string Description { get; set; }
         public Nullable<int> ManagerId { get; set; }
-        public string Title { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
+        public Nullable<System.DateTime> LastModified { get; set; }
     
         public virtual House House { get; set; }
         public virtual User User { get; set; }

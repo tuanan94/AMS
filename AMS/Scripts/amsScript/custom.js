@@ -28,6 +28,12 @@ window.StatusUnpublished = 1;
 window.StatusUnpaid = 2;
 window.StatusPaid = 3;
 
+
+window.Transaction_Type_Income = 1;
+window.Transaction_Type_Expense = 2;
+
+
+
 function loadHelpdeskServiceType() {
     var action = "loadHdSrvCat";
     //    $("#hdSrvType").load("ManageRequest?action=" + action);
@@ -125,7 +131,6 @@ function cancelDeleteHelpdeskService() {
     }
     window.deleteHdSrvList = new Array();
     $("#delBtnGroup").removeClass("show").addClass("hide");;
-
 }
 function commitDeleteHelpdeskService() {
     var postData = { hdSrvDeletedList: window.deleteHdSrvList }
@@ -551,6 +556,16 @@ $(document).ready(function () {
                 "targets": 0
             },
             {
+                "targets": 2,
+                "data": "HdReqHouse",
+                "render": function (data, type, full, meta) {
+                    if (type === "display" || type === "filter") {
+                        return "<span class='label house-color label-warning'>" + data + "</span>";
+                    }
+                    return data;
+                }
+            },
+            {
                 "targets": 4,
                 "data": "HdReqStatus",
                 "render": function (data, type, full) {
@@ -729,6 +744,13 @@ $(document).ready(function () {
                 "</span>" +
             "</div>";
             $("#hdSrvCatTable_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(html);
+
+            var addBtn = "<div class='col-md-1'>" +
+                            "<span class='btn btn-info' data-toggle='modal' data-target='#hdSrvCategoryModal' data-placement='top' onclick='openHdSrvCategoryModal()'>" +
+                        "<i class='fa fa-plus'></i>" +
+                            "</span>" +
+                        "</div>";
+            $("#hdSrvCatTable_wrapper > div:nth-child(1) > div:nth-child(1)").html(addBtn);
         }
     });
     var dataTable4 = $("#hdSrvTable").DataTable({
@@ -746,6 +768,13 @@ $(document).ready(function () {
                 "</span>" +
             "</div>";
             $("#hdSrvTable_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(html);
+
+            var addBtn = "<div class='col-md-1'>" +
+                            "<span class='btn btn-info' data-toggle='modal' data-target='#addHelpdeskRequestModal' data-placement='top' title='Edit' onclick='loadHelpdeskServiceType()'>" +
+                                "<i class='fa fa-plus'></i>" +
+                            "</span>" +
+                        "</div>";
+            $("#hdSrvTable_wrapper > div:nth-child(1) > div:nth-child(1)").html(addBtn);
         }
     });
 
@@ -944,11 +973,11 @@ function getHdReqDetail(id) {
         url: "/Home/HelpdeskRequest/GetHdReqInfoDetail/" + id,
         success: function (data) {
 
-            console.log(data.Data.HdReqInfoDetail);
-            console.log(data.Data.HdSrvCategories);
-            console.log(data.Data.ListHdSrvBySelectedCat);
-            console.log(data.Data.SelectedHdSrvCatId);
-            console.log(data.Data.SelectedHdSrvId);
+//            console.log(data.Data.HdReqInfoDetail);
+//            console.log(data.Data.HdSrvCategories);
+//            console.log(data.Data.ListHdSrvBySelectedCat);
+//            console.log(data.Data.SelectedHdSrvCatId);
+//            console.log(data.Data.SelectedHdSrvId);
 
             var objList = data.Data.HdSrvCategories;
             var returnHtml = parseJsonToSelectTags(objList, data.Data.SelectedHdSrvCatId, "Hãy chọn loại dịch vụ hổ trợ");
@@ -965,7 +994,6 @@ function getHdReqDetail(id) {
 
             $("#hdReqTitle").val(data.Data.HdReqInfoDetail.HdReqTitle);
             $("#hdReqDesc").val(data.Data.HdReqInfoDetail.HdReqUserDesc);
-            $("#hdSrvPrice").val(data.Data.SelectedHdSrvPrice);
 
             $("#updateHdRequestModal").modal("show");
         }
@@ -1096,6 +1124,7 @@ function calculateTotal() {
         var rowIdStr = $(contentObj[i]).prop("id").split("row_");
         var id = rowIdStr[1];
         var currentPrice = $("#item_qty_price_" + id).val();
+        currentPrice = replaceCommaNumber(currentPrice);
         if (currentPrice && isNaN(currentPrice) === false) {
             try {
                 currentPrice = parseFloat(currentPrice);
@@ -1106,6 +1135,7 @@ function calculateTotal() {
             }
         }
     }
+    total = numberWithCommas(total);
     $("#total").text(total);
 }
 
@@ -1169,17 +1199,23 @@ $(document).ready(function () {
     //            }
     //        });
 
-    
+
     $("#receiptWrapper").on("change", ".order-item-qty", function () {
         console.log($(this).val());
         var idStr = $(this).prop("id").split("item_qty_");
-        if ($(this).val() && (isNaN($(this).val()) === false)) {
+        if ($(this).val() && (isNaN(replaceCommaNumber($(this).val())) === false)) {
+            $("#item_qty_" + idStr[1]).val(numberWithCommas($(this).val()));
             var unitPriceValue = $("#item_unit_price_" + idStr[1]).val();
+            unitPriceValue = replaceCommaNumber(unitPriceValue);
+
             if (unitPriceValue && isNaN(unitPriceValue) === false) {
                 var unitPrice = parseFloat(unitPriceValue);
-                var qty = parseFloat($(this).val());
-                $("#item_qty_price_" + idStr[1]).val(unitPrice * qty);
+                var qty = parseFloat(replaceCommaNumber($(this).val()));
+
+                var formatedMoney = numberWithCommas(unitPrice * qty);
+                $("#item_qty_price_" + idStr[1]).val(formatedMoney);
                 calculateTotal();
+
             } else {
                 $("#item_unit_price_" + idStr[1]).val("");
             }
@@ -1190,12 +1226,18 @@ $(document).ready(function () {
     $("#receiptWrapper").on("change", ".order-item-price", function () {
         console.log($(this).val());
         var idStr = $(this).prop("id").split("item_unit_price_");
-        if ($(this).val() && (isNaN($(this).val()) === false)) {
+        if ($(this).val() && (isNaN(replaceCommaNumber($(this).val())) === false)) {
+            $("#item_unit_price_" + idStr[1]).val(numberWithCommas($(this).val()));
             var qtyValue = $("#item_qty_" + idStr[1]).val();
+            qtyValue = replaceCommaNumber(qtyValue);
             if (qtyValue && isNaN(qtyValue) === false) {
+
                 var qty = parseFloat(qtyValue);
-                var unitPrice = parseFloat($(this).val());
-                $("#item_qty_price_" + idStr[1]).val(unitPrice * qty);
+                var unitPrice = parseFloat(replaceCommaNumber($(this).val()));
+
+                var formatedMoney = numberWithCommas(unitPrice * qty);
+                $("#item_qty_price_" + idStr[1]).val(formatedMoney);
+                $("#item_unit_price_" + idStr[1]).val(numberWithCommas(unitPrice));
                 calculateTotal();
             } else {
                 $("#item_qty_price_" + idStr[1]).val("");
@@ -1226,3 +1268,79 @@ $(document).ready(function () {
 });
 
 //Receipt manager
+//http://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
+function numberWithCommas(x) {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+}
+function replaceCommaNumber(x) {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/,/g, "");
+    return parts.join(".");
+}
+function resetFormData(id) {
+    $("#" + id).closest("form").find("input[type=text], textarea").val("");
+}
+
+function removeHiddenBackgroundPopup() {
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
+}
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+function createChart(id, data) {
+    var obj = {};
+    var listLbl = [];
+    var listVal = [];
+    var bgColorList = [];
+
+    for (var i = 0; i < data.length; i++) {
+        obj = data[i];
+        listLbl.push(obj.Name);
+        listVal.push(obj.TotalAmount);
+        bgColorList.push(randomColor2());
+    }
+    var config = {
+        type: 'pie',
+        data: {
+            labels: listLbl,
+            datasets: [
+                {
+                    data: listVal,
+                    backgroundColor: bgColorList
+                }
+            ]
+        },
+        options: {
+            tooltips: {
+                enabled: false
+            },
+            legend: {
+                display: true,
+                labels: {
+                    fontSize: 15
+                },
+                position: "bottom"
+            }
+        }
+    };
+    var ctx2 = document.getElementById(id).getContext("2d");
+    return new Chart(ctx2, config);
+}
+function randomColor2() {
+    var r = Math.floor(Math.random() * 200);
+    var g = Math.floor(Math.random() * 250);
+    var b = Math.floor(Math.random() * 400);
+    var v = Math.floor(Math.random() * 500);
+    var c = 'rgb(' + r + ', ' + g + ', ' + b + ')';
+    return c;
+}

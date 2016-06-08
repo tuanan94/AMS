@@ -1,0 +1,142 @@
+﻿@using Microsoft.AspNet.Identity;
+@{
+<<<<<<< HEAD
+    Layout = null;
+    var currentUser = User.Identity;
+    User curUser = ViewBag.curUser;
+=======
+    Layout = "~/Views/Shared/_ManagementLayout.cshtml";
+>>>>>>> 4a1c7ed... Change get user id and change layout for manager
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Scripts.Render("~/bundles/jquery")
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/css/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+<<<<<<< HEAD
+</head>
+<body class="breakpoint-1024">
+    <div class="navbar navbar-main navbar-primary navbar-fixed-top" role="navigation" style="background-color:#339be7">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="#" data-toggle="sidebar-menu" id="toggle-sidebar-menu" class="visible-xs"><i class="fa fa-ellipsis-v"></i></a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a data-toggle="sidebar-chat" class="btn btn-link navbar-btn visible-xs"><i class="fa fa-comments"></i></a>
+                <a class="navbar-brand" href="index.html">QUẢN LÍ KHU CHUNG CƯ AMS</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="navbar-collapse collapse" id="main-nav" style="height: 1px;">
+                <ul class="nav navbar-nav">
+
+
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                   
+                    <!-- User -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle user" data-toggle="dropdown">
+                            <img src="@((curUser==null||curUser.ProfileImage==null||curUser.ProfileImage.Equals(""))?"/Content/images/defaultProfile.png":curUser.ProfileImage)" class="img-circle" width="40"> @currentUser.GetUserName() <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="user-private-profile.html">Profile</a>
+                            </li>
+                            <li>
+                                <a href="user-private-messages.html">Messages</a>
+                            </li>
+                            <li>
+                                <a href="/Account/LogOff">Logout</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- /.navbar-collapse -->
+        </div>
+    </div>
+  
+    <div class="st-container">
+        @RenderBody()
+        <hr />
+    </div>
+
+
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/amsScript/vendor.js"></script>
+    <script src="~/Scripts/amsScript/scripts.js"></script>
+    <script src="~/Scripts/amsScript/custom.js"></script>
+    <script src="~/Scripts/amsScript/additional-methods.min.js"></script>
+    <script src="~/Scripts/amsScript/jquery.validate.min.js"></script>
+    <script src="~/Scripts/amsScript/jquery.timepicker.min.js"></script>
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>
+=======
+
+@*<nav class="navbar navbar-subnav navbar-static-top" role="navigation">*@
+@*    <div class="container">*@
+@*        <!-- Brand and toggle get grouped for better mobile display -->*@
+@*        <div class="navbar-header">*@
+@*            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subnav">*@
+@*                <span class="sr-only">Toggle navigation</span>*@
+@*                <span class="fa fa-ellipsis-h"></span>*@
+@*            </button>*@
+@*        </div>*@
+        <!-- Collect the nav links, forms, and other content for toggling -->
+@*        <div class="collapse navbar-collapse" id="subnav">*@
+@*            <ul class="nav navbar-nav">*@
+@*                <li class="active">*@
+@*                    <a href="/Home/HelpdeskRequest/ViewHistory/@User.Identity.GetUserId()"><i class="fa icon-headphones"></i> Quản lý yêu cầu</a>*@
+@*                </li>*@
+@*                <li class="">*@
+@*                    <a href="/Management/ManageRequestView/@User.Identity.GetUserId()"><i class="fa fa-cogs"></i> Quản lý dịch vụ hổ trợ</a>*@
+@*                </li>*@
+@*                <li>*@
+@*                    <a href="/Management/ManageReceipt/@User.Identity.GetUserId()"><i class="fa fa-file-text-o"></i> Quản lý hóa đơn</a>*@
+@*                </li>*@
+@*                <li>*@
+@*                    <a href="/Management/ManageIncome"><i class="fa fa-dollar"></i> Quản lý thu chi</a>*@
+@*                </li>*@
+@*                <li>*@
+@*                    <a href="/Management/ManageReport"><i class="fa fa-mail-reply-all"></i> Quản lý Báo cáo</a>*@
+@*                </li>*@
+@*                <li>*@
+@*                    <a href="login.html"><i class="fa fa-list-ol"></i> Khảo sát</a>*@
+@*                </li>*@
+@*            </ul>*@
+@*            <ul class="nav navbar-nav navbar-right hidden-xs">*@
+@*                <li>*@
+@*                    <a href="login.html">Logout  <i class="fa fa-fw icon-unlock-fill"></i></a>*@
+@*                </li>*@
+@*            </ul>*@
+@*        </div>*@
+        <!-- /.navbar-collapse -->
+@*    </div>*@
+@*</nav>*@
+
+<div id="content" style="margin-left: 0">
+   
+    @RenderBody()
+    <!--Footer-->
+    <div class="footer">
+        Social Network Template © Copyright Notice
+    </div>
+</div>
+>>>>>>> 4a1c7ed... Change get user id and change layout for manager
