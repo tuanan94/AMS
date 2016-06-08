@@ -45,6 +45,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Geocoding">
+      <HintPath>..\packages\Geocoding.net.3.4.0\lib\net40\Geocoding.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.0.1011, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
@@ -78,6 +81,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -142,9 +149,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -207,6 +211,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="AroundProviderProduct.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BalanceSheet.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Constant.cs" />
@@ -300,6 +307,7 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Service\AnswerService.cs" />
+    <Compile Include="Service\AroundProviderProductService.cs" />
     <Compile Include="Service\AroundProviderService.cs" />
     <Compile Include="Service\HdReqHdSupporterServices.cs" />
     <Compile Include="Service\HelpdeskRequestHelpdeskSupporterService.cs" />
@@ -334,10 +342,7 @@
     <Compile Include="Transaction.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="TransactionItem.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="TransactionItemCategory.cs">
+    <Compile Include="TransactionCategory.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="User.cs">
@@ -398,6 +403,12 @@
     <Content Include="images\aroundProvider\blog-img-4.jpg" />
     <Content Include="images\aroundProvider\blog-img-5.jpg" />
     <Content Include="images\aroundProvider\blog-img-6.jpg" />
+    <Content Include="images\aroundProvider\img-2.jpg" />
+    <Content Include="images\aroundProvider\markerBlue.png" />
+    <Content Include="images\aroundProvider\slider-img-1.jpg" />
+    <Content Include="images\aroundProvider\slider-img-2.jpg" />
+    <Content Include="images\aroundProvider\slider-img-3.jpg" />
+    <Content Include="images\aroundProvider\slider-img-4.jpg" />
     <Content Include="images\rating.png" />
     <Content Include="Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -419,6 +430,7 @@
     <Content Include="Scripts\amsScript\Social.js" />
     <Content Include="Scripts\amsScript\vendor.js" />
     <Content Include="Scripts\amsScript\vendor.min.js" />
+    <Content Include="Scripts\aroundProvider\map.js" />
     <Content Include="Scripts\aroundProvider\jquery.nav.js" />
     <Content Include="Scripts\aroundProvider\jquery.sticky.js" />
     <Content Include="Scripts\aroundProvider\main.js" />
@@ -583,7 +595,8 @@
     <Content Include="Views\Management\ManageRequest.cshtml" />
     <Content Include="Views\Home\_helpdeskRequestDetail.cshtml" />
     <Content Include="Views\Home\ViewAroundProvider.cshtml" />
-    <Content Include="Views\Home\ViewAroundProviderFood.cshtml" />
+    <Content Include="Views\Home\ViewAroundProviderDetail.cshtml" />
+    <Content Include="Views\Home\SingleProviderDetail.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

@@ -18,5 +18,10 @@ namespace AMS.Service
         {
             return _repository.List.Where(c => c.AroundProviderCategoryId == categoryId).ToList();
         }
+
+        public AroundProvider GetProvider(int id)
+        {
+            return _repository.FindById(id);
+        }
     }
 }
