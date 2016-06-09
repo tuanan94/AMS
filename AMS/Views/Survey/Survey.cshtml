@@ -220,21 +220,21 @@ padding:12px;
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-3 control-label">Câu trả lời</label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control binh" id="idd1" name="anwser1" style="width: 330px">  <label id="label1"></label><br>
+                            <input type="text" class="form-control binh" id="idd1"  onblur="bInfo()" name=" anwser1" style="width: 330px">  <label id="label1"></label><br>
                             <input type="hidden" name="count" value="1" />
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-3 control-label">Câu trả lời</label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control binh" id="idd1" name="anwser1" style="width: 330px">  <br>
+                            <input type="text" class="form-control binh" id="idd2" onblur="bInfo()" name="anwser1" style="width: 330px">  <br>
                             <input type="hidden" name="count" value="2" />
                         </div>
                     </div>
                     <div class="form-group" id="aa">
                         <label for="inputEmail3" class="col-sm-3 control-label">Câu trả lời</label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control binh" id="idd1" name="anwser1" style="width: 330px">  <br>
+                            <input type="text" class="form-control binh" id="idd3" onblur="bInfo()" name="anwser1" style="width: 330px">  <br>
                             <input type="hidden" name="count" value="3" />
                         </div>"
                     </div>" 
@@ -379,7 +379,19 @@ padding:12px;
 
 
 <script>
-   
+    function bInfo() {
+        in1 = document.getElementById('idd1').value;
+        in2 = document.getElementById('idd2').value;
+        in3 = document.getElementById('idd3').value;
+        if (in1 == in2 && in1 != "" && in2 != "") {
+            alert('Same Value'); return false;
+        } else if (in1 == in3 && in1 != "" && in3 != "") {
+            alert('Same Value'); return false;
+        }
+        else if (in2 == in3 && in2 != "" && in3 != "") {
+            alert('Same Value'); return false;
+        } else { return true; }
+    }
     $('#label1').delay(2500).fadeOut('slow');
 
 
@@ -458,7 +470,7 @@ padding:12px;
             var tag = " <div class='form-group'>"+
             "   <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>"+
             "  <div class='col-sm-7'>"+
-            "     <input type='text' class='form-control binh' id='idd1' name='anwser1' style='width: 330px'>  <br>"+
+            "     <input type='text' class='form-control binh' id=\"idd" + index + "\"  onblur='bInfo() name='anwser1' style='width: 330px'>  <br>" +
             "     <input type='hidden' name='count' value='"+i+"' />"+
             "   </div>"+
             "   </div>";

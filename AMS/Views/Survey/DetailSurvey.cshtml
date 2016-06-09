@@ -341,9 +341,9 @@
     //var b = $("#answerr_2").val()
     //var a = $("#answerr_1").val()
     //var c = $("#answerr_3").val()
-    var answer2 = parseFloat($("#answer_2").val())
-    var answer1 = parseFloat($("#answer_1").val())
-    var answer3 = parseFloat($("#answer_3").val())
+    var answer2 = parseFloat($("#answer_2").val()) || null
+    var answer1 = parseFloat($("#answer_1").val()) || null
+    var answer3 = parseFloat($("#answer_3").val()) || null
 
     var a = "Lựa chọn 1"
     var b = "Lựa chọn 2"
@@ -352,13 +352,23 @@
         //var a = document.getElementById('#answerr_1').value;
         //var b = document.getElementById('#answerr_2').value;
         //var c = document.getElementById('#answerr_3').value;
+        if (answer1 === 0 && answer2 === 0 && answer3 === 0) {
+            //RenderPieCharts('container', [
+            //[a, null],
+            //[b, null],
+            //[c, null]
 
-        RenderPieChart('container', [
+            //]);
+          return '<h4>' +"Chưa có dữ liệu"+'</h4>'
+        } else {
+            RenderPieChart('container', [
             [a, answer1],
             [b, answer2],
             [c, answer3]
 
-        ]);
+            ]);
+        }
+       
 
 
         function RenderPieChart(elementId, dataList) {
@@ -370,6 +380,42 @@
                     plotShadow: false
                 }, title: {
                     text: 'Biểu đồ kết quả khảo sát'
+                },
+                tooltip: {
+                    formatter: function () {
+                        return '<b>' + this.point.name + '</b>: ' + this.percentage + ' %';
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            color: '#000000',
+                            connectorColor: '#000000',
+                            formatter: function () {
+                                return '<b>' + this.point.name + '</b>: ' + this.percentage + ' %';
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    name: 'Browser share',
+                    data: dataList
+                }]
+            });
+        };
+        function RenderPieCharts(elementId, dataList) {
+            new Highcharts.Chart({
+                chart: {
+                    renderTo: elementId,
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                }, title: {
+                    text: 'Chưa có dữ liệu'
                 },
                 tooltip: {
                     formatter: function () {
