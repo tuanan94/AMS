@@ -126,20 +126,23 @@ padding:12px;
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Ngày tạo</label>
                                     <div class="col-sm-7">
-                                        @Html.TextBoxFor(m => m.StartDate, new {@class = "form-control binh", style = "width: 330px"})<br>
+                                        @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control binh", style = "width: 330px" })<br>
+                                        @Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
                                     </div>
                                 </div><br>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Ngày bắt đầu</label>
                                     <div class="col-sm-7">
-                                        @Html.TextBoxFor(m => m.PublishDate, new {@class = "form-control binh", style = "width: 330px"})<br>
-                                    </div>
+                                        @Html.TextBoxFor(m => m.PublishDate, new { @class = "form-control binh", style = "width: 330px" })<br>
+                                        @Html.ValidationMessageFor(m => m.PublishDate, "", new { @class = "text-danger" })
+                                     </div>
                                 </div><br>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Ngày kết thúc</label>
                                     <div class="col-sm-7">
-                                        @Html.TextBoxFor(m => m.EndDate, new {@class = "form-control binh", style = "width: 330px"})<br>
-                                    </div>
+                                        @Html.TextBoxFor(m => m.EndDate, new { @class = "form-control binh", style = "width: 330px" @*onblur = "bInfos()",*@ })<br>
+                                        @Html.ValidationMessageFor(m => m.EndDate, "", new { @class = "text-danger" })
+                                     </div>
                                 </div><br>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Khu</label>
@@ -220,7 +223,7 @@ padding:12px;
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-3 control-label">Câu trả lời</label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control binh" id="idd1"  onblur="bInfo()" name=" anwser1" style="width: 330px">  <label id="label1"></label><br>
+                            <input type="text" class="form-control binh" id="idd1"  onblur="bInfo()" name="anwser1" style="width: 330px">  <label id="label1"></label><br>
                             <input type="hidden" name="count" value="1" />
                         </div>
                     </div>
@@ -261,6 +264,7 @@ padding:12px;
                                 <th>Số Thứ tự</th>
                                 <th>Tiêu đề</th>
                                 <th>Ngày tạo</th>
+                                <th>Ngày đăng</th>
                                 <th>Ngày đóng</th>
                                 <th>Trạng thái </th>
                                 <th> </th>
@@ -273,8 +277,8 @@ padding:12px;
                                 {
                                     <tr class="aass">
                                         <td>
-                                            <div class="form-group">
-                                                <div class="col-sm-9">
+                                            <div class="form-group" >
+                                                <div class="col-sm-9" style="width: 100px">
                                                     <input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.Id">
                                                 </div>
                                             </div>
@@ -292,7 +296,18 @@ padding:12px;
                                                 <div class="col-sm-9">
                                                     @*<span class="label date-color label-warning">@item.StartDate</span>*@
                                                     @*<input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.StartDate">*@
-                                                    @Html.TextBoxFor(m => m.StartDate, new { @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate)), @class = "date-color", @style = "width:100px" })
+                                                    @Html.TextBoxFor(m => m.StartDate, new {@Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate)), @class = "date-color", @style = "width:100px"})
+
+
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <div class="col-sm-9">
+                                                    @*<span class="label date-color label-warning">@item.StartDate</span>*@
+                                                    @*<input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.StartDate">*@
+                                                    @Html.TextBoxFor(m => m.StartDate, new { @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.PublishDate)), @class = "date-color", @style = "width:100px" })
 
 
                                                 </div>
@@ -314,7 +329,7 @@ padding:12px;
                                                 {
                                                     <div class="form-group">
                                                         <div class="col-sm-9">
-                                                            <input type="text" disabled="disabled" style="background-color: #3366ff" class="form-control binh" id="fullname" value="Đang mở">
+                                                            <input type="text" disabled="disabled" style="background-color: #3366ff;color: white" class="form-control binh" id="fullname" value="Đang mở">
                                                         </div>
                                                     </div>
                                                 }
@@ -322,7 +337,7 @@ padding:12px;
                                                 {
                                                     <div class="form-group">
                                                         <div class="col-sm-9">
-                                                            <input type="text" disabled="disabled" style="background-color: #ff9999" class="form-control binh" id="fullname" value="Đã đóng">
+                                                            <input type="text" disabled="disabled" style="background-color: #ff9999;color: white" class="form-control binh" id="fullname" value="Đã đóng">
                                                         </div>
                                                     </div>
                                                 }
@@ -332,7 +347,7 @@ padding:12px;
                                         </td>
                                         <td>
                                             <div class="form-group">
-                                                <div class="col-sm-9">
+                                                <div class="col-sm-8">
                                                     <a href="@Url.Action("DeleteSurvey", "Survey", new {surveyId = @item.Id})" onclick="return myFunction()" class="button">Xóa</a>
 
                                                 </div>
@@ -379,22 +394,6 @@ padding:12px;
 
 
 <script>
-    function bInfo() {
-        in1 = document.getElementById('idd1').value;
-        in2 = document.getElementById('idd2').value;
-        in3 = document.getElementById('idd3').value;
-        if (in1 == in2 && in1 != "" && in2 != "") {
-            alert('Same Value'); return false;
-        } else if (in1 == in3 && in1 != "" && in3 != "") {
-            alert('Same Value'); return false;
-        }
-        else if (in2 == in3 && in2 != "" && in3 != "") {
-            alert('Same Value'); return false;
-        } else { return true; }
-    }
-    $('#label1').delay(2500).fadeOut('slow');
-
-
     $(function () {
         $("#StartDate").datepicker();
         //$("#StartDate").attr('readOnly', 'false');
@@ -407,6 +406,44 @@ padding:12px;
         $("#EndDate").datepicker();
         //$("#EndDate").attr('readOnly', 'false');
     });
+    function bInfos() {
+        a = document.getElementById('date1').value;
+        b = document.getElementById('date2').value;
+        c = document.getElementById('date3').value;
+        var d1 = new Date(a)
+        var d2 = new Date(b)
+        var d3 = new Date(c)
+        var diff1 = Math.abs(d1 - d2)
+        var diff2 = Math.abs(d2 - d3);
+        var diff3 = Math.abs(d1 - d3);
+        if (diff1<0) {
+            alert('Same Value'); return false;
+        } else if (diff2 <0) {
+            alert('Same Value'); return false;
+        }
+        else if (diff3 <0) {
+            alert('Same Value'); return false;
+        } else { return true; }
+    }
+    function bInfo() {
+        in1 = document.getElementById('idd1').value;
+        in2 = document.getElementById('idd2').value;
+        in3 = document.getElementById('idd3').value;
+        in4 = document.getElementById('idd4').value;
+        in5 = document.getElementById('idd5').value;
+        if (in1 == in2 && in1 != "" && in2 != "") {
+            alert('Same Value'); return false;
+        } else if (in1 == in3 && in1 != "" && in3 != "") {
+            alert('Same Value'); return false;
+        }
+        else if (in2 == in3 && in2 != "" && in3 != "") {
+            alert('Same Value'); return false;
+        } else { return true; }
+    }
+    $('#label1').delay(2500).fadeOut('slow');
+
+
+  
     function myFunction() {
         var x = confirm("Bạn chắc muốn xóa dòng này chứ?");
         if (x)
@@ -468,12 +505,12 @@ padding:12px;
         $("#addNewForm").on("click", function () {
             window.i++;
             var tag = " <div class='form-group'>"+
-            "   <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>"+
-            "  <div class='col-sm-7'>"+
-            "     <input type='text' class='form-control binh' id=\"idd" + index + "\"  onblur='bInfo() name='anwser1' style='width: 330px'>  <br>" +
-            "     <input type='hidden' name='count' value='"+i+"' />"+
-            "   </div>"+
-            "   </div>";
+                "   <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>"+
+                "  <div class='col-sm-7'>"+
+                "     <input type='text' class='form-control binh' id=\"idd" + index + "\"  onblur='bInfo() name='anwser1' style='width: 330px'>  <br>" +
+                "     <input type='hidden' name='count' value='"+i+"' />"+
+                "   </div>"+
+                "   </div>";
 
             $("#aa").append(tag);
             $("#addNewRow" + i).on("click", function () {

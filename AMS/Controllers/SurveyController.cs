@@ -295,7 +295,8 @@ namespace AMS.Controllers
         [HttpPost]
         public ActionResult Surveys(SurveyViewModel model)
         {
-
+if (ModelState.IsValid)
+            {
         //    string[] title = Request.Form.GetValues("Title");
             var ti = Request.QueryString["Title"];
             string[] listQuestion = Request.Form.GetValues("question");
@@ -363,6 +364,21 @@ namespace AMS.Controllers
                    // String.Format("{0:dd-MM-yyyy}", survey.StartDate);
                     survey.EndDate = model.EndDate;
                     survey.PublishDate = model.PublishDate;
+                    int result = DateTime.Compare(survey.StartDate.Value, survey.EndDate.Value);
+                    int result1 = DateTime.Compare(survey.PublishDate.Value, survey.EndDate.Value);
+                    int result2 = DateTime.Compare(survey.StartDate.Value, survey.PublishDate.Value);
+                    if ((result) <0)
+                    {
+                        ModelState.AddModelError("StartDate", "Xin chon ngay hop ly.");
+                    }
+                    else if ((result1) < 0)
+                    {
+                        ModelState.AddModelError("StartDate", "Xin chon ngay hop ly.");
+                    }
+                    else if ((result2) < 0)
+                    {
+                        ModelState.AddModelError("EndDate", "Xin chon ngay hop ly.");
+                    }
                     survey.Status = 1;
                     survey.Block = listBlock[0];
                     survey.Floor = listFloor[0];
@@ -387,7 +403,7 @@ namespace AMS.Controllers
                     ii++;
                 }
 
-              
+            }  
             }
             ViewBag.Alert = "Tạo survey thành công!!";
           //  return View("Survey");
