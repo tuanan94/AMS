@@ -327,15 +327,24 @@
 <script>
     $('#label1').delay(2500).fadeOut('slow');
     $(function () {
-        $("#StartDate").datepicker();
+        $("#StartDate").datepicker({
+            format: "yyyy/mm/dd",
+            startDate: "-3d"
+        });
         //$("#StartDate").attr('readOnly', 'false');
     });
     $(function () {
-        $("#PublishDate").datepicker();
+        $("#PublishDate").datepicker({
+            format: "yyyy/mm/dd",
+            startDate: "-3d"
+        });
         //$("#PublishDate").attr('readOnly', 'false');
     });
     $(function () {
-        $("#EndDate").datepicker();
+        $("#EndDate").datepicker({
+            format: "yyyy/mm/dd",
+            startDate: "-3d"
+        });
         //$("#EndDate").attr('readOnly', 'false');
     });
     //var b = $("#answerr_2").val()

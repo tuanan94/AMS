@@ -281,9 +281,12 @@ namespace AMS.Controllers
             }
             obj.Title = model.Title;
             obj.Question = listQuestion[0];
-            obj.StartDate = model.StartDate;
-            obj.EndDate = model.EndDate;
-            obj.PublishDate = model.PublishDate;
+            obj.StartDate = (model.StartDate);
+            obj.EndDate =(model.EndDate);
+            obj.PublishDate = (model.PublishDate);
+            //obj.StartDate = DateTime.Parse(model.StartDate);
+            //obj.EndDate = DateTime.Parse(model.EndDate);
+            //obj.PublishDate = DateTime.Parse(model.PublishDate);
             obj.Member = int.Parse(member[0]);
             obj.Block = listBlock[0];
             obj.Floor = listFloor[0];
@@ -360,13 +363,19 @@ if (ModelState.IsValid)
 
 
 
-                    survey.StartDate = DateTime.Parse(String.Format("{0:dd-MM-yyyy}", model.StartDate));
+                    survey.StartDate = (model.StartDate);
                    // String.Format("{0:dd-MM-yyyy}", survey.StartDate);
-                    survey.EndDate = model.EndDate;
-                    survey.PublishDate = model.PublishDate;
+                    //survey.EndDate = DateTime.Parse(model.EndDate);
+                    //survey.PublishDate = DateTime.Parse(model.PublishDate);
+                    survey.EndDate =(model.EndDate);
+                    survey.PublishDate = (model.PublishDate);
                     int result = DateTime.Compare(survey.StartDate.Value, survey.EndDate.Value);
                     int result1 = DateTime.Compare(survey.PublishDate.Value, survey.EndDate.Value);
                     int result2 = DateTime.Compare(survey.StartDate.Value, survey.PublishDate.Value);
+                    if (survey.StartDate.ToString()=="")
+                    {
+                        ModelState.AddModelError("StartDate", "Xin chon ngay hop ly.");
+                    }
                     if ((result) <0)
                     {
                         ModelState.AddModelError("StartDate", "Xin chon ngay hop ly.");
