@@ -108,27 +108,36 @@
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Ngày tạo</label>
                                     <div class="col-sm-7">
-                                        @Html.TextBoxFor(m => m.StartDate, new {@class = "form-control binh", style = "width: 330px", @Value = surveys.StartDate})<br>
+                                        @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control binh", style = "width: 330px", @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", surveys.StartDate)) })<br>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Ngày bắt đầu</label>
                                     <div class="col-sm-7">
-                                        @Html.TextBoxFor(m => m.PublishDate, new {@class = "form-control binh", style = "width: 330px", @Value = surveys.PublishDate})<br>
+                                        @Html.TextBoxFor(m => m.PublishDate, new { @class = "form-control binh", style = "width: 330px", @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", surveys.PublishDate)) })<br>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Ngày kết thúc</label>
                                     <div class="col-sm-7">
-                                        @Html.TextBoxFor(m => m.EndDate, new {@class = "form-control binh", style = "width: 330px", @Value = surveys.EndDate})<br>
+                                        @Html.TextBoxFor(m => m.EndDate, new { @class = "form-control binh", style = "width: 330px", @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", surveys.EndDate)) })<br>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Khu</label>
                                     <div class="col-sm-7">
                                         <select class="form-control binh" name="selectItemBlock" style="width: 330px">
-                                            <option value="@surveys.Block">@surveys.Block</option>
-                                            <option value="NULL">Tất cả</option>
+                                            @{
+                        if (@surveys.Block == "NULL")
+                        {
+                                        <option value="@surveys.Block">Tất cả</option>
+                        }
+                        else
+                        {
+  <option value="@surveys.Block">@surveys.Block</option>
+                        }
+                                            }
+                                           
                                             @{
                                                 foreach (var item in listBlock)
                                                 {
@@ -146,8 +155,18 @@
                                     <label for="inputEmail3" class="col-sm-3 control-label">Tầng</label>
                                     <div class="col-sm-7">
                                         <select class="form-control binh" name="selectItemFloor" style="width: 330px">
-                                            <option value="@surveys.Floor">@surveys.Floor</option>
-                                            <option value="NULL">Tất cả</option>
+                                            @{
+                                                if (@surveys.Floor == "NULL")
+                                                {
+                                                    <option value="@surveys.Floor">Tất cả</option>
+                                                }
+                                                else
+                                                {
+  <option value="@surveys.Floor">@surveys.Floor</option>
+                                                }
+                                            }
+                                            
+                                           
                                             @{
                                                 foreach (var item in listFloor)
                                                 {
@@ -226,10 +245,10 @@
                                 </div>
                             </div>
                         </div>
-                         int ii = 1;
+                                                int ii = 1;
 
-                         //int i = 0;
-                         // int count = answers.Count;
+                                                //int i = 0;
+                                                // int count = answers.Count;
 
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-8">
@@ -247,9 +266,9 @@
 
                                         @{
 
-                         int counts = 1;
-                         foreach (var b in answers)
-                         {
+                                                int counts = 1;
+                                                foreach (var b in answers)
+                                                {
                             <label for="inputEmail3" class="col-sm-3 control-label">Lựa chon @counts :</label>
                                             <div class="col-sm-7">
                                                 @Html.TextBoxFor(m => m.Id, new { @type = "hidden", @Value = surveys.Id })
@@ -259,8 +278,8 @@
 
 
                                             </div>
-                             counts++;
-                         }
+                                                    counts++;
+                                                }
 
 
                                         }

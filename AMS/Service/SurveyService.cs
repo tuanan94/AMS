@@ -13,7 +13,7 @@ namespace AMS.Service
 
         public List<Survey> GetListSurveys()
         {
-            return surveyRepository.List.ToList();
+            return surveyRepository.List.OrderByDescending(t=>t.Id).ToList();
         }
         public Survey FindById(int id)
         {

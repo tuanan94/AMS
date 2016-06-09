@@ -356,7 +356,11 @@ namespace AMS.Controllers
                     survey.Title = model.Title;
                    // string today = DateTime.Now.ToString("MM/dd/yyyy");
                  //   survey.StartDate = DateTime.Parse(today);
-                    survey.StartDate = model.StartDate;
+
+
+
+                    survey.StartDate = DateTime.Parse(String.Format("{0:dd-MM-yyyy}", model.StartDate));
+                   // String.Format("{0:dd-MM-yyyy}", survey.StartDate);
                     survey.EndDate = model.EndDate;
                     survey.PublishDate = model.PublishDate;
                     survey.Status = 1;

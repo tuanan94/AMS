@@ -1,4 +1,4 @@
-﻿@model AMS.ViewModel.SurveyViewModel
+﻿    @model AMS.ViewModel.SurveyViewModel
 @{
     ViewBag.Title = "Survey";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
@@ -96,24 +96,24 @@ padding:12px;
                         <div class="col-sm-offset-2 col-sm-8">
                             <fieldset class="scheduler-border less-padding">
                                 @{
-                    if (alerts != null)
+                                    if (alerts != null)
                                     {
-                                       <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-3 control-label"></label>
-                                    <div class="col-sm-7" id="label1" >
-                                        @*<div class="alert alert-success" style="width: 330px">
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3 control-label"></label>
+                                            <div class="col-sm-7" id="label1">
+                                                @*<div class="alert alert-success" style="width: 330px">
                                             <strong><span class="label date-color label-gray center">Tao thanh cong</span></strong>
                                         </div>*@
-                                        <div class="isa_success" style="width: 330px">
-                                            <i class="fa fa-check"></i>
-                                            @alerts
-                                        </div>
-                                    </div>
+                                                <div class="isa_success" style="width: 330px">
+                                                    <i class="fa fa-check"></i>
+                                                    @alerts
+                                                </div>
+                                            </div>
 
-                                </div><br> 
+                                        </div><br>
                                     }
                                 }
-                               
+
                                 <legend class="scheduler-border">Chi tiết </legend>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Tiêu đề</label>
@@ -185,14 +185,14 @@ padding:12px;
 
                                     </div>
                                 </div><br>
-                                  <div class="form-group">
+                                <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Chế độ bảo mật</label>
                                     <div class="col-sm-7">
                                         <select class="form-control binh" name="privacy" style="width: 330px">
-                                          
+
                                             <option value="1">Công khai</option>
                                             <option value="2">Bí mật</option>
-                                           
+
                                         </select><br>
 
                                     </div>
@@ -208,6 +208,37 @@ padding:12px;
                         </div>
 
                     </div>
+                    <div class="col-sm-offset-3 col-sm-6">
+                <fieldset class="scheduler-border less-padding" id="row"   > 
+                <legend class="scheduler-border" id="row">Câu hỏi </legend> 
+                 <div class="form-group" >
+                     <label for="inputEmail3" class="col-sm-3 control-label">Câu hỏi</label>
+                     <div class="col-sm-7">
+                         <input type='text' class="form-control binh" name="question" style="width: 330px"><br>
+                     </div>
+                 </div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-3 control-label">Câu trả lời</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control binh" id="idd1" name="anwser1" style="width: 330px">  <label id="label1"></label><br>
+                            <input type="hidden" name="count" value="1" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-3 control-label">Câu trả lời</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control binh" id="idd1" name="anwser1" style="width: 330px">  <br>
+                            <input type="hidden" name="count" value="2" />
+                        </div>
+                    </div>
+                    <div class="form-group" id="aa">
+                        <label for="inputEmail3" class="col-sm-3 control-label">Câu trả lời</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control binh" id="idd1" name="anwser1" style="width: 330px">  <br>
+                            <input type="hidden" name="count" value="3" />
+                        </div>"
+                    </div>" 
+                </fieldset></div>
                     <div class="panel-footer">
                         <div class="form-horizontal">
                             <div class="form-group">
@@ -259,15 +290,20 @@ padding:12px;
                                         <td>
                                             <div class="form-group">
                                                 <div class="col-sm-9">
-                                                    <span class="label date-color label-warning">@item.StartDate</span>
+                                                    @*<span class="label date-color label-warning">@item.StartDate</span>*@
                                                     @*<input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.StartDate">*@
+                                                    @Html.TextBoxFor(m => m.StartDate, new { @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate)), @class = "date-color", @style = "width:100px" })
+
+
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="form-group">
                                                 <div class="col-sm-9">
-                                                    <span class="label date-color label-gray">@item.EndDate</span>
+                                                    @*<span class="label date-color label-gray">@item.EndDate</span>*@
+                                                   @*@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.EndDate))*@
+                                                    @Html.TextBoxFor(m => m.EndDate, new { @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.EndDate)), @class = "date-color", @style ="width:100px" })
                                                     @*<input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.EndDate">*@
                                                 </div>
                                             </div>
@@ -416,42 +452,18 @@ padding:12px;
                 "</div>";
             $("#receiptWrapper").append(tag);
         });
-        window.i = 0;
+        window.i = 3;
         $("#addNewForm").on("click", function () {
             window.i++;
-            var tag = "<div class='col-sm-offset-3 col-sm-6'>" +
-                "<fieldset class='scheduler-border less-padding' id=\"row" + i + "\">" +
-                "<legend class='scheduler-border' id=\"row" + i + "\">\"Câu hỏi " + i + "\"</legend> " +
-                " <div class='form-group'>" +
-                "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu hỏi</label>" +
-                "  <div class='col-sm-7'>" +
-                "      <input type='text' class='form-control binh'   name='question' style='width: 330px'><br>" +
-                "   </div>" +
-                " </div>" +
-                " <div class='form-group'>" +
-                "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>" +
-                "  <div class='col-sm-7'>" +
-                "      <input type='text' class='form-control binh' id='idd1' name='anwser1' style='width: 330px'>  <label id='label1'></label><br>" +
-                "<input type='hidden'  name='count' value='1' />" +
-                "   </div>" +
-                " </div>" +
-                " <div class='form-group'>" +
-                "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>" +
-                "  <div class='col-sm-7'>" +
-                "      <input type='text' class='form-control binh'id='idd2'  name='anwser1' style='width: 330px'><br>" +
-                "<input type='hidden'  name='count' value='2' />" +
-                "   </div>" +
-                " </div>" +
-                " <div class='form-group'>" +
-                "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>" +
-                "  <div class='col-sm-7'>" +
-                "      <input type='text' class='form-control binh' id='idd3' name='anwser1' style='width: 330px'><br>" +
-                "<input type='hidden'  name='count' value='3' />" +
-                "   </div>" +
-                " </div>" +
-                "</fieldset></div>";
+            var tag = " <div class='form-group'>"+
+            "   <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>"+
+            "  <div class='col-sm-7'>"+
+            "     <input type='text' class='form-control binh' id='idd1' name='anwser1' style='width: 330px'>  <br>"+
+            "     <input type='hidden' name='count' value='"+i+"' />"+
+            "   </div>"+
+            "   </div>";
 
-            $("#form").append(tag);
+            $("#aa").append(tag);
             $("#addNewRow" + i).on("click", function () {
 
                 var tags =
