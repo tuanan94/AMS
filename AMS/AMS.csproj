@@ -510,6 +510,8 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -591,6 +593,7 @@
     <Content Include="Views\Survey\DoDetailSurvey.cshtml" />
     <Content Include="Views\Survey\Graph.cshtml" />
     <Content Include="Views\Survey\View2.cshtml" />
+    <Content Include="Views\Survey\Graph1.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

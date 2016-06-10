@@ -44,8 +44,8 @@ namespace AMS.Controllers
         }
         public ActionResult View1()
         {
-         
-           
+
+
             return View();
         }
 
@@ -54,6 +54,12 @@ namespace AMS.Controllers
             return View();
         }
         public ActionResult Graph()
+        {
+
+
+            return View();
+        }
+        public ActionResult Graph1()
         {
 
 
@@ -71,7 +77,7 @@ namespace AMS.Controllers
             foreach (var o in listUserAnswerSurveys)
             {
                 listSurveyId.Add(o.SurveyId.Value);
-                
+
             }
             foreach (var obj in listSurveyId)
             {
@@ -88,14 +94,14 @@ namespace AMS.Controllers
         }
         public ActionResult DoDetailSurvey(int surveyId)
         {
-             Survey survey = surveyService.FindById(surveyId);
-          
-           
+            Survey survey = surveyService.FindById(surveyId);
+
+
             List<Answer> listAnswers = answerService.FindByQuestionId(surveyId);
-         
+
             List<Double> listCount = new List<Double>();
             List<string> listCountss = new List<string>();
-           
+
             foreach (var item in listAnswers)
             {
 
@@ -120,37 +126,37 @@ namespace AMS.Controllers
         [HttpPost]
         public ActionResult DoDetailSurvey(SurveyViewModel model)
         {
-           //string a= model.AnswerContent;
+            //string a= model.AnswerContent;
             string[] listQuestion = Request.Form.GetValues("question");
             User currentUser = userService.FindById(int.Parse(User.Identity.GetUserId()));
             String action = this.Request.QueryString["answer"];
-            string forum = ((string)this.RouteData.Values["answer"] == null) ?(string)this.RouteData.Values["answer"]: ""  ;
-          
+            string forum = ((string)this.RouteData.Values["answer"] == null) ? (string)this.RouteData.Values["answer"] : "";
+
             //string[] choice = new string[] { Request.Form.Get("AnswerContent") };
             string[] choice = Request.Form.GetValues("answer");
             //string choice = Request.Form.Get("AnswerContent");
-           // choice = Request.Form.GetValues("AnswerContent");
+            // choice = Request.Form.GetValues("AnswerContent");
             //string[] choiceIds = Request.Form.GetValues("answerId");
             //List<string> listChoice = new List<string>(choice);
             //List<string> listQuestions = new List<string>(listQuestion);
-          
+
             if (Request["answer"] != null)
             {
-                 string strName = Request["answer"].ToString();
-                 UserAnswerSurvey userAnswerSurvey = new UserAnswerSurvey();
-                 userAnswerSurvey.SurveyId = model.Id;
-                    userAnswerSurvey.UserId = currentUser.Id;
-              //   userAnswerSurvey.UserId = 4;
-                 int answerId = answerService.FindByContent(strName, model.Id).Id;
-                 //var answerId = answerService.FindByContent(model.AnswerContent, model.Id).Id;
-                 
-                 userAnswerSurvey.AnswerId = answerId;
-                 userAnswerService.AddUserAnswerSurvey(userAnswerSurvey);
+                string strName = Request["answer"].ToString();
+                UserAnswerSurvey userAnswerSurvey = new UserAnswerSurvey();
+                userAnswerSurvey.SurveyId = model.Id;
+                userAnswerSurvey.UserId = currentUser.Id;
+                //   userAnswerSurvey.UserId = 4;
+                int answerId = answerService.FindByContent(strName, model.Id).Id;
+                //var answerId = answerService.FindByContent(model.AnswerContent, model.Id).Id;
+
+                userAnswerSurvey.AnswerId = answerId;
+                userAnswerService.AddUserAnswerSurvey(userAnswerSurvey);
             }
 
 
 
-          
+
 
             return RedirectToAction("DoSurvey");
 
@@ -189,28 +195,28 @@ namespace AMS.Controllers
             {
                 listFloor.Add(item.Floor);
             }
-             Survey survey = surveyService.FindById(surveyId);
-             List<Double> listCount = new List<Double>();
-             List<string> listCounts = new List<string>();
-             int a = userAnswerService.CountAnswer(332);
-             List<Answer> listAnswers = answerService.FindByQuestionId(survey.Id);
-             foreach (var item in listAnswers)
-             {
-                
-                 listCount.Add(userAnswerService.CountAnswer(item.Id));
-             }
-             Double count = listCount.Sum();
-             foreach (var item in listAnswers)
-             {
-                 Double answerCount = userAnswerService.CountAnswer(item.Id);
+            Survey survey = surveyService.FindById(surveyId);
+            List<Double> listCount = new List<Double>();
+            List<string> listCounts = new List<string>();
+            int a = userAnswerService.CountAnswer(332);
+            List<Answer> listAnswers = answerService.FindByQuestionId(survey.Id);
+            foreach (var item in listAnswers)
+            {
+
+                listCount.Add(userAnswerService.CountAnswer(item.Id));
+            }
+            Double count = listCount.Sum();
+            foreach (var item in listAnswers)
+            {
+                Double answerCount = userAnswerService.CountAnswer(item.Id);
                 // Double percent = Math.Round(((answerCount / count) * 100), 2);
-                 string percent = string.Format("{0:00.0}", (answerCount / count * 100));
-                 listCounts.Add(percent);
-             }
+                string percent = string.Format("{0:00.0}", (answerCount / count * 100));
+                listCounts.Add(percent);
+            }
             ViewBag.alert = alert;
             ViewBag.ListBlock = listBlock;
             ViewBag.ListFloor = listFloor;
-             ViewBag.CountAnswer = listCounts;
+            ViewBag.CountAnswer = listCounts;
             ViewBag.Survey = survey;
             ViewBag.Answer = listAnswers;
             return View();
@@ -258,31 +264,31 @@ namespace AMS.Controllers
             //
             int a = 0;
             Survey obj = surveyService.FindById(model.Id);
-           // List<Question> questions = questionService.FindBySurveyId(obj.Id);
-           
+            // List<Question> questions = questionService.FindBySurveyId(obj.Id);
+
             //foreach (var itemQuestion in questions)
             //{
-                int ii = 0;
-                if (a < totalAnsertGroup.Count)
+            int ii = 0;
+            if (a < totalAnsertGroup.Count)
+            {
+                //List<string> listGroup = totalAnsertGroup[a];
+                List<Answer> answers = answerService.FindByQuestionId(obj.Id);
+                foreach (var itemAnswer in answers)
                 {
-                    //List<string> listGroup = totalAnsertGroup[a];
-                    List<Answer> answers = answerService.FindByQuestionId(obj.Id);
-                    foreach (var itemAnswer in answers)
-                    {
-                      //  itemAnswer.AnswerContent = listGroup[ii];
-                        itemAnswer.AnswerContent = listAnwser[ii];
-                        answerService.UpdateAnswer(itemAnswer);
-                        ii++;
-                    }
-                    //itemQuestion.QuestionContent = listQuestion[a];
-                    //questionService.UpdateQuestion(itemQuestion);
-                    a++;
+                    //  itemAnswer.AnswerContent = listGroup[ii];
+                    itemAnswer.AnswerContent = listAnwser[ii];
+                    answerService.UpdateAnswer(itemAnswer);
+                    ii++;
+                }
+                //itemQuestion.QuestionContent = listQuestion[a];
+                //questionService.UpdateQuestion(itemQuestion);
+                a++;
                 //}
             }
             obj.Title = model.Title;
             obj.Question = listQuestion[0];
             obj.StartDate = (model.StartDate);
-            obj.EndDate =(model.EndDate);
+            obj.EndDate = (model.EndDate);
             obj.PublishDate = (model.PublishDate);
             //obj.StartDate = DateTime.Parse(model.StartDate);
             //obj.EndDate = DateTime.Parse(model.EndDate);
@@ -292,130 +298,127 @@ namespace AMS.Controllers
             obj.Floor = listFloor[0];
             obj.Privacy = int.Parse(privacy[0]);
             surveyService.UpdateSurvey(obj);
-            return RedirectToAction("DetailSurvey", new { surveyId =obj.Id, alert ="Cập nhật thành công!"});
+            return RedirectToAction("DetailSurvey", new { surveyId = obj.Id, alert = "Cập nhật thành công!" });
         }
 
         [HttpPost]
         public ActionResult Surveys(SurveyViewModel model)
         {
-if (ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-        //    string[] title = Request.Form.GetValues("Title");
-            var ti = Request.QueryString["Title"];
-            string[] listQuestion = Request.Form.GetValues("question");
-            string[] listAnwser = Request.Form.GetValues("anwser1");
-            string[] listCountAnwser = Request.Form.GetValues("count");
-            string[] listBlock = Request.Form.GetValues("selectItemBlock");
-            string[] listFloor = Request.Form.GetValues("selectItemFloor");
-            string[] member = Request.Form.GetValues("people");
-            string[] privacy = Request.Form.GetValues("privacy");
-           // string[] listMem = Request.Form.GetValues("count");
-            //  string[] listCountAnwser = {"1", "2", "3","1","2","1","2","3","4"};
-            List<string> listCountAnwsers = new List<string>(listCountAnwser);
-            List<string> listQuestions = new List<string>(listQuestion);
-            List<string> listAnwsers = new List<string>(listAnwser);
-            // count number anwser of question
-            List<int> listCount = new List<int>();
-            List<List<string>> totalAnsertGroup = new List<List<string>>();
-            for (int i = 0; i < (listCountAnwsers.Count) - 1; i++)
-            {
-                if (Int32.Parse(listCountAnwsers[i]) > Int32.Parse(listCountAnwsers[i + 1]))
+                //    string[] title = Request.Form.GetValues("Title");
+                var ti = Request.QueryString["Title"];
+                string[] listQuestion = Request.Form.GetValues("question");
+                string[] listAnwser = Request.Form.GetValues("anwser1");
+                string[] listCountAnwser = Request.Form.GetValues("count");
+                string[] listBlock = Request.Form.GetValues("selectItemBlock");
+                string[] listFloor = Request.Form.GetValues("selectItemFloor");
+                string[] member = Request.Form.GetValues("people");
+                string[] privacy = Request.Form.GetValues("privacy");
+                // string[] listMem = Request.Form.GetValues("count");
+                //  string[] listCountAnwser = {"1", "2", "3","1","2","1","2","3","4"};
+                List<string> listCountAnwsers = new List<string>(listCountAnwser);
+                List<string> listQuestions = new List<string>(listQuestion);
+                List<string> listAnwsers = new List<string>(listAnwser);
+                // count number anwser of question
+                List<int> listCount = new List<int>();
+                List<List<string>> totalAnsertGroup = new List<List<string>>();
+                for (int i = 0; i < (listCountAnwsers.Count) - 1; i++)
                 {
-                    listCount.Add(Int32.Parse(listCountAnwsers[i]));
-                }
-            }
-            listCount.Add(Int32.Parse((listCountAnwsers[(listCountAnwsers.Count) - 1])));
-            for (int i = 0; i < listCount.Count; i++)
-            {
-                List<string> listAnwserGroup = new List<string>();
-                int countAneser = 0;
-                for (int j = 0; j < listAnwsers.Count; j++)
-                {
-                    if (countAneser != listCount[i] && countAneser < listCount[i])
+                    if (Int32.Parse(listCountAnwsers[i]) > Int32.Parse(listCountAnwsers[i + 1]))
                     {
-                        listAnwserGroup.Add(listAnwsers[j]);
-                        countAneser++;
-                        listAnwsers.Remove(listAnwsers[j]);
-                        j = j - 1;
+                        listCount.Add(Int32.Parse(listCountAnwsers[i]));
                     }
                 }
-                totalAnsertGroup.Add(listAnwserGroup);
-            }
-            Survey survey = new Survey();
-            //survey.Title = model.Title;
-            //string today = DateTime.Now.ToString("MM/dd/yyyy");
-            //survey.StartDate = DateTime.Parse(today); 
-            //survey.Status = 1;
-            //surveyService.AddSurvey(survey);
-            //add list question
-            //Question question = new Question();
-            Answer answer = new Answer();
-            int number= totalAnsertGroup.Count;
-            int ii = 0;
-            foreach (var content in listQuestions)
-            {
-                
-                if (ii < number)
+                listCount.Add(Int32.Parse((listCountAnwsers[(listCountAnwsers.Count) - 1])));
+                for (int i = 0; i < listCount.Count; i++)
                 {
-                    survey.Title = model.Title;
-                   // string today = DateTime.Now.ToString("MM/dd/yyyy");
-                 //   survey.StartDate = DateTime.Parse(today);
+                    List<string> listAnwserGroup = new List<string>();
+                    int countAneser = 0;
+                    for (int j = 0; j < listAnwsers.Count; j++)
+                    {
+                        if (countAneser != listCount[i] && countAneser < listCount[i])
+                        {
+                            listAnwserGroup.Add(listAnwsers[j]);
+                            countAneser++;
+                            listAnwsers.Remove(listAnwsers[j]);
+                            j = j - 1;
+                        }
+                    }
+                    totalAnsertGroup.Add(listAnwserGroup);
+                }
+                Survey survey = new Survey();
+                //survey.Title = model.Title;
+                //string today = DateTime.Now.ToString("MM/dd/yyyy");
+                //survey.StartDate = DateTime.Parse(today); 
+                //survey.Status = 1;
+                //surveyService.AddSurvey(survey);
+                //add list question
+                //Question question = new Question();
+                Answer answer = new Answer();
+                int number = totalAnsertGroup.Count;
+                int ii = 0;
+                foreach (var content in listQuestions)
+                {
 
-
-
-                    survey.StartDate = (model.StartDate);
-                   // String.Format("{0:dd-MM-yyyy}", survey.StartDate);
-                    //survey.EndDate = DateTime.Parse(model.EndDate);
-                    //survey.PublishDate = DateTime.Parse(model.PublishDate);
-                    survey.EndDate =(model.EndDate);
-                    survey.PublishDate = (model.PublishDate);
-                    int result = DateTime.Compare(survey.StartDate.Value, survey.EndDate.Value);
-                    int result1 = DateTime.Compare(survey.PublishDate.Value, survey.EndDate.Value);
-                    int result2 = DateTime.Compare(survey.StartDate.Value, survey.PublishDate.Value);
-                    if (survey.StartDate.ToString()=="")
+                    if (ii < number)
                     {
-                        ModelState.AddModelError("StartDate", "Xin chon ngay hop ly.");
-                    }
-                    if ((result) <0)
-                    {
-                        ModelState.AddModelError("StartDate", "Xin chon ngay hop ly.");
-                    }
-                    else if ((result1) < 0)
-                    {
-                        ModelState.AddModelError("StartDate", "Xin chon ngay hop ly.");
-                    }
-                    else if ((result2) < 0)
-                    {
-                        ModelState.AddModelError("EndDate", "Xin chon ngay hop ly.");
-                    }
-                    survey.Status = 1;
-                    survey.Block = listBlock[0];
-                    survey.Floor = listFloor[0];
-                    survey.Privacy = int.Parse(privacy[0]);
+                        survey.Title = model.Title;
+                        // string today = DateTime.Now.ToString("MM/dd/yyyy");
+                        //   survey.StartDate = DateTime.Parse(today);
+                        survey.StartDate = (model.StartDate);
+                        // String.Format("{0:dd-MM-yyyy}", survey.StartDate);
+                        //survey.EndDate = DateTime.Parse(model.EndDate);
+                        //survey.PublishDate = DateTime.Parse(model.PublishDate);
+                        survey.EndDate = (model.EndDate);
+                        survey.PublishDate = (model.PublishDate);
+                        int result = DateTime.Compare(survey.StartDate.Value, survey.EndDate.Value);
+                        int result1 = DateTime.Compare(survey.PublishDate.Value, survey.EndDate.Value);
+                        int result2 = DateTime.Compare(survey.StartDate.Value, survey.PublishDate.Value);
+                        if (survey.StartDate.ToString() == "")
+                        {
+                            ModelState.AddModelError("StartDate", "Xin chon ngay hop ly.");
+                        }
+                        if ((result) < 0)
+                        {
+                            ModelState.AddModelError("StartDate", "Xin chon ngay hop ly.");
+                        }
+                        else if ((result1) < 0)
+                        {
+                            ModelState.AddModelError("StartDate", "Xin chon ngay hop ly.");
+                        }
+                        else if ((result2) < 0)
+                        {
+                            ModelState.AddModelError("EndDate", "Xin chon ngay hop ly.");
+                        }
+                        survey.Status = 1;
+                        survey.Block = listBlock[0];
+                        survey.Floor = listFloor[0];
+                        survey.Privacy = int.Parse(privacy[0]);
                         survey.Member = int.Parse(member[0]);
-                   
-                  
-                    survey.Question = content;
-                    surveyService.AddSurvey(survey);
-                    //question.QuestionContent = content;
-                    //question.SurveyId = survey.Id;
-                    //questionService.AddQuestion(question);
 
-                    List<string> listAnwserGroupsub = totalAnsertGroup[ii];
-                    foreach (var item in listAnwserGroupsub)
-                    {
-                        answer.QuestionId = survey.Id;
-                        answer.AnswerContent = item;
-                        answerService.AddAnswer(answer);
-                       
+
+                        survey.Question = content;
+                        surveyService.AddSurvey(survey);
+                        //question.QuestionContent = content;
+                        //question.SurveyId = survey.Id;
+                        //questionService.AddQuestion(question);
+
+                        List<string> listAnwserGroupsub = totalAnsertGroup[ii];
+                        foreach (var item in listAnwserGroupsub)
+                        {
+                            answer.QuestionId = survey.Id;
+                            answer.AnswerContent = item;
+                            answerService.AddAnswer(answer);
+
+                        }
+                        ii++;
                     }
-                    ii++;
-                }
 
-            }  
+                }
             }
             ViewBag.Alert = "Tạo survey thành công!!";
-          //  return View("Survey");
+            //  return View("Survey");
             return RedirectToAction("Survey", new { alerts = "Tạo survey thành công!!" });
         }
     }

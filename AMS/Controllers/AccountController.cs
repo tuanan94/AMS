@@ -85,6 +85,7 @@ namespace AMS.Controllers
             switch (result)
             {
                 case SLIM_CONFIG.LoginResult.Success:
+                    
                     return RedirectToLocal(returnUrl);
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
