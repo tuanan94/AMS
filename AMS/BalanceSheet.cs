@@ -22,11 +22,18 @@ namespace AMS
     
         public int Id { get; set; }
         public string Title { get; set; }
+        public Nullable<int> Status { get; set; }
         public Nullable<System.DateTime> ForMonth { get; set; }
         public string Description { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> LastModified { get; set; }
         public Nullable<int> ManagerId { get; set; }
+        public Nullable<double> TotalIncome { get; set; }
+        public Nullable<double> TotalExpense { get; set; }
+        public Nullable<double> TotalIncomeInCash { get; set; }
+        public Nullable<double> TotalExpenseInCash { get; set; }
+        public Nullable<double> RedundancyStartMonth { get; set; }
+        public Nullable<double> RedundancyEndMonth { get; set; }
     
         public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

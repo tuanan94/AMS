@@ -58,6 +58,84 @@ a:active {
     text-decoration: none !important;
     font-size: 15px;
 }
+
+/*==============Heart Divider ================*/
+
+.divider {
+  margin-top: 4%;
+}
+
+.divider i {
+  color: #cccccc;
+}
+
+.divider:before,
+.divider:after {
+  content: "______________________";
+  color: #e6e8ea;
+  position: relative;
+  bottom: 6px;
+}
+
+.divider:before {
+  right: 10px;
+}
+
+.divider:after {
+  left: 10px;
+}
+
+/* ====================Product of single provider========================= */
+.col_1_of_4{
+	display: block;
+	float:left;
+	margin: 0 1% 0 1%;
+}
+.col_1_of_4:first-child { margin-left: 5%; } /* all browsers except IE6 and lower */
+.span_1_of_4 {
+	width: auto;
+}
+.span_1_of_4  h3{
+	color:#C94848;
+	margin-bottom: .5em;
+	font-size:1.5em;
+	line-height: 1.2;
+	font-weight : normal;
+	margin-top: 0px;
+	letter-spacing: -1px;
+}
+.span_1_of_4  p {
+	font-size:0.8125em;
+	padding:0.5em 0;
+	color: #333;
+	line-height: 1.5em;
+}
+.desc{
+	border-bottom: 5px solid #01DFD7;
+	padding-bottom:40px;
+}
+.left-text h5 {
+	font-size: 10px;
+	text-transform: uppercase;
+	margin: 4px 0 0 0;
+	float: left;
+}
+.left-text h5 a {
+	color:#999;
+	text-decoration:underline;
+}
+.left-text h5 a:hover{
+	color:#25ad9f;
+}
+span.price {
+	color: #3D3D3D;
+	font-size: 20px;
+	float: right;
+}
+.span_1_of_4 img{
+	padding-bottom:6%;
+}
+
 /*============== Mixins style start ================*/
 .overlay-effect {
     content: "";
@@ -299,7 +377,7 @@ nav {
 #blog {
     padding-top: 75px;
     padding-bottom: 100px;
-    background: url("../../images/aroundProvider/blog-bg.jpg");
+    background: url('../../images/aroundProvider/background.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
@@ -659,7 +737,7 @@ nav {
     padding-left: 20px;
     color: #aaa;
     margin-top: 2%;
-    margin-left: 1%;
+    /*margin-left: 1%;*/
 }
 
 .page-title, a.read-more:hover i {
@@ -689,7 +767,7 @@ a, a.read-more:hover, a.read-more:hover i {
 }
 
 .project-meta {
-    background: none repeat scroll 0 0 #404040;
+    background: none repeat scroll 0 0 #25ad9f;
     border-radius: 5px;
     bottom: -25%;
     color: #fff;
@@ -752,6 +830,7 @@ a, a.read-more:hover, a.read-more:hover i {
         text-align: center;
         top: 50%;
         width: 30px;
+        margin-right: 2%;
     }
     .social-icons a:hover, .mainmenu .navbar-nav li:hover a, .newsletter-form input[type="submit"], .project-link a.project-detail, .more-link {
     background-color: #0eb493;

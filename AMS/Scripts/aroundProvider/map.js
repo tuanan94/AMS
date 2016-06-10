@@ -1,16 +1,6 @@
 $(document)
     .ready(function () {
-        //var lat = $("#lat").val();
-        //var lng = $("#lng").val();
-        //initMap(lat, lng);
-        //google.maps.event.addDomListener(window, 'load', initMap);
     });
-
-//var lat = $("#lat").val();
-//var lng = $("#lng").val();
-//initMap(lat, lng);
-//google.maps.event.addDomListener(window, 'load', initMap);
-
 
 function initMap() {
     var lat = $("#lat").val();
@@ -27,7 +17,7 @@ function initMap() {
     }
     var map = new google.maps.Map(mapCanvas, mapOptions);
 
-    var markerImage = '/images/aroundProvider/markerBlue.png';
+    var markerImage = '/images/aroundProvider/marker.png';
 
     var marker = new google.maps.Marker({
         position: location,

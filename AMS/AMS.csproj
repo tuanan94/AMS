@@ -213,7 +213,22 @@
     <Compile Include="AroundProviderProduct.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="AspNetRole.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUser.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUserClaim.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUserLogin.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="BalanceSheet.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Comment.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Constant.cs" />
@@ -234,6 +249,9 @@
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Constant\StatusEnum.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="C__MigrationHistory.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -396,19 +414,21 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\aroundProvider\banh-canh-cua.jpg" />
+    <Content Include="images\aroundProvider\bida-123.jpg" />
     <Content Include="images\aroundProvider\blog-bg.jpg" />
-    <Content Include="images\aroundProvider\blog-img-1.jpg" />
-    <Content Include="images\aroundProvider\blog-img-2.jpg" />
-    <Content Include="images\aroundProvider\blog-img-3.jpg" />
-    <Content Include="images\aroundProvider\blog-img-4.jpg" />
-    <Content Include="images\aroundProvider\blog-img-5.jpg" />
-    <Content Include="images\aroundProvider\blog-img-6.jpg" />
+    <Content Include="images\aroundProvider\bun-bo-cay-cot-dien.jpg" />
+    <Content Include="images\aroundProvider\bun-bo-gio.jpg" />
+    <Content Include="images\aroundProvider\bun-bo-thit-cha-1.jpg" />
+    <Content Include="images\aroundProvider\bun-bo-thit-cha.jpg" />
+    <Content Include="images\aroundProvider\hu-tieu-nam-vang.jpg" />
+    <Content Include="images\aroundProvider\karaoke-gia-dinh.jpg" />
+    <Content Include="images\aroundProvider\khu-vui-choi-tre-em.jpg" />
+    <Content Include="images\aroundProvider\marker.png" />
     <Content Include="images\aroundProvider\img-2.jpg" />
-    <Content Include="images\aroundProvider\markerBlue.png" />
-    <Content Include="images\aroundProvider\slider-img-1.jpg" />
-    <Content Include="images\aroundProvider\slider-img-2.jpg" />
-    <Content Include="images\aroundProvider\slider-img-3.jpg" />
-    <Content Include="images\aroundProvider\slider-img-4.jpg" />
+    <Content Include="images\aroundProvider\background.jpg" />
+    <Content Include="images\aroundProvider\nha-tre-hai-con-meo.jpg" />
+    <Content Include="images\aroundProvider\pho-bo.jpg" />
     <Content Include="images\rating.png" />
     <Content Include="Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

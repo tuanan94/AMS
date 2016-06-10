@@ -37,7 +37,7 @@
                                         <li class="wow fadeInLeft" data-wow-duration="300ms" data-wow-delay="300ms">
                                             <a href="~/Home/SingleProviderDetail?id=@allProviders[i].Id">
                                                 <div class="blog-img">
-                                                    <img src="~/images/aroundProvider/blog-img-1.jpg" />
+                                                    <img src="@allProviders[i].ImageUrl" />
                                                 </div>
                                                 <div class="content-right">
                                                     <h3>@allProviders[i].Name</h3>
@@ -60,7 +60,7 @@
                                                     <p>@allProviders[i].Address</p>
                                                 </div>
                                                 <div class="blog-img-2">
-                                                    <img src="~/images/aroundProvider/blog-img-3.jpg" />
+                                                    <img src="@allProviders[i].ImageUrl" />
                                                 </div>
                                             </a>
                                         </li>
@@ -73,7 +73,7 @@
                                         <li class="wow fadeInLeft" data-wow-duration="300ms" data-wow-delay="300ms">
                                             <a href="~/Home/SingleProviderDetail?id=@allProviders[i].Id">
                                                 <div class="blog-img">
-                                                    <img src="~/images/aroundProvider/blog-img-4.jpg" />
+                                                    <img src="@allProviders[i].ImageUrl" />
                                                 </div>
                                                 <div class="content-right">
                                                     <h3>@allProviders[i].Name</h3>
@@ -100,46 +100,16 @@
                             <div style="opacity: 1; display: block;" id="owlexample" class="owl-carousel owl-theme">
                                 <div class="owl-wrapper-outer">
                                     <div style="width: 4240px; left: 0px; display: block;" class="owl-wrapper">
-                                        <div style="width: 265px;" class="owl-item">
-                                            <div>
-                                                <img class="img-responsive" src="~/images/aroundProvider/slider-img-1.jpg" alt="">
-                                            </div>
-                                        </div>
-                                        <div style="width: 265px;" class="owl-item">
-                                            <div>
-                                                <img class="img-responsive" src="~/images/aroundProvider/slider-img-2.jpg" alt="">
-                                            </div>
-                                        </div>
-                                        <div style="width: 265px;" class="owl-item">
-                                            <div>
-                                                <img class="img-responsive" src="~/images/aroundProvider/slider-img-3.jpg" alt="">
-                                            </div>
-                                        </div>
-                                        <div style="width: 265px;" class="owl-item">
-                                            <div>
-                                                <img class="img-responsive" src="~/images/aroundProvider/slider-img-4.jpg" alt="">
-                                            </div>
-                                        </div>
-                                        <div style="width: 265px;" class="owl-item">
-                                            <div>
-                                                <img class="img-responsive" src="~/images/aroundProvider/slider-img-1.jpg" alt="">
-                                            </div>
-                                        </div>
-                                        <div style="width: 265px;" class="owl-item">
-                                            <div>
-                                                <img class="img-responsive" src="~/images/aroundProvider/slider-img-2.jpg" alt="">
-                                            </div>
-                                        </div>
-                                        <div style="width: 265px;" class="owl-item">
-                                            <div>
-                                                <img class="img-responsive" src="~/images/aroundProvider/slider-img-3.jpg" alt="">
-                                            </div>
-                                        </div>
-                                        <div style="width: 265px;" class="owl-item">
-                                            <div>
-                                                <img class="img-responsive" src="~/images/aroundProvider/slider-img-4.jpg" alt="">
-                                            </div>
-                                        </div>
+                                        @{
+                                            foreach (var provider in allProviders)
+                                            {
+                                                <div style="width: 265px;" class="owl-item">
+                                                    <div>
+                                                        <img class="img-responsive" src="@provider.ImageUrl" alt="">
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
                                     </div>
                                 </div>
                                 <div class="owl-controls clickable">
@@ -165,7 +135,7 @@
                 </div><!-- .row close -->
             </section>
 
-            <section id="price">
+            @*<section id="price">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="block">
@@ -210,12 +180,12 @@
                                     </li>
 
                                 </ul>
-                                @*<a class="btn btn-default pull-right wow bounceIn" data-wow-duration="500ms" data-wow-delay="1200ms" href="#" role="button">More Info</a>*@
+                                <a class="btn btn-default pull-right wow bounceIn" data-wow-duration="500ms" data-wow-delay="1200ms" href="#" role="button">More Info</a>
                             </div>
                         </div>
                     </div><!-- .col-md-12 close -->
                 </div><!-- .row close -->
-            </section>
+            </section>*@
 
         </div>
 
