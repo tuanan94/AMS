@@ -4,6 +4,8 @@
     UserService userService = new UserService();
     Layout = "~/Views/Shared/_Layout.cshtml";
     House curHouse = userService.findById(int.Parse(User.Identity.GetUserId())).House;
+    String url = HttpContext.Current.Request.Url.AbsolutePath;
+
 }
 
 <div class="sidebar left hidden-xs">
@@ -19,17 +21,17 @@
         <div id="menu">
             <ul id="slide-left" class="slide-left-inactive">
                 <li class="category">Tiện ích cho nhà tôi</li>
-                <li class="active">
+                <li class="@(url.Contains("/Home/Setting")?"active":"")">
                     <a href="/Home/Setting"><i class="fa fa-fw fa-cogs"></i> Thiết lập cho nhà tôi</a>
                 </li>
-                <li class="active">
+                <li class="@(url.Contains("/Home/ManageMember")?"active":"")">
                     <a href="/Home/ManageMember"><i class="fa fa-group"></i> Quản lí thành viên</a>
                 </li>
-                <li>
+                <li class="@(url.Contains("/Home/HelpdeskRequest/ViewHistory")?"active":"")">
                     <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-fw fa-stumbleupon-circle"></i> Dịch vụ sửa chửa</a>
                 </li>
             
-                <li>
+                <li class="@(url.Contains("/Home/ManageReceipt/View")?"active":"")">
                     <a href="/Home/ManageReceipt/View/@User.Identity.GetUserId()"><i class="fa fa-fw fa-money"></i> Hóa đơn</a>
                 </li>
             </ul>

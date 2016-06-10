@@ -43,6 +43,8 @@ namespace AMS
         public string Fullname { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> LastModified { get; set; }
+        public Nullable<int> CoupleId { get; set; }
+        public Nullable<int> RootCoupleId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BalanceSheet> BalanceSheets { get; set; }

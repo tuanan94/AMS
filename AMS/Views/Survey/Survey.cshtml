@@ -3,6 +3,9 @@
     ViewBag.Title = "Survey";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
     List<Survey> listSurveys = ViewBag.ListSurvey;
+    List<string> listBlock = ViewBag.ListBlock;
+    List<string> listFloor = ViewBag.ListFloor;
+    string alerts = ViewBag.alerts;
     <style>
         .button {
             display: block;
@@ -15,264 +18,356 @@
             color: white;
             font-weight: bold;
         }
+        .form-control:focus {
+            border-color: #1ABC9C;
+            box-shadow: none;
+        }
+         .binh {
+            border-color: #1ABC9C;
+            box-shadow: none;
+        }
+        /*//import url('//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css');*/
+ 
+.isa_info, .isa_success, .isa_warning, .isa_error {
+margin: 10px 0px;
+padding:12px;
+}
+.isa_info {
+    color: #00529B;
+    background-color: #BDE5F8;
+}
+.isa_success {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+}
+.isa_warning {
+    color: #9F6000;
+    background-color: #FEEFB3;
+}
+.isa_error {
+    color: #D8000C;
+    background-color: #FFBABA;
+}
+.isa_info i, .isa_success i, .isa_warning i, .isa_error i {
+    margin:10px 22px;
+    font-size:2em;
+    vertical-align:middle;
+}
     </style>
 }
 
 <script src="~/Scripts/jquery-1.10.2.js"></script>
 <body onload="paging()">
-<div class="col-md-12">
+    <div class="col-md-12">
 
-<div class="panel panel-default">
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
+        <div class="panel panel-default binh">
+            <nav class="navbar navbar-default binh">
+                <div class="container-fluid binh">
 
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="/Survey/Survey">Trang chính</a></li>
-                <li><a href="#">Page 1</a></li>
+                    <ul class="nav navbar-nav binh">
+                        <li class="active binh"><a href="/Survey/Survey"><i class="glyphicon glyphicon-home"></i><b>Trang chính</b></a></li>
+                      
 
-            </ul>
-        </div>
-    </nav>
-<div class="panel-heading panel-heading-gray"><h4>Tạo khảo sát</h4>
-</div>
-<div class="panel-body">
-@*@using (Html.BeginForm("Surveys", "Survey", FormMethod.Post))
-                    {
-
-                        <table border="0">
-                            <tr>
-                                <td>
-                                    <button class="btn-primary" id="add">Thêm Câu Hỏi</button>
-                                    <button class="btn-primary" id="addAnwser">Thêm Câu Trả Lời</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 200px;" align="right">
-                                    <h4>Câu hỏi 1</h4>
-
-                                </td>
-                                <td>
-                                    <input type="text" id="question" name="question" value="" />
-                                </td>
-                            </tr>
-
-                            <tr style="background-color: #383838">
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td><button class="btn-primarys" id="">Tạo survey</button></td>
-                            </tr>
-
-                        </table>
-                    }*@
-<ul class="nav nav-tabs" role="tablist" id="rowTab">
-    <li class="active">
-        <a href="#thismonth" role="tab" data-toggle="tab"><i class="fa-pencil-square-o"></i> Tạo survey</a>
-    </li>
-
-    <li class="">
-        <a href="#graph" role="tab" data-toggle="tab"><i class="fa-list"></i> Xem tất cả survey</a>
-    </li>
-</ul>
-<div class="tab-content">
-<div class="tab-pane fade active in" id="thismonth">
-    <div class="panel panel-default">
-        <div class="panel-body">
-
-
-            <div class="table-responsive">
+                    </ul>
+                </div>
+            </nav>
+          
+            <div class="panel-body binh">
                
+                <ul class="nav nav-tabs binh" role="tablist" id="rowTab">
+                    <li class="active binh">
+                        <a href="#thismonth" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-pencil"></i> <b>Tạo survey</b></a>
+                    </li>
+
+                    <li class="binh">
+                        <a href="#graph" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-list"></i> <b>Xem tất cả survey</b></a>
+                    </li>
+                    @*<li class="binh">
+                        <a href="#list" role="tab" data-toggle="tab"><i class="fa-list"></i> Thống kê</a>
+                    </li>*@
+                </ul>
+            <div class="tab-content">
+            
+            <div class="tab-pane fade active in" id="thismonth">
                 @using (Html.BeginForm("Surveys", "Survey", FormMethod.Post))
                 {
-                    <div class="form-group">
-                        <label class="col-sm-3 col-lg-offset-1 control-label">Tiêu đề</label>
-                        <div class="col-sm-7">
-                            @*<input type="text" style="width: 330px" class="form-control" name="Title" id="Title">*@
-                            @Html.TextBoxFor(m => m.Title, new {style = "width: 330px", @class = "form-control", @name = "Title", @id = "Title"})
-                        </div>
-                    </div>
-                                     
-                    <table border="0" class="table v-middle">
-                        <thead>
+                    <div class="form-group" id="form">
 
-                        <tr >
-                            <td>
-                                <div class="form-group">
-                                    <div class="col-sm-9">
-                                        <button class="btn-primary" id="add">Thêm Câu Hỏi</button>
-
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <div class="col-sm-6">
-
-                                        <button class="btn-primary" id="addAnwser">Thêm Câu Trả Lời</button>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <button class="btn-primarys" id="" type="submit">Tạo survey</button>
-                                    </div>
-                                </div>
-                            </td>
-                           
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr border="0">
-                            <td style="width: 200px;" align="right">
-                                <h4> Câu hỏi 1</h4>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <div class="col-sm-9">
-                                        <input type="text" style="width: 330px" class="form-control" id="question" name="question" value=""/>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        @*<tr>
-                                                        <td><button class="btn-primary" id="" type="submit">Tạo survey</button></td>
-                                                    </tr>*@
-                        </tbody>
-                    </table>
-
-                }
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<div class="tab-pane fade" id="graph">
-    <div class="panel panel-default">
-        <div class="table-responsive">
-            <table class="table v-middle">
-                <thead>
-                <tr>
-                    <th>Số Thứ tự</th>
-                    <th>Tiêu đề</th>
-                    <th>Ngày tạo</th>
-                    <th>Ngày đóng</th>
-                    <th>Trạng thái </th>
-                    <th> </th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                @{
-                    foreach (var item in listSurveys)
-                    {
-                        <tr class="aass">
-                            <td>
-                                <div class="form-group">
-                                    <div class="col-sm-9">
-                                        <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.Id">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <div class="col-sm-9">
-                                        <input type="hidden" class="form-control" id="surveyId" value="@item.Id">
-                                        <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.Title">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <div class="col-sm-9">
-                                        <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.StartDate">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <div class="col-sm-9">
-                                        <input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.EndDate">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <fieldset class="scheduler-border less-padding">
                                 @{
-                                    if (@item.Status == ConstantB.Survey_Open)
+                    if (alerts != null)
                                     {
-                                        <div class="form-group">
-                                            <div class="col-sm-9">
-                                                <input type="text" disabled="disabled" style="background-color: blue" class="form-control" id="fullname" value="Đang mở">
-                                            </div>
+                                       <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-3 control-label"></label>
+                                    <div class="col-sm-7" id="label1" >
+                                        @*<div class="alert alert-success" style="width: 330px">
+                                            <strong><span class="label date-color label-gray center">Tao thanh cong</span></strong>
+                                        </div>*@
+                                        <div class="isa_success" style="width: 330px">
+                                            <i class="fa fa-check"></i>
+                                            @alerts
                                         </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="form-group">
-                                            <div class="col-sm-9">
-                                                <input type="text" disabled="disabled" style="background-color: red" class="form-control" id="fullname" value="Đã đóng">
-                                            </div>
-                                        </div>
+                                    </div>
+
+                                </div><br> 
                                     }
                                 }
-
-
-                            </td>
-                            <td>
+                               
+                                <legend class="scheduler-border">Chi tiết </legend>
                                 <div class="form-group">
-                                    <div class="col-sm-9">
-                                        <a href="@Url.Action("DeleteSurvey", "Survey", new {surveyId = @item.Id})" onclick="return myFunction()" class="button">Xóa</a>
+                                    <label for="inputEmail3" class="col-sm-3 control-label">Tiêu đề</label>
+                                    <div class="col-sm-7">
+                                        @*<input type="text" class="form-control" id="Title" name="Title" style="width: 330px"><br>*@
+                                        @Html.TextBoxFor(m => m.Title, new {style = "width: 330px", @class = "form-control binh", @name = "Title", @id = "Title"})<br>
+                                    </div>
+
+                                </div><br>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-3 control-label">Ngày tạo</label>
+                                    <div class="col-sm-7">
+                                        @Html.TextBoxFor(m => m.StartDate, new {@class = "form-control binh", style = "width: 330px"})<br>
+                                    </div>
+                                </div><br>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-3 control-label">Ngày bắt đầu</label>
+                                    <div class="col-sm-7">
+                                        @Html.TextBoxFor(m => m.PublishDate, new {@class = "form-control binh", style = "width: 330px"})<br>
+                                    </div>
+                                </div><br>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-3 control-label">Ngày kết thúc</label>
+                                    <div class="col-sm-7">
+                                        @Html.TextBoxFor(m => m.EndDate, new {@class = "form-control binh", style = "width: 330px"})<br>
+                                    </div>
+                                </div><br>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-3 control-label">Khu</label>
+                                    <div class="col-sm-7">
+                                        <select class="form-control binh" name="selectItemBlock" style="width: 330px">
+                                            <option value="NULL">Tất cả</option>
+                                            @{
+                                                foreach (var item in listBlock)
+                                                {
+                                                    <option value="@item">@item</option>
+                                                }
+                                            }
+                                        </select><br>
 
                                     </div>
-                                </div>
-                            </td>
-                            <td>
+                                </div><br>
                                 <div class="form-group">
-                                    <div class="col-sm-9">
+                                    <label for="inputEmail3" class="col-sm-3 control-label">Tầng</label>
+                                    <div class="col-sm-7">
+                                        <select class="form-control binh" name="selectItemFloor" style="width: 330px">
+                                            <option value="NULL">Tất cả</option>
+                                            @{
+                                                foreach (var item in listFloor)
+                                                {
+                                                    <option value="@item">@item</option>
+                                                }
+                                            }
+                                        </select><br>
 
-                                        <a href="@Url.Action("DetailSurvey", "Survey", new {surveyId = @item.Id})" class="button">Chi Tiết</a>
+                                    </div>
+                                </div><br>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-3 control-label">Đối tượng</label>
+                                    <div class="col-sm-7">
+                                        <select class="form-control binh" name="people" style="width: 330px">
+                                            <option value="6">Tất cả</option>
+                                            <option value="1">Admin</option>
+                                            <option value="2">Manager</option>
+                                            <option value="3">Resident</option>
+                                            <option value="4">Househoulder</option>
+                                            <option value="5">Supporter</option>
+                                        </select><br>
+
+                                    </div>
+                                </div><br>
+                                  <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-3 control-label">Chế độ bảo mật</label>
+                                    <div class="col-sm-7">
+                                        <select class="form-control binh" name="privacy" style="width: 330px">
+                                          
+                                            <option value="1">Công khai</option>
+                                            <option value="2">Bí mật</option>
+                                           
+                                        </select><br>
+
+                                    </div>
+                                </div><br>
+
+                                <div class="form-group">
+                                    <div class="col-sm-3">
+                                        <span id="addNewForm" name="addNewForm" class="btn btn-info"><i class="fa fa-plus">Tạo câu hỏi</i></span>
                                     </div>
                                 </div>
-                            </td>
-                        </tr>
-                    }
+
+                            </fieldset>
+                        </div>
+
+                    </div>
+                    <div class="panel-footer">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-offset-9 col-md-2">
+                                    @*<span class="btn btn-primary">Gửi yêu cầu</span>*@
+                                    <button type="submit" class="btn btn-primary">Tạo Survey</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 }
+            </div>
+
+            <div class="tab-pane fade" id="graph">
+                <div class="panel panel-default binh">
+                    <div class="table-responsive binh">
+                        <table class="table v-middle binh">
+                            <thead>
+                            <tr>
+                                <th>Số Thứ tự</th>
+                                <th>Tiêu đề</th>
+                                <th>Ngày tạo</th>
+                                <th>Ngày đóng</th>
+                                <th>Trạng thái </th>
+                                <th> </th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @{
+                                foreach (var item in listSurveys)
+                                {
+                                    <tr class="aass">
+                                        <td>
+                                            <div class="form-group">
+                                                <div class="col-sm-9">
+                                                    <input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.Id">
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <div class="col-sm-9">
+                                                    <input type="hidden" class="form-control" id="surveyId" value="@item.Id">
+                                                    <input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.Title">
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <div class="col-sm-9">
+                                                    <span class="label date-color label-warning">@item.StartDate</span>
+                                                    @*<input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.StartDate">*@
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <div class="col-sm-9">
+                                                    <span class="label date-color label-gray">@item.EndDate</span>
+                                                    @*<input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.EndDate">*@
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @{
+                                                if (@item.Status == ConstantB.Survey_Open)
+                                                {
+                                                    <div class="form-group">
+                                                        <div class="col-sm-9">
+                                                            <input type="text" disabled="disabled" style="background-color: #3366ff" class="form-control binh" id="fullname" value="Đang mở">
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="form-group">
+                                                        <div class="col-sm-9">
+                                                            <input type="text" disabled="disabled" style="background-color: #ff9999" class="form-control binh" id="fullname" value="Đã đóng">
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+
+
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <div class="col-sm-9">
+                                                    <a href="@Url.Action("DeleteSurvey", "Survey", new {surveyId = @item.Id})" onclick="return myFunction()" class="button">Xóa</a>
+
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <div class="col-sm-9">
+
+                                                    <a href="@Url.Action("DetailSurvey", "Survey", new {surveyId = @item.Id})" class="button">Chi Tiết</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
 
 
 
-                </tbody>
-            </table>
-            <div class="w100 categoryFooter">
+                            </tbody>
+                        </table>
+                        <div class="w100 categoryFooter binh">
 
-                <ul class="pagination" id="paginations">
+                            <ul class="pagination binh" id="paginations">
 
-                    <li class="current"><a href="#">1</a></li>
-                    <li> <a href="#">2</a></li>
-                    <li> <a href="#">3</a></li>
-                    <li> <a href="#">4</a></li>
-                    <li> <a href="#">5</a></li>
+                                <li class="current binh"><a href="#">1</a></li>
+                                <li class="binh"> <a href="#">2</a></li>
+                                <li class="binh"> <a href="#">3</a></li>
+                                <li class="binh"> <a href="#">4</a></li>
+                                <li class="binh"> <a href="#">5</a></li>
 
-                </ul>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
 
             </div>
         </div>
     </div>
-</div>
-</div>
-
-</div>
-</div>
-</div>
 </body>
 
 
 <script>
+   
+    $('#label1').delay(2500).fadeOut('slow');
+
+
+    $(function () {
+        $("#StartDate").datepicker();
+        //$("#StartDate").attr('readOnly', 'false');
+    });
+    $(function () {
+        $("#PublishDate").datepicker();
+        //$("#PublishDate").attr('readOnly', 'false');
+    });
+    $(function () {
+        $("#EndDate").datepicker();
+        //$("#EndDate").attr('readOnly', 'false');
+    });
     function myFunction() {
         var x = confirm("Bạn chắc muốn xóa dòng này chứ?");
         if (x)
             return true;
         else
             return false;
-       
+
     }
-    pageSize = 4;
+    pageSize = 6;
 
     showPage = function (page) {
         $(".content").hide();
@@ -310,64 +405,179 @@
             showPage(parseInt($(this).text()))
         });
     }
-
-
-
-    var countComment = 0;
-    var countQuestion = 2;
-    $('#add').click(function () {
-
-        var table = $(this).closest('table');
-        if (table.find('input:text').length < 7) {
-            table.append('<tr><td style="width:300px;" align="right">  <h4> Câu hỏi ' + countQuestion + '</h4> </td><td  width="330px"> <div class="form-group"> <div class="col-sm-9"> <input type="text" id="question" style="width: 330px" class="form-control" name="question"/></div></div> </td><td><button type="button" class="removebutton" title="Remove this row">X</button></td></tr>');
-            //table.append('<tr><td style="width:200px;" align="right">Name <td> <textarea rows="2" cols="30" id="question" name="question"></textarea> </td></tr>');
-
-        }
-        countQuestion++;
-        countComment = 0;
-    });
-
     $(document).ready(function () {
-        var max_fields = 10; //maximum input boxes allowed
-        var wrapper = $(".input_fields_wrap"); //Fields wrapper
-        var add_button = $(".btn-primary"); //Add button ID
-        var add_buttonAnswer = $(".btn-primarys"); //Add button anwser ID
-        var x = 1; //initlal text box count
-        $(add_button).click(function (e) { //on add input button click
-            e.preventDefault();
-            if (x < max_fields) { //max input box allowed
-                x++; //text box increment
-                $(wrapper).append('<div><input type="text" name="mytext[]"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
-            }
+        window.index = 3;
+        $("#addNewRow").on("click", function () {
+            window.index++;
+            var tag = "<div id=\"row_" + index + "\" class='form-group'>" +
+                "<div class='col-sm-6'><input id=\"item_name_" + index + "\" type='text' class='form-control order-item'></div>" +
+
+                "<span class='btn btn-danger btn-xs' onclick='deleteItem(\"" + index + "\")'><i class='fa fa-times'></i></span>" +
+                "</div>";
+            $("#receiptWrapper").append(tag);
         });
+        window.i = 0;
+        $("#addNewForm").on("click", function () {
+            window.i++;
+            var tag = "<div class='col-sm-offset-3 col-sm-6'>" +
+                "<fieldset class='scheduler-border less-padding' id=\"row" + i + "\">" +
+                "<legend class='scheduler-border' id=\"row" + i + "\">\"Câu hỏi " + i + "\"</legend> " +
+                " <div class='form-group'>" +
+                "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu hỏi</label>" +
+                "  <div class='col-sm-7'>" +
+                "      <input type='text' class='form-control binh'   name='question' style='width: 330px'><br>" +
+                "   </div>" +
+                " </div>" +
+                " <div class='form-group'>" +
+                "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>" +
+                "  <div class='col-sm-7'>" +
+                "      <input type='text' class='form-control binh' id='idd1' name='anwser1' style='width: 330px'>  <label id='label1'></label><br>" +
+                "<input type='hidden'  name='count' value='1' />" +
+                "   </div>" +
+                " </div>" +
+                " <div class='form-group'>" +
+                "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>" +
+                "  <div class='col-sm-7'>" +
+                "      <input type='text' class='form-control binh'id='idd2'  name='anwser1' style='width: 330px'><br>" +
+                "<input type='hidden'  name='count' value='2' />" +
+                "   </div>" +
+                " </div>" +
+                " <div class='form-group'>" +
+                "  <label for='inputEmail3' class='col-sm-3 control-label'>Câu trả lời</label>" +
+                "  <div class='col-sm-7'>" +
+                "      <input type='text' class='form-control binh' id='idd3' name='anwser1' style='width: 330px'><br>" +
+                "<input type='hidden'  name='count' value='3' />" +
+                "   </div>" +
+                " </div>" +
+                "</fieldset></div>";
 
-        $(wrapper).on("click", ".remove_field", function (e) { //user click on remove text
-            e.preventDefault(); $(this).parent('div').remove(); x--;
-        })
-    });
-    var count = 0;
-    $('#addAnwser').click(function () {
-        count++;
-        countComment++;
-        var table = $(this).closest('table');
-        if (table.find('input:text').length < 7) {
-            table.append('<tr><td style="width:200px;border-bottom-color: white;" align="right">Đáp án ' + countComment + ' </td> <td width="330px"> <input type="text" class="form-control" style="width: 330px" id="anwser1" name="anwser1"/><br></td><td><button type="button" class="removebutton" title="Remove this row">X</button></td><td><input type="hidden" id="count" name="count" value="' + countComment + '" /></td></tr>');
-        }
+            $("#form").append(tag);
+            $("#addNewRow" + i).on("click", function () {
 
+                var tags =
+
+
+                    //      " <div class='form-group'>" +
+                    //      " <div class='col-sm-6'>" +
+                    //      "  <strong style='align-content: center'>Tên</strong>" +
+                    //      " </div>" +
+                    //"<div class='col-sm-1'>" +
+                    //" <strong style='align-content: center'>Số lượng</strong>" +
+                    //" </div>" +
+
+
+                    //" </div>" +
+                    //"<div>" +
+                    //" <div  class='form-group'>" +
+                    //"<div class='col-sm-6'>" +
+                    //" <input  type='text' class='form-control order-item'>" +
+                    //" </div>" +
+
+                    //"  <span class='btn btn-danger btn-xs' ><i class='fa fa-times'></i></span>" +
+                    //" </div>" +
+
+                    //"  </div>";
+                    " <div class='form-group'>" +
+                        "  <label for='inputEmail3' class='col-sm-3 control-label'>Tiêu đề</label>" +
+                        "  <div class='col-sm-7'>" +
+                        "      <input type='text' class='form-control'  name='Title' style='width: 330px'><br>" +
+                        "   </div>" +
+                        " </div>" +
+                        " <div class='form-group'>" +
+                        "  <label for='inputEmail3' class='col-sm-3 control-label'>Tiêu đề</label>" +
+                        "  <div class='col-sm-7'>" +
+                        "      <input type='text' class='form-control'  name='Title' style='width: 330px'><br>" +
+                        "   </div>" +
+                        " </div>" +
+                        " <div class='form-group'>" +
+                        "  <label for='inputEmail3' class='col-sm-3 control-label'>Tiêu đề</label>" +
+                        "  <div class='col-sm-7'>" +
+                        "      <input type='text' class='form-control'  name='Title' style='width: 330px'><br>" +
+                        "   </div>" +
+                        " </div>";
+
+
+                $("#row" + i).append(tags);
+
+            });
+        });
     });
-   
+
+
+    //var countComment = 0;
+    //var countQuestion = 2;
+    //$('#add').click(function () {
+
+    //    var table = $(this).closest('table');
+    //    if (table.find('input:text').length < 7) {
+    //        table.append('<tr><td style="width:300px;" align="right">  <h4> Câu hỏi ' + countQuestion + '</h4> </td><td  width="330px"> <div class="form-group"> <div class="col-sm-9"> <input type="text" id="question" style="width: 330px" class="form-control" name="question"/></div></div> </td><td><button type="button" class="removebutton" title="Remove this row">X</button></td></tr>');
+    //        //table.append('<tr><td style="width:200px;" align="right">Name <td> <textarea rows="2" cols="30" id="question" name="question"></textarea> </td></tr>');
+
+    //    }
+    //    countQuestion++;
+    //    countComment = 0;
+    //});
+
+    //$(document).ready(function () {
+    //    var max_fields = 10; //maximum input boxes allowed
+    //    var wrapper = $(".input_fields_wrap"); //Fields wrapper
+    //    var add_button = $(".btn-primary"); //Add button ID
+    //    var add_buttonAnswer = $(".btn-primarys"); //Add button anwser ID
+    //    var x = 1; //initlal text box count
+    //    $(add_button).click(function (e) { //on add input button click
+    //        e.preventDefault();
+    //        if (x < max_fields) { //max input box allowed
+    //            x++; //text box increment
+    //            $(wrapper).append('<div><input type="text" name="mytext[]"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
+    //        }
+    //    });
+
+    //    $(wrapper).on("click", ".remove_field", function (e) { //user click on remove text
+    //        e.preventDefault(); $(this).parent('div').remove(); x--;
+    //    })
+    //});
+    //var count = 0;
+    //$('#addAnwser').click(function () {
+    //    count++;
+    //    countComment++;
+    //    var table = $(this).closest('table');
+    //    if (table.find('input:text').length < 7) {
+    //        table.append('<tr><td style="width:200px;border-bottom-color: white;" align="right">Đáp án ' + countComment + ' </td> <td width="330px"> <input type="text" class="form-control" style="width: 330px" id="anwser1" name="anwser1"/><br></td><td><button type="button" class="removebutton" title="Remove this row">X</button></td><td><input type="hidden" id="count" name="count" value="' + countComment + '" /></td></tr>');
+    //    }
+
+    //});
+
     $(document).on('click', 'button.removebutton', function () {
-     
+
         $(this).closest('tr').remove();
         return false;
     });
+    //$("input").blur(function () {
+    //    if ($("#id1").attr("value") === $("#id2").attr("value")) {
+    //        alert('Same Value');
+    //        $("#label1").text("Hãy nhập giá trị khác!");
+    //        return false;
+    //    } else if ($('#id1').attr('value') === $('#id3').attr('value')) {
+    //        alert('Same Value');
+    //        return false;
+    //    } else if ($('#id2').attr('value') === $('#id3').attr('value')) {
+    //        alert('Same Value');
+    //        return false;
+    //    }
+    //    else { return true; }
+    //});
+    //$('input').blur(function () {
+    //    if ($('#idd1').attr('value') === $('#idd2').attr('value')) {
+    //        alert('Same Value'); return false;
+    //    } else { return true; }
+    //});
 </script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
 @*<tr>
-    <td style="width: 200px; border: 0;" align="right">Đáp án ' + countComment + ' <td>
-    <input type="radio" id="anwser" name="anwser"> <input type="text" id="anwser1" name="anwser1" /><br>
-</td>
-</tr>
-<tr>
-    <td><input type="hidden" id="count" name="count" value="' + countComment + '"/></td>
-</tr>*@
+        <td style="width: 200px; border: 0;" align="right">Đáp án ' + countComment + ' <td>
+        <input type="radio" id="anwser" name="anwser"> <input type="text" id="anwser1" name="anwser1" /><br>
+    </td>
+    </tr>
+    <tr>
+        <td><input type="hidden" id="count" name="count" value="' + countComment + '"/></td>
+    </tr>*@

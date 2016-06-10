@@ -179,7 +179,7 @@ namespace AMS.Controllers
         }
     }
 }
-class CustomResolver : DefaultContractResolver
+public class CustomResolver : DefaultContractResolver
 {
     Type c;
     public CustomResolver(Type c){

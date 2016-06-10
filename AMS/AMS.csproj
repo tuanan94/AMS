@@ -341,6 +341,7 @@
     <Compile Include="Service\ServiceChargeSevices.cs" />
     <Compile Include="Service\QuestionService.cs" />
     <Compile Include="Service\SurveyService.cs" />
+    <Compile Include="Service\UserAnswerService.cs" />
     <Compile Include="Service\UserInHouseService.cs" />
     <Compile Include="Service\HelpdeskSupporterService.cs" />
     <Compile Include="Service\IHelpdeskSupporterService.cs" />
@@ -355,16 +356,12 @@
     <Compile Include="Survey.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="sysdiagram.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Transaction.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="TransactionCategory.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="TransactionItemCategory.cs" />
     <Compile Include="User.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -401,11 +398,13 @@
     <Content Include="Content\css\_vendor.bundle.css" />
     <Content Include="Content\css\_vendor.min.css" />
     <Content Include="Content\images\addimage.png" />
+    <Content Include="Content\images\banner-842.jpg" />
     <Content Include="Content\images\defaultProfile.png" />
     <Content Include="Content\images\familycover.jpg" />
     <Content Include="Content\images\guy-5.jpg" />
     <Content Include="Content\images\delete.png" />
     <Content Include="Content\images\home_default.jpg" />
+    <Content Include="Content\images\logo.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -424,8 +423,11 @@
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\amsScript\additional-methods.min.js" />
+    <Content Include="Scripts\amsScript\canvasjs.min.js" />
+    <Content Include="Scripts\amsScript\jquery.balanced-gallery.js" />
     <Content Include="Scripts\amsScript\jquery.timepicker.min.js" />
     <Content Include="Scripts\amsScript\jquery.validate.min.js" />
+    <Content Include="Scripts\amsScript\LoadFamilyTree.js" />
     <Content Include="Scripts\amsScript\scripts.js" />
     <Content Include="Scripts\amsScript\scripts.min.js" />
     <Content Include="Scripts\amsScript\Social.js" />
@@ -508,7 +510,9 @@
     <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\amsScript\custom.js" />
     <Content Include="Scripts\datatables.js" />
+    <Content Include="Scripts\exporting.js" />
     <Content Include="Scripts\graph.js" />
+    <Content Include="Scripts\highcharts.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -599,6 +603,10 @@
     <Content Include="Views\BalanceSheet\ManageLiabilities.cshtml" />
     <Content Include="Views\BalanceSheet\ManageTransactionCategory.cshtml" />
     <Content Include="Views\Receipt\HouseExpenseStatus.cshtml" />
+    <Content Include="Views\Survey\View1.cshtml" />
+    <Content Include="Views\Survey\DoSurvey.cshtml" />
+    <Content Include="Views\Survey\DoDetailSurvey.cshtml" />
+    <Content Include="Views\Survey\Graph.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

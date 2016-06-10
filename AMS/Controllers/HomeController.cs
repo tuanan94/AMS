@@ -870,6 +870,23 @@ namespace AMS.Controllers
             ViewBag.curHouse = curHouse;
             return View();
         }
+        [HttpGet]
+        [Authorize]
+        public Object getUserByHouseId(int? houseId)
+        {
+            List<User> result = userService.findByHouseId(houseId.Value);
+            // Serializer settings
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.ContractResolver = new CustomResolver(typeof(User));
+            settings.PreserveReferencesHandling = PreserveReferencesHandling.None;
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            settings.Formatting = Formatting.Indented;
+
+            // Do the serialization and output to the console
+            string json = JsonConvert.SerializeObject(result, settings);
+            return json;
+        }
+
 
         [HttpPost]
         [Authorize]
