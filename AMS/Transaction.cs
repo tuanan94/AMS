@@ -24,8 +24,10 @@ namespace AMS
         public Nullable<System.DateTime> LastModified { get; set; }
         public Nullable<int> TransactionId { get; set; }
         public Nullable<int> Type { get; set; }
+        public Nullable<int> ReceiptDetailId { get; set; }
     
         public virtual BalanceSheet BalanceSheet { get; set; }
+        public virtual ReceiptDetail ReceiptDetail { get; set; }
         public virtual TransactionCategory TransactionCategory { get; set; }
     }
 }

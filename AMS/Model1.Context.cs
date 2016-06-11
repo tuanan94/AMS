@@ -44,11 +44,11 @@ namespace AMS
         public virtual DbSet<House> Houses { get; set; }
         public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<Post> Posts { get; set; }
+        public virtual DbSet<PricesOfUtilityServiceCat> PricesOfUtilityServiceCats { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Receipt> Receipts { get; set; }
         public virtual DbSet<ReceiptDetail> ReceiptDetails { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
-        public virtual DbSet<ServiceFee> ServiceFees { get; set; }
         public virtual DbSet<Survey> Surveys { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
@@ -56,5 +56,7 @@ namespace AMS
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAnswerSurvey> UserAnswerSurveys { get; set; }
         public virtual DbSet<UserRateAroundProvider> UserRateAroundProviders { get; set; }
+        public virtual DbSet<UtilityService> UtilityServices { get; set; }
+        public virtual DbSet<UtilityServiceCategory> UtilityServiceCategories { get; set; }
     }
 }

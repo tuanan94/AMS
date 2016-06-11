@@ -32,7 +32,6 @@
           <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="Tel" Type="varchar" MaxLength="11" />
           <Property Name="Address" Type="nvarchar" MaxLength="255" />
-          <Property Name="GoogleMapUrl" Type="nvarchar" MaxLength="255" />
           <Property Name="ClickCount" Type="bigint" />
           <Property Name="AroundProviderCategoryId" Type="int" />
           <Property Name="ImageUrl" Type="nvarchar(max)" />
@@ -115,11 +114,19 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Title" Type="nvarchar" MaxLength="255" />
+          <Property Name="Status" Type="int" />
           <Property Name="ForMonth" Type="datetime" />
           <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="CreateDate" Type="datetime" />
+          <Property Name="ClosingDate" Type="datetime" />
           <Property Name="LastModified" Type="datetime" />
           <Property Name="ManagerId" Type="int" />
+          <Property Name="TotalIncome" Type="float" />
+          <Property Name="TotalExpense" Type="float" />
+          <Property Name="TotalIncomeInCash" Type="float" />
+          <Property Name="TotalExpenseInCash" Type="float" />
+          <Property Name="RedundancyStartMonth" Type="float" />
+          <Property Name="RedundancyEndMonth" Type="float" />
         </EntityType>
         <EntityType Name="Comment">
           <Key>
@@ -204,6 +211,8 @@
           <Property Name="OwnerID" Type="int" />
           <Property Name="ProfileImage" Type="nvarchar(max)" />
           <Property Name="CoverImage" Type="nvarchar(max)" />
+          <Property Name="DisplayMember" Type="bit" />
+          <Property Name="AllowOtherView" Type="bit" />
         </EntityType>
         <EntityType Name="Image">
           <Key>
@@ -228,6 +237,17 @@
           <Property Name="Status" Type="int" />
           <Property Name="UserId" Type="int" />
           <Property Name="EmbedCode" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="PricesOfUtilityServiceCat">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryId" Type="int" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="FromAmount" Type="float" />
+          <Property Name="ToAmount" Type="float" />
+          <Property Name="Price" Type="float" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -273,17 +293,6 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RoleName" Type="nvarchar" MaxLength="255" />
         </EntityType>
-        <EntityType Name="ServiceFee">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="255" />
-          <Property Name="Description" Type="nvarchar(max)" />
-          <Property Name="Price" Type="float" />
-          <Property Name="Unit" Type="nvarchar" MaxLength="255" />
-          <Property Name="CreateDate" Type="datetime" />
-        </EntityType>
         <EntityType Name="Survey">
           <Key>
             <PropertyRef Name="Id" />
@@ -300,6 +309,7 @@
           <Property Name="Floor" Type="nvarchar" MaxLength="50" />
           <Property Name="Member" Type="int" />
           <Property Name="Privacy" Type="int" />
+          <Property Name="Priority" Type="int" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -325,6 +335,7 @@
           <Property Name="LastModified" Type="datetime" />
           <Property Name="TransactionId" Type="int" />
           <Property Name="Type" Type="int" />
+          <Property Name="ReceiptDetailId" Type="int" />
         </EntityType>
         <EntityType Name="TransactionCategory">
           <Key>
@@ -370,6 +381,28 @@
           <Property Name="UserId" Type="int" />
           <Property Name="AroundProviderId" Type="int" />
           <Property Name="Point" Type="int" />
+        </EntityType>
+        <EntityType Name="UtilityService">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Price" Type="float" />
+          <Property Name="Unit" Type="nvarchar" MaxLength="255" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="CategoryId" Type="int" />
+        </EntityType>
+        <EntityType Name="UtilityServiceCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="LastModified" Type="datetime" />
         </EntityType>
         <Association Name="FK_Answer_Survey">
           <End Role="Survey" Type="Self.Survey" Multiplicity="0..1" />
@@ -535,6 +568,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PricesOfUtilityServiceCat_UtilityServiceCategory">
+          <End Role="UtilityServiceCategory" Type="Self.UtilityServiceCategory" Multiplicity="0..1" />
+          <End Role="PricesOfUtilityServiceCat" Type="Self.PricesOfUtilityServiceCat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UtilityServiceCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PricesOfUtilityServiceCat">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Receipt_User">
           <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="Receipt" Type="Self.Receipt" Multiplicity="*" />
@@ -620,10 +665,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tbl_receipt_detail_tbl_service_fee">
-          <End Role="ServiceFee" Type="Self.ServiceFee" Multiplicity="0..1" />
+          <End Role="UtilityService" Type="Self.UtilityService" Multiplicity="0..1" />
           <End Role="ReceiptDetail" Type="Self.ReceiptDetail" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="ServiceFee">
+            <Principal Role="UtilityService">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="ReceiptDetail">
@@ -676,6 +721,18 @@
             </Principal>
             <Dependent Role="User">
               <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transaction_ReceiptDetail">
+          <End Role="ReceiptDetail" Type="Self.ReceiptDetail" Multiplicity="0..1" />
+          <End Role="Transaction" Type="Self.Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReceiptDetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="ReceiptDetailId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -763,6 +820,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UtilityService_UtilityServiceCategory">
+          <End Role="UtilityServiceCategory" Type="Self.UtilityServiceCategory" Multiplicity="0..1" />
+          <End Role="UtilityService" Type="Self.UtilityService" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UtilityServiceCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UtilityService">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="AMSModelStoreContainer">
           <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Answer" EntityType="Self.Answer" Schema="dbo" store:Type="Tables" />
@@ -784,11 +853,11 @@
           <EntitySet Name="House" EntityType="Self.House" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Image" EntityType="Self.Image" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Post" EntityType="Self.Post" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PricesOfUtilityServiceCat" EntityType="Self.PricesOfUtilityServiceCat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Receipt" EntityType="Self.Receipt" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReceiptDetail" EntityType="Self.ReceiptDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ServiceFee" EntityType="Self.ServiceFee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Survey" EntityType="Self.Survey" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Transaction" EntityType="Self.Transaction" Schema="dbo" store:Type="Tables" />
@@ -796,6 +865,8 @@
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserAnswerSurvey" EntityType="Self.UserAnswerSurvey" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRateAroundProvider" EntityType="Self.UserRateAroundProvider" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UtilityService" EntityType="Self.UtilityService" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UtilityServiceCategory" EntityType="Self.UtilityServiceCategory" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Answer_Survey" Association="Self.FK_Answer_Survey">
             <End Role="Survey" EntitySet="Survey" />
             <End Role="Answer" EntitySet="Answer" />
@@ -848,6 +919,10 @@
             <End Role="HelpdeskServiceCategory" EntitySet="HelpdeskServiceCategory" />
             <End Role="HelpdeskService" EntitySet="HelpdeskService" />
           </AssociationSet>
+          <AssociationSet Name="FK_PricesOfUtilityServiceCat_UtilityServiceCategory" Association="Self.FK_PricesOfUtilityServiceCat_UtilityServiceCategory">
+            <End Role="UtilityServiceCategory" EntitySet="UtilityServiceCategory" />
+            <End Role="PricesOfUtilityServiceCat" EntitySet="PricesOfUtilityServiceCat" />
+          </AssociationSet>
           <AssociationSet Name="FK_Receipt_User" Association="Self.FK_Receipt_User">
             <End Role="User" EntitySet="User" />
             <End Role="Receipt" EntitySet="Receipt" />
@@ -877,7 +952,7 @@
             <End Role="ReceiptDetail" EntitySet="ReceiptDetail" />
           </AssociationSet>
           <AssociationSet Name="FK_tbl_receipt_detail_tbl_service_fee" Association="Self.FK_tbl_receipt_detail_tbl_service_fee">
-            <End Role="ServiceFee" EntitySet="ServiceFee" />
+            <End Role="UtilityService" EntitySet="UtilityService" />
             <End Role="ReceiptDetail" EntitySet="ReceiptDetail" />
           </AssociationSet>
           <AssociationSet Name="FK_tbl_receipt_tbl_house" Association="Self.FK_tbl_receipt_tbl_house">
@@ -895,6 +970,10 @@
           <AssociationSet Name="FK_tbl_user_tbl_role" Association="Self.FK_tbl_user_tbl_role">
             <End Role="Role" EntitySet="Role" />
             <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transaction_ReceiptDetail" Association="Self.FK_Transaction_ReceiptDetail">
+            <End Role="ReceiptDetail" EntitySet="ReceiptDetail" />
+            <End Role="Transaction" EntitySet="Transaction" />
           </AssociationSet>
           <AssociationSet Name="FK_Transaction_User" Association="Self.FK_Transaction_User">
             <End Role="User" EntitySet="User" />
@@ -924,6 +1003,10 @@
             <End Role="User" EntitySet="User" />
             <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurvey" />
           </AssociationSet>
+          <AssociationSet Name="FK_UtilityService_UtilityServiceCategory" Association="Self.FK_UtilityService_UtilityServiceCategory">
+            <End Role="UtilityServiceCategory" EntitySet="UtilityServiceCategory" />
+            <End Role="UtilityService" EntitySet="UtilityService" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -949,11 +1032,11 @@
           <EntitySet Name="Houses" EntityType="AMSModel.House" />
           <EntitySet Name="Images" EntityType="AMSModel.Image" />
           <EntitySet Name="Posts" EntityType="AMSModel.Post" />
+          <EntitySet Name="PricesOfUtilityServiceCats" EntityType="AMSModel.PricesOfUtilityServiceCat" />
           <EntitySet Name="Questions" EntityType="AMSModel.Question" />
           <EntitySet Name="Receipts" EntityType="AMSModel.Receipt" />
           <EntitySet Name="ReceiptDetails" EntityType="AMSModel.ReceiptDetail" />
           <EntitySet Name="Roles" EntityType="AMSModel.Role" />
-          <EntitySet Name="ServiceFees" EntityType="AMSModel.ServiceFee" />
           <EntitySet Name="Surveys" EntityType="AMSModel.Survey" />
           <EntitySet Name="sysdiagrams" EntityType="AMSModel.sysdiagram" />
           <EntitySet Name="Transactions" EntityType="AMSModel.Transaction" />
@@ -961,6 +1044,8 @@
           <EntitySet Name="Users" EntityType="AMSModel.User" />
           <EntitySet Name="UserAnswerSurveys" EntityType="AMSModel.UserAnswerSurvey" />
           <EntitySet Name="UserRateAroundProviders" EntityType="AMSModel.UserRateAroundProvider" />
+          <EntitySet Name="UtilityServices" EntityType="AMSModel.UtilityService" />
+          <EntitySet Name="UtilityServiceCategories" EntityType="AMSModel.UtilityServiceCategory" />
           <AssociationSet Name="FK_Answer_Survey" Association="AMSModel.FK_Answer_Survey">
             <End Role="Survey" EntitySet="Surveys" />
             <End Role="Answer" EntitySet="Answers" />
@@ -1049,6 +1134,10 @@
             <End Role="User" EntitySet="Users" />
             <End Role="Post" EntitySet="Posts" />
           </AssociationSet>
+          <AssociationSet Name="FK_PricesOfUtilityServiceCat_UtilityServiceCategory" Association="AMSModel.FK_PricesOfUtilityServiceCat_UtilityServiceCategory">
+            <End Role="UtilityServiceCategory" EntitySet="UtilityServiceCategories" />
+            <End Role="PricesOfUtilityServiceCat" EntitySet="PricesOfUtilityServiceCats" />
+          </AssociationSet>
           <AssociationSet Name="FK_Receipt_User" Association="AMSModel.FK_Receipt_User">
             <End Role="User" EntitySet="Users" />
             <End Role="Receipt" EntitySet="Receipts" />
@@ -1058,8 +1147,12 @@
             <End Role="ReceiptDetail" EntitySet="ReceiptDetails" />
           </AssociationSet>
           <AssociationSet Name="FK_tbl_receipt_detail_tbl_service_fee" Association="AMSModel.FK_tbl_receipt_detail_tbl_service_fee">
-            <End Role="ServiceFee" EntitySet="ServiceFees" />
+            <End Role="UtilityService" EntitySet="UtilityServices" />
             <End Role="ReceiptDetail" EntitySet="ReceiptDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transaction_ReceiptDetail" Association="AMSModel.FK_Transaction_ReceiptDetail">
+            <End Role="ReceiptDetail" EntitySet="ReceiptDetails" />
+            <End Role="Transaction" EntitySet="Transactions" />
           </AssociationSet>
           <AssociationSet Name="FK_tbl_user_tbl_role" Association="AMSModel.FK_tbl_user_tbl_role">
             <End Role="Role" EntitySet="Roles" />
@@ -1080,6 +1173,10 @@
           <AssociationSet Name="FK_UserDoServey_User" Association="AMSModel.FK_UserDoServey_User">
             <End Role="User" EntitySet="Users" />
             <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurveys" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UtilityService_UtilityServiceCategory" Association="AMSModel.FK_UtilityService_UtilityServiceCategory">
+            <End Role="UtilityServiceCategory" EntitySet="UtilityServiceCategories" />
+            <End Role="UtilityService" EntitySet="UtilityServices" />
           </AssociationSet>
           <AssociationSet Name="AspNetUserRoles" Association="AMSModel.AspNetUserRoles">
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
@@ -1115,7 +1212,6 @@
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Tel" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
           <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="GoogleMapUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="ClickCount" Type="Int64" />
           <Property Name="AroundProviderCategoryId" Type="Int32" />
           <Property Name="ImageUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -1201,11 +1297,19 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" />
           <Property Name="ForMonth" Type="DateTime" Precision="3" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="ClosingDate" Type="DateTime" Precision="3" />
           <Property Name="LastModified" Type="DateTime" Precision="3" />
           <Property Name="ManagerId" Type="Int32" />
+          <Property Name="TotalIncome" Type="Double" />
+          <Property Name="TotalExpense" Type="Double" />
+          <Property Name="TotalIncomeInCash" Type="Double" />
+          <Property Name="TotalExpenseInCash" Type="Double" />
+          <Property Name="RedundancyStartMonth" Type="Double" />
+          <Property Name="RedundancyEndMonth" Type="Double" />
           <NavigationProperty Name="User" Relationship="AMSModel.FK_Transaction_User" FromRole="BalanceSheet" ToRole="User" />
           <NavigationProperty Name="Transactions" Relationship="AMSModel.FK_TransactionItem_Transaction" FromRole="BalanceSheet" ToRole="Transaction" />
         </EntityType>
@@ -1306,6 +1410,8 @@
           <Property Name="OwnerID" Type="Int32" />
           <Property Name="ProfileImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CoverImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DisplayMember" Type="Boolean" />
+          <Property Name="AllowOtherView" Type="Boolean" />
           <NavigationProperty Name="HelpdeskRequests" Relationship="AMSModel.FK_tbl_h_desk_request_tbl_house" FromRole="House" ToRole="HelpdeskRequest" />
           <NavigationProperty Name="Receipts" Relationship="AMSModel.FK_tbl_receipt_tbl_house" FromRole="House" ToRole="Receipt" />
           <NavigationProperty Name="Users" Relationship="AMSModel.FK_User_House" FromRole="House" ToRole="User" />
@@ -1335,6 +1441,18 @@
           <Property Name="EmbedCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Comments" Relationship="AMSModel.FK_Comment_Post" FromRole="Post" ToRole="Comment" />
           <NavigationProperty Name="User" Relationship="AMSModel.FK_tbl_post_tbl_user" FromRole="Post" ToRole="User" />
+        </EntityType>
+        <EntityType Name="PricesOfUtilityServiceCat">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryId" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="FromAmount" Type="Double" />
+          <Property Name="ToAmount" Type="Double" />
+          <Property Name="Price" Type="Double" />
+          <NavigationProperty Name="UtilityServiceCategory" Relationship="AMSModel.FK_PricesOfUtilityServiceCat_UtilityServiceCategory" FromRole="PricesOfUtilityServiceCat" ToRole="UtilityServiceCategory" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -1376,7 +1494,8 @@
           <Property Name="ServiceFeeId" Type="Int32" />
           <Property Name="ReceiptId" Type="Int32" />
           <NavigationProperty Name="Receipt" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_receipt" FromRole="ReceiptDetail" ToRole="Receipt" />
-          <NavigationProperty Name="ServiceFee" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_service_fee" FromRole="ReceiptDetail" ToRole="ServiceFee" />
+          <NavigationProperty Name="UtilityService" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_service_fee" FromRole="ReceiptDetail" ToRole="UtilityService" />
+          <NavigationProperty Name="Transactions" Relationship="AMSModel.FK_Transaction_ReceiptDetail" FromRole="ReceiptDetail" ToRole="Transaction" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -1385,18 +1504,6 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RoleName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Users" Relationship="AMSModel.FK_tbl_user_tbl_role" FromRole="Role" ToRole="User" />
-        </EntityType>
-        <EntityType Name="ServiceFee">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Price" Type="Double" />
-          <Property Name="Unit" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="ReceiptDetails" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_service_fee" FromRole="ServiceFee" ToRole="ReceiptDetail" />
         </EntityType>
         <EntityType Name="Survey">
           <Key>
@@ -1414,6 +1521,7 @@
           <Property Name="Floor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Member" Type="Int32" />
           <Property Name="Privacy" Type="Int32" />
+          <Property Name="Priority" Type="Int32" />
           <NavigationProperty Name="Answers" Relationship="AMSModel.FK_Answer_Survey" FromRole="Survey" ToRole="Answer" />
           <NavigationProperty Name="UserAnswerSurveys" Relationship="AMSModel.FK_UserDoServey_Survey" FromRole="Survey" ToRole="UserAnswerSurvey" />
         </EntityType>
@@ -1441,7 +1549,9 @@
           <Property Name="LastModified" Type="DateTime" Precision="3" />
           <Property Name="TransactionId" Type="Int32" />
           <Property Name="Type" Type="Int32" />
+          <Property Name="ReceiptDetailId" Type="Int32" />
           <NavigationProperty Name="BalanceSheet" Relationship="AMSModel.FK_TransactionItem_Transaction" FromRole="Transaction" ToRole="BalanceSheet" />
+          <NavigationProperty Name="ReceiptDetail" Relationship="AMSModel.FK_Transaction_ReceiptDetail" FromRole="Transaction" ToRole="ReceiptDetail" />
           <NavigationProperty Name="TransactionCategory" Relationship="AMSModel.FK_TransactionItem_TransactionItemCategory" FromRole="Transaction" ToRole="TransactionCategory" />
         </EntityType>
         <EntityType Name="TransactionCategory">
@@ -1505,6 +1615,32 @@
           <Property Name="Point" Type="Int32" />
           <NavigationProperty Name="AroundProvider" Relationship="AMSModel.FK_tbl_resident_rate_around_srv_tbl_arround_srv" FromRole="UserRateAroundProvider" ToRole="AroundProvider" />
           <NavigationProperty Name="User" Relationship="AMSModel.FK_tbl_resident_rate_around_srv_tbl_user" FromRole="UserRateAroundProvider" ToRole="User" />
+        </EntityType>
+        <EntityType Name="UtilityService">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Double" />
+          <Property Name="Unit" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CategoryId" Type="Int32" />
+          <NavigationProperty Name="ReceiptDetails" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_service_fee" FromRole="UtilityService" ToRole="ReceiptDetail" />
+          <NavigationProperty Name="UtilityServiceCategory" Relationship="AMSModel.FK_UtilityService_UtilityServiceCategory" FromRole="UtilityService" ToRole="UtilityServiceCategory" />
+        </EntityType>
+        <EntityType Name="UtilityServiceCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="LastModified" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="PricesOfUtilityServiceCats" Relationship="AMSModel.FK_PricesOfUtilityServiceCat_UtilityServiceCategory" FromRole="UtilityServiceCategory" ToRole="PricesOfUtilityServiceCat" />
+          <NavigationProperty Name="UtilityServices" Relationship="AMSModel.FK_UtilityService_UtilityServiceCategory" FromRole="UtilityServiceCategory" ToRole="UtilityService" />
         </EntityType>
         <Association Name="FK_Answer_Survey">
           <End Type="AMSModel.Survey" Role="Survey" Multiplicity="0..1" />
@@ -1774,6 +1910,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PricesOfUtilityServiceCat_UtilityServiceCategory">
+          <End Type="AMSModel.UtilityServiceCategory" Role="UtilityServiceCategory" Multiplicity="0..1" />
+          <End Type="AMSModel.PricesOfUtilityServiceCat" Role="PricesOfUtilityServiceCat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UtilityServiceCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PricesOfUtilityServiceCat">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Receipt_User">
           <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
           <End Type="AMSModel.Receipt" Role="Receipt" Multiplicity="*" />
@@ -1799,14 +1947,26 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tbl_receipt_detail_tbl_service_fee">
-          <End Type="AMSModel.ServiceFee" Role="ServiceFee" Multiplicity="0..1" />
+          <End Type="AMSModel.UtilityService" Role="UtilityService" Multiplicity="0..1" />
           <End Type="AMSModel.ReceiptDetail" Role="ReceiptDetail" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="ServiceFee">
+            <Principal Role="UtilityService">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="ReceiptDetail">
               <PropertyRef Name="ServiceFeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transaction_ReceiptDetail">
+          <End Type="AMSModel.ReceiptDetail" Role="ReceiptDetail" Multiplicity="0..1" />
+          <End Type="AMSModel.Transaction" Role="Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReceiptDetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="ReceiptDetailId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1870,6 +2030,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UtilityService_UtilityServiceCategory">
+          <End Type="AMSModel.UtilityServiceCategory" Role="UtilityServiceCategory" Multiplicity="0..1" />
+          <End Type="AMSModel.UtilityService" Role="UtilityService" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UtilityServiceCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UtilityService">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="AspNetUserRoles">
           <End Type="AMSModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="AMSModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
@@ -1905,7 +2077,6 @@
                 <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
                 <ScalarProperty Name="AroundProviderCategoryId" ColumnName="AroundProviderCategoryId" />
                 <ScalarProperty Name="ClickCount" ColumnName="ClickCount" />
-                <ScalarProperty Name="GoogleMapUrl" ColumnName="GoogleMapUrl" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="Tel" ColumnName="Tel" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -1985,11 +2156,19 @@
           <EntitySetMapping Name="BalanceSheets">
             <EntityTypeMapping TypeName="AMSModel.BalanceSheet">
               <MappingFragment StoreEntitySet="BalanceSheet">
+                <ScalarProperty Name="RedundancyEndMonth" ColumnName="RedundancyEndMonth" />
+                <ScalarProperty Name="RedundancyStartMonth" ColumnName="RedundancyStartMonth" />
+                <ScalarProperty Name="TotalExpenseInCash" ColumnName="TotalExpenseInCash" />
+                <ScalarProperty Name="TotalIncomeInCash" ColumnName="TotalIncomeInCash" />
+                <ScalarProperty Name="TotalExpense" ColumnName="TotalExpense" />
+                <ScalarProperty Name="TotalIncome" ColumnName="TotalIncome" />
                 <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
                 <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="ClosingDate" ColumnName="ClosingDate" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="ForMonth" ColumnName="ForMonth" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -2074,6 +2253,8 @@
           <EntitySetMapping Name="Houses">
             <EntityTypeMapping TypeName="AMSModel.House">
               <MappingFragment StoreEntitySet="House">
+                <ScalarProperty Name="AllowOtherView" ColumnName="AllowOtherView" />
+                <ScalarProperty Name="DisplayMember" ColumnName="DisplayMember" />
                 <ScalarProperty Name="CoverImage" ColumnName="CoverImage" />
                 <ScalarProperty Name="ProfileImage" ColumnName="ProfileImage" />
                 <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
@@ -2108,6 +2289,18 @@
                 <ScalarProperty Name="ImgUrl" ColumnName="ImgUrl" />
                 <ScalarProperty Name="Body" ColumnName="Body" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PricesOfUtilityServiceCats">
+            <EntityTypeMapping TypeName="AMSModel.PricesOfUtilityServiceCat">
+              <MappingFragment StoreEntitySet="PricesOfUtilityServiceCat">
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="ToAmount" ColumnName="ToAmount" />
+                <ScalarProperty Name="FromAmount" ColumnName="FromAmount" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2160,21 +2353,10 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ServiceFees">
-            <EntityTypeMapping TypeName="AMSModel.ServiceFee">
-              <MappingFragment StoreEntitySet="ServiceFee">
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Surveys">
             <EntityTypeMapping TypeName="AMSModel.Survey">
               <MappingFragment StoreEntitySet="Survey">
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
                 <ScalarProperty Name="Privacy" ColumnName="Privacy" />
                 <ScalarProperty Name="Member" ColumnName="Member" />
                 <ScalarProperty Name="Floor" ColumnName="Floor" />
@@ -2204,6 +2386,7 @@
           <EntitySetMapping Name="Transactions">
             <EntityTypeMapping TypeName="AMSModel.Transaction">
               <MappingFragment StoreEntitySet="Transaction">
+                <ScalarProperty Name="ReceiptDetailId" ColumnName="ReceiptDetailId" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
                 <ScalarProperty Name="LastModified" ColumnName="LastModified" />
@@ -2262,6 +2445,30 @@
                 <ScalarProperty Name="Point" ColumnName="Point" />
                 <ScalarProperty Name="AroundProviderId" ColumnName="AroundProviderId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UtilityServices">
+            <EntityTypeMapping TypeName="AMSModel.UtilityService">
+              <MappingFragment StoreEntitySet="UtilityService">
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UtilityServiceCategories">
+            <EntityTypeMapping TypeName="AMSModel.UtilityServiceCategory">
+              <MappingFragment StoreEntitySet="UtilityServiceCategory">
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

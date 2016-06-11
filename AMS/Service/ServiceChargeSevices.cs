@@ -8,27 +8,27 @@ namespace AMS.Service
 {
     public class ServiceChargeSevices
     {
-        GenericRepository<ServiceFee> _serviceChargeRepository = new GenericRepository<ServiceFee>();
+        GenericRepository<UtilityService> _serviceChargeRepository = new GenericRepository<UtilityService>();
 
-        public ServiceFee FindById(int id)
+        public UtilityService FindById(int id)
         {
             return _serviceChargeRepository.FindById(id);
         }
-        public void Add(ServiceFee serviceFee)
+        public void Add(UtilityService serviceFee)
         {
             _serviceChargeRepository.Add(serviceFee);
         }
-        public void Update(ServiceFee serviceFee)
+        public void Update(UtilityService serviceFee)
         {
             _serviceChargeRepository.Update(serviceFee);
         }
-        public void Delete(ServiceFee serviceFee)
+        public void Delete(UtilityService serviceFee)
         {
             _serviceChargeRepository.Delete(serviceFee);
         }
         public void DeleteById(int id)
         {
-            ServiceFee s = _serviceChargeRepository.FindById(id);
+            UtilityService s = _serviceChargeRepository.FindById(id);
             if (s != null)
             {
                 _serviceChargeRepository.Delete(s);

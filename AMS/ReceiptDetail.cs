@@ -14,6 +14,12 @@ namespace AMS
     
     public partial class ReceiptDetail
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ReceiptDetail()
+        {
+            this.Transactions = new HashSet<Transaction>();
+        }
+    
         public int Id { get; set; }
         public Nullable<double> TotalBill { get; set; }
         public Nullable<double> UnitPrice { get; set; }
@@ -23,6 +29,8 @@ namespace AMS
         public Nullable<int> ReceiptId { get; set; }
     
         public virtual Receipt Receipt { get; set; }
-        public virtual ServiceFee ServiceFee { get; set; }
+        public virtual UtilityService UtilityService { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Transaction> Transactions { get; set; }
     }
 }

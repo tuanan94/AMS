@@ -1,121 +1,244 @@
-﻿@{
+﻿@using AMS.Service
+@using Microsoft.AspNet.Identity
+@{
     ViewBag.Title = "Home Page";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
     User curUser = ViewBag.curUser;
-}
-<div class="container-fluid">
-        <div class="cover overlay">
-            <img src="images/profile-cover.jpg" alt="cover">
-            <a href="#" class="btn btn-cover"><i class="fa fa-pencil fa-fw"></i></a>
-        </div>
-        <div class="row">
-            <div class="col-md-9">
-                <ul class="timeline-list">
-                    <li class="media">
-                        <div class="pull-left">
-                            
+    List<UserAnswerSurvey> listUserAnswer = new List<UserAnswerSurvey>();
+    HouseServices houseServices = new HouseServices();
+    SurveyService surveyService = new SurveyService();
+    QuestionService questionService = new QuestionService();
+    AnswerService answerService = new AnswerService();
+    UserAnswerService userAnswerService = new UserAnswerService();
+    UserServices userServices = new UserServices();
+    List<Survey> listSurveys = surveyService.GetListSurveys();
+    string alert = "";
+    foreach (var item in listSurveys)
+    {
+        listUserAnswer = (userAnswerService.GetListUserAnswerSurveysBySurveyId(item.Id));
+        User currentUser = userServices.FindById(int.Parse(User.Identity.GetUserId()));
+        int k = 0;
+        if (item.Priority == 1)
+        {
+            foreach (var VARIABLE in listUserAnswer)
+            {
 
-                            <img src="@(curUser.ProfileImage==null?"/Content/images/defaultProfile.png":curUser.ProfileImage)" alt="people" class="img-circle" width="80">
-                            <div class="date">@curUser.Username</div>
-                        </div>
-                        <div class="media-body">
-                            <div class="row">
-                                <div class="col-md-10 col-lg-8">
-                                    <div class="panel panel-default share">
-                                        <div class="panel-heading panel-heading-gray title">
-                                            What´s new
-                                        </div>
-                                        <div class="panel-body">
-                                            <textarea id="postContent" name="status" class="form-control share-text" rows="8" placeholder="Share your status..."></textarea>
-                                            <div class="row" style="height:auto;" id="previewList">
-                                                <div style="height:100px;width:100px;float:left;position:relative">
-                                                    <img src="~/Content/images/addimage.png" style="max-width:100%;max-height:100%" onclick="addImage()" />
-                                                </div>
-                                                <input type="file" id="uploadEditorImage" style="display:none" />
-                                                <div id="progressBar" class="progress" style="width:200px" hidden="hidden">
-                                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:200px">
-                                                    </div>
+
+                if (VARIABLE.UserId == currentUser.Id)
+                {
+                    k++;
+
+                }
+
+            }
+            if (k != 1)
+            {
+                alert = "Bạn Có Một Survey Cần phải Làm!";
+            }
+        }
+    }
+}
+<style>
+    .button {
+        display: block;
+        width: 100px;
+        height: 35px;
+        background: #4E9CAF;
+        padding: 7px;
+        text-align: center;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+    }
+
+    .modalDialog {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 99999;
+        display: none;
+        opacity: 1;
+        -webkit-transition: opacity 400ms ease-in;
+        -moz-transition: opacity 400ms ease-in;
+        transition: opacity 400ms ease-in;
+    }
+
+        .modalDialog > div {
+            width: 400px;
+            position: relative;
+            margin: 10% auto;
+            padding: 5px 20px 13px 20px;
+            border-radius: 10px;
+            background: #fff;
+            background: #339999;
+        }
+
+    .close {
+        background: #606061;
+        color: #FFFFFF;
+        line-height: 25px;
+        position: absolute;
+        right: -12px;
+        text-align: center;
+        top: -10px;
+        width: 24px;
+        text-decoration: none;
+        font-weight: bold;
+        -webkit-border-radius: 12px;
+        -moz-border-radius: 12px;
+        border-radius: 12px;
+        -moz-box-shadow: 1px 1px 3px #000;
+        -webkit-box-shadow: 1px 1px 3px #000;
+        box-shadow: 1px 1px 3px #000;
+    }
+
+        .close:hover {
+            background: #00d9ff;
+        }
+</style>
+<div class="container-fluid">
+    <div class="cover overlay">
+        <img src="images/profile-cover.jpg" alt="cover">
+        <a href="#" class="btn btn-cover"><i class="fa fa-pencil fa-fw"></i></a>
+    </div>
+    <div class="row">
+        <div class="col-md-9">
+            <ul class="timeline-list">
+                <li class="media">
+                    <div class="pull-left">
+                        <img src="@(curUser.ProfileImage==null?"/Content/images/defaultProfile.png":curUser.ProfileImage)" alt="people" class="img-circle" width="80">
+                        <div class="date">@curUser.Username</div>
+                    </div>
+                    <div class="media-body">
+                        <div class="row">
+                            <div class="col-md-10 col-lg-8">
+
+                                <div class="panel panel-default share">
+                                    <div class="panel-heading panel-heading-gray title">
+                                        What´s new
+                                    </div>
+                                    <div class="panel-body">
+                                        <textarea id="postContent" name="status" class="form-control share-text" rows="8" placeholder="Share your status..ccc."></textarea>
+                                        <div class="row" style="height: auto;" id="previewList">
+                                            <div style="height: 100px; width: 100px; float: left; position: relative">
+                                                <img src="~/Content/images/addimage.png" style="max-width: 100%; max-height: 100%" onclick="addImage()" />
+                                            </div>
+                                            <input type="file" id="uploadEditorImage" style="display: none" />
+                                            <div id="progressBar" class="progress" style="width: 200px" hidden="hidden">
+                                                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 200px">
                                                 </div>
                                             </div>
-                                            <div id="previewEmbed" class="row" style="height:auto; ">
-                                                <div id="previewContent">
-                                                </div>
+                                        </div>
+                                        <div id="previewEmbed" class="row" style="height: auto;">
+                                            <div id="previewContent">
                                             </div>
                                         </div>
-                                        <div class="panel-footer share-buttons">
-                                            <a href="#">
-                                                <i class="fa fa-map-marker"></i>
-                                            </a>
-                                            <a href="#" data-toggle="modal" data-target="#addEmbedModal">
-                                                <i class="fa fa-fw fa-code"></i>
-                                            </a>
-                                            <button type="submit" class="btn btn-primary btn-xs pull-right display-none" style="margin-top:-12px" href="#" onclick="createNewPost()">Post</button>
-                                        </div>
+                                    </div>
+                                    <div class="panel-footer share-buttons">
+                                        <a href="#">
+                                            <i class="fa fa-map-marker"></i>
+                                        </a>
+                                        <a href="#" data-toggle="modal" data-target="#addEmbedModal">
+                                            <i class="fa fa-fw fa-code"></i>
+                                        </a>
+                                        <button type="submit" class="btn btn-primary btn-xs pull-right display-none" style="margin-top: -12px" href="#" onclick="createNewPost()">Post</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="clearfix"></div>
                         </div>
-                    </li>
-                </ul>
-                <ul class="timeline-list" id="timeline">
-                   
-                </ul>
-            </div>
-            <div class="col-md-3">
-                <div data-spy="affix" data-offset-top="318" data-offset-bottom="100" class="affix-top">
-                    <div id="scroll-spy">
-                        <ul class="nav timeline-months">
-                            <li class="active">
-                                <a href="#october"><i class="fa fa-calendar fa-fw"></i>October</a>
-                            </li>
-                            <li>
-                                <a href="#september"><i class="fa fa-calendar fa-fw"></i>September</a>
-                            </li>
-                            <li>
-                                <a href="#august"><i class="fa fa-calendar fa-fw"></i>August</a>
-                            </li>
-                            <li>
-                                <a href="#july"><i class="fa fa-calendar fa-fw"></i>July</a>
-                            </li>
-                            <li>
-                                <a href="#june"><i class="fa fa-calendar fa-fw"></i>June</a>
-                            </li>
-                            <li>
-                                <a href="#may"><i class="fa fa-calendar fa-fw"></i>May</a>
-                            </li>
-                        </ul>
+                        <div class="clearfix"></div>
                     </div>
+                </li>
+            </ul>
+            <ul class="timeline-list" id="timeline"></ul>
+        </div>
+        <div class="col-md-3">
+            <div data-spy="affix" data-offset-top="318" data-offset-bottom="100" class="affix-top">
+                <div id="scroll-spy">
+                    <ul class="nav timeline-months">
+                        <li class="active">
+                            <a href="#october"><i class="fa fa-calendar fa-fw"></i>October</a>
+                        </li>
+                        <li>
+                            <a href="#september"><i class="fa fa-calendar fa-fw"></i>September</a>
+                        </li>
+                        <li>
+                            <a href="#august"><i class="fa fa-calendar fa-fw"></i>August</a>
+                        </li>
+                        <li>
+                            <a href="#july"><i class="fa fa-calendar fa-fw"></i>July</a>
+                        </li>
+                        <li>
+                            <a href="#june"><i class="fa fa-calendar fa-fw"></i>June</a>
+                        </li>
+                        <li>
+                            <a href="#may"><i class="fa fa-calendar fa-fw"></i>May</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="addEmbedModal" role="dialog" >
-        <div class="modal-dialog">
+<!-- Modal -->
+<div class="modal fade" id="addEmbedModal" role="dialog">
+    <div class="modal-dialog">
 
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Thêm mã nhúng</h4>
-                </div>
-                <div class="modal-body">
-                    <input class="form-control" id="embedCode" placeholder="Copy và paste đoạn mã nhúng của bạn vào đây"/>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveEmbedCode()">Lưu lại</button>
-                </div>
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thêm mã nhúng</h4>
             </div>
+            <div class="modal-body">
+                <input class="form-control" id="embedCode" placeholder="Copy và paste đoạn mã nhúng của bạn vào đây" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveEmbedCode()">Lưu lại</button>
+            </div>
+        </div>
 
+    </div>
+</div>
+
+@{
+    if (alert != "")
+    {
+        <div id="openModal" class="modalDialog">
+    <div class="modal-content">
+
+        <a href="#close" title="Close" class="close">X</a>
+        <div class="modal-header">Thông Báo</div>
+        <div class="modal-body">
+            <h4 style="color: white">@alert</h4>
+        </div>
+
+        <div class="modal-footer">
+            @*<button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" >Hủy</button>*@
+            <a href="@Url.Action("DoSurvey", "Survey")" class="button">Làm ngay</a>
         </div>
     </div>
-
-
+</div>
+    }
+}
 
 <script>
+    $(document).ready(function () {
+        $('.modalDialog').fadeIn();
+
+        $('.close').on('click', function (event) {
+            event.preventDefault();
+            /* Act on the event */
+
+            $('.modalDialog').fadeOut();
+
+        });
+    });
     var listUploadImage = [];
     function addImage() {
         $("#uploadEditorImage").click();
@@ -138,7 +261,7 @@
                 embeded: $("#embedCode").val(),
 
             },
-             
+
             success: function (successData) {
                 if (successData == 'success') {
                     clearCreatePostForm();
@@ -151,29 +274,29 @@
             }
 
         });
-       
+
     }
 
     $("#uploadEditorImage").change(function () {
         var data = new FormData();
-        data.append("dir","@SLIM_CONFIG.dirPostImage");
+        data.append("dir", "@SLIM_CONFIG.dirPostImage");
         var files = $("#uploadEditorImage").get(0).files;
         if (files.length > 0) {
             data.append("HelpSectionImages", files[0]);
         }
 
-       // progessBar(true);
+        // progessBar(true);
         $.ajax({
             url: "/Image/Upload/",
             type: "POST",
             processData: false,
             contentType: false,
             data: data,
-            
+
             success: function (successData) {
-                addImageToPreviewList(successData,listUploadImage.length);
+                addImageToPreviewList(successData, listUploadImage.length);
                 listUploadImage[listUploadImage.length] = successData;
-               // progessBar(false);
+                // progessBar(false);
 
             },
             error: function (er) {
@@ -222,7 +345,7 @@
                 postId: id,
             },
             success: function (successData) {
-               // alert(successData)
+                // alert(successData)
                 var obj = JSON.parse(successData);
                 if (obj['ProfileImage'] === null) {
                     $('#userImagePost' + id).attr("src", "/Content/images/defaultProfile.png");
@@ -240,58 +363,58 @@
     }
     function addPostToTimeline(index, postObject) {
         $("#timeline").append('<li class="media">'
-                       +'<div class="pull-left">'
-                            + '<img id="userImagePost' + postObject['Id'] + '" src="images/people/110/woman-5.jpg" alt="people" class="img-circle" width="80">'
-                            +'<div id="userNamePost'+postObject['Id']+'" class="date">3 MAY</div>'
-                        +'</div>'
-                        +'<div class="media-body">'
-                            +'<div class="panel panel-default">'
-                                +'<div class="panel-body" >'
-                                    +'<p>'+postObject['Body']+'</p>'
-                                    +'<div class="row" id="imagesPost'+postObject['Id'] +'" style="height:auto">'
-                                    +'</div>'
-                                    + '<div class="row" style="height:auto;">'
-                                    + postObject['EmbedCode']
-                                    +'</div>'
-                                +'</div>'
-                                +'<div class="view-all-comments"><a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments</div>'
-                                +'<ul class="comments">'
-                                    +'<li>'
-                                        +'<div class="media">'
-                                            +'<a href="" class="pull-left">'
-                                                +'<img  src="images/people/50/woman-5.jpg" class="media-object">'
-                                            +'</a>'
-                                            +'<div class="media-body">'
-                                                +'<a href="" class="comment-author">Mary</a>'
-                                                +'<span>Thanks Bill</span>'
-                                                +'<div class="comment-date">2 days</div>'
-                                            +'</div>'
-                                        +'</div>'
-                                    +'</li>'
-                                    +'<li>'
-                                        +'<div class="media">'
-                                            +'<a href="" class="pull-left">'
-                                                +'<img src="images/people/50/guy-5.jpg" class="media-object">'
-                                            +'</a>'
-                                            +'<div class="media-body">'
-                                                +'<a href="" class="comment-author">Bill D.</a>'
-                                                +'<span>What time did it finish?</span>'
-                                                +'<div class="comment-date">14 min</div>'
-                                            +'</div>'
-                                        +'</div>'
-                                    +'</li>'
-                                    +'<li class="comment-form">'
-                                        +'<div class="input-group">'
-                                            + '<input type="text" class="form-control">'
-                                            +'<span class="input-group-addon">'
-                                                +'<a href=""><i class="fa fa-photo"></i></a>'
-                                            +'</span>'
-                                        +'</div>'
-                                    +'</li>'
-                                +'</ul>'
-                            +'</div>'
-                        +'</div>'
-                    +'</li>')
+            + '<div class="pull-left">'
+            + '<img id="userImagePost' + postObject['Id'] + '" src="images/people/110/woman-5.jpg" alt="people" class="img-circle" width="80">'
+            + '<div id="userNamePost' + postObject['Id'] + '" class="date">3 MAY</div>'
+            + '</div>'
+            + '<div class="media-body">'
+            + '<div class="panel panel-default">'
+            + '<div class="panel-body" >'
+            + '<p>' + postObject['Body'] + '</p>'
+            + '<div class="row" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
+            + '</div>'
+            + '<div class="row" style="height:auto;">'
+            + postObject['EmbedCode']
+            + '</div>'
+            + '</div>'
+            + '<div class="view-all-comments"><a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments</div>'
+            + '<ul class="comments">'
+            + '<li>'
+            + '<div class="media">'
+            + '<a href="" class="pull-left">'
+            + '<img  src="images/people/50/woman-5.jpg" class="media-object">'
+            + '</a>'
+            + '<div class="media-body">'
+            + '<a href="" class="comment-author">Mary</a>'
+            + '<span>Thanks Bill</span>'
+            + '<div class="comment-date">2 days</div>'
+            + '</div>'
+            + '</div>'
+            + '</li>'
+            + '<li>'
+            + '<div class="media">'
+            + '<a href="" class="pull-left">'
+            + '<img src="images/people/50/guy-5.jpg" class="media-object">'
+            + '</a>'
+            + '<div class="media-body">'
+            + '<a href="" class="comment-author">Bill D.</a>'
+            + '<span>What time did it finish?</span>'
+            + '<div class="comment-date">14 min</div>'
+            + '</div>'
+            + '</div>'
+            + '</li>'
+            + '<li class="comment-form">'
+            + '<div class="input-group">'
+            + '<input type="text" class="form-control">'
+            + '<span class="input-group-addon">'
+            + '<a href=""><i class="fa fa-photo"></i></a>'
+            + '</span>'
+            + '</div>'
+            + '</li>'
+            + '</ul>'
+            + '</div>'
+            + '</div>'
+            + '</li>')
     }
 
 
@@ -309,7 +432,7 @@
             success: function (successData) {
                 var obj = JSON.parse(successData);
                 $.each(obj, function (index, image) {
-                    addImageToPost(image['url'],id)
+                    addImageToPost(image['url'], id)
                 });
             },
             error: function (er) {
@@ -319,16 +442,16 @@
         });
     }
     function addImageToPost(imageUrl, postId) {
-        $("#imagesPost" + postId).append('<img src="'+imageUrl+'" style="width:30%;height:auto;margin-right:5px">')
+        $("#imagesPost" + postId).append('<img src="' + imageUrl + '" style="width:30%;height:auto;margin-right:5px">')
     }
 
-    function addImageToPreviewList(dir,position) {
-        $("#previewList").prepend('<div id="previewImage'+position+'" style="height:100px;width:100px;float:left;position:relative"><img onclick="removePreview('+position+')" src="/Content/images/delete.png" style="position:absolute;top:0px;right:0px;width:20px;height:20px"/><img src="'+dir+'" style="max-width:100%;max-height:100%"/></div>')
+    function addImageToPreviewList(dir, position) {
+        $("#previewList").prepend('<div id="previewImage' + position + '" style="height:100px;width:100px;float:left;position:relative"><img onclick="removePreview(' + position + ')" src="/Content/images/delete.png" style="position:absolute;top:0px;right:0px;width:20px;height:20px"/><img src="' + dir + '" style="max-width:100%;max-height:100%"/></div>')
     }
     function removePreview(position) {
         $('#previewImage' + position + '').hide();
         listUploadImage[position] = "";
-       
+
     }
     function reloadFeed() {
         //clear all feed
