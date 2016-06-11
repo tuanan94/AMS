@@ -235,6 +235,7 @@ namespace AMS.Controllers
             string[] listFloor = Request.Form.GetValues("selectItemFloor");
             string[] member = Request.Form.GetValues("people");
             string[] privacy = Request.Form.GetValues("privacy");
+            string[] priority = Request.Form.GetValues("priority");
             List<int> listCount = new List<int>();
             List<List<string>> totalAnsertGroup = new List<List<string>>();
             for (int i = 0; i < (listCountAnwsers.Count) - 1; i++)
@@ -297,6 +298,7 @@ namespace AMS.Controllers
             obj.Block = listBlock[0];
             obj.Floor = listFloor[0];
             obj.Privacy = int.Parse(privacy[0]);
+            obj.Priority = int.Parse(priority[0]);
             surveyService.UpdateSurvey(obj);
             return RedirectToAction("DetailSurvey", new { surveyId = obj.Id, alert = "Cập nhật thành công!" });
         }
@@ -315,6 +317,7 @@ namespace AMS.Controllers
                 string[] listFloor = Request.Form.GetValues("selectItemFloor");
                 string[] member = Request.Form.GetValues("people");
                 string[] privacy = Request.Form.GetValues("privacy");
+                string[] priority = Request.Form.GetValues("priority");
                 // string[] listMem = Request.Form.GetValues("count");
                 //  string[] listCountAnwser = {"1", "2", "3","1","2","1","2","3","4"};
                 List<string> listCountAnwsers = new List<string>(listCountAnwser);
@@ -396,7 +399,7 @@ namespace AMS.Controllers
                         survey.Floor = listFloor[0];
                         survey.Privacy = int.Parse(privacy[0]);
                         survey.Member = int.Parse(member[0]);
-
+                        survey.Priority = int.Parse(priority[0]);
 
                         survey.Question = content;
                         surveyService.AddSurvey(survey);
