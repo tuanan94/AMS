@@ -1,0 +1,35 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+        }
+    </style>
+</head>
+<body>
+    From: <input type="text" id="txtFromDate" />
+    To: <input type="text" id="txtToDate" />
+   
+   
+   
+    <script>
+        $(document).ready(function () {
+            $("#txtFromDate").datepicker({
+                numberOfMonths: 2,
+                onSelect: function (selected) {
+                    $("#txtToDate").datepicker("option", "minDate", selected)
+                }
+            });
+            $("#txtToDate").datepicker({
+                numberOfMonths: 2,
+                onSelect: function (selected) {
+                    $("#txtFromDate").datepicker("option", "maxDate", selected)
+                }
+            });
+        });
+    </script>
+</body>
+</html>

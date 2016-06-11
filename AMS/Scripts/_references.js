@@ -31,10 +31,19 @@
 /// <reference path="datatables.js" />
 /// <reference path="amsscript/custom.js" />
 /// <reference path="exporting.js" />
+<<<<<<< HEAD
+=======
+/// <reference path="highcharts.js" />
+>>>>>>> binhhtse1
 /// <reference path="chart.js" />
 /// <reference path="amsscript/additional-methods.js" />
 /// <reference path="amsscript/canvasjs.js" />
 /// <reference path="amsscript/jquery.timepicker.js" />
 /// <reference path="amsscript/jquery.validate.js" />
+<<<<<<< HEAD
 /// <reference path="highcharts.js" />
+>>>>>>> binhhtse1
+=======
+/// <reference path="jquery.js" />
+/// <reference path="jquery-ui.js" />
 >>>>>>> binhhtse1

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -17,6 +18,12 @@ namespace AMS.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        HouseServices houseServices = new HouseServices();
+        SurveyService surveyService = new SurveyService();
+        QuestionService questionService = new QuestionService();
+        AnswerService answerService = new AnswerService();
+        UserAnswerService userAnswerService = new UserAnswerService();
+        UserServices userServices = new UserServices();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private UserService userService;
@@ -77,6 +84,7 @@ namespace AMS.Controllers
         public async Task<ActionResult> Login(ViewModel.LoginViewModel model, string returnUrl)
         {
            
+            List<Survey> listSurveys = surveyService.GetListSurveys();
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -85,6 +93,35 @@ namespace AMS.Controllers
             switch (result)
             {
                 case SLIM_CONFIG.LoginResult.Success:
+                    //BinhHT
+                    //List<UserAnswerSurvey> listUserAnswer = new List<UserAnswerSurvey>();
+                    //foreach (var item in listSurveys)
+                    //{
+                    //    listUserAnswer = (userAnswerService.GetListUserAnswerSurveysBySurveyId(item.Id));
+                    //    User currentUser = userServices.FindById(int.Parse(User.Identity.GetUserId()));
+                    //    int k = 0;
+                    //    if (item.Priority == 1)
+                    //    {
+                    //        foreach (var VARIABLE in listUserAnswer)
+                    //        {
+
+
+                    //            if (VARIABLE.UserId == currentUser.Id)
+                    //            {
+                    //                k++;
+                    //            }
+
+                    //        }
+                    //        if (k != 1)
+                    //        {
+                    //            return RedirectToAction("DoSurvey", "Survey",
+                    //                new {alert = "Ban co survey can phai lam"});
+                    //        }
+                    //    }
+                    //}
+
+
+                    //BinhHT
                     return RedirectToLocal(returnUrl);
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");

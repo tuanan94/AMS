@@ -1,0 +1,160 @@
+﻿
+@{
+    ViewBag.Title = "View2";
+    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+}
+<style>
+    .media-post-ctr .media-post-header .media-title {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+    .media-post-ctr .media-post-header .media-meta-ctr .author-profile-img {
+        float: left;
+        margin-right: 20px;
+    }
+        .media-post-ctr .media-post-header .media-meta-ctr .author-profile-img img {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+        }
+    .media-post-ctr .media-post-header .media-meta-ctr .media-meta-overview-ctr .media-meta-author-info {
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 8px;
+    }
+    .media-post-ctr .media-post-header .media-meta-ctr .media-meta-overview-ctr .media-meta-post-info {
+        color: #bbb;
+        padding-top: 3px;
+    }
+    .poll-ctr .poll-question-ctr .poll-question-img {
+        position: relative;
+    }
+    .poll-ctr.style-1 .poll-question-ctr {
+        margin: 10px 0;
+    }
+    .poll-ctr .poll-question-ctr.poll-unanswered .poll-txt {
+        background-color: rgba(64,145,196,0.7);
+    }
+    .poll-ctr .poll-question-ctr .poll-question-img .poll-txt {
+        position: absolute;
+        bottom: 0;
+    }
+
+    .poll-ctr .poll-question-ctr .poll-txt {
+        padding: 10px;
+        width: 100%;
+        font-weight: bold;
+        color: #fff;
+        font-size: 24px;
+        text-align: center;
+        word-wrap: break-word;
+        position: relative;
+    }
+    .binh {
+        border-color: #1ABC9C;
+        box-shadow: none;
+    }
+</style>
+<div class="col-sm-offset-1 col-md-8">
+    <fieldset class="scheduler-border less-padding">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="media-post-ctr">
+                    <div class="media-post-header">
+
+                        <h1 class="media-title">Khải sát về việc chọn phe Iron Man hay là Captain America</h1>
+                        <div class="media-meta-ctr">
+                            <div class="author-profile-img">
+                                <img class="img-responsive" src="http://rocketeer.jaskokoyn.cc/public/uploads/default-profile.png">
+                            </div>
+                            <div class="media-meta-overview-ctr">
+                                <div class="media-meta-author-info">
+                                    By <a href="http://rocketeer.jaskokoyn.cc/profile/admin">BinhHT</a>
+                                </div>
+                                <div class="media-meta-post-info">30 phút trước</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                   
+
+                    <div class="poll-ctr style-1" data-question-count="1">
+                        <div class="poll-question-ctr  poll-unanswered " data-total-votes="8">
+                            <div class="poll-question-img">
+                                <img src="http://rocketeer.jaskokoyn.cc/public/uploads/a/1/admin/MROiA11Fqg1z9hyd.jpg" class="img-responsive">
+                                <div class="poll-txt">
+                                   Bạn chọn phe Iron Man hay là Captain America
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="form-group">
+                                <div class="col-sm-offset-1 col-sm-1">
+                                    <input type="radio" id="" name="answer" value="..........">
+                                </div>
+                                <div class="col-sm-7">
+                                    <input type="hidden" id="answerId" name="answerId" value="" />
+                                    <input type="hidden" id="count" name="count" value="" />
+
+                                    <input type="text" class="form-control binh" style="width: 330px" id="anwser1" name="anwser1" value="Iron Man">
+
+                                </div>
+                            </div>
+                            <br />
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-1 col-sm-1">
+                                    <input type="radio" id="" name="answer" value="..........">
+                                </div>
+                                <div class="col-sm-7">
+                                    <input type="hidden" id="answerId" name="answerId" value="" />
+                                    <input type="hidden" id="count" name="count" value="" />
+
+                                    <input type="text" class="form-control binh" style="width: 330px" id="anwser1" name="anwser1" value="Captain America">
+
+                                </div>
+                            </div>
+                            <br />
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-1 col-sm-1">
+                                    <input type="radio" id="" name="answer" value="..........">
+                                </div>
+                                <div class="col-sm-7">
+                                    <input type="hidden" id="answerId" name="answerId" value="" />
+                                    <input type="hidden" id="count" name="count" value="" />
+
+                                    <input type="text" class="form-control binh" style="width: 330px" id="anwser1" name="anwser1" value="Không quan tâm">
+
+                                </div>
+                            </div>
+                            <br />
+
+                                <div class="clearfix"></div>
+                            </div>
+                    </div>
+
+                    <div class="media-page-content">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            @*<a href="@Url.Action("UpdateSurvey", "Survey", new { surveyId =@surveys.Id})" class="fa fa-list-alt">Lưu..</a>*@
+                            <button type="submit" onclick="addCommentByAjax()" class="btn btn-primary">Lưu</button>
+                           
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModall">Xem kết quả</button>
+                             
+
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+</div>
+

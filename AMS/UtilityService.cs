@@ -12,25 +12,25 @@ namespace AMS
     using System;
     using System.Collections.Generic;
     
-    public partial class ReceiptDetail
+    public partial class UtilityService
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ReceiptDetail()
+        public UtilityService()
         {
-            this.Transactions = new HashSet<Transaction>();
+            this.ReceiptDetails = new HashSet<ReceiptDetail>();
         }
     
         public int Id { get; set; }
-        public Nullable<double> TotalBill { get; set; }
-        public Nullable<double> UnitPrice { get; set; }
-        public Nullable<int> Quantity { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
         public string Unit { get; set; }
-        public Nullable<int> ServiceFeeId { get; set; }
-        public Nullable<int> ReceiptId { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
+        public Nullable<System.DateTime> LastModified { get; set; }
+        public Nullable<double> Price { get; set; }
+        public Nullable<int> CategoryId { get; set; }
     
-        public virtual Receipt Receipt { get; set; }
-        public virtual UtilityService UtilityService { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Transaction> Transactions { get; set; }
+        public virtual ICollection<ReceiptDetail> ReceiptDetails { get; set; }
+        public virtual UtilityServiceCategory UtilityServiceCategory { get; set; }
     }
 }

@@ -1,148 +1,228 @@
-﻿@{
+﻿@using AMS.Service
+@using Microsoft.AspNet.Identity
+@{
     ViewBag.Title = "Home Page";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
     User curUser = ViewBag.curUser;
+    List<UserAnswerSurvey> listUserAnswer = new List<UserAnswerSurvey>();
+    HouseServices houseServices = new HouseServices();
+    SurveyService surveyService = new SurveyService();
+    QuestionService questionService = new QuestionService();
+    AnswerService answerService = new AnswerService();
+    UserAnswerService userAnswerService = new UserAnswerService();
+    UserServices userServices = new UserServices();
+    List<Survey> listSurveys = surveyService.GetListSurveys();
+    string alert = "";
+    foreach (var item in listSurveys)
+    {
+        listUserAnswer = (userAnswerService.GetListUserAnswerSurveysBySurveyId(item.Id));
+        User currentUser = userServices.FindById(int.Parse(User.Identity.GetUserId()));
+        int k = 0;
+        if (item.Priority == 1)
+        {
+            foreach (var VARIABLE in listUserAnswer)
+            {
+
+
+                if (VARIABLE.UserId == currentUser.Id)
+                {
+                    k++;
+
+                }
+
+            }
+            if (k != 1)
+            {
+                alert = "Bạn Có Một Survey Cần phải Làm!";
+            }
+        }
+    }
 }
 
 <div class="container-fluid">
-        <div class="cover overlay">
-            <img src="~/Content/images/banner-842.jpg" alt="cover">
-            <a href="#" class="btn btn-cover"><i class="fa fa-pencil fa-fw"></i></a>
-        </div>
-        <div class="row">
-            <div class="col-md-9">
+    <div class="cover overlay">
+        <img src="~/Content/images/banner-842.jpg" alt="cover">
+        <a href="#" class="btn btn-cover"><i class="fa fa-pencil fa-fw"></i></a>
+    </div>
+    <div class="row">
+        <div class="col-md-9">
 
-                <ul class="timeline-list">
-                    <li class="media">
-                        <div class="pull-left">
-                            
+            <ul class="timeline-list">
+                <li class="media">
+                    <div class="pull-left">
 
-                            <img src="@(curUser.ProfileImage==null?"/Content/images/defaultProfile.png":curUser.ProfileImage)" alt="people" class="img-circle" width="80px" height="80px">
-                            <div class="date">@curUser.Username</div>
-                        </div>
-                        <div class="media-body">
-                            <div class="row">
-                                <div class="col-md-10 col-lg-8">
-                                    <div class="panel panel-default share">
-                                       
-                                        <div class="panel-body" id="postStatusArea">
-                                            <textarea id="postContent" name="status" class="form-control share-text" rows="8" placeholder="Chia sẽ những thông tin của bạn..."></textarea>
-                                            <div class="row" style="height:auto;" id="previewList">
-                                                
-                                                <input type="file" id="uploadEditorImage" style="display:none" />
-                                                <div id="progressBar" class="progress" style="width:200px" hidden="hidden">
-                                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:200px">
-                                                    </div>
+
+                        <img src="@(curUser.ProfileImage==null?"/Content/images/defaultProfile.png":curUser.ProfileImage)" alt="people" class="img-circle" width="80px" height="80px">
+                        <div class="date">@curUser.Username</div>
+                    </div>
+                    <div class="media-body">
+                        <div class="row">
+                            <div class="col-md-10 col-lg-8">
+                                <div class="panel panel-default share">
+
+                                    <div class="panel-body" id="postStatusArea">
+                                        <textarea id="postContent" name="status" class="form-control share-text" rows="8" placeholder="Chia sẽ những thông tin của bạn..."></textarea>
+                                        <div class="row" style="height:auto;" id="previewList">
+
+                                            <input type="file" id="uploadEditorImage" style="display:none" />
+                                            <div id="progressBar" class="progress" style="width:200px" hidden="hidden">
+                                                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:200px">
                                                 </div>
                                             </div>
-                                            <div id="previewEmbed" class="row" style="height:auto; ">
-                                                <div id="previewContent">
-                                                </div>
+
+                                        </div>
+                                        <input type="file" id="uploadEditorImage" style="display: none" />
+                                        <div id="progressBar" class="progress" style="width: 200px" hidden="hidden">
+                                            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 200px">
                                             </div>
                                         </div>
-                                        <div class="panel-footer share-buttons" id="postStatusArea">
-                                            
-                                            <a href="#postStatusArea" onclick="addImage()">
-                                                <i class="fa fa-fw fa-photo" ></i>
-                                            </a>
-                                            <a href="#postStatusArea" data-toggle="modal" data-target="#addEmbedModal">
-                                                <i class="fa fa-fw fa-code"></i>
-                                            </a>
-                                            <a href="#postStatusArea" style="float:right">
-                                                <i class="fa fa-map-marker"></i>
-                                            </a>
-                                            <button type="submit" class="btn btn-primary btn-xs pull-right display-none" style="margin-top:-12px" href="#" onclick="createNewPost()">Post</button>
+                                    </div>
+                                    <div class="panel-footer share-buttons" id="postStatusArea">
+
+                                        <a href="#postStatusArea" onclick="addImage()">
+                                            <i class="fa fa-fw fa-photo"></i>
+                                        </a>
+                                        <a href="#postStatusArea" data-toggle="modal" data-target="#addEmbedModal">
+                                            <i class="fa fa-fw fa-code"></i>
+                                        </a>
+                                        <a href="#postStatusArea" style="float:right">
+                                            <i class="fa fa-map-marker"></i>
+                                        </a>
+                                        <button type="submit" class="btn btn-primary btn-xs pull-right display-none" style="margin-top:-12px" href="#" onclick="createNewPost()">Post</button>
+                                        <div id="previewEmbed" class="row" style="height: auto;">
+                                            <div id="previewContent">
+                                            </div>
                                         </div>
+                                    </div>
+                                    <div class="panel-footer share-buttons">
+                                        <a href="#">
+                                            <i class="fa fa-map-marker"></i>
+                                        </a>
+                                        <a href="#" data-toggle="modal" data-target="#addEmbedModal">
+                                            <i class="fa fa-fw fa-code"></i>
+                                        </a>
+                                        <button type="submit" class="btn btn-primary btn-xs pull-right display-none" style="margin-top: -12px" href="#" onclick="createNewPost()">Post</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="clearfix"></div>
                         </div>
-                    </li>
-                </ul>
-                <ul class="timeline-list" id="timeline">
-                   
-                </ul>
-            </div>
-            <div class="col-md-3">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        Thời tiết hôm nay
-                    </div>
-                    <div class="weather-svg">
-                        <div class="today text-center">
-                            <svg version="1.1" id="cloudDrizzleSunFill" class="climacon climacon_cloudDrizzleSunFill" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="15 15 70 70" enable-background="new 15 15 70 70" xml:space="preserve">
-                            <g class="climacon_iconWrap climacon_iconWrap-cloudDrizzleSunFill">
-                            <g class="climacon_componentWrap climacon_componentWrap-drizzle">
-                            <path class="climacon_component climacon_component-stroke climacon_component-stroke_drizzle climacon_component-stroke_drizzle-left" d="M42.001,53.644c1.104,0,2,0.896,2,2v3.998c0,1.105-0.896,2-2,2c-1.105,0-2.001-0.895-2.001-2v-3.998C40,54.538,40.896,53.644,42.001,53.644z"></path>
-                            <path class="climacon_component climacon_component-stroke climacon_component-stroke_drizzle climacon_component-stroke_drizzle-middle" d="M49.999,53.644c1.104,0,2,0.896,2,2v4c0,1.104-0.896,2-2,2s-1.998-0.896-1.998-2v-4C48.001,54.54,48.896,53.644,49.999,53.644z"></path>
-                            <path class="climacon_component climacon_component-stroke climacon_component-stroke_drizzle climacon_component-stroke_drizzle-right" d="M57.999,53.644c1.104,0,2,0.896,2,2v3.998c0,1.105-0.896,2-2,2c-1.105,0-2-0.895-2-2v-3.998C55.999,54.538,56.894,53.644,57.999,53.644z"></path>
+                </li>
+            </ul>
+            <ul class="timeline-list" id="timeline"></ul>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Thời tiết hôm nay
+                </div>
+                <div class="weather-svg">
+                    <div class="today text-center">
+                        <svg version="1.1" id="cloudDrizzleSunFill" class="climacon climacon_cloudDrizzleSunFill" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="15 15 70 70" enable-background="new 15 15 70 70" xml:space="preserve">
+                        <g class="climacon_iconWrap climacon_iconWrap-cloudDrizzleSunFill">
+                        <g class="climacon_componentWrap climacon_componentWrap-drizzle">
+                        <path class="climacon_component climacon_component-stroke climacon_component-stroke_drizzle climacon_component-stroke_drizzle-left" d="M42.001,53.644c1.104,0,2,0.896,2,2v3.998c0,1.105-0.896,2-2,2c-1.105,0-2.001-0.895-2.001-2v-3.998C40,54.538,40.896,53.644,42.001,53.644z"></path>
+                        <path class="climacon_component climacon_component-stroke climacon_component-stroke_drizzle climacon_component-stroke_drizzle-middle" d="M49.999,53.644c1.104,0,2,0.896,2,2v4c0,1.104-0.896,2-2,2s-1.998-0.896-1.998-2v-4C48.001,54.54,48.896,53.644,49.999,53.644z"></path>
+                        <path class="climacon_component climacon_component-stroke climacon_component-stroke_drizzle climacon_component-stroke_drizzle-right" d="M57.999,53.644c1.104,0,2,0.896,2,2v3.998c0,1.105-0.896,2-2,2c-1.105,0-2-0.895-2-2v-3.998C55.999,54.538,56.894,53.644,57.999,53.644z"></path>
                                         </g>
-                            <g class="climacon_componentWrap climacon_componentWrap_cloud">
-                            <path class="climacon_component climacon_component-stroke climacon_component-stroke_cloud" d="M43.945,65.639c-8.835,0-15.998-7.162-15.998-15.998c0-8.836,7.163-15.998,15.998-15.998c6.004,0,11.229,3.312,13.965,8.203c0.664-0.113,1.338-0.205,2.033-0.205c6.627,0,11.998,5.373,11.998,12c0,6.625-5.371,11.998-11.998,11.998C57.168,65.639,47.143,65.639,43.945,65.639z"></path>
-                            <path class="climacon_component climacon_component-fill climacon_component-fill_cloud" fill="#FFFFFF" d="M59.943,61.639c4.418,0,8-3.582,8-7.998c0-4.417-3.582-8-8-8c-1.601,0-3.082,0.481-4.334,1.291c-1.23-5.316-5.973-9.29-11.665-9.29c-6.626,0-11.998,5.372-11.998,11.999c0,6.626,5.372,11.998,11.998,11.998C47.562,61.639,56.924,61.639,59.943,61.639z"></path>
+                        <g class="climacon_componentWrap climacon_componentWrap_cloud">
+                        <path class="climacon_component climacon_component-stroke climacon_component-stroke_cloud" d="M43.945,65.639c-8.835,0-15.998-7.162-15.998-15.998c0-8.836,7.163-15.998,15.998-15.998c6.004,0,11.229,3.312,13.965,8.203c0.664-0.113,1.338-0.205,2.033-0.205c6.627,0,11.998,5.373,11.998,12c0,6.625-5.371,11.998-11.998,11.998C57.168,65.639,47.143,65.639,43.945,65.639z"></path>
+                        <path class="climacon_component climacon_component-fill climacon_component-fill_cloud" fill="#FFFFFF" d="M59.943,61.639c4.418,0,8-3.582,8-7.998c0-4.417-3.582-8-8-8c-1.601,0-3.082,0.481-4.334,1.291c-1.23-5.316-5.973-9.29-11.665-9.29c-6.626,0-11.998,5.372-11.998,11.999c0,6.626,5.372,11.998,11.998,11.998C47.562,61.639,56.924,61.639,59.943,61.639z"></path>
                                         </g>
                                     </g>
                                 </svg>
 
-                            <!-- cloudDrizzleSunFill -->
-                            <div class="clearfix"></div>
-                            <div class="details">
-                                Today:
-                                <strong>10° C</strong>
-                            </div>
+                        <!-- cloudDrizzleSunFill -->
+                        <div class="clearfix"></div>
+                        <div class="details">
+                            Today:
+                            <strong>10° C</strong>
                         </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading panel-heading-gray" style="background-color:#25ad9f;color:white">
+                    Thông báo
+                </div>
+                <div class="panel-body">
+                    <div style="margin-bottom:10px">
+                        <i class="fa fa-fw fa-info"></i>
+                        Yêu cầu helpdesk của bạn đả được xử lí
+                        <br />
+                    </div>
+                    <div style="margin-bottom:10px">
+                        <i class="fa fa-fw fa-info"></i>
+                        Bạn có 1 hóa đơn mới cần thanh toán
+                        <br />
+                    </div>
+                    <div style="margin-bottom:10px">
+                        <i class="fa fa-fw fa-info"></i>
+                        Yêu cầu helpdesk của bạn đả được xử lí
                     </div>
 
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading panel-heading-gray" style="background-color:#25ad9f;color:white">
-                        Thông báo
-                    </div>
-                    <div class="panel-body">
-                        <div style="margin-bottom:10px">
-                            <i class="fa fa-fw fa-info"></i>
-                            Yêu cầu helpdesk của bạn đả được xử lí
-                            <br />
-                        </div>
-                        <div style="margin-bottom:10px">
-                            <i class="fa fa-fw fa-info"></i>
-                            Bạn có 1 hóa đơn mới cần thanh toán
-                            <br />
-                        </div>
-                        <div style="margin-bottom:10px">
-                            <i class="fa fa-fw fa-info"></i>
-                            Yêu cầu helpdesk của bạn đả được xử lí
-                        </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="addEmbedModal" role="dialog" >
-        <div class="modal-dialog">
+<!-- Modal -->
+<div class="modal fade" id="addEmbedModal" role="dialog">
+    <div class="modal-dialog">
 
-            <!-- Modal content-->
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thêm mã nhúng</h4>
+            </div>
+            <div class="modal-body">
+                <input class="form-control" id="embedCode" placeholder="Copy và paste đoạn mã nhúng của bạn vào đây" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveEmbedCode()">Lưu lại</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@{
+    if (!alert.Equals(""))
+    {
+        <div id="openModal" class="modalDialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Thêm mã nhúng</h4>
-                </div>
+
+                <a href="#close" title="Close" class="close">X</a>
+                <div class="modal-header">Thông Báo</div>
                 <div class="modal-body">
-                    <input class="form-control" id="embedCode" placeholder="Copy và paste đoạn mã nhúng của bạn vào đây"/>
+                    <h4>@alert</h4>
                 </div>
+
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveEmbedCode()">Lưu lại</button>
+                    @*<button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" >Hủy</button>*@
+                    <a href="@Url.Action("DoSurvey", "Survey")" class="button">Làm ngay</a>
                 </div>
             </div>
-
         </div>
-    </div>
-
+    }
+}
 
 <script>
+    $(document).ready(function () {
+        $('.modalDialog').fadeIn();
+
+        $('.close').on('click', function (event) {
+            event.preventDefault();
+            /* Act on the event */
+
+            $('.modalDialog').fadeOut();
+
+        });
+    });
     var listUploadImage = [];
     function addImage() {
         $("#uploadEditorImage").click();
@@ -165,7 +245,7 @@
                 embeded: $("#embedCode").val(),
 
             },
-             
+
             success: function (successData) {
                 if (successData == 'success') {
                     clearCreatePostForm();
@@ -178,29 +258,31 @@
             }
 
         });
-       
+
     }
 
     $("#uploadEditorImage").change(function () {
         var data = new FormData();
-        data.append("dir","@SLIM_CONFIG.dirHouseProfileImage");
+
+        data.append("dir", "@SLIM_CONFIG.dirPostImage");
+
         var files = $("#uploadEditorImage").get(0).files;
         if (files.length > 0) {
             data.append("HelpSectionImages", files[0]);
         }
 
-       // progessBar(true);
+        // progessBar(true);
         $.ajax({
             url: "/Image/Upload/",
             type: "POST",
             processData: false,
             contentType: false,
             data: data,
-            
+
             success: function (successData) {
-                addImageToPreviewList(successData,listUploadImage.length);
+                addImageToPreviewList(successData, listUploadImage.length);
                 listUploadImage[listUploadImage.length] = successData;
-               // progessBar(false);
+                // progessBar(false);
 
             },
             error: function (er) {
@@ -250,7 +332,7 @@
                 postId: id,
             },
             success: function (successData) {
-               // alert(successData)
+                // alert(successData)
                 var obj = JSON.parse(successData);
                 if (obj['ProfileImage'] === null) {
                     $('#userImagePost' + id).attr("src", "/Content/images/defaultProfile.png");
@@ -269,14 +351,14 @@
     }
     function addPostToTimeline(index, postObject) {
         $("#timeline").append('<li class="media">'
-                       
+
                        + '<div class="pull-left">'
                         + '<a id="userHrefPost'+postObject['Id']+'" href="">'
                             + '<img id="userImagePost' + postObject['Id'] + '" src="images/people/110/woman-5.jpg" alt="people" class="img-circle" width="80" height="80">'
                             + '<div id="userNamePost' + postObject['Id'] + '" class="date">3 MAY</div>'
                              + '</a>'
                         + '</div>'
-                       
+
                         +'<div class="media-body">'
                             +'<div class="panel panel-default">'
                                 +'<div class="panel-body" >'
@@ -289,7 +371,7 @@
                                 +'</div>'
                                 +'<div class="view-all-comments" id="countComment'+postObject['Id']+'"><a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments</div>'
                                 +'<ul class="comments" id="commentsArea'+postObject['Id']+'">'
-                                   
+
                                 + '</ul>'
                                 + '<ul class="comments">'
                                  + '<li class="comment-form">'
@@ -361,13 +443,13 @@
                                                 + '<img  src="' + comment['userProfile'] + '" class="media-object" style="width:50px">'
                                             +'</a>'
                                             +'<div class="media-body">'
-                                                + '<a href="/Profile/' + comment['userId'] + '" class="comment-author">' + comment['username'] + ': </a>' 
+                                                + '<a href="/Profile/' + comment['userId'] + '" class="comment-author">' + comment['username'] + ': </a>'
                                                 + '<span>' + comment['detail'] + '</span>'
                                                 + '<div class="comment-date">' + timeSince(new Date(comment['createdDate'])) + ' trước </div>'
                                             +'</div>'
                                         +'</div>'
                                     + '</li>')
-       
+
     }
 
 
@@ -397,6 +479,7 @@
             return interval + " phút";
         }
         return Math.floor(seconds) + " giây";
+
     }
 
 
@@ -416,6 +499,7 @@
                 var obj = JSON.parse(successData);
                 $.each(obj, function (index, image) {
                     addImageToPost(image['url'],id,(90/obj.length))
+
                 });
 
             },
@@ -427,15 +511,16 @@
     }
     function addImageToPost(imageUrl, postId,width) {
         $("#imagesPost" + postId).append('<img src="'+imageUrl+'" style="width:'+width+'%;height:auto;margin-right:5px">')
+
     }
 
-    function addImageToPreviewList(dir,position) {
-        $("#previewList").prepend('<div id="previewImage'+position+'" style="height:100px;width:100px;float:left;position:relative"><img onclick="removePreview('+position+')" src="/Content/images/delete.png" style="position:absolute;top:0px;right:0px;width:20px;height:20px"/><img src="'+dir+'" style="max-width:100%;max-height:100%"/></div>')
+    function addImageToPreviewList(dir, position) {
+        $("#previewList").prepend('<div id="previewImage' + position + '" style="height:100px;width:100px;float:left;position:relative"><img onclick="removePreview(' + position + ')" src="/Content/images/delete.png" style="position:absolute;top:0px;right:0px;width:20px;height:20px"/><img src="' + dir + '" style="max-width:100%;max-height:100%"/></div>')
     }
     function removePreview(position) {
         $('#previewImage' + position + '').hide();
         listUploadImage[position] = "";
-       
+
     }
     function reloadFeed() {
         //clear all feed

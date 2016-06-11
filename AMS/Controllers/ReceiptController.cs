@@ -237,11 +237,11 @@ namespace AMS.Controllers
                         }
                         _receiptServices.Add(eReceipt);
 
-                        ServiceFee item = null;
+                        UtilityService item = null;
                         ReceiptDetail detail = null;
                         foreach (var i in receipt.ListItem)
                         {
-                            item = new ServiceFee();
+                            item = new UtilityService();
                             item.Name = i.Name;
                             item.Price = i.UnitPrice;
                             item.CreateDate = DateTime.Now;
@@ -250,7 +250,7 @@ namespace AMS.Controllers
                             detail = new ReceiptDetail();
                             detail.Quantity = i.Quantity;
                             detail.ReceiptId = eReceipt.Id;
-                            detail.ServiceFeeId = item.Id;
+                         //   detail.UtilityServiceId = item.Id;
                             detail.UnitPrice = item.Price;
                             _receiptDetailServices.Add(detail);
                         }
@@ -286,7 +286,8 @@ namespace AMS.Controllers
                     try
                     {
 
-                        ServiceFee item = null;
+                        
+                        UtilityService item = null;
                         ReceiptDetail detail = null;
                         bool receiptIsDeleted = false;
                         if (null == receiptModel.ListItem)
@@ -299,7 +300,7 @@ namespace AMS.Controllers
                             foreach (var recDetail in receiptDetails)
                             {
                                 _receiptDetailServices.DeleteById(recDetail.Id);
-                                _serviceChargeSevices.DeleteById(recDetail.ServiceFeeId.Value);
+                                _serviceChargeSevices.DeleteById(recDetail.UtilityService.Id);
                             }
                         }
                         else
@@ -315,7 +316,7 @@ namespace AMS.Controllers
                                 {
                                     if (newRecDetailModel.RecDetailId == 0)
                                     {
-                                        ServiceFee fee = new ServiceFee();
+                                        UtilityService fee = new UtilityService();
                                         fee.Name = newRecDetailModel.Name;
                                         fee.Price = newRecDetailModel.UnitPrice;
                                         fee.CreateDate = DateTime.Now;
@@ -323,7 +324,7 @@ namespace AMS.Controllers
 
                                         ReceiptDetail newRecDetail = new ReceiptDetail();
                                         newRecDetail.Quantity = newRecDetailModel.Quantity;
-                                        newRecDetail.ServiceFeeId = fee.Id;
+                                        newRecDetail.Id = fee.Id;
                                         newRecDetail.UnitPrice = newRecDetailModel.UnitPrice;
                                         newRecDetail.ReceiptId = receipt.Id;
                                         _receiptDetailServices.Add(newRecDetail);
@@ -338,12 +339,12 @@ namespace AMS.Controllers
                                         updateReceiptDetail.Quantity = newRecDetailModel.Quantity;
                                         updateReceiptDetail.UnitPrice = newRecDetailModel.UnitPrice;
 
-                                        ServiceFee updateServiceFee =
-                                            _serviceChargeSevices.FindById(recDetail.ServiceFeeId.Value);
-                                        updateServiceFee.Name = newRecDetailModel.Name;
-                                        updateServiceFee.Price = newRecDetailModel.UnitPrice;
+                                        UtilityService updateUtilityService =
+                                            _serviceChargeSevices.FindById(recDetail.UtilityService.Id);
+                                        updateUtilityService.Name = newRecDetailModel.Name;
+                                        updateUtilityService.Price = newRecDetailModel.UnitPrice;
 
-                                        _serviceChargeSevices.Update(updateServiceFee);
+                                        _serviceChargeSevices.Update(updateUtilityService);
                                         _receiptDetailServices.Update(updateReceiptDetail);
                                         hasOrderDetail = true;
                                     }
@@ -360,7 +361,7 @@ namespace AMS.Controllers
                                 foreach (var deletedRecDetailId in notFoundOrderId)
                                 {
                                     _receiptDetailServices.DeleteById(deletedRecDetailId.Id);
-                                    _serviceChargeSevices.DeleteById(deletedRecDetailId.ServiceFee.Id);
+                                    _serviceChargeSevices.DeleteById(deletedRecDetailId.UtilityService.Id);
                                 }
                             }
                         }
