@@ -269,6 +269,21 @@
         </div>
     }
 }
+@*<div id="myModall1" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Báo cáo</h4>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Tắt</button>
+
+                </div>
+            </div>
+        </div>
+    </div>*@
 
 <script>
     $(document).ready(function () {
@@ -371,6 +386,7 @@
                     getImagesForPost(index, jsonObject["Id"]);
                     getUserProfileForPost(index, jsonObject["Id"]);
                     getCommentsForPost(jsonObject["Id"]);
+                  
                 });
             },
             error: function (er) {
@@ -400,7 +416,7 @@
 
                 }
                 $('#userNamePost' + id).html(obj["Username"])
-                $('#userHrefPost' + id).attr("href","/Profile/"+obj["Id"])
+                $('#userHrefPost' + id).attr("href", "/Profile/" + obj["Id"])
             },
             error: function (er) {
                 alert(er)
@@ -412,24 +428,24 @@
         $("#timeline").append('<li class="media">'
 
                        + '<div class="pull-left">'
-                        + '<a id="userHrefPost'+postObject['Id']+'" href="">'
+                        + '<a id="userHrefPost' + postObject['Id'] + '" href="">'
                             + '<img id="userImagePost' + postObject['Id'] + '" src="images/people/110/woman-5.jpg" alt="people" class="img-circle" width="80" height="80">'
                             + '<div id="userNamePost' + postObject['Id'] + '" class="date">3 MAY</div>'
                              + '</a>'
                         + '</div>'
 
-                        +'<div class="media-body">'
-                            +'<div class="panel panel-default">'
-                                +'<div class="panel-body" >'
-                                    +'<p>'+postObject['Body']+'</p>'
-                                    +'<div class="row" id="imagesPost'+postObject['Id'] +'" style="height:auto">'
-                                    +'</div>'
+                        + '<div class="media-body">'
+                            + '<div class="panel panel-default">'
+                                + '<div class="panel-body" >'
+                                    + '<p>' + postObject['Body'] + '</p>'
+                                    + '<div class="row" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
+                                    + '</div>'
                                     + '<div class="row" style="height:auto;">'
                                     + postObject['EmbedCode']
-                                    +'</div>'
-                                +'</div>'
-                                +'<div class="view-all-comments" id="countComment'+postObject['Id']+'"><a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments</div>'
-                                +'<ul class="comments" id="commentsArea'+postObject['Id']+'">'
+                                    + '</div>'
+                                + '</div>'
+                                + '<div class="view-all-comments" id="countComment' + postObject['Id'] + '"><a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments</div>'
+                                + '<ul class="comments" id="commentsArea' + postObject['Id'] + '">'
 
                                 + '</ul>'
                                 + '<ul class="comments">'
@@ -437,16 +453,19 @@
                                         + '<div class="input-group">'
                                             + '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control">'
                                             + '<span class="input-group-addon">'
+                                           
                                                 + '<button class="btn btn-success" onclick="addComment(' + postObject['Id'] + ')">Bình luận</button>'
                                             + '</span>'
                                         + '</div>'
                                     + '</li>'
                                 + '</ul>'
-                            +'</div>'
-                        +'</div>'
-                    +'</li>')
-    }
+                            + '</div>'
+                        + '</div>'
+                    + '</li>'
+ )
 
+    }
+ 
     function addComment(postId) {
         $.ajax({
             url: "/Post/CreateComment",
@@ -484,9 +503,9 @@
             },
             success: function (successData) {
                 var obj = JSON.parse(successData);
-                $("#countComment"+postid).html(obj.length + " bình luận")
+                $("#countComment" + postid).html(obj.length + " bình luận")
                 $.each(obj, function (index, comment) {
-                    addCommentToCommentArea(postid,comment)
+                    addCommentToCommentArea(postid, comment)
                 });
             },
             error: function (er) {
@@ -496,17 +515,17 @@
         });
     }
     function addCommentToCommentArea(postId, comment) {
-        $("#commentsArea"+postId).append('<li>'
-                                        +'<div class="media">'
-                                            +'<a href="" class="pull-left">'
+        $("#commentsArea" + postId).append('<li>'
+                                        + '<div class="media">'
+                                            + '<a href="" class="pull-left">'
                                                 + '<img  src="' + comment['userProfile'] + '" class="media-object" style="width:50px">'
-                                            +'</a>'
-                                            +'<div class="media-body">'
+                                            + '</a>'
+                                            + '<div class="media-body">'
                                                 + '<a href="/Profile/' + comment['userId'] + '" class="comment-author">' + comment['username'] + ': </a>'
                                                 + '<span>' + comment['detail'] + '</span>'
                                                 + '<div class="comment-date">' + timeSince(new Date(comment['createdDate'])) + ' trước </div>'
-                                            +'</div>'
-                                        +'</div>'
+                                            + '</div>'
+                                        + '</div>'
                                     + '</li>')
 
     }
@@ -557,7 +576,7 @@
             success: function (successData) {
                 var obj = JSON.parse(successData);
                 $.each(obj, function (index, image) {
-                    addImageToPost(image['url'],id,(90/obj.length))
+                    addImageToPost(image['url'], id, (90 / obj.length))
 
                 });
 
@@ -568,8 +587,8 @@
 
         });
     }
-    function addImageToPost(imageUrl, postId,width) {
-        $("#imagesPost" + postId).append('<img src="'+imageUrl+'" style="width:'+width+'%;height:auto;margin-right:5px">')
+    function addImageToPost(imageUrl, postId, width) {
+        $("#imagesPost" + postId).append('<img src="' + imageUrl + '" style="width:' + width + '%;height:auto;margin-right:5px">')
 
     }
 

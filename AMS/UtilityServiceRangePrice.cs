@@ -20,8 +20,7 @@ namespace AMS
         public Nullable<double> FromAmount { get; set; }
         public Nullable<double> ToAmount { get; set; }
         public Nullable<double> Price { get; set; }
-        public Nullable<int> CategoryId { get; set; }
     
-        public virtual UtilityServiceCategory UtilityServiceCategory { get; set; }
+        public virtual UtilityService UtilityService { get; set; }
     }
 }

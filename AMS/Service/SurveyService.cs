@@ -15,6 +15,10 @@ namespace AMS.Service
         {
             return surveyRepository.List.OrderByDescending(t=>t.Id ).OrderByDescending(t=>t.Priority).ToList();
         }
+        public List<Survey> GetListSurveysTop3()
+        {
+            return surveyRepository.List.OrderByDescending(t => t.Id).OrderByDescending(t => t.Priority).Take(3).ToList();
+        }
         public Survey FindById(int id)
         {
             return surveyRepository.FindById(id);

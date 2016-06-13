@@ -32,6 +32,7 @@ namespace AMS
         public Nullable<int> ManagerId { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> LastModified { get; set; }
+        public Nullable<int> IsAutomation { get; set; }
     
         public virtual House House { get; set; }
         public virtual User User { get; set; }

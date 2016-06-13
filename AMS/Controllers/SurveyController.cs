@@ -95,13 +95,14 @@ namespace AMS.Controllers
         public ActionResult DoDetailSurvey(int surveyId)
         {
             Survey survey = surveyService.FindById(surveyId);
-
+            User currentUser = userService.FindById(int.Parse(User.Identity.GetUserId()));
+            House currentHouse = houseServices.FindById(currentUser.HouseId.Value);
 
             List<Answer> listAnswers = answerService.FindByQuestionId(surveyId);
 
             List<Double> listCount = new List<Double>();
             List<string> listCountss = new List<string>();
-
+            List<Survey> listSurveys = surveyService.GetListSurveysTop3();
             foreach (var item in listAnswers)
             {
 
@@ -115,9 +116,10 @@ namespace AMS.Controllers
                 string percent = string.Format("{0:00.0}", (answerCount / count * 100));
                 listCountss.Add(percent);
             }
-
+            ViewBag.currentUser = currentUser;
+            ViewBag.currentHouse = currentHouse;
             ViewBag.CountAnswer = listCountss;
-
+            ViewBag.ListSurvey = listSurveys;
             ViewBag.Survey = survey;
             ViewBag.Answer = listAnswers;
 

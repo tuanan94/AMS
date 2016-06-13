@@ -1,0 +1,213 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+    List<User> listUser= new List<User>();
+        listUser = ViewBag.ListUser;
+    List<Post> listPosts  = new List<Post>();
+        listPosts = ViewBag.ListPost;
+    List<int> listCountReport = ViewBag.CountReport;
+    List<Report> listReports = ViewBag.ListReport;
+    List<Image> listImage = ViewBag.ListImage;
+}
+<style>
+    .button {
+        display: block;
+        width: 70px;
+        height: 35px;
+        background: #4E9CAF;
+        padding: 7px;
+        text-align: center;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+    }
+
+    .binh {
+        border-color: #1ABC9C;
+        box-shadow: none;
+    }
+
+    .media-item-ctr-1 {
+        border-bottom: 1px solid #e5e3da;
+        padding-bottom: 1em;
+        margin-top: 1em;
+        width: 100%;
+        position: relative;
+        float: left;
+    }
+
+        .media-item-ctr-1 .media-item-thumbnail {
+            display: block;
+            position: relative;
+        }
+
+    .media-ribbon {
+        position: absolute;
+        top: 15px;
+        left: -8px;
+        background-color: #ff4500;
+        padding: 0 3px;
+        font-family: 'Montserrat', sans-serif;
+        color: #fff;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        line-height: 24px;
+        font-size: 11px;
+    }
+
+    .media-item-ctr-1 .media-item-overview {
+        position: relative;
+        min-height: 140px;
+        padding-bottom: 15px;
+    }
+
+        .media-item-ctr-1 .media-item-overview .media-item-cat {
+            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+        }
+
+        .media-item-ctr-1 .media-item-overview .media-meta-data {
+            margin-top: 10px;
+            color: #b5b3ac;
+            font-size: 11px;
+        }
+
+    .media-item-ctr-1 .social-share-ctr {
+        position: absolute;
+        right: 10px;
+        bottom: 20px;
+    }
+
+    .btn-facebook {
+        background-color: #395693;
+        color: #fff;
+    }
+
+    .btn-twitter {
+        background-color: #00acee;
+        color: #fff;
+    }
+</style>
+
+<div class="col-sm-offset-2 col-md-8">
+
+    <div class="panel-heading panel-heading-gray"><i style="color: #000" class="fa fa-list-ul"></i> Bao Cao</div>
+
+    @{
+        int i = 0;
+        
+        foreach (var item in listReports)
+        {
+
+            <fieldset class="scheduler-border less-padding aass">
+                <div class="media-item-ctr-1">
+                    <div class="col-xs-5 col-sm-3">
+                        <a class="media-item-thumbnail" href="">
+                            <img class="img-responsive" src="~/images/Post/survey-icon.png">
+                            <div class="media-ribbon">
+                                <i class="fa fa-heart">@item.Id</i>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-xs-7 col-sm-9 media-item-overview">
+
+                        <h3>
+                            <a href="">@item.Description</a>
+                        </h3>
+                        <h4>Ngày báo cáo: -<span class="label label-gray">@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.CreateDate))</span></h4>
+                        <div class="media-meta-data">
+                            
+                            <h4> Người báo cáo: <a href="~/images/Post/default-profile.png">@listUser.ElementAt(i).Fullname</a></h4>
+
+                        </div>
+                    </div>
+                    <div class="social-share-ctr hidden-xs">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModall_@i">Xem chi tiết</button>
+
+                    </div>
+                </div>
+            </fieldset>
+
+           
+            i++;
+
+        }
+        i = 0;
+        int k = 0;
+        foreach (var a in listPosts)
+        {
+          
+                <div id="myModall_@i" class="modal fade">
+                    <div class="modal-dialog">
+
+
+                        <form id="approveForm" action="" method="Post">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title">Chi tiết báo cáo</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="col-xs-5 col-sm-3">
+                                        @{
+                                            if (listImage.ElementAt(k) == null)
+                                            {
+                                                  <a class="media-item-thumbnail" style="height: 120px" href="">
+                                                    <img class="img-responsive" src="~/images/Post/default-profile.png">
+
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                 <a class="media-item-thumbnail" style="height: 120px" href="">
+                                                    <img class="img-responsive" src="@listImage.ElementAt(k).url">
+
+                                                </a>
+                                              
+                                            }
+                                        }
+                                       
+                                    </div>
+                                    <div class="col-xs-7 col-sm-9 media-item-overview">
+                                        Bài viết sô: @a.Id
+                                        <fieldset class="scheduler-border less-padding aass">
+                                            <h5> @a.Body</h5>
+                                        </fieldset>
+
+
+
+                                        <h4>Có<span class="label label-gray">@listCountReport.ElementAt(k)</span> người báo cáo bài viết này</h4>
+
+                                        <div class="media-meta-data">
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                    <button id="approve" name="action" value="1" class="btn btn-primary">Đồng ý</button>
+                                    <button id="notapprove" name="action" value="2" class="btn btn-success">Từ chối</button>
+                                </div>
+                               
+                            </div>
+                        </form>
+                       
+
+
+                    </div>
+                   
+                </div>
+           
+           i++;
+            k++;
+        }
+    }
+
+
+
+
+</div>
+

@@ -1,4 +1,5 @@
-﻿@model AMS.ViewModel.SurveyViewModel
+﻿@using AMS.Service
+@model AMS.ViewModel.SurveyViewModel
 @{
     ViewBag.Title = "DoDetailSurvey";
 
@@ -6,6 +7,11 @@
     Survey surveys = ViewBag.Survey;
     List<string> listAnswer = ViewBag.CountAnswer;
     List<Answer> answers = ViewBag.Answer;
+    List<Survey> listSurveys = ViewBag.ListSurvey;
+    User currentUser = ViewBag.currentUser;
+    House currentHouse = ViewBag.currentHouse;
+    UserAnswerService userAnswerService = new UserAnswerService();
+    List<UserAnswerSurvey> listUserAnswer = new List<UserAnswerSurvey>();
 }
 <style>
     .media-post-ctr .media-post-header .media-title {
@@ -67,11 +73,82 @@
         border-color: #1ABC9C;
         box-shadow: none;
     }
+    .widget {
+        margin-bottom: 20px;
+    }
+    .ribbon-header {
+        display: block;
+        color: #fff;
+        padding: 10px 10px;
+        text-align: center;
+        text-transform: uppercase;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+        position: relative;
+        margin: 0 -8px;
+        margin-top: -40px;
+    }
+
+    .ribbon-teal {
+        background-color: #0dd3bb;
+    }
+    .media-item-ctr-2 {
+        padding-bottom: 1em;
+        margin-top: 1em;
+        width: 100%;
+        position: relative;
+        float: left;
+    }
+        .media-item-ctr-2 .media-item-thumbnail {
+            display: block;
+            position: relative;
+        }
+    .media-ribbon {
+        position: absolute;
+        top: 15px;
+        left: -8px;
+        background-color: #ff4500;
+        padding: 0 3px;
+        font-family: 'Montserrat', sans-serif;
+        color: #fff;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        line-height: 24px;
+        font-size: 11px;
+    }
+    .media-item-ctr-2 .media-item-overview {
+        position: relative;
+        padding-bottom: 15px;
+    }
+        .media-item-ctr-2 .media-item-overview .media-meta-data {
+            margin-top: 10px;
+            color: #b5b3ac;
+            font-size: 11px;
+        }
+    .widget .media-item-ctr-2 {
+        padding-bottom: 0;
+    }
+
+    .media-item-ctr-2 {
+        padding-bottom: 1em;
+        margin-top: 1em;
+        width: 100%;
+        position: relative;
+        float: left;
+    }
+    .widget .media-item-ctr-2 img {
+        height: 120px;
+    }
+
+    .media-item-ctr-2 .media-item-thumbnail img {
+        width: 100%;
+        max-height: 160px;
+    }
 </style>
 <script src="~/Scripts/jquery-1.10.2.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<div class="col-sm-offset-1 col-sm-10">
+<div class="col-xs-12 col-md-8">
     <div class="panel panel-default">
 
         @*<nav class="navbar navbar-default">
@@ -95,20 +172,20 @@
                     {
 
 
-                        <div class="media-post-ctr">
-                            <div class="media-post-header">
+                    <div class="media-post-ctr">
+                        <div class="media-post-header">
 
-                                <h1 class="media-title">@surveys.Question</h1>
-                                <div class="media-meta-ctr">
-                                    <div class="author-profile-img">
-                                        <img class="img-responsive" src="http://rocketeer.jaskokoyn.cc/public/uploads/default-profile.png">
+                            <h1 class="media-title">@surveys.Question</h1>
+                            <div class="media-meta-ctr">
+                                <div class="author-profile-img">
+                                    <img class="img-responsive" src="~/images/Post/default-profile.png">
+                                </div>
+                                <div class="media-meta-overview-ctr">
+                                    <div class="media-meta-author-info">
+                                        By <a href="~/images/Post/default-profile.png">Admin</a>
                                     </div>
-                                    <div class="media-meta-overview-ctr">
-                                        <div class="media-meta-author-info">
-                                            By <a href="http://rocketeer.jaskokoyn.cc/profile/admin">Admin</a>
-                                        </div>
-                                        <div class="media-meta-post-info">
-                                            @Convert.ToString(string.Format("{0:MM/dd/yyyy}", surveys.StartDate))
+                                    <div class="media-meta-post-info">
+                                        @Convert.ToString(string.Format("{0:MM/dd/yyyy}", surveys.StartDate))
 
                                     </div>
                                 </div>
@@ -147,71 +224,73 @@
                         int count = answers.Count;
                         if (i < count)
                         {
-                            <div class="form-group">
-                                <div class="col-sm-offset-2 col-sm-8">
-                                    <fieldset class="scheduler-border less-padding">
-                                        <legend class="scheduler-border">Câu hỏi</legend>
-                                        <div class="form-group">
-                                            <label for="inputEmail3" class="col-sm-3 control-label">Câu Hỏi @ii:</label>
-                                            <div class="col-sm-7">
+                    <div class="form-group">
+                        <div class="col-sm-offset-1 col-md-10">
+                            <fieldset class="scheduler-border less-padding">
+                                <legend class="scheduler-border">Câu hỏi</legend>
+                                <div class="col-md-10">
+                                    <label for="inputEmail3" class="col-md-4">Câu Hỏi @ii:</label>
+                                    <div class="col-md-6">
 
-                                                <input type="text" disabled="disabled" class="form-control binh" style="width: 330px" id="question" name="question" value="@surveys.Question"><br>
-                                                @Html.TextBoxFor(m => m.Id, new { @type = "hidden", @Value = surveys.Id })
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
+                                        <input type="text" disabled="disabled" class="form-control binh" style="width: 330px" id="question" name="question" value="@surveys.Question"><br>
+                                        @Html.TextBoxFor(m => m.Id, new { @type = "hidden", @Value = surveys.Id })
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
 
-                                            @{
+                                    @{
 
 
                             int counts = 1;
 
                             foreach (var b in answers)
                             {
-                                <label for="inputEmail3" class="col-sm-3 control-label">Câu trả lời:</label>
-                                                <div class="col-sm-1">
-                                                    @*@Html.RadioButtonFor(m => m.AnswerContent,b.Id, new { @Value = b.AnswerContent })*@
+                                <label for="inputEmail3" class="col-md-4">Câu trả lời:</label>
+                                        <div class="col-sm-1">
+                                            @*@Html.RadioButtonFor(m => m.AnswerContent,b.Id, new { @Value = b.AnswerContent })*@
 
 
-                                                    <input type="radio" id="@b.Id" name="answer" value="@b.AnswerContent">
-                                                </div>
-                                                <div class="col-sm-7">
-                                                    <input type="hidden" id="answerId" name="answerId" value="@b.Id" />
-                                                    <input type="hidden" id="count" name="count" value="@counts" />
-                                                    @*<input type="radio" name="gender" value="@b.AnswerContent">*@
-                                                    <input type="text" disabled="disabled" class="form-control binh" style="width: 230px" id="anwser1" name="anwser1" value="@b.AnswerContent">
+                                            <input type="radio" id="@b.Id" name="answer" value="@b.AnswerContent">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="hidden" id="answerId" name="answerId" value="@b.Id" />
+                                            <input type="hidden" id="count" name="count" value="@counts" />
+                                            @*<input type="radio" name="gender" value="@b.AnswerContent">*@
+                                            <input type="text" disabled="disabled" class="form-control binh" style="width: 230px" id="anwser1" name="anwser1" value="@b.AnswerContent">
 
 
-                                                </div>
+                                        </div>
                                 counts++;
                             }
                             i++;
                             ii++;
                             tem++;
-                                            }
-                                        </div>
-
-                                    </fieldset>
+                                    }
                                 </div>
-                            </div>
+
+
+
+                            </fieldset>
+                        </div>
+                    </div>
                         }
 
 
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-8">
-                                @*<a href="@Url.Action("UpdateSurvey", "Survey", new { surveyId =@surveys.Id})" class="fa fa-list-alt">Lưu..</a>*@
-                                <button type="submit" onclick="addCommentByAjax()" class="btn btn-primary">Lưu</button>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            @*<a href="@Url.Action("UpdateSurvey", "Survey", new { surveyId =@surveys.Id})" class="fa fa-list-alt">Lưu..</a>*@
+                            <button type="submit" onclick="addCommentByAjax()" class="btn btn-primary">Lưu</button>
 
-                                @{
-                        if (surveys.Privacy == 1)
-                        {
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModall">Xem kết quả</button>
-                        }
-                                }
-
-                            </div>
+                            @{
+                                    if (surveys.Privacy == 1)
+                                    {
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModall">Xem kết quả</button>
+                                    }
+                            }
 
                         </div>
+
+                    </div>
 
                     }
 
@@ -222,6 +301,325 @@
             </fieldset>
         </div>
 
+    </div>
+</div>
+<div class="col-md-4 hidden-xs">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="widget">
+                <div class="fb-page fb_iframe_widget" data-href="" data-tabs="timeline" data-width="100%" data-height="130" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true" fb-xfbml-state="rendered" fb-iframe-plugin-query="adapt_container_width=true&amp;app_id=1470730869903086&amp;container_width=328&amp;height=130&amp;hide_cover=false&amp;href=https%3A%2F%2Fwww.facebook.com%2Fjaskokoyn&amp;locale=en_US&amp;sdk=joey&amp;show_facepile=true&amp;small_header=false&amp;tabs=timeline&amp;width=100%25"><span style="vertical-align: top; width: 0px; height: 0px; overflow: hidden;"><iframe name="f176e5b0d7d0344" width="100%px" height="130px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" title="fb:page Facebook Social Plugin" src="" style="border: none; visibility: visible; width: 0px; height: 0px;"></iframe></span></div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="clearfix"></div>
+          
+            <div class="widget">
+                <a class="ribbon-header ribbon-teal">
+                    <i class="fa fa-star fa-cat-icon"></i>
+                    Những survey khác
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                @{
+                    foreach (var item in listSurveys)
+                    {
+                        listUserAnswer = (userAnswerService.GetListUserAnswerSurveysBySurveyId(item.Id));
+                        int k = 0;
+
+
+
+                        if (listSurveys.Count != 0)
+                        {
+                            if (item.Member == currentUser.RoleId && item.Block == "NULL" && item.Floor == "NULL")
+                            {
+                                foreach (var VARIABLE in listUserAnswer)
+                                {
+
+
+                                    if (VARIABLE.UserId == currentUser.Id)
+                                    {
+                                        k++;
+                                    }
+
+                                }
+                                if (k != 1)
+                                {
+                                      <div class="media-item-ctr-2">
+                                         <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
+                                             <img src="~/images/Post/SEO_survey_reuslts-1024x768.jpg" class="img-responsive">
+                                             <div class="media-ribbon"><i class="fa fa-heart"></i> @item.Id</div>
+                                         </a>
+                    <div class="media-item-overview">
+                        <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a></h3>
+                        <div class="media-meta-data">Admin -@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))</div>
+                        @{
+                                    if (item.Priority == 1)
+                                    {
+                                        <h3> <span class="label label-warning">Cần Làm</span></h3>
+
+                                    }
+                        }
+                    </div>
+                </div>
+
+                                }
+                            }
+                            if (item.Block == currentHouse.Block && item.Floor == currentHouse.Floor && item.Member == currentUser.RoleId)
+                            {
+                                foreach (var VARIABLE in listUserAnswer)
+                                {
+
+
+                                    if (VARIABLE.UserId == currentUser.Id)
+                                    {
+                                        k++;
+                                    }
+
+                                }
+                                if (k != 1)
+                                {
+                                   <div class="media-item-ctr-2">
+                                         <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
+                                             <img src="~/images/Post/SEO_survey_reuslts-1024x768.jpg" class="img-responsive">
+                                             <div class="media-ribbon"><i class="fa fa-heart"></i> @item.Id</div>
+                                         </a>
+                    <div class="media-item-overview">
+                        <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a></h3>
+                        <div class="media-meta-data">Admin -@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))</div>
+                        @{
+                                    if (item.Priority == 1)
+                                    {
+                                        <h3> <span class="label label-warning">Cần Làm</span></h3>
+
+                                    }
+                        }
+                    </div>
+                </div>
+
+                                }
+                            }
+                            if (item.Member == 6 && item.Block == currentHouse.Block && item.Floor == "NULL")
+                            {
+                                foreach (var VARIABLE in listUserAnswer)
+                                {
+
+
+                                    if (VARIABLE.UserId == currentUser.Id)
+                                    {
+                                        k++;
+                                    }
+
+                                }
+                                if (k != 1)
+                                {
+                                     <div class="media-item-ctr-2">
+                                         <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
+                                             <img src="~/images/Post/SEO_survey_reuslts-1024x768.jpg" class="img-responsive">
+                                             <div class="media-ribbon"><i class="fa fa-heart"></i> @item.Id</div>
+                                         </a>
+                    <div class="media-item-overview">
+                        <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a></h3>
+                        <div class="media-meta-data">Admin -@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))</div>
+                        @{
+                                    if (item.Priority == 1)
+                                    {
+                                        <h3> <span class="label label-warning">Cần Làm</span></h3>
+
+                                    }
+                        }
+                    </div>
+                </div>
+
+                                }
+                            }
+                            if (item.Member == 6 && item.Block == "NULL" && item.Floor == "NULL")
+                            {
+                                foreach (var VARIABLE in listUserAnswer)
+                                {
+
+
+                                    if (VARIABLE.UserId == currentUser.Id)
+                                    {
+                                        k++;
+                                    }
+
+                                }
+                                if (k != 1)
+                                {
+                                   <div class="media-item-ctr-2">
+                                         <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
+                                             <img src="~/images/Post/SEO_survey_reuslts-1024x768.jpg" class="img-responsive">
+                                             <div class="media-ribbon"><i class="fa fa-heart"></i> @item.Id</div>
+                                         </a>
+                    <div class="media-item-overview">
+                        <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a></h3>
+                        <div class="media-meta-data">Admin -@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))</div>
+                        @{
+                                    if (item.Priority == 1)
+                                    {
+                                        <h3> <span class="label label-warning">Cần Làm</span></h3>
+
+                                    }
+                        }
+                    </div>
+                </div>
+                                }
+                            }
+                            if (item.Member == 6 && item.Block == "NULL" && item.Floor == currentHouse.Floor)
+                            {
+                                foreach (var VARIABLE in listUserAnswer)
+                                {
+
+
+                                    if (VARIABLE.UserId == currentUser.Id)
+                                    {
+                                        k++;
+                                    }
+
+                                }
+                                if (k != 1)
+                                {
+                                   <div class="media-item-ctr-2">
+                                         <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
+                                             <img src="~/images/Post/SEO_survey_reuslts-1024x768.jpg" class="img-responsive">
+                                             <div class="media-ribbon"><i class="fa fa-heart"></i> @item.Id</div>
+                                         </a>
+                    <div class="media-item-overview">
+                        <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a></h3>
+                        <div class="media-meta-data">Admin -@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))</div>
+                        @{
+                                    if (item.Priority == 1)
+                                    {
+                                        <h3> <span class="label label-warning">Cần Làm</span></h3>
+
+                                    }
+                        }
+                    </div>
+                </div>
+
+                                }
+
+                            }
+                            if (item.Block == null && item.Floor == currentHouse.Floor && item.Member == currentUser.RoleId)
+                            {
+                                foreach (var VARIABLE in listUserAnswer)
+                                {
+
+
+                                    if (VARIABLE.UserId == currentUser.Id)
+                                    {
+                                        k++;
+                                    }
+
+                                }
+                                if (k != 1)
+                                {
+                                    <div class="media-item-ctr-2">
+                                         <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
+                                             <img src="~/images/Post/SEO_survey_reuslts-1024x768.jpg" class="img-responsive">
+                                             <div class="media-ribbon"><i class="fa fa-heart"></i> @item.Id</div>
+                                         </a>
+                    <div class="media-item-overview">
+                        <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a></h3>
+                        <div class="media-meta-data">Admin -@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))</div>
+                        @{
+                                    if (item.Priority == 1)
+                                    {
+                                        <h3> <span class="label label-warning">Cần Làm</span></h3>
+
+                                    }
+                        }
+                    </div>
+                </div>
+
+                                }
+                            }
+                            if (item.Block == currentHouse.Block && item.Floor == "NULL" && item.Member == currentUser.RoleId)
+                            {
+                                foreach (var VARIABLE in listUserAnswer)
+                                {
+
+
+                                    if (VARIABLE.UserId == currentUser.Id)
+                                    {
+                                        k++;
+                                    }
+
+                                }
+                                if (k != 1)
+                                {
+                                   <div class="media-item-ctr-2">
+                                         <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
+                                             <img src="~/images/Post/SEO_survey_reuslts-1024x768.jpg" class="img-responsive">
+                                             <div class="media-ribbon"><i class="fa fa-heart"></i> @item.Id</div>
+                                         </a>
+                    <div class="media-item-overview">
+                        <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a></h3>
+                        <div class="media-meta-data">Admin -@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))</div>
+                        @{
+                                    if (item.Priority == 1)
+                                    {
+                                        <h3> <span class="label label-warning">Cần Làm</span></h3>
+
+                                    }
+                        }
+                    </div>
+                </div>
+
+                                }
+                            }
+                            if (item.Block == currentHouse.Block && item.Floor == currentHouse.Floor && item.Member == 6)
+                            {
+                                foreach (var VARIABLE in listUserAnswer)
+                                {
+
+
+                                    if (VARIABLE.UserId == currentUser.Id)
+                                    {
+                                        k++;
+                                    }
+
+                                }
+                                if (k != 1)
+                                {
+                                     <div class="media-item-ctr-2">
+                                         <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
+                                             <img src="~/images/Post/SEO_survey_reuslts-1024x768.jpg" class="img-responsive">
+                                             <div class="media-ribbon"><i class="fa fa-heart"></i> @item.Id</div>
+                                         </a>
+                    <div class="media-item-overview">
+                        <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a></h3>
+                        <div class="media-meta-data">Admin -@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))</div>
+                        @{
+                                    if (item.Priority == 1)
+                                    {
+                                        <h3> <span class="label label-warning">Cần Làm</span></h3>
+
+                                    }
+                        }
+                    </div>
+                </div>
+                                  
+
+                                }
+                            }
+                        }
+
+                        else if (listSurveys.Count == 0)
+                        {
+
+                        }
+                    
+
+                }
+                }
+               
+              
+            </div>
+            <div class="clearfix"></div>
+         
+            <div class="clearfix"></div>
+          
+            <div class="clearfix"></div>
+        </div>
     </div>
 </div>
 <div id="myModall" class="modal fade">
