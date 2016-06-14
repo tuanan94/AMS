@@ -136,7 +136,12 @@ namespace AMS.Service
         {
             commentRepository.Add(c);
         }
-       
+        public void UpdatePost(Post obj)
+        {
+            //Survey survey = new Survey();
+            //survey.Title = obj.Title;
+            postRepository.Update(obj);
+        }
     }
 
 }

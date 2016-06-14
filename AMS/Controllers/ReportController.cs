@@ -42,5 +42,19 @@ namespace AMS.Controllers
             ViewBag.ListReport = listReports;
             return View("Report");
         }
+
+        [HttpPost]
+        public ActionResult ApproveReport()
+        {
+            string[] postId = Request.Form.GetValues("PostId");
+            string[] reportId = Request.Form.GetValues("ReportId");
+            Post post = postService.findPostById(int.Parse(postId[0]));
+            Report report = reportService.FindReportById(int.Parse(reportId[0]));
+            report.Disable = 1;
+            reportService.UpdateReport(report);
+            post.Disable = 1;
+            postService.UpdatePost(post);
+            return RedirectToAction("Report");
+        }
 	}
 }

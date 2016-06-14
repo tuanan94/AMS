@@ -237,6 +237,7 @@
           <Property Name="Status" Type="int" />
           <Property Name="UserId" Type="int" />
           <Property Name="EmbedCode" Type="nvarchar(max)" />
+          <Property Name="Disable" Type="int" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -282,6 +283,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
           <Property Name="CreateDate" Type="datetime" />
+          <Property Name="Disable" Type="int" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -1524,6 +1526,7 @@
           <Property Name="Status" Type="Int32" />
           <Property Name="UserId" Type="Int32" />
           <Property Name="EmbedCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Disable" Type="Int32" />
           <NavigationProperty Name="Comments" Relationship="AMSModel.FK_Comment_Post" FromRole="Post" ToRole="Comment" />
           <NavigationProperty Name="User" Relationship="AMSModel.FK_tbl_post_tbl_user" FromRole="Post" ToRole="User" />
           <NavigationProperty Name="UserReportPosts" Relationship="AMSModel.FK_UserReportPost_Post" FromRole="Post" ToRole="UserReportPost" />
@@ -1578,6 +1581,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="Disable" Type="Int32" />
           <NavigationProperty Name="UserReportPosts" Relationship="AMSModel.FK_UserReportPost_Report" FromRole="Report" ToRole="UserReportPost" />
         </EntityType>
         <EntityType Name="Role">
@@ -2428,6 +2432,7 @@
           <EntitySetMapping Name="Posts">
             <EntityTypeMapping TypeName="AMSModel.Post">
               <MappingFragment StoreEntitySet="Post">
+                <ScalarProperty Name="Disable" ColumnName="Disable" />
                 <ScalarProperty Name="EmbedCode" ColumnName="EmbedCode" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
@@ -2484,6 +2489,7 @@
           <EntitySetMapping Name="Reports">
             <EntityTypeMapping TypeName="AMSModel.Report">
               <MappingFragment StoreEntitySet="Report">
+                <ScalarProperty Name="Disable" ColumnName="Disable" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

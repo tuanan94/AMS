@@ -1,10 +1,10 @@
 ﻿@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
-    List<User> listUser= new List<User>();
-        listUser = ViewBag.ListUser;
-    List<Post> listPosts  = new List<Post>();
-        listPosts = ViewBag.ListPost;
+    List<User> listUser = new List<User>();
+    listUser = ViewBag.ListUser;
+    List<Post> listPosts = new List<Post>();
+    listPosts = ViewBag.ListPost;
     List<int> listCountReport = ViewBag.CountReport;
     List<Report> listReports = ViewBag.ListReport;
     List<Image> listImage = ViewBag.ListImage;
@@ -96,7 +96,7 @@
 
     @{
         int i = 0;
-        
+
         foreach (var item in listReports)
         {
 
@@ -117,8 +117,18 @@
                         </h3>
                         <h4>Ngày báo cáo: -<span class="label label-gray">@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.CreateDate))</span></h4>
                         <div class="media-meta-data">
-                            
+
                             <h4> Người báo cáo: <a href="~/images/Post/default-profile.png">@listUser.ElementAt(i).Fullname</a></h4>
+
+                        </div>
+                        <div class="media-meta-data">
+                            @{
+                                if (item.Disable == 1)
+                                {
+                                      <h4><label class="label label-success">Đã xữ lý</label></h4>
+                                }
+                            }
+                          
 
                         </div>
                     </div>
@@ -129,7 +139,7 @@
                 </div>
             </fieldset>
 
-           
+
             i++;
 
         }
@@ -137,12 +147,13 @@
         int k = 0;
         foreach (var a in listPosts)
         {
-          
-                <div id="myModall_@i" class="modal fade">
-                    <div class="modal-dialog">
 
+            <div id="myModall_@i" class="modal fade">
+                <div class="modal-dialog">
 
-                        <form id="approveForm" action="" method="Post">
+                    @using (Html.BeginForm("ApproveReport", "Report", FormMethod.Post))
+                    {
+                       
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -153,22 +164,24 @@
                                         @{
                                             if (listImage.ElementAt(k) == null)
                                             {
-                                                  <a class="media-item-thumbnail" style="height: 120px" href="">
+                                                <a class="media-item-thumbnail" style="height: 120px" href="">
                                                     <img class="img-responsive" src="~/images/Post/default-profile.png">
 
                                                 </a>
                                             }
                                             else
                                             {
-                                                 <a class="media-item-thumbnail" style="height: 120px" href="">
+                                                <a class="media-item-thumbnail" style="height: 120px" href="">
                                                     <img class="img-responsive" src="@listImage.ElementAt(k).url">
 
                                                 </a>
-                                              
+
                                             }
                                         }
-                                       
+
                                     </div>
+                                    <input type="hidden" class="form-control" id="Title" name="ReportId" value="@listReports.ElementAt(k).Id">
+                                    <input type="hidden" class="form-control" id="Title" name="PostId" value="@a.Id">
                                     <div class="col-xs-7 col-sm-9 media-item-overview">
                                         Bài viết sô: @a.Id
                                         <fieldset class="scheduler-border less-padding aass">
@@ -180,29 +193,40 @@
                                         <h4>Có<span class="label label-gray">@listCountReport.ElementAt(k)</span> người báo cáo bài viết này</h4>
 
                                         <div class="media-meta-data">
-
-
+                                            
+                                         @{
+                                                if (listReports.ElementAt(k).Disable == 1)
+                                            {
+                                            <h3><label class="label label-success">Đã xữ lý</label></h3>
+                                            }
+                                         }
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="modal-footer">
+                                @{
+                                    if (listReports.ElementAt(k).Disable == 0)
+                                    {
+                                         <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                                    <button id="approve" name="action" value="1" class="btn btn-primary">Đồng ý</button>
-                                    <button id="notapprove" name="action" value="2" class="btn btn-success">Từ chối</button>
+                                    <button type="submit" name="action" value="1" class="btn btn-primary">Đồng ý</button>
+                                    <button type="submit" name="action" value="2" class="btn btn-success">Từ chối</button>
                                 </div>
+                                    }
+                                   
+                                }
                                
+
                             </div>
-                        </form>
                        
+                    }
 
 
-                    </div>
-                   
                 </div>
-           
-           i++;
-            k++;
+
+            </div>
+
+                    i++;
+                    k++;
         }
     }
 
@@ -210,4 +234,3 @@
 
 
 </div>
-

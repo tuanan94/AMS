@@ -31,6 +31,7 @@ namespace AMS
         public Nullable<int> Status { get; set; }
         public Nullable<int> UserId { get; set; }
         public string EmbedCode { get; set; }
+        public Nullable<int> Disable { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Comment> Comments { get; set; }

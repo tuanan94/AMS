@@ -24,5 +24,9 @@ namespace AMS.Service
         {
             reportRepository.Add(obj);
         }
+        public void UpdateReport(Report obj)
+        {
+            reportRepository.Update(obj);
+        }
     }
 }
