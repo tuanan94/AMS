@@ -429,6 +429,7 @@
     <Content Include="images\HouseProfile\family.jpg" />
     <Content Include="images\HouseProfile\nhatui.png" />
     <Content Include="images\Post\default-profile.png" />
+    <Content Include="images\Post\question_button.png" />
     <Content Include="images\Post\SEO_survey_reuslts-1024x768.jpg" />
     <Content Include="images\Post\survey-icon.png" />
     <Content Include="Model1.Context.tt">

@@ -68,7 +68,7 @@
     <div class="col-md-12">
 
         <div class="panel panel-default binh">
-            <nav class="navbar navbar-default binh">
+            @*<nav class="navbar navbar-default binh">
                 <div class="container-fluid binh">
 
                     <ul class="nav navbar-nav binh">
@@ -77,7 +77,7 @@
 
                     </ul>
                 </div>
-            </nav>
+            </nav>*@
 
             <div class="panel-body binh">
 
@@ -241,7 +241,7 @@
                                     <div class="form-group">
                                         <label for="inputEmail3" class="col-sm-3 control-label">Câu hỏi</label>
                                         <div class="col-sm-7">
-                                            <input type='text' class="form-control binh" name="question" style="width: 330px"><br>
+                                            <input type="text" id="questions" class="form-control binh" name="question" style="width: 330px"><br>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -261,10 +261,17 @@
                                     <div class="form-group" id="aa">
                                         <label for="inputEmail3" class="col-sm-3 control-label">Câu trả lời</label>
                                         <div class="col-sm-7">
-                                            <input type="text" class="form-control binh" id="idd3" onblur="bInfo()" name="anwser1" style="width: 330px">  <br>
-                                            <input type="hidden" name="count" value="3" />
-                                        </div>"
-                                    </div>"
+                                            <input type="text" class="form-control binh" id="idd3" onblur="bInfo()" name="anwser1" style="width: 330px"> <br>
+                                            <input type="hidden" name="count" value="3"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="aa">
+                                        <label for="inputEmail3" class="col-sm-3 control-label">Câu trả lời</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control binh" id="idd4" onblur="bInfo()" name="anwser1" style="width: 330px">  <br>
+                                            <input type="hidden" name="count" value="4" />
+                                        </div>
+                                    </div>
                                 </fieldset>
                             </div>
                             <div class="panel-footer">
@@ -321,7 +328,7 @@
                                                             <div class="col-sm-9">
                                                                 @*<span class="label date-color label-warning">@item.StartDate</span>*@
                                                                 @*<input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.StartDate">*@
-                                                                @Html.TextBoxFor(m => m.StartDate, new { @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate)), @class = "date-color", @style = "width:100px" })
+                                                                @Html.TextBoxFor(m => m.StartDate, new { @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate)), @class = "date-color", @style = "width:100px", @disabled = "disabled" })
 
 
                                                             </div>
@@ -332,7 +339,7 @@
                                                             <div class="col-sm-9">
                                                                 @*<span class="label date-color label-warning">@item.StartDate</span>*@
                                                                 @*<input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.StartDate">*@
-                                                                @Html.TextBoxFor(m => m.StartDate, new { @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.PublishDate)), @class = "date-color", @style = "width:100px" })
+                                                                @Html.TextBoxFor(m => m.StartDate, new { @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.PublishDate)), @class = "date-color", @style = "width:100px", @disabled = "disabled" })
 
 
                                                             </div>
@@ -343,7 +350,7 @@
                                                             <div class="col-sm-9">
                                                                 @*<span class="label date-color label-gray">@item.EndDate</span>*@
                                                                 @*@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.EndDate))*@
-                                                                @Html.TextBoxFor(m => m.EndDate, new { @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.EndDate)), @class = "date-color", @style = "width:100px" })
+                                                                @Html.TextBoxFor(m => m.EndDate, new { @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.EndDate)), @class = "date-color", @style = "width:100px", @disabled = "disabled" })
                                                                 @*<input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.EndDate">*@
                                                             </div>
                                                         </div>
@@ -419,6 +426,19 @@
 
 
 <script>
+    var inputs = $('anwser1');
+
+    inputs.filter(function (i, el) {
+        return inputs.not(this).filter(function () {
+            return this.value === el.value;
+        }).length !== 0;
+    }).addClass('background: red');
+
+    $("#questions").attr("required", true);
+    $("#idd1").attr("required", true);
+    $("#idd2").attr("required", true);
+    $("#idd3").attr("required", true);
+    $("#idd4").attr("required", true);
     $(function () {
         $("#StartDate").datepicker({
             format: "yyyy/mm/dd",
@@ -475,7 +495,7 @@
         in1 = document.getElementById('idd1').value;
         in2 = document.getElementById('idd2').value;
         in3 = document.getElementById('idd3').value;
-        //in4 = document.getElementById('idd4').value;
+        in4 = document.getElementById('idd4').value;
         //in5 = document.getElementById('idd5').value;
         if (in1 == in2 && in1 != "" && in2 != "") {
             alert('Same Value'); return false;
@@ -483,6 +503,12 @@
             alert('Same Value'); return false;
         }
         else if (in2 == in3 && in2 != "" && in3 != "") {
+            alert('Same Value'); return false;
+        } else if (in1 == in4 && in1 != "" && in4 != "") {
+            alert('Same Value'); return false;
+        } else if (in2 == in4 && in2 != "" && in4 != "") {
+            alert('Same Value'); return false;
+        } else if (in3 == in4 && in3 != "" && in4 != "") {
             alert('Same Value'); return false;
         } else { return true; }
     }
@@ -537,7 +563,7 @@
         });
     }
     $(document).ready(function () {
-        window.index = 3;
+        window.index = 4;
         $("#addNewRow").on("click", function () {
             window.index++;
             var tag = "<div id=\"row_" + index + "\" class='form-group'>" +

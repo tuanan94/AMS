@@ -43,17 +43,31 @@ namespace AMS.Controllers
             return View("Report");
         }
 
-        [HttpPost]
-        public ActionResult ApproveReport()
+        //[HttpPost]
+        public ActionResult ApproveReport(int reportId, int postId)
         {
-            string[] postId = Request.Form.GetValues("PostId");
-            string[] reportId = Request.Form.GetValues("ReportId");
-            Post post = postService.findPostById(int.Parse(postId[0]));
-            Report report = reportService.FindReportById(int.Parse(reportId[0]));
+          
+            //string[] postId = Request.Form.GetValues("PostId");
+            //string[] reportId = Request.Form.GetValues("ReportId");
+            Post post = postService.findPostById(postId);
+            Report report = reportService.FindReportById(reportId);
             report.Disable = 1;
             reportService.UpdateReport(report);
             post.Disable = 1;
             postService.UpdatePost(post);
+            return RedirectToAction("Report");
+        }
+        //[HttpPost]
+        public ActionResult RejectReport(int reportId)
+        {
+           
+         
+           // string[] reportId = Request.Form.GetValues("ReportId");
+          
+            Report report = reportService.FindReportById((reportId));
+            report.Disable = 1;
+            reportService.UpdateReport(report);
+           
             return RedirectToAction("Report");
         }
 	}

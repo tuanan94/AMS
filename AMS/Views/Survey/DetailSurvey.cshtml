@@ -58,7 +58,7 @@
 </style>
 <div class="col-sm-offset-1 col-sm-10">
     <div class="panel panel-default binh">
-        <nav class="navbar navbar-default">
+        @*<nav class="navbar navbar-default">
             <div class="container-fluid">
 
                 <ul class="nav navbar-nav">
@@ -67,10 +67,11 @@
 
                 </ul>
             </div>
-        </nav>
-        <div class="panel-heading panel-heading-gray">
-            <h4>Cập nhập chi tiết khảo sát</h4>
-        </div>
+        </nav>*@
+    <div class="panel-heading panel-heading-gray">
+        
+        <h4>Cập nhập chi tiết khảo sát</h4>
+    </div>
         <div class="panel-body">
             <fieldset class="scheduler-border less-padding">
                 @*<form class="form-horizontal" role="form" method="post">*@
@@ -357,7 +358,7 @@
 </div>
 <script>
     $('#label1').delay(2500).fadeOut('slow');
-
+    $('input').attr("required", true);
     $(function () {
         $("#StartDate").datepicker({
             format: "yyyy/mm/dd",
