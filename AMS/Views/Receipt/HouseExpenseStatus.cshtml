@@ -1,8 +1,15 @@
 ﻿@using Microsoft.AspNet.Identity
 <script src="~/Scripts/Chart.min.js"></script>
+<script src="~/Scripts/amsScript/moment.min.js"></script>
 @{
     ViewBag.Title = "HouseExpenseStatus";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+    double unpaidTotal = ViewBag.unpaidTotal;
+    double paidTotal = ViewBag.paidTotal;
+    double total = ViewBag.total;
+    List<Receipt> unpaidReceipts = ViewBag.unpaidReceipts;
+    List<Receipt> paidReceipts = ViewBag.paidReceipts;
+    string thisMonth = ViewBag.thisMonth;
 }
 
 <nav class="navbar navbar-subnav navbar-static-top" role="navigation">
@@ -40,123 +47,198 @@
                 <div class="form-group">
                     <label class="control-label col-md-offset-3 col-md-1">Tháng</label>
                     <div class="col-md-3">
-                        <input id="bsheetMonth" type="text" class="form-control" data-date-default-date="+0d" value=""
-                               data-date-start-view="1" data-date-format="mm-yyyy" data-date-default-date="0d" data-date-language="vi"
+                        <input id="receiptsMonth" type="text" class="form-control" data-date-default-date="+0d" value="@thisMonth"
+                               data-date-start-view="1" data-date-format="mm-yyyy" data-date-language="vi"
                                data-date-min-view-mode="1" data-date-end-date="0m" />
                     </div>
                     <div class="col-md-2">
                         <span class="btn btn-primary" onclick="viewBalanceSheetMonth()">Xem</span>
                     </div>
                 </div>
-
-                <div class="form-group" id="rightCol">
+                <div class="form-group">
                     <div class="col-md-6">
                         <fieldset class="scheduler-border less-padding border-top">
-                            <legend class="scheduler-border bold-black">Hóa đơn đẵ thanh toán</legend>
+                            <legend class="scheduler-border bold-black">Hóa đơn trong tháng</legend>
                             <div class="table-responsive">
                                 <table class="table v-middle table-bordered table-striped balance-sheet">
                                     <thead>
                                         <tr>
-                                            <th></th>
-                                            <th>Hóa đơn chưa thanh toán</th>
-                                            <th>Số tiền</th>
+                                            <th>#</th>
+                                            <th>Tên</th>
+                                            <th>Đã thanh toán</th>
+                                            <th>Chưa thanh toán</th>
+                                            <th>Tổng</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="table-hover">
                                         <tr>
                                             <td>1</td>
-                                            <td>Kim khí điện máy</td>
-                                            <td>400,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Kim khí điện máy</td>
-                                            <td>800,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Kim khí điện máy</td>
-                                            <td>800,000</td>
+                                            <td>Hóa đơn trong tháng @thisMonth</td>
+                                            <td>@paidTotal.ToString("N0")</td>
+                                            <td>@unpaidTotal.ToString("N0")</td>
+                                            <td>@total.ToString("N0")</td>
                                         </tr>
                                     </tbody>
                                     <tfoot>
                                     </tfoot>
                                 </table>
-                            </div>
-                        </fieldset>
-                    </div>
-
-                    <div class="col-md-6">
-                        <fieldset class="scheduler-border less-padding border-top">
-                            <legend class="scheduler-border bold-black">Hóa đơn chưa thanh toán</legend>
-                            <div class="table-responsive">
-                                <table class="table v-middle table-bordered table-striped balance-sheet">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Hóa đơn chưa thanh toán</th>
-                                            <th>Số tiền</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Kim khí điện máy</td>
-                                            <td>400,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Kim khí điện máy</td>
-                                            <td>800,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Kim khí điện máy</td>
-                                            <td>800,000</td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </fieldset>
-                    </div>
+                        </div>
+                    </fieldset>
                 </div>
-                <div id="leftCol" class="form-group" style="text-align: center;">
-                    <canvas id="expenseStatus" width="100%" height="100%"></canvas>
+                <div class="col-md-6">
+                    <div id="leftCol" class="form-group" style="text-align: center;">
+                        <canvas style="width: 100% !important; max-width: 400px; height: auto !important;" id="expenseStatus" width="100%" height="100%"></canvas>
+                    </div>
                 </div>
             </div>
+            <div class="form-group">
+                <div class="col-md-6">
+                    <fieldset class="scheduler-border less-padding border-top">
+                        <legend class="scheduler-border bold-black">Hóa đơn đẵ thanh toán</legend>
+                        <div class="table-responsive">
+                            <table class="table v-middle table-bordered table-striped balance-sheet">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Hóa đơn chưa thanh toán</th>
+                                        <th>Số tiền</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (var r in paidReceipts)
+                                        {
+                                            <tr>
+                                                <td>1</td>
+                                                <td>@r.Title</td>
+                                                @{
+                                            double totalOrder = 0;
+                                            foreach (var detail in r.ReceiptDetails)
+                                            {
+                                                totalOrder += detail.UnitPrice.Value * detail.Quantity.Value;
+                                            }
+                                                }
+                                                <td>@totalOrder.ToString("N0")</td>
+                                                </tr>
+                                        }
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2" class="text-right"><strong>Tổng</strong></td>
+                                        <td><strong>@unpaidTotal.ToString("N0")</strong></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="col-md-6">
+                    <fieldset class="scheduler-border less-padding border-top">
+                        <legend class="scheduler-border bold-black">Hóa đơn chưa thanh toán</legend>
+                        <div class="table-responsive">
+                            <table class="table v-middle table-bordered table-striped balance-sheet">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Hóa đơn chưa thanh toán</th>
+                                        <th>Số tiền</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (var r in unpaidReceipts)
+                                        {
+                                            <tr>
+                                                <td>1</td>
+                                                <td>@r.Title</td>
+                                                @{
+                                            double totalOrder = 0;
+                                            foreach (var detail in r.ReceiptDetails)
+                                            {
+                                                totalOrder += detail.UnitPrice.Value * detail.Quantity.Value;
+                                            }
+                                                }
+                                                <td>@totalOrder.ToString("N0")</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2" class="text-right"><strong>Tổng</strong></td>
+                                        <td><strong>@unpaidTotal.ToString("N0")</strong></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
         </div>
     </div>
+</div>
 </div>
 
 <script>
     $(document).ready(function () {
-
+        $("#receiptsMonth").datepicker(
+            {});
         //        var rightHeight = $("#rightCol").outerHeight(true);
         //        $("#leftCol").css("height", rightHeight);
         //        $("#leftCol > canvas").addClass("align-middle");
         var temp = [
+            {
+                Name: moment("2015-01-01", "YYYY-MM-DD"),
+                TotalAmount: 1500000
+            },
         {
-            Name: "05-2015",
+            Name: moment("2015-02-01", "YYYY-MM-DD"),
             TotalAmount: 3000000
         },
         {
-            Name: "06-2015",
+            Name: moment("2015-03-01", "YYYY-MM-DD"),
             TotalAmount: 4000000
         },
         {
-            Name: "07-2015",
+            Name: moment("2015-04-01", "YYYY-MM-DD"),
             TotalAmount: 1500000
         },
         {
-            Name: "09-2015",
-            TotalAmount: 1500000
+            Name: moment("2015-05-01", "YYYY-MM-DD"),
+            TotalAmount: 4000000
         },
         {
-            Name: "12-2016",
-            TotalAmount: 1500000
+            Name: moment("2015-06-01", "YYYY-MM-DD"),
+            TotalAmount: 3000000
         },
+        {
+            Name: moment("2015-07-01", "YYYY-MM-DD"),
+            TotalAmount: 3500000
+        },
+        {
+            Name: moment("2015-08-01", "YYYY-MM-DD"),
+            TotalAmount: 2000000
+        },
+        {
+            Name: moment("2015-09-01", "YYYY-MM-DD"),
+            TotalAmount: 2305000
+        },
+        {
+            Name: moment("2015-10-01", "YYYY-MM-DD"),
+            TotalAmount: 2900000
+        },
+        {
+            Name: moment("2015-11-01", "YYYY-MM-DD"),
+            TotalAmount: 3300000
+        },
+        {
+            Name: moment("2015-12-01", "YYYY-MM-DD"),
+            TotalAmount: 5000000
+        }
+
         ];
         var expenseChart = createChartbar("expenseStatus", temp);
     });
@@ -196,6 +278,7 @@
                         pointHoverBorderWidth: 2,
                         pointRadius: 1,
                         pointHitRadius: 10,
+
                         data: listVal,
                         backgroundColor: bgColorList
                     }
@@ -213,16 +296,48 @@
                     position: "bottom"
                 },
                 scales: {
-                    xAxes: [{
-                        time: {
-                            unit: 'month'
-                        }
-                    }, {
-                        type: 'logarithmic',
-                        position: 'bottom',
+                    yAxes: [
+                    {
                         ticks: {
-                            min: 1,
-                            max: 1000
+                            max: 5000000,
+                            min: 1000000,
+                            stepSize: 500000,
+                            callback: function (value, index, values) {
+                                return numberWithCommas(value);
+                            }
+                        }
+                    },
+                    ],
+                    xAxes: [
+                    {
+                        type: 'time',
+                        time: {
+                            // string/callback - By default, date objects are expected. You may use a pattern string from http://momentjs.com/docs/#/parsing/string-format/ to parse a time string format, or use a callback function that is passed the label, and must return a moment() instance.
+                            parser: false,
+                            // string - By default, unit will automatically be detected.  Override with 'week', 'month', 'year', etc. (see supported time measurements)
+                            unit: 'month',
+
+                            // Number - The number of steps of the above unit between ticks
+                            unitStepSize: 1,
+
+                            // string - By default, no rounding is applied.  To round, set to a supported time unit eg. 'week', 'month', 'year', etc.
+                            round: false,
+
+                            // Moment js for each of the units. Replaces `displayFormat`
+                            // To override, use a pattern string from http://momentjs.com/docs/#/displaying/format/
+                            displayFormats: {
+                                max: moment().endOf("year"),
+                                min: moment().startOf("year"),
+                                'millisecond': 'SSS [ms]',
+                                'second': 'h:mm:ss a', // 11:20:01 AM
+                                'minute': 'h:mm:ss a', // 11:20:01 AM
+                                'hour': 'MMM D, hA', // Sept 4, 5PM
+                                'day': 'MMM Do', // Sep 4 2015
+                                'week': 'll', // Week 46, or maybe "[W]WW - YYYY" ?
+                                'month': 'MM-YYYY', // Sept 2015
+                                'quarter': '[Q]Q - YYYY', // Q3
+                                'year': 'YYYY', // 2015
+                            },
                         }
                     }
                     ]

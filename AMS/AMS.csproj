@@ -46,6 +46,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LINQtoCSV, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>AmsDLL\LINQtoCSV.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.0.1011, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
@@ -79,6 +83,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -210,7 +215,22 @@
     <Compile Include="AroundProviderProduct.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="AspNetRole.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUser.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUserClaim.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUserLogin.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="BalanceSheet.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Comment.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Constant.cs" />
@@ -218,6 +238,7 @@
     <Compile Include="Constant\RoleEnum.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BalanceSheetController.cs" />
+    <Compile Include="Controllers\ConfigController.cs" />
     <Compile Include="Controllers\HelpdeskServiceController.cs" />
     <Compile Include="Controllers\HelpdeskSupporterController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
@@ -232,6 +253,9 @@
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Constant\StatusEnum.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="C__MigrationHistory.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -275,6 +299,7 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BalanceSheetViewModels.cs" />
+    <Compile Include="Models\ConfigViewModels.cs" />
     <Compile Include="Models\HelpdeskServiceModels.cs" />
     <Compile Include="Models\ManageHouseViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -294,15 +319,15 @@
     <Compile Include="ReceiptDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Report.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Repository\GenericRepository.cs" />
     <Compile Include="Repository\HelpdeskSupporterRepository.cs" />
     <Compile Include="Repository\IHelpdeskSupporterRepository.cs" />
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Repository\UserRepository.cs" />
     <Compile Include="Role.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ServiceFee.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Service\AnswerService.cs" />
@@ -329,6 +354,7 @@
     <Compile Include="Service\TestService.cs" />
     <Compile Include="Service\UserService.cs" />
     <Compile Include="Service\UserServices.cs" />
+    <Compile Include="Service\UtilityServices.cs" />
     <Compile Include="SLIM_CONFIG.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Survey.cs">
@@ -352,6 +378,18 @@
     <Compile Include="UserRateAroundProvider.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="UserReportPost.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UtilityService.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UtilityServiceCategory.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UtilityServiceRangePrice.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\AddMemberViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\HelpdeskSupporterViewModel.cs" />
@@ -360,6 +398,7 @@
     <Compile Include="ViewModel\SurveyViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AmsDLL\LINQtoCSV.dll" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\custom.css" />
@@ -395,6 +434,7 @@
     <Content Include="Scripts\amsScript\additional-methods.min.js" />
     <Content Include="Scripts\amsScript\jquery.timepicker.min.js" />
     <Content Include="Scripts\amsScript\jquery.validate.min.js" />
+    <Content Include="Scripts\amsScript\moment.min.js" />
     <Content Include="Scripts\amsScript\scripts.js" />
     <Content Include="Scripts\amsScript\scripts.min.js" />
     <Content Include="Scripts\amsScript\Social.js" />
@@ -563,6 +603,12 @@
     <Content Include="Views\BalanceSheet\ManageLiabilities.cshtml" />
     <Content Include="Views\BalanceSheet\ManageTransactionCategory.cshtml" />
     <Content Include="Views\Receipt\HouseExpenseStatus.cshtml" />
+    <Content Include="Views\BalanceSheet\ManageBalanceSheet.cshtml" />
+    <Content Include="Views\BalanceSheet\ManageBalanceSheetDetail.cshtml" />
+    <Content Include="Views\Config\UtilityService.cshtml" />
+    <Content Include="Views\Receipt\CreateAutomationReceipt.cshtml" />
+    <Content Include="Views\Receipt\UtilityServiceConsumption.cshtml" />
+    <Content Include="Views\Receipt\UpdateAutomationReceipt.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -585,6 +631,8 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="images\Post\Binh\" />
+    <Folder Include="Upload\csv\" />
+    <Folder Include="Upload\img\" />
     <Folder Include="Views\Image\" />
     <Folder Include="Views\Post\" />
   </ItemGroup>
@@ -599,6 +647,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

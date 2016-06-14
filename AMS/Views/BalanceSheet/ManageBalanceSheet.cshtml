@@ -1,0 +1,301 @@
+﻿@using AMS.Models
+@{
+    ViewBag.Title = "ManageBalanceSheet";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+    bool thereIsNoBls = ViewBag.thereIsNoBls;
+}
+<div class="col-md-12">
+    <div class="panel panel-default">
+
+        <div class="heading-tab">
+            <i class="fa fa-list"> Quản lý thu chi</i>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li>
+                    <a href="/Management/BalanceSheet/View"><i class="fa fa-file-text-o"></i> Báo cáo thu chi</a>
+                </li>
+                <li class="active">
+                    <a href="/Management/BalanceSheet/ManageBalanceSheetView"><i class="fa fa fa-plus"></i> Quản lý thu chi</a>
+                </li>
+                <li>
+                    <a href="/Management/BalanceSheet/ManageTransactionCatView"><i class="fa fa fa-plus"></i> Quản lý nhóm thu chi</a>
+                </li>
+                <li class="">
+                    <a href="/Management/BalanceSheet/"><i class="fa fa fa-plus"></i> Biểu đồ</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="panel-body">
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="">
+                    <div class="panel panel-default" style="border-color: transparent">
+                        <form class="form-horizontal" role="form">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table id="listBalanceSheetTbl" class="table v-middle table-striped table-bordered table-hover" data-first-bls="@thereIsNoBls">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Tên</th>
+                                                <th>Tháng</th>
+                                                <th>Tổng thu</th>
+                                                <th>Tông chi</th>
+                                                <th>Trạng thái</th>
+                                                <th>Người tạo</th>
+                                                <th>Ngày tạo</th>
+                                                <th class="text-right"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Tên</th>
+                                                <th>Tháng</th>
+                                                <th>Tổng thu</th>
+                                                <th>Tông chi</th>
+                                                <th>Trạng thái</th>
+                                                <th>Ngày tạo</th>
+                                                <th>Người tạo</th>
+                                                <th class="text-right"></th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="openBalanceSheetModel" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 id="hdSrvModalTitle" class="modal-title">Mở bảng thu chi cho tháng</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+
+                    <div class="alert alert-info" id="successAddTransTypeNotify" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span>Mở bảng thu chi thành công.</span>
+                    </div>
+                    <div class="alert alert-warning" id="failedAddTransTypeNotify" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span>Mở bảng thu chi thất bại.</span>
+                    </div>
+
+                    <form id="openBalanceSheetForm" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="blsName" class="col-sm-3 control-label"> Tiêu đề </label>
+                            <div class="col-sm-9">
+                                <input id="blsName" type="text" name="Name" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="forMonth" class="col-sm-3 control-label">Tháng</label>
+                            <div class="col-sm-9">
+                                <input id="forMonth" type="text" class="form-control" name="ForMonth"
+                                       data-date-start-view="0" data-date-format="dd-mm-yyyy" data-date-language="vi"
+                                       data-date-min-view-mode="0" data-date-end-date="+1m" data-date-start-date="-1m"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="forMonth" class="col-sm-3 control-label">Tổng tiền mặt</label>
+                            <div class="col-sm-9">
+                                <input id="RedundancyStartMonthView" type="text" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-9 col-md-2">
+                                <span class="btn btn-primary" onclick="openBalanceSheet()">Chấp nhận</span>
+                            </div>
+                        </div>
+                        <input type="hidden" id="redundancyStartMonth" name="RedundancyStartMonth" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#forMonth").datepicker();
+
+        window.listBalanceSheetTbl = $("#listBalanceSheetTbl").DataTable({
+            "ajax": {
+                url: "/Management/BalanceSheet/GetListBalanceSheet",
+                dataSrc: ""
+            },
+            "bLengthChange": false,
+            "bInfo": false,
+            "language": {
+                "emptyTable": "Không có dữ liệu"
+            },
+            "order": [[8, "desc"]],
+            headers: {
+                1: {
+                    sorter: false
+                }
+            },
+            "columns": [
+               { data: "Name" },
+               { data: "Name" },
+                { data: "ForMonth" },
+                { data: "TotalIncome" },
+                { data: "TotalExpense" },
+                { data: "Status" },
+                { data: "Creator" },
+                { data: "CreateDate" },
+                { data: "Id" }
+            ],
+            "drawCallback": function (settings) {
+                var tbl = document.getElementById("listBalanceSheetTbl").dataset.firstBls;
+                if (tbl === "False") {
+                    bindingNumberWithComma("RedundancyStartMonthView");
+                    var addBtn = "<div class='col-md-1'>" +
+                    "<span id='createFirstBlsBtn' class='btn btn-info' data-toggle='modal' data-target='#openBalanceSheetModel'>" +
+                    "<i class='fa fa-plus'></i>" +
+                    "</span>" +
+                    "</div>";
+                    $("#listBalanceSheetTbl_wrapper > div:nth-child(1) > div:nth-child(1)").html(addBtn);
+                }
+
+                var deleteBtn =
+            "<div class='hide' id='delHdSrvBtnGroup'>" +
+                "<span class='btn btn-warning btn-stroke' onclick='()'>" +
+                    "<i class='fa fa-plus'></i> Hủy" +
+                "</span>" +
+                "<span class='btn btn-primary' style='margin-left: 5px' onclick='()'>" +
+                    "<i class='fa fa-plus'></i> Chấp nhận" +
+                "</span>" +
+            "</div>";
+                $("#listBalanceSheetTbl_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(deleteBtn);
+            },
+            "columnDefs": [
+            {
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+            },
+            {
+                "targets": 2,
+                "data": "ForMonth",
+                "render": function (data, type, full, meta) {
+                    if (type === "display" || type === "filter") {
+                        var dateTime = data.split("-");
+                        return "<span class='label date-color label-warning'>" + dateTime[0] +
+                            "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";
+                    }
+                    return data;
+                }
+            },
+            {
+                "targets": 3,
+                "data": "TotalIncome",
+                "render": function (data, type, full, meta) {
+
+                    if (type === "display" || type === "filter") {
+                        return numberWithCommas(data);
+                    }
+                    return data;
+                }
+            },
+
+            {
+                "targets": 4,
+                "data": "TotalExpense",
+                "render": function (data, type, full, meta) {
+                    if (type === "display" || type === "filter") {
+                        return numberWithCommas(data);
+                    }
+                    return data;
+                }
+            },
+            {
+                "targets": 5,
+                "data": "Status",
+                "render": function (data, type, full, meta) {
+                    if (type === "display" || type === "filter") {
+                        if (data === 1) {
+                            return "<span class='label label-info'>Mở</span>";
+                        } else {
+                            return "<span class='label label-danger'>Đóng</span>";
+                        }
+                    }
+                    return data;
+                }
+            },
+
+            {
+                "targets": 8,
+                "data": "Id",
+                "render": function (data, type, full, meta) {
+                    if (type === "display" || type === "filter") {
+
+                        if (full.Status === 2) {
+                            return "<div class='text-right'>" +
+                             "<span onclick='editBalanceShett(\"" + data + "\")' style='margin-right: 5px' class='btn btn-info btn-xs'>" +
+                             "<i class='fa fa-info'></i>" +
+                             "</span>" +
+                             "</div>";
+                        }
+                        return "<div class='text-right'>" +
+                            "<span onclick='editBalanceShett(\"" + data + "\")' style='margin-right: 5px' class='btn btn-default btn-xs'>" +
+                            "<i class='fa fa-pencil'></i>" +
+                            "</span>" 
+                            /*"<span href='#' class='btn btn-danger btn-xs' onclick='deleteHelpdeskService(\"" + data + "\")'>" +
+                            "<i class='fa fa-times'></i>" +
+                            "</span>" +
+                            "</div>"*/;
+                    }
+                    return data;
+                }
+            }
+            ]
+        });
+        generateTableIndex(listBalanceSheetTbl);
+    });
+
+    function openBalanceSheet() {
+        $("#redundancyStartMonth").val(replaceCommaNumber($("#RedundancyStartMonthView").val()));
+        $.ajax({
+            url: "/Management/BalanceSheet/OpenMonthlyBalanceSheet",
+            type: "POST",
+            data: $("#openBalanceSheetForm").serialize(),
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    window.listBalanceSheetTbl.ajax.reload();
+                    $("#successAddTransTypeNotify").fadeIn("fast");
+                    resetFormData("openBalanceSheetForm");
+                    setTimeout(function () {
+                        $("#successAddTransTypeNotify").fadeOut("fast");
+                        $("#openBalanceSheetModel").modal("hide");
+                        removeHiddenBackgroundPopup();
+                        $("#createFirstBlsBtn").addClass("hide");
+
+                    }, 3000);
+
+                } else if (data.StatusCode === -1) {
+                    $("#failedAddTransTypeNotify").text(data.Msg);
+                    $("#failedAddTransTypeNotify").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#failedAddTransTypeNotify").fadeOut("fast");
+                    }, 3000);
+                }
+            }
+        });
+    }
+    function editBalanceShett(id) {
+        location.href = "/Management/BalanceSheet/BalanceSheetDetailView?blsId=" + id;
+    }
+
+</script>

@@ -1,0 +1,347 @@
+﻿@{
+    ViewBag.Title = "UtilityService";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+}
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+
+        <div class="heading-tab">
+            <i class="fa fa-list"> Cấu hình giá điện nước</i>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li class="active">
+                    <a href="/Management/BalanceSheet/View"><i class="fa fa-file-text-o"></i> Giá điện nước</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="panel-body">
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="">
+                    <div class="panel panel-default" style="border-color: transparent">
+                        <form id="addUtilServiceForm" class="form-horizontal" role="form">
+
+
+                            <div class="alert alert-info" id="createSuccessNoti" style="display: none">
+                                <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <span>Mức giá sinh hoạt được tạo thành công</span>
+                            </div>
+                            <div class="alert alert-danger" id="createFailedNoti" style="display: none">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                                <span>Tạo mức giá sinh hoạt thất bại</span>
+                            </div>
+                            <div class="tab-content">
+                                <div class="tab-pane fade active in" id="">
+
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-3 col-sm-6">
+                                            <fieldset class="scheduler-border less-padding">
+                                                <legend class="scheduler-border"> Thông tin dịch vụ</legend>
+                                                <div class="form-group">
+                                                    <label for="serviceTypeName" class="col-md-2 control-label">Tên dịch vụ</label>
+                                                    <div class="col-md-10">
+                                                        <input id="serviceTypeName" name="ServiceTypeName" type="text" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="serviceType" class="col-md-2 control-label">Loại dịch vụ</label>
+                                                    <div class="col-md-4 full-width-select">
+                                                        <select id="serviceType" name="ServiceType" class="form-control">
+                                                            <option value="@SLIM_CONFIG.UTILITY_SERVICE_TYPE_ELECTRICITY" selected="selected"> Điện</option>
+                                                            <option value="@SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER"> Nước</option>
+                                                            <option value="@SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST"> Chi phí cố định</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-offset-1 col-sm-10">
+                                            <fieldset class="scheduler-border less-padding">
+                                                <legend class="scheduler-border">Mức giá</legend>
+
+                                                <div id="fieldsetBody">
+                                                    <div class="form-group">
+                                                        <div class="col-md-offset-1 col-md-4">
+                                                            <strong style="align-content: center">Các mức</strong>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <strong style="align-content: center">Từ</strong>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <strong style="align-content: center">Đến</strong>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <strong style="align-content: center">Giá</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div id="servicePricesWrapper">
+                                                        @{
+                                                            for (int i = 1; i < 4; i++)
+                                                            {
+                                                                <div id="row_@i" class="form-group">
+                                                                    <div class="col-md-offset-1 col-md-4">
+                                                                        <input id="range_name_@i" name="" type="text" class="form-control order-item">
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <input id="from_amount_@i" name="" type="text" class="form-control order-item-qty">
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <input id="to_amount_@i" name="" type="text" class="form-control order-item-price">
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <input id="price_@i" name="" type="text" class="form-control total-order">
+                                                                    </div>
+                                                                    <span class="btn btn-danger btn-xs" onclick="deleteItem(@i)"><i class="fa fa-times"></i></span>
+                                                                </div>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-3">
+                                                        <span id="addNewRow" class="btn btn-stroke btn-primary"><i class="fa fa-plus"></i> Thêm</span>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <div class="col-md-offset-9">
+                                                <span class="btn btn-primary" onclick="addSericesPrices()"><i class="fa fa-floppy-o"></i> Thêm</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="houseRentFrame" class="hide">
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-6">
+            <strong style="align-content: center">Tên phí cố định</strong>
+        </div>
+        <div class="col-sm-2">
+            <strong style="align-content: center">Giá</strong>
+        </div>
+    </div>
+    <div id="fixedCostWrapper">
+        <div id="row_1" class="form-group">
+            <div class="col-md-offset-2 col-md-6">
+                <input id="fixed_cost_name_1" name="" type="text" class="form-control order-item">
+            </div>
+            <div class="col-md-2">
+                <input id="fixed_cost_price_1" name="" type="text" class="form-control order-item-qty">
+            </div>
+            <span class="btn btn-danger btn-xs" onclick="deleteItem(1)"><i class="fa fa-times"></i></span>
+        </div>
+    </div>
+</div>
+<div id="electricFrame" class="hide">
+    <div class="form-group">
+        <div class="col-md-offset-1 col-md-4">
+            <strong style="align-content: center">Các mức</strong>
+        </div>
+        <div class="col-sm-2">
+            <strong style="align-content: center">Từ</strong>
+        </div>
+        <div class="col-sm-2">
+            <strong style="align-content: center">Đến</strong>
+        </div>
+        <div class="col-sm-2">
+            <strong style="align-content: center">Giá</strong>
+        </div>
+    </div>
+    <div id="servicePricesWrapper">
+        @{
+            for (int i = 1; i < 4; i++)
+            {
+                <div id="row_@i" class="form-group">
+                    <div class="col-md-offset-1 col-md-4">
+                        <input id="range_name_@i" name="" type="text" class="form-control order-item">
+                    </div>
+                    <div class="col-md-2">
+                        <input id="from_amount_@i" name="" type="text" class="form-control order-item-qty">
+                    </div>
+                    <div class="col-md-2">
+                        <input id="to_amount_@i" name="" type="text" class="form-control order-item-price">
+                    </div>
+                    <div class="col-md-2">
+                        <input id="price_@i" name="" type="text" class="form-control total-order">
+                    </div>
+                    <span class="btn btn-danger btn-xs" onclick="deleteItem(@i)"><i class="fa fa-times"></i></span>
+                </div>
+            }
+        }
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+
+        window.index = 3;
+        $("#addNewRow").on("click", function () {
+            var mode = parseInt($("#serviceType").find("option:selected").val(), 10);
+            var tag = {};
+            window.index++;
+            if (mode === 1 || mode === 2) {
+                tag = "<div id=\"row_" + index + "\" class='form-group'>" +
+                    "<div class='col-md-offset-1 col-md-4'><input id=\"range_name_" + index + "\" type='text' class='form-control order-item'></div>" +
+                    "<div class='col-sm-2'><input type='text' id=\"from_amount_" + index + "\" class='form-control order-item-qty'></div>" +
+                    "<div class='col-sm-2'><input id=\"to_amount_" + index + "\"type='text' class='form-control order-item-price'></div>" +
+                    "<div class='col-sm-2'><input id=\"price_" + index + "\" type='text' class='form-control'></div>" +
+                    "<span class='btn btn-danger btn-xs' onclick='deleteItem(\"" + index + "\")'><i class='fa fa-times'></i></span>" +
+                    "</div>";
+                $("#servicePricesWrapperInline").append(tag);
+
+            } else if (mode === 5) {
+                tag = "<div id='row_" + index + "' class='form-group'>" +
+                            "<div class='col-md-offset-2 col-md-6'>" +
+                                "<input id='fixed_cost_name_"+ index +"' name='' type='text' class='form-control order-item'>" +
+                            "</div>" +
+                            "<div class='col-md-2'>" +
+                                "<input id='fixed_cost_price_" + index + "'  name='' type='text' class='form-control order-item-qty'>" +
+                            "</div>" +
+                            "<span class='btn btn-danger btn-xs' onclick='deleteItem(\"" + index + "\")'><i class='fa fa-times'></i></span>" +
+                        "</div>";
+                $("#fixedCostWrapperInline").append(tag);
+            }
+
+        });
+        $("#serviceType").on("change", function () {
+            var selected = parseInt($("#serviceType").find("option:selected").val(), 10);
+            if (selected === 5) {
+                $("#fieldsetBody").html($("#houseRentFrame").html());
+                $("#fixedCostWrapper").prop("id", "fixedCostWrapperInline");
+            } else if (selected === 2 || selected === 1) {
+                $("#fieldsetBody").html($("#electricFrame").html());
+                $("#servicePricesWrapper").prop("id", "servicePricesWrapperInline");
+                window.index = 3;
+            }
+        });
+    });
+    function deleteItem(id) {
+        var selected = parseInt($("#serviceType").find("option:selected").val(), 10);
+        if (selected === 5) {
+            if ($("#fixedCostWrapperInline").children().length > 1) {
+                $("#row_" + id)[0].parentNode.removeChild($("#row_" + id)[0]);
+            }
+        } else if (selected === 2 || selected === 1) {
+            if ($("#servicePricesWrapperInline").children().length > 1) {
+                $("#row_" + id)[0].parentNode.removeChild($("#row_" + id)[0]);
+            }
+        }
+        
+    }
+
+
+    function addSericesPrices() {
+        var mode = parseInt($("#serviceType").find("option:selected").val(), 10);
+        if (mode === 1 || mode === 2) {
+            var contentObj = $("#servicePricesWrapperInline > .form-group");
+            var numberOfRow = contentObj.length;
+            var utilityServiceName = $("#serviceTypeName").val();
+            var utilityServiceType = $("#serviceType").val();
+            var listItem = [];
+            for (var i = 0; i < numberOfRow; i++) {
+                var rowIdStr = $(contentObj[i]).prop("id").split("row_");
+                var id = rowIdStr[1];
+                var rangeName = $("#range_name_" + id).val();
+                var fromAmount = replaceCommaNumber($("#from_amount_" + id).val());
+                var toAmount = replaceCommaNumber($("#to_amount_" + id).val());
+                var price = replaceCommaNumber($("#price_" + id).val());
+                if (rangeName && fromAmount && toAmount && price) {
+                    var item = {
+                        Name: rangeName,
+                        FromAmount: fromAmount,
+                        ToAmount: toAmount,
+                        Price: price
+                    };
+                    listItem.push(item);
+                }
+            }
+            var orderItem = {
+                Name: utilityServiceName,
+                Type: utilityServiceType,
+                UtilityServicePriceRanges: listItem
+            };
+
+            $.ajax({
+                url: "/Management/Config/UtilityService/AddUtilServicePrices",
+                data: orderItem,
+                type: "POST",
+                success: function (data) {
+                    if (data.StatusCode === 0) {
+                        $("#createSuccessNoti").fadeIn("fast");
+                        resetFormData("addUtilServiceForm");
+                        setTimeout(function () {
+                            $("#createSuccessNoti").fadeOut("fast");
+                        }, 3000);
+                    } else {
+                        $("#createFailedNoti").fadeIn("fast");
+                        setTimeout(function () {
+                            $("#createFailedNoti").fadeOut("fast");
+                        }, 3000);
+                    }
+                }
+            });
+        }
+        else if (mode === 5) {
+            var contentObj = $("#fixedCostWrapperInline > .form-group");
+            var numberOfRow = contentObj.length;
+            var utilityServiceName = $("#serviceTypeName").val();
+            var utilityServiceType = $("#serviceType").val();
+            var listfixCost = [];
+            for (var i = 0; i < numberOfRow; i++) {
+                var _rowIdStr = $(contentObj[i]).prop("id").split("row_");
+                var _id = _rowIdStr[1];
+                var fixedCostName = $("#fixed_cost_name_" + _id).val();
+                var fixedPrice = replaceCommaNumber($("#fixed_cost_price_" + _id).val());
+                if (fixedCostName && fixedPrice) {
+                    var item = {
+                        Name: fixedCostName,
+                        Price: fixedPrice
+                    };
+                    listfixCost.push(item);
+                }
+            }
+            var fixCostItem = {
+                Name: utilityServiceName,
+                Type: utilityServiceType,
+                FixedCosts: listfixCost
+            };
+
+            $.ajax({
+                url: "/Management/Config/UtilityService/AddFixedCost",
+                data: fixCostItem,
+                type: "POST",
+                success: function (data) {
+                    if (data.StatusCode === 0) {
+                        $("#createSuccessNoti").fadeIn("fast");
+                        resetFormData("addUtilServiceForm");
+                        setTimeout(function () {
+                            $("#createSuccessNoti").fadeOut("fast");
+                        }, 3000);
+                    } else {
+                        $("#createFailedNoti").fadeIn("fast");
+                        setTimeout(function () {
+                            $("#createFailedNoti").fadeOut("fast");
+                        }, 3000);
+                    }
+                }
+            });
+        }
+            
+
+        
+    }
+</script>

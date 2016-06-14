@@ -28,9 +28,17 @@ window.StatusUnpublished = 1;
 window.StatusUnpaid = 2;
 window.StatusPaid = 3;
 
+window.StatusCompleteRecordConsumption = 1;
+window.StatusUncompleteRecordConsumption = 2;
+
+window.StatusManualReceipt = 1;
+window.StatusAutomationReceipt = 2;
 
 window.Transaction_Type_Income = 1;
 window.Transaction_Type_Expense = 2;
+
+window.Mode_Delete = 1;
+window.Mode_Publish = 2;
 
 
 
@@ -973,11 +981,11 @@ function getHdReqDetail(id) {
         url: "/Home/HelpdeskRequest/GetHdReqInfoDetail/" + id,
         success: function (data) {
 
-//            console.log(data.Data.HdReqInfoDetail);
-//            console.log(data.Data.HdSrvCategories);
-//            console.log(data.Data.ListHdSrvBySelectedCat);
-//            console.log(data.Data.SelectedHdSrvCatId);
-//            console.log(data.Data.SelectedHdSrvId);
+            //            console.log(data.Data.HdReqInfoDetail);
+            //            console.log(data.Data.HdSrvCategories);
+            //            console.log(data.Data.ListHdSrvBySelectedCat);
+            //            console.log(data.Data.SelectedHdSrvCatId);
+            //            console.log(data.Data.SelectedHdSrvId);
 
             var objList = data.Data.HdSrvCategories;
             var returnHtml = parseJsonToSelectTags(objList, data.Data.SelectedHdSrvCatId, "Hãy chọn loại dịch vụ hổ trợ");
@@ -1003,15 +1011,19 @@ function getHdReqDetail(id) {
 function generateTableIndex(datatable) {
     datatable.on('order.dt search.dt', function () {
         datatable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-            cell.innerHTML = i + 1;
+            if ($(cell.parentElement.previousSibling).hasClass("hide")) {
+                cell.innerHTML = i - 1;
+            } else {
+                cell.innerHTML = i + 1;
+            }
         });
     }).draw();
 }
 function parseJsonToSelectTags(listJson, selectedId, msg) {
     var objList = listJson;
     var selectTagList = [];
-    var selectTag = "<option value='' selected='selected'> " + msg + " </option>";
-    selectTagList.push(selectTag);
+    //    var selectTag = "<option value='' selected='selected'> " + msg + " </option>";
+    //    selectTagList.push(selectTag);
     for (var i = 0; i < objList.length; i++) {
         var obj = objList[i];
         if (obj.Id === selectedId) {
@@ -1105,9 +1117,7 @@ function acceptApproveUser() {
 function showOrderDetail(receiptId, userId) {
     location.href = "/Home/ManageReceipt/View/Detail?userId=" + userId + "&orderId=" + receiptId;
 }
-function editOrderDetail(receiptId, userId) {
-    location.href = "/Management/ManageReceipt/Edit/Detail?userId=" + userId + "&orderId=" + receiptId;
-}
+
 function approveResident(id) {
     $("#delHdSrvBtnGroup").removeClass("show").addClass("show");
     $("#rowHdSrvCat_" + id).css("display", "none");
@@ -1265,6 +1275,15 @@ $(document).ready(function () {
         var selectedBlock = $("#houseBlock").find("option:selected").val();
         getRoomAndFloor(selectedBlock, selectedFloor, "floor");
     });
+
+    $(".ams-modal").on("hidden.bs.modal", function () {
+        $(this).closest("form").find("input[type=text], textarea").val("");
+        $(this).closest("form").find("select option").prop("selected", function () {
+            return this.defaultSelected;
+        });
+        removeHiddenBackgroundPopup();
+    });
+
 });
 
 //Receipt manager
@@ -1284,8 +1303,8 @@ function resetFormData(id) {
 }
 
 function removeHiddenBackgroundPopup() {
-    $('body').removeClass('modal-open');
-    $('.modal-backdrop').remove();
+    $("body").removeClass("modal-open");
+    $(".modal-backdrop").remove();
 }
 
 function getRandomColor() {
@@ -1305,8 +1324,8 @@ function createChart(id, data) {
 
     for (var i = 0; i < data.length; i++) {
         obj = data[i];
-        listLbl.push(obj.Name);
-        listVal.push(obj.TotalAmount);
+        listLbl.push(obj.TransCatName);
+        listVal.push(obj.TransTotalAmount);
         bgColorList.push(randomColor2());
     }
     var config = {
@@ -1343,4 +1362,68 @@ function randomColor2() {
     var v = Math.floor(Math.random() * 500);
     var c = 'rgb(' + r + ', ' + g + ', ' + b + ')';
     return c;
+}
+
+function bindingNumberWithComma(id) {
+    //    $("#" + id).on("keyup", function () {
+    $("#" + id).on("keydown", function () {
+        console.log($(this).val());
+        if ($(this).val() && (isNaN(replaceCommaNumber($(this).val())) === false)) {
+            var value = replaceCommaNumber($(this).val());
+            $(this).val(numberWithCommas(value));
+        } else {
+            $(this).val("");
+        }
+    });
+}
+
+function electricAggressiveCalculating(consumption, rangePrices) {
+    var rangePrice = {};
+    var previous = 0;
+    var total = 0;
+    for (var i = 0; i < rangePrices.lenth; i++) {
+        rangePrice = rangePrices[i];
+
+        var calculatingPart = 0;
+        if (consumption >= rangePrice.ToAmount) {
+            calculatingPart = rangePrice.ToAmount - previous;
+            previous = rangePrice.ToAmount;
+        }
+        else if (consumption >= rangePrice.FromAmount && consumption < rangePrice.ToAmount) {
+            calculatingPart = consumption - previous;
+        }
+        total += calculatingPart * rangePrice.Price;
+    }
+    return total;
+}
+
+function waterAggressiveCalculating(consumption, rangePrices, numbeOfResident) {
+    var rangePrice = {};
+    var previous = 0;
+    var total = 0;
+    for (var i = 0; i < rangePrices.lenth; i++) {
+
+        rangePrice = rangePrices[i];
+        rangePrice.ToAmount = rangePrice.ToAmount * numbeOfResident;
+        rangePrice.FromAmount = rangePrice.FromAmount * numbeOfResident;
+
+        var calculatingPart = 0;
+        if (consumption >= rangePrice.ToAmount) {
+            calculatingPart = rangePrice.ToAmount - previous;
+            previous = rangePrice.ToAmount;
+        }
+        else if (consumption >= rangePrice.FromAmount && consumption < rangePrice.ToAmount) {
+            calculatingPart = consumption - previous;
+        }
+        total += calculatingPart * rangePrice.Price;
+    }
+    return total;
+}
+
+function calculateDateFromTodayToEndOfMonth() {
+    var oneDay = 24 * 60 * 60 * 1000;
+    var today = new Date();
+    var lastDate = new Date(today.getFullYear(), today.getMonth(0) + 1, 0);
+    var diffDays = Math.round(Math.abs(lastDate.getTime() - today.getTime()) / (oneDay));
+    return diffDays;
 }

@@ -7,49 +7,34 @@
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
 
     bool balanceSheetIsCreated = ViewBag.balanceSheetIsCreated == null ? true : ViewBag.balanceSheetIsCreated;
-    double totalExpense = 0;
-    double totalPaidExpense = 0;
-    double totalUnpaidExpense = 0;
-
-
-    double totalIncome = 0;
-    double totalPaidIncome = 0;
-    double totalUnpaidIncome = 0;
 
     string thisMonth = "";
     string createDate = "";
+    string closingDate = "";
     string lastUpdate = "";
     string description = "";
-    int balanceSheetStatus = 0;
+    string fromDate = "";
+    int status = 0;
     int balanceSheetId = 0;
     string incomeTransactionsJson = "";
     string expenseTransactionsJson = "";
-
-    List<AmountGroupByTransCategory> listExpenseGroupByCategories = new List<AmountGroupByTransCategory>();
-    List<AmountGroupByTransCategory> incomeTransactions = new List<AmountGroupByTransCategory>();
+    BalanceSheetProcessingModel bls = new BalanceSheetProcessingModel();
 
     if (balanceSheetIsCreated)
     {
-        totalExpense = ViewBag.totalExpense;
-        totalPaidExpense = ViewBag.totalPaidExpense;
-        totalUnpaidExpense = ViewBag.totalUnpaidExpense;
-
-
-        totalIncome = ViewBag.totalIncome;
-        totalPaidIncome = ViewBag.totalPaidIncome;
-        totalUnpaidIncome = ViewBag.totalUnpaidIncome;
-
-        listExpenseGroupByCategories = ViewBag.listExpenseGroupByCategories;
-        incomeTransactions = ViewBag.incomeTransactions;
-
         thisMonth = ViewBag.thisMonth;
         createDate = ViewBag.createDate;
+        closingDate = ViewBag.closingDate;
+        fromDate = ViewBag.fromDate;
         lastUpdate = ViewBag.lastUpdate;
-        description = ViewBag.lastUpdate;
+        description = ViewBag.description;
         balanceSheetId = ViewBag.balanceSheetId;
-        balanceSheetStatus = ViewBag.balanceSheetStatus;
+        status = ViewBag.status;
+
         incomeTransactionsJson = ViewBag.incomeTransactionsJson;
         expenseTransactionsJson = ViewBag.expenseTransactionsJson;
+
+        bls = ViewBag.balanceSheet;
     }
 }
 
@@ -63,13 +48,10 @@
                     <a href="/Management/BalanceSheet/View/@User.Identity.GetUserId()"><i class="fa fa-file-text-o"></i> Báo cáo thu chi</a>
                 </li>
                 <li>
-                    <a href="/Management/BalanceSheet/ManageIncomeView"><i class="fa fa fa-plus"></i> Quản lý thu chi</a>
+                    <a href="/Management/BalanceSheet/ManageBalanceSheetView"><i class="fa fa fa-plus"></i> Quản lý thu chi</a>
                 </li>
                 <li>
                     <a href="/Management/BalanceSheet/ManageTransactionCatView"><i class="fa fa fa-plus"></i> Quản lý nhóm thu chi</a>
-                </li>
-                <li class="">
-                    <a href="/Management/BalanceSheet/@User.Identity.GetUserId()"><i class="fa fa fa-plus"></i> Biểu đồ</a>
                 </li>
             </ul>
         </div>
@@ -103,13 +85,14 @@
                                     <label class="control-label col-md-offset-3 col-md-1">Tháng</label>
                                     <div class="col-md-3">
                                         <input id="bsheetMonth" type="text" class="form-control" data-date-default-date="+0d" value="@thisMonth"
-                                               data-date-start-view="1" data-date-format="mm-yyyy" data-date-default-date="0d" data-date-language="vi"
+                                               data-date-start-view="1" data-date-format="mm-yyyy" data-date-language="vi"
                                                data-date-min-view-mode="1" data-date-end-date="0m" />
                                     </div>
                                     <div class="col-md-2">
                                         <span class="btn btn-primary" onclick="viewBalanceSheetMonth()">Xem</span>
                                     </div>
                                 </div>
+
                                 <div class=" form-group">
                                     <div class="col-md-6">
                                         <fieldset class="scheduler-border less-padding border-top">
@@ -123,7 +106,7 @@
                                             <div class="form-group">
                                                 <label for="title" class="col-md-4 control-label">Trạng thái</label>
                                                 <div class="col-md-8">
-                                                    @{if (balanceSheetStatus == -1)
+                                                    @{if (status == SLIM_CONFIG.BALANCE_SHEET_CLOSE)
                                                     {
                                                         <span class="btn btn-danger">Đóng</span>
                                                     }
@@ -135,11 +118,23 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-md-4 control-label">Ngày tạo</label>
+                                                <label class="col-md-4 control-label">Từ ngày</label>
                                                 <div class="col-md-8">
-                                                    <input class="form-control" value="@createDate" />
+                                                    <input class="form-control" value="@fromDate" />
                                                 </div>
                                             </div>
+                                            @if (closingDate != null)
+                                            {
+                                                <div class="form-group">
+                                                    <label class="col-md-4 control-label">Đến ngày</label>
+                                                    <div class="col-md-8">
+
+                                                        <input class="form-control" value="@closingDate" />
+
+                                                    </div>
+                                                </div>
+                                            }
+
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label">Ngày cập nhật</label>
                                                 <div class="col-md-8">
@@ -155,111 +150,78 @@
                                                 <table class="table v-middle table-bordered table-striped balance-sheet">
                                                     <thead>
                                                         <tr>
-                                                            <th rowspan="2"></th>
                                                             <th rowspan="2">Tên</th>
                                                             <th colspan="2" class="text-capitalize text-center" style="background-color: #dddddd">
-                                                                Bảng thu chi tài chính tháng @thisMonth
+                                                                Bảng lưu chuyển tiền mặt tháng @thisMonth
                                                             </th>
                                                         </tr>
                                                         <tr>
-                                                            <th>Thu</th>
-                                                            <th>Chi</th>
+                                                            <th>Tổng</th>
+                                                            <th>Thực thu</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td>1</td>
-                                                            <td>Tổng</td>
-                                                            <td>@totalIncome.ToString("N0")</td>
-                                                            <td>@totalExpense.ToString("N0")</td>
+                                                            <td><strong>Tồn đầu tháng</strong></td>
+                                                            <td id="redudancyStartMonth" colspan="2">@bls.RedudancyStartMonth.ToString("N0")</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>2</td>
-                                                            <td>Đã hoàn tất</td>
-                                                            <td>@totalPaidIncome.ToString("N0")</td>
-                                                            <td>@totalPaidExpense.ToString("N0")</td>
+                                                            <td><strong>Tổng thu nhập</strong></td>
+                                                            <td id="forecastIncome">@bls.ForecastIncome.ToString("N0")</td>
+                                                            <td id="actualIncome">@bls.ActualIncome.ToString("N0")</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>3</td>
-                                                            <td>Cần phải thực hiện</td>
-                                                            <td>@totalUnpaidIncome.ToString("N0")</td>
-                                                            <td>@totalUnpaidExpense.ToString("N0")</td>
+                                                            <td><strong>Tổng chi</strong></td>
+                                                            <td id="forecastExpense">@bls.ForecastExpense.ToString("N0")</td>
+                                                            <td id="actualExpense">@bls.ActualExpense.ToString("N0")</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Tồn cuối tháng</strong></td>
+                                                            <td id="redudancyEndMonth" colspan="2">@bls.RedudancyEndMonth.ToString("N0")</td>
                                                         </tr>
                                                     </tbody>
-                                                    <tfoot>
-                                                        <tr>
-                                                            @{
-                                                    double netIncome = totalIncome - totalExpense;
-                                                    string msg = "";
-                                                    string classStr = "";
-                                                    if (netIncome < 0)
-                                                    {
-                                                        msg = "Lỗ";
-                                                        classStr = "danger";
-                                                    }
-                                                    else if (netIncome == 0)
-                                                    {
-                                                        msg = "Hòa vốn";
-                                                        classStr = "warning";
-                                                    }
-                                                    else
-                                                    {
-                                                        msg = "Lãi";
-                                                        classStr = "success";
-                                                    }
-                                                    <td colspan="2" class="text-right" style="font-weight: 600; font-size: 18px;">@msg</td>
-
-                                                                <td colspan="2" class="@classStr" style="font-weight: 600; font-size: 18px;">@Math.Abs(netIncome).ToString("N0")</td>
-                                                            }
-
-                                                        </tr>
-                                                    </tfoot>
                                                 </table>
                                             </div>
                                         </fieldset>
-
                                     </div>
                                 </div>
-
 
                                 <div class="form-group">
                                     <div class="col-md-6">
                                         <fieldset class="scheduler-border less-padding border-top">
-                                            <legend class="scheduler-border bold-black">Chi tiết các khoản thu</legend>
+                                            <legend class="scheduler-border bold-black text-capitalize">Các khoản thu trong tháng</legend>
                                             <div class="table-responsive">
                                                 <table id="detailIncomeTbl" class="table v-middle table-striped table-bordered">
                                                     <thead>
                                                         <tr>
                                                             <th></th>
                                                             <th>Khoản thu</th>
-                                                            <th>Đẵ thu</th>
-                                                            <th>Còn lại</th>
+                                                            <th>Thực thu</th>
                                                             <th>Tổng</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
 
                                                         @{
-                                foreach (var inc in incomeTransactions)
+                                foreach (var inc in bls.IncomeList)
                                 {
                                     <tr>
                                         <td></td>
-                                        <td>@inc.Name</td>
-                                        <td>@inc.PaidAmount.ToString("N0")</td>
-                                        <td>@inc.UnpaidAmount.ToString("N0")</td>
-                                        <td>@inc.TotalAmount.ToString("N0")</td>
+                                        <td>@inc.TransCatName</td>
+                                        <td>@inc.TransPaidAmount.ToString("N0")</td>
+                                        <td>@inc.TransTotalAmount.ToString("N0")</td>
                                     </tr>
                                 }
                                                         }
                                                     </tbody>
                                                     <tfoot>
-                                                        <tr>
-                                                            <td></td>
-                                                            <td><strong>Tổng</strong></td>
-                                                            <td><strong>@totalPaidIncome.ToString("N0")</strong></td>
-                                                            <td><strong>@totalUnpaidIncome.ToString("N0")</strong></td>
-                                                            <td><strong>@totalIncome.ToString("N0")</strong></td>
-                                                        </tr>
+                                                        @*                                                        <tr>*@
+                                                        @*                                                            <td></td>*@
+                                                        @*                                                            <td><strong>Tổng</strong></td>*@
+                                                        @*                                                            <td><strong>@totalPaidIncome.ToString("N0")</strong></td>*@
+                                                        @*                                                            <td><strong>@totalUnpaidIncome.ToString("N0")</strong></td>*@
+                                                        @*                                                            <td><strong>@totalIncome.ToString("N0")</strong></td>*@
+                                                        @*                                                        </tr>*@
                                                     </tfoot>
                                                 </table>
                                             </div>
@@ -273,40 +235,38 @@
 
                                     <div class="col-md-6">
                                         <fieldset class="scheduler-border less-padding border-top">
-                                            <legend class="scheduler-border bold-black"> Chi tiết các khoản chi</legend>
+                                            <legend class="scheduler-border bold-black text-capitalize"> Các khoản chi trong tháng</legend>
                                             <div class="table-responsive">
                                                 <table id="detailExpensetbl" class="table v-middle table-striped  table-bordered">
                                                     <thead>
                                                         <tr>
                                                             <th></th>
                                                             <th>Khoản chi</th>
-                                                            <th>Ước tính</th>
-                                                            <th>Đẵ trã</th>
-                                                            <th>Còn lại</th>
+                                                            <th>Thực chi</th>
+                                                            <th>Tổng</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         @{
-                                foreach (var exp in listExpenseGroupByCategories)
+                                foreach (var inc in bls.ExpenseList)
                                 {
                                     <tr>
                                         <td></td>
-                                        <td>@exp.Name</td>
-                                        <td>@exp.PaidAmount.ToString("N0")</td>
-                                        <td>@exp.UnpaidAmount.ToString("N0")</td>
-                                        <td>@exp.TotalAmount.ToString("N0")</td>
+                                        <td>@inc.TransCatName</td>
+                                        <td>@inc.TransPaidAmount.ToString("N0")</td>
+                                        <td>@inc.TransTotalAmount.ToString("N0")</td>
                                     </tr>
                                 }
                                                         }
                                                     </tbody>
                                                     <tfoot>
-                                                        <tr>
-                                                            <td></td>
-                                                            <td><strong>Tổng</strong></td>
-                                                            <td><strong>@totalPaidExpense.ToString("N0")</strong></td>
-                                                            <td><strong>@totalUnpaidExpense.ToString("N0")</strong></td>
-                                                            <td><strong>@totalExpense.ToString("N0")</strong></td>
-                                                        </tr>
+                                                        @*                                                        <tr>*@
+                                                        @*                                                            <td></td>*@
+                                                        @*                                                            <td><strong>Tổng</strong></td>*@
+                                                        @*                                                            <td><strong>@totalPaidExpense.ToString("N0")</strong></td>*@
+                                                        @*                                                            <td><strong>@totalUnpaidExpense.ToString("N0")</strong></td>*@
+                                                        @*                                                            <td><strong>@totalExpense.ToString("N0")</strong></td>*@
+                                                        @*                                                        </tr>*@
                                                     </tfoot>
                                                 </table>
                                             </div>
@@ -328,8 +288,6 @@
 </div>
 
 <script>
-    document.getElementById("bsheetMonth").dataset.setDate = "04-03-1993";
-
     $(document).ready(function () {
         $("#bsheetMonth").datepicker(
         {});
@@ -379,12 +337,12 @@
 
     });
 
-    
+
 
     function viewBalanceSheetMonth() {
         var month = $("#bsheetMonth").val();
         location.href = "/Management/BalanceSheet/View?month=" + encodeURIComponent(month);
     }
 
-    
+
 </script>

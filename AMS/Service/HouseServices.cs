@@ -19,6 +19,13 @@ namespace AMS.Service
         {
             return _houseRepository.List.Where(h => h.HouseName.ToLower().Contains(houseName.ToLower())).First();
         }
+        public House FindByBlockFloorHouseName(string block, string floor, string houseName)
+        {
+            IEnumerable<House> houses = _houseRepository.List.Where(h => h.Block.ToLower().Contains(block.ToLower())
+                                                            && h.Floor.ToLower().Contains(floor.ToLower())
+                                                            && h.HouseName.ToLower().Contains(houseName.ToLower()));
+            return houses.Count() == 0 ? null : houses.First();
+        }
         public List<House> GetAllBlock()
         {
             return _houseRepository.List.Where(h => h.OwnerID != null).
@@ -26,7 +33,7 @@ namespace AMS.Service
         }
         public List<House> GetFloorInBlock(string blockName)
         {
-            return _houseRepository.List.Where(h => h.Block.Contains(blockName) &&  h.OwnerID != null).
+            return _houseRepository.List.Where(h => h.Block.Contains(blockName) && h.OwnerID != null).
                 OrderBy(h => h.Floor).GroupBy(h => h.Floor).Select(h => h.First()).ToList();
         }
         public List<House> GetRoomsInFloor(string blockName, string floorName)

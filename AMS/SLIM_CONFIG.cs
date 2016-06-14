@@ -28,11 +28,6 @@ namespace AMS
         public static int RECEIPT_STATUS_UNPAID = 2;
         public static int RECEIPT_STATUS_PAID = 3;
 
-        public static int RECEIPT_TYPE_HD_REQUEST = 1;
-        public static int RECEIPT_TYPE_ELECTRIC = 2;
-        public static int RECEIPT_TYPE_WATER = 3;
-        public static int RECEIPT_TYPE_HOUSE_RENT = 4;
-
 
         public static int TRANSACTION_TYPE_INCOME = 1;
         public static int TRANSACTION_TYPE_EXPENSE = 2;
@@ -40,6 +35,23 @@ namespace AMS
         public static int RECEIPT_ADD_MODE_SAVE = 1;
         public static int RECEIPT_ADD_MODE_SAVE_PUBLISH = 2;
 
+        public static int RECEIPT_TYPE_MANUAL = 1;
+        public static int RECEIPT_TYPE_AUTOMATION = 2;
+
+        public static int BALANCE_SHEET_OPEN = 1;
+        public static int BALANCE_SHEET_CLOSE = 2;
+
+        public static int UTILITY_SERVICE_TYPE_ELECTRICITY = 1;
+        public static int UTILITY_SERVICE_TYPE_WATER = 2;
+        public static int UTILITY_SERVICE_TYPE_HOUSE_RENT = 3;
+        public static int UTILITY_SERVICE_TYPE_HD_REQUEST = 4;
+        public static int UTILITY_SERVICE_TYPE_FIXED_COST = 5;
+
+        public static int UTILITY_SERVICE_GET_CONSUMPTION_COMPLETE = 1;
+        public static int UTILITY_SERVICE_GET_CONSUMPTION_UN_COMPLETE = 2;
+
+        public static int MODE_DELETE = 1;
+        public static int MODE_PUBLISH = 2;
 
 
 

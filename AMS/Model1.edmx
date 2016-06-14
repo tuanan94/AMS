@@ -5,6 +5,16 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="AMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="ContextKey" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="Model" Type="varbinary(max)" Nullable="false" />
+          <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
+        </EntityType>
         <EntityType Name="Answer">
           <Key>
             <PropertyRef Name="Id" />
@@ -22,7 +32,6 @@
           <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="Tel" Type="varchar" MaxLength="11" />
           <Property Name="Address" Type="nvarchar" MaxLength="255" />
-          <Property Name="GoogleMapUrl" Type="nvarchar" MaxLength="255" />
           <Property Name="ClickCount" Type="bigint" />
           <Property Name="AroundProviderCategoryId" Type="int" />
           <Property Name="ImageUrl" Type="nvarchar(max)" />
@@ -48,17 +57,86 @@
           <Property Name="LastModified" Type="date" />
           <Property Name="AroundProviderId" Type="int" />
         </EntityType>
+        <EntityType Name="AspNetRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaims">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ClaimType" Type="nvarchar(max)" />
+          <Property Name="ClaimValue" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogins">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ProviderKey" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserRoles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar(max)" />
+          <Property Name="SecurityStamp" Type="nvarchar(max)" />
+          <Property Name="PhoneNumber" Type="nvarchar(max)" />
+          <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="datetime" />
+          <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
         <EntityType Name="BalanceSheet">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Title" Type="nvarchar" MaxLength="255" />
+          <Property Name="Status" Type="int" />
           <Property Name="ForMonth" Type="datetime" />
           <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="CreateDate" Type="datetime" />
+          <Property Name="ClosingDate" Type="datetime" />
           <Property Name="LastModified" Type="datetime" />
           <Property Name="ManagerId" Type="int" />
+          <Property Name="TotalIncome" Type="float" />
+          <Property Name="TotalExpense" Type="float" />
+          <Property Name="TotalIncomeInCash" Type="float" />
+          <Property Name="TotalExpenseInCash" Type="float" />
+          <Property Name="RedundancyStartMonth" Type="float" />
+          <Property Name="RedundancyEndMonth" Type="float" />
+        </EntityType>
+        <EntityType Name="Comment">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="postId" Type="int" />
+          <Property Name="userId" Type="int" />
+          <Property Name="detail" Type="nvarchar(max)" />
+          <Property Name="createdDate" Type="datetime" />
         </EntityType>
         <EntityType Name="HelpdeskRequest">
           <Key>
@@ -133,6 +211,8 @@
           <Property Name="OwnerID" Type="int" />
           <Property Name="ProfileImage" Type="nvarchar(max)" />
           <Property Name="CoverImage" Type="nvarchar(max)" />
+          <Property Name="DisplayMember" Type="bit" />
+          <Property Name="AllowOtherView" Type="bit" />
         </EntityType>
         <EntityType Name="Image">
           <Key>
@@ -157,6 +237,7 @@
           <Property Name="Status" Type="int" />
           <Property Name="UserId" Type="int" />
           <Property Name="EmbedCode" Type="nvarchar(max)" />
+          <Property Name="Disable" Type="int" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -182,6 +263,7 @@
           <Property Name="ManagerId" Type="int" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="LastModified" Type="datetime" />
+          <Property Name="IsAutomation" Type="int" />
         </EntityType>
         <EntityType Name="ReceiptDetail">
           <Key>
@@ -191,9 +273,17 @@
           <Property Name="TotalBill" Type="float" />
           <Property Name="UnitPrice" Type="float" />
           <Property Name="Quantity" Type="int" />
-          <Property Name="Unit" Type="nvarchar" MaxLength="255" />
           <Property Name="ServiceFeeId" Type="int" />
           <Property Name="ReceiptId" Type="int" />
+        </EntityType>
+        <EntityType Name="Report">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="250" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="Disable" Type="int" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -201,17 +291,6 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RoleName" Type="nvarchar" MaxLength="255" />
-        </EntityType>
-        <EntityType Name="ServiceFee">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="255" />
-          <Property Name="Description" Type="nvarchar(max)" />
-          <Property Name="Price" Type="float" />
-          <Property Name="Unit" Type="nvarchar" MaxLength="255" />
-          <Property Name="CreateDate" Type="datetime" />
         </EntityType>
         <EntityType Name="Survey">
           <Key>
@@ -228,6 +307,8 @@
           <Property Name="Block" Type="nvarchar" MaxLength="50" />
           <Property Name="Floor" Type="nvarchar" MaxLength="50" />
           <Property Name="Member" Type="int" />
+          <Property Name="Privacy" Type="int" />
+          <Property Name="Priority" Type="int" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -253,6 +334,7 @@
           <Property Name="LastModified" Type="datetime" />
           <Property Name="TransactionId" Type="int" />
           <Property Name="Type" Type="int" />
+          <Property Name="ReceiptDetailId" Type="int" />
         </EntityType>
         <EntityType Name="TransactionCategory">
           <Key>
@@ -280,6 +362,8 @@
           <Property Name="Fullname" Type="nvarchar" MaxLength="200" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="LastModified" Type="datetime" />
+          <Property Name="CoupleId" Type="int" />
+          <Property Name="RootCoupleId" Type="int" />
         </EntityType>
         <EntityType Name="UserAnswerSurvey">
           <Key>
@@ -298,6 +382,50 @@
           <Property Name="UserId" Type="int" />
           <Property Name="AroundProviderId" Type="int" />
           <Property Name="Point" Type="int" />
+        </EntityType>
+        <EntityType Name="UserReportPost">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="UserId" Type="int" />
+          <Property Name="PostId" Type="int" />
+          <Property Name="ReportId" Type="int" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UtilityService">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Unit" Type="nvarchar" MaxLength="255" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="LastModified" Type="datetime" />
+          <Property Name="Price" Type="float" />
+          <Property Name="CategoryId" Type="int" />
+        </EntityType>
+        <EntityType Name="UtilityServiceCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Type" Type="int" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="LastModified" Type="datetime" />
+        </EntityType>
+        <EntityType Name="UtilityServiceRangePrices">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ServiceId" Type="int" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="FromAmount" Type="float" />
+          <Property Name="ToAmount" Type="float" />
+          <Property Name="Price" Type="float" />
         </EntityType>
         <Association Name="FK_Answer_Survey">
           <End Role="Survey" Type="Self.Survey" Multiplicity="0..1" />
@@ -320,6 +448,86 @@
             </Principal>
             <Dependent Role="AroundProviderProduct">
               <PropertyRef Name="AroundProviderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_Post">
+          <End Role="Post" Type="Self.Post" Multiplicity="0..1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="postId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_User1">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaims" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaims">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogins">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRoles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -468,10 +676,12 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tbl_receipt_detail_tbl_service_fee">
-          <End Role="ServiceFee" Type="Self.ServiceFee" Multiplicity="0..1" />
+          <End Role="UtilityService" Type="Self.UtilityService" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="ReceiptDetail" Type="Self.ReceiptDetail" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="ServiceFee">
+            <Principal Role="UtilityService">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="ReceiptDetail">
@@ -524,6 +734,18 @@
             </Principal>
             <Dependent Role="User">
               <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transaction_ReceiptDetail">
+          <End Role="ReceiptDetail" Type="Self.ReceiptDetail" Multiplicity="0..1" />
+          <End Role="Transaction" Type="Self.Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReceiptDetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="ReceiptDetailId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -611,12 +833,79 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UserReportPost_Post">
+          <End Role="Post" Type="Self.Post" Multiplicity="0..1" />
+          <End Role="UserReportPost" Type="Self.UserReportPost" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserReportPost">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserReportPost_Report">
+          <End Role="Report" Type="Self.Report" Multiplicity="0..1" />
+          <End Role="UserReportPost" Type="Self.UserReportPost" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserReportPost">
+              <PropertyRef Name="ReportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserReportPost_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="UserReportPost" Type="Self.UserReportPost" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserReportPost">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UtilityService_UtilityServiceCategory">
+          <End Role="UtilityServiceCategory" Type="Self.UtilityServiceCategory" Multiplicity="0..1" />
+          <End Role="UtilityService" Type="Self.UtilityService" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UtilityServiceCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UtilityService">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UtilityServiceRangePrices_UtilityService">
+          <End Role="UtilityService" Type="Self.UtilityService" Multiplicity="0..1" />
+          <End Role="UtilityServiceRangePrices" Type="Self.UtilityServiceRangePrices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UtilityService">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UtilityServiceRangePrices">
+              <PropertyRef Name="ServiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="AMSModelStoreContainer">
+          <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Answer" EntityType="Self.Answer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AroundProvider" EntityType="Self.AroundProvider" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AroundProviderCategory" EntityType="Self.AroundProviderCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AroundProviderProduct" EntityType="Self.AroundProviderProduct" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BalanceSheet" EntityType="Self.BalanceSheet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Comment" EntityType="Self.Comment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HelpdeskRequest" EntityType="Self.HelpdeskRequest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HelpdeskRequestHelpdeskSupporter" EntityType="Self.HelpdeskRequestHelpdeskSupporter" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HelpdeskRequestLog" EntityType="Self.HelpdeskRequestLog" Schema="dbo" store:Type="Tables" />
@@ -628,8 +917,8 @@
           <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Receipt" EntityType="Self.Receipt" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReceiptDetail" EntityType="Self.ReceiptDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Report" EntityType="Self.Report" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ServiceFee" EntityType="Self.ServiceFee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Survey" EntityType="Self.Survey" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Transaction" EntityType="Self.Transaction" Schema="dbo" store:Type="Tables" />
@@ -637,6 +926,10 @@
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserAnswerSurvey" EntityType="Self.UserAnswerSurvey" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRateAroundProvider" EntityType="Self.UserRateAroundProvider" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserReportPost" EntityType="Self.UserReportPost" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UtilityService" EntityType="Self.UtilityService" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UtilityServiceCategory" EntityType="Self.UtilityServiceCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UtilityServiceRangePrices" EntityType="Self.UtilityServiceRangePrices" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Answer_Survey" Association="Self.FK_Answer_Survey">
             <End Role="Survey" EntitySet="Survey" />
             <End Role="Answer" EntitySet="Answer" />
@@ -644,6 +937,30 @@
           <AssociationSet Name="FK_AroundServiceProduct_AroundProvider" Association="Self.FK_AroundServiceProduct_AroundProvider">
             <End Role="AroundProvider" EntitySet="AroundProvider" />
             <End Role="AroundProviderProduct" EntitySet="AroundProviderProduct" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_Post" Association="Self.FK_Comment_Post">
+            <End Role="Post" EntitySet="Post" />
+            <End Role="Comment" EntitySet="Comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_User1" Association="Self.FK_Comment_User1">
+            <End Role="User" EntitySet="User" />
+            <End Role="Comment" EntitySet="Comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
           </AssociationSet>
           <AssociationSet Name="FK_HelpdeskRequest_HelpdeskService" Association="Self.FK_HelpdeskRequest_HelpdeskService">
             <End Role="HelpdeskService" EntitySet="HelpdeskService" />
@@ -694,7 +1011,7 @@
             <End Role="ReceiptDetail" EntitySet="ReceiptDetail" />
           </AssociationSet>
           <AssociationSet Name="FK_tbl_receipt_detail_tbl_service_fee" Association="Self.FK_tbl_receipt_detail_tbl_service_fee">
-            <End Role="ServiceFee" EntitySet="ServiceFee" />
+            <End Role="UtilityService" EntitySet="UtilityService" />
             <End Role="ReceiptDetail" EntitySet="ReceiptDetail" />
           </AssociationSet>
           <AssociationSet Name="FK_tbl_receipt_tbl_house" Association="Self.FK_tbl_receipt_tbl_house">
@@ -712,6 +1029,10 @@
           <AssociationSet Name="FK_tbl_user_tbl_role" Association="Self.FK_tbl_user_tbl_role">
             <End Role="Role" EntitySet="Role" />
             <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transaction_ReceiptDetail" Association="Self.FK_Transaction_ReceiptDetail">
+            <End Role="ReceiptDetail" EntitySet="ReceiptDetail" />
+            <End Role="Transaction" EntitySet="Transaction" />
           </AssociationSet>
           <AssociationSet Name="FK_Transaction_User" Association="Self.FK_Transaction_User">
             <End Role="User" EntitySet="User" />
@@ -741,17 +1062,43 @@
             <End Role="User" EntitySet="User" />
             <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurvey" />
           </AssociationSet>
+          <AssociationSet Name="FK_UserReportPost_Post" Association="Self.FK_UserReportPost_Post">
+            <End Role="Post" EntitySet="Post" />
+            <End Role="UserReportPost" EntitySet="UserReportPost" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserReportPost_Report" Association="Self.FK_UserReportPost_Report">
+            <End Role="Report" EntitySet="Report" />
+            <End Role="UserReportPost" EntitySet="UserReportPost" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserReportPost_User" Association="Self.FK_UserReportPost_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserReportPost" EntitySet="UserReportPost" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UtilityService_UtilityServiceCategory" Association="Self.FK_UtilityService_UtilityServiceCategory">
+            <End Role="UtilityServiceCategory" EntitySet="UtilityServiceCategory" />
+            <End Role="UtilityService" EntitySet="UtilityService" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UtilityServiceRangePrices_UtilityService" Association="Self.FK_UtilityServiceRangePrices_UtilityService">
+            <End Role="UtilityService" EntitySet="UtilityService" />
+            <End Role="UtilityServiceRangePrices" EntitySet="UtilityServiceRangePrices" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="AMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="AMSEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="C__MigrationHistory" EntityType="AMSModel.C__MigrationHistory" />
           <EntitySet Name="Answers" EntityType="AMSModel.Answer" />
           <EntitySet Name="AroundProviders" EntityType="AMSModel.AroundProvider" />
           <EntitySet Name="AroundProviderCategories" EntityType="AMSModel.AroundProviderCategory" />
           <EntitySet Name="AroundProviderProducts" EntityType="AMSModel.AroundProviderProduct" />
+          <EntitySet Name="AspNetRoles" EntityType="AMSModel.AspNetRole" />
+          <EntitySet Name="AspNetUserClaims" EntityType="AMSModel.AspNetUserClaim" />
+          <EntitySet Name="AspNetUserLogins" EntityType="AMSModel.AspNetUserLogin" />
+          <EntitySet Name="AspNetUsers" EntityType="AMSModel.AspNetUser" />
           <EntitySet Name="BalanceSheets" EntityType="AMSModel.BalanceSheet" />
+          <EntitySet Name="Comments" EntityType="AMSModel.Comment" />
           <EntitySet Name="HelpdeskRequests" EntityType="AMSModel.HelpdeskRequest" />
           <EntitySet Name="HelpdeskRequestHelpdeskSupporters" EntityType="AMSModel.HelpdeskRequestHelpdeskSupporter" />
           <EntitySet Name="HelpdeskRequestLogs" EntityType="AMSModel.HelpdeskRequestLog" />
@@ -763,8 +1110,8 @@
           <EntitySet Name="Questions" EntityType="AMSModel.Question" />
           <EntitySet Name="Receipts" EntityType="AMSModel.Receipt" />
           <EntitySet Name="ReceiptDetails" EntityType="AMSModel.ReceiptDetail" />
+          <EntitySet Name="Reports" EntityType="AMSModel.Report" />
           <EntitySet Name="Roles" EntityType="AMSModel.Role" />
-          <EntitySet Name="ServiceFees" EntityType="AMSModel.ServiceFee" />
           <EntitySet Name="Surveys" EntityType="AMSModel.Survey" />
           <EntitySet Name="sysdiagrams" EntityType="AMSModel.sysdiagram" />
           <EntitySet Name="Transactions" EntityType="AMSModel.Transaction" />
@@ -772,6 +1119,10 @@
           <EntitySet Name="Users" EntityType="AMSModel.User" />
           <EntitySet Name="UserAnswerSurveys" EntityType="AMSModel.UserAnswerSurvey" />
           <EntitySet Name="UserRateAroundProviders" EntityType="AMSModel.UserRateAroundProvider" />
+          <EntitySet Name="UserReportPosts" EntityType="AMSModel.UserReportPost" />
+          <EntitySet Name="UtilityServices" EntityType="AMSModel.UtilityService" />
+          <EntitySet Name="UtilityServiceCategories" EntityType="AMSModel.UtilityServiceCategory" />
+          <EntitySet Name="UtilityServiceRangePrices" EntityType="AMSModel.UtilityServiceRangePrice" />
           <AssociationSet Name="FK_Answer_Survey" Association="AMSModel.FK_Answer_Survey">
             <End Role="Survey" EntitySet="Surveys" />
             <End Role="Answer" EntitySet="Answers" />
@@ -792,6 +1143,14 @@
             <End Role="AroundProvider" EntitySet="AroundProviders" />
             <End Role="UserRateAroundProvider" EntitySet="UserRateAroundProviders" />
           </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="AMSModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaim" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="AMSModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogin" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
           <AssociationSet Name="FK_Transaction_User" Association="AMSModel.FK_Transaction_User">
             <End Role="User" EntitySet="Users" />
             <End Role="BalanceSheet" EntitySet="BalanceSheets" />
@@ -799,6 +1158,14 @@
           <AssociationSet Name="FK_TransactionItem_Transaction" Association="AMSModel.FK_TransactionItem_Transaction">
             <End Role="BalanceSheet" EntitySet="BalanceSheets" />
             <End Role="Transaction" EntitySet="Transactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_Post" Association="AMSModel.FK_Comment_Post">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_User1" Association="AMSModel.FK_Comment_User1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Comment" EntitySet="Comments" />
           </AssociationSet>
           <AssociationSet Name="FK_HelpdeskRequest_HelpdeskService" Association="AMSModel.FK_HelpdeskRequest_HelpdeskService">
             <End Role="HelpdeskService" EntitySet="HelpdeskServices" />
@@ -844,6 +1211,10 @@
             <End Role="User" EntitySet="Users" />
             <End Role="Post" EntitySet="Posts" />
           </AssociationSet>
+          <AssociationSet Name="FK_UserReportPost_Post" Association="AMSModel.FK_UserReportPost_Post">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="UserReportPost" EntitySet="UserReportPosts" />
+          </AssociationSet>
           <AssociationSet Name="FK_Receipt_User" Association="AMSModel.FK_Receipt_User">
             <End Role="User" EntitySet="Users" />
             <End Role="Receipt" EntitySet="Receipts" />
@@ -853,8 +1224,16 @@
             <End Role="ReceiptDetail" EntitySet="ReceiptDetails" />
           </AssociationSet>
           <AssociationSet Name="FK_tbl_receipt_detail_tbl_service_fee" Association="AMSModel.FK_tbl_receipt_detail_tbl_service_fee">
-            <End Role="ServiceFee" EntitySet="ServiceFees" />
+            <End Role="UtilityService" EntitySet="UtilityServices" />
             <End Role="ReceiptDetail" EntitySet="ReceiptDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transaction_ReceiptDetail" Association="AMSModel.FK_Transaction_ReceiptDetail">
+            <End Role="ReceiptDetail" EntitySet="ReceiptDetails" />
+            <End Role="Transaction" EntitySet="Transactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserReportPost_Report" Association="AMSModel.FK_UserReportPost_Report">
+            <End Role="Report" EntitySet="Reports" />
+            <End Role="UserReportPost" EntitySet="UserReportPosts" />
           </AssociationSet>
           <AssociationSet Name="FK_tbl_user_tbl_role" Association="AMSModel.FK_tbl_user_tbl_role">
             <End Role="Role" EntitySet="Roles" />
@@ -876,7 +1255,33 @@
             <End Role="User" EntitySet="Users" />
             <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurveys" />
           </AssociationSet>
+          <AssociationSet Name="FK_UserReportPost_User" Association="AMSModel.FK_UserReportPost_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserReportPost" EntitySet="UserReportPosts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UtilityService_UtilityServiceCategory" Association="AMSModel.FK_UtilityService_UtilityServiceCategory">
+            <End Role="UtilityServiceCategory" EntitySet="UtilityServiceCategories" />
+            <End Role="UtilityService" EntitySet="UtilityServices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UtilityServiceRangePrices_UtilityService" Association="AMSModel.FK_UtilityServiceRangePrices_UtilityService">
+            <End Role="UtilityService" EntitySet="UtilityServices" />
+            <End Role="UtilityServiceRangePrice" EntitySet="UtilityServiceRangePrices" />
+          </AssociationSet>
+          <AssociationSet Name="AspNetUserRoles" Association="AMSModel.AspNetUserRoles">
+            <End Role="AspNetRole" EntitySet="AspNetRoles" />
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="C__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ContextKey" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="ProductVersion" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="Answer">
           <Key>
             <PropertyRef Name="Id" />
@@ -896,7 +1301,6 @@
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Tel" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
           <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="GoogleMapUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="ClickCount" Type="Int64" />
           <Property Name="AroundProviderCategoryId" Type="Int32" />
           <Property Name="ImageUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -927,19 +1331,88 @@
           <Property Name="AroundProviderId" Type="Int32" />
           <NavigationProperty Name="AroundProvider" Relationship="AMSModel.FK_AroundServiceProduct_AroundProvider" FromRole="AroundProviderProduct" ToRole="AroundProvider" />
         </EntityType>
+        <EntityType Name="AspNetRole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="AMSModel.AspNetUserRoles" FromRole="AspNetRole" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaim">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="AMSModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaim" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogin">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="AMSModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogin" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUserClaims" Relationship="AMSModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
+          <NavigationProperty Name="AspNetUserLogins" Relationship="AMSModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
+          <NavigationProperty Name="AspNetRoles" Relationship="AMSModel.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
+        </EntityType>
         <EntityType Name="BalanceSheet">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" />
           <Property Name="ForMonth" Type="DateTime" Precision="3" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="ClosingDate" Type="DateTime" Precision="3" />
           <Property Name="LastModified" Type="DateTime" Precision="3" />
           <Property Name="ManagerId" Type="Int32" />
+          <Property Name="TotalIncome" Type="Double" />
+          <Property Name="TotalExpense" Type="Double" />
+          <Property Name="TotalIncomeInCash" Type="Double" />
+          <Property Name="TotalExpenseInCash" Type="Double" />
+          <Property Name="RedundancyStartMonth" Type="Double" />
+          <Property Name="RedundancyEndMonth" Type="Double" />
           <NavigationProperty Name="User" Relationship="AMSModel.FK_Transaction_User" FromRole="BalanceSheet" ToRole="User" />
           <NavigationProperty Name="Transactions" Relationship="AMSModel.FK_TransactionItem_Transaction" FromRole="BalanceSheet" ToRole="Transaction" />
+        </EntityType>
+        <EntityType Name="Comment">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="postId" Type="Int32" />
+          <Property Name="userId" Type="Int32" />
+          <Property Name="detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="createdDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Post" Relationship="AMSModel.FK_Comment_Post" FromRole="Comment" ToRole="Post" />
+          <NavigationProperty Name="User" Relationship="AMSModel.FK_Comment_User1" FromRole="Comment" ToRole="User" />
         </EntityType>
         <EntityType Name="HelpdeskRequest">
           <Key>
@@ -1026,6 +1499,8 @@
           <Property Name="OwnerID" Type="Int32" />
           <Property Name="ProfileImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CoverImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DisplayMember" Type="Boolean" />
+          <Property Name="AllowOtherView" Type="Boolean" />
           <NavigationProperty Name="HelpdeskRequests" Relationship="AMSModel.FK_tbl_h_desk_request_tbl_house" FromRole="House" ToRole="HelpdeskRequest" />
           <NavigationProperty Name="Receipts" Relationship="AMSModel.FK_tbl_receipt_tbl_house" FromRole="House" ToRole="Receipt" />
           <NavigationProperty Name="Users" Relationship="AMSModel.FK_User_House" FromRole="House" ToRole="User" />
@@ -1053,7 +1528,10 @@
           <Property Name="Status" Type="Int32" />
           <Property Name="UserId" Type="Int32" />
           <Property Name="EmbedCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Disable" Type="Int32" />
+          <NavigationProperty Name="Comments" Relationship="AMSModel.FK_Comment_Post" FromRole="Post" ToRole="Comment" />
           <NavigationProperty Name="User" Relationship="AMSModel.FK_tbl_post_tbl_user" FromRole="Post" ToRole="User" />
+          <NavigationProperty Name="UserReportPosts" Relationship="AMSModel.FK_UserReportPost_Post" FromRole="Post" ToRole="UserReportPost" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -1079,6 +1557,7 @@
           <Property Name="ManagerId" Type="Int32" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="LastModified" Type="DateTime" Precision="3" />
+          <Property Name="IsAutomation" Type="Int32" />
           <NavigationProperty Name="House" Relationship="AMSModel.FK_tbl_receipt_tbl_house" FromRole="Receipt" ToRole="House" />
           <NavigationProperty Name="User" Relationship="AMSModel.FK_Receipt_User" FromRole="Receipt" ToRole="User" />
           <NavigationProperty Name="ReceiptDetails" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_receipt" FromRole="Receipt" ToRole="ReceiptDetail" />
@@ -1091,11 +1570,21 @@
           <Property Name="TotalBill" Type="Double" />
           <Property Name="UnitPrice" Type="Double" />
           <Property Name="Quantity" Type="Int32" />
-          <Property Name="Unit" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="ServiceFeeId" Type="Int32" />
           <Property Name="ReceiptId" Type="Int32" />
           <NavigationProperty Name="Receipt" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_receipt" FromRole="ReceiptDetail" ToRole="Receipt" />
-          <NavigationProperty Name="ServiceFee" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_service_fee" FromRole="ReceiptDetail" ToRole="ServiceFee" />
+          <NavigationProperty Name="UtilityService" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_service_fee" FromRole="ReceiptDetail" ToRole="UtilityService" />
+          <NavigationProperty Name="Transactions" Relationship="AMSModel.FK_Transaction_ReceiptDetail" FromRole="ReceiptDetail" ToRole="Transaction" />
+        </EntityType>
+        <EntityType Name="Report">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="Disable" Type="Int32" />
+          <NavigationProperty Name="UserReportPosts" Relationship="AMSModel.FK_UserReportPost_Report" FromRole="Report" ToRole="UserReportPost" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -1104,18 +1593,6 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RoleName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Users" Relationship="AMSModel.FK_tbl_user_tbl_role" FromRole="Role" ToRole="User" />
-        </EntityType>
-        <EntityType Name="ServiceFee">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Price" Type="Double" />
-          <Property Name="Unit" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="ReceiptDetails" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_service_fee" FromRole="ServiceFee" ToRole="ReceiptDetail" />
         </EntityType>
         <EntityType Name="Survey">
           <Key>
@@ -1132,6 +1609,8 @@
           <Property Name="Block" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Floor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Member" Type="Int32" />
+          <Property Name="Privacy" Type="Int32" />
+          <Property Name="Priority" Type="Int32" />
           <NavigationProperty Name="Answers" Relationship="AMSModel.FK_Answer_Survey" FromRole="Survey" ToRole="Answer" />
           <NavigationProperty Name="UserAnswerSurveys" Relationship="AMSModel.FK_UserDoServey_Survey" FromRole="Survey" ToRole="UserAnswerSurvey" />
         </EntityType>
@@ -1159,7 +1638,9 @@
           <Property Name="LastModified" Type="DateTime" Precision="3" />
           <Property Name="TransactionId" Type="Int32" />
           <Property Name="Type" Type="Int32" />
+          <Property Name="ReceiptDetailId" Type="Int32" />
           <NavigationProperty Name="BalanceSheet" Relationship="AMSModel.FK_TransactionItem_Transaction" FromRole="Transaction" ToRole="BalanceSheet" />
+          <NavigationProperty Name="ReceiptDetail" Relationship="AMSModel.FK_Transaction_ReceiptDetail" FromRole="Transaction" ToRole="ReceiptDetail" />
           <NavigationProperty Name="TransactionCategory" Relationship="AMSModel.FK_TransactionItem_TransactionItemCategory" FromRole="Transaction" ToRole="TransactionCategory" />
         </EntityType>
         <EntityType Name="TransactionCategory">
@@ -1189,7 +1670,10 @@
           <Property Name="Fullname" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="LastModified" Type="DateTime" Precision="3" />
+          <Property Name="CoupleId" Type="Int32" />
+          <Property Name="RootCoupleId" Type="Int32" />
           <NavigationProperty Name="BalanceSheets" Relationship="AMSModel.FK_Transaction_User" FromRole="User" ToRole="BalanceSheet" />
+          <NavigationProperty Name="Comments" Relationship="AMSModel.FK_Comment_User1" FromRole="User" ToRole="Comment" />
           <NavigationProperty Name="HelpdeskRequestHelpdeskSupporters" Relationship="AMSModel.FK_tbl_h_desk_req_h_desk_tbl_user" FromRole="User" ToRole="HelpdeskRequestHelpdeskSupporter" />
           <NavigationProperty Name="HelpdeskRequestLogs" Relationship="AMSModel.FK_HelpdeskRequestLog_User1" FromRole="User" ToRole="HelpdeskRequestLog" />
           <NavigationProperty Name="HelpdeskRequestLogs1" Relationship="AMSModel.FK_HelpdeskRequestLog_User2" FromRole="User" ToRole="HelpdeskRequestLog" />
@@ -1199,6 +1683,7 @@
           <NavigationProperty Name="Role" Relationship="AMSModel.FK_tbl_user_tbl_role" FromRole="User" ToRole="Role" />
           <NavigationProperty Name="UserRateAroundProviders" Relationship="AMSModel.FK_tbl_resident_rate_around_srv_tbl_user" FromRole="User" ToRole="UserRateAroundProvider" />
           <NavigationProperty Name="UserAnswerSurveys" Relationship="AMSModel.FK_UserDoServey_User" FromRole="User" ToRole="UserAnswerSurvey" />
+          <NavigationProperty Name="UserReportPosts" Relationship="AMSModel.FK_UserReportPost_User" FromRole="User" ToRole="UserReportPost" />
         </EntityType>
         <EntityType Name="UserAnswerSurvey">
           <Key>
@@ -1222,6 +1707,58 @@
           <Property Name="Point" Type="Int32" />
           <NavigationProperty Name="AroundProvider" Relationship="AMSModel.FK_tbl_resident_rate_around_srv_tbl_arround_srv" FromRole="UserRateAroundProvider" ToRole="AroundProvider" />
           <NavigationProperty Name="User" Relationship="AMSModel.FK_tbl_resident_rate_around_srv_tbl_user" FromRole="UserRateAroundProvider" ToRole="User" />
+        </EntityType>
+        <EntityType Name="UserReportPost">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="PostId" Type="Int32" />
+          <Property Name="ReportId" Type="Int32" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Post" Relationship="AMSModel.FK_UserReportPost_Post" FromRole="UserReportPost" ToRole="Post" />
+          <NavigationProperty Name="Report" Relationship="AMSModel.FK_UserReportPost_Report" FromRole="UserReportPost" ToRole="Report" />
+          <NavigationProperty Name="User" Relationship="AMSModel.FK_UserReportPost_User" FromRole="UserReportPost" ToRole="User" />
+        </EntityType>
+        <EntityType Name="UtilityService">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Unit" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="LastModified" Type="DateTime" Precision="3" />
+          <Property Name="Price" Type="Double" />
+          <Property Name="CategoryId" Type="Int32" />
+          <NavigationProperty Name="ReceiptDetails" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_service_fee" FromRole="UtilityService" ToRole="ReceiptDetail" />
+          <NavigationProperty Name="UtilityServiceCategory" Relationship="AMSModel.FK_UtilityService_UtilityServiceCategory" FromRole="UtilityService" ToRole="UtilityServiceCategory" />
+          <NavigationProperty Name="UtilityServiceRangePrices" Relationship="AMSModel.FK_UtilityServiceRangePrices_UtilityService" FromRole="UtilityService" ToRole="UtilityServiceRangePrice" />
+        </EntityType>
+        <EntityType Name="UtilityServiceCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="LastModified" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="UtilityServices" Relationship="AMSModel.FK_UtilityService_UtilityServiceCategory" FromRole="UtilityServiceCategory" ToRole="UtilityService" />
+        </EntityType>
+        <EntityType Name="UtilityServiceRangePrice">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ServiceId" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="FromAmount" Type="Double" />
+          <Property Name="ToAmount" Type="Double" />
+          <Property Name="Price" Type="Double" />
+          <NavigationProperty Name="UtilityService" Relationship="AMSModel.FK_UtilityServiceRangePrices_UtilityService" FromRole="UtilityServiceRangePrice" ToRole="UtilityService" />
         </EntityType>
         <Association Name="FK_Answer_Survey">
           <End Type="AMSModel.Survey" Role="Survey" Multiplicity="0..1" />
@@ -1283,6 +1820,34 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Type="AMSModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="AMSModel.AspNetUserClaim" Role="AspNetUserClaim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaim">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Type="AMSModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="AMSModel.AspNetUserLogin" Role="AspNetUserLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogin">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Transaction_User">
           <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
           <End Type="AMSModel.BalanceSheet" Role="BalanceSheet" Multiplicity="*" />
@@ -1304,6 +1869,30 @@
             </Principal>
             <Dependent Role="Transaction">
               <PropertyRef Name="TransactionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_Post">
+          <End Type="AMSModel.Post" Role="Post" Multiplicity="0..1" />
+          <End Type="AMSModel.Comment" Role="Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="postId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_User1">
+          <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="AMSModel.Comment" Role="Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="userId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1439,6 +2028,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UserReportPost_Post">
+          <End Type="AMSModel.Post" Role="Post" Multiplicity="0..1" />
+          <End Type="AMSModel.UserReportPost" Role="UserReportPost" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserReportPost">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Receipt_User">
           <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
           <End Type="AMSModel.Receipt" Role="Receipt" Multiplicity="*" />
@@ -1464,14 +2065,40 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tbl_receipt_detail_tbl_service_fee">
-          <End Type="AMSModel.ServiceFee" Role="ServiceFee" Multiplicity="0..1" />
+          <End Type="AMSModel.UtilityService" Role="UtilityService" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="AMSModel.ReceiptDetail" Role="ReceiptDetail" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="ServiceFee">
+            <Principal Role="UtilityService">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="ReceiptDetail">
               <PropertyRef Name="ServiceFeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transaction_ReceiptDetail">
+          <End Type="AMSModel.ReceiptDetail" Role="ReceiptDetail" Multiplicity="0..1" />
+          <End Type="AMSModel.Transaction" Role="Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReceiptDetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="ReceiptDetailId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserReportPost_Report">
+          <End Type="AMSModel.Report" Role="Report" Multiplicity="0..1" />
+          <End Type="AMSModel.UserReportPost" Role="UserReportPost" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserReportPost">
+              <PropertyRef Name="ReportId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1535,12 +2162,62 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UserReportPost_User">
+          <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="AMSModel.UserReportPost" Role="UserReportPost" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserReportPost">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UtilityService_UtilityServiceCategory">
+          <End Type="AMSModel.UtilityServiceCategory" Role="UtilityServiceCategory" Multiplicity="0..1" />
+          <End Type="AMSModel.UtilityService" Role="UtilityService" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UtilityServiceCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UtilityService">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UtilityServiceRangePrices_UtilityService">
+          <End Type="AMSModel.UtilityService" Role="UtilityService" Multiplicity="0..1" />
+          <End Type="AMSModel.UtilityServiceRangePrice" Role="UtilityServiceRangePrice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UtilityService">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UtilityServiceRangePrice">
+              <PropertyRef Name="ServiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AspNetUserRoles">
+          <End Type="AMSModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
+          <End Type="AMSModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="AMSModelStoreContainer" CdmEntityContainer="AMSEntities">
+          <EntitySetMapping Name="C__MigrationHistory">
+            <EntityTypeMapping TypeName="AMSModel.C__MigrationHistory">
+              <MappingFragment StoreEntitySet="__MigrationHistory">
+                <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
+                <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Answers">
             <EntityTypeMapping TypeName="AMSModel.Answer">
               <MappingFragment StoreEntitySet="Answer">
@@ -1556,7 +2233,6 @@
                 <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
                 <ScalarProperty Name="AroundProviderCategoryId" ColumnName="AroundProviderCategoryId" />
                 <ScalarProperty Name="ClickCount" ColumnName="ClickCount" />
-                <ScalarProperty Name="GoogleMapUrl" ColumnName="GoogleMapUrl" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="Tel" ColumnName="Tel" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -1588,16 +2264,80 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="AspNetRoles">
+            <EntityTypeMapping TypeName="AMSModel.AspNetRole">
+              <MappingFragment StoreEntitySet="AspNetRoles">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserClaims">
+            <EntityTypeMapping TypeName="AMSModel.AspNetUserClaim">
+              <MappingFragment StoreEntitySet="AspNetUserClaims">
+                <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserLogins">
+            <EntityTypeMapping TypeName="AMSModel.AspNetUserLogin">
+              <MappingFragment StoreEntitySet="AspNetUserLogins">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="AMSModel.AspNetUser">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="BalanceSheets">
             <EntityTypeMapping TypeName="AMSModel.BalanceSheet">
               <MappingFragment StoreEntitySet="BalanceSheet">
+                <ScalarProperty Name="RedundancyEndMonth" ColumnName="RedundancyEndMonth" />
+                <ScalarProperty Name="RedundancyStartMonth" ColumnName="RedundancyStartMonth" />
+                <ScalarProperty Name="TotalExpenseInCash" ColumnName="TotalExpenseInCash" />
+                <ScalarProperty Name="TotalIncomeInCash" ColumnName="TotalIncomeInCash" />
+                <ScalarProperty Name="TotalExpense" ColumnName="TotalExpense" />
+                <ScalarProperty Name="TotalIncome" ColumnName="TotalIncome" />
                 <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
                 <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="ClosingDate" ColumnName="ClosingDate" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="ForMonth" ColumnName="ForMonth" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Comments">
+            <EntityTypeMapping TypeName="AMSModel.Comment">
+              <MappingFragment StoreEntitySet="Comment">
+                <ScalarProperty Name="createdDate" ColumnName="createdDate" />
+                <ScalarProperty Name="detail" ColumnName="detail" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="postId" ColumnName="postId" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1669,6 +2409,8 @@
           <EntitySetMapping Name="Houses">
             <EntityTypeMapping TypeName="AMSModel.House">
               <MappingFragment StoreEntitySet="House">
+                <ScalarProperty Name="AllowOtherView" ColumnName="AllowOtherView" />
+                <ScalarProperty Name="DisplayMember" ColumnName="DisplayMember" />
                 <ScalarProperty Name="CoverImage" ColumnName="CoverImage" />
                 <ScalarProperty Name="ProfileImage" ColumnName="ProfileImage" />
                 <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
@@ -1694,6 +2436,7 @@
           <EntitySetMapping Name="Posts">
             <EntityTypeMapping TypeName="AMSModel.Post">
               <MappingFragment StoreEntitySet="Post">
+                <ScalarProperty Name="Disable" ColumnName="Disable" />
                 <ScalarProperty Name="EmbedCode" ColumnName="EmbedCode" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
@@ -1719,6 +2462,7 @@
           <EntitySetMapping Name="Receipts">
             <EntityTypeMapping TypeName="AMSModel.Receipt">
               <MappingFragment StoreEntitySet="Receipt">
+                <ScalarProperty Name="IsAutomation" ColumnName="IsAutomation" />
                 <ScalarProperty Name="LastModified" ColumnName="LastModified" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
@@ -1739,10 +2483,19 @@
               <MappingFragment StoreEntitySet="ReceiptDetail">
                 <ScalarProperty Name="ReceiptId" ColumnName="ReceiptId" />
                 <ScalarProperty Name="ServiceFeeId" ColumnName="ServiceFeeId" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
                 <ScalarProperty Name="TotalBill" ColumnName="TotalBill" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reports">
+            <EntityTypeMapping TypeName="AMSModel.Report">
+              <MappingFragment StoreEntitySet="Report">
+                <ScalarProperty Name="Disable" ColumnName="Disable" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1755,21 +2508,11 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ServiceFees">
-            <EntityTypeMapping TypeName="AMSModel.ServiceFee">
-              <MappingFragment StoreEntitySet="ServiceFee">
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Surveys">
             <EntityTypeMapping TypeName="AMSModel.Survey">
               <MappingFragment StoreEntitySet="Survey">
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="Privacy" ColumnName="Privacy" />
                 <ScalarProperty Name="Member" ColumnName="Member" />
                 <ScalarProperty Name="Floor" ColumnName="Floor" />
                 <ScalarProperty Name="Block" ColumnName="Block" />
@@ -1798,6 +2541,7 @@
           <EntitySetMapping Name="Transactions">
             <EntityTypeMapping TypeName="AMSModel.Transaction">
               <MappingFragment StoreEntitySet="Transaction">
+                <ScalarProperty Name="ReceiptDetailId" ColumnName="ReceiptDetailId" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
                 <ScalarProperty Name="LastModified" ColumnName="LastModified" />
@@ -1822,6 +2566,8 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="AMSModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="RootCoupleId" ColumnName="RootCoupleId" />
+                <ScalarProperty Name="CoupleId" ColumnName="CoupleId" />
                 <ScalarProperty Name="LastModified" ColumnName="LastModified" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Fullname" ColumnName="Fullname" />
@@ -1860,6 +2606,62 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="UserReportPosts">
+            <EntityTypeMapping TypeName="AMSModel.UserReportPost">
+              <MappingFragment StoreEntitySet="UserReportPost">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ReportId" ColumnName="ReportId" />
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UtilityServices">
+            <EntityTypeMapping TypeName="AMSModel.UtilityService">
+              <MappingFragment StoreEntitySet="UtilityService">
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UtilityServiceCategories">
+            <EntityTypeMapping TypeName="AMSModel.UtilityServiceCategory">
+              <MappingFragment StoreEntitySet="UtilityServiceCategory">
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UtilityServiceRangePrices">
+            <EntityTypeMapping TypeName="AMSModel.UtilityServiceRangePrice">
+              <MappingFragment StoreEntitySet="UtilityServiceRangePrices">
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="ToAmount" ColumnName="ToAmount" />
+                <ScalarProperty Name="FromAmount" ColumnName="FromAmount" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="AspNetUserRoles" TypeName="AMSModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
+            <EndProperty Name="AspNetUser">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+            <EndProperty Name="AspNetRole">
+              <ScalarProperty Name="Id" ColumnName="RoleId" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

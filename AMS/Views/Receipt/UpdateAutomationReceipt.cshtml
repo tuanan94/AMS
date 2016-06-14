@@ -1,0 +1,865 @@
+﻿@using AMS.Constant
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "CreateAutomationReceipt";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+
+
+    string electricSevices = ViewBag.electricSevices;
+    string waterSevices = ViewBag.waterSevices;
+    string houseRentSevices = ViewBag.houseRentSevices;
+    string fixedCostSevices = ViewBag.fixedCostSevices;
+    Receipt receipt = ViewBag.automationReceipt;
+    int groupStatus = ViewBag.groupStatus;
+
+
+}
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+
+        <div class="heading-tab">
+            <i class="fa fa-list"> Cấu hình giá điện nước</i>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li>
+                    <a href="/Management/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Quản lý hóa đơn</a>
+                </li>
+                <li class="">
+                    <a href="/Management/ManageReceipt/CreateManualReceiptView"><i class="fa fa fa-plus"></i> Tạo hóa đơn thủ công</a>
+                </li>
+                <li class="active">
+                    <a href="/Management/ManageReceipt/CreateAutomationReceiptView"><i class="fa fa fa-plus"></i> Tạo hóa đơn tự động</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="panel-body">
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="">
+                    <div class="panel panel-default" style="border-color: transparent">
+                        <form id="addUtilServiceForm" class="form-horizontal" role="form">
+                            <div class="tab-content">
+                                <div class="tab-pane fade active in" id="">
+                                    <div class="alert alert-warning" id="failedPublishOrderNotify" style="display: none">
+                                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                        <span>Công bố hóa đơn thất bại.</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-offset-1 col-md-10">
+                                            @{
+                                                if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
+                                                {
+                                                    <span id="btnEdit" class="btn btn-default" onclick="editAutomationReceiptHeader(@receipt.Id)"><i class="fa fa-edit"></i> Chỉnh sửa</span>
+                                                    <span id="btnPublish" class="btn btn-default" onclick="publishOrder(@receipt.Id)"><i class="fa fa-paragraph"></i> Công bố</span>
+                                                    <span id="btnDel" class="btn btn-danger" onclick="deleteOrder(@receipt.Id)"><i class="fa fa-times"></i> Xóa</span>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-6">
+                                            <fieldset class="scheduler-border less-padding border-top">
+                                                <legend class="scheduler-border bold-black" style="margin-bottom: 30px;"> Thông tin hóa đơn</legend>
+                                                <div class="form-group">
+                                                    <label for="serviceTypeName" class="col-md-2 control-label">Tiêu đề</label>
+                                                    <div class="col-md-10">
+                                                        <input id="receiptTitle" value="@receipt.Title" type="text" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="serviceTypeName" class="col-md-2 control-label">Trạng thái</label>
+                                                    <div class="col-md-4">
+                                                        @{
+                                                            if (groupStatus == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
+                                                            {
+                                                                <span id="receiptStatusUnpublish" class="btn btn-inverse ">Chưa công bố</span>
+                                                                <span id="receiptStatusPaid" class="btn btn-success hide">Đã thanh toán</span>
+                                                                <span id="receiptStatusUnpaid" class="btn btn-danger hide">Chưa thanh toán</span>
+                                                            }
+                                                            else if (groupStatus == SLIM_CONFIG.RECEIPT_STATUS_PAID)
+                                                            {
+                                                                <span id="receiptStatusUnpublish" class="btn btn-inverse hide">Chưa công bố</span>
+                                                                <span id="receiptStatusPaid" class="btn btn-success">Đã thanh toán</span>
+                                                                <span id="receiptStatusUnpaid" class="btn btn-danger hide">Chưa thanh toán</span>
+                                                            }
+                                                            else if (groupStatus == SLIM_CONFIG.RECEIPT_STATUS_UNPAID)
+                                                            {
+                                                                <span id="receiptStatusUnpublish" class="btn btn-inverse hide">Chưa công bố</span>
+                                                                <span id="receiptStatusPaid" class="btn btn-success hide">Đã thanh toán</span>
+                                                                <span id="receiptStatusUnpaid" class="btn btn-danger ">Chưa thanh toán</span>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="serviceTypeName" class="col-md-2 control-label">Ngày tạo</label>
+                                                    <div class="col-md-4">
+                                                        <input id="serviceTypeName" value="@receipt.CreateDate.Value.ToString(AmsConstants.DateFormat)" name="ServiceTypeName" type="text" class="form-control">
+                                                    </div>
+                                                    <label for="serviceTypeName" class="col-md-2 control-label">Ngày xuất</label>
+                                                    <div class="col-md-4">
+                                                        <input id="publishDate" value="@receipt.PublishDate.Value.ToString(AmsConstants.DateFormat)" name="ServiceTypeName" type="text" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="serviceTypeName" class="col-md-2 control-label">Người tạo</label>
+                                                    <div class="col-md-10">
+                                                        <input id="serviceTypeName" value="@receipt.User.Fullname" name="ServiceTypeName" type="text" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="serviceType" class="col-md-2 control-label">Mô tả</label>
+                                                    <div class="col-md-10">
+                                                        <textarea id="receiptDesc" class="form-control" rows="3">@receipt.Description</textarea>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <fieldset class="scheduler-border less-padding border-top">
+                                                <legend class="scheduler-border bold-black" style="margin-bottom: 30px;">Thiết lập loại giá hóa đơn</legend>
+
+                                                <div class="form-group">
+                                                    <label for="electrics" class="col-md-2 control-label">Giá điện</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" id="electrics" class="form-control" value="@electricSevices" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="serviceType" class="col-md-2 control-label">Giá nước</label>
+                                                    <div class="col-md-10 full-width-select">
+                                                        <input type="text" id="water" class="form-control" value="@waterSevices" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="serviceType" class="col-md-2 control-label">Giá thuê nhà</label>
+                                                    <div class="col-md-10 full-width-select">
+                                                        <input type="text" class="form-control" id="houseRent" value="@houseRentSevices" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="serviceType" class="col-md-2 control-label">Chi phí cố định</label>
+                                                    <div class="col-md-10 full-width-select">
+                                                        <input type="text" class="form-control" id="fixedCost" value="@fixedCostSevices" />
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+
+                                        <table id="autoReceiptTbl" class="table table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Căn hộ</th>
+                                                    <th>Trạng thái</th>
+                                                    <th>Số điện</th>
+                                                    <th>Thành tiền</th>
+                                                    <th>Số nước</th>
+                                                    <th>Thành tiền</th>
+                                                    <th>Phí thuê nhà</th>
+                                                    <th>Phí cố định</th>
+                                                    <th>Tổng</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Căn hộ</th>
+                                                    <th>Trạng thái</th>
+                                                    <th>Số điện</th>
+                                                    <th>Thành tiền</th>
+                                                    <th>Số nước</th>
+                                                    <th>Thành tiền</th>
+                                                    <th>Phí thuê nhà</th>
+                                                    <th>Phí cố định</th>
+                                                    <th>Tổng</th>
+                                                    <th></th>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="editHouseConsumptionModal" class="modal fade ams-modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Cập nhật số lượng sử dụng</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+
+                    <div class="alert alert-info" id="successAddTransTypeNotify" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span>Thêm loại giao dịch thành công.</span>
+                    </div>
+                    <div class="alert alert-warning" id="failedAddTransTypeNotify" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span>Thêm loại giao dịch thất bại.</span>
+                    </div>
+
+                    <form id="editHouseConsumptionForm" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="houseConsumptHouseName" class="col-md-2 col-md-offset-2 control-label">Căn hộ </label>
+                            <div class="col-md-2">
+                                <span id="houseConsumptBlock" class="btn btn-sm date-color btn-block"></span>
+                            </div>
+                            <div class="col-md-2">
+                                <span id="houseConsumptFloor" class="btn btn-sm time-color btn-block"></span>
+                            </div>
+                            <div class="col-md-2">
+                                <span id="houseConsumptHouseName" class="btn btn-sm house-color btn-block"></span>
+                            </div>
+                        </div>
+                        @*                        <div class="form-group" style="margin-top: 30px">*@
+                        @*                            <div class="col-md-6">*@
+                        @*                                <div class="form-group">*@
+                        @*                                    <label for="houseConsumptElectric" class="col-md-4 control-label">Số điện </label>*@
+                        @*                                    <div class="col-md-4">*@
+                        @*                                        <input id="houseConsumptElectric" type="text" class="form-control" value="">*@
+                        @*                                    </div>*@
+                        @*                                    <label id="electricCost" class="col-md-4 control-label"></label>*@
+                        @*                                </div>*@
+                        @*                                <div class="form-group">*@
+                        @*                                    <label for="houseConsumptWater" class="col-md-4 control-label">Số nước </label>*@
+                        @*                                    <div class="col-md-4">*@
+                        @*                                        <input id="houseConsumptWater" type="text" class="form-control" value="">*@
+                        @*                                    </div>*@
+                        @*                                    <label id="waterCost" class="col-md-4 control-label"></label>*@
+                        @*                                </div>*@
+                        @*                                <div class="form-group">*@
+                        @*                                    <label class="col-md-4 control-label">Nhà </label>*@
+                        @*                                    <div class="col-md-4">*@
+                        @*                                    </div>*@
+                        @*                                    <label id="monthlyHouseRent" class="col-md-4 control-label"></label>*@
+                        @*                                </div>*@
+                        @*                                <div class="form-group">*@
+                        @*                                    <label class="col-md-4 control-label">Cố định </label>*@
+                        @*                                    <div class="col-md-4">*@
+                        @*                                    </div>*@
+                        @*                                    <label id="monthlyFixedCost" class="col-md-4 control-label"></label>*@
+                        @*                                </div>*@
+                        @*                                <div class="form-group" style="border-top: 1px solid;">*@
+                        @*                                    <label class="col-md-4 control-label">Tổng </label>*@
+                        @*                                    <div class="col-md-4">*@
+                        @*                                    </div>*@
+                        @*                                    <label id="monthlyTotal" class="col-md-4 control-label"></label>*@
+                        @*                                </div>*@
+                        @*                            </div>*@
+                        @*                            <div class="col-md-6">*@
+                        @*                                <div class="form-group">*@
+                        @*                                    <label class="col-md-6 control-label">Trạng thái</label>*@
+                        @*                                    <div class="col-md-6">*@
+                        @*                                        <span id="unpublished" class="btn btn-inverse btn-xs hide">Chưa công bố</span>*@
+                        @*                                        <span id="paid" class="btn btn-success btn-xs hide">Đã thanh toán</span>*@
+                        @*                                        <span id="unpaid" class="btn btn-danger btn-xs hide">Chưa thanh toán</span>*@
+                        @*                                    </div>*@
+                        @*                                </div>*@
+                        @*                                <div class="form-group">*@
+                        @*                                    <label for="houseConsumptWater" class="col-md-6 control-label">Ngày thanh toán</label>*@
+                        @*                                    <div class="col-md-6">*@
+                        @*                                        <input id="paymentDate" type="text" class="form-control" value="">*@
+                        @*                                    </div>*@
+                        @*                                </div>*@
+                        @*                            </div>*@
+                        @*                        </div>*@
+
+                        <div class="form-group">
+                            <label for="houseConsumptWater" class="col-md-4 control-label">Ngày thanh toán</label>
+                            <div class="col-md-4">
+                                <input id="paymentDate" type="text" class="form-control" value="">
+                            </div>
+                            <span id="unpublished" class="btn btn-inverse hide">Chưa công bố</span>
+                            <span id="paid" class="btn btn-success hide">Đã thanh toán</span>
+                            <span id="unpaid" class="btn btn-danger hide">Chưa thanh toán</span>
+                        </div>
+                        <div class="col-md-offset-2 col-md-8" style=" border-bottom: 1px solid; border-bottom-width: medium; margin-bottom: 10px;"></div>
+                        <div class="form-group">
+                            <label for="houseConsumptElectric" class="col-md-4 control-label">Số điện </label>
+                            <div class="col-md-4">
+                                <input id="houseConsumptElectric" type="text" class="form-control" value="">
+                            </div>
+                            <label id="electricCost" class="col-md-1 control-label"></label>
+                        </div>
+                        <div class="form-group">
+                            <label for="houseConsumptWater" class="col-md-4 control-label">Số nước </label>
+                            <div class="col-md-4">
+                                <input id="houseConsumptWater" type="text" class="form-control" value="">
+                            </div>
+                            <label id="waterCost" class="col-md-1 control-label"></label>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Nhà </label>
+                            <div class="col-md-4">
+                            </div>
+                            <label id="monthlyHouseRent" class="col-md-1 control-label"></label>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Cố định </label>
+                            <div class="col-md-4">
+                            </div>
+                            <label id="monthlyFixedCost" class="col-md-1 control-label"></label>
+                        </div>
+                        <div class="col-md-offset-2 col-md-8" style=" border-bottom: 1px solid; border-bottom-width: medium;"></div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Tổng </label>
+                            <div class="col-md-4">
+                            </div>
+                            <label id="monthlyTotal" class="col-md-1 control-label"></label>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-9 col-md-2">
+                                <span id="btnPurchaseReceipt" onclick="purchaseReceipt()" class="btn btn-info hide">Thanh toán</span>
+                            </div>
+                        </div>
+                        <input type="hidden" id="receiptId" />
+                        <input type="hidden" id="rowId" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="editAutomationReceiptHeaderModal" class="modal fade ams-modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 id="hdSrvModalTitle" class="modal-title">Cập nhật thông tin hóa đơn</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+
+                    <div class="alert alert-info" id="successUpdateOrderTypeNotify" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span>Cập nhật thông tin hóa đơn thành công.</span>
+                    </div>
+                    <div class="alert alert-warning" id="failedpdateOrderTypeNotify" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span>Cập nhật thông tin hóa đơn thất bại.</span>
+                    </div>
+
+                    <form id="updateHouseConsumptionForm" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="autoReceiptTitle" class="col-md-3 control-label">Tiêu đề </label>
+                            <div class="col-md-9">
+                                <input id="autoReceiptTitle" name="Title" type="text" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="autoReceiptPublishmentDate" class="col-md-3 control-label">Ngày xuất</label>
+                            <div class="col-md-5">
+                                <input type="text" id="autoReceiptPublishmentDate" name="PublishDate" class="form-control" data-date-format="dd-mm-yyyy" data-date-language="vi"
+                                       data-date-min-view-mode="0" data-date-today-highlight="true" data-date-start-date="0m" />
+                            </div>
+                            <span id="autoReceiptunPublished" class="btn btn-inverse hide">Chưa công bố</span>
+                            <span id="autoReceiptPaid" class="btn btn-success hide">Đã thanh toán</span>
+                            <span id="autoReceiptUnpaid" class="btn btn-danger hide">Chưa thanh toán</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="autoReceiptElectric" class="col-md-3 control-label">Giá điện</label>
+                            <div class="col-md-9">
+                                <select id="autoReceiptElectric" name="ElectricUtilServiceId" class="form-control"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="autoReceiptWater" class="col-md-3 control-label">Giá nước</label>
+                            <div class="col-md-9">
+                                <select id="autoReceiptWater" class="form-control" name="WaterUtilServiceId"></select>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="autoReceiptHouseRent" class="col-md-3 control-label">Giá thuê nhà</label>
+                            <div class="col-md-9">
+                                <select id="autoReceiptHouseRent" class="form-control"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="autoReceiptFixedCost" class="col-md-3 control-label">Chi phí cố định</label>
+                            <div class="col-md-9">
+                                <select id="autoReceiptFixedCost" name="HouseRentUtilServiceId" class="form-control"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="autoReceiptDesc" class="col-md-3 control-label">Mô tả</label>
+                            <div class="col-md-9">
+                                <textarea id="autoReceiptDesc" name="Description" class="form-control" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" name="ReceiptId" id="autoReceiptReceiptId" value="@receipt.Id" />
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 0">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <span onclick="updateAutomationReceiptHeader(@receipt.Id)" class="btn btn-primary">Chấp nhận</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="confirmDeleteOrderModal" class="modal fade ams-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">Xác nhận Xóa hóa đơn</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Bạn có chắc chắn muốn xóa hóa đơn <b><i class="title" id="delReceiptTitle"></i></b> không ?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button id="delBtn" type="button" class="btn btn-danger btn-ok" data-receipt-id="@receipt.Id">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("documemt").ready(function () {
+        document.getElementById("publishDate").dataset.dateEndDate = "+" + calculateDateFromTodayToEndOfMonth() + "d";
+        window.houseConsumptionList = [];
+        window.deleteConsumptionRecordList = [];
+        window.deleteConsumptionRecordElementList = [];
+        $("#publishDate").datepicker();
+        $("#forMonth").datepicker();
+
+        window.autoReceiptTbl = $("#autoReceiptTbl").DataTable({
+            "ajax": {
+                url: "/Management/ManageReceipt/GetBatchReceiptList?receiptId=" + "@receipt.Id",
+                dataSrc: function (data) {
+
+                    var unpublished = $("#receiptStatusUnpublish");
+                    var paid = $("#receiptStatusPaid");
+                    var unpaid = $("#receiptStatusUnpaid");
+                    if (data.status === window.StatusUnpublished) {
+                        unpublished.removeClass("hide");
+                        paid.addClass("hide");
+                        unpaid.addClass("hide");
+                    }else if (data.status === window.StatusUnpaid) {
+                        unpaid.removeClass("hide");
+                        unpublished.addClass("hide");
+                        paid.addClass("hide");
+                    }else if (data.status === window.StatusPaid) {
+                        paid.removeClass("hide");
+                        unpublished.addClass("hide");
+                        unpaid.addClass("hide");
+                    }
+
+                    $("#receiptTitle").val(data.title);
+                    $("#receiptDesc").text(data.description);
+                    $("#publishDate").text(data.publishDate);
+
+                    $("#electrics").val(data.electricName);
+                    $("#water").val(data.waterName);
+                    $("#houseRent").val(data.houseRentName);
+                    $("#fixedCost").val(data.fixedCostName);
+
+                    window.houseConsumptionList = data.data;
+                    return data.data;
+                }
+            },
+            "order": [["2", "asc"]],
+            "bLengthChange": false,
+            "bInfo": false,
+            "columns": [
+                { data: "HouseName" },
+                { data: "HouseName" },
+                { data: "Status" },
+                { data: "Electric" },
+                { data: "ElectricCost" },
+                { data: "Water" },
+                { data: "WaterCost" },
+                { data: "HouseRentCost" },
+                { data: "FixedCost" },
+                { data: "Total" },
+                { data: "ReceiptId" }
+            ],
+            "drawCallback": function (settings) {
+                var deleteBtn =
+            "<div class='hide' id='delConsumptionRecordBtnGroup'>" +
+                "<span class='btn btn-warning btn-stroke' onclick='cancelDeleteConsumptionRecord()'>" +
+                    "<i class='fa fa-plus'></i> Hủy" +
+                "</span>" +
+                "<span class='btn btn-primary' style='margin-left: 5px' onclick='commitDeleteConsumptionRecord()'>" +
+                    "<i class='fa fa-plus'></i> Chấp nhận" +
+                "</span>" +
+            "</div>";
+                $("#autoReceiptTbl_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(deleteBtn);
+            },
+            "columnDefs": [
+            {
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+            },
+
+            {
+                "targets": 1,
+                "data": "HouseName",
+                "render": function (data, type, full, meta) {
+                    if (type === "display" || type === "filter") {
+                        return "<span class='label date-color' style='margin-right: 5px'>" + full.Block + "</span>" +
+                            "<span class='label time-color' style='margin-right: 5px'>" + full.Floor + "</span>" +
+                            "<span class='label room-color' >" + full.HouseName + "</span>";
+                    }
+                    return data;
+                }
+            },
+            {
+                "targets": 2,
+                "data": "Status",
+                "render": function (data, type, full) {
+                    if (type === "display" || type === "filter") {
+                        if (data === window.StatusUnpaid) {
+                            return "<span class='label label-danger'> Chưa thanh toán</div>";
+                        } else if (data === window.StatusPaid) {
+                            return "<span class='label label-success'>" + "Đã thanh toán" + "</div>";
+                        } else if (data === window.StatusUnpublished) {
+                            return "<span class='label label-default'>" + "Chưa công bố" + "</div>";
+                        }
+                    }
+                    return data;
+                }
+            },
+            {
+                "targets": 4,
+                "data": "ElectricCost",
+                "render": function (data, type, full, meta) {
+                    if (type === "display" || type === "filter") {
+                        return numberWithCommas(data);
+                    }
+                    return data;
+                }
+            },{
+                "targets": 6,
+                "data": "WaterCost",
+                "render": function (data, type, full, meta) {
+                    if (type === "display" || type === "filter") {
+                        return numberWithCommas(data);
+                    }
+                    return data;
+                }
+            },{
+                "targets": 7,
+                "data": "HouseRentCost",
+                "render": function (data, type, full, meta) {
+                    if (type === "display" || type === "filter") {
+                        return numberWithCommas(data);
+                    }
+                    return data;
+                }
+            },{
+                "targets": 8,
+                "data": "FixedCost",
+                "render": function (data, type, full, meta) {
+                    if (type === "display" || type === "filter") {
+                        return numberWithCommas(data);
+                    }
+                    return data;
+                }
+            },{
+                "targets": 9,
+                "data": "Total",
+                "render": function (data, type, full, meta) {
+                    if (type === "display" || type === "filter") {
+                        return numberWithCommas(data);
+                    }
+                    return data;
+                }
+            },
+             {
+                 "targets": 10,
+                 "data": "ReceiptId",
+                 "render": function (data, type, full) {
+                     if (type === "display" || type === "filter") {
+                         if (data !== null && data !== undefined) {
+                             return "<span onclick='viewMonthlyReceiptDetail(\"" + data + "\",\"" + full.DT_RowId + "\")' class='btn btn-default btn-xs lbl-margin-right'>" +
+                                 "<i class='fa fa-pencil'></i>" +
+                                 "</span> ";
+                         }
+                     }
+                     return data;
+                 }
+             }
+            ]
+        });
+        generateTableIndex(window.autoReceiptTbl);
+    });
+    function viewMonthlyReceiptDetail(id,rowId) {
+        $.ajax({
+            url:"/Management/ManageReceipt/GetMonthLyReceiptDetai",
+            data: {
+                receiptId:id
+            },
+            type:"GET",
+            success:function(data) {
+                if (data.StatusCode === 0) {
+                    var obj = data.Data;
+                    $("#houseConsumptBlock").text(obj.Block);
+                    $("#houseConsumptFloor").text(obj.Floor);
+                    $("#houseConsumptHouseName").text(obj.HouseName);
+                    $("#houseConsumptElectric").val(obj.Electric);
+                    $("#electricCost").text(numberWithCommas(obj.ElectricCost));
+                    $("#houseConsumptWater").val(obj.Water);
+                    $("#waterCost").text(numberWithCommas(obj.WaterCost));
+                    $("#monthlyFixedCost").text(numberWithCommas(obj.FixedCost));
+                    $("#monthlyHouseRent").text(numberWithCommas(obj.HouseRentCost));
+                    $("#monthlyTotal").text(numberWithCommas(obj.Total));
+                    $("#receiptId").val(obj.ReceiptId);
+                    $("#paymentDate").val(obj.PaymentDate);
+
+                    $("#rowId").val(rowId);
+
+
+                    var unpublished = $("#unpublished").addClass("hide");
+                    var paid = $("#paid").addClass("hide");
+                    var unpaid = $("#unpaid").addClass("hide");
+                    if (obj.Status === window.StatusUnpublished) {
+                        unpublished.removeClass("hide");
+                    }else if (obj.Status === window.StatusUnpaid) {
+                        unpaid.removeClass("hide");
+                        $("#btnPurchaseReceipt").removeClass("hide");
+                    }else if (obj.Status === window.StatusPaid) {
+                        paid.removeClass("hide");
+                    }
+                    $("#editHouseConsumptionModal").modal("show");
+                }
+            }
+        });
+    }
+
+
+
+    function openFileSelector() {
+        $("#csvFileSelector").click();
+    }
+    function loadCsvFile() {
+
+    }
+
+    function deleteConsumptionRecord(id) {
+        window.deleteConsumptionRecordList.push(id);
+        window.utilityConsumptionTbl.row("#consump_house_" + id).remove().draw();
+        $("#delConsumptionRecordBtnGroup").removeClass("hide").addClass("show");
+    }
+    function cancelDeleteConsumptionRecord() {
+        for (var i = 0; i < window.houseConsumptionList.length; i++) {
+            var originItem = window.houseConsumptionList[i];
+            for (var z = 0; z < window.deleteConsumptionRecordList.length; z++) {
+                var deleteItem = window.deleteConsumptionRecordList[z];
+                if (originItem.HouseId === deleteItem) {
+                    window.utilityConsumptionTbl.row.add(originItem).draw();
+                }
+            }
+        }
+        window.deleteConsumptionRecordList = new Array();
+        $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
+    }
+    function saveAutomationReceipt() {
+        var title = $("#receiptTitle").val();
+        var publishDate = $("#publishDate").val();
+        var desciption = $("#receiptDesc").val();
+        var electricId = $("#electrics").val();
+        var waterId = $("#water").val();
+        var houseRentId = $("#houseRent").val();
+        var fixedCostId = $("#fixedCost").val();
+
+        var obj = {
+            Title: title,
+            PublishDate: publishDate,
+            Description: desciption,
+            ElectricUtilServiceId: electricId,
+            WaterUtilServiceId: waterId,
+            HouseRentUtilServiceId: houseRentId,
+            FixCostUtilServiceId: fixedCostId,
+            userId: @User.Identity.GetUserId(),
+            ResidentExpenseRecords: window.houseConsumptionList
+        }
+        $.ajax({
+            url:"/Management/ManageReceipt/CreateAutomationUtilitySevice",
+            type:"POST",
+            data: obj,
+            success:function(data) {
+                console.log(data);
+            },
+            error:function(){
+
+            }
+        });
+    }
+    function commitDeleteConsumptionRecord() {
+        for (var z = 0; z < window.deleteConsumptionRecordList.length; z++) {
+            var deleteItem = window.deleteConsumptionRecordList[z];
+            for (var i = 0; i < window.houseConsumptionList.length; i++) {
+                var originItem = window.houseConsumptionList[i];
+                if (originItem.HouseId === deleteItem) {
+                    window.houseConsumptionList.splice(i, 1);
+                }
+            }
+        }
+        $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
+        window.deleteConsumptionRecordList = new Array();
+    }
+    function editAutomationReceiptHeader(id) {
+        $.ajax({
+            url:"/Management/ManageReceipt/ViewBatchReceiptDetail",
+            data: {
+                receiptId : id
+            },
+            type:"GET",
+            success:function(data) {
+                var object = data.Data;
+                var electric = object.Electrics;
+                var water = object.Water;
+                var houseRent = object.HouseRent;
+                var fixedCost = object.FixedCost;
+                var receiptInfo = object.ReceiptInfo;
+                $("#autoReceiptElectric").html(parseJsonToSelectTags(electric));
+                $("#autoReceiptWater").html(parseJsonToSelectTags(water));
+                $("#autoReceiptHouseRent").html(parseJsonToSelectTags(houseRent));
+                $("#autoReceiptFixedCost").html(parseJsonToSelectTags(fixedCost));
+
+                $("#autoReceiptTitle").val(receiptInfo.Title);
+                document.getElementById("autoReceiptPublishmentDate").dataset.dateEndDate = "+" + calculateDateFromTodayToEndOfMonth() + "d";
+                $("#autoReceiptPublishmentDate").datepicker();
+                $("#autoReceiptPublishmentDate").val(receiptInfo.PublishDate);
+                $("#autoReceiptDesc").text(receiptInfo.Description);
+                $("#autoReceiptReceiptId").text(receiptInfo.ReceiptId);
+
+                var unpublished = $("#autoReceiptunPublished").addClass("hide");
+                var paid = $("#autoReceiptPaid").addClass("hide");
+                var unpaid = $("#autoReceiptUnpaid").addClass("hide");
+                if (receiptInfo.Status === window.StatusUnpublished) {
+                    unpublished.removeClass("hide");
+                }else if (receiptInfo.Status === window.StatusUnpaid) {
+                    unpaid.removeClass("hide");
+                }else if (receiptInfo.Status === window.StatusPaid) {
+                    paid.removeClass("hide");
+                }
+                $("#editAutomationReceiptHeaderModal").modal("show");
+            },
+            error:function() {
+            }
+
+        });
+    }
+    function updateAutomationReceiptHeader(id) {
+        $.ajax({
+            url:"/Management/ManageReceipt/UpdateAutomationUtilitySevice",
+            data:$("#updateHouseConsumptionForm").serialize(),
+            type:"POST",
+            success:function(data) {
+                if (data.StatusCode === 0) {
+                    window.autoReceiptTbl.ajax.reload();
+                    $("#successUpdateOrderTypeNotify").fadeIn("fast");
+                    resetFormData("updateHouseConsumptionForm");
+                    setTimeout(function() {
+                        var element =
+                        $("#confirmDeleteOrderModal > div > div > div.modal-body")
+                        $("#successUpdateOrderTypeNotify").fadeOut("fast");
+                        $("#editAutomationReceiptHeaderModal").modal("hide");
+                    }, 3000);
+                } else {
+
+                }
+            }
+        });
+    }
+    function updateStatus(id, mode ,callback) {
+        $.ajax({
+            url: "/Management/ManageReceipt/UpdateAutomationReceiptStatus",
+            type: "POST",
+            data: {
+                receiptId: id,
+                mode: mode
+            },
+            success: function(data) {
+                callback(data);
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
+    }
+
+    function publishOrder(id) {
+        updateStatus(id, window.Mode_Publish, function(data) {
+            if (data.StatusCode === 0) {
+                window.autoReceiptTbl.ajax.reload();
+                $("#btnEdit").addClass("hide");
+                $("#btnPublish").addClass("hide");
+                $("#btnDel").addClass("hide");
+            } else {
+                $("#failedPublishOrderNotify").fadeIn("fast");
+            }
+        });
+    }
+    function deleteOrder() {
+        $("#delReceiptTitle").text($("#receiptTitle").val());
+        $("#delBtn").on("click", function(e) {
+            var elementData = $(this).data();
+            $("#confirmDeleteOrderModal").addClass("loading");
+            updateStatus(elementData.receiptId, window.Mode_Delete, function(data) {
+                $("#confirmDeleteOrderModal").removeClass("loading");
+                if (data.StatusCode === 0) {
+                    $("#confirmDeleteOrderModal > div > div > div.modal-body > p").text("Xóa hóa đơn thành công. Sẽ chuyển về trang quản lý hóa đơn trong 2 giây.");
+
+                } else {
+                    $("#confirmDeleteOrderModal > div > div > div.modal-body > p").text("Xóa hóa đơn thất bại. Sẽ chuyển về trang quản lý hóa đơn trong 2 giây.");
+                }
+                setTimeout(function() {
+                    location.href = "/Management/ManageReceipt/View";
+                }, 2000);
+            });
+
+        });
+        $("#confirmDeleteOrderModal").modal("show");
+
+    }
+    function purchaseReceipt() {
+        var id = $("#receiptId").val();
+        $.ajax({
+            url:"/Management/ManageReceipt/UpdateStatus",
+            type:"Get",
+            data: {
+                ReceiptId:id,
+                Status:window.StatusPaid
+            },
+            success: function(data) {
+                if (data.Data.paymentDate !== undefined) {
+                    $("#btnPurchaseReceipt").addClass("hide");
+                    var rowId = $("#rowId").val();
+                    $("#" + rowId + " > td:nth-child(3)").html("<span class='label label-success'>" + "Đã thanh toán" + "</div>");
+                    $("#paid").removeClass("hide");
+                    $("#unpaid").addClass("hide");
+                    $("#paymentDate").val(data.Data.paymentDate);
+                }
+            }
+        });
+    }
+
+</script>

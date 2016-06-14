@@ -24,33 +24,72 @@ namespace AMS.Service
         public void DeleteById(int id)
         {
             Receipt receipt = _receiptRepository.FindById(id);
-            if(receipt != null) _receiptRepository.Delete(receipt);
+            if (receipt != null) _receiptRepository.Delete(receipt);
         }
         public List<Receipt> GetReceiptByHouseId(int houseId)
         {
-            return _receiptRepository.List.Where(r => r.HouseId == houseId 
-                && r.Status != SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED 
+            return _receiptRepository.List.Where(r => r.HouseId == houseId
                 && DateTime.Today.Date >= r.PublishDate.Value.Date).OrderByDescending(r => r.CreateDate).ToList();
         }
-        public List<Receipt> GetReceiptInMounth(DateTime month)
+        public List<Receipt> GetMonthlyReceiptByHouseId(int houseId, DateTime month)
         {
             DateTime firstDateOfThisMounth = new DateTime(month.Year, month.Month, 1);
             DateTime endDateOfThisMounth = new DateTime(month.Year, month.Month, DateTime.DaysInMonth(month.Year, month.Month));
+            return _receiptRepository.List.Where(r => r.HouseId == houseId && r.PublishDate.Value.Date.Date >= firstDateOfThisMounth.Date 
+                && r.PublishDate.Value.Date.Date <= endDateOfThisMounth.Date).OrderByDescending(r => r.CreateDate).ToList();
+        }
+        public List<Receipt> GetReceiptInMounth(DateTime month)
+        {
+
+            DateTime firstDateOfThisMounth = new DateTime(month.Year, month.Month, 1);
+            DateTime endDateOfThisMounth = new DateTime(month.Year, month.Month, DateTime.DaysInMonth(month.Year, month.Month));
             return _receiptRepository.List.Where(r => r.PublishDate.Value.Date.Date >= firstDateOfThisMounth.Date && r.PublishDate.Value.Date.Date <= endDateOfThisMounth.Date).OrderByDescending(r => r.CreateDate).ToList();
+
+        }
+
+        public List<Receipt> GetReceiptInMonthFromOpeningToToday(BalanceSheet blSheet)
+        {
+//            DateTime firstDateOfThisMounth = new DateTime(month.Year, month.Month, 1);
+//            DateTime endDateOfThisMounth = new DateTime(month.Year, month.Month, DateTime.DaysInMonth(month.Year, month.Month));
+//            return _receiptRepository.List.Where(r => r.PublishDate.Value.Date.Date >= firstDateOfThisMounth.Date && r.PublishDate.Value.Date.Date <= endDateOfThisMounth.Date).OrderByDescending(r => r.CreateDate).ToList();
+
+            return _receiptRepository.List.Where(r => r.PublishDate.Value.Date.Date >= blSheet.ForMonth.Value.Date &&
+                r.PublishDate.Value.Date.Date <= DateTime.Today.Date).OrderByDescending(r => r.CreateDate).ToList();
+        }
+        public List<Receipt> GetReceiptInMonthWhileBalanceSheetOpen(BalanceSheet blSheet)
+        {
+            //            DateTime firstDateOfThisMounth = new DateTime(month.Year, month.Month, 1);
+            //            DateTime endDateOfThisMounth = new DateTime(month.Year, month.Month, DateTime.DaysInMonth(month.Year, month.Month));
+            //            return _receiptRepository.List.Where(r => r.PublishDate.Value.Date.Date >= firstDateOfThisMounth.Date && r.PublishDate.Value.Date.Date <= endDateOfThisMounth.Date).OrderByDescending(r => r.CreateDate).ToList();
+
+            return _receiptRepository.List.Where(r => r.PublishDate.Value.Date.Date >= blSheet.ForMonth.Value.Date &&
+                r.PublishDate.Value.Date.Date <= blSheet.ClosingDate.Value.Date).OrderByDescending(r => r.CreateDate).ToList();
+        }
+        public List<Receipt> GetPaidReceiptOfBalanceSheetFromOpeningToToday(BalanceSheet bls)
+        {
+            return _receiptRepository.List.Where(r => r.PaymentDate != null && bls.ForMonth.Value.Date <= r.PaymentDate.Value.Date
+                && DateTime.Today.Date >= r.PaymentDate.Value.Date.Date
+                ).OrderByDescending(r => r.CreateDate).ToList();
+        }
+        public List<Receipt> GetPaidReceiptWhileBalanceSheetOpen(BalanceSheet bls)
+        {
+            return _receiptRepository.List.Where(r => r.PaymentDate != null && bls.ForMonth.Value.Date <= r.PaymentDate.Value.Date
+                && bls.ClosingDate.Value.Date >= r.PaymentDate.Value.Date.Date
+                ).OrderByDescending(r => r.CreateDate).ToList();
         }
         public List<Receipt> GetPublishedReceiptInMounth(DateTime month)
         {
             DateTime firstDateOfThisMounth = new DateTime(month.Year, month.Month, 1);
             DateTime endDateOfThisMounth = new DateTime(month.Year, month.Month, DateTime.DaysInMonth(month.Year, month.Month));
-            return _receiptRepository.List.Where(r => r.Status != SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED 
-                && r.PublishDate.Value.Date.Date >= firstDateOfThisMounth.Date 
+            return _receiptRepository.List.Where(r => r.Status != SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED
+                && r.PublishDate.Value.Date.Date >= firstDateOfThisMounth.Date
                 && r.PublishDate.Value.Date.Date <= endDateOfThisMounth.Date).ToList();
         }
         public List<Receipt> GetPaidReceiptInMounth(DateTime month)
         {
             DateTime firstDateOfThisMounth = new DateTime(month.Year, month.Month, 1);
             DateTime endDateOfThisMounth = new DateTime(month.Year, month.Month, DateTime.DaysInMonth(month.Year, month.Month));
-            return _receiptRepository.List.Where(r => r.Status == SLIM_CONFIG.RECEIPT_STATUS_PAID 
+            return _receiptRepository.List.Where(r => r.Status == SLIM_CONFIG.RECEIPT_STATUS_PAID
                 && r.PublishDate.Value.Date.Date >= firstDateOfThisMounth.Date
                 && r.PublishDate.Value.Date.Date <= endDateOfThisMounth.Date).ToList();
         }
@@ -58,7 +97,14 @@ namespace AMS.Service
         {
             return _receiptRepository.List.OrderByDescending(r => r.CreateDate.Value).ToList();
         }
-
+        public List<Receipt> GetAllReceiptsGroupByCreateDate()
+        {
+            return _receiptRepository.List.OrderByDescending(r => r.CreateDate.Value).GroupBy(r => r.CreateDate.Value).Select(r => r.First()).ToList();
+        }
+        public List<Receipt> GetReceiptsByCreateDate(DateTime createDate)
+        {
+            return _receiptRepository.List.Where(r => r.CreateDate == createDate).ToList();
+        }
         public Receipt FindById(int id)
         {
             return _receiptRepository.List.Where(r => r.Id == id).First();
@@ -71,7 +117,7 @@ namespace AMS.Service
 
         public ReceiptDetail FindById(int id)
         {
-           return _receiptDetailRepository.FindById(id);
+            return _receiptDetailRepository.FindById(id);
         }
 
         public void Add(ReceiptDetail receiptDetail)
@@ -93,7 +139,7 @@ namespace AMS.Service
             ReceiptDetail e = _receiptDetailRepository.FindById(id);
             if (e != null)
             {
-            _receiptDetailRepository.Delete(e);
+                _receiptDetailRepository.Delete(e);
             }
         }
     }
