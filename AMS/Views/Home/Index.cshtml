@@ -38,10 +38,72 @@
         }
     }
 }
+<<<<<<< HEAD
 <link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css" />
 <script src="~/Scripts/amsScript/LoadFamilyTree.js"></script>
 <script src="~/Scripts/amsScript/LoadUserProfile.js"></script>
+=======
+<style>
+    .button {
+        display: block;
+        width: 100px;
+        height: 35px;
+        background: #4E9CAF;
+        padding: 7px;
+        text-align: center;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+    }
 
+    .modalDialog {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 99999;
+        display: none;
+        opacity: 1;
+        -webkit-transition: opacity 400ms ease-in;
+        -moz-transition: opacity 400ms ease-in;
+        transition: opacity 400ms ease-in;
+    }
+
+        .modalDialog > div {
+            width: 400px;
+            position: relative;
+            margin: 10% auto;
+            padding: 5px 20px 13px 20px;
+            border-radius: 10px;
+            background: #fff;
+            background: #339999;
+        }
+>>>>>>> binhht12_6
+
+    .close {
+        background: #606061;
+        color: #FFFFFF;
+        line-height: 25px;
+        position: absolute;
+        right: -12px;
+        text-align: center;
+        top: -10px;
+        width: 24px;
+        text-decoration: none;
+        font-weight: bold;
+        -webkit-border-radius: 12px;
+        -moz-border-radius: 12px;
+        border-radius: 12px;
+        -moz-box-shadow: 1px 1px 3px #000;
+        -webkit-box-shadow: 1px 1px 3px #000;
+        box-shadow: 1px 1px 3px #000;
+    }
+
+        .close:hover {
+            background: #00d9ff;
+        }
+</style>
 <div class="container-fluid">
     <div class="cover overlay">
         <img src="~/Content/images/banner-842.jpg" alt="cover">
@@ -194,10 +256,10 @@
         <div id="openModal" class="modalDialog">
             <div class="modal-content">
 
-                <a href="#close" title="Close" class="close">X</a>
-                <div class="modal-header">Thông Báo</div>
+                <a href="#close" title="Close" class="close" style="color: white">X</a>
+                <div class="modal-header" style="color: white"><b>Thông Báo</b></div>
                 <div class="modal-body">
-                    <h4>@alert</h4>
+                    <h4 style="color: white">@alert</h4>
                 </div>
 
                 <div class="modal-footer">
@@ -209,6 +271,21 @@
         </div>
     }
 }
+@*<div id="myModall1" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Báo cáo</h4>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Tắt</button>
+
+                </div>
+            </div>
+        </div>
+    </div>*@
 
 <script>
     $(document).ready(function () {
@@ -311,6 +388,7 @@
                     getImagesForPost(index, jsonObject["Id"]);
                     getUserProfileForPost(index, jsonObject["Id"]);
                     getCommentsForPost(jsonObject["Id"]);
+                  
                 });
             },
             error: function (er) {
@@ -341,7 +419,7 @@
                 }
                 $('#userNamePost' + id).html(obj["Username"])
                 $('#userHrefPost' + id).attr("href", "/Profile/" + obj["Id"])
-                
+   
                 $('#userLoadProfilePost' + id).attr("onclick", "LoadUserProfile("+obj["Id"]+",true)")
 
             },
@@ -354,25 +432,27 @@
     function addPostToTimeline(index, postObject) {
         $("#timeline").append('<li class="media">'
 
+
                        + '<div class="pull-left" id="userLoadProfilePost'+postObject['Id']+'">'
                         
+
                             + '<img id="userImagePost' + postObject['Id'] + '" src="images/people/110/woman-5.jpg" alt="people" class="img-circle" width="80" height="80">'
                             + '<div id="userNamePost' + postObject['Id'] + '" class="date">3 MAY</div>'
                      
                         + '</div>'
 
-                        +'<div class="media-body">'
-                            +'<div class="panel panel-default">'
-                                +'<div class="panel-body" >'
-                                    +'<p>'+postObject['Body']+'</p>'
-                                    +'<div class="row" id="imagesPost'+postObject['Id'] +'" style="height:auto">'
-                                    +'</div>'
+                        + '<div class="media-body">'
+                            + '<div class="panel panel-default">'
+                                + '<div class="panel-body" >'
+                                    + '<p>' + postObject['Body'] + '</p>'
+                                    + '<div class="row" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
+                                    + '</div>'
                                     + '<div class="row" style="height:auto;">'
                                     + postObject['EmbedCode']
-                                    +'</div>'
-                                +'</div>'
-                                +'<div class="view-all-comments" id="countComment'+postObject['Id']+'"><a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments</div>'
-                                +'<ul class="comments" id="commentsArea'+postObject['Id']+'">'
+                                    + '</div>'
+                                + '</div>'
+                                + '<div class="view-all-comments" id="countComment' + postObject['Id'] + '"><a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments</div>'
+                                + '<ul class="comments" id="commentsArea' + postObject['Id'] + '">'
 
                                 + '</ul>'
                                 + '<ul class="comments">'
@@ -380,16 +460,19 @@
                                         + '<div class="input-group">'
                                             + '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control">'
                                             + '<span class="input-group-addon">'
+                                           
                                                 + '<button class="btn btn-success" onclick="addComment(' + postObject['Id'] + ')">Bình luận</button>'
                                             + '</span>'
                                         + '</div>'
                                     + '</li>'
                                 + '</ul>'
-                            +'</div>'
-                        +'</div>'
-                    +'</li>')
-    }
+                            + '</div>'
+                        + '</div>'
+                    + '</li>'
+ )
 
+    }
+ 
     function addComment(postId) {
         $.ajax({
             url: "/Post/CreateComment",
@@ -427,9 +510,9 @@
             },
             success: function (successData) {
                 var obj = JSON.parse(successData);
-                $("#countComment"+postid).html(obj.length + " bình luận")
+                $("#countComment" + postid).html(obj.length + " bình luận")
                 $.each(obj, function (index, comment) {
-                    addCommentToCommentArea(postid,comment)
+                    addCommentToCommentArea(postid, comment)
                 });
             },
             error: function (er) {
@@ -439,17 +522,18 @@
         });
     }
     function addCommentToCommentArea(postId, comment) {
-        $("#commentsArea"+postId).append('<li>'
-                                        +'<div class="media">'
-                                            +'<a href="" class="pull-left">'
+        $("#commentsArea" + postId).append('<li>'
+                                        + '<div class="media">'
+                                            + '<a href="" class="pull-left">'
                                                 + '<img  src="' + comment['userProfile'] + '" class="media-object" style="width:50px">'
-                                            +'</a>'
-                                            +'<div class="media-body">'
+                                            + '</a>'
+                                            + '<div class="media-body">'
                                                 + '<a href="/Profile/' + comment['userId'] + '" class="comment-author">' + comment['username'] + ': </a>'
                                                 + '<span>' + comment['detail'] + '</span>'
                                                 + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
                                             +'</div>'
                                         +'</div>'
+
                                     + '</li>')
 
     }
@@ -501,7 +585,7 @@
             success: function (successData) {
                 var obj = JSON.parse(successData);
                 $.each(obj, function (index, image) {
-                    addImageToPost(image['url'],id,(90/obj.length))
+                    addImageToPost(image['url'], id, (90 / obj.length))
 
                 });
 
@@ -512,8 +596,8 @@
 
         });
     }
-    function addImageToPost(imageUrl, postId,width) {
-        $("#imagesPost" + postId).append('<img src="'+imageUrl+'" style="width:'+width+'%;height:auto;margin-right:5px">')
+    function addImageToPost(imageUrl, postId, width) {
+        $("#imagesPost" + postId).append('<img src="' + imageUrl + '" style="width:' + width + '%;height:auto;margin-right:5px">')
 
     }
 

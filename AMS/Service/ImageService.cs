@@ -41,6 +41,11 @@ namespace AMS.Service
         {
             return imageRepository.List.ToList();
         }
+
+        public Image getImageByPostId(int id)
+        {
+            return imageRepository.List.FirstOrDefault(t => t.postId == id);
+        }
         public List<Image> findImagesByPostId(int postId)
         {
             List<Image> result = new List<Image>();

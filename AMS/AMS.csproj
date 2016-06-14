@@ -244,6 +244,7 @@
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\ReceiptController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -340,6 +341,7 @@
     <Compile Include="Service\PostService.cs" />
     <Compile Include="Service\ReceiptServices.cs" />
     <Compile Include="Service\QuestionService.cs" />
+    <Compile Include="Service\ReportService.cs" />
     <Compile Include="Service\ServiceChargeSevices.cs" />
     <Compile Include="Service\SurveyService.cs" />
     <Compile Include="Service\UserAnswerService.cs" />
@@ -350,6 +352,7 @@
     <Compile Include="Service\HelpdeskServicesService.cs" />
     <Compile Include="Service\PendingMemberService.cs" />
     <Compile Include="Service\TestService.cs" />
+    <Compile Include="Service\UserReportService.cs" />
     <Compile Include="Service\UserService.cs" />
     <Compile Include="Service\UserServices.cs" />
     <Compile Include="SLIM_CONFIG.cs" />
@@ -428,6 +431,7 @@
     <Content Include="images\HouseProfile\family.jpg" />
     <Content Include="images\HouseProfile\nhatui.png" />
     <Content Include="images\Post\default-profile.png" />
+    <Content Include="images\Post\question_button.png" />
     <Content Include="images\Post\SEO_survey_reuslts-1024x768.jpg" />
     <Content Include="images\Post\survey-icon.png" />
     <Content Include="Model1.Context.tt">
@@ -632,6 +636,7 @@
     <Content Include="Views\Survey\Graph.cshtml" />
     <Content Include="Views\Survey\View2.cshtml" />
     <Content Include="Views\Survey\Graph1.cshtml" />
+    <Content Include="Views\Report\Report.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

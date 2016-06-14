@@ -59,6 +59,11 @@ namespace AMS.Service
             var result =  postRepository.List.OrderByDescending(t=>t.Id).ToList();
             return result;
         }
+        public List<Post> getAllPostById(int id)
+        {
+            var result = postRepository.List.Where(t => t.Id==id).ToList();
+            return result;
+        }
         public List<Post> getAllPost(int? tokenId, int? houseId)
         {
             List<Post> result = new List<Post>();
@@ -131,7 +136,12 @@ namespace AMS.Service
         {
             commentRepository.Add(c);
         }
-       
+        public void UpdatePost(Post obj)
+        {
+            //Survey survey = new Survey();
+            //survey.Title = obj.Title;
+            postRepository.Update(obj);
+        }
     }
 
 }
