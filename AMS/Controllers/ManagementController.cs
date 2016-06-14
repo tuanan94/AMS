@@ -20,6 +20,7 @@ namespace AMS.Controllers
         HelpdeskServicesService _helpdeskServicesService = new HelpdeskServicesService();
         HelpdeskServiceCatService _helpdeskServiceCatService = new HelpdeskServiceCatService();
         UserServices _userServices = new UserServices();
+        AroundProviderService _aroundProviderService = new AroundProviderService();
         
         readonly string parternTime = "dd-MM-yyyy HH:mm";
         [Authorize]
@@ -552,6 +553,12 @@ namespace AMS.Controllers
         }
         public ActionResult CreateReceipt()
         {
+            return View();
+        }
+
+        public ActionResult ManageAroundProvider()
+        {
+            ViewBag.AllProviders = _aroundProviderService.GetAllProviders();
             return View();
         }
     }

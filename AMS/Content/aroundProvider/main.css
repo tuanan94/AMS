@@ -777,7 +777,7 @@ a, a.read-more:hover, a.read-more:hover i {
     margin-left: 2%;
     overflow: hidden;
     position: absolute;
-    width: 96%;
+    width: auto;
     transition: .3s;
 }
 
@@ -862,4 +862,8 @@ a, a.read-more:hover, a.read-more:hover i {
     border-radius: 6px;
     color: #fff;
     padding: 5px 17px;
+}
+
+#Container .mix{
+	display: none;
 }

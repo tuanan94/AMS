@@ -450,6 +450,7 @@
     <Content Include="Scripts\amsScript\Social.js" />
     <Content Include="Scripts\amsScript\vendor.js" />
     <Content Include="Scripts\amsScript\vendor.min.js" />
+    <Content Include="Scripts\aroundProvider\jquery.mixitup.js" />
     <Content Include="Scripts\aroundProvider\map.js" />
     <Content Include="Scripts\aroundProvider\jquery.nav.js" />
     <Content Include="Scripts\aroundProvider\jquery.sticky.js" />
@@ -617,6 +618,7 @@
     <Content Include="Views\Home\ViewAroundProvider.cshtml" />
     <Content Include="Views\Home\ViewAroundProviderDetail.cshtml" />
     <Content Include="Views\Home\SingleProviderDetail.cshtml" />
+    <Content Include="Views\Management\ManageAroundProvider.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

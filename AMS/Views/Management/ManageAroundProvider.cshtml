@@ -1,0 +1,67 @@
+﻿@{
+    ViewBag.Title = "Quản lý dịch vụ xung quanh";
+    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+    List<AroundProvider> allProviders = ViewBag.AllProviders;
+    int count = 0;
+}
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-gray">Quản lý dịch vụ xung quanh</div>
+        <div class="panel-body">
+            <div class="col-md-12" style="margin-bottom: 2%">
+                <button class="btn btn-primary icon-add-symbol"> Thêm dịch vụ </button>
+            </div>
+            <form class="form-horizontal" role="form">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="myTable">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Thứ tự</th>
+                            <th>Tên</th>
+                            <th>Mô tả</th>
+                            <th>Địa chỉ</th>
+                            <th>Điện thoại</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @{
+                            foreach (AroundProvider provider in allProviders)
+                            {
+                                <tr data-id="@(++count)">
+                                    <td class="text-center">
+                                        <span class="label label-gray">@count</span>
+                                    </td>
+                                    <td>
+                                        @provider.Name
+                                    </td>
+                                    <td>
+                                        @provider.Description
+                                    </td>
+                                    <td>
+                                        @provider.Address
+                                    </td>
+                                    <td>
+                                        <span class="label label-gray">@provider.Tel</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a class="btn btn-default btn-xs" onclick="" title="Cập nhật"><i class="fa fa-pencil"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        </tbody>
+                    </table>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+</script>
