@@ -7,6 +7,7 @@ using System.Security.Claims;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Host.SystemWeb;
 using Microsoft.Owin.Security;
+using AMS.ObjectMapping;
 
 namespace AMS.Service
 {
@@ -34,7 +35,23 @@ namespace AMS.Service
         public User findById(int id)
         {
             User user = userRepository.FindById(id);
+
             return user;
+        }
+        public UserProfileMapping findUserProfileMappingById(int id)
+        {
+            User user = findById(id);
+            UserProfileMapping userProfileMapping = new UserProfileMapping();
+            userProfileMapping.Id = user.Id;
+            userProfileMapping.DateOfBirth = user.DateOfBirth.GetValueOrDefault();
+            userProfileMapping.Email = user.Email;
+            userProfileMapping.FullName = user.Fullname;
+            userProfileMapping.Gender = user.Gender.GetValueOrDefault() ;
+            userProfileMapping.ProfileImage = user.ProfileImage;
+            userProfileMapping.HouseId = user.HouseId.GetValueOrDefault();
+            userProfileMapping.HouseName = user.House == null ? "Không xác định" : user.House.HouseName;
+            userProfileMapping.HouseProfile = user.House == null||user.House.ProfileImage==null||user.House.ProfileImage.Equals("") ? "/Content/Images/home_default.jpg" : user.House.ProfileImage;
+            return userProfileMapping;
         }
         public List<User> findByHouseId(int houseId)
         {

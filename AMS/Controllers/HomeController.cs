@@ -21,6 +21,7 @@ using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 
 using Newtonsoft.Json;
+using AMS.ObjectMapping;
 
 namespace AMS.Controllers
 {
@@ -874,6 +875,10 @@ namespace AMS.Controllers
         [Authorize]
         public Object getUserByHouseId(int? houseId)
         {
+            if (houseId == null)
+            {
+                return null;
+            }
             List<User> result = userService.findByHouseId(houseId.Value);
             // Serializer settings
             JsonSerializerSettings settings = new JsonSerializerSettings();
@@ -940,6 +945,22 @@ namespace AMS.Controllers
             houseService.updateHouse(h);
             return "success";
 
+        }
+        [HttpGet]
+        [Authorize]
+        public String getUser(int UserId)
+        {
+            UserProfileMapping user = userService.findUserProfileMappingById(UserId);
+            // Serializer settings
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.ContractResolver = new CustomResolver(typeof(UserProfileMapping));
+            settings.PreserveReferencesHandling = PreserveReferencesHandling.None;
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            settings.Formatting = Formatting.Indented;
+
+            // Do the serialization and output to the console
+            string json = JsonConvert.SerializeObject(user, settings);
+            return json;
         }
     }
 }

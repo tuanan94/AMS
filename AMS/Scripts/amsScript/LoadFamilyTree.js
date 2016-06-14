@@ -1,6 +1,7 @@
 ﻿  var USERS = [];
     var doneUser = [];
-    function loadAllMember(rootTreee,houseid){
+    function loadAllMember(rootTreee, houseid) {
+       // alert('loadAll Member' + houseid)
             $.ajax({
                 url: "/Home/getUserByHouseId/",
                 type: "GET",
@@ -10,9 +11,11 @@
                 },
                 success: function(successData){
                     USERS = JSON.parse(successData);
-                  //  alert(USERS.length)
+                    doneUser = [];
+                    //alert(USERS.length)
                     for(var i= USERS.length -1 ;i>=0;i--){
                         user = USERS[i];
+                       // alert(doneUser.length)
                         if (user['RootCoupleId']==null || user['RootCoupleId']==''){
                             if(doneUser.indexOf(user["Id"])<0){
                                 doneUser[doneUser.length]=user['Id'];
@@ -29,10 +32,10 @@
     }
 
     function addUserToMap(user,root){
-     
+        
         var ulRoot = $("#ulRoot"+root);
         if(ulRoot.length){
-           // alert('ulRootYes')
+            //alert('ulRootYes')
         }else{
             //alert('ulRootNo')
             $("#Couple"+root).append('<ul id="ulRoot'+root+'"></ul>')
@@ -50,7 +53,7 @@
         }else{
             profileSrc = user["ProfileImage"]
         }
-        $("#Couple"+user["CoupleId"]).prepend('<a href="#">'
+        $("#Couple" + user["CoupleId"]).prepend('<a href="#" onclick="LoadUserProfile('+user["Id"]+')">'
                                                        +' <div style="height:150px;float:left">'
                                                             +'<img src="'+profileSrc+'" style="width:auto;height:80%;max-width:100%"><br/>'
                                                             + '<div style="margin-top: 5px; font-size: small;font-weight: 700;background-color: aliceblue;">'

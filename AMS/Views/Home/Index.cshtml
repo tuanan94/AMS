@@ -38,6 +38,9 @@
         }
     }
 }
+<link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css" />
+<script src="~/Scripts/amsScript/LoadFamilyTree.js"></script>
+<script src="~/Scripts/amsScript/LoadUserProfile.js"></script>
 
 <div class="container-fluid">
     <div class="cover overlay">
@@ -49,7 +52,7 @@
 
             <ul class="timeline-list">
                 <li class="media">
-                    <div class="pull-left">
+                    <div class="pull-left" onclick="LoadUserProfile(@curUser.Id)">
 
 
                         <img src="@(curUser.ProfileImage==null?"/Content/images/defaultProfile.png":curUser.ProfileImage)" alt="people" class="img-circle" width="80px" height="80px">
@@ -78,7 +81,10 @@
                                         </div>
                                     </div>
                                     <div class="panel-footer share-buttons" id="postStatusArea">
-
+                                        <div id="previewEmbed" class="row" style="height: auto;">
+                                            <div id="previewContent">
+                                            </div>
+                                        </div>
                                         <a href="#postStatusArea" onclick="addImage()">
                                             <i class="fa fa-fw fa-photo"></i>
                                         </a>
@@ -89,19 +95,7 @@
                                             <i class="fa fa-map-marker"></i>
                                         </a>
                                         <button type="submit" class="btn btn-primary btn-xs pull-right display-none" style="margin-top:-12px" href="#" onclick="createNewPost()">Post</button>
-                                        <div id="previewEmbed" class="row" style="height: auto;">
-                                            <div id="previewContent">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="panel-footer share-buttons">
-                                        <a href="#">
-                                            <i class="fa fa-map-marker"></i>
-                                        </a>
-                                        <a href="#" data-toggle="modal" data-target="#addEmbedModal">
-                                            <i class="fa fa-fw fa-code"></i>
-                                        </a>
-                                        <button type="submit" class="btn btn-primary btn-xs pull-right display-none" style="margin-top: -12px" href="#" onclick="createNewPost()">Post</button>
+                                       
                                     </div>
                                 </div>
                             </div>
@@ -188,9 +182,14 @@
 
     </div>
 </div>
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
+
+
+
+
 
 @{
-    if (!alert.Equals(""))
+    if (alert!="")
     {
         <div id="openModal" class="modalDialog">
             <div class="modal-content">
@@ -341,7 +340,10 @@
 
                 }
                 $('#userNamePost' + id).html(obj["Username"])
-                $('#userHrefPost' + id).attr("href","/Profile/"+obj["Id"])
+                $('#userHrefPost' + id).attr("href", "/Profile/" + obj["Id"])
+                
+                $('#userLoadProfilePost' + id).attr("onclick", "LoadUserProfile("+obj["Id"]+",true)")
+
             },
             error: function (er) {
                 alert(er)
@@ -352,11 +354,11 @@
     function addPostToTimeline(index, postObject) {
         $("#timeline").append('<li class="media">'
 
-                       + '<div class="pull-left">'
-                        + '<a id="userHrefPost'+postObject['Id']+'" href="">'
+                       + '<div class="pull-left" id="userLoadProfilePost'+postObject['Id']+'">'
+                        
                             + '<img id="userImagePost' + postObject['Id'] + '" src="images/people/110/woman-5.jpg" alt="people" class="img-circle" width="80" height="80">'
                             + '<div id="userNamePost' + postObject['Id'] + '" class="date">3 MAY</div>'
-                             + '</a>'
+                     
                         + '</div>'
 
                         +'<div class="media-body">'
@@ -445,7 +447,7 @@
                                             +'<div class="media-body">'
                                                 + '<a href="/Profile/' + comment['userId'] + '" class="comment-author">' + comment['username'] + ': </a>'
                                                 + '<span>' + comment['detail'] + '</span>'
-                                                + '<div class="comment-date">' + timeSince(new Date(comment['createdDate'])) + ' trước </div>'
+                                                + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
                                             +'</div>'
                                         +'</div>'
                                     + '</li>')
@@ -453,8 +455,9 @@
     }
 
 
-    function timeSince(date) {
-
+    function timeSince(dateString) {
+        
+        var date = new Date(dateString);
         var seconds = Math.floor((new Date() - date) / 1000);
 
         var interval = Math.floor(seconds / 31536000);

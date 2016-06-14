@@ -302,6 +302,7 @@
     <Compile Include="Models\MessageViewModels.cs" />
     <Compile Include="Models\ReceiptViewModels.cs" />
     <Compile Include="ObjectMapping\CommentMapping.cs" />
+    <Compile Include="ObjectMapping\UserProfileMapping.cs" />
     <Compile Include="Post.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -313,6 +314,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="ReceiptDetail.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Report.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Repository\GenericRepository.cs" />
@@ -371,6 +375,9 @@
     <Compile Include="UserRateAroundProvider.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="UserReportPost.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="UtilityService.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -401,6 +408,7 @@
     <Content Include="Content\css\default-nav-inverse.min.css" />
     <Content Include="Content\css\default.css" />
     <Content Include="Content\css\default.min.css" />
+    <Content Include="Content\css\FamilyTree.css" />
     <Content Include="Content\css\jquery.timepicker.css" />
     <Content Include="Content\css\media-upload.css" />
     <Content Include="Content\css\thumbnails.css" />
@@ -440,6 +448,7 @@
     <Content Include="Scripts\amsScript\jquery.timepicker.min.js" />
     <Content Include="Scripts\amsScript\jquery.validate.min.js" />
     <Content Include="Scripts\amsScript\LoadFamilyTree.js" />
+    <Content Include="Scripts\amsScript\LoadUserProfile.js" />
     <Content Include="Scripts\amsScript\scripts.js" />
     <Content Include="Scripts\amsScript\scripts.min.js" />
     <Content Include="Scripts\amsScript\Social.js" />

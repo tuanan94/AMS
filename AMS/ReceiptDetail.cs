@@ -24,7 +24,6 @@ namespace AMS
         public Nullable<double> TotalBill { get; set; }
         public Nullable<double> UnitPrice { get; set; }
         public Nullable<int> Quantity { get; set; }
-        public string Unit { get; set; }
         public Nullable<int> ServiceFeeId { get; set; }
         public Nullable<int> ReceiptId { get; set; }
     

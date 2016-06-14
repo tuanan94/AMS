@@ -7,6 +7,7 @@
 /// <reference path="amsScript/jquery.timepicker.min.js" />
 /// <reference path="amsScript/jquery.validate.min.js" />
 /// <reference path="amsscript/loadfamilytree.js" />
+/// <reference path="amsscript/loaduserprofile.js" />
 /// <reference path="amsscript/scripts.js" />
 /// <reference path="amsscript/social.js" />
 /// <reference path="amsscript/vendor.js" />

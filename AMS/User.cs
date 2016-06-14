@@ -26,6 +26,7 @@ namespace AMS
             this.Receipts = new HashSet<Receipt>();
             this.UserRateAroundProviders = new HashSet<UserRateAroundProvider>();
             this.UserAnswerSurveys = new HashSet<UserAnswerSurvey>();
+            this.UserReportPosts = new HashSet<UserReportPost>();
         }
     
         public int Id { get; set; }
@@ -66,5 +67,7 @@ namespace AMS
         public virtual ICollection<UserRateAroundProvider> UserRateAroundProviders { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserAnswerSurvey> UserAnswerSurveys { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserReportPost> UserReportPosts { get; set; }
     }
 }

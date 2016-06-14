@@ -12,29 +12,18 @@ namespace AMS
     using System;
     using System.Collections.Generic;
     
-    public partial class Post
+    public partial class Report
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Post()
+        public Report()
         {
-            this.Comments = new HashSet<Comment>();
             this.UserReportPosts = new HashSet<UserReportPost>();
         }
     
         public int Id { get; set; }
-        public string Title { get; set; }
-        public string Body { get; set; }
-        public string ImgUrl { get; set; }
-        public Nullable<int> PostStatus { get; set; }
+        public string Description { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
-        public Nullable<System.DateTime> UpdateDate { get; set; }
-        public Nullable<int> Status { get; set; }
-        public Nullable<int> UserId { get; set; }
-        public string EmbedCode { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Comment> Comments { get; set; }
-        public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserReportPost> UserReportPosts { get; set; }
     }

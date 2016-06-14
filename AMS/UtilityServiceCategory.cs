@@ -18,7 +18,6 @@ namespace AMS
         public UtilityServiceCategory()
         {
             this.UtilityServices = new HashSet<UtilityService>();
-            this.UtilityServiceRangePrices = new HashSet<UtilityServiceRangePrice>();
         }
     
         public int Id { get; set; }
@@ -30,7 +29,5 @@ namespace AMS
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UtilityService> UtilityServices { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UtilityServiceRangePrice> UtilityServiceRangePrices { get; set; }
     }
 }

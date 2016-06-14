@@ -12,15 +12,15 @@ namespace AMS
     using System;
     using System.Collections.Generic;
     
-    public partial class UtilityServiceRangePrice
+    public partial class UserReportPost
     {
+        public Nullable<int> UserId { get; set; }
+        public Nullable<int> PostId { get; set; }
+        public Nullable<int> ReportId { get; set; }
         public int Id { get; set; }
-        public Nullable<int> ServiceId { get; set; }
-        public string Name { get; set; }
-        public Nullable<double> FromAmount { get; set; }
-        public Nullable<double> ToAmount { get; set; }
-        public Nullable<double> Price { get; set; }
     
-        public virtual UtilityService UtilityService { get; set; }
+        public virtual Post Post { get; set; }
+        public virtual Report Report { get; set; }
+        public virtual User User { get; set; }
     }
 }
