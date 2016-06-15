@@ -4,24 +4,40 @@
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
 }
 
-<h2>Graph</h2>
-<script src="http://code.jquery.com/jquery-1.6.3.min.js"></script>
-<script src="http://code.highcharts.com/highcharts.js"></script>
-<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script language="javascript" type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#image_container img').click(function () {
+            //remove border on any images that might be selected
+            $('#image_container img').removeClass("img_border")
+            // set the img-source as value of image_from_list
+            $('#image_from_list').val($(this).attr("src"));
+            $('#data_value').val($(this).attr("id"));
+            // $('#data_value').val( $(this).data("options").color );
 
-<input type="text" id="id1" onblur="bInfo()" />
-<input type="text" id="id2" onblur="bInfo()" />
+            //add border to a clicked image
+            $(this).addClass("img_border")
+        });
 
-
-
-<script>
-    function bInfo() {
-        in1 = document.getElementById('id1').value;
-        in2 = document.getElementById('id2').value;
-        if (in1 == in2 && in1 !="" && in2 != "") {
-            alert('Same Value'); return false;
-        } else { return true; }
-    }
-   
-
+    })
 </script>
+<style>
+    .img_border {
+        border: 2px solid red;
+    }
+</style>
+
+<body>
+    <div id="image_container">
+        <img src="~/images/Post/survey-icon.png" id="vermillion" width="300px"/>
+        <img src="~/images/Post/question_button.png" id="riverway" width="300px" />
+        <img src="~/images/Post/default-profile.png" id="solaria" width="300px" />
+
+    </div>
+
+    <form action="" method="get">
+        <input id="image_from_list" name="image_from_list" type="text" value="" />
+        <input id="data_value" type="text" value="" />
+    </form>
+</body>
+
