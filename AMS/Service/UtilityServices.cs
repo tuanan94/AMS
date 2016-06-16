@@ -6,30 +6,6 @@ using AMS.Repository;
 
 namespace AMS.Service
 {
-    public class UtilityCategoryServices
-    {
-        GenericRepository<UtilityServiceCategory> _utilityServiceCatRepository = new GenericRepository<UtilityServiceCategory>();
-
-        public UtilityServiceCategory FindByType(int type)
-        {
-            List<UtilityServiceCategory> utilSrvCategories =
-                _utilityServiceCatRepository.List.Where(uCat => uCat.Type.Value == type).ToList();
-            return utilSrvCategories.Count == 0 ? null : utilSrvCategories.First();
-        }
-
-        public void Add(UtilityServiceCategory u)
-        {
-            _utilityServiceCatRepository.Add(u);
-        }
-        public void Update(UtilityServiceCategory u)
-        {
-            _utilityServiceCatRepository.Update(u);
-        }
-        public UtilityServiceCategory FindById(int id)
-        {
-            return _utilityServiceCatRepository.FindById(id);
-        }
-    }
 
     public class UtilityServiceServices
     {
@@ -47,9 +23,9 @@ namespace AMS.Service
         {
             return _utilityServiceRepository.FindById(id);
         }
-        public List<UtilityService> GetServicesByCatId(int id)
+        public List<UtilityService> GetServicesByType(int type)
         {
-            return _utilityServiceRepository.List.Where(s => s.CategoryId == id).ToList();
+            return _utilityServiceRepository.List.Where(s => s.Type == type).ToList();
         }
     }
     public class UtilityServiceRangePriceServices

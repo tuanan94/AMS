@@ -1022,7 +1022,7 @@ function generateTableIndex(datatable) {
 function parseJsonToSelectTags(listJson, selectedId, msg) {
     var objList = listJson;
     var selectTagList = [];
-    //    var selectTag = "<option value='' selected='selected'> " + msg + " </option>";
+    var selectTag = {};
     //    selectTagList.push(selectTag);
     for (var i = 0; i < objList.length; i++) {
         var obj = objList[i];
@@ -1172,13 +1172,13 @@ function parseJsonToSelectTag(floor, room) {
     $("#houseName").html(selectTagList);
 }
 
-function getRoomAndFloor(blockName, floorName, mode) {
+function getRoomAndFloor(blockId, floorName, mode) {
     window.getHouseMode = mode;
     $.ajax({
         type: "GET",
         url: "/Management/ManageReceipt/GetRoomAndFloor",
         data: {
-            blockName: blockName,
+            blockId: blockId,
             floorName: floorName
         },
         success: function (data) {
@@ -1293,9 +1293,19 @@ function numberWithCommas(x) {
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
 }
+function numberWithSpace(x) {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+}
 function replaceCommaNumber(x) {
     var parts = x.toString().split(".");
     parts[0] = parts[0].replace(/,/g, "");
+    return parts.join(".");
+}
+function replaceSpaceNumber(x) {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/ /g, "");
     return parts.join(".");
 }
 function resetFormData(id) {
@@ -1366,7 +1376,12 @@ function randomColor2() {
 
 function bindingNumberWithComma(id) {
     //    $("#" + id).on("keyup", function () {
-    $("#" + id).on("keydown", function () {
+    $("#" + id).on("keyup", function (event) {
+
+        if (event.which >= 37 && event.which <= 40) {
+            event.preventDefault();
+        }
+
         console.log($(this).val());
         if ($(this).val() && (isNaN(replaceCommaNumber($(this).val())) === false)) {
             var value = replaceCommaNumber($(this).val());
@@ -1381,15 +1396,17 @@ function electricAggressiveCalculating(consumption, rangePrices) {
     var rangePrice = {};
     var previous = 0;
     var total = 0;
-    for (var i = 0; i < rangePrices.lenth; i++) {
+    for (var i = 0; i < rangePrices.length; i++) {
         rangePrice = rangePrices[i];
+        var toAmount = parseFloat(rangePrice.ToAmount) ;
+        var fromAmount = parseFloat(rangePrice.FromAmount);
 
         var calculatingPart = 0;
-        if (consumption >= rangePrice.ToAmount) {
-            calculatingPart = rangePrice.ToAmount - previous;
-            previous = rangePrice.ToAmount;
+        if (consumption >= toAmount) {
+            calculatingPart = toAmount - previous;
+            previous = toAmount;
         }
-        else if (consumption >= rangePrice.FromAmount && consumption < rangePrice.ToAmount) {
+        else if (consumption >= fromAmount && consumption < toAmount) {
             calculatingPart = consumption - previous;
         }
         total += calculatingPart * rangePrice.Price;
@@ -1401,18 +1418,20 @@ function waterAggressiveCalculating(consumption, rangePrices, numbeOfResident) {
     var rangePrice = {};
     var previous = 0;
     var total = 0;
-    for (var i = 0; i < rangePrices.lenth; i++) {
+    var toAmount = 0;
+    var fromAmount = 0;
+    for (var i = 0; i < rangePrices.length; i++) {
 
         rangePrice = rangePrices[i];
-        rangePrice.ToAmount = rangePrice.ToAmount * numbeOfResident;
-        rangePrice.FromAmount = rangePrice.FromAmount * numbeOfResident;
+        toAmount = parseFloat(rangePrice.ToAmount) * numbeOfResident;
+        fromAmount = parseFloat(rangePrice.FromAmount) * numbeOfResident;
 
         var calculatingPart = 0;
-        if (consumption >= rangePrice.ToAmount) {
-            calculatingPart = rangePrice.ToAmount - previous;
-            previous = rangePrice.ToAmount;
+        if (consumption >= toAmount) {
+            calculatingPart = toAmount - previous;
+            previous = toAmount;
         }
-        else if (consumption >= rangePrice.FromAmount && consumption < rangePrice.ToAmount) {
+        else if (consumption >= fromAmount && consumption < toAmount) {
             calculatingPart = consumption - previous;
         }
         total += calculatingPart * rangePrice.Price;
@@ -1427,3 +1446,33 @@ function calculateDateFromTodayToEndOfMonth() {
     var diffDays = Math.round(Math.abs(lastDate.getTime() - today.getTime()) / (oneDay));
     return diffDays;
 }
+
+/*
+http://jsfiddle.net/yWTLk/164/
+
+$('input.number').keyup(function (event) {
+    // skip for arrow keys
+    if (event.which >= 37 && event.which <= 40) {
+        event.preventDefault();
+    }
+    var $this = $(this);
+    var num = $this.val().replace(/,/gi, "").split("").reverse().join("");
+
+    var num2 = RemoveRougeChar(num.replace(/(.{3})/g, "$1,").split("").reverse().join(""));
+
+    console.log(num2);
+
+
+    // the following line has been simplified. Revision history contains original.
+    $this.val(num2);
+});
+
+function RemoveRougeChar(convertString){
+    if(convertString.substring(0,1) == ","){
+        return convertString.substring(1, convertString.length)            
+    }
+    return convertString;
+}
+
+
+*/

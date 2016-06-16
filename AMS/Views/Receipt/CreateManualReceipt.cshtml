@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "ManageReipt";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
-    List<House> block = ViewBag.block;
+    List<Block> block = ViewBag.block;
     List<House> firstBlockFloor = ViewBag.firstBlockFloor;
     List<House> rooms = ViewBag.rooms;
 }
@@ -57,7 +57,7 @@
                                                 @{
                                                     foreach (var b in block)
                                                     {
-                                                        <option value="@b.Block">@b.Block</option>
+                                                        <option value="@b.Id">@b.BlockName</option>
                                                     }
                                                 }
                                             </select>

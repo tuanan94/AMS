@@ -45,23 +45,23 @@ namespace AMS.Models
 
     public class MonthlyResidentExpense
     {
-        [CsvColumn(Name = "Tòa nhà", FieldIndex = 1)]
+        [CsvColumn(Name = "Tháng", OutputFormat = "MM-yyyy", FieldIndex = 1)]
+        public string ForMonth { get; set; }
+
+        [CsvColumn(Name = "Tòa nhà", FieldIndex = 2)]
         public string Block { get; set; }
 
-        [CsvColumn(Name = "Tầng", FieldIndex = 2)]
+        [CsvColumn(Name = "Tầng", FieldIndex = 3)]
         public string Floor { get; set; }
 
-        [CsvColumn(Name = "Nhà", FieldIndex = 3)]
+        [CsvColumn(Name = "Nhà", FieldIndex = 4)]
         public string HouseName { get; set; }
 
-        [CsvColumn(Name = "Tháng", OutputFormat = "MM-yyyy", FieldIndex = 4)]
-        public string Month { get; set; }
+        [CsvColumn(Name = "Từ số", FieldIndex = 5)]
+        public int FromNumber { get; set; }
 
-        [CsvColumn(Name = "Số nước", FieldIndex = 5)]
-        public int Water { get; set; }
-
-        [CsvColumn(Name = "Số điện", FieldIndex = 6)]
-        public int Electric { get; set; }
+        [CsvColumn(Name = "Đến số", FieldIndex = 6)]
+        public int ToNumber { get; set; }
     }
 
     public class MonthlyResidentExpenseModel
@@ -72,9 +72,9 @@ namespace AMS.Models
         public string HouseName { get; set; }
         public string Month { get; set; }
         public int Water { get; set; }
+        public int FromNumber { get; set; }
+        public int ToNumber { get; set; }
         public double WaterCost { get; set; }
-        public int Electric { get; set; }
-        public double ElectricCost { get; set; }
         public double Total { get; set; }
         public double Status { get; set; }
         public string DT_RowId { get; set; }
@@ -89,16 +89,16 @@ namespace AMS.Models
         public string HouseName { get; set; }
         public string Month { get; set; }
         public int Water { get; set; }
+        public int FromNumber { get; set; }
+        public int ToNumber { get; set; }
         public double WaterCost { get; set; }
-        public int Electric { get; set; }
-        public double ElectricCost { get; set; }
         public double FixedCost { get; set; }
-        public double HouseRentCost { get; set; }
         public double Total { get; set; }
         public double Status { get; set; }
         public string DT_RowId { get; set; }
         public string PaymentDate { get; set; }
-
+        public int NumberOfResident { get; set; }
+        public List<UtilityServiceRangePriceModel> WaterRangePrices { get; set; }
     }
 
     public class AutomationReceiptsTemplateModel
@@ -131,5 +131,11 @@ namespace AMS.Models
     {
         public string Name { get; set; }
         public int Id { get; set; }
+    }
+
+    public class ReceiptRangePriceByHouseModel
+    {
+        public List<UtilityServiceRangePrice> RangePrices { get; set; }
+        public int Count { get; set; }
     }
 }

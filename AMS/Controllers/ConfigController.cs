@@ -12,7 +12,6 @@ namespace AMS.Controllers
     public class ConfigController : Controller
     {
 
-        UtilityCategoryServices _utilityCategoryServices = new UtilityCategoryServices();
         UtilityServiceServices _utilityServiceServices = new UtilityServiceServices();
         UtilityServiceRangePriceServices _rangePriceServices = new UtilityServiceRangePriceServices();
         [HttpGet]
@@ -23,93 +22,44 @@ namespace AMS.Controllers
         }
 
         [HttpPost]
-        [Route("Management/Config/UtilityService/AddUtilServicePrices")]
+        [Route("Management/Config/UtilityService/AddWaterServicePrices")]
         public ActionResult AddUtilServicePrices(UtilityServiceModel utilSrvModel)
         {
             UtilityService utilityService = new UtilityService();
             utilityService.Name = utilSrvModel.Name;
             utilityService.CreateDate = DateTime.Now;
             utilityService.LastModified = DateTime.Now;
+            utilityService.Type = utilSrvModel.Type;
             MessageViewModels response = new MessageViewModels();
-
-            UtilityServiceCategory utilCat = _utilityCategoryServices.FindByType(utilSrvModel.Type);
-            if (utilCat == null)
-            {
-                utilCat = new UtilityServiceCategory();
-                utilCat.Type = utilSrvModel.Type;
-                string catName = "";
-                if (utilSrvModel.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_ELECTRICITY)
-                {
-                    catName = AmsConstants.UtilityServiceElectricity;
-                }
-                else if (utilSrvModel.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
-                {
-                    catName = AmsConstants.UtilityServiceWater;
-                }
-                else if (utilSrvModel.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_HOUSE_RENT)
-                {
-                    catName = AmsConstants.UtilityServiceHouseRent;
-                }
-                else if (utilSrvModel.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_HD_REQUEST)
-                {
-                    catName = AmsConstants.UtilityServiceHelpdeskRequest;
-                }
-                else if (utilSrvModel.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST)
-                {
-                    catName = AmsConstants.UtilityServiceFixedCost;
-                }
-                utilCat.Name = catName;
-                utilCat.CreateDate = DateTime.Now;
-                utilCat.LastModified = DateTime.Now;
-                _utilityCategoryServices.Add(utilCat);
-                utilityService.CategoryId = utilCat.Id;
-            }
-            else
-            {
-                utilityService.CategoryId = utilCat.Id;
-            }
             _utilityServiceServices.Add(utilityService);
 
-            if (utilSrvModel.UtilityServicePriceRanges != null)
+            if (utilSrvModel.ResInRegisBookPrices != null)
             {
-                UtilityServiceRangePrice rangePrice = null;
-                int count = 0;
-                foreach ( var rp in utilSrvModel.UtilityServicePriceRanges)
+                if (!ParseData(utilSrvModel.ResInRegisBookPrices, SLIM_CONFIG.RESIDENT_IN_REGISTRATION_BOOK, utilityService.Id))
                 {
-                    rangePrice = new UtilityServiceRangePrice();
-                    rangePrice.Name = rp.Name;
-                    try
-                    {
-                        rangePrice.FromAmount = Double.Parse(rp.FromAmount);
-                        count++;
-                        if (count == utilSrvModel.UtilityServicePriceRanges.Count && rp.ToAmount.Equals("*"))
-                        {
-                            rangePrice.ToAmount = 99999999999999;
-                        }
-                        else
-                        {
-                            rangePrice.ToAmount = Double.Parse(rp.ToAmount);
-                        }
-                        rangePrice.Price = rp.Price;
-                        rangePrice.ServiceId = utilityService.Id;
-
-                        _rangePriceServices.Add(rangePrice);
-                    }
-                    catch (Exception)
-                    {
-                        response.StatusCode = -1;
-                        response.Msg = "Các mức giá tiền không đúng";
-                        return Json(response);
-                    }
+                    response.StatusCode = -1;
+                    response.Msg = "Đã có lỗi xãy ra!";
+                    return Json(response);
                 }
             }
-            else
+            if (utilSrvModel.ResHasKt3Prices != null)
             {
-                response.StatusCode = -1;
-                response.Msg = "Không tìm thấy các mức giá sinh hoạt";
+                if (!ParseData(utilSrvModel.ResHasKt3Prices, SLIM_CONFIG.RESIDENT_HAS_KT3, utilityService.Id))
+                {
+                    response.StatusCode = -1;
+                    response.Msg = "Đã có lỗi xãy ra!";
+                    return Json(response);
+                }
             }
-            
-
+            if (utilSrvModel.ResOtherPrices != null)
+            {
+                if (!ParseData(utilSrvModel.ResOtherPrices, SLIM_CONFIG.RESIDENT_OTHER, utilityService.Id))
+                {
+                    response.StatusCode = -1;
+                    response.Msg = "Đã có lỗi xãy ra!";
+                    return Json(response);
+                }
+            }
             return Json(response);
         }
 
@@ -121,23 +71,9 @@ namespace AMS.Controllers
             utilityService.Name = fixedCostModel.Name;
             utilityService.CreateDate = DateTime.Now;
             utilityService.LastModified = DateTime.Now;
+            utilityService.Type = SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST;
             MessageViewModels response = new MessageViewModels();
 
-            UtilityServiceCategory utilCat = _utilityCategoryServices.FindByType(SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST);
-            if (utilCat == null)
-            {
-                utilCat = new UtilityServiceCategory();
-                utilCat.Type = SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST;
-                utilCat.Name = AmsConstants.UtilityServiceFixedCost;
-                utilCat.CreateDate = DateTime.Now;
-                utilCat.LastModified = DateTime.Now;
-                _utilityCategoryServices.Add(utilCat);
-                utilityService.CategoryId = utilCat.Id;
-            }
-            else
-            {
-                utilityService.CategoryId = utilCat.Id;
-            }
             _utilityServiceServices.Add(utilityService);
             if (fixedCostModel.FixedCosts != null)
             {
@@ -156,9 +92,40 @@ namespace AMS.Controllers
                 response.StatusCode = -1;
                 response.Msg = "Không tìm thấy các mức giá sinh hoạt";
             }
-
-
             return Json(response);
+        }
+
+        private bool ParseData(List<UtilityServiceRangePriceModel> priceList, int type, int utilServiceId)
+        {
+            UtilityServiceRangePrice rangePrice = null;
+            int count = 0;
+            foreach (var rp in priceList)
+            {
+                rangePrice = new UtilityServiceRangePrice();
+                rangePrice.Name = rp.Name;
+                try
+                {
+                    rangePrice.FromAmount = Double.Parse(rp.FromAmount);
+                    count++;
+                    if (count == priceList.Count && rp.ToAmount.Equals("*"))
+                    {
+                        rangePrice.ToAmount = 99999999999999;
+                    }
+                    else
+                    {
+                        rangePrice.ToAmount = Double.Parse(rp.ToAmount);
+                    }
+                    rangePrice.Price = rp.Price;
+                    rangePrice.ServiceId = utilServiceId;
+                    rangePrice.Type = type;
+                    _rangePriceServices.Add(rangePrice);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 

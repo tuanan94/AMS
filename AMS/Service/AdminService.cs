@@ -16,10 +16,10 @@ namespace AMS.Service
             return allHouseInfo.List.ToList();
         }
         //add House
-        public void addHouse(String Block, String Floor, String HouseName, String Description, float Area)
+        public void addHouse(int BlockId, String Floor, String HouseName, String Description, float Area)
         {
             House house = new House();
-            house.Block = Block;
+            house.Block.Id = BlockId;
             house.Floor = Floor;
             house.HouseName = HouseName;
             house.Description = Description;

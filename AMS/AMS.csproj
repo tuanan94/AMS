@@ -230,6 +230,12 @@
     <Compile Include="BalanceSheet.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Block.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BlockSurvey.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Comment.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -306,6 +312,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MessageViewModels.cs" />
     <Compile Include="Models\ReceiptViewModels.cs" />
+    <Compile Include="Models\UserViewModels.cs" />
     <Compile Include="Post.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -382,9 +389,6 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="UtilityService.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="UtilityServiceCategory.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="UtilityServiceRangePrice.cs">

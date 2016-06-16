@@ -606,17 +606,7 @@ namespace AMS.Controllers
                 id = 2;
                 catName = "Nước";
             }
-            else if (recType.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_ELECTRICITY)
-            {
-                id = 3;
-                catName = "Điện";
-            }
-            else if (recType.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_HOUSE_RENT)
-            {
-                id = 4;
-                catName = "Cho thuê nhà";
-            }
-
+            
             pubReceip.Name = catName;
             pubReceip.Id = id;
 

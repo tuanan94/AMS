@@ -4,9 +4,7 @@
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
 
 
-    List<UtilityService> electricSevices = ViewBag.electricSevices;
     List<UtilityService> waterSevices = ViewBag.waterSevices;
-    List<UtilityService> houseRentSevices = ViewBag.houseRentSevices;
     List<UtilityService> fixedCostSevices = ViewBag.fixedCostSevices;
 
 }
@@ -47,11 +45,11 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-@*                                                    <label for="forMonth" class="col-md-2 control-label">Tháng</label>*@
-@*                                                    <div class="col-md-4">*@
-@*                                                        <input type="text" id="forMonth" name="ForMonth" class="form-control datepicker" data-date-format="mm-yyyy" data-date-language="vi"*@
-@*                                                               data-date-min-view-mode="1" data-date-start-date="-1m" data-date-today-highlight="true" data-date-end-date="0m" />*@
-@*                                                    </div>*@
+                                                    @*                                                    <label for="forMonth" class="col-md-2 control-label">Tháng</label>*@
+                                                    @*                                                    <div class="col-md-4">*@
+                                                    @*                                                        <input type="text" id="forMonth" name="ForMonth" class="form-control datepicker" data-date-format="mm-yyyy" data-date-language="vi"*@
+                                                    @*                                                               data-date-min-view-mode="1" data-date-start-date="-1m" data-date-today-highlight="true" data-date-end-date="0m" />*@
+                                                    @*                                                    </div>*@
                                                     <label for="publishDate" class="col-md-2 control-label">Ngày xuất</label>
                                                     <div class="col-md-4">
                                                         <input type="text" id="publishDate" name="PublishDate" class="form-control datepicker" data-date-format="dd-mm-yyyy" data-date-language="vi"
@@ -78,19 +76,6 @@
                                                 <legend class="scheduler-border text-right">Thiết lập loại giá hóa đơn</legend>
 
                                                 <div class="form-group">
-                                                    <label for="electrics" class="col-md-2 control-label">Giá điện</label>
-                                                    <div class="col-md-10">
-                                                        <select id="electrics" name="electric" class="form-control">
-                                                            @{
-                                                                foreach (var electric in electricSevices)
-                                                                {
-                                                                    <option value="@electric.Id"> @electric.Name</option>
-                                                                }
-                                                            }
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
                                                     <label for="serviceType" class="col-md-2 control-label">Giá nước</label>
                                                     <div class="col-md-10 full-width-select">
                                                         <select id="water" name="ServiceType" class="form-control">
@@ -98,19 +83,6 @@
                                                                 foreach (var water in waterSevices)
                                                                 {
                                                                     <option value="@water.Id"> @water.Name</option>
-                                                                }
-                                                            }
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="serviceType" class="col-md-2 control-label">Giá thuê nhà</label>
-                                                    <div class="col-md-10 full-width-select">
-                                                        <select id="houseRent" name="ServiceType" class="form-control">
-                                                            @{
-                                                                foreach (var houseRent in houseRentSevices)
-                                                                {
-                                                                    <option value="@houseRent.Id"> @houseRent.Name</option>
                                                                 }
                                                             }
                                                         </select>
@@ -146,8 +118,9 @@
                                                     <th>#</th>
                                                     <th>Căn hộ</th>
                                                     <th>Trạng thái</th>
-                                                    <th>Số điện</th>
-                                                    <th>Số nước</th>
+                                                    <th>Từ số</th>
+                                                    <th>Đến số</th>
+                                                    <th>Số khối</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -156,8 +129,9 @@
                                                     <th>#</th>
                                                     <th>Căn hộ</th>
                                                     <th>Trạng thái</th>
-                                                    <th>Số điện</th>
-                                                    <th>Số nước</th>
+                                                    <th>Từ số</th>
+                                                    <th>Đến số</th>
+                                                    <th>Số khối</th>
                                                     <th></th>
                                                 </tr>
                                             </tfoot>
@@ -166,7 +140,7 @@
 
                                     </div>
                                     <div class="form-group">
-                                        <div class="col-sm-offset-9 col-md-2">
+                                        <div class="pull-right">
                                             <span id="btnAddAutomationReceipt" class="btn btn-primary hide" onclick="saveAutomationReceipt()"> <i class="fa fa-save"></i> Lưu hóa đơn</span>
                                         </div>
                                     </div>
@@ -201,7 +175,7 @@
 
                     <form id="editHouseConsumptionForm" class="form-horizontal" role="form">
                         <div class="form-group">
-                            <label for="houseConsumptHouseName" class="col-md-3 control-label">Căn hộ </label>
+                            <label for="houseConsumptHouseName" class="col-md-2 control-label">Căn hộ </label>
                             <div class="col-md-2">
                                 <span id="houseConsumptBlock" class="btn btn-sm date-color btn-block"></span>
                             </div>
@@ -213,35 +187,21 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="houseConsumptElectric" class="col-md-3 control-label">Số điện </label>
-                            <div class="col-md-3">
-                                <input id="houseConsumptElectric" type="text" class="form-control" value="">
+                            <label for="houseConsumptWater" class="col-md-2 control-label">Số nước </label>
+                            <div class="input-group col-md-9">
+                                <input id="fromNumber" type="text" class="form-control" value="">
+                                <span class="input-group-addon"><i class="fa fa-arrow-right"></i></span>
+                                <input id="toNumber" type="text" class="form-control" value="">
                             </div>
-                            <label for="houseConsumptWater" class="col-md-3 control-label">Số nước </label>
-                            <div class="col-md-3">
-                                <input id="houseConsumptWater" type="text" class="form-control" value="">
-                            </div>
-                            @*                            <label for="houseConsumptElectricCost" class="col-md-3 control-label">Thành tiền </label>*@
-                            @*                            <div class="col-md-3">*@
-                            @*                                <input id="houseConsumptElectricCost" type="text" class="form-control" value="">*@
-                            @*                            </div>*@
                         </div>
-                        @*                        <div class="form-group">*@
-                        @*                            <label for="houseConsumptWater" class="col-md-3 control-label">Số nước </label>*@
-                        @*                            <div class="col-md-3">*@
-                        @*                                <input id="houseConsumptWater" type="text" class="form-control" value="">*@
-                        @*                            </div>*@
-                        @*                            <label for="houseConsumptWater" class="col-md-3 control-label">Thành tiền </label>*@
-                        @*                            <div class="col-md-3">*@
-                        @*                                <input id="houseConsumptWaterCost" type="text" class="form-control" value="">*@
-                        @*                            </div>*@
-                        @*                        </div>*@
-                        @*                        <div class="form-group">*@
-                        @*                            <label for="total" class="col-md-3 control-label">Tổng </label>*@
-                        @*                            <div class="col-md-3">*@
-                        @*                                <input id="total" type="text" class="form-control" value="">*@
-                        @*                            </div>*@
-                        @*                        </div>*@
+                        <div class="form-group">
+                            <label for="houseConsumptWater" class="col-md-2 control-label">Tổng </label>
+                            <div class="input-group col-md-5">
+                                <input id="houseConsumptWater" type="text" class="form-control" value="">
+                                <span class="input-group-addon">Khối</span>
+                            </div>
+                        </div>
+
                         <input type="hidden" id="houseId" />
                         <div class="form-group">
                             <div class="col-sm-offset-9 col-md-2">
@@ -326,16 +286,14 @@
             "</div>";
                 $("#utilityConsumptionTbl_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(deleteBtn);
             },
-            "order": [[5, "asc"]],
+            "order": [[1, "asc"]],
             "columns": [
                 { data: "HouseName" },
                 { data: "HouseName" },
                 { data: "Status" },
-                { data: "Electric" },
-//                { data: "ElectricCost" },
+                { data: "FromNumber" },
+                { data: "ToNumber" },
                 { data: "Water" },
-//                { data: "WaterCost" },
-//                { data: "Total" },
                 { data: "HouseId" }
             ],
             "columnDefs": [
@@ -370,38 +328,8 @@
                         return data;
                     }
                 },
-                /*{
-                    "targets": 4,
-                    "data": "ElectricCost",
-                    "render": function (data, type, full, meta) {
-                        if (type === "display" || type === "filter") {
-                            return numberWithCommas(Math.ceil(data));
-                        }
-                        return data;
-                    }
-                },
                 {
                     "targets": 6,
-                    "data": "WaterCost",
-                    "render": function (data, type, full, meta) {
-                        if (type === "display" || type === "filter") {
-                            return numberWithCommas(Math.ceil(data));
-                        }
-                        return data;
-                    }
-                },
-                {
-                    "targets": 7,
-                    "data": "Total",
-                    "render": function (data, type, full, meta) {
-                        if (type === "display" || type === "filter") {
-                            return numberWithCommas(Math.ceil(data));
-                        }
-                        return data;
-                    }
-                },*/
-                {
-                    "targets": 5,
                     "data": "HouseId",
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
@@ -428,12 +356,10 @@
                 $("#houseConsumptBlock").text(obj.Block);
                 $("#houseConsumptFloor").text(obj.Floor);
                 $("#houseConsumptHouseName").text(obj.HouseName);
-                $("#houseConsumptElectric").val(obj.Electric);
-                //                $("#houseConsumptElectricCost").val(obj.ElectricCost);
+                $("#fromNumber").val(obj.FromNumber);
+                $("#toNumber").val(obj.ToNumber);
                 $("#houseConsumptWater").val(obj.Water);
                 $("#houseId").val(obj.HouseId);
-                //                $("#houseConsumptWaterCost").val(obj.WaterCost);
-                //                $("#total").val(obj.Total);
                 $("#editHouseConsumptionModal").modal("show");
             }
         }
@@ -444,17 +370,17 @@
         for (var i = 0; i < window.houseConsumptionList.length; i++) {
             var obj = window.houseConsumptionList[i];
             if (parseInt(houseId, 10) === parseInt(obj.HouseId, 10)) {
-                obj.Electric = $("#houseConsumptElectric").val();
-                obj.Water = $("#houseConsumptWater").val();
-                if (obj.Electric && obj.Water && parseInt(obj.Water) !== 0 && parseInt(obj.Electric) !== 0) {
+                obj.Water =$("#toNumber").val() -  obj.FromNumber;
+                obj.ToNumber = $("#toNumber").val();
+                if (obj.Water && parseInt(obj.Water) !== 0 ) {
                     $("#consump_house_" + houseId + " .status > span").removeClass("label-danger").addClass("label-success");
                     $("#consump_house_" + houseId + " .status > span").text("Hoàn thành");
                 } else {
                     $("#consump_house_" + houseId + " .status > span").removeClass("label-success").addClass("label-danger");
                     $("#consump_house_" + houseId + " .status > span").text("Chưa hoàn thành");
                 }
-                $("#consump_house_" + houseId + " > td:nth-child(4)").text(obj.Electric);
                 $("#consump_house_" + houseId + " > td:nth-child(5)").text(obj.Water);
+                $("#consump_house_" + houseId + " > td:nth-child(6)").text(obj.ToNumber);
                 window.houseConsumptionList[i] = obj;
                 $("#editHouseConsumptionModal").modal("hide");
                 break;
@@ -464,10 +390,6 @@
     function openFileSelector() {
         $("#csvFileSelector").click();
     }
-    function loadCsvFile() {
-
-    }
-
     function deleteConsumptionRecord(id) {
         var element = $("#consump_house_" + id).addClass("hide");
         window.deleteConsumptionRecordList.push(id);
@@ -493,7 +415,6 @@
         var title = $("#receiptTitle").val();
         var publishDate = $("#publishDate").val();
         var desciption = $("#receiptDesc").val();
-        var electricId = $("#electrics").val();
         var waterId = $("#water").val();
         var houseRentId = $("#houseRent").val();
         var fixedCostId = $("#fixedCost").val();
@@ -502,7 +423,6 @@
             Title: title,
             PublishDate: publishDate,
             Description: desciption,
-            ElectricUtilServiceId: electricId,
             WaterUtilServiceId: waterId,
             HouseRentUtilServiceId: houseRentId,
             FixCostUtilServiceId: fixedCostId,
