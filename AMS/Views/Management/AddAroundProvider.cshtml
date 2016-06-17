@@ -1,0 +1,139 @@
+﻿@{
+    ViewBag.Title = "Thêm dịch vụ";
+    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+}
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        
+        <div class="panel-heading panel-heading-gray">Thêm dịch vụ xung quanh</div>
+        <div class="panel-body">
+            <form class="form-horizontal" role="form" method="post" id="provider">
+                <div class="alert alert-info" id="createSuccessNoti" style="display: none">
+                    <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <span>Tạo mới thành công</span>
+                </div>
+                <div class="alert alert-danger" id="createFailedNoti" style="display: none">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                    <span>Tạo mới thất bại</span>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3" id="arroundProvideImg">
+                        <img id="profilePreview" src="/Content/images/defaultPhoto.png" onclick="chooseProfile()" alt="Click to choose photo" style="width: 250px; height: auto" />
+                        <input style="visibility: hidden" type="file" id="uploadEditorImage"/>
+                        <div id="progressBar" class="progress" style="width: 200px" hidden="hidden">
+                            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 200px">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-2 control-label">Tên</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="name" name="Name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="col-sm-2 control-label">Mô tả</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="description" name="Description">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="address" class="col-sm-2 control-label">Địa chỉ</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="address" name="Address">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tel" class="col-sm-2 control-label">Điện thoại</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="tel" name="Tel">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="modal-footer">
+                        <span type="submit" onclick="addProvider()" class="btn btn-primary">Thêm</span>
+                        <a href="~/Management/ManageAroundProvider" type="button" class="btn btn-danger">Hủy</a>
+                    </div>
+                </div>
+                <input type="hidden" id="imageUrl" name="ImageUrl"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function chooseProfile() {
+        $("#uploadEditorImage").click();
+    }
+
+    $("#uploadEditorImage").change(function () {
+        var data = new FormData();
+        var files = $("#uploadEditorImage").get(0).files;
+        if (files.length > 0) {
+            data.append("HelpSectionImages", files[0]);
+        }
+        progessBar(true);
+        $.ajax({
+            url: "/Image/Upload/",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: data,
+            success: function (successData) {
+                var imageWidth = $("#arroundProvideImg").outerWidth(true);
+                $("#profilePreview").css("width", imageWidth);
+                $("#imageUrl").val(successData);
+                changeImageURL(successData);
+                progessBar(false);
+            },
+            error: function (er) {
+                alert(er);
+                progessBar(false);
+            }
+
+        });
+    });
+
+    function changeImageURL(imageurl) {
+        $("#profilePreview").attr("src", imageurl);
+        $("#ImageURL").val(imageurl);
+    }
+
+    function progessBar(isShow) {
+        if (isShow == true) {
+            $("#progressBar").removeAttr("hidden");
+        } else {
+            $("#progressBar").attr("hidden", "hidden");
+        }
+    }
+    function addProvider() {
+        $.ajax({
+            url: "/Management/CreateAroundProvider",
+            type: "POST",
+            data: $("#provider").serialize(),
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    $("#createSuccessNoti").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#provider").closest("form").find("input[type=text], textarea").val("");
+                        $("#profilePreview").attr("src", "/Content/images/defaultPhoto.png").css("width", "200px");// Em chỉnh lại chổ này nè. làm giống An là ok
+
+                        $("#createSuccessNoti").fadeOut("fast");
+                    }, 3000);
+                } else {
+                    $("#createFailedNoti").fadeIn("fast");
+                }
+            },
+            error: function () {
+
+            }
+        });
+    }
+
+</script>

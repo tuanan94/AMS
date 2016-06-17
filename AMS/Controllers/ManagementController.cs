@@ -556,9 +556,80 @@ namespace AMS.Controllers
             return View();
         }
 
+        [HttpGet]
         public ActionResult ManageAroundProvider()
         {
             ViewBag.AllProviders = _aroundProviderService.GetAllProviders();
+            return View();
+        }
+
+        public ActionResult DetailProvider(int id)
+        {
+            AroundProvider curProvider = _aroundProviderService.FindById(id);
+            AroundProviderDetailModel providerDetail = new AroundProviderDetailModel();
+            providerDetail.Id = curProvider.Id;
+            providerDetail.Name = curProvider.Name;
+            providerDetail.Address = curProvider.Address;
+            providerDetail.Description = curProvider.Description;
+            providerDetail.ImageUrl = curProvider.ImageUrl;
+            providerDetail.Tel = curProvider.Tel;
+
+            return Json(providerDetail);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateProvider(AroundProviderDetailModel aroundProviderDetailModel)
+        {
+            AroundProvider curProvider = _aroundProviderService.FindById(aroundProviderDetailModel.Id);
+            curProvider.Name = aroundProviderDetailModel.Name;
+            curProvider.Description = aroundProviderDetailModel.Description;
+            curProvider.Address = aroundProviderDetailModel.Address;
+            curProvider.Tel = aroundProviderDetailModel.Tel;
+            _aroundProviderService.Update(curProvider);
+            //try
+            //{
+            //    _aroundProviderService.Update(curProvider);
+            //}
+            //catch (Exception)
+            //{
+            //    string message = "Cannot update!";
+            //    return Json(message);
+            //}
+            return Redirect("~/Management/ManageAroundProvider");
+            //return RedirectToAction("ManageAroundProvider");
+        }
+
+        public ActionResult DeleteProvider(int id)
+        {
+            AroundProvider curProvider = _aroundProviderService.FindById(id);
+            _aroundProviderService.Delete(curProvider);
+            return Redirect("~/Management/ManageAroundProvider");
+        }
+
+        [HttpPost]
+        public ActionResult CreateAroundProvider(AroundProviderDetailModel aroundProviderDetailModel)
+        {
+            MessageViewModels response = new MessageViewModels();
+            try
+            {
+                AroundProvider provider = new AroundProvider();
+                provider.Name = aroundProviderDetailModel.Name;
+                provider.Description = aroundProviderDetailModel.Description;
+                provider.Address = aroundProviderDetailModel.Address;
+                provider.Tel = aroundProviderDetailModel.Tel;
+                provider.ImageUrl = aroundProviderDetailModel.ImageUrl;
+                _aroundProviderService.Add(provider);
+            }
+            catch (Exception)
+            {
+                response.StatusCode = -1;
+                response.Msg = "Thêm mới thất bại";
+            }
+
+            return Json(response);
+        }
+        public ActionResult AddAroundProvider()
+        {
             return View();
         }
     }

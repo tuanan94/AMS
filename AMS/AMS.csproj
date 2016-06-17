@@ -294,6 +294,7 @@
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AroundProviderModels.cs" />
     <Compile Include="Models\HelpdeskServiceModels.cs" />
     <Compile Include="Models\ManageHouseViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -407,6 +408,7 @@
     <Content Include="Content\css\_vendor.bundle.css" />
     <Content Include="Content\css\_vendor.min.css" />
     <Content Include="Content\images\addimage.png" />
+    <Content Include="Content\images\defaultPhoto.png" />
     <Content Include="Content\images\defaultProfile.png" />
     <Content Include="Content\images\guy-5.jpg" />
     <Content Include="Content\images\delete.png" />
@@ -619,6 +621,7 @@
     <Content Include="Views\Home\ViewAroundProviderDetail.cshtml" />
     <Content Include="Views\Home\SingleProviderDetail.cshtml" />
     <Content Include="Views\Management\ManageAroundProvider.cshtml" />
+    <Content Include="Views\Management\AddAroundProvider.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
