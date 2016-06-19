@@ -1,13 +1,16 @@
-﻿@model AMS.ViewModel.SurveyViewModel
+﻿@using AMS.Service
+@model AMS.ViewModel.SurveyViewModel
 @{
     ViewBag.Title = "DetailSurvey";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
     Survey surveys = ViewBag.Survey;
     //   List<Question> questions = ViewBag.Question;
-    List<Answer> answers = ViewBag.Answer;
+    List<string> answers = ViewBag.Answer;
     List<string> listAnswer = ViewBag.CountAnswer;
     List<string> listBlock = ViewBag.ListBlock;
     List<string> listFloor = ViewBag.ListFloor;
+    BlockSurveyService blockSurveyService = new BlockSurveyService();
+    BlockService blockService = new BlockService();
     string alert = ViewBag.alert;
 }
 <script src="http://code.jquery.com/jquery-1.6.3.min.js"></script>
@@ -103,16 +106,11 @@
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Tiêu đề</label>
                                     <div class="col-sm-7">
-                                        <input type="text" class="form-control binh" id="Title" name="Title" style="width: 330px" value="@surveys.Title"><br>
+                                        <input type="text" class="form-control binh" id="Title" name="Title" style="width: 330px" value="@surveys.Description"><br>
                                     </div>
 
                                 </div>
-                                <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-3 control-label">Ngày tạo</label>
-                                    <div class="col-sm-7">
-                                        @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control binh", style = "width: 330px", @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", surveys.StartDate)) })<br>
-                                    </div>
-                                </div>
+                              
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Ngày bắt đầu</label>
                                     <div class="col-sm-7">
@@ -125,7 +123,7 @@
                                         @Html.TextBoxFor(m => m.EndDate, new { @class = "form-control binh", style = "width: 330px", @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", surveys.EndDate)) })<br>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                @*<div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Khu</label>
                                     <div class="col-sm-7">
                                         <select class="form-control binh" name="selectItemBlock" style="width: 330px">
@@ -152,75 +150,38 @@
 
 
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-3 control-label">Tầng</label>
-                                    <div class="col-sm-7">
-                                        <select class="form-control binh" name="selectItemFloor" style="width: 330px">
-                                            @{
-                                                if (@surveys.Floor == "NULL")
-                                                {
-                                                    <option value="@surveys.Floor">Tất cả</option>
-                                                }
-                                                else
-                                                {
-  <option value="@surveys.Floor">@surveys.Floor</option>
-                                                }
-                                            }
-                                            
-                                           
-                                            @{
-                                                foreach (var item in listFloor)
-                                                {
-
-                                                    <option value="@item">@item</option>
-                                                }
-                                            }
-                                        </select><br>
-
-
-
-                                    </div>
-                                </div>
+                                </div>*@
+                               
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Đối tượng</label>
                                     <div class="col-sm-7">
                                         <select class="form-control binh" name="people" style="width: 330px">
                                             @{
-                                                if (SLIM_CONFIG.USER_ROLE_ADMIN == surveys.Member)
+                                                if (SLIM_CONFIG.USER_ROLE_ADMIN == surveys.Mode)
                                                 {
-                                                    <option value="1">Admin</option>
+                                                    <option value="1">Tất cả quản trị viên</option>
                                                 }
-                                                else if (SLIM_CONFIG.USER_ROLE_RESIDENT == surveys.Member)
+                                                else if (SLIM_CONFIG.USER_ROLE_RESIDENT == surveys.Mode)
                                                 {
-                                                    <option value="3">Resident</option>
+                                                    <option value="3">Tất cả cư dân</option>
                                                 }
-                                                else if (SLIM_CONFIG.USER_ROLE_MANAGER == surveys.Member)
+                                                else if (SLIM_CONFIG.USER_ROLE_MANAGER == surveys.Mode)
                                                 {
-                                                    <option value="2">Manager</option>
+                                                    <option value="2">tất cả chủ nhà</option>
                                                 }
-                                                else if (SLIM_CONFIG.USER_ROLE_HOUSEHOLDER == surveys.Member)
-                                                {
-                                                    <option value="4">Househoulder</option>
-                                                }
-                                                else if (SLIM_CONFIG.USER_ROLE_SUPPORTER == surveys.Member)
-                                                {
-                                                    <option value="5">Supporter</option>
-                                                }
+                                               
                                             }
-                                            <option value="6">Tất cả</option>
-                                            <option value="1">Admin</option>
-                                            <option value="2">Manager</option>
-                                            <option value="3">Resident</option>
-                                            <option value="4">Househoulder</option>
-                                            <option value="5">Supporter</option>
+                                           
+                                            <option value="1">Tất cả quản trị viên</option>
+                                            <option value="2">tất cả chủ nhà</option>
+                                            <option value="3">Tất cả cư dân</option>
                                         </select><br>
 
 
 
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                @*<div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Chế độ bảo mật</label>
                                     <div class="col-sm-7">
                                         <select class="form-control binh" name="privacy" style="width: 330px">
@@ -244,38 +205,68 @@
 
 
                                     </div>
-                                </div>
+                                </div>*@
 
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Chế độ ưu tiên</label>
                                     <div class="col-sm-7">
-                                        <select class="form-control binh" name="priority" style="width: 330px">
 
+                                        <div class="radio col-sm-7">
                                             @{
                         if (surveys.Priority == 1)
                         {
-                                    <option value="1">Bắt buộc</option>
-                                                <option value="2">Không</option>
+                                       <label><input type="radio" value="1" name="priority" checked="checked">Bắt buộc</label>
+                                            <label><input type="radio" value="0" name="priority">Không</label>
                         }
                         else if (surveys.Priority == 0)
                         {
-                                    <option value="2">Không</option>
-                                                <option value="1">Bắt buộc</option>
+
+                            <label><input type="radio" value="1" name="priority">Bắt buộc</label>
+                                                 <label><input type="radio" value="0" name="priority" checked="checked">Không</label>
                         }
                                             }
-
-
-                                        </select><br>
+                                          
+                                        </div>
+                                       <br>
 
 
 
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-3 control-label">Khu</label>
+                                    <div class="col-sm-7">
 
+                                        @*<label class="checkbox-inline"><input type="checkbox" name="block" value="@item">@item</label>*@
+                                        @{
+                                            List<Block> listBlockss = blockService.GetListBlock();
+                                            List<BlockSurvey> listBlocks = blockSurveyService.FindBySurveyId(surveys.Id);
+                                            int temp = 0;
+                                            foreach (var obj in listBlockss)
+                                            {
+                                               
+                                                    if (temp < listBlocks.Count)
+                                                    {
+                                                        if (obj.Id == listBlocks.ElementAt(temp).BlockId)
+                                                        {
+                                                            <label class="checkbox-inline"><input type="checkbox" checked="checked" name="block" value="@obj.BlockName">@obj.BlockName</label>
+                                                        }
+                                                        
+                                                    }else
+                                                        {
+                                                           <label class="checkbox-inline"><input type="checkbox" name="block" value="@obj.BlockName">@obj.BlockName</label> 
+                                                        }
+                                                temp++;
+                                            }
+                                        }
+
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                                                int ii = 1;
+                                            
 
                                                 //int i = 0;
                                                 // int count = answers.Count;
@@ -285,7 +276,7 @@
                                 <fieldset class="scheduler-border less-padding">
                                     <legend class="scheduler-border">Câu hỏi</legend>
                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-3 control-label">Câu Hỏi @ii:</label>
+                                        <label for="inputEmail3" class="col-sm-3 control-label">Câu Hỏi :</label>
                                         <div class="col-sm-7">
                                             <input type="text" class="form-control binh" style="width: 330px" id="question" name="question" value="@surveys.Question"><br>
 
@@ -300,12 +291,12 @@
                                                 int counts = 1;
                                                 foreach (var b in answers)
                                                 {
-                            <label for="inputEmail3" class="col-sm-3 control-label">Lựa chon @counts :</label>
+                            <label for="inputEmail3" class="col-sm-3 control-label"></label>
                                             <div class="col-sm-7">
                                                 @Html.TextBoxFor(m => m.Id, new { @type = "hidden", @Value = surveys.Id })
 
-                                                <input type="hidden" id="count" name="count" value="@counts" />
-                                                <input type="text" class="form-control binh" style="width: 200px" id="anwserr_@counts" name="anwser1" value="@b.AnswerContent">
+                                                <input type="hidden" id="@counts" name="count" value="@counts" />
+                                                <input type="text" class="form-control binh" style="width: 200px" id="anwserr_@counts" name="anwser1" value="@b">
 
 
                                             </div>
@@ -337,7 +328,8 @@
 
                 </div>
 
-                @*</form>*@
+            @*</form>*@
+                @*//coutn answer.........*@
                 @{
                     int abc = 1;
                     foreach (var item in listAnswer)
@@ -358,7 +350,7 @@
 </div>
 <script>
     $('#label1').delay(2500).fadeOut('slow');
-    $('input').attr("required", true);
+  //  $('input').attr("required", true);
     $(function () {
         $("#StartDate").datepicker({
             format: "yyyy/mm/dd",
@@ -387,10 +379,18 @@
     var answer2 = parseFloat($("#answer_2").val()) || null
     var answer1 = parseFloat($("#answer_1").val()) || null
     var answer3 = parseFloat($("#answer_3").val()) || null
-
+    var answer4 = parseFloat($("#answer_4").val()) || null
+    var answer5 = parseFloat($("#answer_5").val()) || null
+    var answer2a = ($("#anwserr_2").val()) || null
+    var answer1a = ($("#anwserr_1").val()) || null
+    var answer3a = ($("#anwserr_3").val()) || null
+    var answer4a = ($("#anwserr_4").val()) || null
+    var answer5a = ($("#anwserr_5").val()) || null
     var a = "Lựa chọn 1"
     var b = "Lựa chọn 2"
     var c = "Lựa chọn 3"
+    var d = "Lựa chọn 4"  
+    var e = "Lựa chọn 5"
     $(document).ready(function () {
         //var a = document.getElementById('#answerr_1').value;
         //var b = document.getElementById('#answerr_2').value;
@@ -406,10 +406,11 @@
           return '<h4>' +"Chưa có dữ liệu"+'</h4>'
         } else {
             RenderPieChart('container', [
-            [a, answer1],
-            [b, answer2],
-            [c, answer3]
-
+          [answer1a, answer1],
+            [answer2a, answer2],
+            [answer3a, answer3],
+              [answer4a, answer4],
+                [answer5a, answer5]
 
             ]);
         }

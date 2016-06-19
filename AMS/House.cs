@@ -23,7 +23,7 @@ namespace AMS
         }
     
         public int Id { get; set; }
-        public string Block { get; set; }
+        public Nullable<int> BlockId { get; set; }
         public string Floor { get; set; }
         public string HouseName { get; set; }
         public string Description { get; set; }
@@ -33,9 +33,12 @@ namespace AMS
         public string CoverImage { get; set; }
         public Nullable<bool> DisplayMember { get; set; }
         public Nullable<bool> AllowOtherView { get; set; }
+        public Nullable<int> TypeId { get; set; }
     
+        public virtual Block Block { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HelpdeskRequest> HelpdeskRequests { get; set; }
+        public virtual HouseCategory HouseCategory { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Receipt> Receipts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

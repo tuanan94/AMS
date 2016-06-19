@@ -17,26 +17,29 @@ namespace AMS
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Survey()
         {
-            this.Answers = new HashSet<Answer>();
+            this.BlockSurveys = new HashSet<BlockSurvey>();
             this.UserAnswerSurveys = new HashSet<UserAnswerSurvey>();
         }
     
         public int Id { get; set; }
-        public string Title { get; set; }
         public string Description { get; set; }
-        public Nullable<System.DateTime> StartDate { get; set; }
+        public string ImageUrl { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
         public Nullable<System.DateTime> PublishDate { get; set; }
         public Nullable<int> Status { get; set; }
         public string Question { get; set; }
-        public string Block { get; set; }
-        public string Floor { get; set; }
-        public Nullable<int> Member { get; set; }
+        public Nullable<int> Mode { get; set; }
         public Nullable<int> Privacy { get; set; }
         public Nullable<int> Priority { get; set; }
+        public string Answer1 { get; set; }
+        public string Answer2 { get; set; }
+        public string Answer3 { get; set; }
+        public string Answer4 { get; set; }
+        public string Answer5 { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Answer> Answers { get; set; }
+        public virtual ICollection<BlockSurvey> BlockSurveys { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserAnswerSurvey> UserAnswerSurveys { get; set; }
     }

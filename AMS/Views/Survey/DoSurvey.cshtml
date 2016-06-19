@@ -10,6 +10,7 @@
 
     List<UserAnswerSurvey> listUserAnswer = new List<UserAnswerSurvey>();
     UserAnswerService userAnswerService = new UserAnswerService();
+    BlockSurveyService blockSurveyService = new BlockSurveyService();
     string alerts = ViewBag.alerts;
     <style>
         .button {
@@ -115,178 +116,35 @@
             foreach (var item in listSurveys)
             {
                 listUserAnswer = (userAnswerService.GetListUserAnswerSurveysBySurveyId(item.Id));
+                List<BlockSurvey> listBlockSurveys = blockSurveyService.FindBySurveyId(item.Id);
                 int k = 0;
-
-
-
+                int p = 0;
                 if (listSurveys.Count != 0)
                 {
-                    if (item.Member == currentUser.RoleId && item.Block == "NULL" && item.Floor == "NULL")
+                    if ( item.Mode == currentUser.RoleId)
                     {
                         foreach (var VARIABLE in listUserAnswer)
                         {
-
-
                             if (VARIABLE.UserId == currentUser.Id)
                             {
                                 k++;
                             }
-
                         }
-                        if (k != 1)
+                        foreach (var obj in listBlockSurveys)
                         {
-                            <fieldset class="scheduler-border less-padding aass">
-                                <div class="media-item-ctr-1">
-                                    <div class="col-xs-5 col-sm-3">
-                                        <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
-                                            <img class="img-responsive" src="~/images/Post/survey-icon.png">
-                                            <div class="media-ribbon">
-                                                <i class="fa fa-heart"></i> @item.Id
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="col-xs-7 col-sm-9 media-item-overview">
-
-                                        <h3>
-                                            <a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a>
-                                        </h3>
-                                        <p>@item.Title</p>
-                                        <div class="media-meta-data">
-                                            <a href="~/images/Post/default-profile.png">Admin</a> -  @Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))
-                                        </div>
-                                    </div>
-                                    <div class="social-share-ctr hidden-xs">
-                                        @{
-                            if (item.Priority == 1)
+                            if (obj.BlockId == blockSurveyService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
                             {
-                                <h3> <span class="label label-warning">Cần Làm</span></h3>
-
+                                p++;
                             }
-                                        }
-
-                                    </div>
-                                </div>
-                            </fieldset>
-
                         }
-                    }
-                    if (item.Block == currentHouse.Block && item.Floor == currentHouse.Floor && item.Member == currentUser.RoleId)
-                    {
-                        foreach (var VARIABLE in listUserAnswer)
-                        {
-
-
-                            if (VARIABLE.UserId == currentUser.Id)
-                            {
-                                k++;
-                            }
-
-                        }
-                        if (k != 1)
-                        {
-                          <fieldset class="scheduler-border less-padding aass">
-                                <div class="media-item-ctr-1">
-                                    <div class="col-xs-5 col-sm-3">
-                                        <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
-                                            <img class="img-responsive" src="~/images/Post/survey-icon.png">
-                                            <div class="media-ribbon">
-                                                <i class="fa fa-heart"></i> @item.Id
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="col-xs-7 col-sm-9 media-item-overview">
-
-                                        <h3>
-                                            <a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a>
-                                        </h3>
-                                        <p>@item.Title</p>
-                                        <div class="media-meta-data">
-                                            <a href="~/images/Post/default-profile.png">Admin</a> -  @Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))
-                                        </div>
-                                    </div>
-                                    <div class="social-share-ctr hidden-xs">
-                                        @{
-                            if (item.Priority == 1)
-                            {
-                                <h3> <span class="label label-warning">Cần Làm</span></h3>
-
-                            }
-                                        }
-
-                                    </div>
-                                </div>
-                            </fieldset>
-
-                        }
-                    }
-                    if (item.Member == 6 && item.Block == currentHouse.Block && item.Floor == "NULL")
-                    {
-                        foreach (var VARIABLE in listUserAnswer)
-                        {
-
-
-                            if (VARIABLE.UserId == currentUser.Id)
-                            {
-                                k++;
-                            }
-
-                        }
-                        if (k != 1)
-                        {
-                            <fieldset class="scheduler-border less-padding aass">
-                                <div class="media-item-ctr-1">
-                                    <div class="col-xs-5 col-sm-3">
-                                        <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
-                                            <img class="img-responsive" src="~/images/Post/survey-icon.png">
-                                            <div class="media-ribbon">
-                                                <i class="fa fa-heart"></i> @item.Id
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="col-xs-7 col-sm-9 media-item-overview">
-
-                                        <h3>
-                                            <a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a>
-                                        </h3>
-                                        <p>@item.Title</p>
-                                        <div class="media-meta-data">
-                                            <a href="~/images/Post/default-profile.png">Admin</a> -  @Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))
-                                        </div>
-                                    </div>
-                                    <div class="social-share-ctr hidden-xs">
-                                        @{
-                            if (item.Priority == 1)
-                            {
-                                <h3> <span class="label label-warning">Cần Làm</span></h3>
-
-                            }
-                                        }
-
-                                    </div>
-                                </div>
-                            </fieldset>
-
-                        }
-                    }
-                    if (item.Member == 6 && item.Block == "NULL" && item.Floor == "NULL")
-                    {
-                        foreach (var VARIABLE in listUserAnswer)
-                        {
-
-
-                            if (VARIABLE.UserId == currentUser.Id)
-                            {
-                                k++;
-                            }
-
-                        }
-                        if (k != 1)
+                        
+                        if (k != 1 && p==1)
                         {
                            <fieldset class="scheduler-border less-padding aass">
                                 <div class="media-item-ctr-1">
                                     <div class="col-xs-5 col-sm-3">
                                         <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
-                                            <img class="img-responsive" src="~/images/Post/survey-icon.png">
+                                            <img class="img-responsive" src="@item.ImageUrl">
                                             <div class="media-ribbon">
                                                 <i class="fa fa-heart"></i> @item.Id
                                             </div>
@@ -297,9 +155,9 @@
                                         <h3>
                                             <a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a>
                                         </h3>
-                                        <p>@item.Title</p>
+                                        <p>@item.Description</p>
                                         <div class="media-meta-data">
-                                            <a href="~/images/Post/default-profile.png">Admin</a> -  @Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))
+                                            <a href="~/images/Post/default-profile.png">Admin</a> -  @Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.PublishDate))
                                         </div>
                                     </div>
                                     <div class="social-share-ctr hidden-xs">
@@ -316,203 +174,7 @@
                             </fieldset>
                         }
                     }
-                    if (item.Member == 6 && item.Block == "NULL" && item.Floor == currentHouse.Floor)
-                    {
-                        foreach (var VARIABLE in listUserAnswer)
-                        {
-
-
-                            if (VARIABLE.UserId == currentUser.Id)
-                            {
-                                k++;
-                            }
-
-                        }
-                        if (k != 1)
-                        {
-                         <fieldset class="scheduler-border less-padding aass">
-                                <div class="media-item-ctr-1">
-                                    <div class="col-xs-5 col-sm-3">
-                                        <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
-                                            <img class="img-responsive" src="~/images/Post/survey-icon.png">
-                                            <div class="media-ribbon">
-                                                <i class="fa fa-heart"></i> @item.Id
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="col-xs-7 col-sm-9 media-item-overview">
-
-                                        <h3>
-                                            <a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a>
-                                        </h3>
-                                        <p>@item.Title</p>
-                                        <div class="media-meta-data">
-                                            <a href="~/images/Post/default-profile.png">Admin</a> -  @Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))
-                                        </div>
-                                    </div>
-                                    <div class="social-share-ctr hidden-xs">
-                                        @{
-                            if (item.Priority == 1)
-                            {
-                                <h3> <span class="label label-warning">Cần Làm</span></h3>
-
-                            }
-                                        }
-
-                                    </div>
-                                </div>
-                            </fieldset>
-
-                        }
-
-                    }
-                    if (item.Block == null && item.Floor == currentHouse.Floor && item.Member == currentUser.RoleId)
-                    {
-                        foreach (var VARIABLE in listUserAnswer)
-                        {
-
-
-                            if (VARIABLE.UserId == currentUser.Id)
-                            {
-                                k++;
-                            }
-
-                        }
-                        if (k != 1)
-                        {
-                         <fieldset class="scheduler-border less-padding aass">
-                                <div class="media-item-ctr-1">
-                                    <div class="col-xs-5 col-sm-3">
-                                        <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
-                                            <img class="img-responsive" src="~/images/Post/survey-icon.png">
-                                            <div class="media-ribbon">
-                                                <i class="fa fa-heart"></i> @item.Id
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="col-xs-7 col-sm-9 media-item-overview">
-
-                                        <h3>
-                                            <a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a>
-                                        </h3>
-                                        <p>@item.Title</p>
-                                        <div class="media-meta-data">
-                                            <a href="~/images/Post/default-profile.png">Admin</a> -  @Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))
-                                        </div>
-                                    </div>
-                                    <div class="social-share-ctr hidden-xs">
-                                        @{
-                            if (item.Priority == 1)
-                            {
-                                <h3> <span class="label label-warning">Cần Làm</span></h3>
-
-                            }
-                                        }
-
-                                    </div>
-                                </div>
-                            </fieldset>
-
-                        }
-                    }
-                    if (item.Block == currentHouse.Block && item.Floor == "NULL" && item.Member == currentUser.RoleId)
-                    {
-                        foreach (var VARIABLE in listUserAnswer)
-                        {
-
-
-                            if (VARIABLE.UserId == currentUser.Id)
-                            {
-                                k++;
-                            }
-
-                        }
-                        if (k != 1)
-                        {
-                           <fieldset class="scheduler-border less-padding aass">
-                                <div class="media-item-ctr-1">
-                                    <div class="col-xs-5 col-sm-3">
-                                        <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
-                                            <img class="img-responsive" src="~/images/Post/survey-icon.png">
-                                            <div class="media-ribbon">
-                                                <i class="fa fa-heart"></i> @item.Id
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="col-xs-7 col-sm-9 media-item-overview">
-
-                                        <h3>
-                                            <a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a>
-                                        </h3>
-                                        <p>@item.Title</p>
-                                        <div class="media-meta-data">
-                                            <a href="~/images/Post/default-profile.png">Admin</a> -  @Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))
-                                        </div>
-                                    </div>
-                                    <div class="social-share-ctr hidden-xs">
-                                        @{
-                            if (item.Priority == 1)
-                            {
-                                <h3> <span class="label label-warning">Cần Làm</span></h3>
-
-                            }
-                                        }
-
-                                    </div>
-                                </div>
-                            </fieldset>
-
-                        }
-                    }
-                    if (item.Block == currentHouse.Block && item.Floor == currentHouse.Floor && item.Member == 6)
-                    {
-                        foreach (var VARIABLE in listUserAnswer)
-                        {
-
-
-                            if (VARIABLE.UserId == currentUser.Id)
-                            {
-                                k++;
-                            }
-
-                        }
-                        if (k != 1)
-                        {
-                           <fieldset class="scheduler-border less-padding aass">
-                                <div class="media-item-ctr-1">
-                                    <div class="col-xs-5 col-sm-3">
-                                        <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
-                                            <img class="img-responsive" src="~/images/Post/survey-icon.png">
-                                            <div class="media-ribbon">
-                                                <i class="fa fa-heart"></i> @item.Id
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="col-xs-7 col-sm-9 media-item-overview">
-
-                                        <h3>
-                                            <a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a>
-                                        </h3>
-                                        <p>@item.Title</p>
-                                        <div class="media-meta-data">
-                                            <a href="~/images/Post/default-profile.png">Admin</a> -  @Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))
-                                        </div>
-                                    </div>
-                                    <div class="social-share-ctr hidden-xs">
-                                        @{
-                            if (item.Priority == 1)
-                            {
-                                <h3> <span class="label label-warning">Cần Làm</span></h3>
-
-                            }
-                                        }
-
-                                    </div>
-                                </div>
-                            </fieldset>
-
-                        }
-                    }
+                   
                 }
 
                 else if (listSurveys.Count == 0)

@@ -23,6 +23,7 @@ namespace AMS
         public int Id { get; set; }
         public string Title { get; set; }
         public Nullable<int> Type { get; set; }
+        public Nullable<System.DateTime> ForMonth { get; set; }
         public string ReceiptCode { get; set; }
         public Nullable<System.DateTime> PublishDate { get; set; }
         public Nullable<System.DateTime> PaymentDate { get; set; }

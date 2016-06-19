@@ -36,6 +36,7 @@ namespace AMS
         public int RoleId { get; set; }
         public Nullable<int> IsApproved { get; set; }
         public Nullable<int> HouseId { get; set; }
+        public Nullable<int> ResidentType { get; set; }
         public Nullable<int> Creator { get; set; }
         public string ProfileImage { get; set; }
         public Nullable<System.DateTime> DateOfBirth { get; set; }

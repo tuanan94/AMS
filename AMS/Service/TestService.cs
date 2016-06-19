@@ -27,7 +27,7 @@ namespace AMS.Service
         public void addHouse(String Block, String Floor, String HouseName)
         {
             House house = new House();
-            house.Block = Block;
+         //   house.Block = Block;
             house.Floor = Floor;
             house.HouseName = HouseName;
             houseObj.Add(house);    //Add to house object

@@ -22,6 +22,13 @@ namespace AMS.Service
             return userAnswerRepository.FindById(id);
         }
 
+       
+
+        public void DeleteUserAnswer(UserAnswerSurvey obj)
+        {
+            userAnswerRepository.Delete(obj);
+        }
+
         public List<House> GetListBlock()
         {
             return houseRepository.List.ToList().DistinctBy(t => t.Block).ToList();
@@ -35,11 +42,11 @@ namespace AMS.Service
             userAnswerRepository.Add(obj);
         }
 
-        public int CountAnswer(int answerId)
+        public int CountAnswer(string answerId, int surveyId)
         {
 
-            int a =
-                userAnswerRepository.List.Count(t => t.AnswerId == answerId);
+            int a = userAnswerRepository.List.Count(t => t.Answer == answerId && t.SurveyId == surveyId);
+                
                   
                     
             return a;
@@ -52,6 +59,10 @@ namespace AMS.Service
         public List<UserAnswerSurvey> GetListUserAnswerSurveysBySurveyId(int id)
         {
             return userAnswerRepository.List.Where(t => t.SurveyId ==id).ToList();
+        }
+        public List<UserAnswerSurvey> GetListUserAnswerSurveysByAnswer(int id)
+        {
+            return userAnswerRepository.List.ToList().DistinctBy(t => t.Answer ).Where(t=>t.SurveyId== id).ToList();
         }
     }
 }

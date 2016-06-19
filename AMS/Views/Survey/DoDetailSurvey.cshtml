@@ -6,11 +6,12 @@
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
     Survey surveys = ViewBag.Survey;
     List<string> listAnswer = ViewBag.CountAnswer;
-    List<Answer> answers = ViewBag.Answer;
+    List<string> answers = ViewBag.Answer;
     List<Survey> listSurveys = ViewBag.ListSurvey;
     User currentUser = ViewBag.currentUser;
     House currentHouse = ViewBag.currentHouse;
     UserAnswerService userAnswerService = new UserAnswerService();
+    BlockSurveyService blockSurveyService = new BlockSurveyService();
     List<UserAnswerSurvey> listUserAnswer = new List<UserAnswerSurvey>();
 }
 <style>
@@ -141,11 +142,13 @@
     }
 
     .media-item-ctr-2 .media-item-thumbnail img {
-        width: 100%;
+        width: 75%;
         max-height: 160px;
     }
 </style>
 <script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/highcharts.js"></script>
+<script src="~/Scripts/amsScript/canvasjs.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <div class="col-xs-12 col-md-8">
@@ -185,7 +188,7 @@
                                         By <a href="~/images/Post/default-profile.png">Admin</a>
                                     </div>
                                     <div class="media-meta-post-info">
-                                        @Convert.ToString(string.Format("{0:MM/dd/yyyy}", surveys.StartDate))
+                                        @Convert.ToString(string.Format("{0:MM/dd/yyyy}", surveys.PublishDate))
 
                                     </div>
                                 </div>
@@ -200,7 +203,7 @@
                                 <div class="poll-question-img">
                                     <img src="~/images/Post/SEO_survey_reuslts-1024x768.jpg" class="img-responsive">
                                     <div class="poll-txt">
-                                        @surveys.Title
+                                        @surveys.Description
                                     </div>
                                 </div>
                                 <br />
@@ -229,7 +232,7 @@
                             <fieldset class="scheduler-border less-padding">
                                 <legend class="scheduler-border">Câu hỏi</legend>
                                 <div class="col-md-10">
-                                    <label for="inputEmail3" class="col-md-4">Câu Hỏi @ii:</label>
+                                    <label for="inputEmail3" class="col-md-4">Câu Hỏi :</label>
                                     <div class="col-md-6">
 
                                         <input type="text" disabled="disabled" class="form-control binh" style="width: 330px" id="question" name="question" value="@surveys.Question"><br>
@@ -245,18 +248,18 @@
 
                             foreach (var b in answers)
                             {
-                                <label for="inputEmail3" class="col-md-4">Câu trả lời:</label>
+                                <label for="inputEmail3" class="col-md-3"></label>
                                         <div class="col-sm-1">
                                             @*@Html.RadioButtonFor(m => m.AnswerContent,b.Id, new { @Value = b.AnswerContent })*@
 
 
-                                            <input type="radio" id="@b.Id" name="answer" value="@b.AnswerContent">
+                                            <input type="radio" id="@b" name="answer" value="@b">
                                         </div>
                                         <div class="col-md-6">
-                                            <input type="hidden" id="answerId" name="answerId" value="@b.Id" />
+                                            <input type="hidden" id="answerId" name="answerId" value="@b" />
                                             <input type="hidden" id="count" name="count" value="@counts" />
                                             @*<input type="radio" name="gender" value="@b.AnswerContent">*@
-                                            <input type="text" disabled="disabled" class="form-control binh" style="width: 230px" id="anwser1" name="anwser1" value="@b.AnswerContent">
+                                            <input type="text" disabled="disabled" class="form-control binh" style="width: 230px" id="@counts" name="anwser1" value="@b"><br/>
 
 
                                         </div>
@@ -281,12 +284,12 @@
                             @*<a href="@Url.Action("UpdateSurvey", "Survey", new { surveyId =@surveys.Id})" class="fa fa-list-alt">Lưu..</a>*@
                             <button type="submit" onclick="addCommentByAjax()" class="btn btn-primary">Lưu</button>
 
-                            @{
+                            @*@{
                                     if (surveys.Privacy == 1)
-                                    {
+                                    {*@
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModall">Xem kết quả</button>
-                                    }
-                            }
+                                    @*}
+                            }*@
 
                         </div>
 
@@ -321,14 +324,16 @@
                 @{
                     foreach (var item in listSurveys)
                     {
+                        List<BlockSurvey> listBlockSurveys = blockSurveyService.FindBySurveyId(item.Id);
                         listUserAnswer = (userAnswerService.GetListUserAnswerSurveysBySurveyId(item.Id));
                         int k = 0;
-
+                        int p = 0;
 
 
                         if (listSurveys.Count != 0)
                         {
-                            if (item.Member == currentUser.RoleId && item.Block == "NULL" && item.Floor == "NULL")
+                            
+                            if ( item.Mode == currentUser.RoleId)
                             {
                                 foreach (var VARIABLE in listUserAnswer)
                                 {
@@ -340,50 +345,23 @@
                                     }
 
                                 }
-                                if (k != 1)
+                                foreach (var obj in listBlockSurveys)
                                 {
-                                      <div class="media-item-ctr-2">
-                                         <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
-                                             <img src="~/images/Post/SEO_survey_reuslts-1024x768.jpg" class="img-responsive">
-                                             <div class="media-ribbon"><i class="fa fa-heart"></i> @item.Id</div>
-                                         </a>
-                    <div class="media-item-overview">
-                        <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a></h3>
-                        <div class="media-meta-data">Admin -@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))</div>
-                        @{
-                                    if (item.Priority == 1)
+                                    if (obj.BlockId == blockSurveyService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
                                     {
-                                        <h3> <span class="label label-warning">Cần Làm</span></h3>
-
+                                        p++;
                                     }
-                        }
-                    </div>
-                </div>
-
                                 }
-                            }
-                            if (item.Block == currentHouse.Block && item.Floor == currentHouse.Floor && item.Member == currentUser.RoleId)
-                            {
-                                foreach (var VARIABLE in listUserAnswer)
-                                {
-
-
-                                    if (VARIABLE.UserId == currentUser.Id)
-                                    {
-                                        k++;
-                                    }
-
-                                }
-                                if (k != 1)
+                                if (k != 1 && p == 1)
                                 {
                                    <div class="media-item-ctr-2">
                                          <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
-                                             <img src="~/images/Post/SEO_survey_reuslts-1024x768.jpg" class="img-responsive">
+                                             <img src="@item.ImageUrl" class="img-responsive">
                                              <div class="media-ribbon"><i class="fa fa-heart"></i> @item.Id</div>
                                          </a>
                     <div class="media-item-overview">
                         <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a></h3>
-                        <div class="media-meta-data">Admin -@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))</div>
+                        <div class="media-meta-data">Admin -@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.PublishDate))</div>
                         @{
                                     if (item.Priority == 1)
                                     {
@@ -396,211 +374,7 @@
 
                                 }
                             }
-                            if (item.Member == 6 && item.Block == currentHouse.Block && item.Floor == "NULL")
-                            {
-                                foreach (var VARIABLE in listUserAnswer)
-                                {
-
-
-                                    if (VARIABLE.UserId == currentUser.Id)
-                                    {
-                                        k++;
-                                    }
-
-                                }
-                                if (k != 1)
-                                {
-                                     <div class="media-item-ctr-2">
-                                         <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
-                                             <img src="~/images/Post/SEO_survey_reuslts-1024x768.jpg" class="img-responsive">
-                                             <div class="media-ribbon"><i class="fa fa-heart"></i> @item.Id</div>
-                                         </a>
-                    <div class="media-item-overview">
-                        <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a></h3>
-                        <div class="media-meta-data">Admin -@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))</div>
-                        @{
-                                    if (item.Priority == 1)
-                                    {
-                                        <h3> <span class="label label-warning">Cần Làm</span></h3>
-
-                                    }
-                        }
-                    </div>
-                </div>
-
-                                }
-                            }
-                            if (item.Member == 6 && item.Block == "NULL" && item.Floor == "NULL")
-                            {
-                                foreach (var VARIABLE in listUserAnswer)
-                                {
-
-
-                                    if (VARIABLE.UserId == currentUser.Id)
-                                    {
-                                        k++;
-                                    }
-
-                                }
-                                if (k != 1)
-                                {
-                                   <div class="media-item-ctr-2">
-                                         <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
-                                             <img src="~/images/Post/SEO_survey_reuslts-1024x768.jpg" class="img-responsive">
-                                             <div class="media-ribbon"><i class="fa fa-heart"></i> @item.Id</div>
-                                         </a>
-                    <div class="media-item-overview">
-                        <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a></h3>
-                        <div class="media-meta-data">Admin -@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))</div>
-                        @{
-                                    if (item.Priority == 1)
-                                    {
-                                        <h3> <span class="label label-warning">Cần Làm</span></h3>
-
-                                    }
-                        }
-                    </div>
-                </div>
-                                }
-                            }
-                            if (item.Member == 6 && item.Block == "NULL" && item.Floor == currentHouse.Floor)
-                            {
-                                foreach (var VARIABLE in listUserAnswer)
-                                {
-
-
-                                    if (VARIABLE.UserId == currentUser.Id)
-                                    {
-                                        k++;
-                                    }
-
-                                }
-                                if (k != 1)
-                                {
-                                   <div class="media-item-ctr-2">
-                                         <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
-                                             <img src="~/images/Post/SEO_survey_reuslts-1024x768.jpg" class="img-responsive">
-                                             <div class="media-ribbon"><i class="fa fa-heart"></i> @item.Id</div>
-                                         </a>
-                    <div class="media-item-overview">
-                        <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a></h3>
-                        <div class="media-meta-data">Admin -@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))</div>
-                        @{
-                                    if (item.Priority == 1)
-                                    {
-                                        <h3> <span class="label label-warning">Cần Làm</span></h3>
-
-                                    }
-                        }
-                    </div>
-                </div>
-
-                                }
-
-                            }
-                            if (item.Block == null && item.Floor == currentHouse.Floor && item.Member == currentUser.RoleId)
-                            {
-                                foreach (var VARIABLE in listUserAnswer)
-                                {
-
-
-                                    if (VARIABLE.UserId == currentUser.Id)
-                                    {
-                                        k++;
-                                    }
-
-                                }
-                                if (k != 1)
-                                {
-                                    <div class="media-item-ctr-2">
-                                         <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
-                                             <img src="~/images/Post/SEO_survey_reuslts-1024x768.jpg" class="img-responsive">
-                                             <div class="media-ribbon"><i class="fa fa-heart"></i> @item.Id</div>
-                                         </a>
-                    <div class="media-item-overview">
-                        <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a></h3>
-                        <div class="media-meta-data">Admin -@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))</div>
-                        @{
-                                    if (item.Priority == 1)
-                                    {
-                                        <h3> <span class="label label-warning">Cần Làm</span></h3>
-
-                                    }
-                        }
-                    </div>
-                </div>
-
-                                }
-                            }
-                            if (item.Block == currentHouse.Block && item.Floor == "NULL" && item.Member == currentUser.RoleId)
-                            {
-                                foreach (var VARIABLE in listUserAnswer)
-                                {
-
-
-                                    if (VARIABLE.UserId == currentUser.Id)
-                                    {
-                                        k++;
-                                    }
-
-                                }
-                                if (k != 1)
-                                {
-                                   <div class="media-item-ctr-2">
-                                         <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
-                                             <img src="~/images/Post/SEO_survey_reuslts-1024x768.jpg" class="img-responsive">
-                                             <div class="media-ribbon"><i class="fa fa-heart"></i> @item.Id</div>
-                                         </a>
-                    <div class="media-item-overview">
-                        <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a></h3>
-                        <div class="media-meta-data">Admin -@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))</div>
-                        @{
-                                    if (item.Priority == 1)
-                                    {
-                                        <h3> <span class="label label-warning">Cần Làm</span></h3>
-
-                                    }
-                        }
-                    </div>
-                </div>
-
-                                }
-                            }
-                            if (item.Block == currentHouse.Block && item.Floor == currentHouse.Floor && item.Member == 6)
-                            {
-                                foreach (var VARIABLE in listUserAnswer)
-                                {
-
-
-                                    if (VARIABLE.UserId == currentUser.Id)
-                                    {
-                                        k++;
-                                    }
-
-                                }
-                                if (k != 1)
-                                {
-                                     <div class="media-item-ctr-2">
-                                         <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
-                                             <img src="~/images/Post/SEO_survey_reuslts-1024x768.jpg" class="img-responsive">
-                                             <div class="media-ribbon"><i class="fa fa-heart"></i> @item.Id</div>
-                                         </a>
-                    <div class="media-item-overview">
-                        <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a></h3>
-                        <div class="media-meta-data">Admin -@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.StartDate))</div>
-                        @{
-                                    if (item.Priority == 1)
-                                    {
-                                        <h3> <span class="label label-warning">Cần Làm</span></h3>
-
-                                    }
-                        }
-                    </div>
-                </div>
-                                  
-
-                                }
-                            }
+                           
                         }
 
                         else if (listSurveys.Count == 0)
@@ -629,40 +403,21 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">Kết quả khảo sát</h4>
             </div>
+          
             <div class="modal-body">
-                @{
-                    int abc = 1;
-                    foreach (var item in listAnswer)
-                    {
+                <fieldset class="scheduler-border less-padding">
+                    @{
+                        int abc = 1;
+                        foreach (var item in listAnswer)
+                        {
+                            <input type="hidden" id="answer_@abc" name="countAnser" value="@item" />
+                            abc++;
+                        }
 
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">Lựa chọn @abc:</label>
-                            <div class="col-sm-7">
-                                <input type="hidden" class="form-control binh" id="a" name="" style="width: 130px" value="@item"><br>
-                                @{
-                                    if (item == "NaN")
-                                    {
-                                                                  <input type="text" class="form-control binh" id="answer_@abc" name="countAnser" style="width: 130px" value="0 %"><br>
-  
-                                    }
-                                    else
-                                    {
-                              <input type="text" class="form-control binh" id="answer_@abc" name="countAnser" style="width: 130px" value="@item %"><br>
-
-                                    }
-
-
-                       
-                        
-                                }
-
-                            </div>
-                        </div>
-                        <input type="hidden" id="answer_@abc" name="countAnser" value="@item" />
-                        abc++;
                     }
-
-                }
+                    @*<div id="chartContainer" style="width: 100%; height: 300px"></div>*@
+                    <div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+                </fieldset>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Tắt</button>
@@ -672,6 +427,121 @@
     </div>
 </div>
 <script>
+    var answer2 = parseFloat($("#answer_2").val()) || null
+    var answer1 = parseFloat($("#answer_1").val()) || null
+    var answer3 = parseFloat($("#answer_3").val()) || null
+    var answer4 = parseFloat($("#answer_4").val()) || null
+    var answer5 = parseFloat($("#answer_5").val()) || null
+    var answer2a = ($("#2").val()) || null
+    var answer1a = ($("#1").val()) || null
+    var answer3a =($("#3").val()) || null
+    var answer4a = ($("#4").val()) || null
+    var answer5a = ($("#5").val()) || null
+    var a = "Lựa chọn 1"
+    var b = "Lựa chọn 2"
+    var c = "Lựa chọn 3"
+    var d = "Lựa chọn 4"
+    var e = "Lựa chọn 5"
+    $(document).ready(function () {
+        //var a = document.getElementById('#answerr_1').value;
+        //var b = document.getElementById('#answerr_2').value;
+        //var c = document.getElementById('#answerr_3').value;
+
+        if (answer1 === 0 && answer2 === 0 && answer3 === 0) {
+            //RenderPieCharts('container', [
+            //[a, null],
+            //[b, null],
+            //[c, null]
+
+            //]);
+            return '<h4>' + "Chưa có dữ liệu" + '</h4>'
+        } else {
+            RenderPieChart('container', [
+            [answer1a, answer1],
+            [answer2a, answer2],
+            [answer3a, answer3],
+              [answer4a, answer4],
+                [answer5a, answer5]
+
+            ]);
+        }
+
+
+
+        function RenderPieChart(elementId, dataList) {
+            new Highcharts.Chart({
+                chart: {
+                    renderTo: elementId,
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                }, title: {
+                    text: 'Biểu đồ kết quả khảo sát'
+                },
+                tooltip: {
+                    formatter: function () {
+                        return '<b>' + this.point.name + '</b>: ' + this.percentage + ' %';
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            color: '#000000',
+                            connectorColor: '#000000',
+                            formatter: function () {
+                                return '<b>' + this.point.name + '</b>: ' + this.percentage + ' %';
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    name: 'Browser share',
+                    data: dataList
+                }]
+            });
+        };
+
+        function RenderPieCharts(elementId, dataList) {
+            new Highcharts.Chart({
+                chart: {
+                    renderTo: elementId,
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                }, title: {
+                    text: 'Chưa có dữ liệu'
+                },
+                tooltip: {
+                    formatter: function () {
+                        return '<b>' + this.point.name + '</b>: ' + this.percentage + ' %';
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            color: '#000000',
+                            connectorColor: '#000000',
+                            formatter: function () {
+                                return '<b>' + this.point.name + '</b>: ' + this.percentage + ' %';
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    name: 'Browser share',
+                    data: dataList
+                }]
+            });
+        };
+    });
     function addCommentByAjax() {
 
         var payload = {
@@ -718,8 +588,8 @@
     //    });
     //}
     $(function () {
-        $("#StartDate").datepicker();
-        $("#StartDate").attr('readOnly', 'true');
+        $("#PublishDate").datepicker();
+        $("#PublishDate").attr('readOnly', 'true');
     });
     $(document).ready(function () {
         $("#btnSave").click(function () {

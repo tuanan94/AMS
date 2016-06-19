@@ -14,12 +14,10 @@ namespace AMS
     
     public partial class UserAnswerSurvey
     {
-        public int Id { get; set; }
-        public Nullable<int> SurveyId { get; set; }
-        public Nullable<int> UserId { get; set; }
-        public Nullable<int> AnswerId { get; set; }
+        public int SurveyId { get; set; }
+        public int UserId { get; set; }
+        public string Answer { get; set; }
     
-        public virtual Answer Answer { get; set; }
         public virtual Survey Survey { get; set; }
         public virtual User User { get; set; }
     }
