@@ -152,9 +152,8 @@
                                             </div><br>
                                             <div class="form-group">
                                                 <label class="col-sm-3 control-label">Đối tượng</label>
-                                                <div class="col-sm-7">
-                                                    <select class="form-control binh" name="people"
-                                                           >
+                                                @*<div class="col-sm-7">
+                                                    <select class="form-control binh" name="people">
 
                                                         <option value="1">Tất Cả </option>
                                                         <option value="2">Tất Cả Chủ Nhà</option>
@@ -162,6 +161,11 @@
 
                                                     </select><br>
 
+                                                </div>*@
+                                                <div class="radio col-sm-7">
+                                                    <label><input type="radio" value="1" name="people">Tất Cả</label>
+                                                    <label><input type="radio" value="2" name="people">Tất Cả Chủ Nhà</label>
+                                                    <label><input type="radio" value="3" name="people">Tất Cả Cư Dân</label>
                                                 </div>
                                             </div><br>
 
@@ -385,23 +389,29 @@
 
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Danh sách hình</h4>
+            <div class="modal-header login" style="text-align: center; font-size: 42px; background-color: greenyellow">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <div class="isa_success">
+                    <label class="label label-success">Danh Sách Hình</label>
+                </div>
             </div>
             <div class="modal-body" id="image_container">
                 <div class="row">
-                    <div class="col-sm-4"><img src="~/images/IconPoll/1244-f.png" width="150px" /></div>
-                    <div class="col-sm-4"><img src="~/images/IconPoll/images.png" width="150px" /></div>
-                    <div class="col-sm-4"><img src="~/images/IconPoll/paper_holder_pad-512.png" width="150px" /></div>
+                    <div class="col-sm-3"><img src="~/images/IconPoll/girl.png" width="100px" /></div>
+                    <div class="col-sm-3"><img src="~/images/IconPoll/idea.png" width="100px" /></div>
+                    <div class="col-sm-3"><img src="~/images/IconPoll/party.png" width="100px"/>
+                    </div>
+                    <div class="col-sm-3"><img src="~/images/IconPoll/payment.png" width="100px" /></div>
                 </div>
                 <div class="row" style="margin-top: 10px">
-                    <div class="col-sm-4"><img width="150px" src="~/images/IconPoll/survey-flat-icon-clipboard-report-form-checklist-business-plan-sheet-file-note-pad-paper-page-document-planning-check-list-survey-questionnaire-flat-design-icon-512.png" /></div>
-                    <div class="col-sm-4"><img src="~/images/IconPoll/survey-icon.png" width="150px" /></div>
-                    <div class="col-sm-4"><img src="~/images/IconPoll/a.png" width="150px" /></div>
+                    <div class="col-sm-3"><img width="100px" src="~/images/IconPoll/people.png" /></div>
+                    <div class="col-sm-3"><img src="~/images/IconPoll/service.png" width="100px" /></div>
+                    <div class="col-sm-3"><img src="~/images/IconPoll/survey-icon.png" width="100px"/>
+                    </div>
+                    <div class="col-sm-3"><img src="~/images/IconPoll/Food-Dome-icon.png" width="100px" /></div>
                 </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" style="background-color: #DFF2BF">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
             </div>
         </div>
