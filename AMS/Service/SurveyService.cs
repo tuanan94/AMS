@@ -7,38 +7,38 @@ using AMS.ViewModel;
 
 namespace AMS.Service
 {
-    public class SurveyService
+    public class PollService
     {
-        GenericRepository<Survey> surveyRepository = new GenericRepository<Survey>();
+        GenericRepository<Poll> PollRepository = new GenericRepository<Poll>();
 
-        public List<Survey> GetListSurveys()
+        public List<Poll> GetListPolls()
         {
-            return surveyRepository.List.OrderByDescending(t=>t.Id ).OrderByDescending(t=>t.Priority).ToList();
+            return PollRepository.List.OrderByDescending(t=>t.Id ).OrderByDescending(t=>t.Priority).ToList();
         }
-        public List<Survey> GetListSurveysTop3()
+        public List<Poll> GetListPollsTop3()
         {
-            return surveyRepository.List.OrderByDescending(t => t.Id).OrderByDescending(t => t.Priority).Take(3).ToList();
+            return PollRepository.List.OrderByDescending(t => t.Id).OrderByDescending(t => t.Priority).Take(3).ToList();
         }
-        public Survey FindById(int id)
+        public Poll FindById(int id)
         {
-            return surveyRepository.FindById(id);
+            return PollRepository.FindById(id);
         }
        
 
-        public void AddSurvey(Survey obj)
+        public void AddPoll(Poll obj)
         {
-            surveyRepository.Add(obj);
+            PollRepository.Add(obj);
         }
-        public void DeleteSurvey(Survey obj)
+        public void DeletePoll(Poll obj)
         {
            
-            surveyRepository.Delete(obj);
+            PollRepository.Delete(obj);
         }
-        public void UpdateSurvey(Survey obj)
+        public void UpdatePoll(Poll obj)
         {
-            //Survey survey = new Survey();
-            //survey.Title = obj.Title;
-            surveyRepository.Update(obj);
+            //Poll Poll = new Poll();
+            //Poll.Title = obj.Title;
+            PollRepository.Update(obj);
         }
     }
 }

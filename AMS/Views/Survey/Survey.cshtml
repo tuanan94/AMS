@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Survey";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
-    List<Survey> listSurveys = ViewBag.ListSurvey;
+    List<Poll> listSurveys = ViewBag.ListSurvey;
     List<string> listBlock = ViewBag.ListBlock;
     List<string> listFloor = ViewBag.ListFloor;
     string alerts = ViewBag.alerts;
@@ -68,7 +68,7 @@
 <link href="~/Content/css/datatables.css" rel="stylesheet" />
 <script src="~/Scripts/jquery-1.10.2.js"></script>
 <script src="~/Scripts/datatables.js"></script>
-<body @*onload="paging()"*@>
+<body @*onload="hide()"*@>
     <div class="col-md-12">
         <div class="panel panel-default binh">
             <div class="panel-body binh">
@@ -92,7 +92,7 @@
                             if (alerts != null)
                             {
                                 <div class="form-group">
-                                    <label  class="col-sm-3 control-label"></label>
+                                    <label  class="col-sm-2 control-label"></label>
                                     <div class="col-sm-7" id="label1">
                                         @*<div class="alert alert-success" style="width: 330px">
                                                 <strong><span class="label date-color label-gray center">Tao thanh cong</span></strong>
@@ -105,14 +105,15 @@
                                 </div><br>
                             }
                                         }
-                                        <legend class="scheduler-border">Chi tiết </legend>
+                                        <legend class="scheduler-border">Thông Tin Chi tiết </legend>
                                         <div class="col-sm-9">
                                             <div class="form-group">
                                                 <label class="col-sm-3 control-label">Tiêu đề</label>
                                                 <div class="col-sm-7">
-                                                    @*<input type="text" class="form-control" id="Title" name="Title" style="width: 330px"><br>*@
+                                                 
                                                     @Html.TextBoxFor(m => m.Title, new { @class = "form-control binh", @name = "Title", @id = "Title" })<br />
-                                                    <input id="image_from_list" name="image_from_list" type="hidden" value="" />
+                                                    <input id="image_from_list" name="image_from_list" type="hidden" value=""/>
+
                                                 </div>
                                             </div><br>
                                             <div class="form-group">
@@ -126,16 +127,16 @@
                                                 <div class="col-sm-3"></div>
                                                 <div class="col-sm-7">
                                                     <label class="checkbox-inline"><input type="checkbox" name="blockFilter" id="check" value="1"
-                                                                                          onchange="if (this.value == '1') { document.getElementById('other').style.visibility = 'visible' }
- if (! document.getElementById('check').checked) { document.getElementById('other').style.visibility = 'hidden' };"
+                                                                                          onchange=""
                                                    >Lọc Theo Khu</label>
                                                 </div><br />
                                             </div><br />
                                             <div class="form-group">
                                                 <label class="col-sm-3 control-label">Ngày bắt đầu</label>
                                                 <div class="col-sm-7">
-                                                    @Html.TextBoxFor(m => m.PublishDate, new { @class = "form-control binh", onclick = "bInfos()" })<br>
-                                                    @Html.ValidationMessageFor(m => m.PublishDate, "", new { @class = "text-danger" })
+                                                 
+                                                    @Html.TextBoxFor(m => m.PublishDate, new {@class = "form-control binh", onchange = "bInfos()"})<br>
+                                                    @Html.ValidationMessageFor(m => m.PublishDate, "", new {@class = "text-danger"})
                                                 </div>
                                             </div><br>
                                             <div class="form-group">
@@ -145,7 +146,7 @@
                                    {
                                        @class = "form-control binh",
 
-                                       onclick = "bInfos()"
+                                       onchange = "bInfos()"
                                    })<br>
                                                     @Html.ValidationMessageFor(m => m.EndDate, "", new { @class = "text-danger" })
                                                 </div>
@@ -163,9 +164,9 @@
 
                                                 </div>*@
                                                 <div class="radio col-sm-7">
-                                                    <label><input type="radio" value="1" name="people">Tất Cả</label>
-                                                    <label><input type="radio" value="2" name="people">Tất Cả Chủ Nhà</label>
-                                                    <label><input type="radio" value="3" name="people">Tất Cả Cư Dân</label>
+                                                    <label><input type="radio" checked="checked" value="1" name="people">Tất Cả</label><br/>
+                                                    <label><input type="radio" value="2" name="people">Tất Cả Chủ Nhà</label><br />
+                                                    <label><input type="radio" value="3" name="people">Tất Cả Cư Dân</label><br />
                                                 </div>
                                             </div><br>
 
@@ -174,7 +175,7 @@
 
                                          
                                                 <div class="radio col-sm-7">
-                                                    <label><input type="radio" value="1" name="priority">Có</label>
+                                                    <label><input type="radio" checked="checked" value="1" name="priority">Có</label>
                                                     <label><input type="radio" value="0" name="priority">Không</label>
                                                 </div>
 
@@ -213,34 +214,44 @@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Câu trả lời</label>
                                             <div class="col-sm-7">
-                                                <input type="text" class="form-control binh" id="idd1" onblur="bInfo()" name="anwser1">  <label id="label1"></label><br>
+                                                <input type="text" class="form-control binh" id="idd1" onchange="bInfo()" name="anwser1">  <label id="label1"></label><br>
                                                 <input type="hidden" name="count" value="1" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label"></label>
                                             <div class="col-sm-7">
-                                                <input type="text" class="form-control binh" id="idd2" onblur="bInfo()" name="anwser1">  <br>
+                                                <input type="text" class="form-control binh" id="idd2" onchange="bInfo()" name="anwser1">  <br>
                                                 <input type="hidden" name="count" value="2" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label"></label>
                                             <div class="col-sm-7">
-                                                <input type="text" class="form-control binh" id="idd3" onblur="bInfo()" name="anwser1"> <br>
+                                                <input type="text" class="form-control binh" id="idd3" onchange="bInfo()" name="anwser1"> <br>
                                                 <input type="hidden" name="count" value="3" />
                                             </div>
                                         </div>
                                         <div class="form-group" id="aa">
                                             <label class="col-sm-3 control-label"></label>
                                             <div class="col-sm-7">
-                                                <input type="text" class="form-control binh" id="idd4" onblur="bInfo()" name="anwser1"> <br>
-                                                <input type="hidden" name="count" value="4" />
+                                                <input type="text" class="form-control binh" id="idd4" onchange="bInfo()" name="anwser1"> <br>
+                                                <input type="hidden" name="count" value="4"/>
                                             </div>
                                         </div>
+                                        @*<div id="row_5" class="form-group" id="aa">
+                                            <label class="col-sm-3 control-label"></label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control binh" id="idd5" onchange="bInfo()" name="anwser1"> <br>
+                                                <input type="hidden" name="count" value="5"/>
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <span class="btn btn-danger btn-xs" onclick="deleteItem(5)"><i class="fa fa-times"></i></span>
+                                            </div>
+                                        </div>*@
                                         <div class="form-group">
                                             <div class="col-sm-3">
-                                                <span id="addNewForm" name="addNewForm" class="btn btn-info"><i class="fa fa-plus">Thêm câu trả lời</i></span>
+                                                <span id="addNewForm"  name="addNewForm" class="btn btn-info"><i class="fa fa-plus">Thêm câu trả lời</i></span>
                                             </div>
                                         </div>
                                     </div>
@@ -252,6 +263,7 @@
                                     <div class="form-group">
                                         <div class="col-md-offset-9 col-md-2">
                                             @*<span class="btn btn-primary">Gửi yêu cầu</span>*@
+                                            @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control binh", @type = "hidden", onchange = "bInfos()", @Value = Convert.ToString(string.Format("{0:yyyy/MM/dd}", DateTime.Now)) })<br>
                                             <button type="submit" class="btn btn-primary">Tạo Survey</button>
                                         </div>
                                     </div>
@@ -291,8 +303,8 @@
                                                     </td>
                                                     <td>
                                                         <div class="form-group">
-                                                            <div class="col-sm-9">
-                                                                <input type="hidden" class="form-control" id="surveyId" value="@item.Id">
+                                                            <div class="col-sm-12">
+                                                                <input type="hidden" class="form-control" id="PollId" value="@item.Id">
                                                                 <span class="">@item.Description</span>
                                                                 @*<input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.Description">*@
                                                             </div>
@@ -323,9 +335,14 @@
                                                     <td >
                                                       
                                                         @{
-                                                if (@item.EndDate >= DateTime.Now)
+                                                if (@item.EndDate >= DateTime.Now && @item.Status==1)
                                                 {
                                                     <span class="label" style="background-color: #3366ff; font-size: 14px; color: white">Đang mở</span>
+
+                                                }
+                                                else if (@item.Status == 0)
+                                                {
+                                                                                                        <span class="label" style="background-color: #ff9999; font-size: 14px; color: white; ">Đã kết thúc</span>
 
                                                 }
                                                 else
@@ -340,7 +357,7 @@
                                                     <td>
                                                         <div class="form-group">
                                                             <div class="col-sm-8">
-                                                                <a href="@Url.Action("DeleteSurvey", "Survey", new {surveyId = @item.Id})" onclick="return myFunction()" class="button">Xóa</a>
+                                                                <a href="@Url.Action("DeleteSurvey", "Survey", new {PollId = @item.Id})" onclick="return myFunction()" class="button">Xóa</a>
 
                                                             </div>
                                                         </div>
@@ -349,7 +366,7 @@
                                                         <div class="form-group">
                                                             <div class="col-sm-9">
 
-                                                                <a href="@Url.Action("DetailSurvey", "Survey", new {surveyId = @item.Id})" class="button">Chi Tiết</a>
+                                                                <a href="@Url.Action("DetailSurvey", "Survey", new {PollId = @item.Id})" class="button">Chi Tiết</a>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -419,6 +436,10 @@
     </div>
 </div>
 <script>
+    $("#check").change(function () {
+        if (this.value == '1') { document.getElementById('other').style.visibility = 'visible' }
+        if (!document.getElementById('check').checked) { document.getElementById('other').style.visibility = 'hidden' };
+    });
     if (document.getElementById('check').checked) {
         document.getElementById('other').style.visibility = 'visible'
     } else if (!document.getElementById('check').checked) {
@@ -447,11 +468,37 @@
         }).length !== 0;
     }).addClass('background: red');
     $("#myTables").DataTable({
+        "oLanguage": {
+        //    "sSearch": "Tìm Kiếm" //search,
+        "sProcessing": "Đang xử lý...",
+        "sLengthMenu": "Xem _MENU_ mục",
+        "sZeroRecords": "Không tìm thấy dòng nào phù hợp",
+        "sInfo": "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+        "sInfoEmpty": "Đang xem 0 đến 0 trong tổng số 0 mục",
+        "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+        "sInfoPostFix": "",
+        "sSearch": "Tìm:",
+        "sUrl": "",
+        "oPaginate": {
+            "sFirst": "Đầu",
+            "sPrevious": "Trước",
+            "sNext": "Tiếp",
+            "sLast": "Cuối"
+        }
+        }
+        //"language": {
+        //    "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Vietnamese.json"
+        //}
+        
+  
         
     });
     $("#questions").attr("required", true);
     $("#idd1").attr("required", true);
     $("#idd2").attr("required", true);
+    $("#Title").attr("required", true);
+    $("#PublishDate").attr("required", true);
+    $("#EndDate").attr("required", true);
     //$("#idd3").attr("required", true);
     //$("#idd4").attr("required", true);
     $(function () {
@@ -487,17 +534,21 @@
        
         b = document.getElementById('EndDate').value;
         c = document.getElementById('PublishDate').value;
-       
+        a = document.getElementById('StartDate').value;
         var d2 = new Date(b)
         var d3 = new Date(c)
-       
+       var d1 = new Date(a)
         //if (CompareDates(d1, d2, '-') == 0) {
         //    alert('Selected date must be current date or previous date!');
         //    return false;
         //}
         if (d3 > d2) {
             alert('Ngày đăng không hợp lệ!'); return false;
-        } 
+        } else if (d3 < d1) {
+            alert('Ngày đăng không hợp lệ!'); return false;
+        } else if (d2 < d1) {
+            alert('Ngày kết thúc không hợp lệ!'); return false;
+        }
         
         else { return true; }
     }
@@ -506,7 +557,12 @@
         in2 = document.getElementById('idd2').value;
         in3 = document.getElementById('idd3').value;
         in4 = document.getElementById('idd4').value;
-        //in5 = document.getElementById('idd5').value;
+        //if (in5 = document.getElementById('idd5').value != null) {
+        //    if (in1 == in5 && in1 != "" && in5 != "") {
+        //        alert('Same Value'); return false;
+        //    }
+        //}
+      
         if (in1 == in2 && in1 != "" && in2 != "") {
             alert('Same Value'); return false;
         } else if (in1 == in3 && in1 != "" && in3 != "") {
@@ -520,7 +576,7 @@
             alert('Same Value'); return false;
         } else if (in3 == in4 && in3 != "" && in4 != "") {
             alert('Same Value'); return false;
-        } else { return true; }
+        }  else { return true; }
     }
     $('#label1').delay(2500).fadeOut('slow');
 
@@ -551,8 +607,12 @@
         $(this).addClass("current");
         showPage(parseInt($(this).text()))
     });
-
-
+    function hide() {
+        $("#aa").hide();
+    }
+    function show() {
+        $("#aa").show();
+    }
     function paging() {
         var pageSize = 6;
 
@@ -590,9 +650,9 @@
             var tag = " <div id=\"row_" + k + "\" class='form-group'>" +
                 "   <label for='inputEmail3' class='col-sm-3 control-label'></label>" +
                 "  <div class='col-sm-7'>" +
-                "     <input type='text' class='form-control binh' id=\"idd" + index + "\"  onblur='bInfo() name='anwser1' >  <br>" +
+                "     <input type='text' class='form-control binh' id=\"idd" + k + "\"  onchange='bInfo()' name='anwser1' >  <br>" +
               
-                "     <input type='hidden' name='count' value='" + i + "' />" +
+                "     <input type='hidden' name='count' value='" + k + "' />" +
                 "   </div>" +
                 "<div class='col-sm-1'>" +
                 "   <span class='btn btn-danger btn-xs' onclick='deleteItem(5)'><i class='fa fa-times'></i></span>" +
@@ -600,6 +660,9 @@
                 "   </div>";
 
             $("#aa").append(tag);
+            if (i == 4) {
+                $("#addNewForm").hide();
+            }
             $("#addNewRow" + i).on("click", function () {
 
                 var tags =
@@ -633,7 +696,8 @@
 
 
     function deleteItem(id) {
-            $("#row_" + id)[0].parentNode.removeChild($("#row_" + id)[0]);
+        $("#row_" + id)[0].parentNode.removeChild($("#row_" + id)[0]);
+        $("#addNewForm").show();
     }
 
     $(document).on('click', 'button.removebutton', function () {
@@ -641,7 +705,7 @@
         $(this).closest('tr').remove();
         return false;
     });
-  
+
 </script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/datatables.js"></script>

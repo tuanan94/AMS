@@ -17,9 +17,9 @@ namespace AMS
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public UtilityService()
         {
-            this.HouseCategories = new HashSet<HouseCategory>();
             this.ReceiptDetails = new HashSet<ReceiptDetail>();
             this.UtilityServiceRangePrices = new HashSet<UtilityServiceRangePrice>();
+            this.UtilServiceForHouseCats = new HashSet<UtilServiceForHouseCat>();
         }
     
         public int Id { get; set; }
@@ -30,13 +30,12 @@ namespace AMS
         public Nullable<System.DateTime> LastModified { get; set; }
         public Nullable<double> Price { get; set; }
         public Nullable<int> Type { get; set; }
-        public Nullable<int> CategoryId { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<HouseCategory> HouseCategories { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ReceiptDetail> ReceiptDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UtilityServiceRangePrice> UtilityServiceRangePrices { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UtilServiceForHouseCat> UtilServiceForHouseCats { get; set; }
     }
 }

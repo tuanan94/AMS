@@ -40,7 +40,7 @@ namespace AMS.ViewModel
     public class QuestionViewModel
     {
         public string QuestionContent { get; set; }
-        public int SurveyId { get; set; }
+        public int PollId { get; set; }
     }
 
     public class UserAnser

@@ -135,13 +135,13 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="BlockName" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <EntityType Name="BlockSurvey">
+        <EntityType Name="BlockPoll">
           <Key>
             <PropertyRef Name="BlockId" />
-            <PropertyRef Name="SurveyId" />
+            <PropertyRef Name="PollId" />
           </Key>
           <Property Name="BlockId" Type="int" Nullable="false" />
-          <Property Name="SurveyId" Type="int" Nullable="false" />
+          <Property Name="PollId" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Comment">
@@ -237,7 +237,6 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" />
-          <Property Name="WaterRateId" Type="int" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="LastModified" Type="datetime" />
         </EntityType>
@@ -249,6 +248,27 @@
           <Property Name="url" Type="nvarchar(max)" />
           <Property Name="createdDate" Type="datetime" />
           <Property Name="postId" Type="int" />
+        </EntityType>
+        <EntityType Name="Poll">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="255" />
+          <Property Name="ImageUrl" Type="nvarchar" MaxLength="250" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="PublishDate" Type="datetime" />
+          <Property Name="Status" Type="int" />
+          <Property Name="Question" Type="nvarchar" MaxLength="255" />
+          <Property Name="Mode" Type="int" />
+          <Property Name="Privacy" Type="int" />
+          <Property Name="Priority" Type="int" />
+          <Property Name="Answer1" Type="nvarchar" MaxLength="50" />
+          <Property Name="Answer2" Type="nvarchar" MaxLength="50" />
+          <Property Name="Answer3" Type="nvarchar" MaxLength="50" />
+          <Property Name="Answer4" Type="nvarchar" MaxLength="50" />
+          <Property Name="Answer5" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Post">
           <Key>
@@ -324,27 +344,6 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RoleName" Type="nvarchar" MaxLength="255" />
         </EntityType>
-        <EntityType Name="Survey">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Description" Type="nvarchar" MaxLength="255" />
-          <Property Name="ImageUrl" Type="nvarchar" MaxLength="250" />
-          <Property Name="CreateDate" Type="datetime" />
-          <Property Name="EndDate" Type="datetime" />
-          <Property Name="PublishDate" Type="datetime" />
-          <Property Name="Status" Type="int" />
-          <Property Name="Question" Type="nvarchar" MaxLength="255" />
-          <Property Name="Mode" Type="int" />
-          <Property Name="Privacy" Type="int" />
-          <Property Name="Priority" Type="int" />
-          <Property Name="Answer1" Type="nvarchar" MaxLength="50" />
-          <Property Name="Answer2" Type="nvarchar" MaxLength="50" />
-          <Property Name="Answer3" Type="nvarchar" MaxLength="50" />
-          <Property Name="Answer4" Type="nvarchar" MaxLength="50" />
-          <Property Name="Answer5" Type="nvarchar" MaxLength="50" />
-        </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -398,15 +397,14 @@
           <Property Name="Fullname" Type="nvarchar" MaxLength="200" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="LastModified" Type="datetime" />
-          <Property Name="CoupleId" Type="int" />
-          <Property Name="RootCoupleId" Type="int" />
+          <Property Name="FamilyLevel" Type="int" />
         </EntityType>
-        <EntityType Name="UserAnswerSurvey">
+        <EntityType Name="UserAnswerPoll">
           <Key>
-            <PropertyRef Name="SurveyId" />
+            <PropertyRef Name="PollId" />
             <PropertyRef Name="UserId" />
           </Key>
-          <Property Name="SurveyId" Type="int" Nullable="false" />
+          <Property Name="PollId" Type="int" Nullable="false" />
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="Answer" Type="nvarchar" MaxLength="50" />
         </EntityType>
@@ -440,7 +438,6 @@
           <Property Name="LastModified" Type="datetime" />
           <Property Name="Price" Type="float" />
           <Property Name="Type" Type="int" />
-          <Property Name="CategoryId" Type="int" />
         </EntityType>
         <EntityType Name="UtilityServiceRangePrices">
           <Key>
@@ -456,6 +453,16 @@
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="LastModified" Type="datetime" />
         </EntityType>
+        <EntityType Name="UtilServiceForHouseCat">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HouseCatId" Type="int" />
+          <Property Name="UtilServiceId" Type="int" />
+          <Property Name="Status" Type="int" />
+          <Property Name="CreateDate" Type="datetime" />
+        </EntityType>
         <Association Name="FK_AroundServiceProduct_AroundProvider">
           <End Role="AroundProvider" Type="Self.AroundProvider" Multiplicity="0..1" />
           <End Role="AroundProviderProduct" Type="Self.AroundProviderProduct" Multiplicity="*" />
@@ -470,25 +477,25 @@
         </Association>
         <Association Name="FK_BlockSurvey_Block1">
           <End Role="Block" Type="Self.Block" Multiplicity="1" />
-          <End Role="BlockSurvey" Type="Self.BlockSurvey" Multiplicity="*" />
+          <End Role="BlockPoll" Type="Self.BlockPoll" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Block">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="BlockSurvey">
+            <Dependent Role="BlockPoll">
               <PropertyRef Name="BlockId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_BlockSurvey_Survey">
-          <End Role="Survey" Type="Self.Survey" Multiplicity="1" />
-          <End Role="BlockSurvey" Type="Self.BlockSurvey" Multiplicity="*" />
+          <End Role="Poll" Type="Self.Poll" Multiplicity="1" />
+          <End Role="BlockPoll" Type="Self.BlockPoll" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Survey">
+            <Principal Role="Poll">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="BlockSurvey">
-              <PropertyRef Name="SurveyId" />
+            <Dependent Role="BlockPoll">
+              <PropertyRef Name="PollId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -653,18 +660,6 @@
             </Principal>
             <Dependent Role="House">
               <PropertyRef Name="TypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_HouseType_UtilityService">
-          <End Role="UtilityService" Type="Self.UtilityService" Multiplicity="0..1" />
-          <End Role="HouseCategory" Type="Self.HouseCategory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UtilityService">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="HouseCategory">
-              <PropertyRef Name="WaterRateId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -875,25 +870,25 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserDoServey_Survey">
-          <End Role="Survey" Type="Self.Survey" Multiplicity="1" />
-          <End Role="UserAnswerSurvey" Type="Self.UserAnswerSurvey" Multiplicity="*" />
+          <End Role="Poll" Type="Self.Poll" Multiplicity="1" />
+          <End Role="UserAnswerPoll" Type="Self.UserAnswerPoll" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Survey">
+            <Principal Role="Poll">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="UserAnswerSurvey">
-              <PropertyRef Name="SurveyId" />
+            <Dependent Role="UserAnswerPoll">
+              <PropertyRef Name="PollId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserDoServey_User">
           <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="UserAnswerSurvey" Type="Self.UserAnswerSurvey" Multiplicity="*" />
+          <End Role="UserAnswerPoll" Type="Self.UserAnswerPoll" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="UserAnswerSurvey">
+            <Dependent Role="UserAnswerPoll">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
@@ -946,6 +941,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UtilServiceForHouseCat_HouseCategory">
+          <End Role="HouseCategory" Type="Self.HouseCategory" Multiplicity="0..1" />
+          <End Role="UtilServiceForHouseCat" Type="Self.UtilServiceForHouseCat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HouseCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UtilServiceForHouseCat">
+              <PropertyRef Name="HouseCatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UtilServiceForHouseCat_UtilityService">
+          <End Role="UtilityService" Type="Self.UtilityService" Multiplicity="0..1" />
+          <End Role="UtilServiceForHouseCat" Type="Self.UtilServiceForHouseCat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UtilityService">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UtilServiceForHouseCat">
+              <PropertyRef Name="UtilServiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="AMSModelStoreContainer">
           <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Answer" EntityType="Self.Answer" Schema="dbo" store:Type="Tables" />
@@ -959,7 +978,7 @@
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BalanceSheet" EntityType="Self.BalanceSheet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Block" EntityType="Self.Block" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="BlockSurvey" EntityType="Self.BlockSurvey" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BlockPoll" EntityType="Self.BlockPoll" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Comment" EntityType="Self.Comment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HelpdeskRequest" EntityType="Self.HelpdeskRequest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HelpdeskRequestHelpdeskSupporter" EntityType="Self.HelpdeskRequestHelpdeskSupporter" Schema="dbo" store:Type="Tables" />
@@ -969,33 +988,34 @@
           <EntitySet Name="House" EntityType="Self.House" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HouseCategory" EntityType="Self.HouseCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Image" EntityType="Self.Image" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Poll" EntityType="Self.Poll" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Post" EntityType="Self.Post" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Receipt" EntityType="Self.Receipt" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReceiptDetail" EntityType="Self.ReceiptDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Report" EntityType="Self.Report" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Survey" EntityType="Self.Survey" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Transaction" EntityType="Self.Transaction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TransactionCategory" EntityType="Self.TransactionCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="UserAnswerSurvey" EntityType="Self.UserAnswerSurvey" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserAnswerPoll" EntityType="Self.UserAnswerPoll" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRateAroundProvider" EntityType="Self.UserRateAroundProvider" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserReportPost" EntityType="Self.UserReportPost" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UtilityService" EntityType="Self.UtilityService" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UtilityServiceRangePrices" EntityType="Self.UtilityServiceRangePrices" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UtilServiceForHouseCat" EntityType="Self.UtilServiceForHouseCat" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_AroundServiceProduct_AroundProvider" Association="Self.FK_AroundServiceProduct_AroundProvider">
             <End Role="AroundProvider" EntitySet="AroundProvider" />
             <End Role="AroundProviderProduct" EntitySet="AroundProviderProduct" />
           </AssociationSet>
           <AssociationSet Name="FK_BlockSurvey_Block1" Association="Self.FK_BlockSurvey_Block1">
             <End Role="Block" EntitySet="Block" />
-            <End Role="BlockSurvey" EntitySet="BlockSurvey" />
+            <End Role="BlockPoll" EntitySet="BlockPoll" />
           </AssociationSet>
           <AssociationSet Name="FK_BlockSurvey_Survey" Association="Self.FK_BlockSurvey_Survey">
-            <End Role="Survey" EntitySet="Survey" />
-            <End Role="BlockSurvey" EntitySet="BlockSurvey" />
+            <End Role="Poll" EntitySet="Poll" />
+            <End Role="BlockPoll" EntitySet="BlockPoll" />
           </AssociationSet>
           <AssociationSet Name="FK_Comment_Post" Association="Self.FK_Comment_Post">
             <End Role="Post" EntitySet="Post" />
@@ -1048,10 +1068,6 @@
           <AssociationSet Name="FK_House_HouseType" Association="Self.FK_House_HouseType">
             <End Role="HouseCategory" EntitySet="HouseCategory" />
             <End Role="House" EntitySet="House" />
-          </AssociationSet>
-          <AssociationSet Name="FK_HouseType_UtilityService" Association="Self.FK_HouseType_UtilityService">
-            <End Role="UtilityService" EntitySet="UtilityService" />
-            <End Role="HouseCategory" EntitySet="HouseCategory" />
           </AssociationSet>
           <AssociationSet Name="FK_Receipt_User" Association="Self.FK_Receipt_User">
             <End Role="User" EntitySet="User" />
@@ -1122,12 +1138,12 @@
             <End Role="User" EntitySet="User" />
           </AssociationSet>
           <AssociationSet Name="FK_UserDoServey_Survey" Association="Self.FK_UserDoServey_Survey">
-            <End Role="Survey" EntitySet="Survey" />
-            <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurvey" />
+            <End Role="Poll" EntitySet="Poll" />
+            <End Role="UserAnswerPoll" EntitySet="UserAnswerPoll" />
           </AssociationSet>
           <AssociationSet Name="FK_UserDoServey_User" Association="Self.FK_UserDoServey_User">
             <End Role="User" EntitySet="User" />
-            <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurvey" />
+            <End Role="UserAnswerPoll" EntitySet="UserAnswerPoll" />
           </AssociationSet>
           <AssociationSet Name="FK_UserReportPost_Post" Association="Self.FK_UserReportPost_Post">
             <End Role="Post" EntitySet="Post" />
@@ -1144,6 +1160,14 @@
           <AssociationSet Name="FK_UtilityServiceRangePrices_UtilityService" Association="Self.FK_UtilityServiceRangePrices_UtilityService">
             <End Role="UtilityService" EntitySet="UtilityService" />
             <End Role="UtilityServiceRangePrices" EntitySet="UtilityServiceRangePrices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UtilServiceForHouseCat_HouseCategory" Association="Self.FK_UtilServiceForHouseCat_HouseCategory">
+            <End Role="HouseCategory" EntitySet="HouseCategory" />
+            <End Role="UtilServiceForHouseCat" EntitySet="UtilServiceForHouseCat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UtilServiceForHouseCat_UtilityService" Association="Self.FK_UtilServiceForHouseCat_UtilityService">
+            <End Role="UtilityService" EntitySet="UtilityService" />
+            <End Role="UtilServiceForHouseCat" EntitySet="UtilServiceForHouseCat" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -1162,7 +1186,7 @@
           <EntitySet Name="AspNetUsers" EntityType="AMSModel.AspNetUser" />
           <EntitySet Name="BalanceSheets" EntityType="AMSModel.BalanceSheet" />
           <EntitySet Name="Blocks" EntityType="AMSModel.Block" />
-          <EntitySet Name="BlockSurveys" EntityType="AMSModel.BlockSurvey" />
+          <EntitySet Name="BlockPolls" EntityType="AMSModel.BlockPoll" />
           <EntitySet Name="Comments" EntityType="AMSModel.Comment" />
           <EntitySet Name="HelpdeskRequests" EntityType="AMSModel.HelpdeskRequest" />
           <EntitySet Name="HelpdeskRequestHelpdeskSupporters" EntityType="AMSModel.HelpdeskRequestHelpdeskSupporter" />
@@ -1172,22 +1196,23 @@
           <EntitySet Name="Houses" EntityType="AMSModel.House" />
           <EntitySet Name="HouseCategories" EntityType="AMSModel.HouseCategory" />
           <EntitySet Name="Images" EntityType="AMSModel.Image" />
+          <EntitySet Name="Polls" EntityType="AMSModel.Poll" />
           <EntitySet Name="Posts" EntityType="AMSModel.Post" />
           <EntitySet Name="Questions" EntityType="AMSModel.Question" />
           <EntitySet Name="Receipts" EntityType="AMSModel.Receipt" />
           <EntitySet Name="ReceiptDetails" EntityType="AMSModel.ReceiptDetail" />
           <EntitySet Name="Reports" EntityType="AMSModel.Report" />
           <EntitySet Name="Roles" EntityType="AMSModel.Role" />
-          <EntitySet Name="Surveys" EntityType="AMSModel.Survey" />
           <EntitySet Name="sysdiagrams" EntityType="AMSModel.sysdiagram" />
           <EntitySet Name="Transactions" EntityType="AMSModel.Transaction" />
           <EntitySet Name="TransactionCategories" EntityType="AMSModel.TransactionCategory" />
           <EntitySet Name="Users" EntityType="AMSModel.User" />
-          <EntitySet Name="UserAnswerSurveys" EntityType="AMSModel.UserAnswerSurvey" />
+          <EntitySet Name="UserAnswerPolls" EntityType="AMSModel.UserAnswerPoll" />
           <EntitySet Name="UserRateAroundProviders" EntityType="AMSModel.UserRateAroundProvider" />
           <EntitySet Name="UserReportPosts" EntityType="AMSModel.UserReportPost" />
           <EntitySet Name="UtilityServices" EntityType="AMSModel.UtilityService" />
           <EntitySet Name="UtilityServiceRangePrices" EntityType="AMSModel.UtilityServiceRangePrice" />
+          <EntitySet Name="UtilServiceForHouseCats" EntityType="AMSModel.UtilServiceForHouseCat" />
           <AssociationSet Name="FK_AroundServiceProduct_AroundProvider" Association="AMSModel.FK_AroundServiceProduct_AroundProvider">
             <End Role="AroundProvider" EntitySet="AroundProviders" />
             <End Role="AroundProviderProduct" EntitySet="AroundProviderProducts" />
@@ -1218,15 +1243,15 @@
           </AssociationSet>
           <AssociationSet Name="FK_BlockSurvey_Block1" Association="AMSModel.FK_BlockSurvey_Block1">
             <End Role="Block" EntitySet="Blocks" />
-            <End Role="BlockSurvey" EntitySet="BlockSurveys" />
+            <End Role="BlockPoll" EntitySet="BlockPolls" />
           </AssociationSet>
           <AssociationSet Name="FK_House_Block" Association="AMSModel.FK_House_Block">
             <End Role="Block" EntitySet="Blocks" />
             <End Role="House" EntitySet="Houses" />
           </AssociationSet>
           <AssociationSet Name="FK_BlockSurvey_Survey" Association="AMSModel.FK_BlockSurvey_Survey">
-            <End Role="Survey" EntitySet="Surveys" />
-            <End Role="BlockSurvey" EntitySet="BlockSurveys" />
+            <End Role="Poll" EntitySet="Polls" />
+            <End Role="BlockPoll" EntitySet="BlockPolls" />
           </AssociationSet>
           <AssociationSet Name="FK_Comment_Post" Association="AMSModel.FK_Comment_Post">
             <End Role="Post" EntitySet="Posts" />
@@ -1280,9 +1305,13 @@
             <End Role="House" EntitySet="Houses" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
-          <AssociationSet Name="FK_HouseType_UtilityService" Association="AMSModel.FK_HouseType_UtilityService">
-            <End Role="UtilityService" EntitySet="UtilityServices" />
+          <AssociationSet Name="FK_UtilServiceForHouseCat_HouseCategory" Association="AMSModel.FK_UtilServiceForHouseCat_HouseCategory">
             <End Role="HouseCategory" EntitySet="HouseCategories" />
+            <End Role="UtilServiceForHouseCat" EntitySet="UtilServiceForHouseCats" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserDoServey_Survey" Association="AMSModel.FK_UserDoServey_Survey">
+            <End Role="Poll" EntitySet="Polls" />
+            <End Role="UserAnswerPoll" EntitySet="UserAnswerPolls" />
           </AssociationSet>
           <AssociationSet Name="FK_tbl_post_tbl_user" Association="AMSModel.FK_tbl_post_tbl_user">
             <End Role="User" EntitySet="Users" />
@@ -1316,10 +1345,6 @@
             <End Role="Role" EntitySet="Roles" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
-          <AssociationSet Name="FK_UserDoServey_Survey" Association="AMSModel.FK_UserDoServey_Survey">
-            <End Role="Survey" EntitySet="Surveys" />
-            <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurveys" />
-          </AssociationSet>
           <AssociationSet Name="FK_TransactionItem_TransactionItemCategory" Association="AMSModel.FK_TransactionItem_TransactionItemCategory">
             <End Role="TransactionCategory" EntitySet="TransactionCategories" />
             <End Role="Transaction" EntitySet="Transactions" />
@@ -1330,7 +1355,7 @@
           </AssociationSet>
           <AssociationSet Name="FK_UserDoServey_User" Association="AMSModel.FK_UserDoServey_User">
             <End Role="User" EntitySet="Users" />
-            <End Role="UserAnswerSurvey" EntitySet="UserAnswerSurveys" />
+            <End Role="UserAnswerPoll" EntitySet="UserAnswerPolls" />
           </AssociationSet>
           <AssociationSet Name="FK_UserReportPost_User" Association="AMSModel.FK_UserReportPost_User">
             <End Role="User" EntitySet="Users" />
@@ -1339,6 +1364,10 @@
           <AssociationSet Name="FK_UtilityServiceRangePrices_UtilityService" Association="AMSModel.FK_UtilityServiceRangePrices_UtilityService">
             <End Role="UtilityService" EntitySet="UtilityServices" />
             <End Role="UtilityServiceRangePrice" EntitySet="UtilityServiceRangePrices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UtilServiceForHouseCat_UtilityService" Association="AMSModel.FK_UtilServiceForHouseCat_UtilityService">
+            <End Role="UtilityService" EntitySet="UtilityServices" />
+            <End Role="UtilServiceForHouseCat" EntitySet="UtilServiceForHouseCats" />
           </AssociationSet>
           <AssociationSet Name="AspNetUserRoles" Association="AMSModel.AspNetUserRoles">
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
@@ -1479,19 +1508,19 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="BlockName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="BlockSurveys" Relationship="AMSModel.FK_BlockSurvey_Block1" FromRole="Block" ToRole="BlockSurvey" />
+          <NavigationProperty Name="BlockPolls" Relationship="AMSModel.FK_BlockSurvey_Block1" FromRole="Block" ToRole="BlockPoll" />
           <NavigationProperty Name="Houses" Relationship="AMSModel.FK_House_Block" FromRole="Block" ToRole="House" />
         </EntityType>
-        <EntityType Name="BlockSurvey">
+        <EntityType Name="BlockPoll">
           <Key>
             <PropertyRef Name="BlockId" />
-            <PropertyRef Name="SurveyId" />
+            <PropertyRef Name="PollId" />
           </Key>
           <Property Name="BlockId" Type="Int32" Nullable="false" />
-          <Property Name="SurveyId" Type="Int32" Nullable="false" />
+          <Property Name="PollId" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Block" Relationship="AMSModel.FK_BlockSurvey_Block1" FromRole="BlockSurvey" ToRole="Block" />
-          <NavigationProperty Name="Survey" Relationship="AMSModel.FK_BlockSurvey_Survey" FromRole="BlockSurvey" ToRole="Survey" />
+          <NavigationProperty Name="Block" Relationship="AMSModel.FK_BlockSurvey_Block1" FromRole="BlockPoll" ToRole="Block" />
+          <NavigationProperty Name="Poll" Relationship="AMSModel.FK_BlockSurvey_Survey" FromRole="BlockPoll" ToRole="Poll" />
         </EntityType>
         <EntityType Name="Comment">
           <Key>
@@ -1605,11 +1634,10 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="WaterRateId" Type="Int32" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="LastModified" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Houses" Relationship="AMSModel.FK_House_HouseType" FromRole="HouseCategory" ToRole="House" />
-          <NavigationProperty Name="UtilityService" Relationship="AMSModel.FK_HouseType_UtilityService" FromRole="HouseCategory" ToRole="UtilityService" />
+          <NavigationProperty Name="UtilServiceForHouseCats" Relationship="AMSModel.FK_UtilServiceForHouseCat_HouseCategory" FromRole="HouseCategory" ToRole="UtilServiceForHouseCat" />
         </EntityType>
         <EntityType Name="Image">
           <Key>
@@ -1619,6 +1647,29 @@
           <Property Name="url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="createdDate" Type="DateTime" Precision="3" />
           <Property Name="postId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Poll">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ImageUrl" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="PublishDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="Question" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Mode" Type="Int32" />
+          <Property Name="Privacy" Type="Int32" />
+          <Property Name="Priority" Type="Int32" />
+          <Property Name="Answer1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Answer2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Answer3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Answer4" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Answer5" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="BlockPolls" Relationship="AMSModel.FK_BlockSurvey_Survey" FromRole="Poll" ToRole="BlockPoll" />
+          <NavigationProperty Name="UserAnswerPolls" Relationship="AMSModel.FK_UserDoServey_Survey" FromRole="Poll" ToRole="UserAnswerPoll" />
         </EntityType>
         <EntityType Name="Post">
           <Key>
@@ -1705,29 +1756,6 @@
           <Property Name="RoleName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Users" Relationship="AMSModel.FK_tbl_user_tbl_role" FromRole="Role" ToRole="User" />
         </EntityType>
-        <EntityType Name="Survey">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="ImageUrl" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <Property Name="EndDate" Type="DateTime" Precision="3" />
-          <Property Name="PublishDate" Type="DateTime" Precision="3" />
-          <Property Name="Status" Type="Int32" />
-          <Property Name="Question" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Mode" Type="Int32" />
-          <Property Name="Privacy" Type="Int32" />
-          <Property Name="Priority" Type="Int32" />
-          <Property Name="Answer1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Answer2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Answer3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Answer4" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Answer5" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="BlockSurveys" Relationship="AMSModel.FK_BlockSurvey_Survey" FromRole="Survey" ToRole="BlockSurvey" />
-          <NavigationProperty Name="UserAnswerSurveys" Relationship="AMSModel.FK_UserDoServey_Survey" FromRole="Survey" ToRole="UserAnswerSurvey" />
-        </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -1785,8 +1813,7 @@
           <Property Name="Fullname" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="LastModified" Type="DateTime" Precision="3" />
-          <Property Name="CoupleId" Type="Int32" />
-          <Property Name="RootCoupleId" Type="Int32" />
+          <Property Name="FamilyLevel" Type="Int32" />
           <NavigationProperty Name="BalanceSheets" Relationship="AMSModel.FK_Transaction_User" FromRole="User" ToRole="BalanceSheet" />
           <NavigationProperty Name="Comments" Relationship="AMSModel.FK_Comment_User1" FromRole="User" ToRole="Comment" />
           <NavigationProperty Name="HelpdeskRequestHelpdeskSupporters" Relationship="AMSModel.FK_tbl_h_desk_req_h_desk_tbl_user" FromRole="User" ToRole="HelpdeskRequestHelpdeskSupporter" />
@@ -1797,19 +1824,19 @@
           <NavigationProperty Name="Receipts" Relationship="AMSModel.FK_Receipt_User" FromRole="User" ToRole="Receipt" />
           <NavigationProperty Name="Role" Relationship="AMSModel.FK_tbl_user_tbl_role" FromRole="User" ToRole="Role" />
           <NavigationProperty Name="UserRateAroundProviders" Relationship="AMSModel.FK_tbl_resident_rate_around_srv_tbl_user" FromRole="User" ToRole="UserRateAroundProvider" />
-          <NavigationProperty Name="UserAnswerSurveys" Relationship="AMSModel.FK_UserDoServey_User" FromRole="User" ToRole="UserAnswerSurvey" />
+          <NavigationProperty Name="UserAnswerPolls" Relationship="AMSModel.FK_UserDoServey_User" FromRole="User" ToRole="UserAnswerPoll" />
           <NavigationProperty Name="UserReportPosts" Relationship="AMSModel.FK_UserReportPost_User" FromRole="User" ToRole="UserReportPost" />
         </EntityType>
-        <EntityType Name="UserAnswerSurvey">
+        <EntityType Name="UserAnswerPoll">
           <Key>
-            <PropertyRef Name="SurveyId" />
+            <PropertyRef Name="PollId" />
             <PropertyRef Name="UserId" />
           </Key>
-          <Property Name="SurveyId" Type="Int32" Nullable="false" />
+          <Property Name="PollId" Type="Int32" Nullable="false" />
           <Property Name="UserId" Type="Int32" Nullable="false" />
           <Property Name="Answer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Survey" Relationship="AMSModel.FK_UserDoServey_Survey" FromRole="UserAnswerSurvey" ToRole="Survey" />
-          <NavigationProperty Name="User" Relationship="AMSModel.FK_UserDoServey_User" FromRole="UserAnswerSurvey" ToRole="User" />
+          <NavigationProperty Name="Poll" Relationship="AMSModel.FK_UserDoServey_Survey" FromRole="UserAnswerPoll" ToRole="Poll" />
+          <NavigationProperty Name="User" Relationship="AMSModel.FK_UserDoServey_User" FromRole="UserAnswerPoll" ToRole="User" />
         </EntityType>
         <EntityType Name="UserRateAroundProvider">
           <Key>
@@ -1846,10 +1873,9 @@
           <Property Name="LastModified" Type="DateTime" Precision="3" />
           <Property Name="Price" Type="Double" />
           <Property Name="Type" Type="Int32" />
-          <Property Name="CategoryId" Type="Int32" />
-          <NavigationProperty Name="HouseCategories" Relationship="AMSModel.FK_HouseType_UtilityService" FromRole="UtilityService" ToRole="HouseCategory" />
           <NavigationProperty Name="ReceiptDetails" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_service_fee" FromRole="UtilityService" ToRole="ReceiptDetail" />
           <NavigationProperty Name="UtilityServiceRangePrices" Relationship="AMSModel.FK_UtilityServiceRangePrices_UtilityService" FromRole="UtilityService" ToRole="UtilityServiceRangePrice" />
+          <NavigationProperty Name="UtilServiceForHouseCats" Relationship="AMSModel.FK_UtilServiceForHouseCat_UtilityService" FromRole="UtilityService" ToRole="UtilServiceForHouseCat" />
         </EntityType>
         <EntityType Name="UtilityServiceRangePrice">
           <Key>
@@ -1865,6 +1891,18 @@
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="LastModified" Type="DateTime" Precision="3" />
           <NavigationProperty Name="UtilityService" Relationship="AMSModel.FK_UtilityServiceRangePrices_UtilityService" FromRole="UtilityServiceRangePrice" ToRole="UtilityService" />
+        </EntityType>
+        <EntityType Name="UtilServiceForHouseCat">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HouseCatId" Type="Int32" />
+          <Property Name="UtilServiceId" Type="Int32" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="HouseCategory" Relationship="AMSModel.FK_UtilServiceForHouseCat_HouseCategory" FromRole="UtilServiceForHouseCat" ToRole="HouseCategory" />
+          <NavigationProperty Name="UtilityService" Relationship="AMSModel.FK_UtilServiceForHouseCat_UtilityService" FromRole="UtilServiceForHouseCat" ToRole="UtilityService" />
         </EntityType>
         <Association Name="FK_AroundServiceProduct_AroundProvider">
           <End Type="AMSModel.AroundProvider" Role="AroundProvider" Multiplicity="0..1" />
@@ -1956,12 +1994,12 @@
         </Association>
         <Association Name="FK_BlockSurvey_Block1">
           <End Type="AMSModel.Block" Role="Block" Multiplicity="1" />
-          <End Type="AMSModel.BlockSurvey" Role="BlockSurvey" Multiplicity="*" />
+          <End Type="AMSModel.BlockPoll" Role="BlockPoll" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Block">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="BlockSurvey">
+            <Dependent Role="BlockPoll">
               <PropertyRef Name="BlockId" />
             </Dependent>
           </ReferentialConstraint>
@@ -1979,14 +2017,14 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_BlockSurvey_Survey">
-          <End Type="AMSModel.Survey" Role="Survey" Multiplicity="1" />
-          <End Type="AMSModel.BlockSurvey" Role="BlockSurvey" Multiplicity="*" />
+          <End Type="AMSModel.Poll" Role="Poll" Multiplicity="1" />
+          <End Type="AMSModel.BlockPoll" Role="BlockPoll" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Survey">
+            <Principal Role="Poll">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="BlockSurvey">
-              <PropertyRef Name="SurveyId" />
+            <Dependent Role="BlockPoll">
+              <PropertyRef Name="PollId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2146,15 +2184,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_HouseType_UtilityService">
-          <End Type="AMSModel.UtilityService" Role="UtilityService" Multiplicity="0..1" />
-          <End Type="AMSModel.HouseCategory" Role="HouseCategory" Multiplicity="*" />
+        <Association Name="FK_UtilServiceForHouseCat_HouseCategory">
+          <End Type="AMSModel.HouseCategory" Role="HouseCategory" Multiplicity="0..1" />
+          <End Type="AMSModel.UtilServiceForHouseCat" Role="UtilServiceForHouseCat" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="UtilityService">
+            <Principal Role="HouseCategory">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="HouseCategory">
-              <PropertyRef Name="WaterRateId" />
+            <Dependent Role="UtilServiceForHouseCat">
+              <PropertyRef Name="HouseCatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserDoServey_Survey">
+          <End Type="AMSModel.Poll" Role="Poll" Multiplicity="1" />
+          <End Type="AMSModel.UserAnswerPoll" Role="UserAnswerPoll" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Poll">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserAnswerPoll">
+              <PropertyRef Name="PollId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2256,18 +2306,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_UserDoServey_Survey">
-          <End Type="AMSModel.Survey" Role="Survey" Multiplicity="1" />
-          <End Type="AMSModel.UserAnswerSurvey" Role="UserAnswerSurvey" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Survey">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="UserAnswerSurvey">
-              <PropertyRef Name="SurveyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_TransactionItem_TransactionItemCategory">
           <End Type="AMSModel.TransactionCategory" Role="TransactionCategory" Multiplicity="0..1" />
           <End Type="AMSModel.Transaction" Role="Transaction" Multiplicity="*" />
@@ -2294,12 +2332,12 @@
         </Association>
         <Association Name="FK_UserDoServey_User">
           <End Type="AMSModel.User" Role="User" Multiplicity="1" />
-          <End Type="AMSModel.UserAnswerSurvey" Role="UserAnswerSurvey" Multiplicity="*" />
+          <End Type="AMSModel.UserAnswerPoll" Role="UserAnswerPoll" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="UserAnswerSurvey">
+            <Dependent Role="UserAnswerPoll">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
@@ -2325,6 +2363,18 @@
             </Principal>
             <Dependent Role="UtilityServiceRangePrice">
               <PropertyRef Name="ServiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UtilServiceForHouseCat_UtilityService">
+          <End Type="AMSModel.UtilityService" Role="UtilityService" Multiplicity="0..1" />
+          <End Type="AMSModel.UtilServiceForHouseCat" Role="UtilServiceForHouseCat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UtilityService">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UtilServiceForHouseCat">
+              <PropertyRef Name="UtilServiceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2468,11 +2518,11 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="BlockSurveys">
-            <EntityTypeMapping TypeName="AMSModel.BlockSurvey">
-              <MappingFragment StoreEntitySet="BlockSurvey">
+          <EntitySetMapping Name="BlockPolls">
+            <EntityTypeMapping TypeName="AMSModel.BlockPoll">
+              <MappingFragment StoreEntitySet="BlockPoll">
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="SurveyId" ColumnName="SurveyId" />
+                <ScalarProperty Name="PollId" ColumnName="PollId" />
                 <ScalarProperty Name="BlockId" ColumnName="BlockId" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2576,7 +2626,6 @@
               <MappingFragment StoreEntitySet="HouseCategory">
                 <ScalarProperty Name="LastModified" ColumnName="LastModified" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="WaterRateId" ColumnName="WaterRateId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -2589,6 +2638,28 @@
                 <ScalarProperty Name="createdDate" ColumnName="createdDate" />
                 <ScalarProperty Name="url" ColumnName="url" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Polls">
+            <EntityTypeMapping TypeName="AMSModel.Poll">
+              <MappingFragment StoreEntitySet="Poll">
+                <ScalarProperty Name="Answer5" ColumnName="Answer5" />
+                <ScalarProperty Name="Answer4" ColumnName="Answer4" />
+                <ScalarProperty Name="Answer3" ColumnName="Answer3" />
+                <ScalarProperty Name="Answer2" ColumnName="Answer2" />
+                <ScalarProperty Name="Answer1" ColumnName="Answer1" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="Privacy" ColumnName="Privacy" />
+                <ScalarProperty Name="Mode" ColumnName="Mode" />
+                <ScalarProperty Name="Question" ColumnName="Question" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="PublishDate" ColumnName="PublishDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2672,28 +2743,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Surveys">
-            <EntityTypeMapping TypeName="AMSModel.Survey">
-              <MappingFragment StoreEntitySet="Survey">
-                <ScalarProperty Name="Answer5" ColumnName="Answer5" />
-                <ScalarProperty Name="Answer4" ColumnName="Answer4" />
-                <ScalarProperty Name="Answer3" ColumnName="Answer3" />
-                <ScalarProperty Name="Answer2" ColumnName="Answer2" />
-                <ScalarProperty Name="Answer1" ColumnName="Answer1" />
-                <ScalarProperty Name="Priority" ColumnName="Priority" />
-                <ScalarProperty Name="Privacy" ColumnName="Privacy" />
-                <ScalarProperty Name="Mode" ColumnName="Mode" />
-                <ScalarProperty Name="Question" ColumnName="Question" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="PublishDate" ColumnName="PublishDate" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
             <EntityTypeMapping TypeName="AMSModel.sysdiagram">
               <MappingFragment StoreEntitySet="sysdiagrams">
@@ -2733,8 +2782,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="AMSModel.User">
               <MappingFragment StoreEntitySet="User">
-                <ScalarProperty Name="RootCoupleId" ColumnName="RootCoupleId" />
-                <ScalarProperty Name="CoupleId" ColumnName="CoupleId" />
+                <ScalarProperty Name="FamilyLevel" ColumnName="FamilyLevel" />
                 <ScalarProperty Name="LastModified" ColumnName="LastModified" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Fullname" ColumnName="Fullname" />
@@ -2754,12 +2802,12 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="UserAnswerSurveys">
-            <EntityTypeMapping TypeName="AMSModel.UserAnswerSurvey">
-              <MappingFragment StoreEntitySet="UserAnswerSurvey">
+          <EntitySetMapping Name="UserAnswerPolls">
+            <EntityTypeMapping TypeName="AMSModel.UserAnswerPoll">
+              <MappingFragment StoreEntitySet="UserAnswerPoll">
                 <ScalarProperty Name="Answer" ColumnName="Answer" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="SurveyId" ColumnName="SurveyId" />
+                <ScalarProperty Name="PollId" ColumnName="PollId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2786,7 +2834,6 @@
           <EntitySetMapping Name="UtilityServices">
             <EntityTypeMapping TypeName="AMSModel.UtilityService">
               <MappingFragment StoreEntitySet="UtilityService">
-                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="LastModified" ColumnName="LastModified" />
@@ -2809,6 +2856,17 @@
                 <ScalarProperty Name="FromAmount" ColumnName="FromAmount" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UtilServiceForHouseCats">
+            <EntityTypeMapping TypeName="AMSModel.UtilServiceForHouseCat">
+              <MappingFragment StoreEntitySet="UtilServiceForHouseCat">
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UtilServiceId" ColumnName="UtilServiceId" />
+                <ScalarProperty Name="HouseCatId" ColumnName="HouseCatId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

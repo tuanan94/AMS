@@ -4,15 +4,15 @@
     ViewBag.Title = "DoDetailSurvey";
 
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
-    Survey surveys = ViewBag.Survey;
+    Poll surveys = ViewBag.Survey;
     List<string> listAnswer = ViewBag.CountAnswer;
     List<string> answers = ViewBag.Answer;
-    List<Survey> listSurveys = ViewBag.ListSurvey;
+    List<Poll> listSurveys = ViewBag.ListSurvey;
     User currentUser = ViewBag.currentUser;
     House currentHouse = ViewBag.currentHouse;
     UserAnswerService userAnswerService = new UserAnswerService();
-    BlockSurveyService blockSurveyService = new BlockSurveyService();
-    List<UserAnswerSurvey> listUserAnswer = new List<UserAnswerSurvey>();
+    BlockPollService BlockPollService = new BlockPollService();
+    List<UserAnswerPoll> listUserAnswer = new List<UserAnswerPoll>();
 }
 <style>
     .media-post-ctr .media-post-header .media-title {
@@ -234,13 +234,13 @@
                             <fieldset class="scheduler-border less-padding">
                                 <legend class="scheduler-border">Câu hỏi</legend>
                                 <div class="col-md-10">
-                                    <label for="inputEmail3" class="col-md-4">Câu Hỏi :</label>
-                                    <div class="col-md-6">
-
-                                        <input type="text" disabled="disabled" class="form-control binh" style="width: 330px" id="question" name="question" value="@surveys.Question"><br>
+                                    <label  class="col-md-4">Câu Hỏi :</label>
+                                    <div class="col-md-8">
+                                        <textarea style="margin-bottom: 20px" disabled="disabled" cols="30" class="form-control binh col-sm-6">@surveys.Question</textarea><br/>
+                                        @*<input type="text" disabled="disabled" class="form-control binh"  id="question" name="question" value="@surveys.Question"><br>*@
                                         @Html.TextBoxFor(m => m.Id, new { @type = "hidden", @Value = surveys.Id })
-                                    </div>
-                                </div>
+                                    </div><br />
+                                </div><br />
                                 <div class="col-md-10">
 
                                     @{
@@ -250,22 +250,26 @@
 
                             foreach (var b in answers)
                             {
-                                <label for="inputEmail3" class="col-md-3"></label>
+                                if (b != null)
+                                {
+                                     <label for="inputEmail3" class="col-md-3"></label>
                                         <div class="col-sm-1">
                                             @*@Html.RadioButtonFor(m => m.AnswerContent,b.Id, new { @Value = b.AnswerContent })*@
 
 
                                             <input type="radio" id="@b" name="answer" value="@b">
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-8">
                                             <input type="hidden" id="answerId" name="answerId" value="@b" />
                                             <input type="hidden" id="count" name="count" value="@counts" />
                                             @*<input type="radio" name="gender" value="@b.AnswerContent">*@
-                                            <input type="text" disabled="disabled" class="form-control binh" style="width: 230px" id="@counts" name="anwser1" value="@b"><br/>
+                                            <input type="text" disabled="disabled" class="form-control binh" @*style="width: 230px"*@ id="@counts" name="anwser1" value="@b"><br/>
 
 
                                         </div>
-                                counts++;
+                                counts++; 
+                                }
+                              
                             }
                             i++;
                             ii++;
@@ -283,7 +287,7 @@
 
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-8">
-                            @*<a href="@Url.Action("UpdateSurvey", "Survey", new { surveyId =@surveys.Id})" class="fa fa-list-alt">Lưu..</a>*@
+                            @*<a href="@Url.Action("UpdateSurvey", "Survey", new { PollId =@surveys.Id})" class="fa fa-list-alt">Lưu..</a>*@
                             <button type="submit" onclick="addCommentByAjax()" class="btn btn-primary">Lưu</button>
 
                             @*@{
@@ -326,10 +330,10 @@
                 @{
     foreach (var item in listSurveys)
     {
-        List<BlockSurvey> listBlockSurveys = blockSurveyService.FindBySurveyId(item.Id);
-        listUserAnswer = (userAnswerService.GetListUserAnswerSurveysBySurveyId(item.Id));
+        List<BlockPoll> listBlockPolls = BlockPollService.FindByPollId(item.Id);
+        listUserAnswer = (userAnswerService.GetListUserAnswerPollsByPollId(item.Id));
         int k = 0;
-      //  int p = 0;
+        int p = 0;
         if (listSurveys.Count != 0)
         {
             if (item.Mode == 1 )
@@ -343,24 +347,24 @@
                     }
 
                 }
-                //foreach (var obj in listBlockSurveys)
-                //{
-                //    if (obj.BlockId == blockSurveyService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
-                //    {
-                //        p++;
-                //    }
-                //}
-                //if (k != 1 && p == 1)
-                    if (k != 1 )
+                foreach (var obj in listBlockPolls)
+                {
+                    if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                    {
+                        p++;
+                    }
+                }
+                if (k != 1 || p == 1)
+                   // if (k != 1 )
                 {
                     <fieldset class="scheduler-border less-padding">
                         <div class="media-item-ctr-2">
-                            <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
+                            <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { PollId = @item.Id })">
                                 <img src="@item.ImageUrl" class="img-responsive">
                                 <div class="media-ribbon"><i class="fa fa-heart"></i> @item.Id</div>
                             </a>
                             <div class="media-item-overview">
-                                <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a></h3>
+                                <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { PollId = @item.Id })">@item.Question</a></h3>
                                 <div class="media-meta-data">@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.PublishDate))</div>
                             </div>
                         </div>
@@ -377,31 +381,31 @@
                     }
 
                 }
-                //foreach (var obj in listBlockSurveys)
-                //{
-                //    if (obj.BlockId == blockSurveyService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
-                //    {
-                //        p++;
-                //    }
-                //}
-                //if (k != 1 && p == 1)
-                    if (k != 1)
+                foreach (var obj in listBlockPolls)
+                {
+                    if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                    {
+                        p++;
+                    }
+                }
+                if ((k != 1 && p == 1) || p == 0)
+                    //if (k != 1)
                 {
                     <fieldset class="scheduler-border less-padding">
                         <div class="media-item-ctr-2">
-                            <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
+                            <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { PollId = @item.Id })">
                                 <img src="@item.ImageUrl" class="img-responsive">
                                 <div class="media-ribbon"><i class="fa fa-heart"></i> @item.Id</div>
                             </a>
                             <div class="media-item-overview">
-                                <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a></h3>
+                                <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { PollId = @item.Id })">@item.Question</a></h3>
                                 <div class="media-meta-data">@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.PublishDate))</div>
                             </div>
                         </div>
                     </fieldset>
                 }
             }
-            else if ((item.Mode == 3 && currentUser.RoleId == 4) || (item.Mode == 2 && currentUser.RoleId == 3))
+            else if ((item.Mode == 3 && currentUser.RoleId == 4 && item.Status == 1) || (item.Mode == 3 && currentUser.RoleId == 3 && item.Status == 1))
             {
                 foreach (var VARIABLE in listUserAnswer)
                 {
@@ -412,24 +416,24 @@
                     }
 
                 }
-                //foreach (var obj in listBlockSurveys)
-                //{
-                //    if (obj.BlockId == blockSurveyService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
-                //    {
-                //        p++;
-                //    }
-                //}
-                //if (k != 1 && p == 1)
-                if (k != 1)
+                foreach (var obj in listBlockPolls)
+                {
+                    if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                    {
+                        p++;
+                    }
+                }
+                if ((k != 1 && p == 1) || p == 0)
+               // if (k != 1)
                 {
                     <fieldset class="scheduler-border less-padding">
                         <div class="media-item-ctr-2">
-                            <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">
+                            <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { PollId = @item.Id })">
                                 <img src="@item.ImageUrl" class="img-responsive">
                                 <div class="media-ribbon"><i class="fa fa-heart"></i> @item.Id</div>
                             </a>
                             <div class="media-item-overview">
-                                <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { surveyId = @item.Id })">@item.Question</a></h3>
+                                <h3><a href="@Url.Action("DoDetailSurvey", "Survey", new { PollId = @item.Id })">@item.Question</a></h3>
                                 <div class="media-meta-data">@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.PublishDate))</div>
                             </div>
                         </div>

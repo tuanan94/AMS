@@ -3,13 +3,12 @@
 @{
     ViewBag.Title = "DetailSurvey";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
-    Survey surveys = ViewBag.Survey;
+    Poll surveys = ViewBag.Survey;
     //   List<Question> questions = ViewBag.Question;
     List<string> answers = ViewBag.Answer;
     List<string> listAnswer = ViewBag.CountAnswer;
-    List<string> listBlock = ViewBag.ListBlock;
-    List<string> listFloor = ViewBag.ListFloor;
-    BlockSurveyService blockSurveyService = new BlockSurveyService();
+
+    BlockPollService BlockPollService = new BlockPollService();
     BlockService blockService = new BlockService();
     string alert = ViewBag.alert;
 }
@@ -54,27 +53,16 @@
             font-size: 2em;
             vertical-align: middle;
         }
-     .binh {
-         border-color: #1ABC9C;
-         box-shadow: none;
-     }
+
+    .binh {
+        border-color: #1ABC9C;
+        box-shadow: none;
+    }
 </style>
 <div class="col-sm-offset-1 col-sm-10">
     <div class="panel panel-default binh">
-        @*<nav class="navbar navbar-default">
-                <div class="container-fluid">
-
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="/Survey/Survey"><i class="glyphicon glyphicon-home"> </i>Trang chính</a></li>
 
 
-                    </ul>
-                </div>
-            </nav>*@
-        <div class="panel-heading panel-heading-gray">
-
-            <h4>Cập nhập chi tiết khảo sát</h4>
-        </div>
         <div class="panel-body">
             <fieldset class="scheduler-border less-padding">
                 @*<form class="form-horizontal" role="form" method="post">*@
@@ -114,56 +102,29 @@
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Ngày bắt đầu</label>
                                     <div class="col-sm-7">
-                                        @Html.TextBoxFor(m => m.PublishDate, new { @class = "form-control binh", style = "width: 330px", @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", surveys.PublishDate)) })<br>
+                                        @Html.TextBoxFor(m => m.PublishDate, new { @class = "form-control binh", onchange = "bInfos()", style = "width: 330px", @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", surveys.PublishDate)) })<br>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-3 control-label">Ngày kết thúc</label>
                                     <div class="col-sm-7">
-                                        @Html.TextBoxFor(m => m.EndDate, new { @class = "form-control binh", style = "width: 330px", @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", surveys.EndDate)) })<br>
+                                        @Html.TextBoxFor(m => m.EndDate, new { @class = "form-control binh", onchange = "bInfos()", style = "width: 330px", @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", surveys.EndDate)) })<br>
                                     </div>
                                 </div>
-                                @*<div class="form-group">
-                                                                      <label for="inputEmail3" class="col-sm-3 control-label">Khu</label>
-                                                                      <div class="col-sm-7">
-                                                                          <select class="form-control binh" name="selectItemBlock" style="width: 330px">
-                                                                              @{
-                                                          if (@surveys.Block == "NULL")
-                                                          {
-                                                                          <option value="@surveys.Block">Tất cả</option>
-                                                          }
-                                                          else
-                                                          {
-                                    <option value="@surveys.Block">@surveys.Block</option>
-                                                          }
-                                                                              }
 
-                                                                              @{
-                                                                                  foreach (var item in listBlock)
-                                                                                  {
-
-                                                                                      <option value="@item">@item</option>
-                                                                                  }
-                                                                              }
-                                                                          </select><br>
-
-
-
-                                                                      </div>
-                                                                  </div>*@
 
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Đối tượng</label>
                                     <div class="col-sm-7">
 
                                         @{
-                        if  (surveys.Mode == 1)
+                        if (surveys.Mode == 1)
                         {
                             <label><input type="radio" value="1" checked="checked" name="people">Tất Cả</label><br />
                                             <label><input type="radio" value="2" name="people">Tất Cả Chủ Nhà</label><br />
                                             <label><input type="radio" value="3" name="people">Tất Cả Cư Dân</label><br />
                         }
-                        else if ( surveys.Mode == 2)
+                        else if (surveys.Mode == 2)
                         {
                             <label><input type="radio" value="1" name="people">Tất Cả</label><br />
                                             <label><input type="radio" value="2" checked="checked" name="people">Tất Cả Chủ Nhà</label><br />
@@ -209,29 +170,43 @@
                                     </div>*@
 
                                 <div class="form-group">
-                                    <label  class="col-sm-3 control-label">Chế độ ưu tiên</label>
+                                    <label class="col-sm-3 control-label">Chế độ ưu tiên</label>
                                     <div class="col-sm-7">
 
-                                     
-                                            @{
+
+                                        @{
                         if (surveys.Priority == 1)
                         {
-                            <label><input type="radio" value="1" name="priority" checked="checked">Bắt buộc</label><br />
-                                                <label><input type="radio" value="0" name="priority">Không</label><br />
+                            <label><input type="radio" value="1" name="priority" checked="checked">Bắt buộc </label>
+                                            <label><input type="radio" value="0" name="priority">Không</label><br />
                         }
                         else if (surveys.Priority == 0)
                         {
 
-                            <label><input type="radio" value="1" name="priority">Bắt buộc</label><br />
-                                                <label><input type="radio" value="0" name="priority" checked="checked">Không</label><br />
+                            <label><input type="radio" value="1" name="priority">Bắt buộc</label>
+                                            <label><input type="radio" value="0" name="priority" checked="checked">Không</label><br />
                         }
-                                            }
+                                        }
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Trạng Thái</label>
+                                    <div class="col-sm-7">
 
-                                     
-                                       
 
+                                        @{
+                        if (surveys.Status == 1)
+                        {
+                            <label><input type="radio" value="1" name="status" checked="checked"> Mở </label>
+                                            <label><input type="radio" value="0" name="status"> Đóng</label><br />
+                        }
+                        else if (surveys.Status == 0)
+                        {
 
-
+                            <label><input type="radio" value="1" name="status"> Mở</label>
+                                            <label><input type="radio" value="0" name="status" checked="checked"> Đóng</label><br />
+                        }
+                                        }
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -241,24 +216,28 @@
                                         @*<label class="checkbox-inline"><input type="checkbox" name="block" value="@item">@item</label>*@
                                         @{
                         List<Block> listBlockss = blockService.GetListBlock();
-                        List<BlockSurvey> listBlocks = blockSurveyService.FindBySurveyId(surveys.Id);
+                        List<BlockPoll> listBlocks = BlockPollService.FindByPollId(surveys.Id);
                         int temp = 0;
                         foreach (var obj in listBlockss)
                         {
-
                             if (temp < listBlocks.Count)
                             {
                                 if (obj.Id == listBlocks.ElementAt(temp).BlockId)
                                 {
                                     <label class="checkbox-inline"><input type="checkbox" checked="checked" name="block" value="@obj.BlockName">@obj.BlockName</label>
                                 }
-
+                                else
+                                {
+                                    <label class="checkbox-inline"><input type="checkbox"  name="block" value="@obj.BlockName">@obj.BlockName</label>
+                                }
+                                temp++;
                             }
+
                             else
                             {
                                 <label class="checkbox-inline"><input type="checkbox" name="block" value="@obj.BlockName">@obj.BlockName</label>
                             }
-                            temp++;
+
                         }
                                         }
 
@@ -293,17 +272,21 @@
                         int counts = 1;
                         foreach (var b in answers)
                         {
-                            <label for="inputEmail3" class="col-sm-3 control-label"></label>
+                            if (b != null && b != "")
+                            {
+                                <label for="inputEmail3" class="col-sm-3 control-label"></label>
                                             <div class="col-sm-7">
                                                 @Html.TextBoxFor(m => m.Id, new { @type = "hidden", @Value = surveys.Id })
 
                                                 <input type="hidden" id="@counts" name="count" value="@counts" />
-                                                <input type="text" class="form-control binh" style="width: 200px" id="anwserr_@counts" name="anwser1" value="@b">
+                                                <input type="text" class="form-control binh" style="width: 200px" id="anwserr_@counts" name="anwser1" value="@b"><br />
 
 
                                             </div>
 
-                            counts++;
+                                counts++;
+                            }
+
                         }
 
 
@@ -315,19 +298,15 @@
                         </div>
                         ////}
 
-
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-8">
-                                @*<a href="@Url.Action("UpdateSurvey", "Survey", new { surveyId =@surveys.Id})" class="fa fa-list-alt">Lưu..</a>*@
+                                @*<a href="@Url.Action("UpdateSurvey", "Survey", new { PollId =@surveys.Id})" class="fa fa-list-alt">Lưu..</a>*@
                                 <button type="submit" class="btn btn-primary">Lưu</button>
-                                <button type="reset" class="btn btn-primary">Xóa hết</button>
+                                @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control binh", @type = "hidden", onchange = "bInfos()", @Value = Convert.ToString(string.Format("{0:yyyy/MM/dd}", DateTime.Now)) })<br>
                             </div>
 
                         </div>
-
                     }
-
-
                 </div>
 
                 @*</form>*@
@@ -336,6 +315,7 @@
                     int abc = 1;
                     foreach (var item in listAnswer)
                     {
+
                         <input type="hidden" id="answer_@abc" name="countAnser" value="@item" />
                         abc++;
                     }
@@ -351,6 +331,28 @@
     </div>
 </div>
 <script>
+    function bInfos() {
+
+        b = document.getElementById('EndDate').value;
+        c = document.getElementById('PublishDate').value;
+        a = document.getElementById('StartDate').value;
+        var d2 = new Date(b)
+        var d3 = new Date(c)
+        var d1 = new Date(a)
+        //if (CompareDates(d1, d2, '-') == 0) {
+        //    alert('Selected date must be current date or previous date!');
+        //    return false;
+        //}
+        if (d3 > d2) {
+            alert('Ngày đăng không hợp lệ!'); return false;
+        } else if (d3 < d1) {
+            alert('Ngày đăng không hợp lệ!'); return false;
+        } else if (d2 < d1) {
+            alert('Ngày kết thúc không hợp lệ!'); return false;
+        }
+
+        else { return true; }
+    }
     $('#label1').delay(2500).fadeOut('slow');
     //  $('input').attr("required", true);
     $(function () {
@@ -362,14 +364,14 @@
     });
     $(function () {
         $("#PublishDate").datepicker({
-            format: "yyyy/mm/dd",
+            format: "mm/dd/yyyy",
             startDate: "-3d"
         });
         //$("#PublishDate").attr('readOnly', 'false');
     });
     $(function () {
         $("#EndDate").datepicker({
-            format: "yyyy/mm/dd",
+            format: "mm/dd/yyyy",
             startDate: "-3d"
         });
         //$("#EndDate").attr('readOnly', 'false');
@@ -408,10 +410,10 @@
             return '<h4>' + "Chưa có dữ liệu" + '</h4>'
         } else {
             RenderPieChart('container', [
-          [answer1a, answer1],
-            [answer2a, answer2],
-            [answer3a, answer3],
-              [answer4a, answer4],
+                [answer1a, answer1],
+                [answer2a, answer2],
+                [answer3a, answer3],
+                [answer4a, answer4],
                 [answer5a, answer5]
 
             ]);

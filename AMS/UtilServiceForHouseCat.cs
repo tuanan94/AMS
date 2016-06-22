@@ -12,13 +12,15 @@ namespace AMS
     using System;
     using System.Collections.Generic;
     
-    public partial class BlockSurvey
+    public partial class UtilServiceForHouseCat
     {
-        public int BlockId { get; set; }
-        public int SurveyId { get; set; }
-        public string Name { get; set; }
+        public int Id { get; set; }
+        public Nullable<int> HouseCatId { get; set; }
+        public Nullable<int> UtilServiceId { get; set; }
+        public Nullable<int> Status { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
     
-        public virtual Block Block { get; set; }
-        public virtual Survey Survey { get; set; }
+        public virtual HouseCategory HouseCategory { get; set; }
+        public virtual UtilityService UtilityService { get; set; }
     }
 }

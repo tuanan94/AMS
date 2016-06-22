@@ -12,21 +12,35 @@ namespace AMS
     using System;
     using System.Collections.Generic;
     
-    public partial class Block
+    public partial class Poll
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Block()
+        public Poll()
         {
             this.BlockPolls = new HashSet<BlockPoll>();
-            this.Houses = new HashSet<House>();
+            this.UserAnswerPolls = new HashSet<UserAnswerPoll>();
         }
     
         public int Id { get; set; }
-        public string BlockName { get; set; }
+        public string Description { get; set; }
+        public string ImageUrl { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
+        public Nullable<System.DateTime> PublishDate { get; set; }
+        public Nullable<int> Status { get; set; }
+        public string Question { get; set; }
+        public Nullable<int> Mode { get; set; }
+        public Nullable<int> Privacy { get; set; }
+        public Nullable<int> Priority { get; set; }
+        public string Answer1 { get; set; }
+        public string Answer2 { get; set; }
+        public string Answer3 { get; set; }
+        public string Answer4 { get; set; }
+        public string Answer5 { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BlockPoll> BlockPolls { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<House> Houses { get; set; }
+        public virtual ICollection<UserAnswerPoll> UserAnswerPolls { get; set; }
     }
 }
