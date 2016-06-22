@@ -88,7 +88,7 @@
                                                             <strong style="align-content: center">Từ</strong>
                                                         </div>
                                                         <div class="col-sm-2">
-                                                            <strong style="align-content: center">Đến</strong>
+                                                            <strong style="align-content: center">Đến (* vô hạn)</strong>
                                                         </div>
                                                         <div class="col-sm-2">
                                                             <strong style="align-content: center">Giá</strong>
@@ -103,7 +103,7 @@
                                                                         <input id="range_name_@i" name="" type="text" class="form-control order-item">
                                                                     </div>
                                                                     <div class="col-md-2">
-                                                                        <input id="from_amount_@i" name="" type="text" class="form-control order-item-qty">
+                                                                        <input id="from_amount_@i" readonly="readonly" value="@(i==1 ? "0": "")" name="" type="text" class="form-control order-item-qty">
                                                                     </div>
                                                                     <div class="col-md-2">
                                                                         <input id="to_amount_@i" name="" type="text" class="form-control order-item-price">
@@ -243,9 +243,6 @@
                 $("#houseCatRow").addClass("hide");
                 $("#UtilityServiceWrapper").html($("#fixedCostFrame").html());
                 $("#fixedCostWrapper").prop("id", "fixedCostWrapperInline");
-                //                $("#addNewFixedCost").on("click", function () {
-                //                    createNewFixedCostRow("fixedCostWrapperInline");
-                //                });
             } else if (selected === 2 || selected === 1) {
                 getListHouseCategory();
                 $("#UtilityServiceWrapper").html($("#waterFrame").html());
@@ -255,7 +252,8 @@
             }
             bindingEventOnDelet();
         });
-
+        bindingClassNumberWithComma("total-order");
+        onChangeFromNumber();
     });
     function onDeleteRow(event) {
         event.stopPropagation();
@@ -283,6 +281,77 @@
         window.index++;
         addRangePrice(index, wrapperId);
         bindingEventOnDelet();
+        onChangeFromNumber();
+    }
+    function onChangeFromNumber() {
+        $(".order-item-price").on("change", function (event) {
+            if (event.which >= 37 && event.which <= 40) {
+                event.preventDefault();
+                return;
+            }
+            var nextElement = event.target.parentNode.parentNode.nextElementSibling;
+            var nextFromValue = {};
+            var fromValue = event.target.parentNode.previousElementSibling.querySelector(".order-item-qty");
+
+            if (nextElement == null) {
+                event.target.value = "*";
+                return;
+            } else {
+                nextFromValue = nextElement.querySelector(".order-item-qty");
+                var nextToValue = nextElement.querySelector(".order-item-price");
+                if (parseInt(event.target.value, 10) >= parseInt(nextToValue.value, 10)) {
+                    var nextNode = event.target.parentNode.parentNode.nextElementSibling;
+                    while (nextNode && nextNode.nodeType === 1 && nextNode !== this) {
+                        nextNode.querySelector(".order-item-price").value = "";
+                        nextNode.querySelector(".order-item-qty").value = "";
+                        nextNode = nextNode.nextElementSibling;
+                    }
+                }// if next node is greater than this node clean all next node
+            }
+            if (event.target.parentNode.parentNode.previousElementSibling) {
+                var previousValue = event.target.parentNode.parentNode.previousElementSibling
+                    .querySelector(".order-item-price");
+
+                if (isNaN(event.target.value) && event.target.value !== "*") {
+                    event.target.value = "";
+                } // clean next node when input other character except *
+                else if (isNaN(event.target.value) && event.target.value === "*") {
+                    if (nextElement != null) {
+                        var nextNode = event.target.parentNode.parentNode.nextElementSibling;
+                        while (nextNode && nextNode.nodeType === 1 && nextNode !== this) {
+                            nextNode.querySelector(".order-item-price").value = "";
+                            nextNode.querySelector(".order-item-qty").value = "";
+                            nextNode = nextNode.nextElementSibling;
+                        }
+                    }// clean next node when input * in the middle
+                } else if (parseInt(event.target.value, 10) > parseInt(previousValue.value, 10)) {
+                    nextFromValue.value = event.target.value;
+                } else {
+                    event.target.value = "";
+                    fromValue.value = "";
+                    var previousNode = event.target.parentNode.parentNode.previousElementSibling;
+                    while (previousNode && previousNode.nodeType === 1 && previousNode !== this) {
+                        previousNode.querySelector(".order-item-price").value = "";
+                        if (previousNode.querySelector(".order-item-qty").value != 0) {
+                            previousNode.querySelector(".order-item-qty").value = "";
+                        }
+                        previousNode = previousNode.previousElementSibling;
+                    }
+                    var nextNode = event.target.parentNode.parentNode.nextElementSibling;
+                    while (nextNode && nextNode.nodeType === 1 && nextNode !== this) {
+                        nextNode.querySelector(".order-item-price").value = "";
+                        nextNode.querySelector(".order-item-qty").value = "";
+                        nextNode = nextNode.nextElementSibling;
+                    }
+                }// when in put in the middle wrong clean all element
+            } else {
+                if (isNaN(event.target.value) && event.target.value !== "*") {
+                    event.target.value = "";
+                } else {
+                    nextFromValue.value = event.target.value;
+                }
+            }
+        });
     }
     function createNewFixedCostRow(wrapperId) {
         window.index++;
@@ -302,7 +371,7 @@
     function addRangePrice(index, parentTagId) {
         var tag = "<div id=\"row_" + index + "\" class='form-group'>" +
                 "<div class='col-md-offset-1 col-md-4'><input id=\"range_name_" + index + "\" type='text' class='form-control order-item'></div>" +
-                "<div class='col-sm-2'><input type='text' id=\"from_amount_" + index + "\" class='form-control order-item-qty'></div>" +
+                "<div class='col-sm-2'><input type='text' id=\"from_amount_" + index + "\" readonly='readonly' class='form-control order-item-qty'></div>" +
                 "<div class='col-sm-2'><input id=\"to_amount_" + index + "\"type='text' class='form-control order-item-price'></div>" +
                 "<div class='col-sm-2'><input id=\"price_" + index + "\" type='text' class='form-control'></div>" +
                 "<span class='btn btn-danger btn-xs on-delete'><i class='fa fa-times'></i></span>" +

@@ -288,17 +288,14 @@
                                 <span class="input-group-addon">đồng</span>
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <div class="col-sm-offset-9 col-md-2">
-                                <span id="btnPurchaseReceipt" onclick="purchaseReceipt()" class="btn btn-info hide">Thanh toán</span>
-                                <span id="btnEditUtilityServiceQuantity" onclick="updateHouseConsumption()" class="btn btn-info hide">Cập nhật</span>
-                            </div>
-                        </div>
                         <input type="hidden" id="receiptId" />
                         <input type="hidden" id="rowId" />
                     </form>
                 </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 0">
+                <span id="btnPurchaseReceipt" onclick="purchaseReceipt()" class="btn btn-info hide">Thanh toán</span>
+                <span id="btnEditUtilityServiceQuantity" onclick="updateHouseConsumption()" class="btn btn-info hide">Cập nhật</span>
             </div>
         </div>
     </div>
@@ -322,6 +319,10 @@
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <span>Cập nhật thất bại.</span>
                     </div>
+                    <div class="alert alert-warning" id="orderIsExistedNotify" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span>Hóa đơn tháng <strong id="forMonthMsg"></strong> đã được tạo</span>
+                    </div>
 
                     <form id="updateHouseConsumptionForm" class="form-horizontal" role="form">
                         <div class="form-group">
@@ -331,49 +332,43 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label for="autoReceiptTitle" class="col-md-3 control-label">Tháng</label>
+                            <div class="col-md-5">
+                                <input type="text" id="autoRseceiptForMonth" readonly="readonly" value="@receipt.ForMonth.Value.ToString(AmsConstants.MonthYearFormat)" name="ForMonth" class="form-control datepicker" data-date-format="mm-yyyy" data-date-language="vi"
+                                       data-date-min-view-mode="1" data-date-start-date="-1m" data-date-today-highlight="true" data-date-end-date="+1m" />
+                            </div>
+                            <div class="col-md-4">
+                                <span id="autoReceiptunPublished" class="btn btn-inverse hide">Chưa công bố</span>
+                                <span id="autoReceiptPaid" class="btn btn-success hide">Đã thanh toán</span>
+                                <span id="autoReceiptUnpaid" class="btn btn-danger hide">Chưa thanh toán</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label for="autoReceiptPublishmentDate" class="col-md-3 control-label">Ngày xuất</label>
                             <div class="col-md-5">
                                 <input type="text" id="autoReceiptPublishmentDate" name="PublishDate" class="form-control" data-date-format="dd-mm-yyyy" data-date-language="vi"
                                        data-date-min-view-mode="0" data-date-today-highlight="true" data-date-start-date="0m" />
                             </div>
-                            <span id="autoReceiptunPublished" class="btn btn-inverse hide">Chưa công bố</span>
-                            <span id="autoReceiptPaid" class="btn btn-success hide">Đã thanh toán</span>
-                            <span id="autoReceiptUnpaid" class="btn btn-danger hide">Chưa thanh toán</span>
+
                         </div>
-                        @*                        <div class="form-group">*@
-                        @*                            <label for="autoReceiptWater" class="col-md-3 control-label">Giá nước</label>*@
-                        @*                            <div class="col-md-9">*@
-                        @*                                <select id="autoReceiptWater" class="form-control" name="WaterUtilServiceId"></select>*@
-                        @**@
-                            @*                            </div>*@
-</div>
-@*                        </div>*@
-</div>
-@*                        <div class="form-group">*@<div class="form-group">
-    @*                            <label for="autoReceiptFixedCost" class="col-md-3 control-label">Chi phí cố định</label>*@<label for="autoReceiptFixedCost" class="col-md-3 control-label"></label>
-    @*                            <div class="col-md-9">*@<div class="col-md-9">
-        @*                                <select id="autoReceiptFixedCost" name="HouseRentUtilServiceId" class="form-control"></select>*@<select id="autoReceiptFixedCost" name="HouseRentUtilServiceId" class="form-control"></select>
-        @*                            </div>*@
-    </div>
-    @*                        </div>*@
-</div>
-<div class="form-group">
-    <label for="autoReceiptDesc" class="col-md-3 control-label">Mô tả</label>
-    <div class="col-md-9">
-        <textarea id="autoReceiptDesc" name="Description" class="form-control" rows="3"></textarea>
-    </div>
-</div>
-<input type="hidden" name="ReceiptId" id="autoReceiptReceiptId" value="@receipt.CreateDate.Value.Ticks" />
+                        <div class="form-group">
+                            <label for="autoReceiptDesc" class="col-md-3 control-label">Mô tả</label>
+                            <div class="col-md-9">
+                                <textarea id="autoReceiptDesc" name="Description" class="form-control" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" name="ReceiptId" id="autoReceiptReceiptId" value="@receipt.CreateDate.Value.Ticks" />
                     </form>
-</div>
-</div>
-<div class="modal-footer" style="margin-top: 0">
-    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-    <span onclick="updateAutomationReceiptHeader(@receipt.CreateDate.Value.Ticks)" class="btn btn-primary">Chấp nhận</span>
-</div>
-</div>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 0">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <span onclick="updateAutomationReceiptHeader(@receipt.CreateDate.Value.Ticks)" class="btn btn-primary">Chấp nhận</span>
+            </div>
+        </div>
     </div>
 </div>
+
 
 <div id="confirmDeleteOrderModal" class="modal fade ams-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -396,7 +391,7 @@
 </div>
 
 <script>
-    $("documemt").ready(function() {
+    $("documemt").ready(function () {
         document.getElementById("publishDate").dataset.dateEndDate = "+" + (calculateDateFromTodayToEndOfMonth() + 1) + "d";
         window.houseConsumptionList = [];
         window.deleteConsumptionRecordList = [];
@@ -416,11 +411,11 @@
                         unpublished.removeClass("hide");
                         paid.addClass("hide");
                         unpaid.addClass("hide");
-                    }else if (data.status === window.StatusUnpaid) {
+                    } else if (data.status === window.StatusUnpaid) {
                         unpaid.removeClass("hide");
                         unpublished.addClass("hide");
                         paid.addClass("hide");
-                    }else if (data.status === window.StatusPaid) {
+                    } else if (data.status === window.StatusPaid) {
                         paid.removeClass("hide");
                         unpublished.addClass("hide");
                         unpaid.addClass("hide");
@@ -429,6 +424,7 @@
                     $("#receiptTitle").val(data.title);
                     $("#receiptDesc").text(data.description);
                     $("#publishDate").val(data.publishDate);
+                    $("#forMonth").val(data.forMonth);
 
                     $("#water").val(data.waterName);
                     $("#fixedCost").val(data.fixedCostName);
@@ -532,7 +528,7 @@
                     }
                     return data;
                 }
-            },{
+            }, {
                 "targets": 7,
                 "data": "Total",
                 "render": function (data, type, full, meta) {
@@ -565,27 +561,27 @@
                      if (type === "display" || type === "filter") {
                          if (data !== null && data !== undefined) {
                              if (full.Status === window.StatusUnpaid) {
-                                 return "<div class='text-right'>"+
+                                 return "<div class='text-right'>" +
                                          "<span onclick='viewMonthlyReceiptDetail(\"" + data + "\",\"" + full.DT_RowId + "\")' class='btn btn-default btn-xs lbl-margin-right'>" +
                                              "<i class='fa fa-pencil'></i>" +
-                                         "</span> "+
+                                         "</span> " +
                                      "</div>";
                              } else if (full.Status === window.StatusPaid) {
-                                 return "<div class='text-right'>"+
+                                 return "<div class='text-right'>" +
                                         "<span onclick='viewMonthlyReceiptDetail(\"" + data + "\",\"" + full.DT_RowId + "\")' class='btn btn-default btn-xs lbl-margin-right'>" +
                                             "<i class='fa fa-info'></i>" +
-                                        "</span> "+
+                                        "</span> " +
                                     "</div>";
                              } else if (full.Status === window.StatusUnpublished) {
-                                 return "<div class='text-right'>"+
+                                 return "<div class='text-right'>" +
                                          "<span onclick='viewMonthlyReceiptDetail(\"" + data + "\",\"" + full.DT_RowId + "\")' class='btn btn-default btn-xs lbl-margin-right'>" +
                                              "<i class='fa fa-pencil'></i>" +
-                                         "</span> "+
+                                         "</span> " +
                                       "</span>"
                                         + " <span onclick='deleteConsumptionRecord(" + data + ")' class='btn btn-danger btn-xs' >"
                                         + "  <i class='fa fa-times'></i>"
                                         + " </span>"
-                                   +  "</div>";
+                                   + "</div>";
                              }
                          }
                      }
@@ -606,7 +602,7 @@
                 fromValue = replaceSpaceNumber(fromValue);
                 var toValue = $this.val();
                 toValue = replaceSpaceNumber(toValue);
-                if (!isNaN(toValue) && parseInt(toValue, 10)>=0) {
+                if (!isNaN(toValue) && parseInt(toValue, 10) >= 0) {
                     var quantity = parseInt(toValue) - parseInt(fromValue);
                     var waterCost = waterAggressiveCalculating(quantity, window.waterRangePrices);
                     var fixedCost = parseInt(replaceCommaNumber($("#monthlyFixedCost").val()));
@@ -621,20 +617,20 @@
                 var fixedCost = parseInt(replaceCommaNumber($("#monthlyFixedCost").val()));
                 $("#houseConsumptWater").text(0);
                 $("#waterCost").val(0);
-                $("#monthlyTotal").val(numberWithCommas( fixedCost));
+                $("#monthlyTotal").val(numberWithCommas(fixedCost));
             }
 
         });
     });
 
-    function viewMonthlyReceiptDetail(id,rowId) {
+    function viewMonthlyReceiptDetail(id, rowId) {
         $.ajax({
-            url:"/Management/ManageReceipt/GetMonthLyReceiptDetai",
+            url: "/Management/ManageReceipt/GetMonthLyReceiptDetai",
             data: {
-                receiptId:id
+                receiptId: id
             },
-            type:"GET",
-            success:function(data) {
+            type: "GET",
+            success: function (data) {
                 if (data.StatusCode === 0) {
                     var obj = data.Data;
                     $("#houseConsumptBlock").text(obj.Block);
@@ -661,16 +657,16 @@
                         $("#btnEditUtilityServiceQuantity").removeClass("hide");
                         $("#btnPurchaseReceipt").addClass("hide");
 
-                        $("#houseConsumptWater").prop("readonly",false);
-                    }else if (obj.Status === window.StatusUnpaid) {
+                        $("#houseConsumptWater").prop("readonly", false);
+                    } else if (obj.Status === window.StatusUnpaid) {
                         unpaid.removeClass("hide");
                         $("#btnPurchaseReceipt").removeClass("hide");
                         $("#btnEditUtilityServiceQuantity").addClass("hide");
 
-                        $("#houseConsumptWater").prop("readonly",true);
-                    }else if (obj.Status === window.StatusPaid) {
+                        $("#houseConsumptWater").prop("readonly", true);
+                    } else if (obj.Status === window.StatusPaid) {
                         paid.removeClass("hide");
-                        $("#houseConsumptWater").prop("readonly",true);
+                        $("#houseConsumptWater").prop("readonly", true);
                     }
                     $("#editHouseConsumptionModal").modal("show");
                 }
@@ -680,12 +676,12 @@
 
     function editAutomationReceiptHeader(id) {
         $.ajax({
-            url:"/Management/ManageReceipt/ViewBatchReceiptDetail",
+            url: "/Management/ManageReceipt/ViewBatchReceiptDetail",
             data: {
-                receiptId : id
+                receiptId: id
             },
-            type:"GET",
-            success:function(data) {
+            type: "GET",
+            success: function (data) {
                 var object = data.Data;
                 //                var water = object.Water;
                 //                var houseRent = object.HouseRent;
@@ -707,41 +703,51 @@
                 var unpaid = $("#autoReceiptUnpaid").addClass("hide");
                 if (object.Status === window.StatusUnpublished) {
                     unpublished.removeClass("hide");
-                }else if (object.Status === window.StatusUnpaid) {
+                } else if (object.Status === window.StatusUnpaid) {
                     unpaid.removeClass("hide");
-                }else if (object.Status === window.StatusPaid) {
+                } else if (object.Status === window.StatusPaid) {
                     paid.removeClass("hide");
                 }
                 $("#editAutomationReceiptHeaderModal").modal("show");
             },
-            error:function() {
+            error: function () {
             }
 
         });
     }
     function updateAutomationReceiptHeader(id) {
         $.ajax({
-            url:"/Management/ManageReceipt/UpdateAutomationUtilitySevice",
-            data:$("#updateHouseConsumptionForm").serialize(),
-            type:"POST",
-            success:function(data) {
+            url: "/Management/ManageReceipt/UpdateAutomationReceipt",
+            data: $("#updateHouseConsumptionForm").serialize(),
+            type: "POST",
+            success: function (data) {
                 if (data.StatusCode === 0) {
                     window.autoReceiptTbl.ajax.reload();
                     $("#successUpdateOrderTypeNotify").fadeIn("fast");
                     resetFormData("updateHouseConsumptionForm");
-                    setTimeout(function() {
+                    setTimeout(function () {
                         var element =
                             $("#confirmDeleteOrderModal > div > div > div.modal-body");
                         $("#successUpdateOrderTypeNotify").fadeOut("fast");
                         $("#editAutomationReceiptHeaderModal").modal("hide");
                     }, 3000);
+                } else if (data.StatusCode === 2) {
+                    $("#forMonthMsg").text($("#autoRseceiptForMonth").val());
+                    $("#orderIsExistedNotify").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#orderIsExistedNotify").fadeOut("fast");
+                    },
+                        3000);
                 } else {
-
+                    $("#failedpdateOrderTypeNotify").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#failedpdateOrderTypeNotify").fadeOut("fast");
+                    }, 3000);
                 }
             }
         });
     }
-    function updateStatus(id, mode ,callback) {
+    function updateStatus(id, mode, callback) {
         $.ajax({
             url: "/Management/ManageReceipt/UpdateAutomationReceiptStatus",
             type: "POST",
@@ -749,16 +755,16 @@
                 receiptId: id,
                 mode: mode
             },
-            success: function(data) {
+            success: function (data) {
                 callback(data);
             },
-            error: function(data) {
+            error: function (data) {
                 console.log(data);
             }
         });
     }
     function publishOrder(id) {
-        updateStatus(id, window.Mode_Publish, function(data) {
+        updateStatus(id, window.Mode_Publish, function (data) {
             if (data.StatusCode === 0) {
                 window.autoReceiptTbl.ajax.reload();
                 $("#btnEdit").addClass("hide");
@@ -771,10 +777,10 @@
     }
     function deleteOrder() {
         $("#delReceiptTitle").text($("#receiptTitle").val());
-        $("#delBtn").on("click", function(e) {
+        $("#delBtn").on("click", function (e) {
             var elementData = $(this).data();
             $("#confirmDeleteOrderModal").addClass("loading");
-            updateStatus(elementData.receiptId, window.Mode_Delete, function(data) {
+            updateStatus(elementData.receiptId, window.Mode_Delete, function (data) {
                 $("#confirmDeleteOrderModal").removeClass("loading");
                 if (data.StatusCode === 0) {
                     $("#confirmDeleteOrderModal > div > div > div.modal-body > p").text("Xóa hóa đơn thành công. Đang chuyển về trang quản lý hóa đơn.");
@@ -782,7 +788,7 @@
                 } else {
                     $("#confirmDeleteOrderModal > div > div > div.modal-body > p").text("Xóa hóa đơn thất bại. Đang chuyển về trang quản lý hóa đơn.");
                 }
-                setTimeout(function() {
+                setTimeout(function () {
                     location.href = "/Management/ManageReceipt/View";
                 }, 2000);
             });
@@ -794,13 +800,13 @@
     function purchaseReceipt() {
         var id = $("#receiptId").val();
         $.ajax({
-            url:"/Management/ManageReceipt/UpdateStatus",
-            type:"Get",
+            url: "/Management/ManageReceipt/UpdateStatus",
+            type: "Get",
             data: {
-                ReceiptId:id,
-                Status:window.StatusPaid
+                ReceiptId: id,
+                Status: window.StatusPaid
             },
-            success: function(data) {
+            success: function (data) {
                 if (data.Data.paymentDate !== undefined) {
                     $("#btnPurchaseReceipt").addClass("hide");
                     var rowId = $("#rowId").val();
@@ -809,7 +815,7 @@
                     $("#unpaid").addClass("hide");
                     $("#paymentDate").val(data.Data.paymentDate);
                     $("#successAddTransTypeNotify").fadeIn("fast");
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $("#successAddTransTypeNotify").fadeOut("fast");
                         $("#editHouseConsumptionModal").modal("hide");
                     }, 3000);
@@ -817,28 +823,27 @@
             }
         });
     }
-    function updateHouseConsumption()
-    {
+    function updateHouseConsumption() {
         var id = $("#receiptId").val();
         var toNumber = $("#toNumber").val();
         $.ajax({
-            url:"/Management/ManageReceipt/UpdateHouseConsumption",
-            type:"Post",
+            url: "/Management/ManageReceipt/UpdateHouseConsumption",
+            type: "Post",
             data: {
-                ReceiptId:id,
-                ToNumber:toNumber
+                ReceiptId: id,
+                ToNumber: toNumber
             },
-            success: function(data) {
+            success: function (data) {
                 if (data.StatusCode === 0) {
                     window.autoReceiptTbl.ajax.reload();
                     $("#successAddTransTypeNotify").fadeIn("fast");
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $("#successAddTransTypeNotify").fadeOut("fast");
                         $("#editHouseConsumptionModal").modal("hide");
                     }, 3000);
                 } else {
                     $("#failedAddTransTypeNotify").fadeIn("fast");
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $("#failedAddTransTypeNotify").fadeOut("fast");
                     }, 3000);
                 }
@@ -872,7 +877,7 @@
             data: {
                 deleteItems: window.deleteConsumptionRecordList
             },
-            success: function(data) {
+            success: function (data) {
                 if (data.StatusCode === 0) {
                     $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
                     window.deleteConsumptionRecordList = new Array();

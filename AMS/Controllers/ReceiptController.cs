@@ -460,6 +460,7 @@ namespace AMS.Controllers
                         data = receiptModel,
                         publishDate = receipt.PublishDate.Value.ToString(AmsConstants.DateFormat),
                         title = receipt.Title,
+                        forMonth = receipt.ForMonth.Value.ToString(AmsConstants.MonthYearFormat),
                         status = status,
                         description = receipt.Description,
                         waterName = waterName,
@@ -724,8 +725,8 @@ namespace AMS.Controllers
         }
 
         [HttpPost]
-        [Route("Management/ManageReceipt/UpdateAutomationUtilitySevice")]
-        public ActionResult UpdateAutomationUtilitySevice(AutomationReceiptsTemplateModel automationReceipt)
+        [Route("Management/ManageReceipt/UpdateAutomationReceipt")]
+        public ActionResult UpdateAutomationReceipt(AutomationReceiptsTemplateModel automationReceipt)
         {
             MessageViewModels response = new MessageViewModels();
             User u = _userServices.FindById(Int32.Parse(User.Identity.GetUserId()));
@@ -735,104 +736,115 @@ namespace AMS.Controllers
                         _receiptServices.GetReceiptsByCreateDate(new DateTime(automationReceipt.ReceiptId));
                 if (groupedByCreateDateReceipts != null && groupedByCreateDateReceipts.Count != 0)
                 {
-
-                    foreach (var receiptItem in groupedByCreateDateReceipts)
+                    if (automationReceipt.ForMonth != null)
                     {
-                        receiptItem.PublishDate = DateTime.ParseExact(automationReceipt.PublishDate,
-                            AmsConstants.DateFormat,
+                        DateTime forMonth = DateTime.ParseExact(automationReceipt.ForMonth, AmsConstants.MonthYearFormat,
                             CultureInfo.CurrentCulture);
-                        receiptItem.LastModified = DateTime.Now;
-                        receiptItem.Title = automationReceipt.Title;
-                        receiptItem.Description = automationReceipt.Description;
-                        _receiptServices.Update(receiptItem);
-
-                        /*Stat update water bill*/
-                        UtilityService service = _utilityServiceServices.FindById(automationReceipt.WaterUtilServiceId);
-                        List<ReceiptDetail> receiptDetails =
-                              receiptItem.ReceiptDetails.Where(
-                                  rd =>
-                                      rd.UtilityService.Type ==
-                                      SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER).ToList();
-                        if (receiptDetails.Count != 0)
+                        if (forMonth != groupedByCreateDateReceipts.First().ForMonth.Value &&
+                            _receiptServices.CheckForMonthAutomationReceiptIsCreated(forMonth))
                         {
-                            ReceiptDetail waterReceiptDetail = _receiptDetailServices.FindById(receiptDetails.First().Id);
-                            if (service != null &&
-                                service.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER &&
-                                service.Id != waterReceiptDetail.UtilityServiceId)
-                            {
-                                waterReceiptDetail.UtilityServiceId = service.Id;
-                                waterReceiptDetail.TotalBill =
-                                    CalculateWaterUtiServiceVersion1(waterReceiptDetail.Quantity.Value,
-                                        service.UtilityServiceRangePrices.ToList()); // update version
+                            response.StatusCode = 2;
+                            response.Msg = "Hóa đơn hàng loạt tháng này đã được tạo";
+                            return Json(response);
+                        }
+                        foreach (var receiptItem in groupedByCreateDateReceipts)
+                        {
+                            receiptItem.PublishDate = DateTime.ParseExact(automationReceipt.PublishDate,
+                                AmsConstants.DateFormat,
+                                CultureInfo.CurrentCulture);
+                            receiptItem.LastModified = DateTime.Now;
+                            receiptItem.Title = automationReceipt.Title;
+                            receiptItem.ForMonth = forMonth;
+                            receiptItem.Description = automationReceipt.Description;
+                            _receiptServices.Update(receiptItem);
 
-                                if (waterReceiptDetail.Quantity.Value != 0)
+                            /*Stat update water bill*/
+                            UtilityService service = _utilityServiceServices.FindById(automationReceipt.WaterUtilServiceId);
+                            List<ReceiptDetail> receiptDetails =
+                                  receiptItem.ReceiptDetails.Where(
+                                      rd =>
+                                          rd.UtilityService.Type ==
+                                          SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER).ToList();
+                            if (receiptDetails.Count != 0)
+                            {
+                                ReceiptDetail waterReceiptDetail = _receiptDetailServices.FindById(receiptDetails.First().Id);
+                                if (service != null &&
+                                    service.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER &&
+                                    service.Id != waterReceiptDetail.UtilityServiceId)
                                 {
-                                    waterReceiptDetail.UnitPrice = waterReceiptDetail.TotalBill /
-                                                               waterReceiptDetail.Quantity.Value;
-                                }
-                                else
+                                    waterReceiptDetail.UtilityServiceId = service.Id;
+                                    waterReceiptDetail.TotalBill =
+                                        CalculateWaterUtiServiceVersion1(waterReceiptDetail.Quantity.Value,
+                                            service.UtilityServiceRangePrices.ToList()); // update version
+
+                                    if (waterReceiptDetail.Quantity.Value != 0)
+                                    {
+                                        waterReceiptDetail.UnitPrice = waterReceiptDetail.TotalBill /
+                                                                   waterReceiptDetail.Quantity.Value;
+                                    }
+                                    else
+                                    {
+                                        waterReceiptDetail.UnitPrice = 0;
+                                    }
+
+                                    _receiptDetailServices.Update(waterReceiptDetail);
+                                } //update
+                            }
+                            else
+                            {
+                                ReceiptDetail waterReceiptDetail = new ReceiptDetail();
+                                if (service != null &&
+                                    service.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
                                 {
-                                    waterReceiptDetail.UnitPrice = 0;
-                                }
+                                    waterReceiptDetail.UtilityServiceId = service.Id;
+                                    waterReceiptDetail.TotalBill = 0.0;
+                                    waterReceiptDetail.Quantity = 0;
+                                    waterReceiptDetail.UnitPrice = 0.0;
+                                    waterReceiptDetail.ReceiptId = receiptItem.Id;
+                                    _receiptDetailServices.Add(waterReceiptDetail);
+                                } //add
+                            }
+                            /*End update water bill*/
 
-                                _receiptDetailServices.Update(waterReceiptDetail);
-                            } //update
-                        }
-                        else
-                        {
-                            ReceiptDetail waterReceiptDetail = new ReceiptDetail();
-                            if (service != null &&
-                                service.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
+                            /*Stat update fixed cost bill*/
+                            service = _utilityServiceServices.FindById(automationReceipt.FixCostUtilServiceId);
+                            receiptDetails =
+                                receiptItem.ReceiptDetails.Where(
+                                    rd =>
+                                        rd.UtilityService.Type ==
+                                        SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST).ToList();
+                            if (receiptDetails.Count != 0)
                             {
-                                waterReceiptDetail.UtilityServiceId = service.Id;
-                                waterReceiptDetail.TotalBill = 0.0;
-                                waterReceiptDetail.Quantity = 0;
-                                waterReceiptDetail.UnitPrice = 0.0;
-                                waterReceiptDetail.ReceiptId = receiptItem.Id;
-                                _receiptDetailServices.Add(waterReceiptDetail);
-                            } //add
-                        }
-                        /*End update water bill*/
-
-
-                        /*Stat update fixed cost bill*/
-                        service = _utilityServiceServices.FindById(automationReceipt.FixCostUtilServiceId);
-                        receiptDetails =
-                            receiptItem.ReceiptDetails.Where(
-                                rd =>
-                                    rd.UtilityService.Type ==
-                                    SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST).ToList();
-                        if (receiptDetails.Count != 0)
-                        {
-                            ReceiptDetail fixedCostReceiptDetail =
-                                _receiptDetailServices.FindById(receiptDetails.First().Id);
-                            if (service != null &&
-                                service.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST &&
-                                service.Id != fixedCostReceiptDetail.UtilityServiceId)
+                                ReceiptDetail fixedCostReceiptDetail =
+                                    _receiptDetailServices.FindById(receiptDetails.First().Id);
+                                if (service != null &&
+                                    service.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST &&
+                                    service.Id != fixedCostReceiptDetail.UtilityServiceId)
+                                {
+                                    fixedCostReceiptDetail.UtilityServiceId = service.Id;
+                                    fixedCostReceiptDetail.TotalBill = service.Price;
+                                    fixedCostReceiptDetail.UnitPrice = service.Price;
+                                    fixedCostReceiptDetail.Quantity = 1;
+                                    _receiptDetailServices.Update(fixedCostReceiptDetail);
+                                } //update
+                            }
+                            else
                             {
-                                fixedCostReceiptDetail.UtilityServiceId = service.Id;
-                                fixedCostReceiptDetail.TotalBill = service.Price;
-                                fixedCostReceiptDetail.UnitPrice = service.Price;
-                                fixedCostReceiptDetail.Quantity = 1;
-                                _receiptDetailServices.Update(fixedCostReceiptDetail);
-                            } //update
-                        }
-                        else
-                        {
-                            ReceiptDetail fixedCostReceiptDetail = new ReceiptDetail();
-                            if (service != null &&
-                                service.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST)
-                            {
-                                fixedCostReceiptDetail.UtilityServiceId = service.Id;
-                                fixedCostReceiptDetail.TotalBill = service.Price;
-                                fixedCostReceiptDetail.Quantity = 1;
-                                fixedCostReceiptDetail.UnitPrice = service.Price;
-                                fixedCostReceiptDetail.ReceiptId = receiptItem.Id;
-                                _receiptDetailServices.Add(fixedCostReceiptDetail);
-                            } //add
-                        }
-                        /*End update fixed cost bill*/
+                                ReceiptDetail fixedCostReceiptDetail = new ReceiptDetail();
+                                if (service != null &&
+                                    service.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST)
+                                {
+                                    fixedCostReceiptDetail.UtilityServiceId = service.Id;
+                                    fixedCostReceiptDetail.TotalBill = service.Price;
+                                    fixedCostReceiptDetail.Quantity = 1;
+                                    fixedCostReceiptDetail.UnitPrice = service.Price;
+                                    fixedCostReceiptDetail.ReceiptId = receiptItem.Id;
+                                    _receiptDetailServices.Add(fixedCostReceiptDetail);
+                                } //add
+                            }
+                            /*End update fixed cost bill*/
 
+                        }
                     }
                 }
                 else
@@ -1347,11 +1359,12 @@ namespace AMS.Controllers
                             .Append("_")
                             .Append(now.Year)
                             .Append("_")
+                            .Append("Time_")
                             .Append(now.Hour)
-                            .Append("_Time_")
+                            .Append("_")
                             .Append(now.Minute)
                             .Append("_")
-                            .Append(now.Millisecond)
+                            .Append(now.Second)
                             .Append(".csv")
                             .ToString();
                     pic.SaveAs(new StringBuilder(newPath).Append(fileName).ToString());

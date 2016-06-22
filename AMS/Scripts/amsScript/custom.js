@@ -1383,11 +1383,9 @@ function randomColor2() {
 function bindingNumberWithComma(id) {
     //    $("#" + id).on("keyup", function () {
     $("#" + id).on("keyup", function (event) {
-
         if (event.which >= 37 && event.which <= 40) {
             event.preventDefault();
         }
-
         console.log($(this).val());
         if ($(this).val() && (isNaN(replaceCommaNumber($(this).val())) === false)) {
             var value = replaceCommaNumber($(this).val());
@@ -1397,6 +1395,22 @@ function bindingNumberWithComma(id) {
         }
     });
 }
+function bindingClassNumberWithComma(_class) {
+    //    $("#" + id).on("keyup", function () {
+    $("." + _class).on("keyup", function (event) {
+        if (event.which >= 37 && event.which <= 40) {
+            event.preventDefault();
+        }
+        console.log($(this).val());
+        if ($(this).val() && (isNaN(replaceCommaNumber($(this).val())) === false)) {
+            var value = replaceCommaNumber($(this).val());
+            $(this).val(numberWithCommas(value));
+        } else {
+            $(this).val("");
+        }
+    });
+}
+
 
 function electricAggressiveCalculating(consumption, rangePrices) {
     var rangePrice = {};
