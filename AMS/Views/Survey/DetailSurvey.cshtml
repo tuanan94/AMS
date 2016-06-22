@@ -225,12 +225,13 @@
                                 if (obj.Id == listBlocks.ElementAt(temp).BlockId)
                                 {
                                     <label class="checkbox-inline"><input type="checkbox" checked="checked" name="block" value="@obj.BlockName">@obj.BlockName</label>
-                                }
+                                    temp++;
+                                        }
                                 else
                                 {
                                     <label class="checkbox-inline"><input type="checkbox"  name="block" value="@obj.BlockName">@obj.BlockName</label>
                                 }
-                                temp++;
+                                
                             }
 
                             else
