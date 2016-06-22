@@ -36,6 +36,11 @@ namespace AMS.Service
             return _houseRepository.List.Where(h => h.Floor.Contains(floorName) && h.Block.Id == blockId && h.OwnerID != null).
                 OrderBy(h => h.HouseName).ToList();
         }
+
+        public List<House> GetAllOwnedHousesThisMonth()
+        {
+            return _houseRepository.List.Where(h => h.OwnerID != null).OrderBy(h => h.HouseName).ToList();
+        }
     }
 
     public class BlockServices
@@ -50,6 +55,70 @@ namespace AMS.Service
         public List<Block> GetAllBlocks()
         {
             return _blockRepository.List.OrderBy(b => b.BlockName).ToList();
-        } 
+        }
+    }
+
+    public class HouseCategoryServices
+    {
+        GenericRepository<HouseCategory> _houseCatRepository = new GenericRepository<HouseCategory>();
+
+        public List<HouseCategory> GetAll()
+        {
+            return _houseCatRepository.List.OrderBy(b => b.Name).ToList();
+        }
+        public HouseCategory FindById(int id)
+        {
+            return _houseCatRepository.FindById(id);
+        }
+    }
+
+    public class UtilServiceForHouseCatServices
+    {
+        GenericRepository<UtilServiceForHouseCat> _utilServiceForHouseCat = new GenericRepository<UtilServiceForHouseCat>();
+
+
+        public UtilServiceForHouseCat FindById(int id)
+        {
+            return _utilServiceForHouseCat.FindById(id);
+        }
+
+        public void Delete(UtilServiceForHouseCat item)
+        {
+            _utilServiceForHouseCat.Delete(item);
+        }
+
+        public void Add(UtilServiceForHouseCat u)
+        {
+            _utilServiceForHouseCat.Add(u);
+        }
+        public void Update(UtilServiceForHouseCat u)
+        {
+            _utilServiceForHouseCat.Update(u);
+        }
+
+        public List<UtilServiceForHouseCat> GetAllGroupByUtilServiceId()
+        {
+            return _utilServiceForHouseCat.List.Where(utilSrv => utilSrv.Status != SLIM_CONFIG.UTILITY_SERVICE_OF_HOUSE_CAT_REMOVED).GroupBy(utilSrv => utilSrv.UtilServiceId)
+                                   .Select(utilSrv => utilSrv.First()).ToList();
+        }
+
+        public List<UtilServiceForHouseCat> GetFixActiveUtilService()
+        {
+            return _utilServiceForHouseCat.List.Where(
+                        utilSrv => utilSrv.Status == SLIM_CONFIG.UTILITY_SERVICE_OF_HOUSE_CAT_ENABLE)
+                                   .GroupBy(utilSrv => utilSrv.UtilServiceId)
+                                   .Select(utilSrv => utilSrv.First()).ToList();
+        }
+        public List<UtilServiceForHouseCat> GetActiveUtilServiceOfHouseCategory(int houseCatId)
+        {
+            return _utilServiceForHouseCat.List.Where(
+                        utilSrv => utilSrv.Status == SLIM_CONFIG.UTILITY_SERVICE_OF_HOUSE_CAT_ENABLE && utilSrv.HouseCatId == houseCatId).
+                        GroupBy(utilSrv => utilSrv.UtilServiceId).Select(utilSrv => utilSrv.First()).ToList();
+        }
+
+        public List<UtilServiceForHouseCat> GetByUtilServiceid(int utilSrvId)
+        {
+            return _utilServiceForHouseCat.List.Where(utiSrv => utiSrv.UtilServiceId == utilSrvId).ToList();
+        }
     }
 }

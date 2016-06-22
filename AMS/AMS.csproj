@@ -285,6 +285,9 @@
     <Compile Include="House.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="HouseCategory.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Image.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -307,6 +310,7 @@
     <Compile Include="Models\BalanceSheetViewModels.cs" />
     <Compile Include="Models\ConfigViewModels.cs" />
     <Compile Include="Models\HelpdeskServiceModels.cs" />
+    <Compile Include="Models\HouseModels.cs" />
     <Compile Include="Models\ManageHouseViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -394,6 +398,9 @@
     <Compile Include="UtilityServiceRangePrice.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="UtilServiceForHouseCat.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\AddMemberViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\HelpdeskSupporterViewModel.cs" />
@@ -403,14 +410,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AmsDLL\LINQtoCSV.dll" />
+    <Content Include="AmsDLL\LinqToExcel.dll" />
+    <Content Include="AmsDLL\Remotion.Data.Linq.dll" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\custom.css" />
+    <Content Include="Content\css\dataTables.bootstrap.min.css" />
     <Content Include="Content\css\datatables.css" />
     <Content Include="Content\css\default-nav-inverse.css" />
     <Content Include="Content\css\default-nav-inverse.min.css" />
     <Content Include="Content\css\default.css" />
     <Content Include="Content\css\default.min.css" />
+    <Content Include="Content\css\jquery-ui.min.css" />
     <Content Include="Content\css\jquery.timepicker.css" />
     <Content Include="Content\css\media-upload.css" />
     <Content Include="Content\css\thumbnails.css" />
@@ -423,6 +434,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="LinqToExcel.dll" />
     <Content Include="Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
@@ -433,6 +445,7 @@
       <DependentUpon>Model1.edmx</DependentUpon>
       <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
+    <Content Include="Remotion.Data.Linq.dll" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\amsScript\additional-methods.min.js" />
@@ -524,6 +537,7 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -609,10 +623,13 @@
     <Content Include="Views\Receipt\HouseExpenseStatus.cshtml" />
     <Content Include="Views\BalanceSheet\ManageBalanceSheet.cshtml" />
     <Content Include="Views\BalanceSheet\ManageBalanceSheetDetail.cshtml" />
-    <Content Include="Views\Config\UtilityService.cshtml" />
+    <Content Include="Views\Config\CreateUtilityService.cshtml" />
     <Content Include="Views\Receipt\CreateAutomationReceipt.cshtml" />
     <Content Include="Views\Receipt\UtilityServiceConsumption.cshtml" />
     <Content Include="Views\Receipt\UpdateAutomationReceipt.cshtml" />
+    <Content Include="Views\Receipt\DownloadWaterConsumptionTemplate.cshtml" />
+    <Content Include="Views\Config\ManageUtilityService.cshtml" />
+    <Content Include="Views\Config\UpdateUtilityService.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

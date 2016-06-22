@@ -19,10 +19,10 @@
 fieldset.scheduler-border {
     /* border: 1px solid #25AD9F !important;*/
     border: 1px solid #333333 !important;
-    border-radius: 4px;
+    border-radius: 3px;
     padding: 0 1.4em 1.4em 1.4em !important;
     /*margin: 0 0 1.5em 0 !important;*/
-    margin-bottom: 1.5em !important;
+    /*margin-bottom: 1.5em !important;*/
     -webkit-box-shadow: 0px 0px 0px 0px #000;
     box-shadow: 0px 0px 0px 0px #000;
 }
@@ -42,11 +42,12 @@ fieldset.scheduler-border {
 }
 
 fieldset.scheduler-border > legend {
+    font-weight: bold;
+    margin-bottom: 10px;
     width: auto;
-    border-bottom: none;
-    margin-bottom: 5px;
-    font-size: 15px;
-    color: #25AD9F;
+    padding: 5px 10px 5px 10px;
+    color: #428bca;
+    border-bottom: transparent;
 }
 
     fieldset.scheduler-border > legend.bold-black {
@@ -187,7 +188,7 @@ td.highlight {
 }
 
     .heading-tab i {
-        font-size: 19px;
+        font-size: 21px;
     }
 
     .heading-tab ul.nav-tabs {
@@ -259,20 +260,26 @@ canvas {
     border-radius: 5px;
     padding: 5px;
 }
+
 .modal {
     background-color: rgba(0, 0, 0, 0.7);
 }
-.modal.loading .modal-content:before {
-    content: 'Đang xử lý';
-    text-align: center;
-    line-height: 155px;
-    font-size: 20px;
-    background: rgba(0, 0, 0, .7);
-    position: absolute;
-    top: 55px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    color: #EEE;
-    z-index: 1000;
+
+    .modal.loading .modal-content:before {
+        content: 'Đang xử lý';
+        text-align: center;
+        line-height: 155px;
+        font-size: 20px;
+        background: rgba(204, 204, 204, 0.5);
+        position: absolute;
+        top: 55px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        color: #000;
+        z-index: 1000;
+    }
+/*line height like line-height of bootstap*/
+.line-height {
+    line-height: 34px;
 }

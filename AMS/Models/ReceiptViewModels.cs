@@ -31,6 +31,7 @@ namespace AMS.Models
         public string CreateDate { get; set; }
         public string Block { get; set; }
         public string Floor { get; set; }
+        public string ForMonth { get; set; }
         public string HouseName { get; set; }
         public int Status { get; set; }
         public int IsAutomation { get; set; }
@@ -104,7 +105,7 @@ namespace AMS.Models
     public class AutomationReceiptsTemplateModel
     {
         public string Title { get; set; }
-        public int ReceiptId { get; set; }
+        public long ReceiptId { get; set; }
         public string ForMonth { get; set; }
         public string CreatedDate { get; set; }
         public string PublishDate { get; set; }
@@ -117,6 +118,27 @@ namespace AMS.Models
         public int FixCostUtilServiceId { get; set; }
         public List<MonthlyResidentExpenseModel> ResidentExpenseRecords { get; set; }
         public int UserId { get; set; }
+    }
+
+    public class MonthlyResidentExpenseOutput
+    {
+        [CsvColumn(Name = "Tháng", OutputFormat = "MM-yyyy", FieldIndex = 1)]
+        public string ForMonth { get; set; }
+
+        [CsvColumn(Name = "Tòa nhà", FieldIndex = 2)]
+        public string Block { get; set; }
+
+        [CsvColumn(Name = "Tầng", FieldIndex = 3)]
+        public string Floor { get; set; }
+
+        [CsvColumn(Name = "Nhà", FieldIndex = 4)]
+        public string HouseName { get; set; }
+
+        [CsvColumn(Name = "Từ số", FieldIndex = 5)]
+        public string FromNumber { get; set; }
+
+        [CsvColumn(Name = "Đến số", FieldIndex = 6)]
+        public string ToNumber { get; set; }
     }
 
     public class UtilityServicesGroupByTypeModel

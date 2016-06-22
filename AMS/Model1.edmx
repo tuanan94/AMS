@@ -229,6 +229,16 @@
           <Property Name="CoverImage" Type="nvarchar(max)" />
           <Property Name="DisplayMember" Type="bit" />
           <Property Name="AllowOtherView" Type="bit" />
+          <Property Name="TypeId" Type="int" />
+        </EntityType>
+        <EntityType Name="HouseCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="LastModified" Type="datetime" />
         </EntityType>
         <EntityType Name="Image">
           <Key>
@@ -270,6 +280,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Title" Type="nvarchar" MaxLength="255" />
           <Property Name="Type" Type="int" />
+          <Property Name="ForMonth" Type="datetime" />
           <Property Name="ReceiptCode" Type="varchar" MaxLength="255" />
           <Property Name="PublishDate" Type="datetime" />
           <Property Name="PaymentDate" Type="datetime" />
@@ -386,8 +397,7 @@
           <Property Name="Fullname" Type="nvarchar" MaxLength="200" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="LastModified" Type="datetime" />
-          <Property Name="CoupleId" Type="int" />
-          <Property Name="RootCoupleId" Type="int" />
+          <Property Name="FamilyLevel" Type="int" />
         </EntityType>
         <EntityType Name="UserAnswerSurvey">
           <Key>
@@ -442,6 +452,16 @@
           <Property Name="Type" Type="int" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="LastModified" Type="datetime" />
+        </EntityType>
+        <EntityType Name="UtilServiceForHouseCat">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HouseCatId" Type="int" />
+          <Property Name="UtilServiceId" Type="int" />
+          <Property Name="Status" Type="int" />
+          <Property Name="CreateDate" Type="datetime" />
         </EntityType>
         <Association Name="FK_AroundServiceProduct_AroundProvider">
           <End Role="AroundProvider" Type="Self.AroundProvider" Multiplicity="0..1" />
@@ -628,6 +648,18 @@
             </Principal>
             <Dependent Role="House">
               <PropertyRef Name="BlockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_House_HouseType">
+          <End Role="HouseCategory" Type="Self.HouseCategory" Multiplicity="0..1" />
+          <End Role="House" Type="Self.House" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HouseCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="House">
+              <PropertyRef Name="TypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -909,6 +941,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UtilServiceForHouseCat_HouseCategory">
+          <End Role="HouseCategory" Type="Self.HouseCategory" Multiplicity="0..1" />
+          <End Role="UtilServiceForHouseCat" Type="Self.UtilServiceForHouseCat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HouseCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UtilServiceForHouseCat">
+              <PropertyRef Name="HouseCatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UtilServiceForHouseCat_UtilityService">
+          <End Role="UtilityService" Type="Self.UtilityService" Multiplicity="0..1" />
+          <End Role="UtilServiceForHouseCat" Type="Self.UtilServiceForHouseCat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UtilityService">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UtilServiceForHouseCat">
+              <PropertyRef Name="UtilServiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="AMSModelStoreContainer">
           <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Answer" EntityType="Self.Answer" Schema="dbo" store:Type="Tables" />
@@ -930,6 +986,7 @@
           <EntitySet Name="HelpdeskService" EntityType="Self.HelpdeskService" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HelpdeskServiceCategory" EntityType="Self.HelpdeskServiceCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="House" EntityType="Self.House" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HouseCategory" EntityType="Self.HouseCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Image" EntityType="Self.Image" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Post" EntityType="Self.Post" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
@@ -947,6 +1004,7 @@
           <EntitySet Name="UserReportPost" EntityType="Self.UserReportPost" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UtilityService" EntityType="Self.UtilityService" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UtilityServiceRangePrices" EntityType="Self.UtilityServiceRangePrices" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UtilServiceForHouseCat" EntityType="Self.UtilServiceForHouseCat" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_AroundServiceProduct_AroundProvider" Association="Self.FK_AroundServiceProduct_AroundProvider">
             <End Role="AroundProvider" EntitySet="AroundProvider" />
             <End Role="AroundProviderProduct" EntitySet="AroundProviderProduct" />
@@ -1005,6 +1063,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_House_Block" Association="Self.FK_House_Block">
             <End Role="Block" EntitySet="Block" />
+            <End Role="House" EntitySet="House" />
+          </AssociationSet>
+          <AssociationSet Name="FK_House_HouseType" Association="Self.FK_House_HouseType">
+            <End Role="HouseCategory" EntitySet="HouseCategory" />
             <End Role="House" EntitySet="House" />
           </AssociationSet>
           <AssociationSet Name="FK_Receipt_User" Association="Self.FK_Receipt_User">
@@ -1099,6 +1161,14 @@
             <End Role="UtilityService" EntitySet="UtilityService" />
             <End Role="UtilityServiceRangePrices" EntitySet="UtilityServiceRangePrices" />
           </AssociationSet>
+          <AssociationSet Name="FK_UtilServiceForHouseCat_HouseCategory" Association="Self.FK_UtilServiceForHouseCat_HouseCategory">
+            <End Role="HouseCategory" EntitySet="HouseCategory" />
+            <End Role="UtilServiceForHouseCat" EntitySet="UtilServiceForHouseCat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UtilServiceForHouseCat_UtilityService" Association="Self.FK_UtilServiceForHouseCat_UtilityService">
+            <End Role="UtilityService" EntitySet="UtilityService" />
+            <End Role="UtilServiceForHouseCat" EntitySet="UtilServiceForHouseCat" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -1124,6 +1194,7 @@
           <EntitySet Name="HelpdeskServices" EntityType="AMSModel.HelpdeskService" />
           <EntitySet Name="HelpdeskServiceCategories" EntityType="AMSModel.HelpdeskServiceCategory" />
           <EntitySet Name="Houses" EntityType="AMSModel.House" />
+          <EntitySet Name="HouseCategories" EntityType="AMSModel.HouseCategory" />
           <EntitySet Name="Images" EntityType="AMSModel.Image" />
           <EntitySet Name="Posts" EntityType="AMSModel.Post" />
           <EntitySet Name="Questions" EntityType="AMSModel.Question" />
@@ -1141,6 +1212,7 @@
           <EntitySet Name="UserReportPosts" EntityType="AMSModel.UserReportPost" />
           <EntitySet Name="UtilityServices" EntityType="AMSModel.UtilityService" />
           <EntitySet Name="UtilityServiceRangePrices" EntityType="AMSModel.UtilityServiceRangePrice" />
+          <EntitySet Name="UtilServiceForHouseCats" EntityType="AMSModel.UtilServiceForHouseCat" />
           <AssociationSet Name="FK_AroundServiceProduct_AroundProvider" Association="AMSModel.FK_AroundServiceProduct_AroundProvider">
             <End Role="AroundProvider" EntitySet="AroundProviders" />
             <End Role="AroundProviderProduct" EntitySet="AroundProviderProducts" />
@@ -1221,6 +1293,10 @@
             <End Role="HelpdeskServiceCategory" EntitySet="HelpdeskServiceCategories" />
             <End Role="HelpdeskService" EntitySet="HelpdeskServices" />
           </AssociationSet>
+          <AssociationSet Name="FK_House_HouseType" Association="AMSModel.FK_House_HouseType">
+            <End Role="HouseCategory" EntitySet="HouseCategories" />
+            <End Role="House" EntitySet="Houses" />
+          </AssociationSet>
           <AssociationSet Name="FK_tbl_receipt_tbl_house" Association="AMSModel.FK_tbl_receipt_tbl_house">
             <End Role="House" EntitySet="Houses" />
             <End Role="Receipt" EntitySet="Receipts" />
@@ -1228,6 +1304,10 @@
           <AssociationSet Name="FK_User_House" Association="AMSModel.FK_User_House">
             <End Role="House" EntitySet="Houses" />
             <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UtilServiceForHouseCat_HouseCategory" Association="AMSModel.FK_UtilServiceForHouseCat_HouseCategory">
+            <End Role="HouseCategory" EntitySet="HouseCategories" />
+            <End Role="UtilServiceForHouseCat" EntitySet="UtilServiceForHouseCats" />
           </AssociationSet>
           <AssociationSet Name="FK_tbl_post_tbl_user" Association="AMSModel.FK_tbl_post_tbl_user">
             <End Role="User" EntitySet="Users" />
@@ -1284,6 +1364,10 @@
           <AssociationSet Name="FK_UtilityServiceRangePrices_UtilityService" Association="AMSModel.FK_UtilityServiceRangePrices_UtilityService">
             <End Role="UtilityService" EntitySet="UtilityServices" />
             <End Role="UtilityServiceRangePrice" EntitySet="UtilityServiceRangePrices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UtilServiceForHouseCat_UtilityService" Association="AMSModel.FK_UtilServiceForHouseCat_UtilityService">
+            <End Role="UtilityService" EntitySet="UtilityServices" />
+            <End Role="UtilServiceForHouseCat" EntitySet="UtilServiceForHouseCats" />
           </AssociationSet>
           <AssociationSet Name="AspNetUserRoles" Association="AMSModel.AspNetUserRoles">
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
@@ -1537,10 +1621,23 @@
           <Property Name="CoverImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DisplayMember" Type="Boolean" />
           <Property Name="AllowOtherView" Type="Boolean" />
+          <Property Name="TypeId" Type="Int32" />
           <NavigationProperty Name="Block" Relationship="AMSModel.FK_House_Block" FromRole="House" ToRole="Block" />
           <NavigationProperty Name="HelpdeskRequests" Relationship="AMSModel.FK_tbl_h_desk_request_tbl_house" FromRole="House" ToRole="HelpdeskRequest" />
+          <NavigationProperty Name="HouseCategory" Relationship="AMSModel.FK_House_HouseType" FromRole="House" ToRole="HouseCategory" />
           <NavigationProperty Name="Receipts" Relationship="AMSModel.FK_tbl_receipt_tbl_house" FromRole="House" ToRole="Receipt" />
           <NavigationProperty Name="Users" Relationship="AMSModel.FK_User_House" FromRole="House" ToRole="User" />
+        </EntityType>
+        <EntityType Name="HouseCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="LastModified" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Houses" Relationship="AMSModel.FK_House_HouseType" FromRole="HouseCategory" ToRole="House" />
+          <NavigationProperty Name="UtilServiceForHouseCats" Relationship="AMSModel.FK_UtilServiceForHouseCat_HouseCategory" FromRole="HouseCategory" ToRole="UtilServiceForHouseCat" />
         </EntityType>
         <EntityType Name="Image">
           <Key>
@@ -1585,6 +1682,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Type" Type="Int32" />
+          <Property Name="ForMonth" Type="DateTime" Precision="3" />
           <Property Name="ReceiptCode" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="PublishDate" Type="DateTime" Precision="3" />
           <Property Name="PaymentDate" Type="DateTime" Precision="3" />
@@ -1715,8 +1813,7 @@
           <Property Name="Fullname" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="LastModified" Type="DateTime" Precision="3" />
-          <Property Name="CoupleId" Type="Int32" />
-          <Property Name="RootCoupleId" Type="Int32" />
+          <Property Name="FamilyLevel" Type="Int32" />
           <NavigationProperty Name="BalanceSheets" Relationship="AMSModel.FK_Transaction_User" FromRole="User" ToRole="BalanceSheet" />
           <NavigationProperty Name="Comments" Relationship="AMSModel.FK_Comment_User1" FromRole="User" ToRole="Comment" />
           <NavigationProperty Name="HelpdeskRequestHelpdeskSupporters" Relationship="AMSModel.FK_tbl_h_desk_req_h_desk_tbl_user" FromRole="User" ToRole="HelpdeskRequestHelpdeskSupporter" />
@@ -1778,6 +1875,7 @@
           <Property Name="Type" Type="Int32" />
           <NavigationProperty Name="ReceiptDetails" Relationship="AMSModel.FK_tbl_receipt_detail_tbl_service_fee" FromRole="UtilityService" ToRole="ReceiptDetail" />
           <NavigationProperty Name="UtilityServiceRangePrices" Relationship="AMSModel.FK_UtilityServiceRangePrices_UtilityService" FromRole="UtilityService" ToRole="UtilityServiceRangePrice" />
+          <NavigationProperty Name="UtilServiceForHouseCats" Relationship="AMSModel.FK_UtilServiceForHouseCat_UtilityService" FromRole="UtilityService" ToRole="UtilServiceForHouseCat" />
         </EntityType>
         <EntityType Name="UtilityServiceRangePrice">
           <Key>
@@ -1793,6 +1891,18 @@
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="LastModified" Type="DateTime" Precision="3" />
           <NavigationProperty Name="UtilityService" Relationship="AMSModel.FK_UtilityServiceRangePrices_UtilityService" FromRole="UtilityServiceRangePrice" ToRole="UtilityService" />
+        </EntityType>
+        <EntityType Name="UtilServiceForHouseCat">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HouseCatId" Type="Int32" />
+          <Property Name="UtilServiceId" Type="Int32" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="HouseCategory" Relationship="AMSModel.FK_UtilServiceForHouseCat_HouseCategory" FromRole="UtilServiceForHouseCat" ToRole="HouseCategory" />
+          <NavigationProperty Name="UtilityService" Relationship="AMSModel.FK_UtilServiceForHouseCat_UtilityService" FromRole="UtilServiceForHouseCat" ToRole="UtilityService" />
         </EntityType>
         <Association Name="FK_AroundServiceProduct_AroundProvider">
           <End Type="AMSModel.AroundProvider" Role="AroundProvider" Multiplicity="0..1" />
@@ -2038,6 +2148,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_House_HouseType">
+          <End Type="AMSModel.HouseCategory" Role="HouseCategory" Multiplicity="0..1" />
+          <End Type="AMSModel.House" Role="House" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HouseCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="House">
+              <PropertyRef Name="TypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tbl_receipt_tbl_house">
           <End Type="AMSModel.House" Role="House" Multiplicity="0..1" />
           <End Type="AMSModel.Receipt" Role="Receipt" Multiplicity="*" />
@@ -2059,6 +2181,18 @@
             </Principal>
             <Dependent Role="User">
               <PropertyRef Name="HouseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UtilServiceForHouseCat_HouseCategory">
+          <End Type="AMSModel.HouseCategory" Role="HouseCategory" Multiplicity="0..1" />
+          <End Type="AMSModel.UtilServiceForHouseCat" Role="UtilServiceForHouseCat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HouseCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UtilServiceForHouseCat">
+              <PropertyRef Name="HouseCatId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2229,6 +2363,18 @@
             </Principal>
             <Dependent Role="UtilityServiceRangePrice">
               <PropertyRef Name="ServiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UtilServiceForHouseCat_UtilityService">
+          <End Type="AMSModel.UtilityService" Role="UtilityService" Multiplicity="0..1" />
+          <End Type="AMSModel.UtilServiceForHouseCat" Role="UtilServiceForHouseCat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UtilityService">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UtilServiceForHouseCat">
+              <PropertyRef Name="UtilServiceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2460,6 +2606,7 @@
           <EntitySetMapping Name="Houses">
             <EntityTypeMapping TypeName="AMSModel.House">
               <MappingFragment StoreEntitySet="House">
+                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
                 <ScalarProperty Name="AllowOtherView" ColumnName="AllowOtherView" />
                 <ScalarProperty Name="DisplayMember" ColumnName="DisplayMember" />
                 <ScalarProperty Name="CoverImage" ColumnName="CoverImage" />
@@ -2470,6 +2617,16 @@
                 <ScalarProperty Name="HouseName" ColumnName="HouseName" />
                 <ScalarProperty Name="Floor" ColumnName="Floor" />
                 <ScalarProperty Name="BlockId" ColumnName="BlockId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HouseCategories">
+            <EntityTypeMapping TypeName="AMSModel.HouseCategory">
+              <MappingFragment StoreEntitySet="HouseCategory">
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2523,6 +2680,7 @@
                 <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
                 <ScalarProperty Name="PublishDate" ColumnName="PublishDate" />
                 <ScalarProperty Name="ReceiptCode" ColumnName="ReceiptCode" />
+                <ScalarProperty Name="ForMonth" ColumnName="ForMonth" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -2624,8 +2782,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="AMSModel.User">
               <MappingFragment StoreEntitySet="User">
-                <ScalarProperty Name="RootCoupleId" ColumnName="RootCoupleId" />
-                <ScalarProperty Name="CoupleId" ColumnName="CoupleId" />
+                <ScalarProperty Name="FamilyLevel" ColumnName="FamilyLevel" />
                 <ScalarProperty Name="LastModified" ColumnName="LastModified" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Fullname" ColumnName="Fullname" />
@@ -2699,6 +2856,17 @@
                 <ScalarProperty Name="FromAmount" ColumnName="FromAmount" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UtilServiceForHouseCats">
+            <EntityTypeMapping TypeName="AMSModel.UtilServiceForHouseCat">
+              <MappingFragment StoreEntitySet="UtilServiceForHouseCat">
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UtilServiceId" ColumnName="UtilServiceId" />
+                <ScalarProperty Name="HouseCatId" ColumnName="HouseCatId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

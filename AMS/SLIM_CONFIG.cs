@@ -41,9 +41,7 @@ namespace AMS
         public static int BALANCE_SHEET_OPEN = 1;
         public static int BALANCE_SHEET_CLOSE = 2;
 
-        public static int UTILITY_SERVICE_TYPE_ELECTRICITY = 1;
         public static int UTILITY_SERVICE_TYPE_WATER = 2;
-        public static int UTILITY_SERVICE_TYPE_HOUSE_RENT = 3;
         public static int UTILITY_SERVICE_TYPE_HD_REQUEST = 4;
         public static int UTILITY_SERVICE_TYPE_FIXED_COST = 5;
 
@@ -53,8 +51,15 @@ namespace AMS
         public static int MODE_DELETE = 1;
         public static int MODE_PUBLISH = 2;
 
+        public static int RESIDENT_IN_REGISTRATION_BOOK = 1;
+        public static int RESIDENT_HAS_KT3 = 2;
+        public static int RESIDENT_OTHER = 3;
 
+        public static int UTILITY_SERVICE_OF_HOUSE_CAT_ENABLE = 1;
+        public static int UTILITY_SERVICE_OF_HOUSE_CAT_DISABLE = 2;
+        public static int UTILITY_SERVICE_OF_HOUSE_CAT_REMOVED = 3;
 
+        public static int MAX_NUMBER = 999999999;
     }
 
 }

@@ -1,0 +1,254 @@
+﻿@{
+    ViewBag.Title = "ManageUtilityService";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+}
+
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+
+        <div class="heading-tab">
+            <i class="fa fa-list"> Quản lý phí sinh hoạt</i>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li class="active">
+                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-file-text-o"></i> Phí sinh họat</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="panel-body">
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="">
+                    <div class="panel panel-default" style="border-color: transparent">
+                        <form id="addUtilServiceForm" class="form-horizontal" role="form">
+                            <div class="alert alert-info" id="createSuccessNoti" style="display: none">
+                                <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <span>Tạo mới thành công</span>
+                            </div>
+                            <div class="alert alert-danger" id="createFailedNoti" style="display: none">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                                <span>Tạo mới thất bại</span>
+                            </div>
+                            <div class="tab-content">
+                                <div class="tab-pane fade active in" id="">
+
+                                    <table id="utilityServices" class="table table-hover table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Tên</th>
+                                            <th>Loại</th>
+                                            <th>Loại nhà</th>
+                                            <th>Trang thái</th>
+                                            <th>Ngày tạo</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tfoot>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Tên</th>
+                                            <th>Loại</th>
+                                            <th>Loại nhà</th>
+                                            <th>Trang thái</th>
+                                            <th>Ngày tạo</th>
+                                            <th></th>
+                                        </tr>
+                                        </tfoot>
+                                        <tbody>
+                                       
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+
+        window.deleteUtilService = [];
+
+        window.utilityServicesTbl = $("#utilityServices").DataTable({
+            "ajax": {
+                url: "/Management/Config/UtilityService/GetUtilityServices",
+                dataSrc: function (data) {
+                    window.utilityServices = data;
+                    return data;
+                }
+            },
+            "destroy": true,
+            "bLengthChange": false,
+            "bInfo": false,
+            "drawCallback": function (settings) {
+                var addBtn = "<div class='col-md-1'>" +
+                "<a id='createFirstBlsBtn' class='btn btn-info' href='/Management/Config/UtilityService/Create'>" +
+                "<i class='fa fa-plus'></i>" +
+                "</a>" +
+                "</div>";
+                $("#utilityServices_wrapper > div:nth-child(1) > div:nth-child(1)").html(addBtn);
+
+                var deleteBtn =
+            "<div class='hide' id='delConsumptionRecordBtnGroup'>" +
+                "<span class='btn btn-warning btn-stroke' onclick='cancelDeleteConsumptionRecord()'>" +
+                    "<i class='fa fa-plus'></i> Hủy" +
+                "</span>" +
+                "<span class='btn btn-primary' style='margin-left: 5px' onclick='commitDeleteConsumptionRecord()'>" +
+                    "<i class='fa fa-plus'></i> Chấp nhận" +
+                "</span>" +
+            "</div>";
+                $("#utilityServices_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(deleteBtn);
+
+            },
+            "order": [[4, "asc"]],
+            "columns": [
+                { data: "Name" },
+                { data: "Name" },
+                { data: "Type" },
+                { data: "HouseCat" },
+                { data: "Status" },
+                { data: "CreateDate" },
+                { data: "Id" }
+            ],
+            "columnDefs": [
+                {
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0
+                },
+                {
+                    "targets": 2,
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            if (data === window.Utility_Service_Water) {
+                                return "<span class='label time-color'>Điện</span>";
+                            } else {
+                                return "<span class='label room-color'>Phí dịch vụ</span>";
+                            }
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "targets": 2,
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            if (full.Type === window.Utility_Service_Fixed_Cost) {
+                                return "";
+                            }
+                            return data;
+                        }
+                        return data;
+                    }
+                }, 
+                {
+                    "targets": 3,
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            if (data === "*") {
+                                return "Tất cả căn hộ";
+                            }
+                            return data;
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "targets": 4,
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            if (data === window.Enable) {
+                                return "<span class='label label-success'>Mở</span>";
+                            } else {
+                                return "<span class='label label-danger'>Đóng</span>";
+                            }
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "targets": 6,
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            if (full.Status === window.Enable) {
+                                return "<div class='text-right'>" +
+                                    "<span onclick='updateUtilSrvForHouseCat(\"" +
+                                    data +
+                                    "\")' class='btn btn-default btn-xs'>" +
+                                    " <i class='fa fa-pencil'></i>" +
+                                    "</span>" +
+                                    " </div>";
+                            } else {
+                                return "<div class='text-right'>"
+                                + "<span onclick='updateUtilSrvForHouseCat(\"" + data + "\")' class='btn btn-default btn-xs'>"
+                                + " <i class='fa fa-pencil'></i>"
+                                + "</span>"
+                                + " <span onclick='deleteConsumptionRecord(" + data + ")' class='btn btn-danger btn-xs' >"
+                                + "  <i class='fa fa-times'></i>"
+                                + " </span>"
+                                + " </div>";
+                            }
+                        }
+                        return data;
+                    }
+                },
+
+            ]
+        });
+        generateTableIndex(window.utilityServicesTbl);
+    });
+    function updateUtilSrvForHouseCat(id) {
+        location.href = "/Management/Config/UtilityService/EditUtilServiceView?id=" + id;
+    }
+
+    function deleteConsumptionRecord(id) {
+        var element = $("#h_cat_util_srv_" + id).addClass("hide");
+        window.deleteUtilService.push(id);
+
+        window.utilityServicesTbl.row("#h_cat_util_srv_" + id).remove().draw();
+        $("#delConsumptionRecordBtnGroup").removeClass("hide").addClass("show");
+
+    }
+    function cancelDeleteConsumptionRecord() {
+        for (var i = 0; i < window.utilityServices.length; i++) {
+            var originItem = window.utilityServices[i];
+            for (var z = 0; z < window.deleteUtilService.length; z++) {
+                var deleteItem = window.deleteUtilService[z];
+                if (originItem.Id === deleteItem) {
+                    window.utilityServicesTbl.row.add(originItem).draw();
+                }
+            }
+        }
+        window.deleteUtilService = new Array();
+        $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
+    }
+    function commitDeleteConsumptionRecord() {
+        
+        $.ajax({
+            url:"/Management/Config/UtilityService/DeleteUtilServices",
+            data: {
+                deleteItems: window.deleteUtilService
+            },
+            type:"POST",
+            success:function(data) {
+                for (var z = 0; z < window.deleteUtilService.length; z++) {
+                    var deleteItem = window.deleteUtilService[z];
+                    for (var i = 0; i < window.utilityServices.length; i++) {
+                        var originItem = window.utilityServices[i];
+                        if (originItem.Id === deleteItem) {
+                            window.utilityServicesTbl.splice(i, 1);
+                        }
+                    }
+                }
+                $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
+                window.deleteUtilService = new Array();
+            }
+
+        });
+        
+    }
+</script>

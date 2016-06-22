@@ -5,8 +5,8 @@
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
 
 
-    string waterSevices = ViewBag.waterSevices;
-    string fixedCostSevices = ViewBag.fixedCostSevices;
+    List<UtilServiceForHouseCat> waterSevices = ViewBag.waterService;
+    UtilServiceForHouseCat fixedCost = ViewBag.fixedCost;
     Receipt receipt = ViewBag.automationReceipt;
     int groupStatus = ViewBag.groupStatus;
 
@@ -16,163 +16,200 @@
     <div class="panel panel-default">
 
         <div class="heading-tab">
-            <i class="fa fa-list"> Cấu hình giá điện nước</i>
+            <i class="fa fa-list"> Cập nhật hóa đơn</i>
             <ul class="nav nav-tabs pull-right" role="tablist">
-                <li>
+                <li class="active">
                     <a href="/Management/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Quản lý hóa đơn</a>
                 </li>
                 <li class="">
                     <a href="/Management/ManageReceipt/CreateManualReceiptView"><i class="fa fa fa-plus"></i> Tạo hóa đơn thủ công</a>
                 </li>
-                <li class="active">
+                <li>
                     <a href="/Management/ManageReceipt/CreateAutomationReceiptView"><i class="fa fa fa-plus"></i> Tạo hóa đơn tự động</a>
+                </li>
+                <li class="">
+                    <a href="/Management/ManageReceipt/DownloadRecordTemplate"><i class="fa fa-cloud-download"></i> Tải bảng ghi nước</a>
                 </li>
             </ul>
         </div>
 
         <div class="panel-body">
-            <div class="tab-content">
-                <div class="tab-pane fade active in" id="">
-                    <div class="panel panel-default" style="border-color: transparent">
-                        <form id="addUtilServiceForm" class="form-horizontal" role="form">
-                            <div class="tab-content">
-                                <div class="tab-pane fade active in" id="">
-                                    <div class="alert alert-warning" id="failedPublishOrderNotify" style="display: none">
-                                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                        <span>Công bố hóa đơn thất bại.</span>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-1"></div>
-                                        <div class="col-md-offset-1 col-md-10">
-                                            @{
-                                                if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
-                                                {
-                                                    <span id="btnEdit" class="btn btn-default" onclick="editAutomationReceiptHeader(@receipt.Id)"><i class="fa fa-edit"></i> Chỉnh sửa</span>
-                                                    <span id="btnPublish" class="btn btn-default" onclick="publishOrder(@receipt.Id)"><i class="fa fa-paragraph"></i> Công bố</span>
-                                                    <span id="btnDel" class="btn btn-danger" onclick="deleteOrder(@receipt.Id)"><i class="fa fa-times"></i> Xóa</span>
-                                                }
-                                            }
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-6">
-                                            <fieldset class="scheduler-border less-padding border-top">
-                                                <legend class="scheduler-border bold-black" style="margin-bottom: 30px;"> Thông tin hóa đơn</legend>
-                                                <div class="form-group">
-                                                    <label for="serviceTypeName" class="col-md-2 control-label">Tiêu đề</label>
-                                                    <div class="col-md-10">
-                                                        <input id="receiptTitle" value="@receipt.Title" type="text" class="form-control">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="serviceTypeName" class="col-md-2 control-label">Trạng thái</label>
-                                                    <div class="col-md-4">
-                                                        @{
-                                                            if (groupStatus == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
-                                                            {
-                                                                <span id="receiptStatusUnpublish" class="btn btn-inverse ">Chưa công bố</span>
-                                                                <span id="receiptStatusPaid" class="btn btn-success hide">Đã thanh toán</span>
-                                                                <span id="receiptStatusUnpaid" class="btn btn-danger hide">Chưa thanh toán</span>
-                                                            }
-                                                            else if (groupStatus == SLIM_CONFIG.RECEIPT_STATUS_PAID)
-                                                            {
-                                                                <span id="receiptStatusUnpublish" class="btn btn-inverse hide">Chưa công bố</span>
-                                                                <span id="receiptStatusPaid" class="btn btn-success">Đã thanh toán</span>
-                                                                <span id="receiptStatusUnpaid" class="btn btn-danger hide">Chưa thanh toán</span>
-                                                            }
-                                                            else if (groupStatus == SLIM_CONFIG.RECEIPT_STATUS_UNPAID)
-                                                            {
-                                                                <span id="receiptStatusUnpublish" class="btn btn-inverse hide">Chưa công bố</span>
-                                                                <span id="receiptStatusPaid" class="btn btn-success hide">Đã thanh toán</span>
-                                                                <span id="receiptStatusUnpaid" class="btn btn-danger ">Chưa thanh toán</span>
-                                                            }
-                                                        }
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="serviceTypeName" class="col-md-2 control-label">Ngày tạo</label>
-                                                    <div class="col-md-4">
-                                                        <input id="serviceTypeName" value="@receipt.CreateDate.Value.ToString(AmsConstants.DateFormat)" name="ServiceTypeName" type="text" class="form-control">
-                                                    </div>
-                                                    <label for="serviceTypeName" class="col-md-2 control-label">Ngày xuất</label>
-                                                    <div class="col-md-4">
-                                                        <input id="publishDate" value="@receipt.PublishDate.Value.ToString(AmsConstants.DateFormat)" name="ServiceTypeName" type="text" class="form-control">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="serviceTypeName" class="col-md-2 control-label">Người tạo</label>
-                                                    <div class="col-md-10">
-                                                        <input id="serviceTypeName" value="@receipt.User.Fullname" name="ServiceTypeName" type="text" class="form-control">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="serviceType" class="col-md-2 control-label">Mô tả</label>
-                                                    <div class="col-md-10">
-                                                        <textarea id="receiptDesc" class="form-control" rows="3">@receipt.Description</textarea>
-                                                    </div>
-                                                </div>
-                                            </fieldset>
+            <div class="panel panel-default" style="border-color: transparent">
+                <form id="addUtilServiceForm" class="form-horizontal" role="form">
+                    <div class="tab-content">
+                        <div class="tab-pane fade active in" id="">
 
-                                        </div>
-                                        <div class="col-md-6">
-                                            <fieldset class="scheduler-border less-padding border-top">
-                                                <legend class="scheduler-border bold-black" style="margin-bottom: 30px;">Thiết lập loại giá hóa đơn</legend>
+                            <div class="alert alert-warning" id="failedPublishOrderNotify" style="display: none">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <span>Công bố hóa đơn thất bại.</span>
+                            </div>
 
-                                                <div class="form-group">
-                                                    <label for="serviceType" class="col-md-2 control-label">Giá nước</label>
-                                                    <div class="col-md-10 full-width-select">
-                                                        <input type="text" id="water" class="form-control" value="@waterSevices" />
-                                                    </div>
-                                                </div>
 
-                                                <div class="form-group">
-                                                    <label for="serviceType" class="col-md-2 control-label">Chi phí cố định</label>
-                                                    <div class="col-md-10 full-width-select">
-                                                        <input type="text" class="form-control" id="fixedCost" value="@fixedCostSevices" />
-                                                    </div>
-                                                </div>
-                                            </fieldset>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-
-                                        <table id="autoReceiptTbl" class="table table-hover table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Căn hộ</th>
-                                                    <th>Từ số</th>
-                                                    <th>Đến số</th>
-                                                    <th>Tổng</th>
-                                                    <th>Tiền điện</th>
-                                                    <th>Phí cố định</th>
-                                                    <th>Tổng hóa đơn</th>
-                                                    <th>Trạng thái</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tfoot>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Căn hộ</th>
-                                                    <th>Từ số</th>
-                                                    <th>Đến số</th>
-                                                    <th>Tổng</th>
-                                                    <th>Tiền điện</th>
-                                                    <th>Phí cố định</th>
-                                                    <th>Tổng hóa đơn</th>
-                                                    <th>Trạng thái</th>
-                                                    <th></th>
-                                                </tr>
-                                            </tfoot>
-                                            <tbody></tbody>
-                                        </table>
-                                    </div>
+                            <div class="form-group">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-offset-1 col-md-10">
+                                    @{
+                                        if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
+                                        {
+                                            <span id="btnEdit" class="btn btn-default" onclick="editAutomationReceiptHeader(@receipt.CreateDate.Value.Ticks)"><i class="fa fa-edit"></i> Chỉnh sửa</span>
+                                            <span id="btnPublish" class="btn btn-default" onclick="publishOrder(@receipt.CreateDate.Value.Ticks)"><i class="fa fa-paragraph"></i> Công bố</span>
+                                            <span id="btnDel" class="btn btn-danger" onclick="deleteOrder(@receipt.CreateDate.Value.Ticks)"><i class="fa fa-times"></i> Xóa</span>
+                                        }
+                                    }
                                 </div>
                             </div>
-                        </form>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <fieldset class="scheduler-border less-padding border-top">
+                                        <legend class="scheduler-border bold-black" style="margin-bottom: 30px;"> Thông tin hóa đơn</legend>
+                                        <div class="form-group">
+                                            <label for="serviceTypeName" class="col-md-2 control-label">Tiêu đề</label>
+                                            <div class="col-md-10">
+                                                <input id="receiptTitle" value="@receipt.Title" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label el class="col-md-2 control-label">Tháng</label>
+                                            <div class="col-md-4">
+                                                <input type="text" id="forMonth" readonly="readonly" value="@receipt.ForMonth.Value.ToString(AmsConstants.MonthYearFormat)" name="ForMonth" class="form-control datepicker" data-date-format="mm-yyyy" data-date-language="vi"
+                                                       data-date-min-view-mode="1" data-date-start-date="-1m" data-date-today-highlight="true" data-date-end-date="0m" />
+                                            </div>
+                                            <label for="serviceTypeName" class="col-md-2 control-label">Trạng thái</label>
+                                            <div class="col-md-4">
+                                                @{
+                                                    if (groupStatus == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
+                                                    {
+                                                        <span id="receiptStatusUnpublish" class="btn btn-inverse ">Chưa công bố</span>
+                                                        <span id="receiptStatusPaid" class="btn btn-success hide">Đã thanh toán</span>
+                                                        <span id="receiptStatusUnpaid" class="btn btn-danger hide">Chưa thanh toán</span>
+                                                    }
+                                                    else if (groupStatus == SLIM_CONFIG.RECEIPT_STATUS_PAID)
+                                                    {
+                                                        <span id="receiptStatusUnpublish" class="btn btn-inverse hide">Chưa công bố</span>
+                                                        <span id="receiptStatusPaid" class="btn btn-success">Đã thanh toán</span>
+                                                        <span id="receiptStatusUnpaid" class="btn btn-danger hide">Chưa thanh toán</span>
+                                                    }
+                                                    else if (groupStatus == SLIM_CONFIG.RECEIPT_STATUS_UNPAID)
+                                                    {
+                                                        <span id="receiptStatusUnpublish" class="btn btn-inverse hide">Chưa công bố</span>
+                                                        <span id="receiptStatusPaid" class="btn btn-success hide">Đã thanh toán</span>
+                                                        <span id="receiptStatusUnpaid" class="btn btn-danger ">Chưa thanh toán</span>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="serviceTypeName" class="col-md-2 control-label">Ngày tạo</label>
+                                            <div class="col-md-4">
+                                                <input id="serviceTypeName" readonly="readonly" value="@receipt.CreateDate.Value.ToString(AmsConstants.DateFormat)" name="ServiceTypeName" type="text" class="form-control">
+                                            </div>
+                                            <label for="publishDate" class="col-md-2 control-label">Ngày xuất</label>
+                                            <div class="col-md-4">
+                                                <input id="publishDate" readonly="readonly" value="@receipt.PublishDate.Value.ToString(AmsConstants.DateFormat)" name="ServiceTypeName" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="serviceTypeName" class="col-md-2 control-label">Người tạo</label>
+                                            <div class="col-md-10">
+                                                <input id="creator" value="@receipt.User.Fullname" name="ServiceTypeName" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="receiptDesc" class="col-md-2 control-label">Mô tả</label>
+                                            <div class="col-md-10">
+                                                <textarea id="receiptDesc" class="form-control" rows="3">@receipt.Description</textarea>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+
+                                        <fieldset class="scheduler-border less-padding border-top">
+                                            <legend class="scheduler-border bold-black">Giá nước</legend>
+
+                                            <div class="row">
+                                                <div class="table-responsive col-md-offset-1 col-md-11">
+                                                    <table class="table v-middle table-bordered table-striped table-condensed ">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width: 40%" class="text-capitalize">Loại nhà</th>
+                                                                <th style="width: 60%" class="text-capitalize text-center">
+                                                                    Tên giá
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @{
+
+                                                                for (int i = 0; i < waterSevices.Count; i++)
+                                                                {
+                                                                    var water = waterSevices[i];
+                                                                    <tr>
+                                                                        <td>@water.HouseCategory.Name</td>
+                                                                        <td>@water.UtilityService.Name</td>
+                                                                    </tr>
+                                                                }
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <fieldset class="scheduler-border less-padding border-top">
+                                                <legend class="scheduler-border bold-black">Phí cố định</legend>
+
+                                                <label class="col-md-2 control-label">Tên</label>
+                                                <div class="col-md-10">
+                                                    <input class="form-control" value="@(fixedCost.UtilityService == null ? "Chưa thiết lập" : fixedCost.UtilityService.Name)" type="text" />
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <table id="autoReceiptTbl" class="table table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Căn hộ</th>
+                                            <th>Từ số</th>
+                                            <th>Đến số</th>
+                                            <th>Tổng</th>
+                                            <th>Tiền điện</th>
+                                            <th>Phí cố định</th>
+                                            <th>Tổng hóa đơn</th>
+                                            <th>Trạng thái</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Căn hộ</th>
+                                            <th>Từ số</th>
+                                            <th>Đến số</th>
+                                            <th>Tổng</th>
+                                            <th>Tiền điện</th>
+                                            <th>Phí cố định</th>
+                                            <th>Tổng hóa đơn</th>
+                                            <th>Trạng thái</th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -233,7 +270,7 @@
                         <div class="form-group">
                             <label for="waterCost" class="col-md-3 control-label">Tiền nước</label>
                             <div class="input-group col-md-7">
-                                <input id="waterCost" readonly="readonly"  type="text" class="form-control" value="">
+                                <input id="waterCost" readonly="readonly" type="text" class="form-control" value="">
                                 <span class="input-group-addon">đồng</span>
                             </div>
                         </div>
@@ -303,34 +340,38 @@
                             <span id="autoReceiptPaid" class="btn btn-success hide">Đã thanh toán</span>
                             <span id="autoReceiptUnpaid" class="btn btn-danger hide">Chưa thanh toán</span>
                         </div>
-                        <div class="form-group">
-                            <label for="autoReceiptWater" class="col-md-3 control-label">Giá nước</label>
-                            <div class="col-md-9">
-                                <select id="autoReceiptWater" class="form-control" name="WaterUtilServiceId"></select>
-
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="autoReceiptFixedCost" class="col-md-3 control-label">Chi phí cố định</label>
-                            <div class="col-md-9">
-                                <select id="autoReceiptFixedCost" name="HouseRentUtilServiceId" class="form-control"></select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="autoReceiptDesc" class="col-md-3 control-label">Mô tả</label>
-                            <div class="col-md-9">
-                                <textarea id="autoReceiptDesc" name="Description" class="form-control" rows="3"></textarea>
-                            </div>
-                        </div>
-                        <input type="hidden" name="ReceiptId" id="autoReceiptReceiptId" value="@receipt.Id" />
+                        @*                        <div class="form-group">*@
+                        @*                            <label for="autoReceiptWater" class="col-md-3 control-label">Giá nước</label>*@
+                        @*                            <div class="col-md-9">*@
+                        @*                                <select id="autoReceiptWater" class="form-control" name="WaterUtilServiceId"></select>*@
+                        @**@
+                            @*                            </div>*@
+</div>
+@*                        </div>*@
+</div>
+@*                        <div class="form-group">*@<div class="form-group">
+    @*                            <label for="autoReceiptFixedCost" class="col-md-3 control-label">Chi phí cố định</label>*@<label for="autoReceiptFixedCost" class="col-md-3 control-label"></label>
+    @*                            <div class="col-md-9">*@<div class="col-md-9">
+        @*                                <select id="autoReceiptFixedCost" name="HouseRentUtilServiceId" class="form-control"></select>*@<select id="autoReceiptFixedCost" name="HouseRentUtilServiceId" class="form-control"></select>
+        @*                            </div>*@
+    </div>
+    @*                        </div>*@
+</div>
+<div class="form-group">
+    <label for="autoReceiptDesc" class="col-md-3 control-label">Mô tả</label>
+    <div class="col-md-9">
+        <textarea id="autoReceiptDesc" name="Description" class="form-control" rows="3"></textarea>
+    </div>
+</div>
+<input type="hidden" name="ReceiptId" id="autoReceiptReceiptId" value="@receipt.CreateDate.Value.Ticks" />
                     </form>
-                </div>
-            </div>
-            <div class="modal-footer" style="margin-top: 0">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <span onclick="updateAutomationReceiptHeader(@receipt.Id)" class="btn btn-primary">Chấp nhận</span>
-            </div>
-        </div>
+</div>
+</div>
+<div class="modal-footer" style="margin-top: 0">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+    <span onclick="updateAutomationReceiptHeader(@receipt.CreateDate.Value.Ticks)" class="btn btn-primary">Chấp nhận</span>
+</div>
+</div>
     </div>
 </div>
 
@@ -348,7 +389,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-                <button id="delBtn" type="button" class="btn btn-danger btn-ok" data-receipt-id="@receipt.Id">Xóa</button>
+                <button id="delBtn" type="button" class="btn btn-danger btn-ok" data-receipt-id="@receipt.CreateDate.Value.Ticks">Xóa</button>
             </div>
         </div>
     </div>
@@ -356,7 +397,7 @@
 
 <script>
     $("documemt").ready(function() {
-        document.getElementById("publishDate").dataset.dateEndDate = "+" + calculateDateFromTodayToEndOfMonth() + "d";
+        document.getElementById("publishDate").dataset.dateEndDate = "+" + (calculateDateFromTodayToEndOfMonth() + 1) + "d";
         window.houseConsumptionList = [];
         window.deleteConsumptionRecordList = [];
         window.deleteConsumptionRecordElementList = [];
@@ -523,11 +564,29 @@
                  "render": function (data, type, full) {
                      if (type === "display" || type === "filter") {
                          if (data !== null && data !== undefined) {
-                             return "<div class='text-right'>"+
+                             if (full.Status === window.StatusUnpaid) {
+                                 return "<div class='text-right'>"+
                                          "<span onclick='viewMonthlyReceiptDetail(\"" + data + "\",\"" + full.DT_RowId + "\")' class='btn btn-default btn-xs lbl-margin-right'>" +
                                              "<i class='fa fa-pencil'></i>" +
                                          "</span> "+
                                      "</div>";
+                             } else if (full.Status === window.StatusPaid) {
+                                 return "<div class='text-right'>"+
+                                        "<span onclick='viewMonthlyReceiptDetail(\"" + data + "\",\"" + full.DT_RowId + "\")' class='btn btn-default btn-xs lbl-margin-right'>" +
+                                            "<i class='fa fa-info'></i>" +
+                                        "</span> "+
+                                    "</div>";
+                             } else if (full.Status === window.StatusUnpublished) {
+                                 return "<div class='text-right'>"+
+                                         "<span onclick='viewMonthlyReceiptDetail(\"" + data + "\",\"" + full.DT_RowId + "\")' class='btn btn-default btn-xs lbl-margin-right'>" +
+                                             "<i class='fa fa-pencil'></i>" +
+                                         "</span> "+
+                                      "</span>"
+                                        + " <span onclick='deleteConsumptionRecord(" + data + ")' class='btn btn-danger btn-xs' >"
+                                        + "  <i class='fa fa-times'></i>"
+                                        + " </span>"
+                                   +  "</div>";
+                             }
                          }
                      }
                      return data;
@@ -547,19 +606,24 @@
                 fromValue = replaceSpaceNumber(fromValue);
                 var toValue = $this.val();
                 toValue = replaceSpaceNumber(toValue);
-                var quantity = parseInt(toValue) - parseInt(fromValue);
-                var waterCost = waterAggressiveCalculating(quantity, window.waterRangePrices, window.numberOfResident);
-                var fixedCost = parseInt(replaceCommaNumber($("#monthlyFixedCost").val()));
-                $("#houseConsumptWater").text(numberWithCommas(quantity));
-                $("#waterCost").val(numberWithCommas(waterCost));
-                $("#monthlyTotal").val(numberWithCommas(waterCost + fixedCost));
+                if (!isNaN(toValue) && parseInt(toValue, 10)>=0) {
+                    var quantity = parseInt(toValue) - parseInt(fromValue);
+                    var waterCost = waterAggressiveCalculating(quantity, window.waterRangePrices);
+                    var fixedCost = parseInt(replaceCommaNumber($("#monthlyFixedCost").val()));
+                    $("#houseConsumptWater").text(numberWithCommas(quantity));
+                    $("#waterCost").val(numberWithCommas(waterCost));
+                    $("#monthlyTotal").val(numberWithCommas(waterCost + fixedCost));
+                } else {
+                    $this.val("");
+                    $("#houseConsumptWater").text("0");
+                }
             } else {
                 var fixedCost = parseInt(replaceCommaNumber($("#monthlyFixedCost").val()));
                 $("#houseConsumptWater").text(0);
                 $("#waterCost").val(0);
                 $("#monthlyTotal").val(numberWithCommas( fixedCost));
             }
-            
+
         });
     });
 
@@ -588,7 +652,6 @@
                     $("#rowId").val(rowId);
 
                     window.waterRangePrices = obj.WaterRangePrices;
-                    window.numberOfResident = obj.NumberOfResident;
 
                     var unpublished = $("#unpublished").addClass("hide");
                     var paid = $("#paid").addClass("hide");
@@ -615,66 +678,6 @@
         });
     }
 
-
-    function deleteConsumptionRecord(id) {
-        window.deleteConsumptionRecordList.push(id);
-        window.utilityConsumptionTbl.row("#consump_house_" + id).remove().draw();
-        $("#delConsumptionRecordBtnGroup").removeClass("hide").addClass("show");
-    }
-    function cancelDeleteConsumptionRecord() {
-        for (var i = 0; i < window.houseConsumptionList.length; i++) {
-            var originItem = window.houseConsumptionList[i];
-            for (var z = 0; z < window.deleteConsumptionRecordList.length; z++) {
-                var deleteItem = window.deleteConsumptionRecordList[z];
-                if (originItem.HouseId === deleteItem) {
-                    window.utilityConsumptionTbl.row.add(originItem).draw();
-                }
-            }
-        }
-        window.deleteConsumptionRecordList = new Array();
-        $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
-    }
-    function saveAutomationReceipt() {
-        var title = $("#receiptTitle").val();
-        var publishDate = $("#publishDate").val();
-        var desciption = $("#receiptDesc").val();
-        var waterId = $("#water").val();
-        var fixedCostId = $("#fixedCost").val();
-
-        var obj = {
-            Title: title,
-            PublishDate: publishDate,
-            Description: desciption,
-            WaterUtilServiceId: waterId,
-            FixCostUtilServiceId: fixedCostId,
-            userId: @User.Identity.GetUserId(),
-            ResidentExpenseRecords: window.houseConsumptionList
-        }
-        $.ajax({
-            url:"/Management/ManageReceipt/CreateAutomationUtilitySevice",
-            type:"POST",
-            data: obj,
-            success:function(data) {
-                console.log(data);
-            },
-            error:function(){
-
-            }
-        });
-    }
-    function commitDeleteConsumptionRecord() {
-        for (var z = 0; z < window.deleteConsumptionRecordList.length; z++) {
-            var deleteItem = window.deleteConsumptionRecordList[z];
-            for (var i = 0; i < window.houseConsumptionList.length; i++) {
-                var originItem = window.houseConsumptionList[i];
-                if (originItem.HouseId === deleteItem) {
-                    window.houseConsumptionList.splice(i, 1);
-                }
-            }
-        }
-        $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
-        window.deleteConsumptionRecordList = new Array();
-    }
     function editAutomationReceiptHeader(id) {
         $.ajax({
             url:"/Management/ManageReceipt/ViewBatchReceiptDetail",
@@ -684,30 +687,29 @@
             type:"GET",
             success:function(data) {
                 var object = data.Data;
-                var water = object.Water;
-                var houseRent = object.HouseRent;
-                var fixedCost = object.FixedCost;
-                var receiptInfo = object.ReceiptInfo;
+                //                var water = object.Water;
+                //                var houseRent = object.HouseRent;
+                //                var fixedCost = object.FixedCost;
 
-                $("#autoReceiptTitle").val(receiptInfo.Title);
+                $("#autoReceiptTitle").val(object.Title);
                 document.getElementById("autoReceiptPublishmentDate").dataset.dateEndDate = "+" + calculateDateFromTodayToEndOfMonth() + "d";
                 $("#autoReceiptPublishmentDate").datepicker();
-                $("#autoReceiptPublishmentDate").val(receiptInfo.PublishDate);
-                $("#autoReceiptDesc").val(receiptInfo.Description);
-                $("#autoReceiptReceiptId").text(receiptInfo.ReceiptId);
+                $("#autoReceiptPublishmentDate").val(object.PublishDate);
+                $("#autoReceiptDesc").val(object.Description);
+                $("#autoReceiptReceiptId").text(object.ReceiptId);
 
-                $("#autoReceiptWater").html(parseJsonToSelectTags(water,receiptInfo.WaterUtilServiceId));
-                $("#autoReceiptFixedCost").html(parseJsonToSelectTags(fixedCost,receiptInfo.FixCostUtilServiceId));
+                //                $("#autoReceiptWater").html(parseJsonToSelectTags(water,receiptInfo.WaterUtilServiceId));
+                //                $("#autoReceiptFixedCost").html(parseJsonToSelectTags(fixedCost,receiptInfo.FixCostUtilServiceId));
 
 
                 var unpublished = $("#autoReceiptunPublished").addClass("hide");
                 var paid = $("#autoReceiptPaid").addClass("hide");
                 var unpaid = $("#autoReceiptUnpaid").addClass("hide");
-                if (receiptInfo.Status === window.StatusUnpublished) {
+                if (object.Status === window.StatusUnpublished) {
                     unpublished.removeClass("hide");
-                }else if (receiptInfo.Status === window.StatusUnpaid) {
+                }else if (object.Status === window.StatusUnpaid) {
                     unpaid.removeClass("hide");
-                }else if (receiptInfo.Status === window.StatusPaid) {
+                }else if (object.Status === window.StatusPaid) {
                     paid.removeClass("hide");
                 }
                 $("#editAutomationReceiptHeaderModal").modal("show");
@@ -729,7 +731,7 @@
                     resetFormData("updateHouseConsumptionForm");
                     setTimeout(function() {
                         var element =
-                        $("#confirmDeleteOrderModal > div > div > div.modal-body")
+                            $("#confirmDeleteOrderModal > div > div > div.modal-body");
                         $("#successUpdateOrderTypeNotify").fadeOut("fast");
                         $("#editAutomationReceiptHeaderModal").modal("hide");
                     }, 3000);
@@ -775,10 +777,10 @@
             updateStatus(elementData.receiptId, window.Mode_Delete, function(data) {
                 $("#confirmDeleteOrderModal").removeClass("loading");
                 if (data.StatusCode === 0) {
-                    $("#confirmDeleteOrderModal > div > div > div.modal-body > p").text("Xóa hóa đơn thành công. Sẽ chuyển về trang quản lý hóa đơn trong 2 giây.");
+                    $("#confirmDeleteOrderModal > div > div > div.modal-body > p").text("Xóa hóa đơn thành công. Đang chuyển về trang quản lý hóa đơn.");
 
                 } else {
-                    $("#confirmDeleteOrderModal > div > div > div.modal-body > p").text("Xóa hóa đơn thất bại. Sẽ chuyển về trang quản lý hóa đơn trong 2 giây.");
+                    $("#confirmDeleteOrderModal > div > div > div.modal-body > p").text("Xóa hóa đơn thất bại. Đang chuyển về trang quản lý hóa đơn.");
                 }
                 setTimeout(function() {
                     location.href = "/Management/ManageReceipt/View";
@@ -839,6 +841,42 @@
                     setTimeout(function() {
                         $("#failedAddTransTypeNotify").fadeOut("fast");
                     }, 3000);
+                }
+            }
+        });
+    }
+
+    function deleteConsumptionRecord(id) {
+        var element = $("#receipt_id_" + id).addClass("hide");
+        window.deleteConsumptionRecordList.push(id);
+        window.autoReceiptTbl.row("#receipt_id_" + id).remove().draw();
+        $("#delConsumptionRecordBtnGroup").removeClass("hide").addClass("show");
+    }
+    function cancelDeleteConsumptionRecord() {
+        for (var i = 0; i < window.houseConsumptionList.length; i++) {
+            var originItem = window.houseConsumptionList[i];
+            for (var z = 0; z < window.deleteConsumptionRecordList.length; z++) {
+                var deleteItem = window.deleteConsumptionRecordList[z];
+                if (originItem.ReceiptId === deleteItem) {
+                    window.autoReceiptTbl.row.add(originItem).draw();
+                }
+            }
+        }
+        window.deleteConsumptionRecordList = new Array();
+        $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
+    }
+    function commitDeleteConsumptionRecord() {
+        $.ajax({
+            url: "/Management/ManageReceipt/DeleteHouseConsumption",
+            type: "POST",
+            data: {
+                deleteItems: window.deleteConsumptionRecordList
+            },
+            success: function(data) {
+                if (data.StatusCode === 0) {
+                    $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
+                    window.deleteConsumptionRecordList = new Array();
+                    window.autoReceiptTbl.ajax.reload();
                 }
             }
         });

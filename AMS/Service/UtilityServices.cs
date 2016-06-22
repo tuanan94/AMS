@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using AMS.Repository;
+using Microsoft.Owin.Security.Provider;
 
 namespace AMS.Service
 {
@@ -18,6 +19,10 @@ namespace AMS.Service
         public void Update(UtilityService u)
         {
             _utilityServiceRepository.Update(u);
+        }
+        public void Delete(UtilityService u)
+        {
+            _utilityServiceRepository.Delete(u);
         }
         public UtilityService FindById(int id)
         {
@@ -43,6 +48,11 @@ namespace AMS.Service
         public UtilityServiceRangePrice FindById(int id)
         {
             return _UtilityServiceRangePriceRepository.FindById(id);
+        }
+        public void DeleteById(int id)
+        {
+            UtilityServiceRangePrice rangePrice = _UtilityServiceRangePriceRepository.FindById(id);
+            if (rangePrice != null) _UtilityServiceRangePriceRepository.Delete(rangePrice);
         }
     }
 }

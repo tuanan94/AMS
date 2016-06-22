@@ -40,11 +40,9 @@ namespace AMS.Service
         }
         public List<Receipt> GetReceiptInMounth(DateTime month)
         {
-
             DateTime firstDateOfThisMounth = new DateTime(month.Year, month.Month, 1);
             DateTime endDateOfThisMounth = new DateTime(month.Year, month.Month, DateTime.DaysInMonth(month.Year, month.Month));
             return _receiptRepository.List.Where(r => r.PublishDate.Value.Date.Date >= firstDateOfThisMounth.Date && r.PublishDate.Value.Date.Date <= endDateOfThisMounth.Date).OrderByDescending(r => r.CreateDate).ToList();
-
         }
 
         public List<Receipt> GetReceiptInMonthFromOpeningToToday(BalanceSheet blSheet)
@@ -93,6 +91,13 @@ namespace AMS.Service
                 && r.PublishDate.Value.Date.Date >= firstDateOfThisMounth.Date
                 && r.PublishDate.Value.Date.Date <= endDateOfThisMounth.Date).ToList();
         }
+
+        public List<Receipt> GetBatchReceiptByMonth(DateTime month)
+        {
+            return _receiptRepository.List.Where(r => r.PublishDate.Value.Date == month.Date.Date
+                && r.PublishDate.Value.Month == month.Date.Month && r.IsAutomation == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION).ToList();
+        }
+
         public List<Receipt> GetAllReceipts()
         {
             return _receiptRepository.List.OrderByDescending(r => r.CreateDate.Value).ToList();
@@ -123,9 +128,21 @@ namespace AMS.Service
         }
         public Receipt FindById(int id)
         {
-            return _receiptRepository.List.Where(r => r.Id == id).First();
+            return _receiptRepository.FindById(id);
+        }
+        public Receipt GetLastAutomationReceiptOfHouse(int houseId)
+        {
+            List<Receipt> listReceipt = _receiptRepository.List.Where(
+                r => r.HouseId == houseId && r.IsAutomation == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION
+                     && r.ReceiptDetails.Where(rd => rd.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
+                         .Count() != 0).OrderByDescending(r => r.PublishDate).ToList();
+            return listReceipt.Count == 0 ? null : listReceipt.First();
         }
 
+        public bool CheckForMonthAutomationReceiptIsCreated(DateTime forMonth)
+        {
+            return _receiptRepository.List.Any(autoRe => autoRe.ForMonth != null && autoRe.ForMonth.Value == forMonth && autoRe.IsAutomation == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION);
+        }
     }
     public class ReceiptDetailServices
     {
@@ -157,6 +174,15 @@ namespace AMS.Service
             {
                 _receiptDetailRepository.Delete(e);
             }
+        }
+
+        public List<ReceiptDetail> GetReceiptDetailByReceiptCreateDate(DateTime receiptCreateDate)
+        {
+            return
+                _receiptDetailRepository.List.Where(rd => rd.Receipt.CreateDate.Value == receiptCreateDate)
+                    .GroupBy(rd => rd.UtilityServiceId)
+                    .Select(rd => rd.First())
+                    .ToList();
         }
     }
 }

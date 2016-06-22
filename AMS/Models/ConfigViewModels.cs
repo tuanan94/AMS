@@ -22,9 +22,10 @@ namespace AMS.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int Type { get; set; }
-        public List<UtilityServiceRangePriceModel> ResInRegisBookPrices { get; set; }
-        public List<UtilityServiceRangePriceModel> ResHasKt3Prices { get; set; }
-        public List<UtilityServiceRangePriceModel> ResOtherPrices { get; set; }
+        public int HouseCatId { get; set; }
+        public int UtilServiceForHouseCatId { get; set; }
+        public List<UtilityServiceRangePriceModel> WaterUtilServiceRangePrices { get; set; }
+        public List<int> DeletedRangePrices { get; set; }
     }
 
     public class FixedCostModel
@@ -32,7 +33,7 @@ namespace AMS.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int Type { get; set; }
-        public List<FixedCostPriceModel> FixedCosts { get; set; }
+        public FixedCostPriceModel FixedCost { get; set; }
     }
     public class FixedCostPriceModel
     {

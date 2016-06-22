@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "DownloadWaterConsumptionTemplate";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+}
+
+
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+
+        <div class="heading-tab">
+            <i class="fa fa-list"> Tải bảng ghi nước</i>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li>
+                    <a href="/Management/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Quản lý hóa đơn</a>
+                </li>
+                <li class="">
+                    <a href="/Management/ManageReceipt/CreateManualReceiptView"><i class="fa fa fa-plus"></i> Tạo hóa đơn thủ công</a>
+                </li>
+                <li class="">
+                    <a href="/Management/ManageReceipt/CreateAutomationReceiptView"><i class="fa fa fa-plus"></i> Tạo hóa đơn tự động</a>
+                </li>
+                <li class="active">
+                    <a href="/Management/ManageReceipt/DownloadRecordTemplate"><i class="fa fa-cloud-download"></i> Tải bảng ghi nước</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="panel-body">
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="">
+                    <div class="panel panel-default" style="border-color: transparent">
+                        <form id="addUtilServiceForm" class="form-horizontal" role="form" method="GET" action="/Management/ManageReceipt/DownloadRecordTemplate">
+                            <div class="tab-content">
+                                <div class="tab-pane fade active in" id="">
+                                    <div class="form-group">
+                                        <label class="col-md-offset-3 col-md-1 control-label">Tháng</label>
+                                        <div class="col-md-3 ">
+                                            <input type="text" id="publishDate" name="forMonth" class="form-control datepicker" data-date-format="mm-yyyy" data-date-language="vi"
+                                                   data-date-min-view-mode="1" data-date-end-date="+1m" data-date-start-date="-1m" data-date-today-highlight="true" @*data-date-start-date="0m"*@ />
+                                        </div>
+                                        <button class="btn btn-info" type="submit">
+                                            <i class="fa fa-cloud-download"></i> Tải về
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

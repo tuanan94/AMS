@@ -40,6 +40,12 @@ window.Transaction_Type_Expense = 2;
 window.Mode_Delete = 1;
 window.Mode_Publish = 2;
 
+window.Enable = 1;
+window.Disable = 2;
+
+window.Utility_Service_Water = 2;
+window.Utility_Service_Fixed_Cost = 5;
+
 
 
 function loadHelpdeskServiceType() {
@@ -1414,7 +1420,7 @@ function electricAggressiveCalculating(consumption, rangePrices) {
     return total;
 }
 
-function waterAggressiveCalculating(consumption, rangePrices, numbeOfResident) {
+function waterAggressiveCalculating(consumption, rangePrices) {
     var rangePrice = {};
     var previous = 0;
     var total = 0;
@@ -1423,8 +1429,8 @@ function waterAggressiveCalculating(consumption, rangePrices, numbeOfResident) {
     for (var i = 0; i < rangePrices.length; i++) {
 
         rangePrice = rangePrices[i];
-        toAmount = parseFloat(rangePrice.ToAmount) * numbeOfResident;
-        fromAmount = parseFloat(rangePrice.FromAmount) * numbeOfResident;
+        toAmount = parseFloat(rangePrice.ToAmount);
+        fromAmount = parseFloat(rangePrice.FromAmount) ;
 
         var calculatingPart = 0;
         if (consumption >= toAmount) {
