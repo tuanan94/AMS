@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "ManageReipt";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
-    List<House> block = ViewBag.block;
+    List<Block> block = ViewBag.block;
     List<House> firstBlockFloor = ViewBag.firstBlockFloor;
     List<House> rooms = ViewBag.rooms;
 }
@@ -14,10 +14,16 @@
             <i class="fa fa-list"> Tạo hóa đơn thủ công</i>
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li>
-                    <a href="/Management/ManageReceipt/View/@User.Identity.GetUserId()"><i class="fa fa-file-text-o"></i> Quản lý hóa đơn</a>
+                    <a href="/Management/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Quản lý hóa đơn</a>
                 </li>
                 <li class="active">
-                    <a href="/Management/ManageReceipt/@User.Identity.GetUserId()"><i class="fa fa fa-plus"></i> Tạo hóa đơn thủ công</a>
+                    <a href="/Management/ManageReceipt/CreateManualReceiptView"><i class="fa fa fa-plus"></i> Tạo hóa đơn thủ công</a>
+                </li>
+                <li class="">
+                    <a href="/Management/ManageReceipt/CreateAutomationReceiptView"><i class="fa fa fa-plus"></i> Tạo hóa đơn tự động</a>
+                </li>
+                <li class="">
+                <a href="/Management/ManageReceipt/DownloadRecordTemplate"><i class="fa fa-cloud-download"></i> Tải bảng ghi nước</a>
                 </li>
             </ul>
         </div>
@@ -54,7 +60,7 @@
                                                 @{
                                                     foreach (var b in block)
                                                     {
-                                                        <option value="@b.Block">@b.Block</option>
+                                                        <option value="@b.Id">@b.BlockName</option>
                                                     }
                                                 }
                                             </select>
@@ -94,8 +100,12 @@
                                         </div>
                                         <label for="receiptDesc" class="col-md-2 control-label">Ngày phát hành</label>
                                         <div class="col-md-4">
+                                            @*Donot clean this code*@
+                                            @*   <input type="text" id="publishDate" class="form-control datepicker" data-date-format="dd-mm-yyyy" data-date-language="vi"*@
+                                            @*   data-date-min-view-mode="0" data-date-today-highlight="true" data-date-start-date="0m"/>*@
+
                                             <input type="text" id="publishDate" class="form-control datepicker" data-date-format="dd-mm-yyyy" data-date-language="vi"
-                                                   data-date-min-view-mode="0" data-date-today-highlight="true" data-date-start-date="0m" />
+                                                   data-date-min-view-mode="0" data-date-today-highlight="true" @*data-date-start-date="0m"*@/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -192,10 +202,10 @@
                         </div>
 
                         <div class="form-horizontal">
-                            <div class="form-group">
-                                <div class="col-md-offset-9">
+                            <div class="col-md-12">
+                                <div class="pull-right">
                                     <span onclick="createReceipt(@User.Identity.GetUserId(),1)" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Lưu</span>
-                                    <span onclick="createReceipt(@User.Identity.GetUserId(),2)" class="btn btn-info">Lưu và Công bố</span>
+                                    <span onclick="createReceipt(@User.Identity.GetUserId(),2)" class="btn btn-info"><i class="fa fa-paragraph"></i> Công bố</span>
                                 </div>
                             </div>
                         </div>
@@ -207,11 +217,7 @@
 </div>
 
 <script>
-    var oneDay = 24 * 60 * 60 * 1000;
-    var today = new Date();
-    var lastDate = new Date(today.getFullYear(), today.getMonth(0) + 1, 0);
-    var diffDays = Math.round(Math.abs(lastDate.getTime() - today.getTime()) / (oneDay));
-    document.getElementById("publishDate").dataset.dateEndDate = "+" + diffDays + "d";
+    document.getElementById("publishDate").dataset.dateEndDate = "+" + calculateDateFromTodayToEndOfMonth() + "d";
 
     $(document).ready(function () {
         $("#publishDate").datepicker({

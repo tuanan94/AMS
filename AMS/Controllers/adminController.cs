@@ -43,7 +43,7 @@ namespace AMS.Controllers
 
         [HttpPost]
        // [ValidateInput(false)]
-        public ActionResult addHouse(String Block, String Floor, String HouseName,String Description,float Area)
+        public ActionResult addHouse(int Block, String Floor, String HouseName,String Description,float Area)
         {
             bool isValid = true;
             isValid = !HouseName.Equals("");
@@ -57,7 +57,7 @@ namespace AMS.Controllers
             return RedirectToAction("ManageHouse");
         }
         [HttpPost]
-        public void addHouseAjax(String Block, String Floor, String HouseName, String Description, float Area)
+        public void addHouseAjax(int Block, String Floor, String HouseName, String Description, float Area)
         {
             bool isValid = true;
             //Step 1: Valid

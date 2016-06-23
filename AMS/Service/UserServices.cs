@@ -24,6 +24,7 @@ namespace AMS.Service
             return
                 userRepository.List.Where(
                     u => u.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT 
+
                     && u.IsApproved != null && u.IsApproved == SLIM_CONFIG.USER_APPROVE_WAITING).ToList();
         }
 
@@ -31,5 +32,14 @@ namespace AMS.Service
         {
             userRepository.Update(u);
         }
+
+        public List<User> GetKindOfUserInHouse(int houseId)
+        {
+            return userRepository.List.Where(u => u.HouseId == houseId)
+                    .GroupBy(u => u.ResidentType)
+                    .Select(r => r.First())
+                    .ToList();
+        }
+
     }
 }

@@ -84,7 +84,7 @@ namespace AMS.Controllers
         public async Task<ActionResult> Login(ViewModel.LoginViewModel model, string returnUrl)
         {
            
-            List<Survey> listSurveys = surveyService.GetListSurveys();
+            List<Poll> listSurveys = surveyService.GetListSurveys();
             if (!ModelState.IsValid)
             {
                 return View(model);

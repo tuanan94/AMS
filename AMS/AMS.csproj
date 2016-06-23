@@ -46,6 +46,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LINQtoCSV, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>AmsDLL\LINQtoCSV.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.0.1011, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
@@ -79,6 +83,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -228,6 +233,9 @@
     <Compile Include="Block.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="BlockPoll.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Comment.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -236,6 +244,7 @@
     <Compile Include="Constant\RoleEnum.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BalanceSheetController.cs" />
+    <Compile Include="Controllers\ConfigController.cs" />
     <Compile Include="Controllers\HelpdeskServiceController.cs" />
     <Compile Include="Controllers\HelpdeskSupporterController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
@@ -279,6 +288,9 @@
     <Compile Include="House.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="HouseCategory.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Image.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -299,7 +311,9 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BalanceSheetViewModels.cs" />
+    <Compile Include="Models\ConfigViewModels.cs" />
     <Compile Include="Models\HelpdeskServiceModels.cs" />
+    <Compile Include="Models\HouseModels.cs" />
     <Compile Include="Models\ManageHouseViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -309,6 +323,10 @@
     <Compile Include="ObjectMapping\Notification.cs" />
     <Compile Include="ObjectMapping\PostMapping.cs" />
     <Compile Include="ObjectMapping\UserProfileMapping.cs" />
+    <Compile Include="Models\UserViewModels.cs" />
+    <Compile Include="Poll.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Post.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -361,12 +379,10 @@
     <Compile Include="Service\UserReportService.cs" />
     <Compile Include="Service\UserService.cs" />
     <Compile Include="Service\UserServices.cs" />
+    <Compile Include="Service\UtilityServices.cs" />
     <Compile Include="SLIM_CONFIG.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="StringUtil.cs" />
-    <Compile Include="Survey.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="sysdiagram.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -379,7 +395,7 @@
     <Compile Include="User.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="UserAnswerSurvey.cs">
+    <Compile Include="UserAnswerPoll.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="UserRateAroundProvider.cs">
@@ -394,6 +410,9 @@
     <Compile Include="UtilityServiceRangePrice.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="UtilServiceForHouseCat.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\AddMemberViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\HelpdeskSupporterViewModel.cs" />
@@ -402,6 +421,9 @@
     <Compile Include="ViewModel\SurveyViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AmsDLL\LINQtoCSV.dll" />
+    <Content Include="AmsDLL\LinqToExcel.dll" />
+    <Content Include="AmsDLL\Remotion.Data.Linq.dll" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\blue.css" />
@@ -410,12 +432,14 @@
     <Content Include="Content\css\brown.css" />
     <Content Include="Content\css\brown.min.css" />
     <Content Include="Content\css\custom.css" />
+    <Content Include="Content\css\dataTables.bootstrap.min.css" />
     <Content Include="Content\css\datatables.css" />
     <Content Include="Content\css\default-nav-inverse.css" />
     <Content Include="Content\css\default-nav-inverse.min.css" />
     <Content Include="Content\css\default.css" />
     <Content Include="Content\css\default.min.css" />
     <Content Include="Content\css\FamilyTree.css" />
+    <Content Include="Content\css\jquery-ui.min.css" />
     <Content Include="Content\css\jquery.timepicker.css" />
     <Content Include="Content\css\media-upload.css" />
     <Content Include="Content\css\thumbnails.css" />
@@ -438,6 +462,7 @@
     <Content Include="images\Post\question_button.png" />
     <Content Include="images\Post\SEO_survey_reuslts-1024x768.jpg" />
     <Content Include="images\Post\survey-icon.png" />
+    <Content Include="LinqToExcel.dll" />
     <Content Include="Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
@@ -448,6 +473,7 @@
       <DependentUpon>Model1.edmx</DependentUpon>
       <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
+    <Content Include="Remotion.Data.Linq.dll" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\amsScript\additional-methods.min.js" />
@@ -457,6 +483,7 @@
     <Content Include="Scripts\amsScript\jquery.validate.min.js" />
     <Content Include="Scripts\amsScript\LoadFamilyTree.js" />
     <Content Include="Scripts\amsScript\LoadUserProfile.js" />
+    <Content Include="Scripts\amsScript\moment.min.js" />
     <Content Include="Scripts\amsScript\scripts.js" />
     <Content Include="Scripts\amsScript\scripts.min.js" />
     <Content Include="Scripts\amsScript\Social.js" />
@@ -535,6 +562,7 @@
     <Content Include="Model1.edmx.diagram">
       <DependentUpon>Model1.edmx</DependentUpon>
     </Content>
+    <Content Include="ClassDiagram1.cd" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
     <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\amsScript\custom.js" />
@@ -641,6 +669,15 @@
     <Content Include="Views\Survey\View2.cshtml" />
     <Content Include="Views\Survey\Graph1.cshtml" />
     <Content Include="Views\Report\Report.cshtml" />
+    <Content Include="Views\BalanceSheet\ManageBalanceSheet.cshtml" />
+    <Content Include="Views\BalanceSheet\ManageBalanceSheetDetail.cshtml" />
+    <Content Include="Views\Config\CreateUtilityService.cshtml" />
+    <Content Include="Views\Receipt\CreateAutomationReceipt.cshtml" />
+    <Content Include="Views\Receipt\UtilityServiceConsumption.cshtml" />
+    <Content Include="Views\Receipt\UpdateAutomationReceipt.cshtml" />
+    <Content Include="Views\Receipt\DownloadWaterConsumptionTemplate.cshtml" />
+    <Content Include="Views\Config\ManageUtilityService.cshtml" />
+    <Content Include="Views\Config\UpdateUtilityService.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -663,6 +700,8 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="images\Post\Binh\" />
+    <Folder Include="Upload\csv\" />
+    <Folder Include="Upload\img\" />
     <Folder Include="Views\Image\" />
     <Folder Include="Views\Post\" />
   </ItemGroup>
@@ -677,6 +716,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

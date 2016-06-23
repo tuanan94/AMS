@@ -75,7 +75,7 @@ namespace AMS.Controllers
             if (isValid)
             {
                 //Step 2: Send to service to do business
-                testService.addHouse(Block, Floor, HouseName);
+                //testService.addHouse(Block, Floor, HouseName);
             }
 
             return RedirectToAction("Index");
@@ -98,7 +98,7 @@ namespace AMS.Controllers
             if (isValid)
             {
                 //Step 2: Send to service to do business
-                testService.addHouse(Block, Floor, HouseName);
+                //testService.addHouse(Block, Floor, HouseName);
             }
         }
 

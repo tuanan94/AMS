@@ -17,13 +17,16 @@ namespace AMS
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Block()
         {
-            this.Surveys = new HashSet<Survey>();
+            this.BlockPolls = new HashSet<BlockPoll>();
+            this.Houses = new HashSet<House>();
         }
     
         public int Id { get; set; }
-        public string Block1 { get; set; }
+        public string BlockName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Survey> Surveys { get; set; }
+        public virtual ICollection<BlockPoll> BlockPolls { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<House> Houses { get; set; }
     }
 }

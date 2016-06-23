@@ -22,9 +22,9 @@ namespace AMS
         public Nullable<int> CategoryId { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> LastModified { get; set; }
-        public Nullable<int> TransactionId { get; set; }
         public Nullable<int> Type { get; set; }
         public Nullable<int> ReceiptDetailId { get; set; }
+        public Nullable<int> BalanceSheetId { get; set; }
     
         public virtual BalanceSheet BalanceSheet { get; set; }
         public virtual ReceiptDetail ReceiptDetail { get; set; }

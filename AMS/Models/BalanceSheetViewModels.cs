@@ -44,9 +44,46 @@ namespace AMS.Models
     public class AmountGroupByTransCategory
     {
         public int Id { get; set; }
-        public string Name  { get; set; }
+        public string Name { get; set; }
         public double TotalAmount { get; set; }
         public double PaidAmount { get; set; }
         public double UnpaidAmount { get; set; }
+    }
+
+    public class BalanceSheetModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public double TotalIncome { get; set; }
+        public double TotalExpense { get; set; }
+        public double TotalIncomeInCash { get; set; }
+        public double TotalExpenseInCash { get; set; }
+        public double RedundancyStartMonth { get; set; }
+        public double RedundancyEndMonth { get; set; }
+        public string ForMonth { get; set; }
+        public string CreateDate { get; set; }
+        public string Creator { get; set; }
+        public int Status { get; set; }
+        public string DT_RowId { get; set; }
+
+    }
+    public class CloseBalanceSheetModel
+    {
+        public int ThisMonthId { get; set; }
+        public string NextMonthTitle { get; set; }
+    }
+
+    public class BalanceSheetProcessingModel
+    {
+        public double ForecastIncome { get; set; }
+        public double ActualIncome { get; set; }
+        public double ActualExpense { get; set; }
+        public double ForecastExpense { get; set; }
+        public double RedudancyStartMonth { get; set; }
+        public double RedudancyEndMonth { get; set; }
+        public string LastModified { get; set; }
+        public List<TransactionModel> TotalTransactionList;
+        public List<TransactionModel> IncomeList;
+        public List<TransactionModel> ExpenseList;
     }
 }

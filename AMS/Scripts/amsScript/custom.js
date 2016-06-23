@@ -28,9 +28,23 @@ window.StatusUnpublished = 1;
 window.StatusUnpaid = 2;
 window.StatusPaid = 3;
 
+window.StatusCompleteRecordConsumption = 1;
+window.StatusUncompleteRecordConsumption = 2;
+
+window.StatusManualReceipt = 1;
+window.StatusAutomationReceipt = 2;
 
 window.Transaction_Type_Income = 1;
 window.Transaction_Type_Expense = 2;
+
+window.Mode_Delete = 1;
+window.Mode_Publish = 2;
+
+window.Enable = 1;
+window.Disable = 2;
+
+window.Utility_Service_Water = 2;
+window.Utility_Service_Fixed_Cost = 5;
 
 
 
@@ -973,11 +987,11 @@ function getHdReqDetail(id) {
         url: "/Home/HelpdeskRequest/GetHdReqInfoDetail/" + id,
         success: function (data) {
 
-//            console.log(data.Data.HdReqInfoDetail);
-//            console.log(data.Data.HdSrvCategories);
-//            console.log(data.Data.ListHdSrvBySelectedCat);
-//            console.log(data.Data.SelectedHdSrvCatId);
-//            console.log(data.Data.SelectedHdSrvId);
+            //            console.log(data.Data.HdReqInfoDetail);
+            //            console.log(data.Data.HdSrvCategories);
+            //            console.log(data.Data.ListHdSrvBySelectedCat);
+            //            console.log(data.Data.SelectedHdSrvCatId);
+            //            console.log(data.Data.SelectedHdSrvId);
 
             var objList = data.Data.HdSrvCategories;
             var returnHtml = parseJsonToSelectTags(objList, data.Data.SelectedHdSrvCatId, "Hãy chọn loại dịch vụ hổ trợ");
@@ -1003,15 +1017,19 @@ function getHdReqDetail(id) {
 function generateTableIndex(datatable) {
     datatable.on('order.dt search.dt', function () {
         datatable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-            cell.innerHTML = i + 1;
+            if ($(cell.parentElement.previousSibling).hasClass("hide")) {
+                cell.innerHTML = i - 1;
+            } else {
+                cell.innerHTML = i + 1;
+            }
         });
     }).draw();
 }
 function parseJsonToSelectTags(listJson, selectedId, msg) {
     var objList = listJson;
     var selectTagList = [];
-    var selectTag = "<option value='' selected='selected'> " + msg + " </option>";
-    selectTagList.push(selectTag);
+    var selectTag = {};
+    //    selectTagList.push(selectTag);
     for (var i = 0; i < objList.length; i++) {
         var obj = objList[i];
         if (obj.Id === selectedId) {
@@ -1105,9 +1123,7 @@ function acceptApproveUser() {
 function showOrderDetail(receiptId, userId) {
     location.href = "/Home/ManageReceipt/View/Detail?userId=" + userId + "&orderId=" + receiptId;
 }
-function editOrderDetail(receiptId, userId) {
-    location.href = "/Management/ManageReceipt/Edit/Detail?userId=" + userId + "&orderId=" + receiptId;
-}
+
 function approveResident(id) {
     $("#delHdSrvBtnGroup").removeClass("show").addClass("show");
     $("#rowHdSrvCat_" + id).css("display", "none");
@@ -1162,13 +1178,13 @@ function parseJsonToSelectTag(floor, room) {
     $("#houseName").html(selectTagList);
 }
 
-function getRoomAndFloor(blockName, floorName, mode) {
+function getRoomAndFloor(blockId, floorName, mode) {
     window.getHouseMode = mode;
     $.ajax({
         type: "GET",
         url: "/Management/ManageReceipt/GetRoomAndFloor",
         data: {
-            blockName: blockName,
+            blockId: blockId,
             floorName: floorName
         },
         success: function (data) {
@@ -1265,6 +1281,15 @@ $(document).ready(function () {
         var selectedBlock = $("#houseBlock").find("option:selected").val();
         getRoomAndFloor(selectedBlock, selectedFloor, "floor");
     });
+
+    $(".ams-modal").on("hidden.bs.modal", function () {
+        $(this).closest("form").find("input[type=text], textarea").val("");
+        $(this).closest("form").find("select option").prop("selected", function () {
+            return this.defaultSelected;
+        });
+        removeHiddenBackgroundPopup();
+    });
+
 });
 
 //Receipt manager
@@ -1274,9 +1299,19 @@ function numberWithCommas(x) {
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
 }
+function numberWithSpace(x) {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+}
 function replaceCommaNumber(x) {
     var parts = x.toString().split(".");
     parts[0] = parts[0].replace(/,/g, "");
+    return parts.join(".");
+}
+function replaceSpaceNumber(x) {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/ /g, "");
     return parts.join(".");
 }
 function resetFormData(id) {
@@ -1284,8 +1319,8 @@ function resetFormData(id) {
 }
 
 function removeHiddenBackgroundPopup() {
-    $('body').removeClass('modal-open');
-    $('.modal-backdrop').remove();
+    $("body").removeClass("modal-open");
+    $(".modal-backdrop").remove();
 }
 
 function getRandomColor() {
@@ -1305,8 +1340,8 @@ function createChart(id, data) {
 
     for (var i = 0; i < data.length; i++) {
         obj = data[i];
-        listLbl.push(obj.Name);
-        listVal.push(obj.TotalAmount);
+        listLbl.push(obj.TransCatName);
+        listVal.push(obj.TransTotalAmount);
         bgColorList.push(randomColor2());
     }
     var config = {
@@ -1344,3 +1379,120 @@ function randomColor2() {
     var c = 'rgb(' + r + ', ' + g + ', ' + b + ')';
     return c;
 }
+
+function bindingNumberWithComma(id) {
+    //    $("#" + id).on("keyup", function () {
+    $("#" + id).on("keyup", function (event) {
+        if (event.which >= 37 && event.which <= 40) {
+            event.preventDefault();
+        }
+        console.log($(this).val());
+        if ($(this).val() && (isNaN(replaceCommaNumber($(this).val())) === false)) {
+            var value = replaceCommaNumber($(this).val());
+            $(this).val(numberWithCommas(value));
+        } else {
+            $(this).val("");
+        }
+    });
+}
+function bindingClassNumberWithComma(_class) {
+    //    $("#" + id).on("keyup", function () {
+    $("." + _class).on("keyup", function (event) {
+        if (event.which >= 37 && event.which <= 40) {
+            event.preventDefault();
+        }
+        console.log($(this).val());
+        if ($(this).val() && (isNaN(replaceCommaNumber($(this).val())) === false)) {
+            var value = replaceCommaNumber($(this).val());
+            $(this).val(numberWithCommas(value));
+        } else {
+            $(this).val("");
+        }
+    });
+}
+
+
+function electricAggressiveCalculating(consumption, rangePrices) {
+    var rangePrice = {};
+    var previous = 0;
+    var total = 0;
+    for (var i = 0; i < rangePrices.length; i++) {
+        rangePrice = rangePrices[i];
+        var toAmount = parseFloat(rangePrice.ToAmount) ;
+        var fromAmount = parseFloat(rangePrice.FromAmount);
+
+        var calculatingPart = 0;
+        if (consumption >= toAmount) {
+            calculatingPart = toAmount - previous;
+            previous = toAmount;
+        }
+        else if (consumption >= fromAmount && consumption < toAmount) {
+            calculatingPart = consumption - previous;
+        }
+        total += calculatingPart * rangePrice.Price;
+    }
+    return total;
+}
+
+function waterAggressiveCalculating(consumption, rangePrices) {
+    var rangePrice = {};
+    var previous = 0;
+    var total = 0;
+    var toAmount = 0;
+    var fromAmount = 0;
+    for (var i = 0; i < rangePrices.length; i++) {
+
+        rangePrice = rangePrices[i];
+        toAmount = parseFloat(rangePrice.ToAmount);
+        fromAmount = parseFloat(rangePrice.FromAmount) ;
+
+        var calculatingPart = 0;
+        if (consumption >= toAmount) {
+            calculatingPart = toAmount - previous;
+            previous = toAmount;
+        }
+        else if (consumption >= fromAmount && consumption < toAmount) {
+            calculatingPart = consumption - previous;
+        }
+        total += calculatingPart * rangePrice.Price;
+    }
+    return total;
+}
+
+function calculateDateFromTodayToEndOfMonth() {
+    var oneDay = 24 * 60 * 60 * 1000;
+    var today = new Date();
+    var lastDate = new Date(today.getFullYear(), today.getMonth(0) + 1, 0);
+    var diffDays = Math.round(Math.abs(lastDate.getTime() - today.getTime()) / (oneDay));
+    return diffDays;
+}
+
+/*
+http://jsfiddle.net/yWTLk/164/
+
+$('input.number').keyup(function (event) {
+    // skip for arrow keys
+    if (event.which >= 37 && event.which <= 40) {
+        event.preventDefault();
+    }
+    var $this = $(this);
+    var num = $this.val().replace(/,/gi, "").split("").reverse().join("");
+
+    var num2 = RemoveRougeChar(num.replace(/(.{3})/g, "$1,").split("").reverse().join(""));
+
+    console.log(num2);
+
+
+    // the following line has been simplified. Revision history contains original.
+    $this.val(num2);
+});
+
+function RemoveRougeChar(convertString){
+    if(convertString.substring(0,1) == ","){
+        return convertString.substring(1, convertString.length)            
+    }
+    return convertString;
+}
+
+
+*/

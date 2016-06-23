@@ -11,10 +11,16 @@
             <i class="fa fa-list"> Danh sách hóa đơn</i>
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li class="active">
-                    <a href="/Management/ManageReceipt/View/@User.Identity.GetUserId()"><i class="fa fa-file-text-o"></i> Quản lý hóa đơn</a>
+                    <a href="/Management/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Quản lý hóa đơn</a>
                 </li>
-                <li>
-                    <a href="/Management/ManageReceipt/@User.Identity.GetUserId()"><i class="fa fa fa-plus"></i> Tạo hóa đơn thủ công</a>
+                <li class="">
+                    <a href="/Management/ManageReceipt/CreateManualReceiptView"><i class="fa fa fa-plus"></i> Tạo hóa đơn thủ công</a>
+                </li>
+                <li class="">
+                    <a href="/Management/ManageReceipt/CreateAutomationReceiptView"><i class="fa fa fa-plus"></i> Tạo hóa đơn tự động</a>
+                </li>
+                <li class="">
+                    <a href="/Management/ManageReceipt/DownloadRecordTemplate"><i class="fa fa-cloud-download"></i> Tải bảng ghi nước</a>
                 </li>
             </ul>
         </div>
@@ -29,6 +35,7 @@
                             <thead>
                                 <tr>
                                     <th></th>
+                                    <th>Loại</th>
                                     <th>Tiêu đề</th>
                                     <th>Căn hộ</th>
                                     <th>Tổng (đồng)</th>
@@ -40,6 +47,7 @@
                             <tfoot>
                                 <tr>
                                     <th></th>
+                                    <th>Loại</th>
                                     <th>Tiêu đề</th>
                                     <th>Căn hộ</th>
                                     <th>Tổng (đồng)</th>
@@ -69,11 +77,12 @@
                 url: "/Management/ManageReceipt/Admin/GetManagerOrderList?userId=" + fromUserId,
                 dataSrc: ""
             },
-            "order": [["5", "desc"]],
+            "order": [["6", "desc"]],
             "bLengthChange": false,
             "bInfo": false,
             "columns": [
                 { data: "ReceiptTitle" },
+                { data: "IsAutomation" },
                 { data: "ReceiptTitle" },
                 { data: "HouseName" },
                 { data: "TotalOrder" },
@@ -88,27 +97,49 @@
                 "targets": 0
             },
             {
-                "targets": 2,
-                "data": "HouseName",
+                "targets": 1,
+                "data": "IsAutomation",
                 "render": function (data, type, full, meta) {
                     if (type === "display" || type === "filter") {
-                        return "<span class='label house-color label-warning'>" + data + "</span>";
+                        if (data === window.StatusAutomationReceipt) {
+                            return "<i class='fa fa-users single-receipt'></i>";
+                        } else {
+                            return "<i class='fa fa-user single-receipt'></i>";
+                        }
                     }
                     return data;
                 }
             },
             {
                 "targets": 3,
-                "data": "TotalOrder",
+                "data": "HouseName",
                 "render": function (data, type, full, meta) {
                     if (type === "display" || type === "filter") {
-                        return numberWithCommas(data);
+                        if (full.IsAutomation !== window.StatusAutomationReceipt) {
+                            return "<span class='label date-color' style='margin-right: 5px'>" + full.Block + "</span>" +
+                                "<span class='label time-color' style='margin-right: 5px'>" + full.Floor + "</span>" +
+                                "<span class='label room-color' >" + full.HouseName + "</span>";
+                        }
+                        return "";
                     }
                     return data;
                 }
             },
             {
                 "targets": 4,
+                "data": "TotalOrder",
+                "render": function (data, type, full, meta) {
+                    if (type === "display" || type === "filter") {
+                        if (full.IsAutomation !== window.StatusAutomationReceipt) {
+                            return numberWithCommas(data);
+                        }
+                        return "";
+                    }
+                    return data;
+                }
+            },
+            {
+                "targets": 5,
                 "data": "Status",
                 "render": function (data, type, full) {
                     if (type === "display" || type === "filter") {
@@ -124,7 +155,7 @@
                 }
             },
             {
-                "targets": 5,
+                "targets": 6,
                 "data": "CreateDate",
                 "render": function (data, type, full) {
                     if (type === "display" || type === "filter") {
@@ -137,12 +168,12 @@
                     return data;
                 }
             }, {
-                "targets": 6,
+                "targets": 7,
                 "data": "ReceiptId",
                 "render": function (data, type, full) {
                     if (type === "display" || type === "filter") {
                         if (data !== null && data !== undefined) {
-                            return "<span onclick='editOrderDetail(" + data + "," + fromUserId + ")' class='btn btn-default btn-xs lbl-margin-right'>" +
+                            return "<span onclick='editOrderDetail(\"" + data + "\",\"" + full.IsAutomation+ "\",\"" + fromUserId + "\")' class='btn btn-default btn-xs lbl-margin-right'>" +
                                 "<i class='fa fa-pencil'></i>" +
                                 "</span> ";
                         }
@@ -154,5 +185,11 @@
         });
         generateTableIndex(dataTable5);
     });
-
+    function editOrderDetail(receiptId, isAutomation, userId) {
+        if (parseInt(isAutomation,10) === window.StatusAutomationReceipt) {
+            location.href = "/Management/ManageReceipt/ViewBatchReceipt?receiptId=" + receiptId;
+        } else {
+            location.href = "/Management/ManageReceipt/Edit/Detail?userId=" + userId + "&orderId=" + receiptId;
+        }
+    }
 </script>

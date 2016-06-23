@@ -4,7 +4,7 @@
 @{
     ViewBag.Title = "ManageReipt";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
-    List<House> block = ViewBag.block;
+    List<Block> block = ViewBag.block;
     List<House> firstBlockFloor = ViewBag.firstBlockFloor;
     List<House> rooms = ViewBag.rooms;
     Receipt receipt = ViewBag.receipt;
@@ -18,10 +18,16 @@
                 <i class="fa fa-list"> Chi tiết hóa đơn</i>
                 <ul class="nav nav-tabs pull-right" role="tablist">
                     <li class="active">
-                        <a href="/Management/ManageReceipt/View/@User.Identity.GetUserId()"><i class="fa fa-file-text-o"></i> Quản lý hóa đơn</a>
+                        <a href="/Management/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Quản lý hóa đơn</a>
                     </li>
                     <li>
-                        <a href="/Management/ManageReceipt/@User.Identity.GetUserId()"><i class="fa fa fa-plus"></i> Tạo hóa đơn thủ công</a>
+                        <a href="/Management/ManageReceipt/CreateManualReceiptView"><i class="fa fa fa-plus"></i> Tạo hóa đơn thủ công</a>
+                    </li>
+                    <li class="">
+                        <a href="/Management/ManageReceipt/CreateAutomationReceiptView"><i class="fa fa fa-plus"></i> Tạo hóa đơn tự động</a>
+                    </li>
+                    <li class="">
+                        <a href="/Management/ManageReceipt/DownloadRecordTemplate"><i class="fa fa-cloud-download"></i> Tải bảng ghi nước</a>
                     </li>
                 </ul>
             </div>
@@ -33,11 +39,11 @@
 
                         <div class="alert alert-info hide" id="createReceiptSuccessNoti" @*style="display: none"*@>
                             <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                            <span>Hóa đơn được tạo thành công</span>
+                            <span>Cập nhật thành công</span>
                         </div>
                         <div class="alert alert-danger hide" id="createReceiptFailedNoti">
                             <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                            <span>Việc tạo hóa đơn thất bại</span>
+                            <span>Cập nhật thất bại</span>
                         </div>
 
                         <div class="form-group">
@@ -57,13 +63,13 @@
                                                 @{
                                                     foreach (var b in block)
                                                     {
-                                                        if (b.Block.Equals(receipt.House.Block))
+                                                        if (b.Id.Equals(receipt.House.Block.Id))
                                                         {
-                                                            <option selected="selected" value="@b.Block">@b.Block</option>
+                                                            <option selected="selected" value="@b.Id">@b.BlockName</option>
                                                         }
                                                         else
                                                         {
-                                                            <option value="@b.Block">@b.Block</option>
+                                                            <option value="@b.Id">@b.BlockName</option>
                                                         }
                                                     }
                                                 }
@@ -130,13 +136,13 @@
                                                 }
                                                 else if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPAID)
                                                 {
-                                                    <span id="unPaid" class="btn btn-default">Chưa thanh toán</span>
+                                                    <span id="unPaid" class="btn btn-danger">Chưa thanh toán</span>
                                                     <span id="paid" class="btn btn-success hide">Đã thanh toán</span>
                                                 }
                                                 else if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
                                                 {
                                                     <span id="unpublished" class="btn btn-inverse">Chưa công bố</span>
-                                                    <span id="unPaid" class="btn btn-default hide">Chưa thanh toán</span>
+                                                    <span id="unPaid" class="btn btn-danger hide">Chưa thanh toán</span>
                                                     <span id="paid" class="btn btn-success hide">Đã thanh toán</span>
                                                 }
                                             }
@@ -198,7 +204,7 @@
 
                                                 <div id="row_@index" class="form-group">
                                                     <div class="col-sm-6">
-                                                        <input id="item_name_@index" value="@detail.ServiceFee.Name" name="" type="text" class="form-control order-item">
+                                                        <input id="item_name_@index" value="@detail.UtilityService.Name" name="" type="text" class="form-control order-item">
                                                     </div>
                                                     <div class="col-sm-1">
                                                         <input id="item_qty_@index" value="@detail.Quantity.Value.ToString("N0")" type="text" class="form-control order-item-qty">
@@ -318,7 +324,7 @@
                 var id = rowIdStr[1];
                 var name = $("#item_name_" + id).val();
                 var qty = $("#item_qty_" + id).val();
-                var unitPrice = $("#item_unit_price_" + id).val();
+                var unitPrice = replaceCommaNumber($("#item_unit_price_" + id).val());
                 var receipDetailId = $("#item_id_" + id).val();
                 if (name && qty && unitPrice) {
                     var item = {
@@ -357,7 +363,7 @@
                     $("#receiptWrapper").load("/Management/ManageReceipt/ReceiptDetailItemList?receiptId="+ document.getElementById("updateOrder").dataset.receiptid);
 
                 } else if (data.StatusCode === 5) {
-                    location.href = "/Management/ManageReceipt/View/" + document.getElementById("updateOrder").dataset.fromuserid;
+                    location.href = "/Management/ManageReceipt/View";
                 }else {
                     $("#createReceiptFailedNoti").removeClass("hide").addClass("show");
                     setTimeout(function () {

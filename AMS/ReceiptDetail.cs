@@ -28,6 +28,8 @@ namespace AMS
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> LastModified { get; set; }
         public Nullable<int> ReceiptId { get; set; }
+        public Nullable<int> FromNumber { get; set; }
+        public Nullable<int> ToNumber { get; set; }
     
         public virtual Receipt Receipt { get; set; }
         public virtual UtilityService UtilityService { get; set; }

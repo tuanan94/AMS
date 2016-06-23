@@ -14,18 +14,8 @@ namespace AMS
     
     public partial class Answer
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Answer()
-        {
-            this.UserAnswerSurveys = new HashSet<UserAnswerSurvey>();
-        }
-    
         public string Id { get; set; }
         public string AnswerContent { get; set; }
         public Nullable<int> QuestionId { get; set; }
-    
-        public virtual Survey Survey { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserAnswerSurvey> UserAnswerSurveys { get; set; }
     }
 }

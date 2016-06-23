@@ -1,0 +1,507 @@
+﻿@{
+    ViewBag.Title = "UtilityService";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+    List<HouseCategory> houseCat = ViewBag.houseCat;
+}
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+
+        <div class="heading-tab">
+            <i class="fa fa-list"> Tạo mới phí sinh hoạt</i>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li class="active">
+                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-file-text-o"></i> Phí sinh họat</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="panel-body">
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="">
+                    <div class="panel panel-default" style="border-color: transparent">
+                        <form id="addUtilServiceForm" class="form-horizontal" role="form">
+                            <div class="alert alert-info" id="createSuccessNoti" style="display: none">
+                                <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <span>Tạo mới thành công</span>
+                            </div>
+                            <div class="alert alert-danger" id="createFailedNoti" style="display: none">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                                <span>Tạo mới thất bại</span>
+                            </div>
+                            <div class="tab-content">
+                                <div class="tab-pane fade active in" id="">
+                                    <div class="form-group">
+                                        <div class="col-md-offset-1 col-md-10">
+                                            <fieldset class="scheduler-border less-padding">
+                                                <legend class="scheduler-border">Thông tin</legend>
+                                                <div class="form-group">
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label for="serviceTypeName" class="col-md-12 control-label">Tên</label>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="serviceType" class="col-md-12 control-label">Loại dịch vụ</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        <div class="form-group">
+                                                            <div class="col-md-12">
+                                                                <input id="serviceTypeName" name="ServiceTypeName" type="text" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="col-md-6">
+                                                                <select id="serviceType" name="ServiceType" class="form-control">
+                                                                    <option value="@SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER"> Nước</option>
+                                                                    <option value="@SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST"> Chi phí cố định</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-6" id="houseCatRow">
+                                                                <label for="houseCat" class="col-md-3 control-label">Loại nhà</label>
+                                                                <div class="col-md-9">
+                                                                    <select id="houseCat" name="ServiceType" class="form-control">
+                                                                        @foreach (var cat in houseCat)
+                                                                        {
+                                                                            <option value="@cat.Id"> @cat.Name</option>
+                                                                        }
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="UtilityServiceWrapper">
+                                        <div class="col-md-offset-1 col-md-10">
+                                            <fieldset class="scheduler-border less-padding">
+                                                <legend class="scheduler-border">Cư dân trong hộ khẩu</legend>
+
+                                                <div>
+                                                    <div class="form-group">
+                                                        <div class="col-md-offset-1 col-md-4">
+                                                            <strong style="align-content: center">Tên mức</strong>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <strong style="align-content: center">Từ</strong>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <strong style="align-content: center">Đến (* vô hạn)</strong>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <strong style="align-content: center">Giá</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div id="waterRangeWrapperInline">
+                                                        @{
+                                                            for (int i = 1; i < 4; i++)
+                                                            {
+                                                                <div id="row_@i" class="form-group">
+                                                                    <div class="col-md-offset-1 col-md-4">
+                                                                        <input id="range_name_@i" name="" type="text" class="form-control order-item">
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <input id="from_amount_@i" readonly="readonly" value="@(i==1 ? "0": "")" name="" type="text" class="form-control order-item-qty">
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <input id="to_amount_@i" name="" type="text" class="form-control order-item-price">
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <input id="price_@i" name="" type="text" class="form-control total-order">
+                                                                    </div>
+                                                                    <span class="btn btn-danger btn-xs on-delete"><i class="fa fa-times"></i></span>
+                                                                </div>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-md-3">
+                                                        <span id="addRowWater" class="btn btn-stroke btn-primary"><i class="fa fa-plus"></i> Thêm</span>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <div class="pull-right">
+                                                <span class="btn btn-primary" onclick="addServicePrices()"><i class="fa fa-floppy-o"></i> Tạo mới</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="fixedCostFrame" class="hide">
+    <div class="col-md-offset-1 col-md-10">
+        <fieldset class="scheduler-border less-padding">
+            <legend class="scheduler-border">Phí cố định</legend>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-6">
+                    <strong style="align-content: center">Tên phí cố định</strong>
+                </div>
+                <div class="col-sm-2">
+                    <strong style="align-content: center">Giá</strong>
+                </div>
+            </div>
+            <div id="fixedCostWrapper">
+                <div id="row_1" class="form-group">
+                    <div class="col-md-offset-2 col-md-7">
+                        <input id="fixed_cost_name_1" name="" type="text" class="form-control order-item">
+                    </div>
+                    <div class="col-md-2">
+                        <input id="fixed_cost_price_1" name="" type="text" class="form-control order-item-qty">
+                    </div>
+                    @*                    <span class="btn btn-danger btn-xs on-delete"><i class="fa fa-times"></i></span>*@
+                </div>
+            </div>
+            @*            <div class="form-group">*@
+            @*                <div class="col-sm-3">*@
+            @*                    <span id="addNewFixedCost" class="btn btn-stroke btn-primary"><i class="fa fa-plus"></i> Thêm</span>*@
+            @*                </div>*@
+            @*            </div>*@
+        </fieldset>
+    </div>
+</div>
+
+<div id="waterFrame" class="hide">
+    <div class="col-md-offset-1 col-md-10">
+        <fieldset class="scheduler-border less-padding">
+            <legend class="scheduler-border">Cư dân trong hộ khẩu</legend>
+
+            <div>
+                <div class="form-group">
+                    <div class="col-md-offset-1 col-md-4">
+                        <strong style="align-content: center">Tên mức</strong>
+                    </div>
+                    <div class="col-sm-2">
+                        <strong style="align-content: center">Từ</strong>
+                    </div>
+                    <div class="col-sm-2">
+                        <strong style="align-content: center">Đến</strong>
+                    </div>
+                    <div class="col-sm-2">
+                        <strong style="align-content: center">Giá</strong>
+                    </div>
+                </div>
+                <div id="waterRangeWrapper">
+                    @{
+                        for (int i = 1; i < 4; i++)
+                        {
+                            <div id="row_@i" class="form-group">
+                                <div class="col-md-offset-1 col-md-4">
+                                    <input id="range_name_@i" name="" type="text" class="form-control order-item">
+                                </div>
+                                <div class="col-md-2">
+                                    <input id="from_amount_@i" name="" type="text" class="form-control order-item-qty">
+                                </div>
+                                <div class="col-md-2">
+                                    <input id="to_amount_@i" name="" type="text" class="form-control order-item-price">
+                                </div>
+                                <div class="col-md-2">
+                                    <input id="price_@i" name="" type="text" class="form-control total-order">
+                                </div>
+                                <span class="btn btn-danger btn-xs on-delete"><i class="fa fa-times"></i></span>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-3">
+                    <span id="addRowWater" class="btn btn-stroke btn-primary"><i class="fa fa-plus"></i> Thêm</span>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        window.index = 3;
+        onClickAddNewRow();
+        bindingEventOnDelet();
+
+        $("#serviceType").on("change", function () {
+            var selected = parseInt($("#serviceType").find("option:selected").val(), 10);
+            if (selected === 5) {
+                $("#houseCatRow").addClass("hide");
+                $("#UtilityServiceWrapper").html($("#fixedCostFrame").html());
+                $("#fixedCostWrapper").prop("id", "fixedCostWrapperInline");
+            } else if (selected === 2 || selected === 1) {
+                getListHouseCategory();
+                $("#UtilityServiceWrapper").html($("#waterFrame").html());
+                $("#waterRangeWrapper").prop("id", "waterRangeWrapperInline");
+                window.index = 3;
+                onClickAddNewRow();
+            }
+            bindingEventOnDelet();
+        });
+        bindingClassNumberWithComma("total-order");
+        onChangeFromNumber();
+    });
+    function onDeleteRow(event) {
+        event.stopPropagation();
+        console.log($(event));
+        var thisNode = event.currentTarget;
+        var fieldSetRow = thisNode.parentNode.parentNode.children.length;
+        if (fieldSetRow > 1) {
+            thisNode.parentNode.parentNode.removeChild(thisNode.parentNode);
+        }
+        event.stopPropagation();
+    }
+    function bindingEventOnDelet() {
+        $(".on-delete").unbind();
+        $(".on-delete").on("click", function (event) {
+            onDeleteRow(event);
+        });
+    }
+    function onClickAddNewRow() {
+        $("#addRowWater").unbind();
+        $("#addRowWater").on("click", function () {
+            createNewRow("waterRangeWrapperInline");
+        });
+    }
+    function createNewRow(wrapperId) {
+        window.index++;
+        addRangePrice(index, wrapperId);
+        bindingEventOnDelet();
+        onChangeFromNumber();
+    }
+    function onChangeFromNumber() {
+        $(".order-item-price").on("change", function (event) {
+            if (event.which >= 37 && event.which <= 40) {
+                event.preventDefault();
+                return;
+            }
+            var nextElement = event.target.parentNode.parentNode.nextElementSibling;
+            var nextFromValue = {};
+            var fromValue = event.target.parentNode.previousElementSibling.querySelector(".order-item-qty");
+
+            if (nextElement == null) {
+                event.target.value = "*";
+                return;
+            } else {
+                nextFromValue = nextElement.querySelector(".order-item-qty");
+                var nextToValue = nextElement.querySelector(".order-item-price");
+                if (parseInt(event.target.value, 10) >= parseInt(nextToValue.value, 10)) {
+                    var nextNode = event.target.parentNode.parentNode.nextElementSibling;
+                    while (nextNode && nextNode.nodeType === 1 && nextNode !== this) {
+                        nextNode.querySelector(".order-item-price").value = "";
+                        nextNode.querySelector(".order-item-qty").value = "";
+                        nextNode = nextNode.nextElementSibling;
+                    }
+                }// if next node is greater than this node clean all next node
+            }
+            if (event.target.parentNode.parentNode.previousElementSibling) {
+                var previousValue = event.target.parentNode.parentNode.previousElementSibling
+                    .querySelector(".order-item-price");
+
+                if (isNaN(event.target.value) && event.target.value !== "*") {
+                    event.target.value = "";
+                } // clean next node when input other character except *
+                else if (isNaN(event.target.value) && event.target.value === "*") {
+                    if (nextElement != null) {
+                        var nextNode = event.target.parentNode.parentNode.nextElementSibling;
+                        while (nextNode && nextNode.nodeType === 1 && nextNode !== this) {
+                            nextNode.querySelector(".order-item-price").value = "";
+                            nextNode.querySelector(".order-item-qty").value = "";
+                            nextNode = nextNode.nextElementSibling;
+                        }
+                    }// clean next node when input * in the middle
+                } else if (parseInt(event.target.value, 10) > parseInt(previousValue.value, 10)) {
+                    nextFromValue.value = event.target.value;
+                } else {
+                    event.target.value = "";
+                    fromValue.value = "";
+                    var previousNode = event.target.parentNode.parentNode.previousElementSibling;
+                    while (previousNode && previousNode.nodeType === 1 && previousNode !== this) {
+                        previousNode.querySelector(".order-item-price").value = "";
+                        if (previousNode.querySelector(".order-item-qty").value != 0) {
+                            previousNode.querySelector(".order-item-qty").value = "";
+                        }
+                        previousNode = previousNode.previousElementSibling;
+                    }
+                    var nextNode = event.target.parentNode.parentNode.nextElementSibling;
+                    while (nextNode && nextNode.nodeType === 1 && nextNode !== this) {
+                        nextNode.querySelector(".order-item-price").value = "";
+                        nextNode.querySelector(".order-item-qty").value = "";
+                        nextNode = nextNode.nextElementSibling;
+                    }
+                }// when in put in the middle wrong clean all element
+            } else {
+                if (isNaN(event.target.value) && event.target.value !== "*") {
+                    event.target.value = "";
+                } else {
+                    nextFromValue.value = event.target.value;
+                }
+            }
+        });
+    }
+    function createNewFixedCostRow(wrapperId) {
+        window.index++;
+        addNewFixedCostRow(index, wrapperId);
+        bindingEventOnDelet();
+    }
+    function getListHouseCategory() {
+        $.ajax({
+            url: "/Management/Config/UtilityService/GetListHouseType",
+            type: "GET",
+            success: function (data) {
+                $("#houseCat").html(parseJsonToSelectTags(data));
+                $("#houseCatRow").removeClass("hide");
+            }
+        });
+    }
+    function addRangePrice(index, parentTagId) {
+        var tag = "<div id=\"row_" + index + "\" class='form-group'>" +
+                "<div class='col-md-offset-1 col-md-4'><input id=\"range_name_" + index + "\" type='text' class='form-control order-item'></div>" +
+                "<div class='col-sm-2'><input type='text' id=\"from_amount_" + index + "\" readonly='readonly' class='form-control order-item-qty'></div>" +
+                "<div class='col-sm-2'><input id=\"to_amount_" + index + "\"type='text' class='form-control order-item-price'></div>" +
+                "<div class='col-sm-2'><input id=\"price_" + index + "\" type='text' class='form-control'></div>" +
+                "<span class='btn btn-danger btn-xs on-delete'><i class='fa fa-times'></i></span>" +
+                "</div>";
+        $("#" + parentTagId).append(tag);
+    }
+    function addNewFixedCostRow(index, parentTagId) {
+        var tag = "<div id='row_" + index + "' class='form-group'>" +
+                    " <div class='col-md-offset-2 col-md-7'>" +
+                    " <input id='fixed_cost_name_" + index + "' name='' type='text' class='form-control order-item'>" +
+                    "</div>" +
+                    "  <div class='col-md-2'>" +
+                    "  <input id='fixed_cost_price_" + index + "' name='' type='text' class='form-control order-item-qty'>" +
+                    "    </div>" +
+                    "   <span class='btn btn-danger btn-xs on-delete'><i class='fa fa-times'></i></span>" +
+                    "  </div>";
+
+
+        $("#" + parentTagId).append(tag);
+    }
+
+    function addServicePrices() {
+        var mode = parseInt($("#serviceType").find("option:selected").val(), 10);
+        if (mode === 1 || mode === 2) {
+            var utilityServiceName = $("#serviceTypeName").val();
+            var utilityServiceType = $("#serviceType").val();
+            var houseCategory = $("#houseCat").val();
+
+            var price = 0;
+            var toAmount = 0;
+            var fromAmount = 0;
+            var rangeName = 0;
+            var id = 0;
+            var rowIdStr = [];
+            var item = {};
+
+            var waterRangePrices = [];
+
+            var waterRangeElement = $("#waterRangeWrapperInline > .form-group");
+            var numberOfRow = waterRangeElement.length;
+            var thisElement = {};
+
+            for (var i = 0; i < numberOfRow; i++) {
+                thisElement = $(waterRangeElement[i]);
+                rowIdStr = thisElement.prop("id").split("row_");
+                id = rowIdStr[1];
+                rangeName = thisElement.find("#range_name_" + id).val();
+                fromAmount = replaceCommaNumber(thisElement.find("#from_amount_" + id).val());
+                toAmount = replaceCommaNumber(thisElement.find("#to_amount_" + id).val());
+                price = replaceCommaNumber(thisElement.find("#price_" + id).val());
+
+                if (rangeName && fromAmount && toAmount && price) {
+                    item = {
+                        Name: rangeName,
+                        FromAmount: fromAmount,
+                        ToAmount: toAmount,
+                        Price: price
+                    };
+                    waterRangePrices.push(item);
+                }
+            }
+            var waterUtilService = {
+                Name: utilityServiceName,
+                Type: utilityServiceType,
+                HouseCatId: houseCategory,
+                WaterUtilServiceRangePrices: waterRangePrices
+            };
+
+            $.ajax({
+                url: "/Management/Config/UtilityService/AddWaterServicePrices",
+                data: waterUtilService,
+                type: "POST",
+                success: function (data) {
+                    if (data.StatusCode === 0) {
+                        $("#createSuccessNoti").fadeIn("fast");
+                        resetFormData("addUtilServiceForm");
+                        setTimeout(function () {
+                            $("#createSuccessNoti").fadeOut("fast");
+                        }, 3000);
+                    } else {
+                        $("#createFailedNoti").fadeIn("fast");
+                        setTimeout(function () {
+                            $("#createFailedNoti").fadeOut("fast");
+                        }, 3000);
+                    }
+                }
+            });
+        }
+        else if (mode === 5) {
+            var fixedCostElement = $("#fixedCostWrapperInline > .form-group");
+            var numberOfRow = fixedCostElement.length;
+            var utilityServiceName = $("#serviceTypeName").val();
+            var utilityServiceType = $("#serviceType").val();
+            var fixedCost = {};
+
+            var _rowIdStr = $(fixedCostElement[0]).prop("id").split("row_");
+            var _id = _rowIdStr[1];
+            var fixedCostName = $("#fixed_cost_name_" + _id).val();
+            var fixedPrice = replaceCommaNumber($("#fixed_cost_price_" + _id).val());
+            if (fixedCostName && fixedPrice) {
+                var item = {
+                    Name: fixedCostName,
+                    Price: fixedPrice
+                };
+                fixedCost = item;
+                var fixCostItem = {
+                    Name: utilityServiceName,
+                    Type: utilityServiceType,
+                    FixedCost: fixedCost
+                };
+                $.ajax({
+                    url: "/Management/Config/UtilityService/AddFixedCost",
+                    data: fixCostItem,
+                    type: "POST",
+                    success: function (data) {
+                        if (data.StatusCode === 0) {
+                            $("#createSuccessNoti").fadeIn("fast");
+                            resetFormData("addUtilServiceForm");
+                            setTimeout(function () {
+                                $("#createSuccessNoti").fadeOut("fast");
+                            }, 3000);
+                        } else {
+                            $("#createFailedNoti").fadeIn("fast");
+                            setTimeout(function () {
+                                $("#createFailedNoti").fadeOut("fast");
+                            }, 3000);
+                        }
+                    }
+                });
+            }
+        }
+    }
+</script>

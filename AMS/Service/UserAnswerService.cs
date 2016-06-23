@@ -11,13 +11,13 @@ namespace AMS.Service
 {
     public class UserAnswerService
     {
-        GenericRepository<UserAnswerSurvey> userAnswerRepository = new GenericRepository<UserAnswerSurvey>();
+        GenericRepository<UserAnswerPoll> userAnswerRepository = new GenericRepository<UserAnswerPoll>();
         GenericRepository<House> houseRepository = new GenericRepository<House>();
-        public List<UserAnswerSurvey> GetListUserAnswerSurvey()
+        public List<UserAnswerPoll> GetListUserAnswerSurvey()
         {
             return userAnswerRepository.List.ToList();
         }
-        public UserAnswerSurvey FindById(int id)
+        public UserAnswerPoll FindById(int id)
         {
             return userAnswerRepository.FindById(id);
         }
@@ -30,7 +30,7 @@ namespace AMS.Service
         {
             return houseRepository.List.ToList().DistinctBy(t => t.Floor).ToList();
         }
-        public void AddUserAnswerSurvey(UserAnswerSurvey obj)
+        public void AddUserAnswerSurvey(UserAnswerPoll obj)
         {
             userAnswerRepository.Add(obj);
         }
@@ -45,13 +45,13 @@ namespace AMS.Service
             return -1;
         }
 
-        public List<UserAnswerSurvey> GetListUserAnswerSurveysBySurveyId()
+        public List<UserAnswerPoll> GetListUserAnswerSurveysBySurveyId()
         {
-            return userAnswerRepository.List.ToList().DistinctBy(t => t.SurveyId).ToList();
+            return userAnswerRepository.List.ToList().DistinctBy(t => t.PollId).ToList();
         }
-        public List<UserAnswerSurvey> GetListUserAnswerSurveysBySurveyId(int id)
+        public List<UserAnswerPoll> GetListUserAnswerSurveysBySurveyId(int id)
         {
-            return userAnswerRepository.List.Where(t => t.SurveyId ==id).ToList();
+            return userAnswerRepository.List.Where(t => t.PollId ==id).ToList();
         }
     }
 }

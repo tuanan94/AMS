@@ -4,14 +4,14 @@
     ViewBag.Title = "Home Page";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
     User curUser = ViewBag.curUser;
-    List<UserAnswerSurvey> listUserAnswer = new List<UserAnswerSurvey>();
+    List<UserAnswerPoll> listUserAnswer = new List<UserAnswerPoll>();
     HouseServices houseServices = new HouseServices();
     SurveyService surveyService = new SurveyService();
     QuestionService questionService = new QuestionService();
     AnswerService answerService = new AnswerService();
     UserAnswerService userAnswerService = new UserAnswerService();
     UserServices userServices = new UserServices();
-    List<Survey> listSurveys = surveyService.GetListSurveys();
+    List<Poll> listSurveys = surveyService.GetListSurveys();
     string alert = "";
     foreach (var item in listSurveys)
     {

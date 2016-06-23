@@ -19,10 +19,10 @@
 fieldset.scheduler-border {
     /* border: 1px solid #25AD9F !important;*/
     border: 1px solid #333333 !important;
-    border-radius: 4px;
+    border-radius: 3px;
     padding: 0 1.4em 1.4em 1.4em !important;
     /*margin: 0 0 1.5em 0 !important;*/
-    margin-bottom: 1.5em !important;
+    /*margin-bottom: 1.5em !important;*/
     -webkit-box-shadow: 0px 0px 0px 0px #000;
     box-shadow: 0px 0px 0px 0px #000;
 }
@@ -42,11 +42,12 @@ fieldset.scheduler-border {
 }
 
 fieldset.scheduler-border > legend {
+    font-weight: bold;
+    margin-bottom: 10px;
     width: auto;
-    border-bottom: none;
-    margin-bottom: 5px;
-    font-size: 15px;
-    color: #25AD9F;
+    padding: 5px 10px 5px 10px;
+    color: #428bca;
+    border-bottom: transparent;
 }
 
     fieldset.scheduler-border > legend.bold-black {
@@ -94,6 +95,13 @@ fieldset.scheduler-border > legend {
     background-color: #c2e1f6;
 }
 
+.room-color {
+    color: #000;
+    border: 1px solid;
+    border-radius: 3px;
+    background-color: #FFBD53;
+}
+
 .house-color {
     color: #000;
     border: 1px solid;
@@ -122,6 +130,7 @@ td.highlight {
     }
 
         .manager-header > li > a {
+            color: #152C40 !important;
             margin: 0 auto 2px;
             display: block;
             height: 100%;
@@ -133,9 +142,9 @@ td.highlight {
             transition: all 0.3s;
         }
 
-        .manager-header > li.active > a > i {
+        .manager-header > li.active > a {
             /*color: #333333;*/
-            color: #af1b1b;
+            color: #fff !important;
         }
 
         .manager-header > li > a > i {
@@ -179,7 +188,7 @@ td.highlight {
 }
 
     .heading-tab i {
-        font-size: 19px;
+        font-size: 21px;
     }
 
     .heading-tab ul.nav-tabs {
@@ -197,7 +206,7 @@ td.highlight {
 
     .heading-tab ul li.active a, .heading-tab ul li.active a i {
         /*color: #428bca;*/
-        color: #555;
+        color: #152C40;
     }
 
 .table-striped.balance-sheet > tbody > tr:nth-child(odd) > td,
@@ -219,14 +228,58 @@ textarea {
     resize: none;
 }
 
-canvas{
-        width: 100% !important;
-        max-width: 300px;
-        height: auto !important;
-    }
+canvas {
+    width: 100% !important;
+    max-width: 300px;
+    height: auto !important;
+}
+
 .align-middle {
-position: absolute;
+    position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);    
+    transform: translate(-50%, -50%);
+}
+
+
+/*Start edit layout table*/
+.table-striped > tbody > tr:nth-child(odd) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
+    background: #e9e9e9;
+}
+
+.table-hover > tbody > tr:hover > td,
+.table-hover > tbody > tr:hover > th {
+    background: #f6f6f6;
+}
+/*End edit layout table*/
+.single-receipt {
+    color: #2E88CC;
+    font-size: 25px;
+    border: solid 1px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.modal {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+    .modal.loading .modal-content:before {
+        content: 'Đang xử lý';
+        text-align: center;
+        line-height: 155px;
+        font-size: 20px;
+        background: rgba(204, 204, 204, 0.5);
+        position: absolute;
+        top: 55px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        color: #000;
+        z-index: 1000;
+    }
+/*line height like line-height of bootstap*/
+.line-height {
+    line-height: 34px;
 }

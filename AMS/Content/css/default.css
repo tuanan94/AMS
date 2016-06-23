@@ -25006,7 +25006,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   }
 }
 .navbar-nav {
-  margin: 9px -15px;
+  /*margin: 9px -15px;*//*AnLTNM Change*/
 }
 .navbar-nav > li > a {
   padding-top: 10px;

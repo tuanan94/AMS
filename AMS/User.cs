@@ -25,7 +25,7 @@ namespace AMS
             this.Posts = new HashSet<Post>();
             this.Receipts = new HashSet<Receipt>();
             this.UserRateAroundProviders = new HashSet<UserRateAroundProvider>();
-            this.UserAnswerSurveys = new HashSet<UserAnswerSurvey>();
+            this.UserAnswerPolls = new HashSet<UserAnswerPoll>();
             this.UserReportPosts = new HashSet<UserReportPost>();
         }
     
@@ -36,6 +36,7 @@ namespace AMS
         public int RoleId { get; set; }
         public Nullable<int> IsApproved { get; set; }
         public Nullable<int> HouseId { get; set; }
+        public Nullable<int> ResidentType { get; set; }
         public Nullable<int> Creator { get; set; }
         public string ProfileImage { get; set; }
         public Nullable<System.DateTime> DateOfBirth { get; set; }
@@ -66,7 +67,7 @@ namespace AMS
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserRateAroundProvider> UserRateAroundProviders { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserAnswerSurvey> UserAnswerSurveys { get; set; }
+        public virtual ICollection<UserAnswerPoll> UserAnswerPolls { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserReportPost> UserReportPosts { get; set; }
     }

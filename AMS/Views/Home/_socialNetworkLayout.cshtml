@@ -13,7 +13,7 @@
         <div class="sidebar-block">
             <a href="@(curHouse==null?"#":("/House/"+curHouse.Id))">
                 <div class="profile">
-                    <img src="@(curHouse.ProfileImage == null||curHouse.ProfileImage.Equals("")?"/Content/images/home_default.jpg":curHouse.ProfileImage)" alt="HOUSE" class="img-circle" width="100px">
+                    <img src="@(curHouse==null|| curHouse.ProfileImage == null||curHouse.ProfileImage.Equals("")?"/Content/images/home_default.jpg":curHouse.ProfileImage)" alt="HOUSE" class="img-circle" width="100px">
                     <h4>Nhà @(curHouse == null || curHouse.HouseName.Equals("") ? "chưa xác định" : curHouse.HouseName)</h4>
                 </div>
             </a>

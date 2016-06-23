@@ -14,6 +14,15 @@ namespace AMS.Service
     {
         GenericRepository<BalanceSheet> _trasactionRepository = new GenericRepository<BalanceSheet>();
 
+        public List<BalanceSheet> GetAllBalanceSheets()
+        {
+            return _trasactionRepository.List.OrderByDescending(b => b.Id).ToList();
+        }
+        public bool hasBalanceSheet()
+        {
+            IEnumerable<BalanceSheet> listTrans = _trasactionRepository.List.ToList();
+            return listTrans.Count() == 0 ? false : true;
+        }
         public BalanceSheet FindById(int id)
         {
             return _trasactionRepository.FindById(id);
@@ -26,6 +35,13 @@ namespace AMS.Service
         {
             _trasactionRepository.Update(transaction);
         }
+
+        public BalanceSheet CheckBalanceSheetIsExisted(DateTime blsForMonth)
+        {
+            IEnumerable<BalanceSheet> listTrans = _trasactionRepository.List.Where(r => r.ForMonth.Value != null && r.ForMonth.Value.Date == blsForMonth ).ToList();
+            return listTrans.Count() == 0 ? null : listTrans.First();
+        }
+
         public BalanceSheet FindByMonthYear(DateTime monthYear)
         {
             IEnumerable<BalanceSheet> listTrans = _trasactionRepository.List.Where(r => r.ForMonth.Value != null &&

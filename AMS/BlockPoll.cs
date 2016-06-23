@@ -12,14 +12,13 @@ namespace AMS
     using System;
     using System.Collections.Generic;
     
-    public partial class UserAnswerSurvey
+    public partial class BlockPoll
     {
-        public int SurveyId { get; set; }
-        public int UserId { get; set; }
-        public string Answer { get; set; }
+        public int BlockId { get; set; }
+        public int PollId { get; set; }
+        public string Name { get; set; }
     
-        public virtual Answer Answer1 { get; set; }
-        public virtual Survey Survey { get; set; }
-        public virtual User User { get; set; }
+        public virtual Block Block { get; set; }
+        public virtual Poll Poll { get; set; }
     }
 }

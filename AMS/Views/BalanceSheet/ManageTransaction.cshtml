@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Manage Income";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
+    int blsId = ViewBag.blsId;
 }
 
 <div class="col-md-12">
@@ -32,7 +33,7 @@
                         <form class="form-horizontal" role="form">
                             <div class="col-md-12">
                                 <div class="table-responsive">
-                                    <table id="listIncomeTbl" class="table v-middle table-striped table-bordered table-hover">
+                                    <table id="listIncomeTbl" data-bls-id="@blsId" class="table v-middle table-striped table-bordered table-hover">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -190,14 +191,15 @@
     $(document).ready(function () {
         $("#BalanceSheetForMonthView").datepicker();
         window.deleteTransList = [];
-
+        var blsId = document.getElementById("listIncomeTbl").dataset.blsId;
         window.listIncomeTable = $("#listIncomeTbl").DataTable({
             "bLengthChange": false,
             "bInfo": false,
             "ajax": {
-                url: "/Management/BalanceSheet/GetIncomeTransItems",
+                url: "/Management/BalanceSheet/GetIncomeTransItems?blsId=" + blsId,
                 dataSrc: ""
             },
+            "order": [[7, "desc"]],
             rowId: 'TransId',
             "drawCallback": function (settings) {
                 var addBtn = "<div class='col-md-1'>" +
@@ -467,9 +469,9 @@
                 console.log(data);
             }
         });
-//        $("#transForMonth").val("");
-//        $("#transTotalAmount").val("");
-//        $("#transPaidAmount").val("");
+        //        $("#transForMonth").val("");
+        //        $("#transTotalAmount").val("");
+        //        $("#transPaidAmount").val("");
     }
 
     function addIncomeTransaction() {

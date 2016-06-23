@@ -13,9 +13,9 @@
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/css/css")
     @Scripts.Render("~/bundles/modernizr")
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="~/Content/css/jquery-ui.min.css">
+    <link rel="stylesheet" href="~/Content/css/dataTables.bootstrap.min.css">
 </head>
 <body class="breakpoint-1024">
     <div class="navbar navbar-main navbar-primary navbar-fixed-top navbar-primary-manager" role="navigation">
@@ -51,7 +51,7 @@
                         <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-life-ring"></i>Yêu cầu</a>
                     </li>
                     <li class="active">
-                        <a href="/Management/ManageReceipt/View/@User.Identity.GetUserId()"><i class="fa fa-file-text-o"></i> Hóa đơn</a>
+                        <a href="/Management/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Hóa đơn</a>
                     </li>
                     <li>
                         <a href="/Management/BalanceSheet/View"><i class="fa fa-dollar"></i> Thu chi</a>
@@ -63,7 +63,7 @@
                         <a href="~/Views/Shared/login.html"><i class="fa fa-list-ol"></i> Khảo sát</a>
                     </li>
                     <li class="">
-                        <a href="/Management/ManageRequestView/@User.Identity.GetUserId()"><i class="fa fa-wrench"></i> Cấu Hình</a>
+                        <a href="/Management/Config/UtilityService/View"><i class="fa fa-wrench"></i> Cấu Hình</a>
                     </li>
                 </ul>
             </div>
