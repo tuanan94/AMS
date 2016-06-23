@@ -239,6 +239,7 @@
                                                 <input type="hidden" name="count" value="4"/>
                                             </div>
                                         </div>
+                                        <input type="hidden" class="form-control binh" id="idd6" value=""> <br>
                                         @*<div id="row_5" class="form-group" id="aa">
                                             <label class="col-sm-3 control-label"></label>
                                             <div class="col-sm-7">
@@ -445,6 +446,9 @@
     } else if (!document.getElementById('check').checked) {
         document.getElementById('other').style.visibility = 'hidden'
     }
+   
+   
+
     $(document).ready(function () {
         $('#image_container img').click(function () {
             //remove border on any images that might be selected
@@ -552,6 +556,40 @@
         
         else { return true; }
     }
+    $(document).ready(function () {
+        $('body').on('blur', '#idd5', function () {
+            var key5 = $("#idd5").val();
+            var key1 = $("#idd1").val();
+            var key2 = $("#idd2").val();
+            var key3 = $("#idd3").val();
+            var key4 = $("#idd4").val();
+            if (key1 === key5 && key1 != null && key5 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            } else if (key1 === key2 && key1 != null && key2 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            } else if (key1 === key3 && key1 != null && key3 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            } else if (key1 === key4 && key1 != null && key4 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            } else if (key1 === key5 && key1 != null && key5 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            } else if (key2 === key3 && key2 != null && key3 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            } else if (key2 === key4 && key2 != null && key4 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            } else if (key2 === key5 && key2 != null && key5 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            } else if (key3 === key4 && key3 != null && key4 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            } else if (key3 === key5 && key3 != null && key5 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            } else if (key4 === key5 && key4 != null && key5 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            }
+
+            
+        });
+    });
     function bInfo() {
         in1 = document.getElementById('idd1').value;
         in2 = document.getElementById('idd2').value;
@@ -562,7 +600,7 @@
         //        alert('Same Value'); return false;
         //    }
         //}
-      
+       
         if (in1 == in2 && in1 != "" && in2 != "") {
             alert('Same Value'); return false;
         } else if (in1 == in3 && in1 != "" && in3 != "") {
