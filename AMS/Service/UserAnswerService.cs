@@ -13,13 +13,21 @@ namespace AMS.Service
     {
         GenericRepository<UserAnswerPoll> userAnswerRepository = new GenericRepository<UserAnswerPoll>();
         GenericRepository<House> houseRepository = new GenericRepository<House>();
-        public List<UserAnswerPoll> GetListUserAnswerSurvey()
+
+        public List<UserAnswerPoll> GetListUserAnswerPoll()
         {
             return userAnswerRepository.List.ToList();
         }
         public UserAnswerPoll FindById(int id)
         {
             return userAnswerRepository.FindById(id);
+        }
+
+       
+
+        public void DeleteUserAnswer(UserAnswerPoll obj)
+        {
+            userAnswerRepository.Delete(obj);
         }
 
         public List<House> GetListBlock()
@@ -30,28 +38,34 @@ namespace AMS.Service
         {
             return houseRepository.List.ToList().DistinctBy(t => t.Floor).ToList();
         }
-        public void AddUserAnswerSurvey(UserAnswerPoll obj)
+
+        public void AddUserAnswerPoll(UserAnswerPoll obj)
         {
             userAnswerRepository.Add(obj);
         }
 
-        public int CountAnswer(int answerId)
+
+        public int CountAnswer(string answerId, int PollId)
         {
 
-            //  int a = userAnswerRepository.List.Count(t => t.AnswerId == answerId);
-
-
-            // return a;
-            return -1;
+            int a = userAnswerRepository.List.Count(t => t.Answer == answerId && t.PollId == PollId);
+                
+                  
+                    
+            return a;
         }
 
-        public List<UserAnswerPoll> GetListUserAnswerSurveysBySurveyId()
+        public List<UserAnswerPoll> GetListUserAnswerPollsByPollId()
         {
             return userAnswerRepository.List.ToList().DistinctBy(t => t.PollId).ToList();
         }
-        public List<UserAnswerPoll> GetListUserAnswerSurveysBySurveyId(int id)
+        public List<UserAnswerPoll> GetListUserAnswerPollsByPollId(int id)
         {
             return userAnswerRepository.List.Where(t => t.PollId ==id).ToList();
+        }
+        public List<UserAnswerPoll> GetListUserAnswerPollsByAnswer(int id)
+        {
+            return userAnswerRepository.List.ToList().DistinctBy(t => t.Answer ).Where(t=>t.PollId== id).ToList();
         }
     }
 }

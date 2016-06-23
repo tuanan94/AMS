@@ -19,7 +19,7 @@ namespace AMS.Controllers
     public class AccountController : Controller
     {
         HouseServices houseServices = new HouseServices();
-        SurveyService surveyService = new SurveyService();
+        PollService surveyService = new PollService();
         QuestionService questionService = new QuestionService();
         AnswerService answerService = new AnswerService();
         UserAnswerService userAnswerService = new UserAnswerService();
@@ -84,7 +84,7 @@ namespace AMS.Controllers
         public async Task<ActionResult> Login(ViewModel.LoginViewModel model, string returnUrl)
         {
            
-            List<Poll> listSurveys = surveyService.GetListSurveys();
+           
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -93,35 +93,7 @@ namespace AMS.Controllers
             switch (result)
             {
                 case SLIM_CONFIG.LoginResult.Success:
-                    //BinhHT
-                    //List<UserAnswerSurvey> listUserAnswer = new List<UserAnswerSurvey>();
-                    //foreach (var item in listSurveys)
-                    //{
-                    //    listUserAnswer = (userAnswerService.GetListUserAnswerSurveysBySurveyId(item.Id));
-                    //    User currentUser = userServices.FindById(int.Parse(User.Identity.GetUserId()));
-                    //    int k = 0;
-                    //    if (item.Priority == 1)
-                    //    {
-                    //        foreach (var VARIABLE in listUserAnswer)
-                    //        {
-
-
-                    //            if (VARIABLE.UserId == currentUser.Id)
-                    //            {
-                    //                k++;
-                    //            }
-
-                    //        }
-                    //        if (k != 1)
-                    //        {
-                    //            return RedirectToAction("DoSurvey", "Survey",
-                    //                new {alert = "Ban co survey can phai lam"});
-                    //        }
-                    //    }
-                    //}
-
-
-                    //BinhHT
+                   
                     return RedirectToLocal(returnUrl);
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");

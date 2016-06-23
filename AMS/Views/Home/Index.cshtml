@@ -5,17 +5,20 @@
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
     User curUser = ViewBag.curUser;
     List<UserAnswerPoll> listUserAnswer = new List<UserAnswerPoll>();
+
     HouseServices houseServices = new HouseServices();
-    SurveyService surveyService = new SurveyService();
     QuestionService questionService = new QuestionService();
     AnswerService answerService = new AnswerService();
+
+    PollService surveyService = new PollService();
     UserAnswerService userAnswerService = new UserAnswerService();
     UserServices userServices = new UserServices();
-    List<Poll> listSurveys = surveyService.GetListSurveys();
+    List<Poll> listSurveys = surveyService.GetListPolls();
+
     string alert = "";
     foreach (var item in listSurveys)
     {
-        listUserAnswer = (userAnswerService.GetListUserAnswerSurveysBySurveyId(item.Id));
+        listUserAnswer = (userAnswerService.GetListUserAnswerPollsByPollId(item.Id));
         User currentUser = userServices.FindById(int.Parse(User.Identity.GetUserId()));
         int k = 0;
         if (item.Priority == 1)
@@ -250,7 +253,7 @@
 @{
     if (alert!="")
     {
-        <div id="openModal" class="modalDialog">
+        @*<div id="openModal" class="modalDialog">
             <div class="modal-content">
 
                 <a href="#close" title="Close" class="close" style="color: white">X</a>
@@ -260,12 +263,17 @@
                 </div>
 
                 <div class="modal-footer">
-                    @*<button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal" >Hủy</button>*@
+                 
                     <a href="@Url.Action("DoSurvey", "Survey")" class="button">Làm ngay</a>
                 </div>
             </div>
-        </div>
+        </div>*@
+    <script>
+        setTimeout(function () {
+            window.location.href = "/Survey/DoSurvey";
+        }, 1000);
+        </script>
+       
     }
 }
 @*<div id="myModall1" class="modal fade">
@@ -285,6 +293,7 @@
     </div>*@
 
 <script>
+   
     $(document).ready(function () {
         $('.modalDialog').fadeIn();
 
@@ -428,8 +437,6 @@
     }
     function addPostToTimeline(index, postObject) {
         $("#timeline").append('<li class="media">'
-
-
                        + '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile('+postObject['UserId']+',true)">'
                         
 
@@ -458,16 +465,17 @@
                                         + '<div class="input-group">'
                                             + '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control" style="width: 95%;">'
                                             + '<span class="input-group-addon" style="padding: 0;">'
+
                                            
-                                                + '<button class="btn btn-success" onclick="addComment(' + postObject['Id'] + ')">Bình luận</button>'
-                                            + '</span>'
-                                        + '</div>'
-                                    + '</li>'
-                                + '</ul>'
-                            + '</div>'
-                        + '</div>'
-                    + '</li>'
- )
+            + '<button class="btn btn-success" onclick="addComment(' + postObject['Id'] + ')">Bình luận</button>'
+            + '</span>'
+            + '</div>'
+            + '</li>'
+            + '</ul>'
+            + '</div>'
+            + '</div>'
+            + '</li>'
+        )
 
     }
  
@@ -521,18 +529,18 @@
     }
     function addCommentToCommentArea(postId, comment) {
         $("#commentsArea" + postId).append('<li>'
-                                        + '<div class="media">'
-                                            + '<a href="" class="pull-left">'
-                                                + '<img  src="' + comment['userProfile'] + '" class="media-object" style="width:50px">'
-                                            + '</a>'
-                                            + '<div class="media-body">'
-                                                + '<a href="/Profile/' + comment['userId'] + '" class="comment-author">' + comment['username'] + ': </a>'
-                                                + '<span>' + comment['detail'] + '</span>'
-                                                + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
-                                            +'</div>'
-                                        +'</div>'
+            + '<div class="media">'
+            + '<a href="" class="pull-left">'
+            + '<img  src="' + comment['userProfile'] + '" class="media-object" style="width:50px">'
+            + '</a>'
+            + '<div class="media-body">'
+            + '<a href="/Profile/' + comment['userId'] + '" class="comment-author">' + comment['username'] + ': </a>'
+            + '<span>' + comment['detail'] + '</span>'
+            + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
+            +'</div>'
+            +'</div>'
 
-                                    + '</li>')
+            + '</li>')
 
     }
 

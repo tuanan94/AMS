@@ -18,20 +18,20 @@ namespace AMS.Service
         {
             return questionRepository.FindById(id);
         }
-        public List<Question> FindBySurveyId(int id)
-        {
-            return questionRepository.List.Where(t=>t.SurveyId==id).ToList();
-        }
+        //public List<Question> FindByPollId(int id)
+        //{
+        //    return questionRepository.List.Where(t=>t.PollId==id).ToList();
+        //}
 
-        public void DeleteQuestionBySurvetId(int id)
-        {
-            List<Question> obj = questionRepository.List.Where(t => t.SurveyId == id).ToList();
-            foreach (var item in obj)
-            {
-                questionRepository.Delete(item);
-            }
+        //public void DeleteQuestionBySurvetId(int id)
+        //{
+        //    List<Question> obj = questionRepository.List.Where(t => t.PollId == id).ToList();
+        //    foreach (var item in obj)
+        //    {
+        //        questionRepository.Delete(item);
+        //    }
           
-        }
+        //}
         public void AddQuestion(Question obj)
         {
             questionRepository.Add(obj);

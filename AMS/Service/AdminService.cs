@@ -20,6 +20,8 @@ namespace AMS.Service
         {
             House house = new House();
             house.Block.Id = BlockId;
+
+
             house.Floor = Floor;
             house.HouseName = HouseName;
             house.Description = Description;

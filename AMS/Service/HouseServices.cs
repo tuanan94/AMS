@@ -26,6 +26,7 @@ namespace AMS.Service
                                                             && h.HouseName.ToLower().Contains(houseName.ToLower()));
             return houses.Count() == 0 ? null : houses.First();
         }
+
         public List<House> GetFloorInBlock(int blockId)
         {
             return _houseRepository.List.Where(h => h.Block.Id == blockId && h.OwnerID != null).

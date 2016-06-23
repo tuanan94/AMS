@@ -32,5 +32,6 @@ namespace AMS.Service
         //    house.HouseName = HouseName;
         //    houseObj.Add(house);    //Add to house object
         //}
+
     }
 }
