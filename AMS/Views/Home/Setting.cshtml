@@ -3,6 +3,7 @@
     ViewBag.Title = "Setting";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
     House curHouse = ViewBag.curHouse;
+    var pendingMembers = curHouse.Users.Where(u => u.IsApproved != 1).ToList();
 }
 
 <link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css" />
@@ -16,26 +17,51 @@
 
                     <div class="panel panel-default">
                         <div class="panel-heading panel-heading-gray">
-                            <a href="#" class="btn btn-primary btn-xs pull-right">Thêm thành viên <i class="fa fa-plus"></i></a>
+                            <a href="#" class="btn btn-primary btn-xs pull-right" data-toggle="modal" data-target="#addMemberModal">Thêm thành viên <i class="fa fa-plus"></i></a>
                             <i class="icon-user-1"></i> Thành viên
                         </div>
-                        <div class="panel-body">
+                        <div class="panel-body" id="memberPanelBody">
                             <div class="row" style="text-align:center">
-                                <div class="tree">
-                                    <ul>
+                                <a href="#" class="familymember">
+                                    <div style="width:100px;height:120px;float:left">
+                                        <img src="~/Content/images/home_default.jpg" style="width:100%;" />
+                                        <div style="margin-top: 5px; font-size: small;font-weight: 700;background-color: aliceblue;">
+                                            @curHouse.HouseName
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
 
-                                        <li id="Coupletree">
-                                            <a href="#">
-                                                <div style="width:100px;height:120px;float:left">
-                                                    <img src="~/Content/images/home_default.jpg" style="width:100%;" />
-                                                    <div style="margin-top: 5px; font-size: small;font-weight: 700;background-color: aliceblue;">
-                                                        @curHouse.HouseName
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading panel-heading-gray">
+                            <i class="icon-user-1"></i> Thành viên đang đợi duyệt
+                        </div>
+                        <div class="panel-body" id="pendingMember">
+                            
+                            <div class="row" style="text-align:center">
+                                @{
+                                    foreach (User pendingU in pendingMembers)
+                                    {   <div class="familymember">
+                                    <a href="#" class="" onclick="LoadUserProfile(@pendingU.Id)">
+                                        <div style="height:120px;float:left">
+                                            <img src="@(pendingU.ProfileImage==null||pendingU.ProfileImage.Equals("")?"/Content/Images/defaultProfile.png":pendingU.ProfileImage)" style="height:80%" />
+                                            <div style="margin-top: 5px; font-size: small;font-weight: 700;background-color: aliceblue;">
+                                                @pendingU.Fullname
+                                            </div>
+
+                                        </div>
+                                    </a>
+                                            <div>
+                                                <button class="btn cancelRequest btn-danger" onclick="deleteRequest(@pendingU.Id)">
+                                                    Hủy yêu cầu
+                                                </button>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                
                             </div>
                         </div>
                     </div>
@@ -53,7 +79,7 @@
                                 <button id="saveProfileBtn" class="btn btn-primary" onclick="saveHomeProfile()" style="margin-top:10px;display:none">Lưu thay đổi</button>
                                 <button id="unsaveProfileBtn" class="btn btn-default" onclick="unsaveHomeProfile()" style="margin-top:10px;display:none">Hủy</button>
 
-                                 <h3>Nhà @curHouse.HouseName</h3>
+                                <h3>Nhà @curHouse.HouseName</h3>
                                 <input style="visibility:hidden" type="file" id="uploadEditorImage" />
                                 <div id="progressBar" class="progress" style="width:200px" hidden="hidden">
                                     <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:200px">
@@ -63,7 +89,9 @@
 
                             </div>
                             <div class="profile-icons">
-                                <span><i class="fa fa-users"></i> @curHouse.Users.Count</span> <span><i class="fa fa-photo"></i> Block: @curHouse.Block</span> <span><i class="fa fa-video-camera"></i> Tầng: @curHouse.Floor </span>
+                                <span><i class="fa fa-users"></i> @curHouse.Users.Count</span>
+                                <span><i class="fa fa-photo"></i> Block: @curHouse.Block</span>
+                                <span><i class="fa fa-video-camera"></i> Tầng: @curHouse.Floor </span>
                             </div>
                         </div>
 
@@ -94,28 +122,126 @@
                                             <span class="text-muted" style="word-break:break-word">Cho phép hiện thông tin thành viên</span>
                                         </div>
                                         <div class="col-sm-4">
-                                            <input id="allowDisplayMember" class="form-control"  type="checkbox" name="my-checkbox" @(curHouse.DisplayMember==false?"":"checked") >
+                                            <input id="allowDisplayMember" class="form-control" type="checkbox" name="my-checkbox" @(curHouse.DisplayMember == false ? "" : "checked")>
 
-                                           
+
                                         </div>
                                     </div>
                                 </li>
-                               
+
                             </ul>
                         </div>
                     </div>
-               
-                    
-                 </div>
-                
-                
+
+
+                </div>
+
+
             </div>
 
         </div>
     </div>
 </div>
 
+<!-- Modal -->
+<div id="addMemberModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Đăng kí thêm thành viên mới</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4" style="text-align:center">
+                        <img src="/Content/images/defaultProfile.png" style="width:100%;height:auto" id="addNewMemberProfilePreview"/>
+                        <button class="btn btn-primary btn-xs" style="width:100%;margin-top:10px" onclick="chooseNewMemberProfile()">Chọn ảnh đại diện</button>
+                        <input type="file" id="selectNewMemberProfileImage" style="display:none"/>
+                        <div class="form-group">
+                            <label>Cư trú theo diện</label>
+                            <div>
+                                <input type="radio" name="type" value="KT1" />KT1
+                            </div>
+                            <div>
+                                <input type="radio" name="type" value="KT2"/>KT2
+                            </div>
+                            <div>
+                                <input type="radio" name="type" value="KT3"/>KT3
+                            </div>
+                            <div>
+                                <input type="radio" name="type" value="KT4"/>KT4
+                            </div>
+                            <div>
+                                <input type="radio" name="type" value="None"/>Chưa đăng kí
+                            </div>
+
+                        </div>
+                        <a href="http://danluat.thuvienphapluat.vn/giai-dap-ve-kt1-kt2-kt3-kt4-120705.aspx">Tôi thuộc diện nào?</a>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label>Họ và tên</label>
+                            <input id="createMemberFullname" class="form-control" placeholder="VD: Nguyễn Văn A" />
+                        </div>
+                        <div class="form-group">
+                            <label>Tên đăng nhập</label>
+                            <input id="createMemberUsername" class="form-control" />
+                            <div id="UsernameAlert" class="hidden">Tên đăng nhập hợp lệ</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Giới tính</label>
+                            <select class="form-control" id="gender">
+                                <option value="@SLIM_CONFIG.USER_SEX_MALE" selected="selected">Nam</option>
+                                <option value="@SLIM_CONFIG.USER_SEX_FEMALE">Nữ</option>
+                                </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Ngày tháng năm sinh</label>
+                            <input class="form-control" data-val="true" id="DateOfBirth" name="DateOfBirth" type="datetime" value="">
+                        </div>
+                        <div class="form-group">
+                            <label>Số chứng minh nhân dân</label>
+                            <input class="form-control" data-val="true" id="IDNumber" type="number">
+                        </div>
+                        <div class="form-group">
+                            <label>Ngày cấp</label>
+                            <input class="form-control" data-val="true" id="IDDate" name="IDDate" type="datetime" value="">
+                        </div>
+                        <div class="form-group">
+                            <label>Mối quan hệ với chủ hộ</label>
+                            <select class="form-control" id="ownerRelationShip">
+                                <option value="unselected">---Chọn mối quan hệ với chủ hộ---</option>
+                                <option value="0">Vợ, Chồng, Anh, Chị, Em, Bạn...</option>
+                                <option value="-2">Ông, bà (Lớn hơn 2 bậc)</option>
+                                <option value="-1">Bố, mẹ, cô, dì, chú, bác, cậu, mợ...(Lớn hơn 1 bậc)</option>
+                                <option value="1">Con, cháu (gọi bằng cô, dì, chú, bác)</option>
+                                <option value="2">Cháu (gọi bằng ông, bà)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div id="alertInfo" class="alert-danger"></div>
+                <div id="alertInfoSuccess" class="alert-success" style="text-align:center"></div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="sendrequestButton"  class="btn btn-primary" onclick="sendCreateMemberRequest()">Gửi đăng kí</button>
+
+                <button type="button" id="createNewCloseBtn" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <script>
+    $(function () {
+        $("#DateOfBirth").datepicker();
+        $("#IDDate").datepicker();
+    });
     $(document).ready(function() {
         $('#allowDisplayMember').change(function() {
             if($(this).is(":checked")) {
@@ -135,7 +261,7 @@
         });
         loadAllMember("tree","@curHouse.Id");
     });
-  
+
     function updateAllowOtherView(isDisplay){
         $.ajax({
             url: "/Home/UpdateAllowOtherView/",
@@ -182,7 +308,13 @@
     }
     function chooseProfile() {
         $("#uploadEditorImage").click();
+
     }
+
+    function chooseNewMemberProfile(){
+        $("#selectNewMemberProfileImage").click();
+    }
+
     function saveHomeProfile() {
         $.ajax({
             url: "/Home/ChangeProfile/",
@@ -206,10 +338,38 @@
     function unsaveHomeProfile() {
         $("#houseProfile"+@curHouse.Id).attr("src", "@(curHouse.ProfileImage==null||curHouse.ProfileImage.Equals("")?"/Content/Images/home_default.jpg":curHouse.ProfileImage)");
 
-                document.getElementById("saveProfileBtn").style.display="none";
-                document.getElementById("unsaveProfileBtn").style.display="none";
+        document.getElementById("saveProfileBtn").style.display="none";
+        document.getElementById("unsaveProfileBtn").style.display="none";
 
     }
+    $("#selectNewMemberProfileImage").change(function () {
+        var data = new FormData();
+        data.append("dir", "@SLIM_CONFIG.dirProfileImage");
+        var files = $("#selectNewMemberProfileImage").get(0).files;
+        if (files.length > 0) {
+            data.append("HelpSectionImages", files[0]);
+        }
+       // progessBar(true);
+        $.ajax({
+            url: "/Image/Upload/",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: data,
+            success: function (dir) {
+                //alert(dir)
+                $("#addNewMemberProfilePreview").attr("src", dir);
+         //       progessBar(false);
+
+            },
+            error: function (er) {
+                alert(er);
+           //     progessBar(false);
+            }
+
+        });
+    });
+
 
     $("#uploadEditorImage").change(function () {
         var data = new FormData();
@@ -245,5 +405,164 @@
         document.getElementById("saveProfileBtn").style.display="inline";
         document.getElementById("unsaveProfileBtn").style.display="inline";
 
+    }
+    $("#createMemberFullname").change(function () {
+        $.ajax({
+            url: "/Home/getHintUsername/",
+            type: "GET",
+            data: {
+                fullname: $("#createMemberFullname").val(),
+            },
+            success: function (successData) {
+                $("#createMemberUsername").val(successData);
+                checkAvailbleUsername();
+
+            },
+            error: function (er) {
+                alert(er);
+            }
+
+        });
+    })
+    $("#createMemberUsername").change(function () {
+        checkAvailbleUsername()
+    })
+    function checkAvailbleUsername(){
+        $.ajax({
+            url: "/Home/checkAvailableUsername/",
+            type: "GET",
+            data: {
+                username: $("#createMemberUsername").val(),
+            },
+            success: function (successData) {
+                //alert(successData)
+                if(successData=='True'){
+                    $("#UsernameAlert").html('Tên đăng nhập hợp lệ')
+                    $("#UsernameAlert").attr("class","alert-info")
+                }else{
+                    $("#UsernameAlert").html('Tên đăng nhập đã có người sử dụng')
+                    $("#UsernameAlert").attr("class","alert-danger")
+                }
+
+            },
+            error: function (er) {
+                alert(er);
+            }
+
+        });
+    }
+
+    function sendCreateMemberRequest(){
+        $("#alertInfo").html("");
+        var curDate = new Date();
+        var isValid  = true;
+        var type = $('input[name=type]:checked').val();
+        if (type == null){
+            isValid = false;
+            $("#alertInfo").append('Bạn phải chọn diện cư trú <br/>');
+
+        }
+           
+        var fullname  = $("#createMemberFullname").val();
+        if (fullname == ""){
+            isValid = false;
+            $("#alertInfo").append('Tên đầy đủ không được để trống<br/>');
+        }
+        var username = $("#createMemberUsername").val();
+        if (username == ''){
+            isValid = false;
+            $("#alertInfo").append('Tên đăng nhập không được để trống<br/>');
+        }
+        var dateOfBirth = $('#DateOfBirth').datepicker( "getDate" )
+        var idDate = $('#IDDate').datepicker( "getDate" )
+        var idNumber = $('#IDNumber').val();
+        if($("#DateOfBirth").val()==''){
+            isValid = false;
+            $("#alertInfo").append('Ngày sinh không được để trống<br/>');
+        }
+        if (dateOfBirth.getTime() >= new Date().getTime()){
+            isValid = false;
+            $("#alertInfo").append('Ngày sinh không được lớn hơn ngày hiện tại<br/>');
+        }
+        if(idNumber!=''&&$("#IDDate").val()==''){
+            isValid = false;
+
+            $("#alertInfo").append('Trong trường hợp có CMND thì bắt buộc điền ngày cấp<br/>');
+
+        }
+        var relationShip =$( "#ownerRelationShip option:selected" ).val();
+        if(relationShip == 'unselected'){
+            isValid = false;
+            $("#alertInfo").append('Hãy chọn mối quan hệ với chủ hộ<br/>');
+        }
+        var gender = $( "#gender option:selected" ).val();
+        //var info = type + " "  + fullname + " "+ username + " " + dateOfBirth;
+        //alert(info);
+       
+        if(isValid){
+            $.ajax({
+                url: "/Home/addMember/",
+                type: "POST",
+                data: {
+                    fullname: fullname,
+                    username: username,
+                    birthDate: dateOfBirth.toISOString(),
+                    IDNumber: idNumber,
+                    idDate: idDate.toISOString(),
+                    relationShipLevel: relationShip,
+                    gender: gender,
+                    profileImage: $("#addNewMemberProfilePreview").attr("src"),
+                },
+                success: function (successData) {
+                    if(successData=='false'){
+                        $("#alertInfo").html('Có lỗi xảy ra. User này đã tổn tại trong hệ thống')
+                    }else{
+                        $('#alertInfoSuccess').html('<h4 style="color:#0044cc"><i class="fa fa-fw fa-thumbs-o-up"></i>Yêu cầu thêm thành viên mới đã được gửi thành công. </br><h4> ')
+                        $("#sendrequestButton").attr('style','display:none')
+                        $("#createNewCloseBtn").attr('onclick','refreshPage()')
+                        disableAll()
+                    }
+
+                  //  alert(successData)
+
+                },
+                error: function (er) {
+                    alert(er);
+                }
+
+            });
+        }
+    }
+    function refreshPage(){
+        location.reload(true)
+    }
+    function disableAll(){
+        $("#createMemberFullname").attr('disabled','disabled');
+        $("#createMemberUsername").attr('disabled','disabled');
+        $("#gender").attr('disabled','disabled');
+        $('#DateOfBirth').attr('disabled','disabled');
+        $('#IDNumber').attr('disabled','disabled');
+        $('#IDDate').attr('disabled','disabled');
+        $("#ownerRelationShip").attr('disabled','disabled');
+    }
+
+    function deleteRequest(id){
+        $.ajax({
+            url: "/Home/deleteRequest/",
+            type: "POST",
+            data: {
+                id: id
+            },
+            success: function (successData) {
+                //alert(successData)
+                location.reload();
+
+            },
+            error: function (er) {
+                alert(er);
+            }
+
+        });
+        
     }
 </script>

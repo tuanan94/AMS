@@ -76,7 +76,7 @@ namespace AMS.Controllers
             List<int> listSurveyId = new List<int>();
             foreach (var o in listUserAnswerSurveys)
             {
-                listSurveyId.Add(o.SurveyId.Value);
+              //  listSurveyId.Add(o.SurveyId.Value);
 
             }
             foreach (var obj in listSurveyId)
@@ -106,15 +106,15 @@ namespace AMS.Controllers
             foreach (var item in listAnswers)
             {
 
-                listCount.Add(userAnswerService.CountAnswer(item.Id));
+               // listCount.Add(userAnswerService.CountAnswer(item.Id));
             }
             Double count = listCount.Sum();
             foreach (var item in listAnswers)
             {
-                Double answerCount = userAnswerService.CountAnswer(item.Id);
+               // Double answerCount = userAnswerService.CountAnswer(item.Id);
                 // Double percent = Math.Round(((answerCount / count) * 100), 2);
-                string percent = string.Format("{0:00.0}", (answerCount / count * 100));
-                listCountss.Add(percent);
+               // string percent = string.Format("{0:00.0}", (answerCount / count * 100));
+               // listCountss.Add(percent);
             }
             ViewBag.currentUser = currentUser;
             ViewBag.currentHouse = currentHouse;
@@ -149,10 +149,10 @@ namespace AMS.Controllers
                 userAnswerSurvey.SurveyId = model.Id;
                 userAnswerSurvey.UserId = currentUser.Id;
                 //   userAnswerSurvey.UserId = 4;
-                int answerId = answerService.FindByContent(strName, model.Id).Id;
+              //  int answerId = answerService.FindByContent(strName, model.Id).Id;
                 //var answerId = answerService.FindByContent(model.AnswerContent, model.Id).Id;
 
-                userAnswerSurvey.AnswerId = answerId;
+             //   userAnswerSurvey.AnswerId = answerId;
                 userAnswerService.AddUserAnswerSurvey(userAnswerSurvey);
             }
 
@@ -205,15 +205,15 @@ namespace AMS.Controllers
             foreach (var item in listAnswers)
             {
 
-                listCount.Add(userAnswerService.CountAnswer(item.Id));
+             //   listCount.Add(userAnswerService.CountAnswer(item.Id));
             }
             Double count = listCount.Sum();
             foreach (var item in listAnswers)
             {
-                Double answerCount = userAnswerService.CountAnswer(item.Id);
+             //   Double answerCount = userAnswerService.CountAnswer(item.Id);
                 // Double percent = Math.Round(((answerCount / count) * 100), 2);
-                string percent = string.Format("{0:00.0}", (answerCount / count * 100));
-                listCounts.Add(percent);
+               // string percent = string.Format("{0:00.0}", (answerCount / count * 100));
+                //listCounts.Add(percent);
             }
             ViewBag.alert = alert;
             ViewBag.ListBlock = listBlock;

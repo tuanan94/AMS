@@ -38,11 +38,11 @@ namespace AMS.Service
         public int CountAnswer(int answerId)
         {
 
-            int a =
-                userAnswerRepository.List.Count(t => t.AnswerId == answerId);
-                  
-                    
-            return a;
+            //  int a = userAnswerRepository.List.Count(t => t.AnswerId == answerId);
+
+
+            // return a;
+            return -1;
         }
 
         public List<UserAnswerSurvey> GetListUserAnswerSurveysBySurveyId()

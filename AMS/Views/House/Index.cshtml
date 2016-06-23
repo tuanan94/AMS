@@ -19,27 +19,34 @@
         <h2 style="color: white;background-color: #25AD9F;border-radius: 30px;">@curHouse.HouseName</h2>
     </div>
 </div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
 
-<div class="panel panel-default" style="margin-top:60px">
-    <div class="panel-heading panel-heading-gray"><h4>Thành viên trong nhà @curHouse.HouseName</h4></div>
-    <div class="panel-body">
-        <div class="tree">
-            <ul>
-                <li id="Coupletree">
-                    <a href="#">
-                        <div style="width:100px;height:120px;float:left">
-                            <img src="~/Content/images/home_default.jpg" style="width:100%;" />
-                            <div style="margin-top: 5px; font-size: small;font-weight: 700;background-color: aliceblue;">
-                                @curHouse.HouseName
+        </div>
+        <div class="col-md-8">
+            <div class="panel panel-default" style="margin-top:60px">
+                <div class="panel-heading panel-heading-gray"><h4>Thành viên trong nhà @curHouse.HouseName</h4></div>
+                <div class="panel-body" id="memberPanelBody">
+                    <div class="row" style="text-align:center">
+                        <a href="/House/@curHouse.Id" class="familymember">
+                            <div style="width:100px;height:120px;float:left">
+                                <img src="@(curHouse.ProfileImage==null||curHouse.ProfileImage.Equals("")?"/Content/Images/home_default.jpg":curHouse.ProfileImage)" style="width:100%;">
+                                <div style="margin-top: 5px; font-size: small;font-weight: 700;background-color: aliceblue;">
+                                    @curHouse.HouseName
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </li>
-            </ul>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+
         </div>
     </div>
 </div>
-   
+
 <div class="container-fluid">
     <div class="row">
         <h3 style="margin-left:60px">Bài viết</h3>
@@ -54,7 +61,7 @@
     $(document).ready(function() {
         loadAllMember("tree","@curHouse.Id");
     });
-    var listUploadImage = [];
+  
     function addImage() {
         $("#uploadEditorImage").click();
 
@@ -94,13 +101,15 @@
 
     $("#uploadEditorImage").change(function () {
         var data = new FormData();
-        data.append("dir","@SLIM_CONFIG.dirPostImage");
+
+        data.append("dir", "@SLIM_CONFIG.dirPostImage");
+
         var files = $("#uploadEditorImage").get(0).files;
         if (files.length > 0) {
             data.append("HelpSectionImages", files[0]);
         }
 
-       // progessBar(true);
+        // progessBar(true);
         $.ajax({
             url: "/Image/Upload/",
             type: "POST",
@@ -109,9 +118,9 @@
             data: data,
 
             success: function (successData) {
-                addImageToPreviewList(successData,listUploadImage.length);
+                addImageToPreviewList(successData, listUploadImage.length);
                 listUploadImage[listUploadImage.length] = successData;
-               // progessBar(false);
+                // progessBar(false);
 
             },
             error: function (er) {
@@ -133,14 +142,16 @@
             datatype: 'json',
             data: {
                 idToken: -1,
-                houseId: @curHouse.Id,
+                houseId: @curHouse.Id
             },
             success: function (successData) {
                 var obj = JSON.parse(successData);
                 $.each(obj, function (index, jsonObject) {
                     addPostToTimeline(index, jsonObject);
                     getImagesForPost(index, jsonObject["Id"]);
-                    getUserProfileForPost(index, jsonObject["Id"]);
+                    // getUserProfileForPost(index, jsonObject["Id"]);
+                    getCommentsForPost(jsonObject["Id"]);
+
                 });
             },
             error: function (er) {
@@ -161,7 +172,7 @@
                 postId: id,
             },
             success: function (successData) {
-               // alert(successData)
+                // alert(successData)
                 var obj = JSON.parse(successData);
                 if (obj['ProfileImage'] === null) {
                     $('#userImagePost' + id).attr("src", "/Content/images/defaultProfile.png");
@@ -170,6 +181,10 @@
 
                 }
                 $('#userNamePost' + id).html(obj["Username"])
+                $('#userHrefPost' + id).attr("href", "/Profile/" + obj["Id"])
+
+                $('#userLoadProfilePost' + id).attr("onclick", "LoadUserProfile(" + obj["Id"] + ",true)")
+
             },
             error: function (er) {
                 alert(er)
@@ -179,59 +194,145 @@
     }
     function addPostToTimeline(index, postObject) {
         $("#timeline").append('<li class="media">'
-                       +'<div class="pull-left">'
-                            + '<img id="userImagePost' + postObject['Id'] + '" src="images/people/110/woman-5.jpg" alt="people" class="img-circle" width="80">'
-                            +'<div id="userNamePost'+postObject['Id']+'" class="date">3 MAY</div>'
-                        +'</div>'
-                        +'<div class="media-body">'
-                            +'<div class="panel panel-default">'
-                                +'<div class="panel-body" >'
-                                    +'<p>'+postObject['Body']+'</p>'
-                                    +'<div class="row" id="imagesPost'+postObject['Id'] +'" style="height:auto">'
-                                    +'</div>'
+
+
+                       + '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)">'
+
+
+                            + '<img id="userImagePost' + postObject['Id'] + '" src="' + postObject['userProfile'] + '" alt="people" class="img-circle" width="80" height="80">'
+                            + '<div id="userNamePost' + postObject['Id'] + '" class="date">' + postObject['username'] + '</div>'
+
+                        + '</div>'
+
+                        + '<div class="media-body">'
+                            + '<div class="panel panel-default">'
+                                + '<div class="panel-body" >'
+                                    + '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>'
+                                    + '<p>' + postObject['Body'] + '</p>'
+                                    + '<div class="row" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
+                                    + '</div>'
                                     + '<div class="row" style="height:auto;">'
                                     + postObject['EmbedCode']
-                                    +'</div>'
-                                +'</div>'
-                                +'<div class="view-all-comments"><a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments</div>'
-                                +'<ul class="comments">'
-                                    +'<li>'
-                                        +'<div class="media">'
-                                            +'<a href="" class="pull-left">'
-                                                +'<img  src="/images/people/50/woman-5.jpg" class="media-object">'
-                                            +'</a>'
-                                            +'<div class="media-body">'
-                                                +'<a href="" class="comment-author">Mary</a>'
-                                                +'<span>Thanks Bill</span>'
-                                                +'<div class="comment-date">2 days</div>'
-                                            +'</div>'
-                                        +'</div>'
-                                    +'</li>'
-                                    +'<li>'
-                                        +'<div class="media">'
-                                            +'<a href="" class="pull-left">'
-                                                +'<img src="/images/people/50/guy-5.jpg" class="media-object">'
-                                            +'</a>'
-                                            +'<div class="media-body">'
-                                                +'<a href="" class="comment-author">Bill D.</a>'
-                                                +'<span>What time did it finish?</span>'
-                                                +'<div class="comment-date">14 min</div>'
-                                            +'</div>'
-                                        +'</div>'
-                                    +'</li>'
-                                    +'<li class="comment-form">'
-                                        +'<div class="input-group">'
-                                            + '<input type="text" class="form-control">'
-                                            +'<span class="input-group-addon">'
-                                                +'<a href=""><i class="fa fa-photo"></i></a>'
-                                            +'</span>'
-                                        +'</div>'
-                                    +'</li>'
-                                +'</ul>'
-                            +'</div>'
-                        +'</div>'
-                    +'</li>')
+                                    + '</div>'
+                                + '</div>'
+                                + '<div class="view-all-comments" id="countComment' + postObject['Id'] + '"><a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments</div>'
+                                + '<ul class="comments" id="commentsArea' + postObject['Id'] + '">'
+
+                                + '</ul>'
+                                + '<ul class="comments">'
+                                 + '<li class="comment-form">'
+                                        + '<div class="input-group">'
+                                            + '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control" style="width: 95%;">'
+                                            + '<span class="input-group-addon" style="padding: 0;">'
+
+                                                + '<button class="btn btn-success" onclick="addComment(' + postObject['Id'] + ')">Bình luận</button>'
+                                            + '</span>'
+                                        + '</div>'
+                                    + '</li>'
+                                + '</ul>'
+                            + '</div>'
+                        + '</div>'
+                    + '</li>'
+ )
+
     }
+
+    function addComment(postId) {
+        $.ajax({
+            url: "/Post/CreateComment",
+            type: "POST",
+            data: {
+                detail: $("#contentDetail" + postId).val(),
+                postId: postId,
+            },
+            success: function (successData) {
+                if (successData === 'success') {
+                    $("#commentsArea" + postId).html("");
+                    getCommentsForPost(postId)
+                    $("#contentDetail" + postId).val("")
+                } else {
+                    alert(successData)
+                }
+            },
+            error: function (er) {
+                alert(er)
+            }
+
+        });
+    }
+
+    function getCommentsForPost(postid) {
+        if (postid == null) {
+            alert("postid == null");
+            return;
+        }
+        $.ajax({
+            url: "/Post/getCommentsForPost",
+            type: "GET",
+            data: {
+                postId: postid,
+            },
+            success: function (successData) {
+                var obj = JSON.parse(successData);
+                $("#countComment" + postid).html(obj.length + " bình luận")
+                $.each(obj, function (index, comment) {
+                    addCommentToCommentArea(postid, comment)
+                });
+            },
+            error: function (er) {
+                alert(er)
+            }
+
+        });
+    }
+    function addCommentToCommentArea(postId, comment) {
+        $("#commentsArea" + postId).append('<li>'
+                                        + '<div class="media">'
+                                            + '<a href="" class="pull-left">'
+                                                + '<img  src="' + comment['userProfile'] + '" class="media-object" style="width:50px">'
+                                            + '</a>'
+                                            + '<div class="media-body">'
+                                                + '<a href="/Profile/' + comment['userId'] + '" class="comment-author">' + comment['username'] + ': </a>'
+                                                + '<span>' + comment['detail'] + '</span>'
+                                                + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
+                                            + '</div>'
+                                        + '</div>'
+
+                                    + '</li>')
+
+    }
+
+
+    function timeSince(dateString) {
+
+        var date = new Date(dateString);
+        var seconds = Math.floor((new Date() - date) / 1000);
+
+        var interval = Math.floor(seconds / 31536000);
+
+        if (interval >= 1) {
+            return interval + " năm";
+        }
+        interval = Math.floor(seconds / 2592000);
+        if (interval >= 1) {
+            return interval + " tháng";
+        }
+        interval = Math.floor(seconds / 86400);
+        if (interval >= 1) {
+            return interval + " ngày";
+        }
+        interval = Math.floor(seconds / 3600);
+        if (interval >= 1) {
+            return interval + " giờ";
+        }
+        interval = Math.floor(seconds / 60);
+        if (interval >= 1) {
+            return interval + " phút";
+        }
+        return Math.floor(seconds) + " giây";
+
+    }
+
 
 
     function getImagesForPost(index, id) {
@@ -248,8 +349,10 @@
             success: function (successData) {
                 var obj = JSON.parse(successData);
                 $.each(obj, function (index, image) {
-                    addImageToPost(image['url'],id)
+                    addImageToPost(image['url'], id, (90 / obj.length))
+
                 });
+
             },
             error: function (er) {
                 alert(er)
@@ -257,12 +360,13 @@
 
         });
     }
-    function addImageToPost(imageUrl, postId) {
-        $("#imagesPost" + postId).append('<img src="'+imageUrl+'" style="width:30%;height:auto;margin-right:5px">')
+    function addImageToPost(imageUrl, postId, width) {
+        $("#imagesPost" + postId).append('<img src="' + imageUrl + '" style="width:' + width + '%;height:auto;margin-right:5px">')
+
     }
 
-    function addImageToPreviewList(dir,position) {
-        $("#previewList").prepend('<div id="previewImage'+position+'" style="height:100px;width:100px;float:left;position:relative"><img onclick="removePreview('+position+')" src="/Content/images/delete.png" style="position:absolute;top:0px;right:0px;width:20px;height:20px"/><img src="'+dir+'" style="max-width:100%;max-height:100%"/></div>')
+    function addImageToPreviewList(dir, position) {
+        $("#previewList").prepend('<div id="previewImage' + position + '" style="height:100px;width:100px;float:left;position:relative"><img onclick="removePreview(' + position + ')" src="/Content/images/delete.png" style="position:absolute;top:0px;right:0px;width:20px;height:20px"/><img src="' + dir + '" style="max-width:100%;max-height:100%"/></div>')
     }
     function removePreview(position) {
         $('#previewImage' + position + '').hide();
@@ -280,5 +384,8 @@
         listUploadImage = [];
         $("#previewList").html('');
         $("#postContent").val('');
+    }
+    function report(id) {
+        alert('Chức năng report (chưa xử lí)' + id);
     }
 </script>

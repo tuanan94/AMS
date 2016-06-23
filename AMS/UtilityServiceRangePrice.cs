@@ -20,6 +20,9 @@ namespace AMS
         public Nullable<double> FromAmount { get; set; }
         public Nullable<double> ToAmount { get; set; }
         public Nullable<double> Price { get; set; }
+        public Nullable<int> Type { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
+        public Nullable<System.DateTime> LastModified { get; set; }
     
         public virtual UtilityService UtilityService { get; set; }
     }

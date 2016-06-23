@@ -39,6 +39,7 @@ namespace AMS.Controllers
         HelpdeskRequestLogServices _helpdeskRequestLogServices = new HelpdeskRequestLogServices();
         HdReqHdSupporterServices _hdReqHdSupporterServices = new HdReqHdSupporterServices();
         HouseServices houseService = new HouseServices();
+        NotificationService notificationService = new NotificationService();
         readonly string parternTime = "dd-MM-yyyy HH:mm";
 
         public ActionResult Test()
@@ -961,6 +962,96 @@ namespace AMS.Controllers
             // Do the serialization and output to the console
             string json = JsonConvert.SerializeObject(user, settings);
             return json;
+        }
+        [HttpGet]
+        [Authorize]
+        public Object getNotification()
+        {
+            List<Notification> notis = notificationService.getNotification(int.Parse(User.Identity.GetUserId()));
+            // Serializer settings
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.ContractResolver = new CustomResolver(typeof(Notification));
+            settings.PreserveReferencesHandling = PreserveReferencesHandling.None;
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            settings.Formatting = Formatting.Indented;
+
+            // Do the serialization and output to the console
+            string json = JsonConvert.SerializeObject(notis, settings);
+            return json;
+        }
+        [HttpPost]
+        [Authorize]
+        public String getHintUsername(String fullname,int? startNumber)
+        {
+            
+            String hintResult;
+            User testUser = null;
+            hintResult = StringUtil.RemoveSign4VietnameseString(fullname).ToLower().Replace(" ","");
+            testUser = userService.findByUsername(hintResult+(startNumber==null?"":(startNumber+"")));
+            if (testUser == null)
+            {
+                return hintResult + startNumber;
+            }
+            else
+            {
+                return getHintUsername(hintResult, (startNumber == null ? 1 : startNumber + 1));
+            }
+
+        }
+        [HttpGet]
+        [Authorize]
+        public bool checkAvailableUsername(String username)
+        {
+
+            return userService.findByUsername(username)==null;
+
+        }
+
+        [HttpGet]
+        [Authorize]
+        public Object addMember(String fullname, String username, String profileImage,int gender, DateTime birthDate, String IDNumber, DateTime idDate, int relationShipLevel)
+        {
+            User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
+
+            //DateTime bdate = DateTime.Parse(birthDate);
+            User u = userService.findByUsername(username);
+            if (u != null)
+            {
+                return false;
+            }
+            u = new User();
+            u.Fullname = fullname;
+            u.Username = username;
+            u.DateOfBirth = birthDate;
+            u.RoleId = SLIM_CONFIG.USER_ROLE_RESIDENT;
+            u.IsApproved = 0;
+            u.HouseId = curUser.HouseId;
+            u.Gender = null;
+            if (!IDNumber.Equals(""))
+            {
+                u.IDNumber = IDNumber;
+                u.IDCreatedDate = idDate;
+            }
+            
+            u.FamilyLevel = relationShipLevel;
+            u.CreateDate = DateTime.Now;
+            u.LastModified = DateTime.Now;
+            u.Password = "123123";
+            u.ProfileImage = profileImage;
+            userService.addUser(u);
+            return JsonConvert.SerializeObject(u);
+        }
+        [HttpPost]
+        [Authorize]
+        public bool deleteRequest(int id)
+        {
+            User u = userService.findById(id);
+            if(u==null || u.IsApproved == 1)
+            {
+                return false;
+            }
+            userService.deleteUser(u);
+            return true;
         }
     }
 }

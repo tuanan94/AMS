@@ -23,6 +23,11 @@ namespace AMS.Controllers
             {
                 folderDir = "HouseProfileImages";
             }
+
+            if (SLIM_CONFIG.dirProfileImage.Equals(dir))
+            {
+                folderDir = "ProfileImages";
+            }
             String filePath = "";
             if (System.Web.HttpContext.Current.Request.Files.AllKeys.Any())
             {

@@ -25,6 +25,7 @@ namespace AMS
         public static int POST_STATUS_HIDE = 2;
         public static String dirPostImage = "postImage";
         public static String dirHouseProfileImage = "houseImage";
+        public static String dirProfileImage = "profileImage";
         public static int RECEIPT_STATUS_UNPUBLISHED = 1;
         public static int RECEIPT_STATUS_UNPAID = 2;
         public static int RECEIPT_STATUS_PAID = 3;
@@ -41,7 +42,7 @@ namespace AMS
         public static int RECEIPT_ADD_MODE_SAVE = 1;
         public static int RECEIPT_ADD_MODE_SAVE_PUBLISH = 2;
 
-
+        public static int NOTIFICATION_TYPE_MANAGERPOST = 0;
 
 
     }

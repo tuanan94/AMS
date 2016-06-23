@@ -35,6 +35,7 @@ namespace AMS
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<BalanceSheet> BalanceSheets { get; set; }
+        public virtual DbSet<Block> Blocks { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<HelpdeskRequest> HelpdeskRequests { get; set; }
         public virtual DbSet<HelpdeskRequestHelpdeskSupporter> HelpdeskRequestHelpdeskSupporters { get; set; }
@@ -58,7 +59,6 @@ namespace AMS
         public virtual DbSet<UserRateAroundProvider> UserRateAroundProviders { get; set; }
         public virtual DbSet<UserReportPost> UserReportPosts { get; set; }
         public virtual DbSet<UtilityService> UtilityServices { get; set; }
-        public virtual DbSet<UtilityServiceCategory> UtilityServiceCategories { get; set; }
         public virtual DbSet<UtilityServiceRangePrice> UtilityServiceRangePrices { get; set; }
     }
 }

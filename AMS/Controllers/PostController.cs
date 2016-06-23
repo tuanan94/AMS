@@ -66,11 +66,11 @@ namespace AMS.Controllers
         public Object getPost(int? idToken, int? houseId)
         {
             
-            List<Post> all = postService.getAllPost(idToken,houseId);
+            List<PostMapping> all = postService.getAllPostMapping(idToken,houseId);
             
             // Serializer settings
             JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.ContractResolver = new CustomResolver(typeof(Post));
+            settings.ContractResolver = new CustomResolver(typeof(PostMapping));
             settings.PreserveReferencesHandling = PreserveReferencesHandling.None;
             settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             settings.Formatting = Formatting.Indented;

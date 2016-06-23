@@ -59,6 +59,45 @@ namespace AMS.Service
             var result =  postRepository.List.OrderByDescending(t=>t.Id).ToList();
             return result;
         }
+        public List<PostMapping> getAllPostMapping(int? tokenId, int? houseId)
+        {
+            List<Post> allPost = new List<Post>();
+            List<Post> allRaw = getAllPost();
+            if (houseId != null)
+            {
+                foreach (Post p in allRaw)
+                {
+                    if (p.User.HouseId == houseId)
+                    {
+                        allPost.Add(p);
+                    }
+                }
+            }
+            else
+            {
+                allPost = allRaw;
+            }
+            List<PostMapping> result = new List<PostMapping>();
+            foreach(Post p in allPost)
+            {
+                PostMapping pMapping = new PostMapping();
+                pMapping.Id = p.Id;
+                pMapping.Body = p.Body;
+                pMapping.CreateDate = p.CreateDate.GetValueOrDefault();
+                pMapping.EmbedCode = p.EmbedCode;
+                pMapping.UserId = p.UserId;
+                pMapping.username = p.User == null ? "Không xác định sở hữu" : p.User.Username;
+                pMapping.userProfile = p.User == null || p.User.ProfileImage == null || p.User.ProfileImage.Equals("") ? "/Content/Images/defaultProfile.png" : p.User.ProfileImage;
+                result.Add(pMapping);
+            }
+            return result;
+        }
+        public List<Post> getAllPostByRole(int roleId)
+        {
+            var result = postRepository.List.Where(t => t.User.RoleId == roleId).OrderByDescending(t =>t.CreateDate).ToList();
+            return result;
+        }
+
         public List<Post> getAllPostById(int id)
         {
             var result = postRepository.List.Where(t => t.Id==id).ToList();

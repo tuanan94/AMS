@@ -63,6 +63,10 @@ namespace AMS.Service
             userRepository.Update(u);
 
         }
+        public void deleteUser(User u)
+        {
+            userRepository.Delete(u);
+        }
 
         public SLIM_CONFIG.LoginResult login(string username, string password)
         {

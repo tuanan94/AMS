@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 namespace AMS.Controllers
 {
+    [Authorize]
     public class HouseController : Controller
     {
         UserService userService = new UserService();

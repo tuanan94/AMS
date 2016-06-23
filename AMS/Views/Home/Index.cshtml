@@ -38,11 +38,10 @@
         }
     }
 }
-<<<<<<< HEAD
 <link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css" />
 <script src="~/Scripts/amsScript/LoadFamilyTree.js"></script>
 <script src="~/Scripts/amsScript/LoadUserProfile.js"></script>
-=======
+
 <style>
     .button {
         display: block;
@@ -79,7 +78,6 @@
             background: #fff;
             background: #339999;
         }
->>>>>>> binhht12_6
 
     .close {
         background: #606061;
@@ -244,7 +242,6 @@
 
     </div>
 </div>
-<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
 
 
 
@@ -386,7 +383,7 @@
                 $.each(obj, function (index, jsonObject) {
                     addPostToTimeline(index, jsonObject);
                     getImagesForPost(index, jsonObject["Id"]);
-                    getUserProfileForPost(index, jsonObject["Id"]);
+                   // getUserProfileForPost(index, jsonObject["Id"]);
                     getCommentsForPost(jsonObject["Id"]);
                   
                 });
@@ -433,17 +430,18 @@
         $("#timeline").append('<li class="media">'
 
 
-                       + '<div class="pull-left" id="userLoadProfilePost'+postObject['Id']+'">'
+                       + '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile('+postObject['UserId']+',true)">'
                         
 
-                            + '<img id="userImagePost' + postObject['Id'] + '" src="images/people/110/woman-5.jpg" alt="people" class="img-circle" width="80" height="80">'
-                            + '<div id="userNamePost' + postObject['Id'] + '" class="date">3 MAY</div>'
+                            + '<img id="userImagePost' + postObject['Id'] + '" src="'+postObject['userProfile']+'" alt="people" class="img-circle" width="80" height="80">'
+                            + '<div id="userNamePost' + postObject['Id'] + '" class="date">'+postObject['username']+'</div>'
                      
                         + '</div>'
 
                         + '<div class="media-body">'
                             + '<div class="panel panel-default">'
                                 + '<div class="panel-body" >'
+                                    + '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>'
                                     + '<p>' + postObject['Body'] + '</p>'
                                     + '<div class="row" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
                                     + '</div>'
@@ -458,8 +456,8 @@
                                 + '<ul class="comments">'
                                  + '<li class="comment-form">'
                                         + '<div class="input-group">'
-                                            + '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control">'
-                                            + '<span class="input-group-addon">'
+                                            + '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control" style="width: 95%;">'
+                                            + '<span class="input-group-addon" style="padding: 0;">'
                                            
                                                 + '<button class="btn btn-success" onclick="addComment(' + postObject['Id'] + ')">Bình luận</button>'
                                             + '</span>'
@@ -620,5 +618,8 @@
         listUploadImage = [];
         $("#previewList").html('');
         $("#postContent").val('');
+    }
+    function report(id) {
+        alert('Chức năng report (chưa xử lí)' + id);
     }
 </script>

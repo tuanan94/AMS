@@ -20,7 +20,7 @@ namespace AMS
             this.UserAnswerSurveys = new HashSet<UserAnswerSurvey>();
         }
     
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string AnswerContent { get; set; }
         public Nullable<int> QuestionId { get; set; }
     

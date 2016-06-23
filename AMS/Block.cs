@@ -12,22 +12,18 @@ namespace AMS
     using System;
     using System.Collections.Generic;
     
-    public partial class UtilityServiceCategory
+    public partial class Block
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public UtilityServiceCategory()
+        public Block()
         {
-            this.UtilityServices = new HashSet<UtilityService>();
+            this.Surveys = new HashSet<Survey>();
         }
     
         public int Id { get; set; }
-        public Nullable<int> Type { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public Nullable<System.DateTime> CreateDate { get; set; }
-        public Nullable<System.DateTime> LastModified { get; set; }
+        public string Block1 { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UtilityService> UtilityServices { get; set; }
+        public virtual ICollection<Survey> Surveys { get; set; }
     }
 }

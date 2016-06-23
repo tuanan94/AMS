@@ -225,6 +225,9 @@
     <Compile Include="BalanceSheet.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Block.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Comment.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -303,6 +306,8 @@
     <Compile Include="Models\MessageViewModels.cs" />
     <Compile Include="Models\ReceiptViewModels.cs" />
     <Compile Include="ObjectMapping\CommentMapping.cs" />
+    <Compile Include="ObjectMapping\Notification.cs" />
+    <Compile Include="ObjectMapping\PostMapping.cs" />
     <Compile Include="ObjectMapping\UserProfileMapping.cs" />
     <Compile Include="Post.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -338,6 +343,7 @@
     <Compile Include="Service\ImageService.cs" />
     <Compile Include="Service\HouseServices.cs" />
     <Compile Include="Service\IHelpdeskRequestHelpdeskSupporterService.cs" />
+    <Compile Include="Service\NotificationService.cs" />
     <Compile Include="Service\PostService.cs" />
     <Compile Include="Service\ReceiptServices.cs" />
     <Compile Include="Service\QuestionService.cs" />
@@ -357,6 +363,7 @@
     <Compile Include="Service\UserServices.cs" />
     <Compile Include="SLIM_CONFIG.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="StringUtil.cs" />
     <Compile Include="Survey.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -382,9 +389,6 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="UtilityService.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="UtilityServiceCategory.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="UtilityServiceRangePrice.cs">
