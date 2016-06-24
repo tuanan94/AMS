@@ -22,6 +22,26 @@ namespace AMS.Controllers
         BlockPollService BlockPollService = new BlockPollService();
         //
         // GET: /Survey/
+        [Authorize]
+        public ActionResult ViewHistory()
+        {
+            SurveyViewModel model = new SurveyViewModel();
+            User currentUser = userService.FindById(int.Parse(User.Identity.GetUserId()));
+            List<SurveyViewModel> listPolls = new List<SurveyViewModel>();
+            List<UserAnswerPoll> listUserAnswerPolls = userAnswerService.GetListUserAnswerPollsByUserId(currentUser.Id);
+            foreach (var item in listUserAnswerPolls)
+            {
+                model.Id = item.PollId;
+                model.AnswerContent = item.Answer;
+                model.Question = PollService.FindById(item.PollId).Question;
+                model.ImageUrl = PollService.FindById(item.PollId).ImageUrl;
+                listPolls.Add(model);
+            }
+            ViewBag.List = listPolls;
+            return View();
+        }
+
+
         public ActionResult Survey(string alerts)
         {
             List<Block> listHouseBlock = blockService.GetListBlock();

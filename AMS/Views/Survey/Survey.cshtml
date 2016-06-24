@@ -187,7 +187,7 @@
                                                     @{
                             foreach (var item in listBlock)
                             {
-                                        <label class="checkbox-inline"><input type="checkbox" name="block"  value="@item">@item</label>
+                                        <label class="checkbox-inline"><input type="checkbox" name="block" class="blockss"  value="@item">@item</label>
 
                             }
                                                     }
@@ -438,13 +438,17 @@
 <script>
     $("#check").change(function () {
         if (this.value == '1') { document.getElementById('other').style.visibility = 'visible' }
-        if (!document.getElementById('check').checked) { document.getElementById('other').style.visibility = 'hidden' };
+        if (!document.getElementById('check').checked) {
+            document.getElementById('other').style.visibility = 'hidden' 
+            $('.blockss').prop('checked', false);
+        };
     });
-    if (document.getElementById('check').checked) {
-        document.getElementById('other').style.visibility = 'visible'
-    } else if (!document.getElementById('check').checked) {
-        document.getElementById('other').style.visibility = 'hidden'
-    }
+    //if (document.getElementById('check').checked) {
+    //    document.getElementById('other').style.visibility = 'visible'
+    //} else if (!document.getElementById('check').checked) {
+    //    $('block').prop('checked', false);
+    //    document.getElementById('other').style.visibility = 'hidden'
+    //}
     $(document).ready(function () {
         $('#image_container img').click(function () {
             //remove border on any images that might be selected
@@ -552,6 +556,40 @@
         
         else { return true; }
     }
+    $(document).ready(function () {
+        $('body').on('blur', '#idd5', function () {
+            var key5 = $("#idd5").val();
+            var key1 = $("#idd1").val();
+            var key2 = $("#idd2").val();
+            var key3 = $("#idd3").val();
+            var key4 = $("#idd4").val();
+            if (key1 === key5 && key1 != null && key5 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            } else if (key1 === key2 && key1 != null && key2 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            } else if (key1 === key3 && key1 != null && key3 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            } else if (key1 === key4 && key1 != null && key4 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            } else if (key1 === key5 && key1 != null && key5 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            } else if (key2 === key3 && key2 != null && key3 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            } else if (key2 === key4 && key2 != null && key4 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            } else if (key2 === key5 && key2 != null && key5 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            } else if (key3 === key4 && key3 != null && key4 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            } else if (key3 === key5 && key3 != null && key5 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            } else if (key4 === key5 && key4 != null && key5 != null) {
+                alert("Câu Trả Lời Không Được Giống Nhau");
+            }
+
+
+        });
+    });
     function bInfo() {
         in1 = document.getElementById('idd1').value;
         in2 = document.getElementById('idd2').value;
@@ -564,18 +602,18 @@
         //}
       
         if (in1 == in2 && in1 != "" && in2 != "") {
-            alert('Same Value'); return false;
+            alert('Câu Trả Lời Không Được Giống Nhau'); return false;
         } else if (in1 == in3 && in1 != "" && in3 != "") {
-            alert('Same Value'); return false;
+            alert('Câu Trả Lời Không Được Giống Nhau'); return false;
         }
         else if (in2 == in3 && in2 != "" && in3 != "") {
-            alert('Same Value'); return false;
+            alert('Câu Trả Lời Không Được Giống Nhau'); return false;
         } else if (in1 == in4 && in1 != "" && in4 != "") {
-            alert('Same Value'); return false;
+            alert('Câu Trả Lời Không Được Giống Nhau'); return false;
         } else if (in2 == in4 && in2 != "" && in4 != "") {
-            alert('Same Value'); return false;
+            alert('Câu Trả Lời Không Được Giống Nhau'); return false;
         } else if (in3 == in4 && in3 != "" && in4 != "") {
-            alert('Same Value'); return false;
+            alert('Câu Trả Lời Không Được Giống Nhau'); return false;
         }  else { return true; }
     }
     $('#label1').delay(2500).fadeOut('slow');

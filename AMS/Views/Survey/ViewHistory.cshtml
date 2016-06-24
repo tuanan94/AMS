@@ -1,0 +1,116 @@
+﻿@using AMS.ViewModel
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "ViewHistory";
+    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+    List<SurveyViewModel> list = ViewBag.List;
+}
+
+<link href="~/Content/css/datatables.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/datatables.js"></script>
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="heading-tab">
+            <i class="fa fa-list">Bình Chọn</i>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+
+                <li class="active">
+                    <a href=""><i class="fa fa-history"></i>Các Bình Chọn Bạn Đã Làm</a>
+                </li>
+
+                <li>
+                    <a href="/Survey/DoSurvey"><i class="fa fa-book"></i>Danh Sách Các Bình Chọn</a>
+                </li>
+
+
+
+            </ul>
+        </div>
+        <div class="panel-body">
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="">
+                    <table id="myTables" class="table table-hover table-bordered">
+                        <thead>
+                            <tr >
+                                <th style="width: 100px" class="col-sm-1">
+
+                                    Số thứ tự
+
+
+                                </th>
+                                <th style="width: 100px" class="col-sm-1">Hình ảnh</th>
+                                <th  class="col-sm-5">Câu hỏi</th>
+                                <th class="col-sm-4">Lựa chọn</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @{
+                                int i = 0;
+                                foreach (var item in list)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <div class="col-sm-3">
+                                                    <span class="">@i</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td><img class="img-responsive" width="100px" src="@item.ImageUrl"></td>
+                                        <td>
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <span class="">@item.Question</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <span class="">@item.AnswerContent</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#myTables").DataTable({
+        "oLanguage": {
+            //    "sSearch": "Tìm Kiếm" //search,
+            "sProcessing": "Đang xử lý...",
+            "sLengthMenu": "Xem _MENU_ mục",
+            "sZeroRecords": "Không tìm thấy dòng nào phù hợp",
+            "sInfo": "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+            "sInfoEmpty": "Đang xem 0 đến 0 trong tổng số 0 mục",
+            "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+            "sInfoPostFix": "",
+            "sSearch": "Tìm:",
+            "sUrl": "",
+            "oPaginate": {
+                "sFirst": "Đầu",
+                "sPrevious": "Trước",
+                "sNext": "Tiếp",
+                "sLast": "Cuối"
+            }
+        }
+        //"language": {
+        //    "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Vietnamese.json"
+        //}
+
+
+    });
+</script>
+<script src="~/Scripts/datatables.js"></script>

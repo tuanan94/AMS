@@ -693,6 +693,7 @@
     <Content Include="Views\Receipt\DownloadWaterConsumptionTemplate.cshtml" />
     <Content Include="Views\Config\ManageUtilityService.cshtml" />
     <Content Include="Views\Config\UpdateUtilityService.cshtml" />
+    <Content Include="Views\Survey\ViewHistory.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
