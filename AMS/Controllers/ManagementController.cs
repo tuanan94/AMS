@@ -573,8 +573,11 @@ namespace AMS.Controllers
             providerDetail.Description = curProvider.Description;
             providerDetail.ImageUrl = curProvider.ImageUrl;
             providerDetail.Tel = curProvider.Tel;
+            //providerDetail.ClickCount = curProvider.ClickCount;
 
             return Json(providerDetail);
+            //ViewBag.providerDetail = providerDetail;
+            //return View("View");
         }
 
         [HttpPost]
@@ -595,7 +598,7 @@ namespace AMS.Controllers
             //    string message = "Cannot update!";
             //    return Json(message);
             //}
-            return Redirect("~/Management/ManageAroundProvider");
+            return RedirectToAction("ManageAroundProvider");
             //return RedirectToAction("ManageAroundProvider");
         }
 
