@@ -71,7 +71,7 @@
                                     <label class="control-label col-md-offset-3 col-md-1">Tháng</label>
                                     <div class="col-md-3">
                                         <input id="bsheetMonth" type="text" class="form-control" data-date-default-date="+0d"
-                                               data-date-start-view="1" data-date-format="mm-yyyy" data-date-default-date="0d" data-date-language="vi"
+                                               data-date-start-view="1" data-date-format="mm-yyyy" data-date-language="vi"
                                                data-date-min-view-mode="1" data-date-end-date="0m" />
                                     </div>
                                     <div class="col-md-2">
@@ -86,7 +86,7 @@
                                     <div class="col-md-3">
                                         <input id="bsheetMonth" type="text" class="form-control" data-date-default-date="+0d" value="@thisMonth"
                                                data-date-start-view="1" data-date-format="mm-yyyy" data-date-language="vi"
-                                               data-date-min-view-mode="1" data-date-end-date="0m" />
+                                               data-date-min-view-mode="1" data-date-end-date="+1m" />
                                     </div>
                                     <div class="col-md-2">
                                         <span class="btn btn-primary" onclick="viewBalanceSheetMonth()">Xem</span>
@@ -98,86 +98,88 @@
                                         <fieldset class="scheduler-border less-padding border-top">
                                             <legend class="scheduler-border bold-black">Thông tin</legend>
                                             <div class="form-group">
-                                                <label for="title" class="col-md-4 control-label">Tiêu đề</label>
-                                                <div class="col-md-8">
+                                                <label for="title" class="col-md-3 control-label">Tiêu đề</label>
+                                                <div class="col-md-9">
                                                     <input id="title" class="form-control" value="Bảng thu chi tài chính tháng @thisMonth" />
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="title" class="col-md-4 control-label">Trạng thái</label>
-                                                <div class="col-md-8">
+                                                <label for="title" class="col-md-3 control-label">Trạng thái</label>
+                                                <div class="col-md-9">
                                                     @{if (status == SLIM_CONFIG.BALANCE_SHEET_CLOSE)
                                                     {
                                                         <span class="btn btn-danger">Đóng</span>
                                                     }
                                                     else
                                                     {
-                                                        <span class="btn btn-info">Đang cập nhật</span>
+                                                        <span class="btn btn-info">Mở</span>
                                                     }
                                                     }
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-md-4 control-label">Từ ngày</label>
-                                                <div class="col-md-8">
-                                                    <input class="form-control" value="@fromDate" />
-                                                </div>
-                                            </div>
-                                            @if (closingDate != null)
-                                            {
-                                                <div class="form-group">
-                                                    <label class="col-md-4 control-label">Đến ngày</label>
-                                                    <div class="col-md-8">
-
-                                                        <input class="form-control" value="@closingDate" />
-
+                                                <label class="col-md-3 control-label">Từ ngày</label>
+                                                <div class="col-md-9">
+                                                    <div class="input-group">
+                                                        <input class="form-control" value="@fromDate" />
+                                                        @{if (closingDate != null)
+                                                        {
+                                                            <span class="input-group-addon">đến</span>
+                                                            <input class="form-control" value="@closingDate" />
+                                                        }
+                                                        }
                                                     </div>
                                                 </div>
-                                            }
-
+                                            </div>
                                             <div class="form-group">
-                                                <label class="col-md-4 control-label">Ngày cập nhật</label>
-                                                <div class="col-md-8">
+                                                <label class="col-md-3 control-label">Cập nhật</label>
+                                                <div class="col-md-9">
                                                     <input class="form-control" value="@lastUpdate" />
                                                 </div>
                                             </div>
                                         </fieldset>
                                     </div>
-                                    <div class="col-md-6 ">
-                                        <fieldset class="scheduler-border less-padding border-top">
-                                            <legend class="scheduler-border bold-black">Tổng quan về thu chi</legend>
+                                    <div class="col-md-6 " style="padding: 0">
+                                        <fieldset class="scheduler-border less-padding border-top" style="padding: 0px 0px 0px 1.4em!important;">
+                                            <legend class="scheduler-border bold-black">Bảng báo cáo tài chính</legend>
                                             <div class="table-responsive">
                                                 <table class="table v-middle table-bordered table-striped balance-sheet">
                                                     <thead>
                                                         <tr>
-                                                            <th rowspan="2">Tên</th>
-                                                            <th colspan="2" class="text-capitalize text-center" style="background-color: #dddddd">
-                                                                Bảng lưu chuyển tiền mặt tháng @thisMonth
+                                                            <th style="width: 40%" rowspan="2">Tên</th>
+                                                            <th colspan="4" class="text-capitalize text-center" style="background-color: #dddddd">
+                                                                Bảng thu chi tháng @thisMonth
                                                             </th>
                                                         </tr>
                                                         <tr>
+                                                            <th style="width: 30%;">Tồn</th>
                                                             <th>Tổng</th>
                                                             <th>Thực thu</th>
+                                                            <th>Thực chi</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td><strong>Tồn đầu tháng</strong></td>
-                                                            <td id="redudancyStartMonth" colspan="2">@bls.RedudancyStartMonth.ToString("N0")</td>
+                                                            <td><strong>Đầu kỳ</strong></td>
+                                                            <td id="redudancyStartMonth" colspan="4">@bls.RedudancyStartMonth.ToString("N0")</td>
                                                         </tr>
                                                         <tr>
-                                                            <td><strong>Tổng thu nhập</strong></td>
+                                                            <td><strong>Doanh thu</strong></td>
+                                                            <td></td>
                                                             <td id="forecastIncome">@bls.ForecastIncome.ToString("N0")</td>
                                                             <td id="actualIncome">@bls.ActualIncome.ToString("N0")</td>
+                                                            <td></td>
                                                         </tr>
                                                         <tr>
-                                                            <td><strong>Tổng chi</strong></td>
+                                                            <td><strong>Chi phí</strong></td>
+                                                            <td></td>
                                                             <td id="forecastExpense">@bls.ForecastExpense.ToString("N0")</td>
+                                                            <td></td>
                                                             <td id="actualExpense">@bls.ActualExpense.ToString("N0")</td>
                                                         </tr>
                                                         <tr>
-                                                            <td><strong>Tồn cuối tháng</strong></td>
-                                                            <td id="redudancyEndMonth" colspan="2">@bls.RedudancyEndMonth.ToString("N0")</td>
+                                                            <td><strong>Cuối kỳ</strong></td>
+                                                            <td id="redudancyEndMonth" colspan="4">@bls.RedudancyEndMonth.ToString("N0")</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -202,16 +204,15 @@
                                                     </thead>
                                                     <tbody>
 
-                                                        @{
-                                foreach (var inc in bls.IncomeList)
-                                {
-                                    <tr>
-                                        <td></td>
-                                        <td>@inc.TransCatName</td>
-                                        <td>@inc.TransPaidAmount.ToString("N0")</td>
-                                        <td>@inc.TransTotalAmount.ToString("N0")</td>
-                                    </tr>
-                                }
+                                                        @{foreach (var inc in bls.IncomeList)
+                                                        {
+                                                            <tr>
+                                                                <td></td>
+                                                                <td>@inc.UtilSrvCatName</td>
+                                                                <td>@inc.TransPaidAmount.ToString("N0")</td>
+                                                                <td>@inc.TransTotalAmount.ToString("N0")</td>
+                                                            </tr>
+                                                        }
                                                         }
                                                     </tbody>
                                                     <tfoot>
@@ -252,7 +253,7 @@
                                 {
                                     <tr>
                                         <td></td>
-                                        <td>@inc.TransCatName</td>
+                                        <td>@inc.UtilSrvCatName</td>
                                         <td>@inc.TransPaidAmount.ToString("N0")</td>
                                         <td>@inc.TransTotalAmount.ToString("N0")</td>
                                     </tr>

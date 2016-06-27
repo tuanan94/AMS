@@ -34,30 +34,28 @@
 
                                     <table id="utilityServices" class="table table-hover table-bordered">
                                         <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Tên</th>
-                                            <th>Loại</th>
-                                            <th>Loại nhà</th>
-                                            <th>Trang thái</th>
-                                            <th>Ngày tạo</th>
-                                            <th></th>
-                                        </tr>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Tên</th>
+                                                <th>Loại</th>
+                                                <th>Loại nhà</th>
+                                                <th>Trang thái</th>
+                                                <th>Ngày tạo</th>
+                                                <th></th>
+                                            </tr>
                                         </thead>
                                         <tfoot>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Tên</th>
-                                            <th>Loại</th>
-                                            <th>Loại nhà</th>
-                                            <th>Trang thái</th>
-                                            <th>Ngày tạo</th>
-                                            <th></th>
-                                        </tr>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Tên</th>
+                                                <th>Loại</th>
+                                                <th>Loại nhà</th>
+                                                <th>Trang thái</th>
+                                                <th>Ngày tạo</th>
+                                                <th></th>
+                                            </tr>
                                         </tfoot>
-                                        <tbody>
-                                       
-                                        </tbody>
+                                        <tbody></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -120,14 +118,15 @@
                     "orderable": false,
                     "targets": 0
                 },
+
                 {
                     "targets": 2,
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
                             if (data === window.Utility_Service_Water) {
-                                return "<span class='label time-color'>Điện</span>";
+                                return "<span class='label time-color'>" + full.UtilSrvCatName + "</span>";
                             } else {
-                                return "<span class='label room-color'>Phí dịch vụ</span>";
+                                return "<span class='label room-color'>" + full.UtilSrvCatName + "</span>";
                             }
                         }
                         return data;
@@ -144,7 +143,7 @@
                         }
                         return data;
                     }
-                }, 
+                },
                 {
                     "targets": 3,
                     "render": function (data, type, full, meta) {
@@ -171,6 +170,7 @@
                     }
                 },
                 {
+                    "width": "8%",
                     "targets": 6,
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
@@ -227,14 +227,14 @@
         $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
     }
     function commitDeleteConsumptionRecord() {
-        
+
         $.ajax({
-            url:"/Management/Config/UtilityService/DeleteUtilServices",
+            url: "/Management/Config/UtilityService/DeleteUtilServices",
             data: {
                 deleteItems: window.deleteUtilService
             },
-            type:"POST",
-            success:function(data) {
+            type: "POST",
+            success: function (data) {
                 for (var z = 0; z < window.deleteUtilService.length; z++) {
                     var deleteItem = window.deleteUtilService[z];
                     for (var i = 0; i < window.utilityServices.length; i++) {
@@ -249,6 +249,6 @@
             }
 
         });
-        
+
     }
 </script>

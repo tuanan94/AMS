@@ -64,7 +64,7 @@
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <span>Thêm loại giao dịch thành công.</span>
                     </div>
-                    <div class="alert alert-warning" id="failedAddTransTypeNotify" style="display: none">
+                    <div class="alert alert-danger" id="failedAddTransTypeNotify" style="display: none">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <span>Thêm loại giao dịch thất bại.</span>
                     </div>
@@ -102,7 +102,7 @@
                 url: "/Management/BalanceSheet/GetAllTransactionTypeFull",
                 dataSrc: ""
             },
-            rowId: 'TransId',
+            rowId: 'ReceiptId',
             "drawCallback": function (settings) {
                 var addBtn = "<div class='col-md-1'>" +
                     "<span class='btn btn-info' onclick='openAddTransCatModal()'>" +
@@ -183,17 +183,14 @@
                     $("#transCategoryId").val(data.Data.TransCategoryId);
                     $("#addTransactionTypeModal").modal("show");
 
-
                     $("#updateTransCatBtn").removeClass("hide");
                     $("#addTransCatBtn").addClass("hide");
                     $("#addTransactionTypeModalTitle").text("Cập nhật loại giao dịch");
                     $("#successAddTransTypeNotify").text("Cập nhật loại giao dịch thành công.");
                     $("#failedAddTransTypeNotify").text("Cập nhật loại giao dịch thất bại.");
-
                 } 
             },
             error: function () {
-
             }
         });
     }

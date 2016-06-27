@@ -14,11 +14,13 @@ namespace AMS.Controllers
     public class ConfigController : Controller
     {
 
-        UtilityServiceServices _utilityServiceServices = new UtilityServiceServices();
-        UtilityServiceRangePriceServices _rangePriceServices = new UtilityServiceRangePriceServices();
-        HouseCategoryServices _houseCategoryServices = new HouseCategoryServices();
-        UtilServiceForHouseCatServices _utilServiceForHouseCatServices = new UtilServiceForHouseCatServices();
+        private UtilityServiceServices _utilityServiceServices = new UtilityServiceServices();
+        private UtilityServiceRangePriceServices _rangePriceServices = new UtilityServiceRangePriceServices();
+        private HouseCategoryServices _houseCategoryServices = new HouseCategoryServices();
+        private UtilServiceForHouseCatServices _utilServiceForHouseCatServices = new UtilServiceForHouseCatServices();
         private ReceiptDetailServices _receiptDetailServices = new ReceiptDetailServices();
+        private TransactionService _transactionService = new TransactionService();
+        private UtilityServiceCateoryService _utilityServiceCateoryService = new UtilityServiceCateoryService();
 
         [HttpGet]
         [Route("Management/Config/UtilityService/Create")]
@@ -56,6 +58,7 @@ namespace AMS.Controllers
                 model.Status = houseCat.Status.Value;
                 model.Type = SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER;
                 model.DT_RowId = new StringBuilder("h_cat_util_srv_").Append(houseCat.Id).ToString();
+                model.UtilSrvCatName = houseCat.UtilityService.UtilServiceCategory.Name;
                 listmodel.Add(model);
             }
             foreach (var fixedCost in utilSrvForHouseCat.Where(utilSrv => utilSrv.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST).ToList())
@@ -67,6 +70,7 @@ namespace AMS.Controllers
                 model.HouseCat = "*";
                 model.Status = fixedCost.Status.Value;
                 model.Type = SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST;
+                model.UtilSrvCatName = fixedCost.UtilityService.UtilServiceCategory.Name;
                 model.DT_RowId = new StringBuilder("h_cat_util_srv_").Append(fixedCost.Id).ToString();
                 listmodel.Add(model);
             }
@@ -82,12 +86,32 @@ namespace AMS.Controllers
             MessageViewModels response = new MessageViewModels();
             if (houseCat != null)
             {
+                // Check  waterTransaction category and fixedCost category is existed
+                List<UtilServiceCategory> allTransCategory = _utilityServiceCateoryService.GetAllMandatory();
+                UtilServiceCategory waterUtilSrv = null;
+                foreach (var transCat in allTransCategory)
+                {
+                    if (transCat.Name.Trim().Equals(AmsConstants.UtilityServiceWater))
+                    {
+                        waterUtilSrv = transCat;
+                    }
+                }
+                if (waterUtilSrv == null)
+                {
+                    waterUtilSrv = new UtilServiceCategory();
+                    waterUtilSrv.Name = AmsConstants.UtilityServiceWater;
+                    waterUtilSrv.Status = SLIM_CONFIG.TRANS_CAT_STATUS_DENY_REMOVE;
+                    waterUtilSrv.CreateDate = DateTime.Now;
+                    waterUtilSrv.LastModified = DateTime.Now;
+                    _utilityServiceCateoryService.Add(waterUtilSrv);
+                }
+
                 UtilityService utilityService = new UtilityService();
                 utilityService.Name = utilSrvModel.Name;
                 utilityService.CreateDate = DateTime.Now;
                 utilityService.LastModified = DateTime.Now;
                 utilityService.Type = utilSrvModel.Type;
-
+                utilityService.UtilSrvCatId = waterUtilSrv.Id;
                 _utilityServiceServices.Add(utilityService);
 
                 if (utilSrvModel.WaterUtilServiceRangePrices != null)
@@ -205,18 +229,22 @@ namespace AMS.Controllers
                             foreach (var rd in receiptDetails)
                             {
                                 ReceiptDetail receiptDetail = _receiptDetailServices.FindById(rd.Id);
-                                receiptDetail.TotalBill = ReceiptController.CalculateWaterUtiServiceVersion1(receiptDetail.Quantity.Value,
+                                receiptDetail.Total = ReceiptController.CalculateWaterUtiServiceVersion1(receiptDetail.Quantity.Value,
                                     utilService.UtilityServiceRangePrices.ToList());
                                 receiptDetail.LastModified = DateTime.Now;
                                 if (receiptDetail.Quantity.Value != 0)
                                 {
-                                    receiptDetail.UnitPrice = receiptDetail.TotalBill / receiptDetail.Quantity.Value;
+                                    receiptDetail.UnitPrice = receiptDetail.Total / receiptDetail.Quantity.Value;
                                 }
                                 else
                                 {
                                     receiptDetail.UnitPrice = 0;
                                 }
+                                var transactions = receiptDetail.Transactions.Where(tr => tr.BalanceSheet.Id == receiptDetail.Receipt.BlsId).ToList();
                                 _receiptDetailServices.Update(receiptDetail);
+
+                                //Update total amount of transaction when user receipt is unpublish
+                                UpdateTotalAmountInTransaction(transactions, receiptDetail.Total.Value);
                             }
                         }// if this water utility service is applied in this month. It must be update all order.
                     }
@@ -241,12 +269,33 @@ namespace AMS.Controllers
         [Route("Management/Config/UtilityService/AddFixedCost")]
         public ActionResult AddFixedCost(FixedCostModel fixedCostModel)
         {
+            // Check  waterTransaction category and fixedCost category is existed
+            List<UtilServiceCategory> allTransCategory = _utilityServiceCateoryService.GetAllMandatory();
+            UtilServiceCategory hdRequestTransCat = null;
+            MessageViewModels response = new MessageViewModels();
+            foreach (var transCat in allTransCategory)
+            {
+                if (transCat.Name.Trim().Equals(AmsConstants.UtilityServiceFixedCost))
+                {
+                    hdRequestTransCat = transCat;
+                }
+            }
+            if (hdRequestTransCat == null)
+            {
+                hdRequestTransCat = new UtilServiceCategory();
+                hdRequestTransCat.Name = AmsConstants.UtilityServiceFixedCost;
+                hdRequestTransCat.Status = SLIM_CONFIG.TRANS_CAT_STATUS_DENY_REMOVE;
+                hdRequestTransCat.CreateDate = DateTime.Now;
+                hdRequestTransCat.LastModified = DateTime.Now;
+                _utilityServiceCateoryService.Add(hdRequestTransCat);
+            }
+
             UtilityService utilityService = new UtilityService();
             utilityService.Name = fixedCostModel.Name;
             utilityService.CreateDate = DateTime.Now;
             utilityService.LastModified = DateTime.Now;
             utilityService.Type = SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST;
-            MessageViewModels response = new MessageViewModels();
+            utilityService.UtilSrvCatId = hdRequestTransCat.Id;
             _utilityServiceServices.Add(utilityService);
 
             if (fixedCostModel.FixedCost != null)
@@ -256,6 +305,8 @@ namespace AMS.Controllers
                 rangePrice.Price = fc.Price;
                 rangePrice.Name = fc.Name;
                 rangePrice.ServiceId = utilityService.Id;
+                rangePrice.CreateDate = DateTime.Now;
+                rangePrice.LastModified = DateTime.Now;
                 _rangePriceServices.Add(rangePrice);
 
                 foreach (var houseCat in _houseCategoryServices.GetAll())
@@ -296,14 +347,14 @@ namespace AMS.Controllers
                             s.Status = SLIM_CONFIG.UTILITY_SERVICE_OF_HOUSE_CAT_REMOVED;
                             _utilServiceForHouseCatServices.Update(s);
                         }
-//                        if (utilSrv != null)
-//                        {
-//                            foreach (var range in utilSrv.UtilityServiceRangePrices)
-//                            {
-//                                _rangePriceServices.DeleteById(range.Id);
-//                            }
-//                            _utilityServiceServices.Delete(_utilityServiceServices.FindById(utilSrv.Id));
-//                        }
+                        //                        if (utilSrv != null)
+                        //                        {
+                        //                            foreach (var range in utilSrv.UtilityServiceRangePrices)
+                        //                            {
+                        //                                _rangePriceServices.DeleteById(range.Id);
+                        //                            }
+                        //                            _utilityServiceServices.Delete(_utilityServiceServices.FindById(utilSrv.Id));
+                        //                        }
                     }
                 }
             }
@@ -344,14 +395,18 @@ namespace AMS.Controllers
                     {
                         ReceiptDetail receiptDetail = _receiptDetailServices.FindById(rd.Id);
 
-                        receiptDetail.TotalBill = rangePrice.Price * rd.Receipt.House.Area;
+                        receiptDetail.Total = rangePrice.Price * rd.Receipt.House.Area;
                         receiptDetail.LastModified = DateTime.Now;
                         receiptDetail.Quantity = (int)rd.Receipt.House.Area.Value;
                         if (receiptDetail.Quantity.Value != 0)
                         {
-                            receiptDetail.UnitPrice = receiptDetail.TotalBill / receiptDetail.Quantity.Value;
+                            receiptDetail.UnitPrice = receiptDetail.Total / receiptDetail.Quantity.Value;
                         }
+                        var transactions = receiptDetail.Transactions.Where(tr => tr.BalanceSheet.Id == receiptDetail.Receipt.BlsId).ToList();
                         _receiptDetailServices.Update(receiptDetail);
+
+                        //Update total amount of transaction when user receipt is unpublish
+                        UpdateTotalAmountInTransaction(transactions, receiptDetail.Total.Value);
                     }
                 }// if this water utility service is applied in this month. It must be update all order.
 
@@ -425,7 +480,7 @@ namespace AMS.Controllers
                                 List<UtilityServiceRangePrice> rangePrices =
                                     utilServiceForHouseCat.UtilityService.UtilityServiceRangePrices.ToList();
 
-                                receiptDetail.TotalBill =
+                                receiptDetail.Total =
                                     ReceiptController.CalculateWaterUtiServiceVersion1(receiptDetail.Quantity.Value,
                                         rangePrices);
 
@@ -436,13 +491,17 @@ namespace AMS.Controllers
 
                                 if (receiptDetail.Quantity.Value != 0)
                                 {
-                                    receiptDetail.UnitPrice = receiptDetail.TotalBill / receiptDetail.Quantity.Value;
+                                    receiptDetail.UnitPrice = receiptDetail.Total / receiptDetail.Quantity.Value;
                                 }
                                 else
                                 {
                                     receiptDetail.UnitPrice = 0;
                                 }
+                                var transactions = receiptDetail.Transactions.Where(tr => tr.BalanceSheet.Id == receiptDetail.Receipt.BlsId).ToList();
                                 _receiptDetailServices.Update(receiptDetail);
+
+                                //Update total amount of transaction when user receipt is unpublish
+                                UpdateTotalAmountInTransaction(transactions, receiptDetail.Total.Value);
                             }
                         }// Update current active to deactive. And get order detail of current active util service
 
@@ -477,25 +536,24 @@ namespace AMS.Controllers
                                     ReceiptDetail receiptDetail = _receiptDetailServices.FindById(rd.Id);
                                     double price =
                                         utilServiceForHouseCat.UtilityService.UtilityServiceRangePrices.First().Price.Value;
-                                    receiptDetail.TotalBill = price * rd.Receipt.House.Area;
+                                    receiptDetail.Total = price * rd.Receipt.House.Area;
                                     receiptDetail.LastModified = DateTime.Now;
                                     receiptDetail.Quantity = (int)rd.Receipt.House.Area.Value;
                                     receiptDetail.UtilityServiceId = utilServiceForHouseCat.UtilServiceId.Value;
                                     if (receiptDetail.Quantity.Value != 0)
                                     {
-                                        receiptDetail.UnitPrice = receiptDetail.TotalBill / receiptDetail.Quantity.Value;
+                                        receiptDetail.UnitPrice = receiptDetail.Total / receiptDetail.Quantity.Value;
                                     }
+                                    var transactions = receiptDetail.Transactions.Where(tr => tr.BalanceSheet.Id == receiptDetail.Receipt.BlsId).ToList();
                                     _receiptDetailServices.Update(receiptDetail);
-                                }
 
+                                    //Update total amount of transaction when user receipt is unpublish
+                                    UpdateTotalAmountInTransaction(transactions, receiptDetail.Total.Value);
+
+                                }
                             }
                         }
-
-
-
-
                     }
-
                 }
             }
             else
@@ -539,6 +597,19 @@ namespace AMS.Controllers
                 }
             }
             return true;
+        }
+
+        public void UpdateTotalAmountInTransaction(List<Transaction> listTrans, double totalAmount)
+        {
+            //Update total amount of transaction when user receipt is unpublish
+            if (listTrans.ToList().Count != 0)
+            {
+                var eTrans = _transactionService.FindById(listTrans.First().Id);
+                eTrans.TotalAmount = totalAmount;
+                eTrans.PaidAmount = 0;
+                eTrans.LastModified = DateTime.Now;
+                _transactionService.Update(eTrans);
+            }
         }
     }
 

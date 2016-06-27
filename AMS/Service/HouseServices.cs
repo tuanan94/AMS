@@ -70,6 +70,8 @@ namespace AMS.Service
         {
             return _houseCatRepository.FindById(id);
         }
+
+       
     }
 
     public class UtilServiceForHouseCatServices
@@ -102,7 +104,7 @@ namespace AMS.Service
                                    .Select(utilSrv => utilSrv.First()).ToList();
         }
 
-        public List<UtilServiceForHouseCat> GetFixActiveUtilService()
+        public List<UtilServiceForHouseCat> GetActiveUtilService()
         {
             return _utilServiceForHouseCat.List.Where(
                         utilSrv => utilSrv.Status == SLIM_CONFIG.UTILITY_SERVICE_OF_HOUSE_CAT_ENABLE)

@@ -71,7 +71,12 @@ namespace AMS.Repository
             //table.Attach(entity);
             db.Entry(entity).State = EntityState.Modified;
             db.SaveChanges();
+        }
 
+        public void DeleteRange(List<T> entities)
+        {
+            table.RemoveRange(entities);
+            db.SaveChanges();
         }
     }
 }

@@ -47,22 +47,22 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="navbar-collapse collapse" id="main-nav" style="height: 1px;">
                 <ul class="nav navbar-nav manager-header">
-                    <li class="">
+                    <li id="hdRequestNav">
                         <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-life-ring"></i>Yêu cầu</a>
                     </li>
-                    <li class="active">
+                    <li id="receiptNav">
                         <a href="/Management/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Hóa đơn</a>
                     </li>
-                    <li>
+                    <li id="balanceSheetNav">
                         <a href="/Management/BalanceSheet/View"><i class="fa fa-dollar"></i> Thu chi</a>
                     </li>
-                    <li>
+                    <li id="reportNav">
                         <a href="/Management/ManageReport"><i class="fa fa fa-bell-o"></i> Báo cáo</a>
                     </li>
-                    <li>
+                    <li id="surveyNav">
                         <a href="~/Views/Shared/login.html"><i class="fa fa-list-ol"></i> Khảo sát</a>
                     </li>
-                    <li class="">
+                    <li id="configNav" class="">
                         <a href="/Management/Config/UtilityService/View"><i class="fa fa-wrench"></i> Cấu Hình</a>
                     </li>
                 </ul>
@@ -75,7 +75,7 @@
         <div id="content" style="margin-left: 0">
             @RenderBody()
             <!--Footer-->
-            <div class="footer">
+            <div class="footer" style="left:0px">
                 Social Network Template © Copyright Notice
             </div>
         </div>

@@ -28,7 +28,7 @@
                     <a href="/Management/ManageReceipt/CreateAutomationReceiptView"><i class="fa fa fa-plus"></i> Tạo hóa đơn tự động</a>
                 </li>
                 <li class="">
-                    <a href="/Management/ManageReceipt/DownloadRecordTemplate"><i class="fa fa-cloud-download"></i> Tải bảng ghi nước</a>
+                    <a href="/Management/ManageReceipt/ViewDownloadRecordTemplate"><i class="fa fa-cloud-download"></i> Tải bảng ghi nước</a>
                 </li>
             </ul>
         </div>
@@ -39,11 +39,10 @@
                     <div class="tab-content">
                         <div class="tab-pane fade active in" id="">
 
-                            <div class="alert alert-warning" id="failedPublishOrderNotify" style="display: none">
+                            <div class="alert alert-danger" id="failedPublishOrderNotify" style="display: none">
                                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                 <span>Công bố hóa đơn thất bại.</span>
                             </div>
-
 
                             <div class="form-group">
                                 <div class="col-md-1"></div>
@@ -60,7 +59,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-md-6">
-                                    <fieldset class="scheduler-border less-padding border-top">
+                                    <fieldset class="scheduler-border less-padding">
                                         <legend class="scheduler-border bold-black" style="margin-bottom: 30px;"> Thông tin hóa đơn</legend>
                                         <div class="form-group">
                                             <label for="serviceTypeName" class="col-md-2 control-label">Tiêu đề</label>
@@ -71,29 +70,29 @@
                                         <div class="form-group">
                                             <label el class="col-md-2 control-label">Tháng</label>
                                             <div class="col-md-4">
-                                                <input type="text" id="forMonth" readonly="readonly" value="@receipt.ForMonth.Value.ToString(AmsConstants.MonthYearFormat)" name="ForMonth" class="form-control datepicker" data-date-format="mm-yyyy" data-date-language="vi"
-                                                       data-date-min-view-mode="1" data-date-start-date="-1m" data-date-today-highlight="true" data-date-end-date="0m" />
+                                                <input type="text" readonly="readonly" value="@receipt.BalanceSheet.StartDate.Value.ToString(AmsConstants.MonthYearFormat)" class="form-control" />
+                                                <input type="hidden" id="blsId" value="@receipt.BalanceSheet.Id" name="ForMonth" class="form-control" />
                                             </div>
                                             <label for="serviceTypeName" class="col-md-2 control-label">Trạng thái</label>
                                             <div class="col-md-4">
                                                 @{
                                                     if (groupStatus == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
                                                     {
-                                                        <span id="receiptStatusUnpublish" class="btn btn-inverse ">Chưa công bố</span>
-                                                        <span id="receiptStatusPaid" class="btn btn-success hide">Đã thanh toán</span>
-                                                        <span id="receiptStatusUnpaid" class="btn btn-danger hide">Chưa thanh toán</span>
+                                                        <span id="receiptStatusUnpublish" class="btn btn-inverse  btn-sm  ">Chưa công bố</span>
+                                                        <span id="receiptStatusPaid" class="btn btn-success  btn-sm  hide">Đã thanh toán</span>
+                                                        <span id="receiptStatusUnpaid" class="btn btn-danger btn-sm  hide">Chưa thanh toán</span>
                                                     }
                                                     else if (groupStatus == SLIM_CONFIG.RECEIPT_STATUS_PAID)
                                                     {
-                                                        <span id="receiptStatusUnpublish" class="btn btn-inverse hide">Chưa công bố</span>
-                                                        <span id="receiptStatusPaid" class="btn btn-success">Đã thanh toán</span>
-                                                        <span id="receiptStatusUnpaid" class="btn btn-danger hide">Chưa thanh toán</span>
+                                                        <span id="receiptStatusUnpublish" class="btn btn-inverse  btn-sm  hide">Chưa công bố</span>
+                                                        <span id="receiptStatusPaid" class="btn btn-success  btn-sm ">Đã thanh toán</span>
+                                                        <span id="receiptStatusUnpaid" class="btn btn-danger btn-sm  hide">Chưa thanh toán</span>
                                                     }
                                                     else if (groupStatus == SLIM_CONFIG.RECEIPT_STATUS_UNPAID)
                                                     {
-                                                        <span id="receiptStatusUnpublish" class="btn btn-inverse hide">Chưa công bố</span>
-                                                        <span id="receiptStatusPaid" class="btn btn-success hide">Đã thanh toán</span>
-                                                        <span id="receiptStatusUnpaid" class="btn btn-danger ">Chưa thanh toán</span>
+                                                        <span id="receiptStatusUnpublish" class="btn btn-inverse btn-sm hide">Chưa công bố</span>
+                                                        <span id="receiptStatusPaid" class="btn btn-success btn-sm  hide">Đã thanh toán</span>
+                                                        <span id="receiptStatusUnpaid" class="btn btn-danger btn-sm  ">Chưa thanh toán</span>
                                                     }
                                                 }
                                             </div>
@@ -126,11 +125,11 @@
                                 <div class="col-md-6">
                                     <div class="row">
 
-                                        <fieldset class="scheduler-border less-padding border-top">
+                                        <fieldset class="scheduler-border less-padding">
                                             <legend class="scheduler-border bold-black">Giá nước</legend>
 
                                             <div class="row">
-                                                <div class="table-responsive col-md-offset-1 col-md-11">
+                                                <div class="table-responsive col-md-12">
                                                     <table class="table v-middle table-bordered table-striped table-condensed ">
                                                         <thead>
                                                             <tr>
@@ -159,16 +158,14 @@
                                         </fieldset>
                                     </div>
                                     <div class="form-group">
-                                        <div class="form-group">
-                                            <fieldset class="scheduler-border less-padding border-top">
-                                                <legend class="scheduler-border bold-black">Phí cố định</legend>
+                                        <fieldset class="scheduler-border less-padding">
+                                            <legend class="scheduler-border bold-black">Phí cố định</legend>
 
-                                                <label class="col-md-2 control-label">Tên</label>
-                                                <div class="col-md-10">
-                                                    <input class="form-control" value="@(fixedCost.UtilityService == null ? "Chưa thiết lập" : fixedCost.UtilityService.Name)" type="text" />
-                                                </div>
-                                            </fieldset>
-                                        </div>
+                                            <label class="col-md-2 control-label">Tên</label>
+                                            <div class="col-md-10">
+                                                <input class="form-control" value="@(fixedCost.UtilityService == null ? "Chưa thiết lập" : fixedCost.UtilityService.Name)" type="text" />
+                                            </div>
+                                        </fieldset>
                                     </div>
 
                                 </div>
@@ -229,7 +226,7 @@
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <span>Cập nhật thành công.</span>
                     </div>
-                    <div class="alert alert-warning" id="failedAddTransTypeNotify" style="display: none">
+                    <div class="alert alert-danger" id="failedAddTransTypeNotify" style="display: none">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <span>Cập nhật thất bại.</span>
                     </div>
@@ -315,11 +312,11 @@
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <span>Cập nhật thành công.</span>
                     </div>
-                    <div class="alert alert-warning" id="failedpdateOrderTypeNotify" style="display: none">
+                    <div class="alert alert-danger" id="failedpdateOrderTypeNotify" style="display: none">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <span>Cập nhật thất bại.</span>
                     </div>
-                    <div class="alert alert-warning" id="orderIsExistedNotify" style="display: none">
+                    <div class="alert alert-danger" id="orderIsExistedNotify" style="display: none">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <span>Hóa đơn tháng <strong id="forMonthMsg"></strong> đã được tạo</span>
                     </div>
@@ -334,8 +331,8 @@
                         <div class="form-group">
                             <label for="autoReceiptTitle" class="col-md-3 control-label">Tháng</label>
                             <div class="col-md-5">
-                                <input type="text" id="autoRseceiptForMonth" readonly="readonly" value="@receipt.ForMonth.Value.ToString(AmsConstants.MonthYearFormat)" name="ForMonth" class="form-control datepicker" data-date-format="mm-yyyy" data-date-language="vi"
-                                       data-date-min-view-mode="1" data-date-start-date="-1m" data-date-today-highlight="true" data-date-end-date="+1m" />
+                                <input type="text" id="autoReceiptForMonth" readonly="readonly" value="@receipt.BalanceSheet.StartDate.Value.ToString(AmsConstants.MonthYearFormat)" class="form-control" />
+                                <input type="hidden" id="autoReceiptBlsId" name="BalanceSheetId" />
                             </div>
                             <div class="col-md-4">
                                 <span id="autoReceiptunPublished" class="btn btn-inverse hide">Chưa công bố</span>
@@ -363,7 +360,7 @@
             </div>
             <div class="modal-footer" style="margin-top: 0">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <span onclick="updateAutomationReceiptHeader(@receipt.CreateDate.Value.Ticks)" class="btn btn-primary">Chấp nhận</span>
+                <span onclick="updateAutomationReceiptHeader(@receipt.CreateDate.Value.Ticks)" class="btn btn-info">Chấp nhận</span>
             </div>
         </div>
     </div>
@@ -392,7 +389,6 @@
 
 <script>
     $("documemt").ready(function () {
-        document.getElementById("publishDate").dataset.dateEndDate = "+" + (calculateDateFromTodayToEndOfMonth() + 1) + "d";
         window.houseConsumptionList = [];
         window.deleteConsumptionRecordList = [];
         window.deleteConsumptionRecordElementList = [];
@@ -425,6 +421,7 @@
                     $("#receiptDesc").text(data.description);
                     $("#publishDate").val(data.publishDate);
                     $("#forMonth").val(data.forMonth);
+                    $("#blsId").val(data.blsId);
 
                     $("#water").val(data.waterName);
                     $("#fixedCost").val(data.fixedCostName);
@@ -688,11 +685,12 @@
                 //                var fixedCost = object.FixedCost;
 
                 $("#autoReceiptTitle").val(object.Title);
-                document.getElementById("autoReceiptPublishmentDate").dataset.dateEndDate = "+" + calculateDateFromTodayToEndOfMonth() + "d";
                 $("#autoReceiptPublishmentDate").datepicker();
                 $("#autoReceiptPublishmentDate").val(object.PublishDate);
                 $("#autoReceiptDesc").val(object.Description);
                 $("#autoReceiptReceiptId").text(object.ReceiptId);
+                $("#autoReceiptForMonth").val(object.ForMonth);
+                $("#autoReceiptBlsId").val(object.BalanceSheetId);
 
                 //                $("#autoReceiptWater").html(parseJsonToSelectTags(water,receiptInfo.WaterUtilServiceId));
                 //                $("#autoReceiptFixedCost").html(parseJsonToSelectTags(fixedCost,receiptInfo.FixCostUtilServiceId));
@@ -808,9 +806,10 @@
             },
             success: function (data) {
                 if (data.Data.paymentDate !== undefined) {
+                    window.autoReceiptTbl.ajax.reload();
                     $("#btnPurchaseReceipt").addClass("hide");
-                    var rowId = $("#rowId").val();
-                    $("#" + rowId + " > td:nth-child(9)").html("<span class='label label-success'>" + "Đã thanh toán" + "</div>");
+                    //                    var rowId = $("#rowId").val();
+                    //                    $("#" + rowId + " > td:nth-child(9)").html("<span class='label label-success'>" + "Đã thanh toán" + "</div>");
                     $("#paid").removeClass("hide");
                     $("#unpaid").addClass("hide");
                     $("#paymentDate").val(data.Data.paymentDate);

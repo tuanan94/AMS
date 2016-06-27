@@ -126,12 +126,10 @@
                                         </div>
 
                                     </div>
-
-
                                     <div class="form-horizontal">
                                         <div class="form-group">
                                             <div class="pull-right">
-                                                <span class="btn btn-primary" onclick="addServicePrices()"><i class="fa fa-floppy-o"></i> Tạo mới</span>
+                                                <span class="btn btn-primary" onclick="addServicePrices()"><i class="fa fa-floppy-o"></i> Lưu lại</span>
                                             </div>
                                         </div>
                                     </div>
@@ -150,7 +148,7 @@
         <fieldset class="scheduler-border less-padding">
             <legend class="scheduler-border">Phí cố định</legend>
             <div class="form-group">
-                <div class="col-md-offset-2 col-md-6">
+                <div class="col-md-offset-2 col-md-7">
                     <strong style="align-content: center">Tên phí cố định</strong>
                 </div>
                 <div class="col-sm-2">
@@ -165,14 +163,8 @@
                     <div class="col-md-2">
                         <input id="fixed_cost_price_1" name="" type="text" class="form-control order-item-qty">
                     </div>
-                    @*                    <span class="btn btn-danger btn-xs on-delete"><i class="fa fa-times"></i></span>*@
                 </div>
             </div>
-            @*            <div class="form-group">*@
-            @*                <div class="col-sm-3">*@
-            @*                    <span id="addNewFixedCost" class="btn btn-stroke btn-primary"><i class="fa fa-plus"></i> Thêm</span>*@
-            @*                </div>*@
-            @*            </div>*@
         </fieldset>
     </div>
 </div>
@@ -222,7 +214,7 @@
             </div>
             <div class="form-group">
                 <div class="col-md-3">
-                    <span id="addRowWater" class="btn btn-stroke btn-primary"><i class="fa fa-plus"></i> Thêm</span>
+                    <span id="addRowWater" class="btn btn-stroke btn-info"><i class="fa fa-plus"></i> Thêm</span>
                 </div>
             </div>
         </fieldset>
@@ -243,6 +235,8 @@
                 $("#houseCatRow").addClass("hide");
                 $("#UtilityServiceWrapper").html($("#fixedCostFrame").html());
                 $("#fixedCostWrapper").prop("id", "fixedCostWrapperInline");
+                bindingClassNumberWithComma("order-item-qty");
+
             } else if (selected === 2 || selected === 1) {
                 getListHouseCategory();
                 $("#UtilityServiceWrapper").html($("#waterFrame").html());
@@ -252,8 +246,8 @@
             }
             bindingEventOnDelet();
         });
-        bindingClassNumberWithComma("total-order");
         onChangeFromNumber();
+        bindingClassNumberWithComma("total-order");
     });
     function onDeleteRow(event) {
         event.stopPropagation();
@@ -283,76 +277,7 @@
         bindingEventOnDelet();
         onChangeFromNumber();
     }
-    function onChangeFromNumber() {
-        $(".order-item-price").on("change", function (event) {
-            if (event.which >= 37 && event.which <= 40) {
-                event.preventDefault();
-                return;
-            }
-            var nextElement = event.target.parentNode.parentNode.nextElementSibling;
-            var nextFromValue = {};
-            var fromValue = event.target.parentNode.previousElementSibling.querySelector(".order-item-qty");
-
-            if (nextElement == null) {
-                event.target.value = "*";
-                return;
-            } else {
-                nextFromValue = nextElement.querySelector(".order-item-qty");
-                var nextToValue = nextElement.querySelector(".order-item-price");
-                if (parseInt(event.target.value, 10) >= parseInt(nextToValue.value, 10)) {
-                    var nextNode = event.target.parentNode.parentNode.nextElementSibling;
-                    while (nextNode && nextNode.nodeType === 1 && nextNode !== this) {
-                        nextNode.querySelector(".order-item-price").value = "";
-                        nextNode.querySelector(".order-item-qty").value = "";
-                        nextNode = nextNode.nextElementSibling;
-                    }
-                }// if next node is greater than this node clean all next node
-            }
-            if (event.target.parentNode.parentNode.previousElementSibling) {
-                var previousValue = event.target.parentNode.parentNode.previousElementSibling
-                    .querySelector(".order-item-price");
-
-                if (isNaN(event.target.value) && event.target.value !== "*") {
-                    event.target.value = "";
-                } // clean next node when input other character except *
-                else if (isNaN(event.target.value) && event.target.value === "*") {
-                    if (nextElement != null) {
-                        var nextNode = event.target.parentNode.parentNode.nextElementSibling;
-                        while (nextNode && nextNode.nodeType === 1 && nextNode !== this) {
-                            nextNode.querySelector(".order-item-price").value = "";
-                            nextNode.querySelector(".order-item-qty").value = "";
-                            nextNode = nextNode.nextElementSibling;
-                        }
-                    }// clean next node when input * in the middle
-                } else if (parseInt(event.target.value, 10) > parseInt(previousValue.value, 10)) {
-                    nextFromValue.value = event.target.value;
-                } else {
-                    event.target.value = "";
-                    fromValue.value = "";
-                    var previousNode = event.target.parentNode.parentNode.previousElementSibling;
-                    while (previousNode && previousNode.nodeType === 1 && previousNode !== this) {
-                        previousNode.querySelector(".order-item-price").value = "";
-                        if (previousNode.querySelector(".order-item-qty").value != 0) {
-                            previousNode.querySelector(".order-item-qty").value = "";
-                        }
-                        previousNode = previousNode.previousElementSibling;
-                    }
-                    var nextNode = event.target.parentNode.parentNode.nextElementSibling;
-                    while (nextNode && nextNode.nodeType === 1 && nextNode !== this) {
-                        nextNode.querySelector(".order-item-price").value = "";
-                        nextNode.querySelector(".order-item-qty").value = "";
-                        nextNode = nextNode.nextElementSibling;
-                    }
-                }// when in put in the middle wrong clean all element
-            } else {
-                if (isNaN(event.target.value) && event.target.value !== "*") {
-                    event.target.value = "";
-                } else {
-                    nextFromValue.value = event.target.value;
-                }
-            }
-        });
-    }
+    
     function createNewFixedCostRow(wrapperId) {
         window.index++;
         addNewFixedCostRow(index, wrapperId);
@@ -445,9 +370,10 @@
                 data: waterUtilService,
                 type: "POST",
                 success: function (data) {
+                    smoothScrollToTop();
                     if (data.StatusCode === 0) {
                         $("#createSuccessNoti").fadeIn("fast");
-                        resetFormData("addUtilServiceForm");
+                        resetFromNotField();
                         setTimeout(function () {
                             $("#createSuccessNoti").fadeOut("fast");
                         }, 3000);
@@ -487,11 +413,12 @@
                     data: fixCostItem,
                     type: "POST",
                     success: function (data) {
+                        smoothScrollToTop();
                         if (data.StatusCode === 0) {
                             $("#createSuccessNoti").fadeIn("fast");
-                            resetFormData("addUtilServiceForm");
                             setTimeout(function () {
                                 $("#createSuccessNoti").fadeOut("fast");
+                                resetAllField();
                             }, 3000);
                         } else {
                             $("#createFailedNoti").fadeIn("fast");
@@ -503,5 +430,11 @@
                 });
             }
         }
+    }
+    function resetFromNotField() {
+        $("#addUtilServiceForm").closest("form").find("input[type=text]:not(.order-item-qty:first), textarea").val("");
+    }
+    function resetAllField() {
+        $("#addUtilServiceForm").closest("form").find("input[type=text], textarea").val("");
     }
 </script>
