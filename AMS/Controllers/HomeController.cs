@@ -53,12 +53,14 @@ namespace AMS.Controllers
         public ActionResult Index()
         {
             User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
+            
             if(curUser == null)
             {
                 return View("error");
             }
             ViewBag.curUser = curUser;
             ViewBag.curHouse = curUser.House;
+            String weahterResultTest = WeatherUtil.getJsonResult();
             return View();
         }
         [HttpPost]

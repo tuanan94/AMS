@@ -421,6 +421,7 @@
     <Compile Include="ViewModel\MemberViewModel.cs" />
     <Compile Include="ViewModel\PostViewModel.cs" />
     <Compile Include="ViewModel\SurveyViewModel.cs" />
+    <Compile Include="WeatherUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="AmsDLL\LINQtoCSV.dll" />
