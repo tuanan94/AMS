@@ -13,14 +13,10 @@ namespace AMS
 {
     public class WeatherUtil
     {
-        public static WeatherResult getWeather()
+        
+        public static weatherResult getWeatherResult() // return weatherCode
         {
-
-
-            return WeatherResult.NoneDefined;
-        }
-        public static String getJsonResult()
-        {
+            weatherResult weatherResult = new weatherResult();
             String requestContent = "";
             requestContent += "https://api.worldweatheronline.com/premium/v1/weather.ashx?num_of_days=3&q=";
             requestContent += "Ho+Chi+Minh+City"; //location
@@ -36,22 +32,56 @@ namespace AMS
             var jsonobject = jss.Deserialize<dynamic>(responseString);
             var data = jsonobject["data"];
             var current_condition = data["current_condition"];
-            return responseString;
+            string weatherCode = current_condition[0]["weatherCode"];
+            string weatherDes = current_condition[0]["weatherDesc"][0]["value"];
+            string weatherIconUrl = current_condition[0]["weatherIconUrl"][0]["value"];
+            string temp_C = current_condition[0]["temp_C"];
+            weatherResult.code = weatherCode;
+            weatherResult.desc = weatherDes;
+            weatherResult.weatherIcon = weatherResult.getWeatherIcon(weatherCode, weatherIconUrl);
+            weatherResult.tempC = temp_C;
+            return weatherResult;
         }
     }
 
-    public class weatherObject
+}
+public class weatherResult
+{
+    public static string getWeatherIcon(string code, string defaultIcon)
     {
-        public String data { get; set; }
-    }
-    public class data
-    {
-        current_condition c;
-    }
-    public class current_condition
-    {
-        String weatherCode;
-        String temp_C;
+        string result = "";
+        switch (code)
+        {
+            case "113":
+                    result = "/Content/Images/WeatherIcon/Sunny.gif";
+                    break;
+            case "116":
+                    result = "/Content/Images/WeatherIcon/Partlycloudy.gif";
+                    break;
+            default:
+                result = defaultIcon;
+                break;
+                
+        }
 
+        return result; 
     }
+
+    public weatherResult()
+    {
+        code = "000";
+        desc = "No information";
+        tempC = "No information";
+        maxTemp = "No information";
+        minTemp = "No information";
+        weatherIcon = "";
+        
+    }
+    public string code { get; set; }
+    public string desc { get; set; }
+    public string tempC { get; set; }
+    public string maxTemp { get; set; }
+    public string minTemp { get; set; }
+    public string weatherIcon { get; set; }
+
 }

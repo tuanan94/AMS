@@ -456,6 +456,13 @@
     <Content Include="Content\images\delete.png" />
     <Content Include="Content\images\home_default.jpg" />
     <Content Include="Content\images\logo.png" />
+    <Content Include="Content\images\WeatherIcon\Cloudy.gif" />
+    <Content Include="Content\images\WeatherIcon\Lightning.gif" />
+    <Content Include="Content\images\WeatherIcon\Partlycloudy.gif" />
+    <Content Include="Content\images\WeatherIcon\Partlycloudywithrain.gif" />
+    <Content Include="Content\images\WeatherIcon\Raining.gif" />
+    <Content Include="Content\images\WeatherIcon\Sunny.gif" />
+    <Content Include="Content\images\WeatherIcon\Windy.gif" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />

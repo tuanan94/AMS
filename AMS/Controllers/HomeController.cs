@@ -60,7 +60,8 @@ namespace AMS.Controllers
             }
             ViewBag.curUser = curUser;
             ViewBag.curHouse = curUser.House;
-            String weahterResultTest = WeatherUtil.getJsonResult();
+            weatherResult weatherResult = WeatherUtil.getWeatherResult();
+            ViewBag.weather = weatherResult;
             return View();
         }
         [HttpPost]
