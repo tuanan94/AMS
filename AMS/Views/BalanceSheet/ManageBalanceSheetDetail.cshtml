@@ -10,7 +10,7 @@
     <div class="panel panel-default">
 
         <div class="heading-tab">
-            <i class="fa fa-list"> Bảng chi tiết thu chi tháng @bls.ForMonth.Value.ToString(AmsConstants.MonthYearFormat)</i>
+            <i class="fa fa-list"></i><strong> Chi tiết bảng thu chi</strong>
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li>
                     <a href="/Management/BalanceSheet/View"><i class="fa fa-file-text-o"></i> Báo cáo thu chi</a>
@@ -29,142 +29,158 @@
                 <div class="tab-pane fade active in" id="">
                     <div class="panel panel-default" style="border-color: transparent">
                         <form class="form-horizontal" role="form">
-                            <div class="col-md-12">
-                                <div class="col-md-offset-4">
+                            <div class="row">
+                                <div class="pull-right">
                                     @{
                                         if (bls.Status == SLIM_CONFIG.BALANCE_SHEET_OPEN)
                                         {
                                             <span id="btnDuedate" class="btn btn-default">
                                                 <i class="fa fa-pencil" aria-hidden="true"></i> Chỉnh sửa
                                             </span>
-                                            <span id="assignHdReqBtn" class="btn btn-danger" data-toggle="modal" data-target="#closeMonthlyBalanceSheetModal">
+                                            <span id="assignHdReqBtn" class="btn btn-danger" onclick="openCloseBlsModal()">
                                                 Đóng
                                             </span>
                                         }
                                     }
                                 </div>
-                                <div class=" form-group">
-                                    <div class="col-md-6">
-                                        <fieldset class="scheduler-border less-padding border-top">
-                                            <legend class="scheduler-border bold-black">Thông tin</legend>
+                            </div>
+                            <div class=" form-group">
+                                <fieldset class="scheduler-border less-padding">
+                                    <legend class="scheduler-border bold-black">Thông tin</legend>
+                                    <div class="form-group">
+                                        <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="title" class="col-md-4 control-label">Tiêu đề</label>
+                                                <label for="title" class="col-md-3 control-label">Tiêu đề</label>
 
-                                                <div class="col-md-8">
+                                                <div class="col-md-9">
                                                     <input id="title" class="form-control" value="@bls.Title" />
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="title" class="col-md-4 control-label">Trạng thái</label>
-
+                                                <label class="col-md-3 control-label">Từ ngày</label>
+                                                <div class="col-md-9">
+                                                    <div class="input-group">
+                                                        @{
+                                                            if (@bls.CreateDate.Value.Date == DateTime.Today)
+                                                            {
+                                                                <input class="form-control" value="@bls.StartDate.Value.ToString(AmsConstants.DateFormat)" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <input class="form-control" value="@bls.StartDate.Value.ToString(AmsConstants.DateFormat)" />
+                                                                <span class="input-group-addon">đến</span>
+                                                                <input class="form-control" value="@(bls.ClosingDate == null ? "Hôm nay" : bls.ClosingDate.Value.ToString(AmsConstants.DateFormat))" />
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="title" class="col-md-3 control-label">Trạng thái</label>
                                                 @{
-
                                                     if (bls.Status == SLIM_CONFIG.BALANCE_SHEET_CLOSE)
                                                     {
-                                                        <div class="col-md-8">
+                                                        <div class="col-md-9">
                                                             <span class="btn btn-danger">Đóng</span>
                                                         </div>
                                                     }
                                                     else
                                                     {
-                                                        <div class="col-md-8">
-                                                            <span class="btn btn-info">Đang cập nhật</span>
+                                                        <div class="col-md-9">
+                                                            <span class="btn btn-info">Mở</span>
                                                         </div>
                                                     }
-
                                                 }
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Cập nhật</label>
+                                                <div class="col-md-9">
+                                                    <input id="lastUpdate" class="form-control" value="@bls.LastModified.Value.ToString(AmsConstants.DateTimeFormat)" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
 
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-md-4 control-label">Ngày tạo</label>
-                                                <div class="col-md-8">
-                                                    <input class="form-control" value="@bls.CreateDate.Value.ToString(AmsConstants.DateFormat)" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-md-4 control-label">Ngày cập nhật</label>
-                                                <div class="col-md-8">
-                                                    <input id="lastUpdate" class="form-control" value="@bls.LastModified.Value.ToString(AmsConstants.DateFormat)" />
-                                                </div>
-                                            </div>
-                                        </fieldset>
-                                    </div>
-                                    <div class="col-md-6 ">
-                                        <fieldset class="scheduler-border less-padding border-top">
-                                            <legend class="scheduler-border bold-black">Tổng quan về thu chi</legend>
                                             <div class="table-responsive">
-                                                <table class="table v-middle table-bordered table-striped balance-sheet">
+                                                <table class="table v-middle table-bordered table-condensed table-striped">
                                                     <thead>
                                                         <tr>
-                                                            <th rowspan="2">Tên</th>
-                                                            <th colspan="2" class="text-capitalize text-center" style="background-color: #dddddd">
-                                                                Bảng lưu chuyển tiền mặt tháng @bls.ForMonth.Value.ToString(AmsConstants.MonthYearFormat)
+                                                            <th style="width: 20%" rowspan="2">Tên</th>
+                                                            <th colspan="4" class="text-capitalize text-center" style="background-color: #dddddd">
+                                                                Bảng thu chi tháng @bls.StartDate.Value.ToString(AmsConstants.MonthYearFormat)
                                                             </th>
                                                         </tr>
                                                         <tr>
-                                                            <th>Tổng</th>
-                                                            <th>Thực thu</th>
+                                                            <th style="width: 20%;">Tồn</th>
+                                                            <th style="width: 20%;">Tổng</th>
+                                                            <th style="width: 20%;">Thực thu</th>
+                                                            <th style="width: 20%;">Thực chi</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td><strong>Tồn đầu tháng</strong></td>
-                                                            <td id="redudancyStartMonth" colspan="2">15,000,000</td>
+                                                            <td><strong>Đầu kỳ</strong></td>
+                                                            <td id="redudancyStartMonth" colspan="4"></td>
                                                         </tr>
+                                                    <tr>
+                                                        <td><strong>Doanh thu</strong></td>
+                                                        <td></td>
+                                                        <td id="forecastIncome"></td>
+                                                        <td id="actualIncome"></td>
+                                                        <td></td>
+                                                    </tr>
                                                         <tr>
-                                                            <td><strong>Tổng thu nhập</strong></td>
-                                                            <td id="forecastIncome"></td>
-                                                            <td id="actualIncome"></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><strong>Tổng chi</strong></td>
+                                                            <td><strong>Chi phí</strong></td>
+                                                            <td></td>
                                                             <td id="forecastExpense"></td>
+                                                            <td></td>
                                                             <td id="actualExpense"></td>
                                                         </tr>
                                                         <tr>
-                                                            <td><strong>Tồn cuối tháng</strong></td>
-                                                            <td id="redudancyEndMonth" colspan="2">0</td>
+                                                            <td><strong>Cuối kỳ</strong></td>
+                                                            <td id="redudancyEndMonth" colspan="4"></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
-                                        </fieldset>
-                                    </div>
-                                </div>
 
-                                <div class="form-group">
-
-                                    <div class="table-responsive">
-                                        <table id="blsTransDetailTbl" data-bls-id="@bls.Id" class="table v-middle table-striped table-bordered table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Tên</th>
-                                                    <th>Loại</th>
-                                                    <th>Nhóm</th>
-                                                    <th>Tháng</th>
-                                                    <th>Tổng</th>
-                                                    <th>Đã thanh toán</th>
-                                                    <th>Ngày tạo</th>
-                                                    <th class="text-right"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody></tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Tên</th>
-                                                    <th>Loại</th>
-                                                    <th>Nhóm</th>
-                                                    <th>Tháng</th>
-                                                    <th>Tổng</th>
-                                                    <th>Đã thanh toán</th>
-                                                    <th>Ngày tạo</th>
-                                                    <th class="text-right"></th>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
+                                        </div>
                                     </div>
+                                </fieldset>
+                            </div>
+
+                            <div class="form-group">
+
+                                <div class="table-responsive">
+                                    <table id="blsTransDetailTbl" data-bls-id="@bls.Id" data-bls-status="@bls.Status" class="table v-middle table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Tên</th>
+                                                <th>Loại</th>
+                                                <th>Nhóm</th>
+                                                <th>Tháng</th>
+                                                <th>Tổng</th>
+                                                <th>Đã thanh toán</th>
+                                                <th>Ngày tạo</th>
+                                                <th class="text-right"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Tên</th>
+                                                <th>Loại</th>
+                                                <th>Nhóm</th>
+                                                <th>Tháng</th>
+                                                <th>Tổng</th>
+                                                <th>Đã thanh toán</th>
+                                                <th>Ngày tạo</th>
+                                                <th class="text-right"></th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
                                 </div>
                             </div>
                         </form>
@@ -187,23 +203,27 @@
 
                     <div class="alert alert-info" id="successAddTransNotify" style="display: none">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span>Thêm khoản thu thành công.</span>
+                        <span>Thêm giao dịch thành công.</span>
                     </div>
-                    <div class="alert alert-warning" id="failedAddTransNotify" style="display: none">
+                    <div class="alert alert-danger" id="failedAddTransNotify" style="display: none">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span>Thêm khoản thu thất bại.</span>
+                        <span>Thêm giao dịch thất bại.</span>
+                    </div>
+                    <div class="alert alert-danger" id="failedAddTransWithMsgNotify" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span id="addTransMsg"></span>
                     </div>
 
                     <form id="addIncomeLineForm" class="form-horizontal" role="form">
                         <div class="form-group">
-                            <label for="transTitle" class="col-sm-3 control-label">Tên </label>
-                            <div class="col-sm-9">
+                            <label for="transTitle" class="col-md-3 control-label">Tên </label>
+                            <div class="col-md-9">
                                 <input id="transTitle" type="text" name="TransTitle" class="form-control" value="">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">Loại </label>
-                            <div class="col-sm-9">
+                            <label class="col-md-3 control-label">Loại </label>
+                            <div class="col-md-9">
                                 <label class="radio-inline">
                                     <input type="radio" value="1" checked="checked" name="TransType" />Thu
                                 </label>
@@ -213,63 +233,58 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="transCat" class="col-sm-3 control-label">Nhóm </label>
-                            <div class="col-sm-7">
-                                <select id="transCat" name="TransCatId" class="form-control" data-size="3"></select>
-                            </div>
-                            <span class="btn btn-stroke btn-info btn-sm" onclick="closePopupAndShowOther()"><i class="fa fa-plus"></i> Nhóm</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="BalanceSheetForMonthView" class="col-sm-3 control-label">Cho tháng</label>
-                            <div class="col-sm-9">
-                                @*Do not del this code*@
-                                @*<input id="BalanceSheetForMonthView" type="text" class="form-control"
-                                       data-date-start-view="1" data-date-format="mm-yyyy" data-date-language="vi"
-                                       data-date-min-view-mode="1" data-date-end-date="0m" data-date-start-date="0m"/>*@
-                                <input id="BalanceSheetForMonthView" type="text" class="form-control"
-                                       data-date-start-view="1" data-date-format="mm-yyyy" data-date-language="vi"
-                                       data-date-min-view-mode="1" data-date-end-date="0m" data-date-start-date="-1m"/>
+                            <label for="transCat" class="col-md-3 control-label">Nhóm </label>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <select id="transCat" name="UtilSrvCatId" class="form-control" data-size="3"></select>
+                                    <span class="input-group-addon btn btn-stroke btn-info btn-sm" onclick="closePopupAndShowOther()"><i class="fa fa-plus"></i> Nhóm</span>
+                                </div>
                             </div>
                         </div>
+
                         <div class="form-group">
-                            <label for="transTotalAmount" class="col-sm-3 control-label">Tổng thanh toán</label>
-                            <div class="col-sm-9">
-                                <input id="transTotalAmountView" type="text" class="form-control" value="">
+                            <label for="transTotalAmount" class="col-md-3 control-label">Thanh toán</label>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <input id="transPaidInMonthView" type="text" class="form-control" value="">
+
+                                    <label for="transTotalAmount" class="control-label input-group-addon" style="color: #333333; font-weight: 600;">Tổng</label>
+                                    <input id="transTotalAmountView" type="text" class="form-control" value="">
+                                    <span class="input-group-addon">đồng</span>
+                                </div>
                             </div>
+
                         </div>
+
                         <div class="form-group">
-                            <label for="transPaidAmount" class="col-sm-3 control-label">Đã thanh toán</label>
-                            <div class="col-sm-9">
-                                <input id="transPaidAmountView" type="text" class="form-control" value="">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="transDesc" class="col-sm-3 control-label">Mô tả</label>
-                            <div class="col-sm-9">
+                            <label for="transDesc" class="col-md-3 control-label">Mô tả</label>
+                            <div class="col-md-9">
                                 <textarea id="transDesc" name="TransDesc" class="form-control" rows="3"></textarea>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-9 col-md-2">
-                                <span id="addIncomeTrans" onclick="addIncomeTransaction()" class="btn btn-primary">Chấp nhận</span>
-                            </div>
-                            <div class="col-sm-offset-9 col-md-2">
-                                <span id="updateIncomeTrans" onclick="updateIncomeTransaction()" class="btn btn-primary hide">Chấp nhận</span>
-                            </div>
-                        </div>
-                        <input type="hidden" id="transForMonth" name="TransForMonth" value="" />
-                        <input type="hidden" id="transPaidAmount" name="TransPaidAmount" value="" />
+                        <input type="hidden" id="transForMonth" name="TransStartDate" value="" />
+                        <input type="hidden" id="transPaidInMonthAmount" name="TransPaidAmount" value="" />
                         <input type="hidden" id="transTotalAmount" name="TransTotalAmount" value="" />
-                        <input type="hidden" id="transId" name="TransId" value="" />
+                        <input type="hidden" id="ReceiptId" name="ReceiptId" value="" />
                         <input type="hidden" id="balanceSheetId" name="BalanceSheetId" value="@bls.Id" />
                     </form>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 0">
+                <div class="form-group">
+                    <div class="col-md-offset-9 col-md-2">
+                        <span id="addIncomeTrans" onclick="addIncomeTransaction()" class="btn btn-info">Chấp nhận</span>
+                    </div>
+                    <div class="col-md-offset-9 col-md-2">
+                        <span id="updateIncomeTrans" onclick="updateIncomeTransaction()" class="btn btn-info hide">Chấp nhận</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div id="addTransactionTypeModal" class="modal fade" role="dialog">
+<div id="addTransactionTypeModal" class="modal fade ams-modal" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -283,32 +298,29 @@
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <span>Thêm loại giao dịch thành công.</span>
                     </div>
-                    <div class="alert alert-warning" id="failedAddTransTypeNotify" style="display: none">
+                    <div class="alert alert-danger" id="failedAddTransTypeNotify" style="display: none">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <span>Thêm loại giao dịch thất bại.</span>
                     </div>
 
                     <form id="addTransactionTypeForm" class="form-horizontal" role="form">
                         <div class="form-group">
-                            <label for="transCategoryName" class="col-sm-3 control-label">Tên </label>
-                            <div class="col-sm-9">
+                            <label for="transCategoryName" class="col-md-3 control-label">Tên </label>
+                            <div class="col-md-9">
                                 <input id="transCategoryName" type="text" name="TransCategoryName" class="form-control" value="">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-sm-offset-9 col-md-2">
-                                <span id="addHdSrv" onclick="addTransactionItemCat()" class="btn btn-primary">Chấp nhận</span>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
+            <div class="modal-footer" style="margin-top: 0">
+                <span id="addHdSrv" onclick="addTransactionItemCat()" class="btn btn-info">Chấp nhận</span>
+            </div>
         </div>
     </div>
 </div>
 
-<div id="closeMonthlyBalanceSheetModal" class="modal fade" role="dialog">
+<div id="closeMonthlyBalanceSheetModal" class="modal fade ams-modal" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -320,32 +332,31 @@
 
                     <div class="alert alert-info" id="successCloseBlsNotify" style="display: none">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span>Thêm loại giao dịch thành công.</span>
+                        <span>Đóng bảng thu chi thành công.</span>
                     </div>
-                    <div class="alert alert-warning" id="failedCloseBlsNotify" style="display: none">
+                    <div class="alert alert-danger" id="failedCloseBlsNotify" style="display: none">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span>Thêm loại giao dịch thất bại.</span>
+                        <span>Đóng bảng thu chi thất bại.</span>
                     </div>
 
                     <form id="closeMonthlyBalanceSheetForm" class="form-horizontal" role="form">
-                        <div class="well">
-                            Bản quản lý thu chi tháng này sẽ được đóng.Nhập tiêu đề để mở tháng tiếp theo.
+                        <div class="form-group text-center">
+                            <span>
+                                Đóng bảng thu chi "<strong id="blsTitle"></strong>". Mở tháng tiếp theo.
+                            </span>
                         </div>
                         <div class="form-group">
-                            <label for="nextMonthTitle" class="col-sm-3 control-label"> Tiêu đề tháng sau</label>
-                            <div class="col-sm-9">
+                            <label for="nextMonthTitle" class="col-md-2 control-label"> Tiêu đề</label>
+                            <div class="col-md-10">
                                 <input id="nextMonthTitle" type="text" name="NextMonthTitle" class="form-control" value="">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-sm-offset-9 col-md-2">
-                                <span onclick="closeBalanceSheet()" class="btn btn-primary">Chấp nhận</span>
                             </div>
                         </div>
                         <input type="hidden" name="ThisMonthId" value="@bls.Id" />
                     </form>
                 </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 0">
+                <span onclick="closeBalanceSheet()" class="btn btn-info">Chấp nhận</span>
             </div>
         </div>
     </div>
@@ -355,7 +366,6 @@
 <script>
 
     $(document).ready(function () {
-        $("#BalanceSheetForMonthView").datepicker();
         window.deleteTransList = [];
         var blsId = document.getElementById("blsTransDetailTbl").dataset.blsId;
         window.listIncomeTable = $("#blsTransDetailTbl").DataTable({
@@ -405,19 +415,25 @@
                     } else {
                         $("#lastUpdate").val("0");
                     }
+                    if (data.balanceSheetId) {
+                        window.thisBalanceSheet = data.balanceSheetId;
+                    }
                     return data.data;
                 }
 
             },
-            rowId: 'TransId',
+            rowId: 'ReceiptId',
             "order": [[8, "desc"]],
             "drawCallback": function (settings) {
-                var addBtn = "<div class='col-md-1'>" +
-                    "<span class='btn btn-info' onclick='openAddIncomeLineModal()'>" +
-                    "<i class='fa fa-plus'></i>" +
-                    "</span>" +
-                    "</div>";
-                $("#blsTransDetailTbl_wrapper > div:nth-child(1) > div:nth-child(1)").html(addBtn);
+                var blsStatus = document.getElementById("blsTransDetailTbl").dataset.blsStatus;
+                if (blsStatus != "@SLIM_CONFIG.BALANCE_SHEET_CLOSE") {
+                    var addBtn = "<div class='col-md-1'>" +
+                                    "<span class='btn btn-info' onclick='openAddIncomeLineModal()'>" +
+                                    "<i class='fa fa-plus'></i>" +
+                                    "</span>" +
+                                "</div>";
+                    $("#blsTransDetailTbl_wrapper > div:nth-child(1) > div:nth-child(1)").html(addBtn);
+                }
 
                 var deleteBtn =
             "<div class='hide' id='delHdSrvBtnGroup'>" +
@@ -434,12 +450,12 @@
                 { data: "TransTitle" },
                 { data: "TransTitle" },
                 { data: "TransType" },
-                { data: "TransCatName" },
-                { data: "TransForMonth" },
+                { data: "UtilSrvCatName" },
+                { data: "TransStartDate" },
                 { data: "TransTotalAmount" },
                 { data: "TransPaidAmount" },
                 { data: "TransCreateDate" },
-                { data: "TransId" }
+                { data: "ReceiptId" }
             ],
             "columnDefs": [
                 {
@@ -464,7 +480,7 @@
                 },
                 {
                     "targets": 4,
-                    "data": "TransForMonth",
+                    "data": "TransStartDate",
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
                             var dateMonth = data.split("-");
@@ -499,18 +515,19 @@
                 },
                 {
                     "targets": 8,
-                    "data": "TransId",
+                    "width": "7%",
+                    "data": "ReceiptId",
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
                             if (full.TransEditable === -1) {
                                 return "<div class='text-right'>" +
-                                " <span onclick='openViewIncomeLineModal(\"" + data + "\")' class='btn btn-info btn-stroke btn-xs'> " +
+                                " <span onclick='openViewIncomeLineModal(\"" + data + "\",\"" + full.UtilSrvCatId + "\")' class='btn btn-info btn-stroke btn-xs'> " +
                                 " <i class='fa fa-info'></i> " +
                                 " </span> " +
                                 " </div>";
                             } else if (full.TransEditable === 1) {
                                 return "<div class='text-right'>" +
-                                " <span onclick='openUpdateIncomeLineModal(\"" + data + "\")' class='btn btn-default btn-xs'> " +
+                                " <span onclick='openUpdateIncomeLineModal(\"" + data + "\",\"" + full.UtilSrvCatId + "\")' class='btn btn-default btn-xs'> " +
                                 " <i class='fa fa-pencil'></i> " +
                                 " </span> " +
                                 " <span href='#' class='btn btn-danger btn-xs' onclick='deleteTrans(\"" + data + "\")'> " +
@@ -544,7 +561,7 @@
         });
 
         bindingNumberWithComma("transTotalAmountView");
-        bindingNumberWithComma("transPaidAmountView");
+        bindingNumberWithComma("transPaidInMonthView");
 
     });
 
@@ -599,8 +616,8 @@
             $("#addIncomeLineModal").modal("show");
         });
     }
-    function openUpdateIncomeLineModal(id) {
-        getTransItemDetail(id, function (data) {
+    function openUpdateIncomeLineModal(id, utilSrvId) {
+        getTransItemDetail(id, utilSrvId, function (data) {
             $("#transCat").html(data);
 
             $("#addIncomeTrans").removeClass("hide").addClass("hide");
@@ -614,8 +631,8 @@
         });
     }
 
-    function openViewIncomeLineModal(id) {
-        getTransItemDetail(id, function (data) {
+    function openViewIncomeLineModal(id, utilSrvId) {
+        getTransItemDetail(id, utilSrvId, function (data) {
             $("#transCat").html(data);
 
             $("#addIncomeTrans").removeClass("hide").addClass("hide");
@@ -625,24 +642,29 @@
             $("#addIncomeLineModal").modal("show");
         });
     }
-    function getTransItemDetail(id, callback) {
+    function getTransItemDetail(id, utilSrvId, callback) {
         $.ajax({
             url: "/Management/BalanceSheet/GetTransItemDetail",
             type: "GET",
-            data: { id: id },
+            data: {
+                id: id,
+                blsId: window.thisBalanceSheet,
+                utilSrvCatId: utilSrvId
+            },
             success: function (data) {
                 var obj = data.Data;
                 $("#transTitle").val(obj.TransTitle);
-                $("#transCat").val(obj.TransCatName);
-                $("#BalanceSheetForMonthView").val(obj.TransForMonth);
+                $("#transCat").val(obj.UtilSrvCatName);
+                $("#BalanceSheetForMonthView").val(obj.TransStartDate);
                 $("#transTotalAmountView").val(numberWithCommas(obj.TransTotalAmount));
+                $("#transPaidInMonthView").val(numberWithCommas(obj.TransPaidInMonthAmount));
                 $("#transPaidAmountView").val(numberWithCommas(obj.TransPaidAmount));
                 $("#transDesc").val(obj.TransDesc);
-                $("#transId").val(obj.TransId);
+                $("#ReceiptId").val(obj.ReceiptId);
                 var dbId = obj.TransType;
                 $("input:radio[name=TransType]").filter("[value=" + dbId + "]").prop("checked", "true");
 
-                getTransactionItemCat(1, obj.TransCatId, function (data) {
+                getTransactionItemCat(1, obj.UtilSrvCatId, function (data) {
                     callback(data);
                 });
             }
@@ -655,9 +677,9 @@
         $("#transForMonth").val(forMounth);
 
         var transTotalAmount = replaceCommaNumber($("#transTotalAmountView").val());
-        var transPaidAmount = replaceCommaNumber($("#transPaidAmountView").val());
+        var transPaidAmount = replaceCommaNumber($("#transPaidInMonthView").val());
         $("#transTotalAmount").val(transTotalAmount);
-        $("#transPaidAmount").val(transPaidAmount);
+        $("#transPaidInMonthAmount").val(transPaidAmount);
 
         $.ajax({
             url: "/Management/BalanceSheet/UpdateTransactionItem",
@@ -665,12 +687,25 @@
             data: $("#addIncomeLineForm").serialize(),
             success: function (data) {
                 if (data.StatusCode === 0) {
-                    $("#successAddTransNotify").fadeIn("slow");
+                    $("#successAddTransNotify").fadeIn("fast");
                     setTimeout(function () {
-                        $("#successAddTransNotify").fadeOut("slow");
+                        resetFormData("addIncomeLineForm");
+                        $("#successAddTransNotify").fadeOut("fast");
+                        $("#addIncomeLineModal").modal("hide");
                     }, 3000);
-                    resetFormData("addIncomeLineForm");
                     window.listIncomeTable.ajax.reload();
+                } else if (data.StatusCode === 2) {
+                    $("#addTransMsg").text("Không tìm thấy giao dịch");
+                    $("#failedAddTransWithMsgNotify").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#failedAddTransWithMsgNotify").fadeOut("fast");
+                    }, 3000);
+                } else if (data.StatusCode === 3) {
+                    $("#addTransMsg").text("Bảng thu chi đã đóng");
+                    $("#failedAddTransWithMsgNotify").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#failedAddTransWithMsgNotify").fadeOut("fast");
+                    }, 3000);
                 } else {
                     $("#failedAddTransNotify").fadeIn("fast");
                     setTimeout(function () {
@@ -690,9 +725,9 @@
         $("#transForMonth").val(forMounth);
 
         var transTotalAmount = replaceCommaNumber($("#transTotalAmountView").val());
-        var transPaidAmount = replaceCommaNumber($("#transPaidAmountView").val());
+        var transPaidAmount = replaceCommaNumber($("#transPaidInMonthView").val());
         $("#transTotalAmount").val(transTotalAmount);
-        $("#transPaidAmount").val(transPaidAmount);
+        $("#transPaidInMonthAmount").val(transPaidAmount);
 
         $.ajax({
             url: "/Management/BalanceSheet/AddTransactionItem",
@@ -706,6 +741,18 @@
                     }, 3000);
                     resetFormData("addIncomeLineForm");
                     window.listIncomeTable.ajax.reload();
+                } else if (data.StatusCode === 2) {
+                    $("#addTransMsg").text("Không tìm thấy giao dịch");
+                    $("#failedAddTransWithMsgNotify").fadeIn("slow");
+                    setTimeout(function () {
+                        $("#failedAddTransWithMsgNotify").fadeOut("slow");
+                    }, 3000);
+                } else if (data.StatusCode === 3) {
+                    $("#addTransMsg").text("Bảng thu chi đã đóng");
+                    $("#failedAddTransWithMsgNotify").fadeIn("slow");
+                    setTimeout(function () {
+                        $("#failedAddTransWithMsgNotify").fadeOut("slow");
+                    }, 3000);
                 } else {
                     $("#failedAddTransNotify").fadeIn("fast");
                     setTimeout(function () {
@@ -717,6 +764,11 @@
         });
         $("#transForMonth").val("");
     }
+    function openCloseBlsModal() {
+        $("#blsTitle").text($("#title").val());
+        $("#closeMonthlyBalanceSheetModal").modal("show");
+    }
+
     function deleteTrans(id) {
         $("#delHdSrvBtnGroup").removeClass("show").addClass("show");
         $("#trans_" + id).css("display", "none");
@@ -762,13 +814,13 @@
                 if (data.StatusCode === 0) {
                     $("#successCloseBlsNotify").fadeIn("fast");
                     resetFormData("closeMonthlyBalanceSheetForm");
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $("#successCloseBlsNotify").fadeOut("fast");
                         location.href = "/Management/BalanceSheet/ManageBalanceSheetView";
                     }, 3000);
                 } else {
                     $("#failedCloseBlsNotify").fadeIn("fast");
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $("#failedCloseBlsNotify").fadeOut("fast");
                     }, 3000);
                 }

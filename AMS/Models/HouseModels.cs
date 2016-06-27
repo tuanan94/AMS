@@ -20,6 +20,7 @@ namespace AMS.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int Status { get; set; }
+        public string UtilSrvCatName { get; set; }
         public string HouseCat { get; set; }
         public int Type { get; set; }
         public string CreateDate { get; set; }

@@ -567,4 +567,5 @@ namespace AMS.Controllers
             return RedirectToAction("Survey", new { alerts = "Tạo survey thành công!!" });
         }
     }
+
 }

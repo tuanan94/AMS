@@ -35777,7 +35777,7 @@ fieldset[disabled] .cover.overlay .btn-cover.active {
   margin-right: 250px;
 }
 .show-sidebar .navbar-fixed-top {
-  left: 250px;
+  /*left: 250px;*/
 }
 #menu ul .news-item {
   font-size: 12px !important;

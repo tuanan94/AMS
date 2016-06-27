@@ -1,4 +1,5 @@
-﻿@using Microsoft.AspNet.Identity
+﻿@using AMS.Constant
+@using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "CreateAutomationReceipt";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
@@ -7,6 +8,8 @@
     List<UtilServiceForHouseCat> waterSevices = ViewBag.waterService;
     UtilServiceForHouseCat fixedCost = ViewBag.fixedCost;
 
+    BalanceSheet balanceSheet = ViewBag.curentBls;
+    
 }
 
 <div class="col-md-12">
@@ -25,7 +28,7 @@
                     <a href="/Management/ManageReceipt/CreateAutomationReceiptView"><i class="fa fa fa-plus"></i> Tạo hóa đơn tự động</a>
                 </li>
                 <li class="">
-                    <a href="/Management/ManageReceipt/DownloadRecordTemplate"><i class="fa fa-cloud-download"></i> Tải bảng ghi nước</a>
+                    <a href="/Management/ManageReceipt/ViewDownloadRecordTemplate"><i class="fa fa-cloud-download"></i> Tải bảng ghi nước</a>
                 </li>
             </ul>
         </div>
@@ -43,74 +46,84 @@
                                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                 <span>Tạo mới thất bại.</span>
                             </div>
-                            <div class="alert alert-danger" id="orderIsExistedNoty" style="display: none">
+                            <div class="alert alert-danger" id="msgAddFailedNoty" style="display: none">
                                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                <span>Hóa đơn tháng <strong id="forMonthMsg"></strong> đã được tạo</span>
+                                <span id="notyMsg"></span>
                             </div>
-
-                            <div class="form-group">
-                                <div class="col-md-6">
-                                    <fieldset class="scheduler-border less-padding border-top">
-                                        <legend class="scheduler-border bold-black"> Thông tin hóa đơn</legend>
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label">Tiêu đề</label>
-                                            <div class="col-md-10">
-                                                <input id="receiptTitle" name="ReceiptTitle" type="text" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label">Tháng</label>
-                                            <div class="col-md-4">
-                                                <input type="text" id="forMonth" value="07-2016" name="ForMonth" class="form-control" data-date-format="mm-yyyy" data-date-language="vi"
-                                                       data-date-min-view-mode="1" data-date-start-date="-1m" data-date-today-highlight="true" data-date-end-date="+1m" />
-                                            </div>
-                                            <label class="col-md-2 control-label">Ngày xuất</label>
-                                            <div class="col-md-4">
-                                                <input type="text" id="publishDate" name="PublishDate" class="form-control" data-date-format="dd-mm-yyyy" data-date-language="vi"
-                                                       data-date-min-view-mode="0" data-date-today-highlight="true" data-date-start-date="0m" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label">Mô tả</label>
-                                            <div class="col-md-10">
-                                                <textarea id="receiptDesc" name="ReceiptDesc" class="form-control" rows="3"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-group hide" id="uploadingFileRow">
-                                            <label class="col-md-2 control-label">Bảng ghi nước</label>
-                                            <div class="col-md-10">
-                                                <input id="uploadingFile" readonly="readonly" name="ServiceTypeName" type="text" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="pull-right">
-                                                <input type="file" id="csvFileSelector" accept=".csv" style="display: none" />
-                                                <span class="btn btn-info btn-stroke" onclick="openFileSelector()"><i class="fa fa-cloud-upload"></i> Bảng ghi nhận</span>
-                                            </div>
-                                        </div>
-                                    </fieldset>
+                            @{
+                                if (null == balanceSheet)
+                                {<div class="alert alert-danger">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    <span> Mở bảng thu chi để tạo mới hóa đơn. Click vào <a href="/Management/BalanceSheet/ManageBalanceSheetView">đây</a> để đến trang quản lý thu chi.</span>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-
+                                }
+                                else if (null == waterSevices || null == fixedCost)
+                                {
+                                    <div class="alert alert-danger">
+                                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                        <span> Chưa cấu hình giá nước hoặc dịch vụ phí cho loại hộ dân cư click vào <a href="/Management/Config/UtilityService/View">đây</a> để đến trang quản lý giá nước và dịch vụ phí cho dân cư.</span>
+                                    </div>
+                                }
+                                else
+                                {<div class="form-group">
+                                    <div class="col-md-6">
                                         <fieldset class="scheduler-border less-padding border-top">
-                                            <legend class="scheduler-border bold-black">Giá nước</legend>
-
+                                            <legend class="scheduler-border bold-black"> Thông tin hóa đơn</legend>
                                             <div class="form-group">
-                                                <div class="table-responsive col-md-offset-1 col-md-11">
-                                                    <table class="table v-middle table-bordered table-striped table-condensed ">
-                                                        <thead>
-                                                            <tr>
-                                                                <th style="width: 40%" class="text-capitalize">Loại nhà</th>
-                                                                <th style="width: 60%" class="text-capitalize text-center">
-                                                                    Tên giá
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @{
-
-                                                                for (int i = 0; i < waterSevices.Count; i++)
+                                                <label class="col-md-2 control-label">Tiêu đề</label>
+                                                <div class="col-md-10">
+                                                    <input id="receiptTitle" name="ReceiptTitle" type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label">Tháng</label>
+                                                <div class="col-md-4">
+                                                    <input type="text" id="forMonthView" value="@balanceSheet.StartDate.Value.ToString(AmsConstants.DateFormat)" class="form-control" readonly="readonly" />
+                                                    <input type="hidden" id="blsId" value="@balanceSheet.Id" name="ForMonth" readonly="readonly" />
+                                                </div>
+                                                <label class="col-md-2 control-label">Ngày xuất</label>
+                                                <div class="col-md-4">
+                                                    <input type="text" id="publishDate" name="PublishDate" class="form-control" data-date-format="dd-mm-yyyy" data-date-language="vi"
+                                                           data-date-min-view-mode="0" data-date-today-highlight="true" data-date-start-date="0m" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label">Mô tả</label>
+                                                <div class="col-md-10">
+                                                    <textarea id="receiptDesc" name="ReceiptDesc" class="form-control" rows="3"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group hide" id="uploadingFileRow">
+                                                <label class="col-md-2 control-label">Bảng ghi nước</label>
+                                                <div class="col-md-10">
+                                                    <input id="uploadingFile" readonly="readonly" name="ServiceTypeName" type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="pull-right">
+                                                    <input type="file" id="csvFileSelector" accept=".csv" style="display: none" />
+                                                    <span class="btn btn-info btn-stroke" onclick="openFileSelector()"><i class="fa fa-cloud-upload"></i> Bảng ghi nhận</span>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <fieldset class="scheduler-border less-padding border-top">
+                                                <legend class="scheduler-border bold-black">Giá nước</legend>
+                                                <div class="form-group">
+                                                    <div class="table-responsive col-md-offset-1 col-md-11">
+                                                        <table class="table v-middle table-bordered table-striped table-condensed ">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style="width: 40%" class="text-capitalize">Loại nhà</th>
+                                                                    <th style="width: 60%" class="text-capitalize text-center">
+                                                                        Tên giá
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @{for (int i = 0; i < waterSevices.Count; i++)
                                                                 {
                                                                     var water = waterSevices[i];
                                                                     <tr>
@@ -118,62 +131,63 @@
                                                                         <td>@water.UtilityService.Name</td>
                                                                     </tr>
                                                                 }
-                                                            }
-                                                        </tbody>
-                                                    </table>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </fieldset>
+                                            </fieldset>
 
-                                    </div>
-                                    <div class="form-group">
-                                        <fieldset class="scheduler-border less-padding border-top">
-                                            <legend class="scheduler-border bold-black">Phí cố định</legend>
+                                        </div>
+                                        <div class="form-group">
+                                            <fieldset class="scheduler-border less-padding border-top">
+                                                <legend class="scheduler-border bold-black">Phí cố định</legend>
 
-                                            <span class="col-md-2 control-label">Tên</span>
-                                            <div class="col-md-10">
-                                                <input class="form-control" value="@(fixedCost.UtilityService == null ? "Chưa thiết lập" : fixedCost.UtilityService.Name)" type="text" />
-                                            </div>
-                                        </fieldset>
+                                                <label class="col-md-2 control-label">Tên</label>
+                                                <div class="col-md-10">
+                                                    <input class="form-control" value="@(fixedCost.UtilityService == null ? "Chưa thiết lập" : fixedCost.UtilityService.Name)" type="text" />
+                                                </div>
+                                            </fieldset>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                                <div class="form-group">
 
+                                    <table id="utilityConsumptionTbl" class="table table-hover table-bordered hide">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Căn hộ</th>
+                                                <th>Trạng thái</th>
+                                                <th>Từ số</th>
+                                                <th>Đến số</th>
+                                                <th>Số khối</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Căn hộ</th>
+                                                <th>Trạng thái</th>
+                                                <th>Từ số</th>
+                                                <th>Đến số</th>
+                                                <th>Số khối</th>
+                                                <th></th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody></tbody>
+                                    </table>
 
-                            <div class="form-group">
-
-                                <table id="utilityConsumptionTbl" class="table table-hover table-bordered hide">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Căn hộ</th>
-                                            <th>Trạng thái</th>
-                                            <th>Từ số</th>
-                                            <th>Đến số</th>
-                                            <th>Số khối</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Căn hộ</th>
-                                            <th>Trạng thái</th>
-                                            <th>Từ số</th>
-                                            <th>Đến số</th>
-                                            <th>Số khối</th>
-                                            <th></th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody></tbody>
-                                </table>
-
-                            </div>
-                            <div class="form-group">
-                                <div class="pull-right">
-                                    <span id="btnAddAutomationReceipt" class="btn btn-primary hide" onclick="saveAutomationReceipt()"> <i class="fa fa-save"></i> Lưu hóa đơn</span>
                                 </div>
-                            </div>
+                                <div class="form-group">
+                                    <div class="pull-right">
+                                        <span id="btnAddAutomationReceipt" class="btn btn-info hide" onclick="saveAutomationReceipt()"> <i class="fa fa-save"></i> Lưu</span>
+                                    </div>
+                                </div>
+                                }
+                            }
+
                         </div>
                     </div>
                 </form>
@@ -196,7 +210,7 @@
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <span>Thêm loại giao dịch thành công.</span>
                     </div>
-                    <div class="alert alert-warning" id="failedAddTransTypeNotify" style="display: none">
+                    <div class="alert alert-danger" id="failedAddTransTypeNotify" style="display: none">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <span>Thêm loại giao dịch thất bại.</span>
                     </div>
@@ -230,14 +244,12 @@
                             </div>
                         </div>
 
-                        <input type="hidden" id="houseId" />
-                        <div class="form-group">
-                            <div class="col-sm-offset-9 col-md-2">
-                                <span id="addHdSrv" onclick="updateHouseUtilServieConsume()" class="btn btn-primary">Chấp nhận</span>
-                            </div>
-                        </div>
+                        <input type="hidden" id="houseId"/>
                     </form>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <span id="addHdSrv" onclick="updateHouseUtilServieConsume()" class="btn btn-info">Chấp nhận</span>
             </div>
         </div>
     </div>
@@ -247,12 +259,10 @@
 <script>
 
     $("documemt").ready(function () {
-        document.getElementById("publishDate").dataset.dateEndDate = "+" + (calculateDateFromTodayToEndOfMonth() + 1) + "d";
         window.houseConsumptionList = [];
         window.deleteConsumptionRecordList = [];
         window.deleteConsumptionRecordElementList = [];
         $("#publishDate").datepicker();
-        $("#forMonth").datepicker();
 
         $("#csvFileSelector").change(function () {
             var data = new FormData();
@@ -375,7 +385,7 @@
                     "targets": 4,
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
-                            if (data === -1) {
+                            if (data === 0) {
                                 return ("-");
                             }
                             return data;
@@ -387,7 +397,7 @@
                     "targets": 5,
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
-                            if (data === -1) {
+                            if (data === 0) {
                                 return ("-");
                             }
                             return data;
@@ -495,7 +505,7 @@
         var title = $("#receiptTitle").val();
         var publishDate = $("#publishDate").val();
         var desciption = $("#receiptDesc").val();
-        var forMonth = $("#forMonth").val();
+        var balanceSheetId = $("#blsId").val();
         var waterId = $("#water").val();
         var houseRentId = $("#houseRent").val();
         var fixedCostId = $("#fixedCost").val();
@@ -503,11 +513,11 @@
         var obj = {
             Title: title,
             PublishDate: publishDate,
-            ForMonth: forMonth,
             Description: desciption,
             WaterUtilServiceId: waterId,
             HouseRentUtilServiceId: houseRentId,
             FixCostUtilServiceId: fixedCostId,
+            BalanceSheetId: balanceSheetId,
             userId: @User.Identity.GetUserId(),
             ResidentExpenseRecords: window.houseConsumptionList
         }
@@ -516,9 +526,7 @@
             type:"POST",
             data: obj,
             success:function(data) {
-                $("html, body").animate({
-                    scrollTop: 0
-                }, 600);
+                smoothScrollToTop();
                 if (data.StatusCode === 0) {
                     $("#successAddOrderNotify").fadeIn("fast");
                     setTimeout(function() {
@@ -527,10 +535,25 @@
                             .href = "/Management/ManageReceipt/View";
                     },3000);
                 }else if (data.StatusCode === 2) {
-                    $("#orderIsExistedNoty").fadeIn("fast");
-                    $("#forMonthMsg").text($("#forMonth").val());
+                    var msg = "Hóa đơn tiền nước và dịch vụ phí tháng <strong>" + $("#forMonthView").val() + "</strong> đã tồn tại.";
+                    $("#notyMsg").html(msg);
+                    $("#msgAddFailedNoty").fadeIn("fast");
                     setTimeout(function() {
-                        $("#orderIsExistedNoty").fadeOut("fast");
+                        $("#msgAddFailedNoty").fadeOut("fast");
+                    },5000);
+                }else if (data.StatusCode === 3) {
+                    var msg = "Không tìm được khung giá nước cho loại nhà <strong>" + data.Data + "</strong>.";
+                    $("#notyMsg").html(msg);
+                    $("#msgAddFailedNoty").fadeIn("fast");
+                    setTimeout(function() {
+                        $("#msgAddFailedNoty").fadeOut("fast");
+                    },5000);
+                }else if (data.StatusCode === 4) {
+                    var msg = "Bảng thu chi của tháng <strong>" + $("#forMonthView").val() + "</strong> đã đóng. Xin nhập lại tháng khác.";
+                    $("#notyMsg").html(msg);
+                    $("#msgAddFailedNoty").fadeIn("fast");
+                    setTimeout(function() {
+                        $("#msgAddFailedNoty").fadeOut("fast");
                     },5000);
                 } else {
                     $("#failedAddOrderNotify").fadeIn("fast");

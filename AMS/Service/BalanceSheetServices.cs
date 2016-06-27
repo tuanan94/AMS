@@ -36,51 +36,62 @@ namespace AMS.Service
             _trasactionRepository.Update(transaction);
         }
 
-        public BalanceSheet CheckBalanceSheetIsExisted(DateTime blsForMonth)
-        {
-            IEnumerable<BalanceSheet> listTrans = _trasactionRepository.List.Where(r => r.ForMonth.Value != null && r.ForMonth.Value.Date == blsForMonth ).ToList();
-            return listTrans.Count() == 0 ? null : listTrans.First();
-        }
+        //        public BalanceSheet CheckBalanceSheetIsExisted(DateTime blsForMonth)
+        //        {
+        //            IEnumerable<BalanceSheet> listTrans = _trasactionRepository.List.Where(r => r.CreateDate.Value != null && r.CreateDate.Value.Date == blsForMonth).ToList();
+        //            return listTrans.Count() == 0 ? null : listTrans.First();
+        //        }
 
-        public BalanceSheet FindByMonthYear(DateTime monthYear)
-        {
-            IEnumerable<BalanceSheet> listTrans = _trasactionRepository.List.Where(r => r.ForMonth.Value != null &&
-                                                   r.ForMonth.Value.Month == monthYear.Month &&
-                                                   r.ForMonth.Value.Year == monthYear.Year).ToList();
-            return listTrans.Count() == 0 ? null : listTrans.First();
-        }
+        //        public BalanceSheet FindByMonthYear(DateTime monthYear)
+        //        {
+        //            IEnumerable<BalanceSheet> listTrans = _trasactionRepository.List.Where(r => r.CreateDate.Value != null &&
+        //                                                   r.CreateDate.Value.Month == monthYear.Month &&
+        //                                                   r.CreateDate.Value.Year == monthYear.Year).ToList();
+        //            return listTrans.Count() == 0 ? null : listTrans.First();
+        //        }
 
         public BalanceSheet GetBalanceSheetForMonth(DateTime thisMonth)
         {
-            IEnumerable<BalanceSheet> balanceSheets = _trasactionRepository.List.Where(r => r.ForMonth.Value.Date.Month == thisMonth.Month
-                && r.ForMonth.Value.Date.Year == thisMonth.Year).ToList();
+            IEnumerable<BalanceSheet> balanceSheets = _trasactionRepository.List.Where(r => r.StartDate.Value.Date.Month == thisMonth.Month
+                && r.StartDate.Value.Date.Year == thisMonth.Year).ToList();
             return balanceSheets.Count() == 0 ? null : balanceSheets.ToList().First();
+        }
+        public BalanceSheet GetCurentActivateBalanceSheet()
+        {
+            List<BalanceSheet> balanceSheets = _trasactionRepository.List.Where(blSheet => blSheet.Status == SLIM_CONFIG.BALANCE_SHEET_OPEN).ToList();
+            return balanceSheets.Count == 0 ? null : balanceSheets.ToList().First();
         }
     }
 
-    public class TransactionCategoryService
+    public class UtilityServiceCateoryService
     {
-        GenericRepository<TransactionCategory> _transCatRepository = new GenericRepository<TransactionCategory>();
+        GenericRepository<UtilServiceCategory> _utilServiceCategoryRepository = new GenericRepository<UtilServiceCategory>();
 
-        public TransactionCategory FindById(int id)
+        public UtilServiceCategory FindById(int id)
         {
-            return _transCatRepository.FindById(id);
+            return _utilServiceCategoryRepository.FindById(id);
         }
-        public List<TransactionCategory> GetAll()
+
+        public List<UtilServiceCategory> GetAllEnable()
         {
-            return _transCatRepository.List.ToList();
+            return _utilServiceCategoryRepository.List.Where(utilSrvCat => utilSrvCat.Status == SLIM_CONFIG.TRANS_CAT_STATUS_ENABLE).ToList();
         }
-        public void Add(TransactionCategory transaction)
+        public List<UtilServiceCategory> GetAllMandatory()
         {
-            _transCatRepository.Add(transaction);
+            return _utilServiceCategoryRepository.List.Where(utilSrvCat => utilSrvCat.Status == SLIM_CONFIG.TRANS_CAT_STATUS_DENY_REMOVE).ToList();
         }
-        public void Update(TransactionCategory transaction)
+
+        public void Add(UtilServiceCategory utilSrvCat)
         {
-            _transCatRepository.Update(transaction);
+            _utilServiceCategoryRepository.Add(utilSrvCat);
         }
-        public void Delete(TransactionCategory transaction)
+        public void Update(UtilServiceCategory utilSrvCat)
         {
-            _transCatRepository.Delete(transaction);
+            _utilServiceCategoryRepository.Update(utilSrvCat);
+        }
+        public void Delete(UtilServiceCategory utilSrvCat)
+        {
+            _utilServiceCategoryRepository.Delete(utilSrvCat);
         }
     }
 
@@ -100,6 +111,14 @@ namespace AMS.Service
         {
             _transactionRepository.Delete(transactionItem);
         }
+        public void DeleteById(int id)
+        {
+            Transaction trans = _transactionRepository.FindById(id);
+            if (trans != null)
+            {
+                _transactionRepository.Delete(trans);
+            }
+        }
         public void Update(Transaction transactionItem)
         {
             _transactionRepository.Update(transactionItem);
@@ -107,7 +126,23 @@ namespace AMS.Service
         public List<Transaction> GetByTransType()
         {
             return
-                _transactionRepository.List.OrderByDescending(tr => tr.BalanceSheet.ForMonth).ToList();
+                _transactionRepository.List.OrderByDescending(tr => tr.BalanceSheet.StartDate).ToList();
+        }
+
+        public List<Transaction> GetAllTransactionHaveSameOrderCreateDate(DateTime orderCreateDate)
+        {
+            return _transactionRepository.List.Where(
+                    trans => trans.ReceiptDetail != null && trans.ReceiptDetail.Receipt.CreateDate.Value == orderCreateDate).ToList();
+        }
+
+        public List<Transaction> GetTransOfReceipt(int receiptId)
+        {
+            return _transactionRepository.List.Where(trans => trans.ReceiptDetail.Receipt.Id == receiptId).ToList();
+        }
+
+        public void DeleteRangeByReceiptId(int receitpDetailId)
+        {
+            _transactionRepository.DeleteRange(_transactionRepository.List.Where(trans => trans.ReceiptDetailId == receitpDetailId).ToList());
         }
     }
 }

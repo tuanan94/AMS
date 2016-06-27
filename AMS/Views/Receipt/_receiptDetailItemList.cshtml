@@ -10,17 +10,17 @@
         }
 
         <div id="row_@index" class="form-group">
-            <div class="col-sm-6">
+            <div class="col-sm-5">
                 <input id="item_name_@index" value="@detail.UtilityService.Name" name="" type="text" class="form-control order-item">
             </div>
-            <div class="col-sm-1">
+            <div class="col-sm-2">
                 <input id="item_qty_@index" value="@detail.Quantity" type="text" class="form-control order-item-qty">
             </div>
             <div class="col-sm-2">
-                <input id="item_unit_price_@index" value="@detail.UnitPrice" type="text" class="form-control order-item-price">
+                <input id="item_unit_price_@index" value="@detail.UnitPrice.Value.ToString("N0")" type="text" class="form-control order-item-price">
             </div>
             <div class="col-sm-2">
-                <input id="item_qty_price_@index" readonly="readonly" value="@(detail.UnitPrice*detail.Quantity)" name="" type="text" class="form-control total-order">
+                <input id="item_qty_price_@index" readonly="readonly" value="@((detail.UnitPrice * detail.Quantity).Value.ToString("N0"))" name="" type="text" class="form-control total-order">
             </div>
             <span class="btn btn-danger btn-xs" onclick="deleteItem(@index)"><i class="fa fa-times"></i></span>
             <input type="hidden" id="item_id_@index" value="@detail.Id" name="" />

@@ -14,11 +14,13 @@ namespace AMS.Models
     public class ReceiptModel
     {
         public int ReceiptId { get; set; }
+        public int BalanceSheetId { get; set; }
         public string ReceiptTitle { get; set; }
         public string ReceiptDesc { get; set; }
         public string ReceiptHouseName { get; set; }
         public int ReceiptType { get; set; }
         public string PublishDate { get; set; }
+        public string ForMonth { get; set; }
         public int Creator { get; set; }
         public int Mode { get; set; }
         public List<OrderItemModel> ListItem { get; set; }
@@ -26,6 +28,7 @@ namespace AMS.Models
     public class ReceiptInfoModel
     {
         public int ReceiptId { get; set; }
+        public int TransactionId { get; set; }
         public string ReceiptTitle { get; set; }
         public double TotalOrder { get; set; }
         public string CreateDate { get; set; }
@@ -106,6 +109,7 @@ namespace AMS.Models
     {
         public string Title { get; set; }
         public long ReceiptId { get; set; }
+        public int BalanceSheetId { get; set; }
         public string ForMonth { get; set; }
         public string CreatedDate { get; set; }
         public string PublishDate { get; set; }
@@ -159,5 +163,17 @@ namespace AMS.Models
     {
         public List<UtilityServiceRangePrice> RangePrices { get; set; }
         public int Count { get; set; }
+    }
+
+    public class ReceiptDetailTotalInBls
+    {
+        public ReceiptDetailTotalInBls(ReceiptDetail receiptDetail, double totalAmount)
+        {
+            ReceiptDetail = receiptDetail;
+            TotalAmount = totalAmount;
+        }
+
+        public ReceiptDetail ReceiptDetail { get; set; }
+        public double  TotalAmount { get; set; }
     }
 }

@@ -26,7 +26,6 @@ namespace AMS.Service
                                                             && h.HouseName.ToLower().Contains(houseName.ToLower()));
             return houses.Count() == 0 ? null : houses.First();
         }
-
         public List<House> GetFloorInBlock(int blockId)
         {
             return _houseRepository.List.Where(h => h.Block.Id == blockId && h.OwnerID != null).
@@ -42,11 +41,12 @@ namespace AMS.Service
         {
             return _houseRepository.List.Where(h => h.OwnerID != null).OrderBy(h => h.HouseName).ToList();
         }
-        public void updateHouse(House h)
-        {
-            _houseRepository.Update(h);
+            public void updateHouse(House h)
+            {
+                _houseRepository.Update(h);
+            }
         }
-    }
+
 
     public class BlockServices
     {
@@ -75,6 +75,8 @@ namespace AMS.Service
         {
             return _houseCatRepository.FindById(id);
         }
+
+       
     }
 
     public class UtilServiceForHouseCatServices
@@ -107,7 +109,7 @@ namespace AMS.Service
                                    .Select(utilSrv => utilSrv.First()).ToList();
         }
 
-        public List<UtilServiceForHouseCat> GetFixActiveUtilService()
+        public List<UtilServiceForHouseCat> GetActiveUtilService()
         {
             return _utilServiceForHouseCat.List.Where(
                         utilSrv => utilSrv.Status == SLIM_CONFIG.UTILITY_SERVICE_OF_HOUSE_CAT_ENABLE)

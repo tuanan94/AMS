@@ -72,7 +72,7 @@
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <span>Thêm khoản thu thành công.</span>
                     </div>
-                    <div class="alert alert-warning" id="failedAddTransNotify" style="display: none">
+                    <div class="alert alert-danger" id="failedAddTransNotify" style="display: none">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <span>Thêm khoản thu thất bại.</span>
                     </div>
@@ -98,7 +98,7 @@
                         <div class="form-group">
                             <label for="transCat" class="col-sm-3 control-label">Nhóm </label>
                             <div class="col-sm-7">
-                                <select id="transCat" name="TransCatId" class="form-control" data-size="3"></select>
+                                <select id="transCat" name="UtilSrvCatId" class="form-control" data-size="3"></select>
                             </div>
                             <span class="btn btn-stroke btn-info btn-sm" onclick="closePopupAndShowOther()"><i class="fa fa-plus"></i> Nhóm</span>
                         </div>
@@ -136,10 +136,10 @@
                                 <span id="updateIncomeTrans" onclick="updateIncomeTransaction()" class="btn btn-primary hide">Chấp nhận</span>
                             </div>
                         </div>
-                        <input type="hidden" id="transForMonth" name="TransForMonth" value="" />
+                        <input type="hidden" id="transForMonth" name="TransStartDate" value="" />
                         <input type="hidden" id="transPaidAmount" name="TransPaidAmount" value="" />
                         <input type="hidden" id="transTotalAmount" name="TransTotalAmount" value="" />
-                        <input type="hidden" id="transId" name="TransId" value="" />
+                        <input type="hidden" id="ReceiptId" name="ReceiptId" value="" />
                     </form>
                 </div>
             </div>
@@ -161,7 +161,7 @@
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <span>Thêm loại giao dịch thành công.</span>
                     </div>
-                    <div class="alert alert-warning" id="failedAddTransTypeNotify" style="display: none">
+                    <div class="alert alert-danger" id="failedAddTransTypeNotify" style="display: none">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <span>Thêm loại giao dịch thất bại.</span>
                     </div>
@@ -200,7 +200,7 @@
                 dataSrc: ""
             },
             "order": [[7, "desc"]],
-            rowId: 'TransId',
+            rowId: 'ReceiptId',
             "drawCallback": function (settings) {
                 var addBtn = "<div class='col-md-1'>" +
                     "<span class='btn btn-info' onclick='openAddIncomeLineModal()'>" +
@@ -224,11 +224,11 @@
                 { data: "TransTitle" },
                 { data: "TransTitle" },
                 { data: "TransType" },
-                { data: "TransCatName" },
-                { data: "TransForMonth" },
+                { data: "UtilSrvCatName" },
+                { data: "TransStartDate" },
                 { data: "TransTotalAmount" },
                 { data: "TransCreateDate" },
-                { data: "TransId" }
+                { data: "ReceiptId" }
             ],
             "columnDefs": [
                 {
@@ -253,7 +253,7 @@
                 },
                 {
                     "targets": 4,
-                    "data": "TransForMonth",
+                    "data": "TransStartDate",
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
                             var dateMonth = data.split("-");
@@ -278,7 +278,7 @@
                 },
                 {
                     "targets": 7,
-                    "data": "TransId",
+                    "data": "ReceiptId",
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
                             if (full.TransEditable === -1) {
@@ -422,16 +422,16 @@
             success: function (data) {
                 var obj = data.Data;
                 $("#transTitle").val(obj.TransTitle);
-                $("#transCat").val(obj.TransCatName);
-                $("#BalanceSheetForMonthView").val(obj.TransForMonth);
+                $("#transCat").val(obj.UtilSrvCatName);
+                $("#BalanceSheetForMonthView").val(obj.TransStartDate);
                 $("#transTotalAmountView").val(numberWithCommas(obj.TransTotalAmount));
                 $("#transPaidAmountView").val(numberWithCommas(obj.TransPaidAmount));
                 $("#transDesc").val(obj.TransDesc);
-                $("#transId").val(obj.TransId);
+                $("#ReceiptId").val(obj.ReceiptId);
                 var dbId = obj.TransType;
                 $("input:radio[name=TransType]").filter("[value=" + dbId + "]").prop("checked", "true");
 
-                getTransactionItemCat(1, obj.TransCatId, function (data) {
+                getTransactionItemCat(1, obj.UtilSrvCatId, function (data) {
                     callback(data);
                 });
             }

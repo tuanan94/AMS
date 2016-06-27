@@ -26,13 +26,16 @@ namespace AMS.Models
     public class TransactionModel
     {
         public int BalanceSheetId { get; set; }
-        public int TransId { get; set; }
-        public string TransCatName { get; set; }
-        public int TransCatId { get; set; }
+        public int ReceiptId { get; set; }
+        public int TransactionId { get; set; }
+        public string UtilSrvCatName { get; set; }
+        public int UtilSrvCatId { get; set; }
+        public int UtilSrvId { get; set; }
         public int TransType { get; set; }
-        public string TransForMonth { get; set; }
+        public string TransStartDate { get; set; }
         public double TransTotalAmount { get; set; }
         public double TransPaidAmount { get; set; }
+        public double TransPaidInMonthAmount { get; set; }
         public double TransUnpaidAmount { get; set; }
         public string TransTitle { get; set; }
         public string TransDesc { get; set; }
@@ -60,7 +63,7 @@ namespace AMS.Models
         public double TotalExpenseInCash { get; set; }
         public double RedundancyStartMonth { get; set; }
         public double RedundancyEndMonth { get; set; }
-        public string ForMonth { get; set; }
+        public string StartDate { get; set; }
         public string CreateDate { get; set; }
         public string Creator { get; set; }
         public int Status { get; set; }
@@ -86,4 +89,18 @@ namespace AMS.Models
         public List<TransactionModel> IncomeList;
         public List<TransactionModel> ExpenseList;
     }
+    public class UtilSrvCatTransaction
+    {
+        public Transaction Transaction { get; set; }
+        public double TotalAmount { get; set; }
+        public double TotalPaid { get; set; }
+
+        public UtilSrvCatTransaction(Transaction transaction, double totalAmount, double totalPaid)
+        {
+            Transaction = transaction;
+            TotalAmount = totalAmount;
+            TotalPaid = totalPaid;
+        }
+    }
+    
 }

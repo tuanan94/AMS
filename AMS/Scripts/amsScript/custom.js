@@ -460,7 +460,12 @@ $(document).ready(function () {
         submitHandler: function () {
             addNewHdRequest();
         }
+
+
+
     });
+
+    
 
     $("#addHdSrvCat").on("click", function () {
         console.log($("#hdSrvCategoryForm").serialize());
@@ -792,7 +797,23 @@ $(document).ready(function () {
         }
     });
 
+    activeNavigationBar();
 });
+
+function activeNavigationBar() {
+    $("#main-nav > ul > li").removeClass("active");
+    var pathName = window.location.pathname;
+    if (pathName.indexOf("/HelpdeskRequest/") > -1) {
+        $("#hdRequestNav").addClass("active");
+    } else if (pathName.indexOf("/ManageReceipt/") > -1) {
+        $("#receiptNav").addClass("active");
+    } else if (pathName.indexOf("/BalanceSheet/") > -1) {
+        $("#balanceSheetNav").addClass("active");
+    } else if (pathName.indexOf("/Config/") > -1) {
+        $("#configNav").addClass("active");
+    } else {
+    }
+}
 
 function setModalMaxHeight(element) {
     this.$element = $(element);
@@ -1146,13 +1167,13 @@ function calculateTotal() {
                 currentPrice = parseFloat(currentPrice);
                 total += currentPrice;
             } catch (e) {
-                $("#total").text("");
+                $("#total").val("");
                 return;
             }
         }
     }
     total = numberWithCommas(total);
-    $("#total").text(total);
+    $("#total").val(total);
 }
 
 
@@ -1216,52 +1237,7 @@ $(document).ready(function () {
     //        });
 
 
-    $("#receiptWrapper").on("change", ".order-item-qty", function () {
-        console.log($(this).val());
-        var idStr = $(this).prop("id").split("item_qty_");
-        if ($(this).val() && (isNaN(replaceCommaNumber($(this).val())) === false)) {
-            $("#item_qty_" + idStr[1]).val(numberWithCommas($(this).val()));
-            var unitPriceValue = $("#item_unit_price_" + idStr[1]).val();
-            unitPriceValue = replaceCommaNumber(unitPriceValue);
-
-            if (unitPriceValue && isNaN(unitPriceValue) === false) {
-                var unitPrice = parseFloat(unitPriceValue);
-                var qty = parseFloat(replaceCommaNumber($(this).val()));
-
-                var formatedMoney = numberWithCommas(unitPrice * qty);
-                $("#item_qty_price_" + idStr[1]).val(formatedMoney);
-                calculateTotal();
-
-            } else {
-                $("#item_unit_price_" + idStr[1]).val("");
-            }
-        } else {
-            $("#item_qty_" + idStr[1]).val("");
-        }
-    });
-    $("#receiptWrapper").on("change", ".order-item-price", function () {
-        console.log($(this).val());
-        var idStr = $(this).prop("id").split("item_unit_price_");
-        if ($(this).val() && (isNaN(replaceCommaNumber($(this).val())) === false)) {
-            $("#item_unit_price_" + idStr[1]).val(numberWithCommas($(this).val()));
-            var qtyValue = $("#item_qty_" + idStr[1]).val();
-            qtyValue = replaceCommaNumber(qtyValue);
-            if (qtyValue && isNaN(qtyValue) === false) {
-
-                var qty = parseFloat(qtyValue);
-                var unitPrice = parseFloat(replaceCommaNumber($(this).val()));
-
-                var formatedMoney = numberWithCommas(unitPrice * qty);
-                $("#item_qty_price_" + idStr[1]).val(formatedMoney);
-                $("#item_unit_price_" + idStr[1]).val(numberWithCommas(unitPrice));
-                calculateTotal();
-            } else {
-                $("#item_qty_price_" + idStr[1]).val("");
-            }
-        } else {
-            $("#item_unit_price_" + idStr[1]).val("");
-        }
-    });
+    
     //        jQuery.validator.addClassRules("order-item-qty", {
     //            required: true,
     //            number: true
@@ -1318,6 +1294,8 @@ function resetFormData(id) {
     $("#" + id).closest("form").find("input[type=text], textarea").val("");
 }
 
+
+
 function removeHiddenBackgroundPopup() {
     $("body").removeClass("modal-open");
     $(".modal-backdrop").remove();
@@ -1340,7 +1318,7 @@ function createChart(id, data) {
 
     for (var i = 0; i < data.length; i++) {
         obj = data[i];
-        listLbl.push(obj.TransCatName);
+        listLbl.push(obj.UtilSrvCatName);
         listVal.push(obj.TransTotalAmount);
         bgColorList.push(randomColor2());
     }
@@ -1382,11 +1360,12 @@ function randomColor2() {
 
 function bindingNumberWithComma(id) {
     //    $("#" + id).on("keyup", function () {
+    $("#" + id).unbind();
     $("#" + id).on("keyup", function (event) {
         if (event.which >= 37 && event.which <= 40) {
             event.preventDefault();
         }
-        console.log($(this).val());
+        console.log("keyup " + $(this).val());
         if ($(this).val() && (isNaN(replaceCommaNumber($(this).val())) === false)) {
             var value = replaceCommaNumber($(this).val());
             $(this).val(numberWithCommas(value));
@@ -1397,6 +1376,7 @@ function bindingNumberWithComma(id) {
 }
 function bindingClassNumberWithComma(_class) {
     //    $("#" + id).on("keyup", function () {
+    $("." + _class).unbind();
     $("." + _class).on("keyup", function (event) {
         if (event.which >= 37 && event.which <= 40) {
             event.preventDefault();
@@ -1467,6 +1447,143 @@ function calculateDateFromTodayToEndOfMonth() {
     return diffDays;
 }
 
+function onChangeFromNumber() {
+    $(".order-item-price").unbind();
+    $(".order-item-price").on("change", function (event) {
+        if (event.which >= 37 && event.which <= 40) {
+            event.preventDefault();
+            return;
+        }
+        var nextElement = event.target.parentNode.parentNode.nextElementSibling;
+        var nextFromValue = {};
+        var fromValue = event.target.parentNode.previousElementSibling.querySelector(".order-item-qty");
+
+        if (nextElement == null) {
+            event.target.value = "*";
+            return;
+        } else {
+            nextFromValue = nextElement.querySelector(".order-item-qty");
+            var nextToValue = nextElement.querySelector(".order-item-price");
+            if (parseInt(event.target.value, 10) >= parseInt(nextToValue.value, 10)) {
+                var nextNode = event.target.parentNode.parentNode.nextElementSibling;
+                while (nextNode && nextNode.nodeType === 1 && nextNode !== this) {
+                    nextNode.querySelector(".order-item-price").value = "";
+                    nextNode.querySelector(".order-item-qty").value = "";
+                    nextNode = nextNode.nextElementSibling;
+                }
+            }// if next node is greater than this node clean all next node
+        }
+        if (event.target.parentNode.parentNode.previousElementSibling) {
+            var previousValue = event.target.parentNode.parentNode.previousElementSibling
+                .querySelector(".order-item-price");
+
+            if (isNaN(event.target.value) && event.target.value !== "*") {
+                event.target.value = "";
+            } // clean next node when input other character except *
+            else if (isNaN(event.target.value) && event.target.value === "*") {
+                if (nextElement != null) {
+                    event.target.value = "";
+                    var nextNode = event.target.parentNode.parentNode.nextElementSibling;
+                    while (nextNode && nextNode.nodeType === 1 && nextNode !== this) {
+                        nextNode.querySelector(".order-item-price").value = "";
+                        nextNode.querySelector(".order-item-qty").value = "";
+                        nextNode = nextNode.nextElementSibling;
+                    }
+                }// clean next node when input * in the middle
+            } else if (parseInt(event.target.value, 10) > parseInt(previousValue.value, 10)) {
+                nextFromValue.value = event.target.value;
+            } else {
+                event.target.value = "";
+                fromValue.value = "";
+                var previousNode = event.target.parentNode.parentNode.previousElementSibling;
+                while (previousNode && previousNode.nodeType === 1 && previousNode !== this) {
+                    previousNode.querySelector(".order-item-price").value = "";
+                    if (previousNode.querySelector(".order-item-qty").value != 0) {
+                        previousNode.querySelector(".order-item-qty").value = "";
+                    }
+                    previousNode = previousNode.previousElementSibling;
+                }
+                var nextNode = event.target.parentNode.parentNode.nextElementSibling;
+                while (nextNode && nextNode.nodeType === 1 && nextNode !== this) {
+                    nextNode.querySelector(".order-item-price").value = "";
+                    nextNode.querySelector(".order-item-qty").value = "";
+                    nextNode = nextNode.nextElementSibling;
+                }
+            }// when in put in the middle wrong clean all element
+        } else {
+            if (isNaN(event.target.value) && event.target.value !== "*") {
+                event.target.value = "";
+            } else {
+                nextFromValue.value = event.target.value;
+            }
+        }
+    });
+}
+
+function bindingCalculateSubTotal() {
+    $("#receiptWrapper").on("keyup", ".order-item-qty", function () {
+        if (event.which >= 37 && event.which <= 40) {
+            event.preventDefault();
+            return;
+        }
+        console.log($(this).val());
+        var idStr = $(this).prop("id").split("item_qty_");
+        if ($(this).val() && (isNaN(replaceCommaNumber($(this).val())) === false)) {
+            $("#item_qty_" + idStr[1]).val(numberWithCommas($(this).val()));
+            var unitPriceValue = $("#item_unit_price_" + idStr[1]).val();
+            unitPriceValue = replaceCommaNumber(unitPriceValue);
+
+            if (unitPriceValue && isNaN(unitPriceValue) === false) {
+                var unitPrice = parseFloat(unitPriceValue);
+                var qty = parseFloat(replaceCommaNumber($(this).val()));
+
+                var formatedMoney = numberWithCommas(unitPrice * qty);
+                $("#item_qty_price_" + idStr[1]).val(formatedMoney);
+                calculateTotal();
+
+            } else {
+                $("#item_unit_price_" + idStr[1]).val("");
+            }
+        } else {
+            $("#item_qty_" + idStr[1]).val("");
+            $("#item_qty_price_" + idStr[1]).val("");
+
+        }
+    });
+    $("#receiptWrapper").on("keyup", ".order-item-price", function () {
+        if (event.which >= 37 && event.which <= 40) {
+            event.preventDefault();
+            return;
+        }
+        console.log("change " + $(this).val());
+        var idStr = $(this).prop("id").split("item_unit_price_");
+        if ($(this).val() && (isNaN(replaceCommaNumber($(this).val())) === false)) {
+            $("#item_unit_price_" + idStr[1]).val(numberWithCommas($(this).val()));
+            var qtyValue = $("#item_qty_" + idStr[1]).val();
+            qtyValue = replaceCommaNumber(qtyValue);
+            if (qtyValue && isNaN(qtyValue) === false) {
+
+                var qty = parseFloat(qtyValue);
+                var unitPrice = parseFloat(replaceCommaNumber($(this).val()));
+
+                var formatedMoney = numberWithCommas(unitPrice * qty);
+                $("#item_qty_price_" + idStr[1]).val(formatedMoney);
+                $("#item_unit_price_" + idStr[1]).val(numberWithCommas(unitPrice));
+                calculateTotal();
+            } else {
+                $("#item_qty_price_" + idStr[1]).val("");
+            }
+        } else {
+            $("#item_unit_price_" + idStr[1]).val("");
+            $("#item_qty_price_" + idStr[1]).val("");
+        }
+    });
+}
+function smoothScrollToTop() {
+    $("html, body").animate({
+        scrollTop: 0
+    }, 600);
+}
 /*
 http://jsfiddle.net/yWTLk/164/
 

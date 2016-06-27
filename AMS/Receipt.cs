@@ -23,8 +23,6 @@ namespace AMS
         public int Id { get; set; }
         public string Title { get; set; }
         public Nullable<int> Type { get; set; }
-        public Nullable<System.DateTime> ForMonth { get; set; }
-        public string ReceiptCode { get; set; }
         public Nullable<System.DateTime> PublishDate { get; set; }
         public Nullable<System.DateTime> PaymentDate { get; set; }
         public Nullable<int> Status { get; set; }
@@ -34,7 +32,9 @@ namespace AMS
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> LastModified { get; set; }
         public Nullable<int> IsAutomation { get; set; }
+        public Nullable<int> BlsId { get; set; }
     
+        public virtual BalanceSheet BalanceSheet { get; set; }
         public virtual House House { get; set; }
         public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
