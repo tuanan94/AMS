@@ -511,7 +511,7 @@ namespace AMS.Controllers
                                 int utlSrvId = receiptDetail.UtilityServiceId.Value;
                                 receiptDetail.UtilityServiceId = null;
                                 _receiptDetailServices.DeleteById(receiptDetail.Id);
-                              //  _utilityServiceServices.DeleteById(utlSrvId); AnTT
+                                _utilityServiceServices.DeleteById(utlSrvId);
 
                                 foreach (var trans in receiptDetail.Transactions.Where(trans => trans.BlsId == curBalanceSheet.Id))
                                 {

@@ -24,6 +24,14 @@ namespace AMS.Service
         {
             _utilityServiceRepository.Delete(u);
         }
+        public void DeleteById(int id)
+        {
+            var utilSrv = _utilityServiceRepository.FindById(id);
+            if (utilSrv != null)
+            {
+                _utilityServiceRepository.Delete(utilSrv);
+            }
+        }
         public UtilityService FindById(int id)
         {
             return _utilityServiceRepository.FindById(id);
