@@ -454,6 +454,7 @@
     <Content Include="Content\images\guy-5.jpg" />
     <Content Include="Content\images\delete.png" />
     <Content Include="Content\images\home_default.jpg" />
+    <Content Include="Content\images\lock-1.jpg" />
     <Content Include="Content\images\logo.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
