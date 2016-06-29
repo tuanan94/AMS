@@ -21,6 +21,7 @@ namespace AMS.ViewModel
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public DateTime? PublishDate { get; set; }
+        public DateTime? AnswerDate { get; set; }
         //public string StartDate { get; set; }
         //public string EndDate { get; set; }
         //public string PublishDate { get; set; }

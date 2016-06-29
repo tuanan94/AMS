@@ -180,7 +180,7 @@
                     <div class="media-post-ctr">
                         <div class="media-post-header">
 
-                            <h1 class="media-title">@surveys.Question</h1>
+                            @*<h1 class="media-title">@surveys.Question</h1>*@
                             <div class="media-meta-ctr">
                                 <div class="author-profile-img">
                                     <img class="img-responsive" src="@surveys.ImageUrl">
@@ -205,7 +205,7 @@
                                 <div class="poll-question-img">
                                     <img src="~/images/Post/SEO_survey_reuslts-1024x768.jpg" class="img-responsive">
                                     <div class="poll-txt">
-                                        @surveys.Description
+                                        @surveys.Question
                                     </div>
                                 </div>
                                 <br />
@@ -232,16 +232,15 @@
                     <div class="form-group">
                         <div class="col-sm-offset-1 col-md-10">
                             <fieldset class="scheduler-border less-padding">
-                                <legend class="scheduler-border">Câu hỏi</legend>
-                                <div class="col-md-10">
+                                <legend class="scheduler-border">Lựa Chọn</legend>
+                                @*<div class="col-md-10">
                                     <label  class="col-md-4">Câu Hỏi :</label>
                                     <div class="col-md-8">
                                         <textarea style="margin-bottom: 20px" disabled="disabled" cols="30" class="form-control binh col-sm-6">@surveys.Question</textarea><br/>
-                                        @*<input type="text" disabled="disabled" class="form-control binh"  id="question" name="question" value="@surveys.Question"><br>*@
-                                        @Html.TextBoxFor(m => m.Id, new { @type = "hidden", @Value = surveys.Id })
+                                      
                                     </div><br />
-                                </div><br />
-                                <div class="col-md-10">
+                                </div><br />*@
+                                <div class="col-sm-12">
 
                                     @{
 
@@ -252,14 +251,14 @@
                             {
                                 if (b != null)
                                 {
-                                     <label for="inputEmail3" class="col-md-3"></label>
+                                    <div class="col-sm-1"> </div>
                                         <div class="col-sm-1">
                                             @*@Html.RadioButtonFor(m => m.AnswerContent,b.Id, new { @Value = b.AnswerContent })*@
-
+                                            @Html.TextBoxFor(m => m.Id, new { @type = "hidden", @Value = surveys.Id })
 
                                             <input type="radio" id="@b" name="answer" value="@b">
                                         </div>
-                                        <div class="col-md-8">
+                                        <div class="col-sm-10">
                                             <input type="hidden" id="answerId" name="answerId" value="@b" />
                                             <input type="hidden" id="count" name="count" value="@counts" />
                                             @*<input type="radio" name="gender" value="@b.AnswerContent">*@
@@ -285,17 +284,17 @@
                         }
 
 
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-8">
+                    <div class="form-group" >
+                        <div class="col-sm-offset-2 col-sm-8" style="margin-top: 20px">
                             @*<a href="@Url.Action("UpdateSurvey", "Survey", new { PollId =@surveys.Id})" class="fa fa-list-alt">Lưu..</a>*@
                             <button type="submit" onclick="addCommentByAjax()" class="btn btn-primary">Lưu</button>
 
                             @*@{
-                                    if (surveys.Privacy == 1)
-                                    {*@
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModall">Xem kết quả</button>
-                                    @*}
-                            }*@
+            if (surveys.Privacy == 1)
+            {*@
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModall">Xem kết quả</button>
+                            @*}
+            }*@
 
                         </div>
 
@@ -483,7 +482,7 @@
 
                     }
                     @*<div id="chartContainer" style="width: 100%; height: 300px"></div>*@
-                    <div id="container" style="min-width: 400px; height: auto; margin: 0 auto"></div>
+                    <div id="container" style="min-width: 300px; height: auto; margin: 0 auto; text-align: center"></div>
                 </fieldset>
             </div>
             <div class="modal-footer" style="background-color: green"></div>
@@ -498,7 +497,7 @@
     var answer5 = parseFloat($("#answer_5").val()) || null
     var answer2a = ($("#2").val()) || null
     var answer1a = ($("#1").val()) || null
-    var answer3a =($("#3").val()) || null
+    var answer3a = ($("#3").val()) || null
     var answer4a = ($("#4").val()) || null
     var answer5a = ($("#5").val()) || null
     var a = "Lựa chọn 1"
@@ -553,19 +552,43 @@
                         allowPointSelect: true,
                         cursor: 'pointer',
                         dataLabels: {
-                            enabled: true,
+                            enabled: false,
                             color: '#000000',
                             connectorColor: '#000000',
                             formatter: function () {
                                 return '<b>' + this.point.name + '</b>: ' + this.percentage + ' %';
                             }
-                        }
+                        },
+
+
+
+                        showInLegend: true
                     }
                 },
                 series: [{
                     type: 'pie',
+                    colorByPoint: true,
                     name: 'Browser share',
-                    data: dataList
+                    //data: dataList
+                    data: [{
+                        name: answer1a,
+                        y: answer1
+                    }, {
+                        name: answer2a,
+                        y: answer2,
+                        sliced: true,
+                        selected: true
+                    }, {
+                        name: answer3a,
+                        y: answer3
+                    }, {
+                        name: answer4a,
+                        y: answer4
+                    }, {
+                        name: answer5a,
+                        y: answer5
+
+                    }]
                 }]
             });
         };

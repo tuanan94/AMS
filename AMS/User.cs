@@ -34,7 +34,6 @@ namespace AMS
         public string Username { get; set; }
         public string Password { get; set; }
         public int RoleId { get; set; }
-        public Nullable<int> IsApproved { get; set; }
         public Nullable<int> HouseId { get; set; }
         public Nullable<int> ResidentType { get; set; }
         public Nullable<int> Creator { get; set; }
@@ -47,6 +46,7 @@ namespace AMS
         public Nullable<System.DateTime> LastModified { get; set; }
         public Nullable<int> FamilyLevel { get; set; }
         public Nullable<System.DateTime> IDCreatedDate { get; set; }
+        public Nullable<int> Status { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BalanceSheet> BalanceSheets { get; set; }

@@ -24,15 +24,15 @@ namespace AMS
     
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
-        public string Unit { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> LastModified { get; set; }
         public Nullable<double> Price { get; set; }
         public Nullable<int> Type { get; set; }
+        public Nullable<int> UtilSrvCatId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ReceiptDetail> ReceiptDetails { get; set; }
+        public virtual UtilServiceCategory UtilServiceCategory { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UtilityServiceRangePrice> UtilityServiceRangePrices { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

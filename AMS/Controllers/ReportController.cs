@@ -26,9 +26,9 @@ namespace AMS.Controllers
             List<Image> listImage = new List<Image>();
             foreach (var obj in listusUserReportPosts)
             {
-               listPosts.Add(postService.findPostById(obj.PostId.Value));
-                userReport.Add(userServices.FindById(obj.UserId.Value));
-                listImage.Add(imageService.getImageByPostId(obj.PostId.Value));
+               listPosts.Add(postService.findPostById(obj.PostId));
+                userReport.Add(userServices.FindById(obj.UserId));
+                listImage.Add(imageService.getImageByPostId(obj.PostId));
             }
             foreach (var item in listPosts)
             {

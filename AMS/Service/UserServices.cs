@@ -19,14 +19,14 @@ namespace AMS.Service
         {
             return userRepository.List.Where(u => u.RoleId == SLIM_CONFIG.USER_ROLE_SUPPORTER).ToList();
         }
-        public List<User> GetAllUnapproveUsers()
-        {
-            return
-                userRepository.List.Where(
-                    u => u.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT 
+        //public List<User> GetAllUnapproveUsers()
+        //{
+        //    return
+        //        userRepository.List.Where(
+        //            u => u.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT 
 
-                    && u.IsApproved != null && u.IsApproved == SLIM_CONFIG.USER_APPROVE_WAITING).ToList();
-        }
+        //            && u.IsApproved != null && u.IsApproved == SLIM_CONFIG.USER_APPROVE_WAITING).ToList();
+        //}
 
         public void Update(User u)
         {

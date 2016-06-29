@@ -9,6 +9,12 @@
     List<Report> listReports = ViewBag.ListReport;
     List<Image> listImage = ViewBag.ListImage;
 }
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/highcharts.js"></script>
+<script src="~/Scripts/amsScript/canvasjs.min.js"></script>
+<link href="~/Content/css/datatables.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/datatables.js"></script>
 <style>
     .button {
         display: block;
@@ -91,8 +97,186 @@
         color: #fff;
     }
 </style>
+<div class="col-sm-offset-1 col-md-10">
+    <div class="panel panel-default">
+        <div class="heading-tab">
+            <i class="fa fa-list">Quản Lý Báo Cáo</i>
+        </div>
+        <div class="panel-body">
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="">
+                    <table id="myTables" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th  style="width: 100px;text-align: center" class="col-sm-1">
 
-<div class="col-sm-offset-2 col-md-8">
+                                    Số thứ tự
+
+
+                                </th>
+                                <th style="width: 100px; text-align: center" class="col-sm-1">Ngày Báo Cáo</th>
+                                <th style="text-align: center" class="col-sm-5">Nội Dung Báo Cáo</th>
+                                <th style="text-align: center" class="col-sm-2">Người Báo Cáo</th>
+                                <th style="text-align: center" class="col-sm-1">Trạng Thái</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @{
+                                int i = 0;
+                                foreach (var item in listReports)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <div class="col-sm-3">
+                                                    <span class="">@i</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.CreateDate))</td>
+                                        <td>
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <span class="">@item.Description</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <span class="">@listUser.ElementAt(i).Fullname</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @{
+                                    if (item.Disable == 1 && listPosts.ElementAt(i).Disable == 1)
+                                    {
+                                        <label class="label label-success">Đã xữ lý</label>
+
+                                    }
+                                    else if (item.Disable == 1 && listPosts.ElementAt(i).Disable == 0)
+                                    {
+                                        <label class="label label-warning"> Từ chối</label>
+
+                                    }
+                                    else
+                                    {
+                                        <label class="label label-primary">Chưa Xữ Lý</label>
+                                    }
+                                            }
+                                        </td>
+                                        <td>
+                                            <span class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModall_@i"> <i class="fa fa-newspaper-o"><b>Chi Tiết</b></i> </span>
+                                            @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModall_@i">Xem chi tiết</button>*@
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                    @{
+                        i = 0;
+                        int k = 0;
+                        foreach (var a in listPosts)
+                        {
+
+                            <div id="myModall_@i" class="modal fade">
+                                <div class="modal-dialog">
+
+
+
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title">Chi tiết báo cáo</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="col-xs-5 col-sm-3">
+                                                @{
+                            if (listImage.ElementAt(k) == null)
+                            {
+                                <a class="media-item-thumbnail">
+                                    <img class="img-responsive" src="~/images/Post/default-profile.png">
+
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="media-item-thumbnail">
+                                    <img class="img-responsive" src="@listImage.ElementAt(k).url">
+
+                                </a>
+
+                            }
+                                                }
+
+                                            </div>
+                                            <input type="hidden" class="form-control" id="Title" name="ReportId" value="@listReports.ElementAt(k).Id">
+                                            <input type="hidden" class="form-control" id="Title" name="PostId" value="@a.Id">
+                                            <div class="col-xs-7 col-sm-9 media-item-overview">
+                                                <h4>Bài viết số: @a.Id</h4>
+                                                <fieldset class="scheduler-border less-padding aass">
+                                                    <h4> @a.Body</h4>
+                                                </fieldset>
+
+
+
+                                                <h4>Có<span class="label label-gray">@listCountReport.ElementAt(k)</span> người báo cáo bài viết này</h4>
+
+                                                <div class="media-meta-data">
+
+                                                    @{
+                            if (listReports.ElementAt(k).Disable == 1 && a.Disable == 1)
+                            {
+                                <h3><label class="label label-success">Đã xữ lý</label></h3>
+                            }
+                            else if (listReports.ElementAt(k).Disable == 1 && a.Disable == 0)
+                            {
+                                <h3><label class="label label-warning">Đã từ chối</label></h3>
+                            }
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @{
+                            if (listReports.ElementAt(k).Disable == 0)
+                            {
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                    <button name="action" value="1" class="btn btn-primary" onclick="location.href = '@Url.Action("ApproveReport", "Report", new { reportId = @listReports.ElementAt(k).Id, postId = @a.Id })'">Đồng ý</button>
+                                    <button name="action" value="2" class="btn btn-success" onclick="location.href = '@Url.Action("RejectReport", "Report", new { reportId = @listReports.ElementAt(k).Id })'">Từ chối</button>
+
+                                </div>
+                            }
+
+                                        }
+
+
+                                    </div>
+
+
+
+
+                                </div>
+
+                            </div>
+
+                            i++;
+                            k++;
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div class="col-sm-offset-2 col-md-8">
 
     <div class="panel-heading panel-heading-gray"><i style="color: #000" class="fa fa-list-ul"></i><b> Danh sách báo cáo</b></div>
 
@@ -126,14 +310,15 @@
                         <div class="media-meta-data">
                             @{
             if (item.Disable == 1 && listPosts.ElementAt(i).Disable == 1)
-                                {
-                                      <h3><label class="label label-success">Đã xữ lý</label></h3>
-                                } else if (item.Disable == 1 && listPosts.ElementAt(i).Disable == 0)
-                                                {
-                                                    <h3><label class="label label-warning">Đã từ chối</label></h3> 
-                                                }
+            {
+                <h3><label class="label label-success">Đã xữ lý</label></h3>
+            }
+            else if (item.Disable == 1 && listPosts.ElementAt(i).Disable == 0)
+            {
+                <h3><label class="label label-warning">Đã từ chối</label></h3>
+            }
                             }
-                          
+
 
                         </div>
                     </div>
@@ -156,91 +341,117 @@
             <div id="myModall_@i" class="modal fade">
                 <div class="modal-dialog">
 
-                    @*@using (Html.BeginForm("ApproveReport", "Report", FormMethod.Post))
-                    {*@
-                       
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                    <h4 class="modal-title">Chi tiết báo cáo</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="col-xs-5 col-sm-3">
-                                        @{
+                 
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Chi tiết báo cáo</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-xs-5 col-sm-3">
+                                @{
                                             if (listImage.ElementAt(k) == null)
                                             {
-                                                <a class="media-item-thumbnail" >
-                                                    <img class="img-responsive" src="~/images/Post/default-profile.png">
+                        <a class="media-item-thumbnail">
+                            <img class="img-responsive" src="~/images/Post/default-profile.png">
 
-                                                </a>
+                        </a>
                                             }
                                             else
                                             {
-                                                <a class="media-item-thumbnail" >
-                                                    <img class="img-responsive" src="@listImage.ElementAt(k).url">
+                        <a class="media-item-thumbnail">
+                            <img class="img-responsive" src="@listImage.ElementAt(k).url">
 
-                                                </a>
+                        </a>
 
                                             }
-                                        }
+                                }
 
-                                    </div>
-                                    <input type="hidden" class="form-control" id="Title" name="ReportId" value="@listReports.ElementAt(k).Id">
-                                    <input type="hidden" class="form-control" id="Title" name="PostId" value="@a.Id">
-                                    <div class="col-xs-7 col-sm-9 media-item-overview">
-                                        <h4>Bài viết số: @a.Id</h4>
-                                        <fieldset class="scheduler-border less-padding aass">
-                                            <h4> @a.Body</h4>
-                                        </fieldset>
+                            </div>
+                            <input type="hidden" class="form-control" id="Title" name="ReportId" value="@listReports.ElementAt(k).Id">
+                            <input type="hidden" class="form-control" id="Title" name="PostId" value="@a.Id">
+                            <div class="col-xs-7 col-sm-9 media-item-overview">
+                                <h4>Bài viết số: @a.Id</h4>
+                                <fieldset class="scheduler-border less-padding aass">
+                                    <h4> @a.Body</h4>
+                                </fieldset>
 
 
 
-                                        <h4>Có<span class="label label-gray">@listCountReport.ElementAt(k)</span> người báo cáo bài viết này</h4>
+                                <h4>Có<span class="label label-gray">@listCountReport.ElementAt(k)</span> người báo cáo bài viết này</h4>
 
-                                        <div class="media-meta-data">
-                                            
-                                         @{
+                                <div class="media-meta-data">
+
+                                    @{
                                                 if (listReports.ElementAt(k).Disable == 1 && a.Disable==1)
                                             {
-                                            <h3><label class="label label-success">Đã xữ lý</label></h3>
+                            <h3><label class="label label-success">Đã xữ lý</label></h3>
                                             }
                                                 else if (listReports.ElementAt(k).Disable == 1 && a.Disable == 0)
                                                 {
-                                                    <h3><label class="label label-warning">Đã từ chối</label></h3> 
+                            <h3><label class="label label-warning">Đã từ chối</label></h3>
                                                 }
-                                         }
-                                        </div>
-                                    </div>
+                                    }
                                 </div>
-                                @{
+                            </div>
+                        </div>
+                        @{
                                     if (listReports.ElementAt(k).Disable == 0)
                                     {
-                                         <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                                             <button name="action" value="1" class="btn btn-primary" onclick="location.href = '@Url.Action("ApproveReport", "Report", new { reportId = @listReports.ElementAt(k).Id, postId = @a.Id })'">Đồng ý</button>
-                                             <button name="action" value="2" class="btn btn-success" onclick="location.href = '@Url.Action("RejectReport", "Report", new { reportId = @listReports.ElementAt(k).Id })'">Từ chối</button>
-                                            
-                                </div>
-                                    }
-                                   
-                                }
-                               
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button name="action" value="1" class="btn btn-primary" onclick="location.href = '@Url.Action("ApproveReport", "Report", new { reportId = @listReports.ElementAt(k).Id, postId = @a.Id })'">Đồng ý</button>
+                    <button name="action" value="2" class="btn btn-success" onclick="location.href = '@Url.Action("RejectReport", "Report", new { reportId = @listReports.ElementAt(k).Id })'">Từ chối</button>
 
-                            </div>
-                       
-                    @*}*@
+                </div>
+                                    }
+
+                        }
+
+
+                    </div>
+
+                 
 
 
                 </div>
 
             </div>
 
-                    i++;
-                    k++;
+                                    i++;
+                                    k++;
         }
     }
 
 
 
 
-</div>
+</div>*@
+<script>
+    $("#myTables").DataTable({
+        "oLanguage": {
+            //    "sSearch": "Tìm Kiếm" //search,
+            "sProcessing": "Đang xử lý...",
+            "sLengthMenu": "Xem _MENU_ mục",
+            "sZeroRecords": "Không tìm thấy dòng nào phù hợp",
+            "sInfo": "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+            "sInfoEmpty": "Đang xem 0 đến 0 trong tổng số 0 mục",
+            "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+            "sInfoPostFix": "",
+            "sSearch": "Tìm:",
+            "sUrl": "",
+            "oPaginate": {
+                "sFirst": "Đầu",
+                "sPrevious": "Trước",
+                "sNext": "Tiếp",
+                "sLast": "Cuối"
+            }
+        }
+        //"language": {
+        //    "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Vietnamese.json"
+        //}
+
+
+    });
+</script>
+<script src="~/Scripts/datatables.js"></script>

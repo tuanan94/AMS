@@ -17,6 +17,7 @@ namespace AMS
         public int PollId { get; set; }
         public int UserId { get; set; }
         public string Answer { get; set; }
+        public Nullable<System.DateTime> AnswerDate { get; set; }
     
         public virtual Poll Poll { get; set; }
         public virtual User User { get; set; }

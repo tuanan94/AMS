@@ -11,7 +11,7 @@ namespace AMS.Service
         GenericRepository<UserReportPost> reportRepository = new GenericRepository<UserReportPost>();
         public List<UserReportPost> GetListUserReportPost()
         {
-            return reportRepository.List.OrderByDescending(t => t.Id).ToList();
+            return reportRepository.List.OrderByDescending(t => t.ReportId).ToList();
         }
         public UserReportPost FindUserReportPostById(int id)
         {

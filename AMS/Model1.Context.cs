@@ -55,13 +55,13 @@ namespace AMS
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
-        public virtual DbSet<TransactionCategory> TransactionCategories { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAnswerPoll> UserAnswerPolls { get; set; }
         public virtual DbSet<UserRateAroundProvider> UserRateAroundProviders { get; set; }
         public virtual DbSet<UserReportPost> UserReportPosts { get; set; }
         public virtual DbSet<UtilityService> UtilityServices { get; set; }
         public virtual DbSet<UtilityServiceRangePrice> UtilityServiceRangePrices { get; set; }
+        public virtual DbSet<UtilServiceCategory> UtilServiceCategories { get; set; }
         public virtual DbSet<UtilServiceForHouseCat> UtilServiceForHouseCats { get; set; }
     }
 }

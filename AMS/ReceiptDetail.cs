@@ -21,15 +21,15 @@ namespace AMS
         }
     
         public int Id { get; set; }
-        public Nullable<double> TotalBill { get; set; }
+        public Nullable<double> Total { get; set; }
         public Nullable<double> UnitPrice { get; set; }
         public Nullable<int> Quantity { get; set; }
         public Nullable<int> UtilityServiceId { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> LastModified { get; set; }
-        public Nullable<int> ReceiptId { get; set; }
         public Nullable<int> FromNumber { get; set; }
         public Nullable<int> ToNumber { get; set; }
+        public Nullable<int> ReceiptId { get; set; }
     
         public virtual Receipt Receipt { get; set; }
         public virtual UtilityService UtilityService { get; set; }
