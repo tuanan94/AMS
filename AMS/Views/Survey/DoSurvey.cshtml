@@ -174,10 +174,26 @@
 }
 <script src="~/Scripts/jquery-1.10.2.js"></script>
 <body onload="paging()">
+    <div class="heading-tab">
+        <i class="fa fa-list">Bình Chọn</i>
+        <ul class="nav nav-tabs pull-right" role="tablist">
+            
+                    <li>
+                        <a href="/Survey/ViewHistory"><i class="fa fa-history"></i>Các Bình Chọn Bạn Đã Làm</a>
+                    </li>
+               
+            <li class="active">
+                <a href=""><i class="fa fa-book"></i>Danh Sách Các Bình Chọn</a>
+            </li>
+           
+                
+              
+        </ul>
+    </div>
 
     <div class="col-sm-offset-1 col-md-8">
         @{
-            if (alert != null)
+            if (alert != "")
             {
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-3 control-label"></label>

@@ -63,6 +63,10 @@ namespace AMS.Service
         {
             return userAnswerRepository.List.Where(t => t.PollId ==id).ToList();
         }
+        public List<UserAnswerPoll> GetListUserAnswerPollsByUserId(int userId)
+        {
+            return userAnswerRepository.List.Where(t => t.UserId == userId).ToList();
+        }
         public List<UserAnswerPoll> GetListUserAnswerPollsByAnswer(int id)
         {
             return userAnswerRepository.List.ToList().DistinctBy(t => t.Answer ).Where(t=>t.PollId== id).ToList();

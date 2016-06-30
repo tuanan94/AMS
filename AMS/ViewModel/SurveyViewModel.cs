@@ -15,20 +15,21 @@ namespace AMS.ViewModel
         }
         public int Id { get; set; }
         public string Title { get; set; }
+        public string Question { get; set; }
         public string Status { get; set; }
-
+        public string ImageUrl { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public DateTime? PublishDate { get; set; }
+        public DateTime? AnswerDate { get; set; }
         //public string StartDate { get; set; }
         //public string EndDate { get; set; }
         //public string PublishDate { get; set; }
 
         public int RoleId { get; set; }
-        public List<QuestionViewModel> QuestionViewModels { get; set; }
-        public List<AnswerViewModel> AnswerViewModels { get; set; }
+      
         public string AnswerContent { get; set; }
-        public int AnswerId { get; set; }
+      
 
     }
 

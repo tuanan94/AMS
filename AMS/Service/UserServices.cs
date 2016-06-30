@@ -29,6 +29,7 @@ namespace AMS.Service
                     && u.Status != null && u.Status == SLIM_CONFIG.USER_APPROVE_WAITING).ToList();
         }
 
+
         public void Update(User u)
         {
             userRepository.Update(u);

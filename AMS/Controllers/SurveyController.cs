@@ -22,6 +22,78 @@ namespace AMS.Controllers
         BlockPollService BlockPollService = new BlockPollService();
         //
         // GET: /Survey/
+        [Authorize]
+        public ActionResult ViewHistory()
+        {
+           
+         
+          
+            User currentUser = userService.FindById(int.Parse(User.Identity.GetUserId()));
+            List<SurveyViewModel> listPolls = new List<SurveyViewModel>();
+            List<List<string>> listAll = new List<List<string>>();
+            List<List<Double>> listEach = new List<List<Double>>();
+            List<List<string>> listCountAll = new List<List<string>>();
+            List<UserAnswerPoll> listUserAnswerPolls = userAnswerService.GetListUserAnswerPollsByUserId(currentUser.Id);
+            foreach (var item in listUserAnswerPolls)
+            {
+                List<Double> listeach = new List<Double>();
+                List<Double> listCount = new List<Double>();
+                List<string> listCountss = new List<string>();
+                List<string> listAnswers = new List<string>();
+                SurveyViewModel model = new SurveyViewModel();
+                model.Id = item.PollId;
+                model.AnswerContent = item.Answer;
+                model.Question = PollService.FindById(item.PollId).Question;
+                model.ImageUrl = PollService.FindById(item.PollId).ImageUrl;
+                model.AnswerDate = item.AnswerDate;
+                listPolls.Add(model);
+                List<UserAnswerPoll> listAnswerss = userAnswerService.GetListUserAnswerPollsByAnswer(item.PollId);
+                foreach (var items in listAnswerss)
+                {
+
+                    listCount.Add(userAnswerService.CountAnswer(items.Answer, items.PollId));
+
+
+                }
+                Double count = listCount.Sum();
+                foreach (var itema in listAnswerss)
+                {
+
+                    Double answerCount = userAnswerService.CountAnswer(itema.Answer, itema.PollId);
+                    listeach.Add(answerCount);
+                    string percent = string.Format("{0:00.0}", (answerCount / count * 100));
+                    listCountss.Add(percent);
+
+
+                }
+                string answer1 = PollService.FindById(item.PollId).Answer1;
+                string answer2 = PollService.FindById(item.PollId).Answer2;
+                string answer3 = PollService.FindById(item.PollId).Answer3;
+                string answer4 = PollService.FindById(item.PollId).Answer4;
+                string answer5 = PollService.FindById(item.PollId).Answer5;
+                listEach.Add(listeach);
+               listCountAll.Add(listCountss);
+                listAnswers.Add(answer1);
+                listAnswers.Add(answer2);
+                listAnswers.Add(answer3);
+                listAnswers.Add(answer4);
+                listAnswers.Add(answer5);
+                listAll.Add(listAnswers);
+            }
+            ViewBag.Each = listEach;
+            ViewBag.Answer = listAll;
+            ViewBag.ListCount = listCountAll;
+            ViewBag.List = listPolls;
+            return View();
+        }
+
+        public ActionResult ListPoll()
+        {
+            List<Poll> listSurveys = PollService.GetListPolls();
+            ViewBag.ListSurvey = listSurveys;
+            return View();
+        }
+
         public ActionResult Survey(string alerts)
         {
             List<Block> listHouseBlock = blockService.GetListBlock();
@@ -101,7 +173,7 @@ namespace AMS.Controllers
             User currentUser = userService.FindById(int.Parse(User.Identity.GetUserId()));
             House currentHouse = houseServices.FindById(currentUser.HouseId.Value);
 
-            List<string> listAnswers = new List<string>();
+           
             List<Poll> listSurveyss = PollService.GetListPolls();
             List<Double> listCount = new List<Double>();
             List<string> listCountss = new List<string>();
@@ -111,6 +183,7 @@ namespace AMS.Controllers
             string answer3 = PollService.FindById(PollId).Answer3;
             string answer4 = PollService.FindById(PollId).Answer4;
             string answer5 = PollService.FindById(PollId).Answer5;
+            List<string> listAnswers = new List<string>();
             listAnswers.Add(answer1);
             listAnswers.Add(answer2);
             listAnswers.Add(answer3);
@@ -170,7 +243,7 @@ namespace AMS.Controllers
                 //   UserAnswerPoll.UserId = 4;
                // string answerId = answerService.FindByContent(strName, model.Id).Id;
                 //var answerId = answerService.FindByContent(model.AnswerContent, model.Id).Id;
-
+                UserAnswerPoll.AnswerDate = DateTime.Now;
                 UserAnswerPoll.Answer = strName;
                 userAnswerService.AddUserAnswerPoll(UserAnswerPoll);
             }
@@ -203,7 +276,7 @@ namespace AMS.Controllers
 
         public ActionResult DetailSurvey(int PollId, string alert)
         {
-
+            List<Double> listeach = new List<Double>();
             List<Block> listHouseBlock = blockService.GetListBlock();
             List<string> listBlock = new List<string>();
             List<House> listHouseFloor = userAnswerService.GetListBlock();
@@ -234,7 +307,7 @@ namespace AMS.Controllers
            {
               
                    Double answerCount = userAnswerService.CountAnswer(item.Answer,PollId);
-
+               listeach.Add(answerCount);
                    string percent = string.Format("{0:00.0}", (answerCount / count * 100));
                    listCounts.Add(percent);
                
@@ -252,6 +325,7 @@ namespace AMS.Controllers
             listAnswers.Add(answer4);
             listAnswers.Add(answer5);
             ViewBag.alert = alert;
+            ViewBag.Each = listeach;
             ViewBag.ListBlock = listBlock;
             ViewBag.ListFloor = listFloor;
             ViewBag.CountAnswer = listCounts;

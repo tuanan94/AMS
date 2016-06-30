@@ -12,6 +12,7 @@ namespace AMS.Service
         public List<UserReportPost> GetListUserReportPost()
         {
             return reportRepository.List.OrderByDescending(t => t.ReportId).ToList();// AnLTNM Change because it not found
+
         }
         public UserReportPost FindUserReportPostById(int id)
         {
