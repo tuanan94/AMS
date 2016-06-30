@@ -23,6 +23,8 @@ namespace AMS
     
         public int Id { get; set; }
         public string BlockName { get; set; }
+        public Nullable<int> NoFloor { get; set; }
+        public Nullable<int> NoRoomPerFloor { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BlockPoll> BlockPolls { get; set; }

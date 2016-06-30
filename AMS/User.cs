@@ -19,7 +19,8 @@ namespace AMS
         {
             this.BalanceSheets = new HashSet<BalanceSheet>();
             this.Comments = new HashSet<Comment>();
-            this.HelpdeskRequestHelpdeskSupporters = new HashSet<HelpdeskRequestHelpdeskSupporter>();
+            this.HelpdeskRequests = new HashSet<HelpdeskRequest>();
+            this.HelpdeskRequests1 = new HashSet<HelpdeskRequest>();
             this.HelpdeskRequestLogs = new HashSet<HelpdeskRequestLog>();
             this.HelpdeskRequestLogs1 = new HashSet<HelpdeskRequestLog>();
             this.Posts = new HashSet<Post>();
@@ -33,8 +34,7 @@ namespace AMS
         public string Email { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public int RoleId { get; set; }
-        public Nullable<int> IsApproved { get; set; }
+        public Nullable<int> RoleId { get; set; }
         public Nullable<int> HouseId { get; set; }
         public Nullable<int> ResidentType { get; set; }
         public Nullable<int> Creator { get; set; }
@@ -47,13 +47,16 @@ namespace AMS
         public Nullable<System.DateTime> LastModified { get; set; }
         public Nullable<int> FamilyLevel { get; set; }
         public Nullable<System.DateTime> IDCreatedDate { get; set; }
+        public Nullable<int> Status { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BalanceSheet> BalanceSheets { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Comment> Comments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<HelpdeskRequestHelpdeskSupporter> HelpdeskRequestHelpdeskSupporters { get; set; }
+        public virtual ICollection<HelpdeskRequest> HelpdeskRequests { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<HelpdeskRequest> HelpdeskRequests1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HelpdeskRequestLog> HelpdeskRequestLogs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

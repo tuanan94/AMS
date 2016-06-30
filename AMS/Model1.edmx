@@ -1205,6 +1205,7 @@
           <EntitySet Name="AspNetUserLogins" EntityType="AMSModel.AspNetUserLogin" />
           <EntitySet Name="AspNetUsers" EntityType="AMSModel.AspNetUser" />
           <EntitySet Name="BalanceSheets" EntityType="AMSModel.BalanceSheet" />
+          <EntitySet Name="Blocks" EntityType="AMSModel.Block" />
           <EntitySet Name="BlockPolls" EntityType="AMSModel.BlockPoll" />
           <EntitySet Name="Comments" EntityType="AMSModel.Comment" />
           <EntitySet Name="HelpdeskRequests" EntityType="AMSModel.HelpdeskRequest" />
@@ -1263,6 +1264,14 @@
           <AssociationSet Name="FK_Transaction_User" Association="AMSModel.FK_Transaction_User">
             <End Role="User" EntitySet="Users" />
             <End Role="BalanceSheet" EntitySet="BalanceSheets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BlockSurvey_Block1" Association="AMSModel.FK_BlockSurvey_Block1">
+            <End Role="Block" EntitySet="Blocks" />
+            <End Role="BlockPoll" EntitySet="BlockPolls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_House_Block" Association="AMSModel.FK_House_Block">
+            <End Role="Block" EntitySet="Blocks" />
+            <End Role="House" EntitySet="Houses" />
           </AssociationSet>
           <AssociationSet Name="FK_BlockSurvey_Survey" Association="AMSModel.FK_BlockSurvey_Survey">
             <End Role="Poll" EntitySet="Polls" />
@@ -1387,15 +1396,6 @@
           <AssociationSet Name="AspNetUserRoles" Association="AMSModel.AspNetUserRoles">
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
-          </AssociationSet>
-          <EntitySet Name="Blocks" EntityType="AMSModel.Block" />
-          <AssociationSet Name="FK_BlockSurvey_Block1" Association="AMSModel.FK_BlockSurvey_Block1">
-            <End Role="Block" EntitySet="Blocks" />
-            <End Role="BlockPoll" EntitySet="BlockPolls" />
-          </AssociationSet>
-          <AssociationSet Name="FK_House_Block" Association="AMSModel.FK_House_Block">
-            <End Role="Block" EntitySet="Blocks" />
-            <End Role="House" EntitySet="Houses" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="C__MigrationHistory">
@@ -1528,6 +1528,17 @@
           <NavigationProperty Name="Transactions" Relationship="AMSModel.FK_Transaction_BalanceSheet" FromRole="BalanceSheet" ToRole="Transaction" />
           <NavigationProperty Name="User" Relationship="AMSModel.FK_Transaction_User" FromRole="BalanceSheet" ToRole="User" />
         </EntityType>
+        <EntityType Name="Block">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BlockName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NoFloor" Type="Int32" />
+          <Property Name="NoRoomPerFloor" Type="Int32" />
+          <NavigationProperty Name="BlockPolls" Relationship="AMSModel.FK_BlockSurvey_Block1" FromRole="Block" ToRole="BlockPoll" />
+          <NavigationProperty Name="Houses" Relationship="AMSModel.FK_House_Block" FromRole="Block" ToRole="House" />
+        </EntityType>
         <EntityType Name="BlockPoll">
           <Key>
             <PropertyRef Name="BlockId" />
@@ -1536,8 +1547,8 @@
           <Property Name="BlockId" Type="Int32" Nullable="false" />
           <Property Name="PollId" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Poll" Relationship="AMSModel.FK_BlockSurvey_Survey" FromRole="BlockPoll" ToRole="Poll" />
           <NavigationProperty Name="Block" Relationship="AMSModel.FK_BlockSurvey_Block1" FromRole="BlockPoll" ToRole="Block" />
+          <NavigationProperty Name="Poll" Relationship="AMSModel.FK_BlockSurvey_Survey" FromRole="BlockPoll" ToRole="Poll" />
         </EntityType>
         <EntityType Name="Comment">
           <Key>
@@ -1639,11 +1650,11 @@
           <Property Name="DisplayMember" Type="Boolean" />
           <Property Name="AllowOtherView" Type="Boolean" />
           <Property Name="TypeId" Type="Int32" />
+          <NavigationProperty Name="Block" Relationship="AMSModel.FK_House_Block" FromRole="House" ToRole="Block" />
           <NavigationProperty Name="HelpdeskRequests" Relationship="AMSModel.FK_tbl_h_desk_request_tbl_house" FromRole="House" ToRole="HelpdeskRequest" />
           <NavigationProperty Name="HouseCategory" Relationship="AMSModel.FK_House_HouseType" FromRole="House" ToRole="HouseCategory" />
           <NavigationProperty Name="Receipts" Relationship="AMSModel.FK_tbl_receipt_tbl_house" FromRole="House" ToRole="Receipt" />
           <NavigationProperty Name="Users" Relationship="AMSModel.FK_User_House" FromRole="House" ToRole="User" />
-          <NavigationProperty Name="Block" Relationship="AMSModel.FK_House_Block" FromRole="House" ToRole="Block" />
         </EntityType>
         <EntityType Name="HouseCategory">
           <Key>
@@ -2023,6 +2034,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_BlockSurvey_Block1">
+          <End Type="AMSModel.Block" Role="Block" Multiplicity="1" />
+          <End Type="AMSModel.BlockPoll" Role="BlockPoll" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Block">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BlockPoll">
+              <PropertyRef Name="BlockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_House_Block">
+          <End Type="AMSModel.Block" Role="Block" Multiplicity="0..1" />
+          <End Type="AMSModel.House" Role="House" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Block">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="House">
+              <PropertyRef Name="BlockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_BlockSurvey_Survey">
           <End Type="AMSModel.Poll" Role="Poll" Multiplicity="1" />
           <End Type="AMSModel.BlockPoll" Role="BlockPoll" Multiplicity="*" />
@@ -2389,41 +2424,6 @@
           <End Type="AMSModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="AMSModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
-        <EntityType Name="Block">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="BlockName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="NoFloor" Type="Int32" />
-          <Property Name="NoRoomPerFloor" Type="Int32" />
-          <NavigationProperty Name="BlockPolls" Relationship="AMSModel.FK_BlockSurvey_Block1" FromRole="Block" ToRole="BlockPoll" />
-          <NavigationProperty Name="Houses" Relationship="AMSModel.FK_House_Block" FromRole="Block" ToRole="House" />
-        </EntityType>
-        <Association Name="FK_BlockSurvey_Block1">
-          <End Type="AMSModel.Block" Role="Block" Multiplicity="1" />
-          <End Type="AMSModel.BlockPoll" Role="BlockPoll" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Block">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="BlockPoll">
-              <PropertyRef Name="BlockId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_House_Block">
-          <End Type="AMSModel.Block" Role="Block" Multiplicity="0..1" />
-          <End Type="AMSModel.House" Role="House" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Block">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="House">
-              <PropertyRef Name="BlockId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2549,6 +2549,16 @@
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Blocks">
+            <EntityTypeMapping TypeName="AMSModel.Block">
+              <MappingFragment StoreEntitySet="Block">
+                <ScalarProperty Name="NoRoomPerFloor" ColumnName="NoRoomPerFloor" />
+                <ScalarProperty Name="NoFloor" ColumnName="NoFloor" />
+                <ScalarProperty Name="BlockName" ColumnName="BlockName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2913,16 +2923,6 @@
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
-          <EntitySetMapping Name="Blocks">
-            <EntityTypeMapping TypeName="AMSModel.Block">
-              <MappingFragment StoreEntitySet="Block">
-                <ScalarProperty Name="NoRoomPerFloor" ColumnName="NoRoomPerFloor" />
-                <ScalarProperty Name="NoFloor" ColumnName="NoFloor" />
-                <ScalarProperty Name="BlockName" ColumnName="BlockName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

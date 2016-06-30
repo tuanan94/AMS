@@ -12,8 +12,6 @@ using AMS.Enum;
 using AMS.Models;
 using AMS.Service;
 using Microsoft.AspNet.Identity;
-using Twilio;
-
 namespace AMS.Controllers
 {
     public class ManageUserController : Controller
