@@ -3,7 +3,7 @@ var USERS = [];
 var doneUser = [];
 var colorLevel;
     function loadAllMember(rootTreee, houseid) {
-       // alert('loadAll Member' + houseid)
+        alert('loadAll Member' + houseid)
             $.ajax({
                 url: "/Home/getUserByHouseId/",
                 type: "GET",
@@ -12,11 +12,11 @@ var colorLevel;
 
                 },
                 success: function (successData) {
-                    //alert(successData)
+                  alert(successData)
                     USERS = JSON.parse(successData);
                     doneUser = [];
                     colorLevel = 0;
-                   // alert(USERS.length);
+                   alert(USERS.length);
                     USERS.sort(function (a, b) {
                         return a['FamilyLevel'] - b['FamilyLevel']
                     })
@@ -26,7 +26,9 @@ var colorLevel;
                             familyLevel[familyLevel.length] = USERS[i]['FamilyLevel'];
                         }
                     }
+                    console.log(familyLevel.length)
                     for (var i = 0; i < familyLevel.length; i++) {
+                        console.log('addusertofamilyLevel' + familyLevel.length);
                         addUserToFamilyTree(familyLevel[i], USERS);
                     }
                 },
@@ -36,6 +38,7 @@ var colorLevel;
             });
     }
     function addUserToFamilyTree(level, USERS) {
+        alert('add user to family tree' + level)
         var divLevel = $("#level" + level);
         if (divLevel.length) {
             //alert('yes')
@@ -46,7 +49,7 @@ var colorLevel;
         }
         for (var i = 0; i < USERS.length; i++) {
             var u = USERS[i];
-            if (u['FamilyLevel'] == level&&u['IsApproved']=='1') {
+            if (u['FamilyLevel'] == level&&u['Status']=='1') {
                 var userProfile = "";
                 if (u['ProfileImage']==null || u['ProfileImage'] == '') {
                     userProfile = '/Content/Images/defaultProfile.png';
