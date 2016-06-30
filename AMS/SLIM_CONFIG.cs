@@ -72,7 +72,7 @@ namespace AMS
         public static int UTILITY_SERVICE_OF_HOUSE_CAT_ENABLE = 1;
         public static int UTILITY_SERVICE_OF_HOUSE_CAT_DISABLE = 2;
         public static int UTILITY_SERVICE_OF_HOUSE_CAT_REMOVED = 3;
-
+        
         public static int RECEIPT_IS_ADDED_IN_BLS = 1;
         public static int RECEIPT_IS_NOT_ADDED_IN_BLS = 2;
 
@@ -82,6 +82,14 @@ namespace AMS
 
 
         public static double MAX_NUMBER = 999999999.0;
+
+        /* Weather API. 507468bd4d6345f2aa372826162306. Service Provider: http://developer.worldweatheronline.com/default.aspx */
+        public static String WeatherAPI_KEY = "507468bd4d6345f2aa372826162306";
+        public static String WeatherAPI_URL = "https://api.worldweatheronline.com/premium/v1/weather.ashx";
+
+
+        public enum WeatherResult {Sun,Cloud,Rain,NoneDefined}
+
     }
 
 }
