@@ -14,10 +14,9 @@ namespace AMS
     
     public partial class UserReportPost
     {
-        public Nullable<int> UserId { get; set; }
-        public Nullable<int> PostId { get; set; }
-        public Nullable<int> ReportId { get; set; }
-        public int Id { get; set; }
+        public int UserId { get; set; }
+        public int PostId { get; set; }
+        public int ReportId { get; set; }
     
         public virtual Post Post { get; set; }
         public virtual Report Report { get; set; }

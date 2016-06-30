@@ -1,0 +1,173 @@
+﻿@{
+    ViewBag.Title = "Quản lý dịch vụ xung quanh";
+    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+    List<AroundProvider> allProviders = ViewBag.AllProviders;
+    int count = 0;
+}
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-gray">Quản lý dịch vụ xung quanh</div>
+        <div class="panel-body">
+            <div class="col-md-12" style="margin-bottom: 2%">
+                <a class="btn btn-primary icon-add-symbol" href="~/Management/AddAroundProvider"> Thêm dịch vụ </a>
+            </div>
+            <form class="form-horizontal" role="form">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="myTable">
+                        <thead>
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th>Tên</th>
+                            <th>Mô tả</th>
+                            <th>Địa chỉ</th>
+                            <th>Điện thoại</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @{
+                            foreach (AroundProvider provider in allProviders)
+                            {
+                                <tr data-id="@(++count)">
+                                    <td class="text-center">
+                                        <span class="label label-gray">@count</span>
+                                    </td>
+                                    <td>
+                                        @provider.Name
+                                    </td>
+                                    <td>
+                                        @provider.Description
+                                    </td>
+                                    <td>
+                                        @provider.Address
+                                    </td>
+                                    <td>
+                                        <span class="label label-gray">@provider.Tel</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a class="btn btn-default btn-xs" onclick="loadData(@provider.Id)" title="Chi tiết"><i class="fa fa-pencil"></i></a>
+                                        <a class="btn btn-default btn-xs" onclick="deleteProvider(@provider.Id)" style="background-color: #c34040; color: #ffffff; border-color: #c34040" title="Xóa"><i class="fa fa-remove"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        </tbody>
+                    </table>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="loadData" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Chi tiết </h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <form class="form-horizontal" role="form" method="post" id="provider">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Tên</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="name" name="Name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Mô tả</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="description" name="Description">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Địa chỉ</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="address" name="Address">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">Điện thoại</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="tel" name="Tel">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="modal-footer">
+                                <input hidden="hidden" name="Id" id="hiddenId" />
+                                <button type="submit" onclick="updateProvider()" class="btn btn-primary">Cập Nhật</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+    function loadData(curId) {
+        $.ajax({
+            url: '/Management/DetailProvider',
+            data: {
+                id: curId
+            },
+            error: function () {
+                alert("Xảy ra lỗi trong quá trình tải dữ liệu!");
+            },
+            success: function (curProvider) {
+                $("#name").val(curProvider.Name);
+                $("#description").val(curProvider.Description);
+                $("#address").val(curProvider.Address);
+                $("#tel").val(curProvider.Tel);
+                $("#hiddenId").val(curProvider.Id);
+                $("#loadData").modal("show");
+            },
+            type: 'POST'
+        });
+    }
+
+    function updateProvider() {
+        $.ajax({
+            url: '/Management/UpdateProvider',
+            data: $("#provider").serialize(),
+            error: function () {
+                alert("Xảy ra lỗi trong quá trình tải dữ liệu!");
+            },
+            success: function (message) {
+                //if (message != null) {
+                //    $("#loadData").modal("hide");
+                //    alert(message);
+                //}
+            },
+            type: 'POST'
+        });
+    }
+
+    function deleteProvider(curId) {
+        $.ajax({
+            url: '/Management/DeleteProvider',
+            data: {
+                id: curId
+            },
+            error: function () {
+                alert("Xảy ra lỗi trong quá trình tải dữ liệu!");
+            },
+            success: function (message) {
+                //if (message != null) {
+                //    $("#loadData").modal("hide");
+                //    alert(message);
+                //}
+                
+            },
+            type: 'POST'
+        });
+    }
+</script>

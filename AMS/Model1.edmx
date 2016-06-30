@@ -135,6 +135,8 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="BlockName" Type="nvarchar" MaxLength="50" />
+          <Property Name="NoFloor" Type="int" />
+          <Property Name="NoRoomPerFloor" Type="int" />
         </EntityType>
         <EntityType Name="BlockPoll">
           <Key>
@@ -172,6 +174,7 @@
           <Property Name="HelpdeskServiceId" Type="int" />
           <Property Name="HouseId" Type="int" />
           <Property Name="Priority" Type="int" />
+          <Property Name="SupporterId" Type="int" />
         </EntityType>
         <EntityType Name="HelpdeskRequestHelpdeskSupporter">
           <Key>
@@ -373,9 +376,8 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="255" />
           <Property Name="Username" Type="varchar" MaxLength="255" />
-          <Property Name="Password" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="RoleId" Type="int" Nullable="false" />
-          <Property Name="IsApproved" Type="int" />
+          <Property Name="Password" Type="varchar" MaxLength="255" />
+          <Property Name="RoleId" Type="int" />
           <Property Name="HouseId" Type="int" />
           <Property Name="ResidentType" Type="int" />
           <Property Name="Creator" Type="int" />
@@ -388,6 +390,7 @@
           <Property Name="LastModified" Type="datetime" />
           <Property Name="FamilyLevel" Type="int" />
           <Property Name="IDCreatedDate" Type="datetime" />
+          <Property Name="Status" Type="int" />
         </EntityType>
         <EntityType Name="UserAnswerPoll">
           <Key>
@@ -410,12 +413,13 @@
         </EntityType>
         <EntityType Name="UserReportPost">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="PostId" />
+            <PropertyRef Name="ReportId" />
           </Key>
-          <Property Name="UserId" Type="int" />
-          <Property Name="PostId" Type="int" />
-          <Property Name="ReportId" Type="int" />
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="PostId" Type="int" Nullable="false" />
+          <Property Name="ReportId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="UtilityService">
           <Key>
@@ -591,6 +595,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_HelpdeskRequest_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="HelpdeskRequest" Type="Self.HelpdeskRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="HelpdeskRequest">
+              <PropertyRef Name="SupporterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HelpdeskRequest_User1">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="HelpdeskRequest" Type="Self.HelpdeskRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="HelpdeskRequest">
+              <PropertyRef Name="SupporterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_HelpdeskRequestLog_HelpdeskReq">
           <End Role="HelpdeskRequest" Type="Self.HelpdeskRequest" Multiplicity="0..1" />
           <End Role="HelpdeskRequestLog" Type="Self.HelpdeskRequestLog" Multiplicity="*" />
@@ -711,30 +739,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tbl_h_desk_req_h_desk_tbl_h_desk_request">
-          <End Role="HelpdeskRequest" Type="Self.HelpdeskRequest" Multiplicity="0..1" />
-          <End Role="HelpdeskRequestHelpdeskSupporter" Type="Self.HelpdeskRequestHelpdeskSupporter" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="HelpdeskRequest">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="HelpdeskRequestHelpdeskSupporter">
-              <PropertyRef Name="HelpdeskRequestId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tbl_h_desk_req_h_desk_tbl_user">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="HelpdeskRequestHelpdeskSupporter" Type="Self.HelpdeskRequestHelpdeskSupporter" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="HelpdeskRequestHelpdeskSupporter">
-              <PropertyRef Name="HelpdeskSupporterId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_tbl_h_desk_request_tbl_house">
           <End Role="House" Type="Self.House" Multiplicity="0..1" />
           <End Role="HelpdeskRequest" Type="Self.HelpdeskRequest" Multiplicity="*" />
@@ -810,7 +814,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tbl_user_tbl_role">
-          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
           <End Role="User" Type="Self.User" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Role">
@@ -894,7 +898,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserReportPost_Post">
-          <End Role="Post" Type="Self.Post" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="1" />
           <End Role="UserReportPost" Type="Self.UserReportPost" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Post">
@@ -906,7 +910,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserReportPost_Report">
-          <End Role="Report" Type="Self.Report" Multiplicity="0..1" />
+          <End Role="Report" Type="Self.Report" Multiplicity="1" />
           <End Role="UserReportPost" Type="Self.UserReportPost" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Report">
@@ -918,7 +922,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserReportPost_User">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="UserReportPost" Type="Self.UserReportPost" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -1057,6 +1061,14 @@
             <End Role="HelpdeskService" EntitySet="HelpdeskService" />
             <End Role="HelpdeskRequest" EntitySet="HelpdeskRequest" />
           </AssociationSet>
+          <AssociationSet Name="FK_HelpdeskRequest_User" Association="Self.FK_HelpdeskRequest_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="HelpdeskRequest" EntitySet="HelpdeskRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HelpdeskRequest_User1" Association="Self.FK_HelpdeskRequest_User1">
+            <End Role="User" EntitySet="User" />
+            <End Role="HelpdeskRequest" EntitySet="HelpdeskRequest" />
+          </AssociationSet>
           <AssociationSet Name="FK_HelpdeskRequestLog_HelpdeskReq" Association="Self.FK_HelpdeskRequestLog_HelpdeskReq">
             <End Role="HelpdeskRequest" EntitySet="HelpdeskRequest" />
             <End Role="HelpdeskRequestLog" EntitySet="HelpdeskRequestLog" />
@@ -1096,14 +1108,6 @@
           <AssociationSet Name="FK_tbl_arround_srv_tbl_around_srv_cat" Association="Self.FK_tbl_arround_srv_tbl_around_srv_cat">
             <End Role="AroundProviderCategory" EntitySet="AroundProviderCategory" />
             <End Role="AroundProvider" EntitySet="AroundProvider" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tbl_h_desk_req_h_desk_tbl_h_desk_request" Association="Self.FK_tbl_h_desk_req_h_desk_tbl_h_desk_request">
-            <End Role="HelpdeskRequest" EntitySet="HelpdeskRequest" />
-            <End Role="HelpdeskRequestHelpdeskSupporter" EntitySet="HelpdeskRequestHelpdeskSupporter" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tbl_h_desk_req_h_desk_tbl_user" Association="Self.FK_tbl_h_desk_req_h_desk_tbl_user">
-            <End Role="User" EntitySet="User" />
-            <End Role="HelpdeskRequestHelpdeskSupporter" EntitySet="HelpdeskRequestHelpdeskSupporter" />
           </AssociationSet>
           <AssociationSet Name="FK_tbl_h_desk_request_tbl_house" Association="Self.FK_tbl_h_desk_request_tbl_house">
             <End Role="House" EntitySet="House" />
@@ -1327,6 +1331,8 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="BlockName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NoFloor" Type="Int32" />
+          <Property Name="NoRoomPerFloor" Type="Int32" />
           <NavigationProperty Name="BlockPolls" Relationship="Self.FK_BlockSurvey_Block1" FromRole="Block" ToRole="BlockPoll" />
           <NavigationProperty Name="Houses" Relationship="Self.FK_House_Block" FromRole="Block" ToRole="House" />
         </EntityType>
@@ -1370,9 +1376,11 @@
           <Property Name="HelpdeskServiceId" Type="Int32" />
           <Property Name="HouseId" Type="Int32" />
           <Property Name="Priority" Type="Int32" />
+          <Property Name="SupporterId" Type="Int32" />
           <NavigationProperty Name="HelpdeskService" Relationship="Self.FK_HelpdeskRequest_HelpdeskService" FromRole="HelpdeskRequest" ToRole="HelpdeskService" />
+          <NavigationProperty Name="User" Relationship="Self.FK_HelpdeskRequest_User" FromRole="HelpdeskRequest" ToRole="User" />
+          <NavigationProperty Name="User1" Relationship="Self.FK_HelpdeskRequest_User1" FromRole="HelpdeskRequest" ToRole="User" />
           <NavigationProperty Name="HelpdeskRequestLogs" Relationship="Self.FK_HelpdeskRequestLog_HelpdeskReq" FromRole="HelpdeskRequest" ToRole="HelpdeskRequestLog" />
-          <NavigationProperty Name="HelpdeskRequestHelpdeskSupporters" Relationship="Self.FK_tbl_h_desk_req_h_desk_tbl_h_desk_request" FromRole="HelpdeskRequest" ToRole="HelpdeskRequestHelpdeskSupporter" />
           <NavigationProperty Name="House" Relationship="Self.FK_tbl_h_desk_request_tbl_house" FromRole="HelpdeskRequest" ToRole="House" />
         </EntityType>
         <EntityType Name="HelpdeskRequestHelpdeskSupporter">
@@ -1384,8 +1392,6 @@
           <Property Name="HelpdeskRequestId" Type="Int32" />
           <Property Name="Status" Type="Int32" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="HelpdeskRequest" Relationship="Self.FK_tbl_h_desk_req_h_desk_tbl_h_desk_request" FromRole="HelpdeskRequestHelpdeskSupporter" ToRole="HelpdeskRequest" />
-          <NavigationProperty Name="User" Relationship="Self.FK_tbl_h_desk_req_h_desk_tbl_user" FromRole="HelpdeskRequestHelpdeskSupporter" ToRole="User" />
         </EntityType>
         <EntityType Name="HelpdeskRequestLog">
           <Key>
@@ -1606,9 +1612,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Username" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="RoleId" Type="Int32" Nullable="false" />
-          <Property Name="IsApproved" Type="Int32" />
+          <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="RoleId" Type="Int32" />
           <Property Name="HouseId" Type="Int32" />
           <Property Name="ResidentType" Type="Int32" />
           <Property Name="Creator" Type="Int32" />
@@ -1621,9 +1626,11 @@
           <Property Name="LastModified" Type="DateTime" Precision="3" />
           <Property Name="FamilyLevel" Type="Int32" />
           <Property Name="IDCreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" />
           <NavigationProperty Name="BalanceSheets" Relationship="Self.FK_Transaction_User" FromRole="User" ToRole="BalanceSheet" />
           <NavigationProperty Name="Comments" Relationship="Self.FK_Comment_User1" FromRole="User" ToRole="Comment" />
-          <NavigationProperty Name="HelpdeskRequestHelpdeskSupporters" Relationship="Self.FK_tbl_h_desk_req_h_desk_tbl_user" FromRole="User" ToRole="HelpdeskRequestHelpdeskSupporter" />
+          <NavigationProperty Name="HelpdeskRequests" Relationship="Self.FK_HelpdeskRequest_User" FromRole="User" ToRole="HelpdeskRequest" />
+          <NavigationProperty Name="HelpdeskRequests1" Relationship="Self.FK_HelpdeskRequest_User1" FromRole="User" ToRole="HelpdeskRequest" />
           <NavigationProperty Name="HelpdeskRequestLogs" Relationship="Self.FK_HelpdeskRequestLog_User1" FromRole="User" ToRole="HelpdeskRequestLog" />
           <NavigationProperty Name="HelpdeskRequestLogs1" Relationship="Self.FK_HelpdeskRequestLog_User2" FromRole="User" ToRole="HelpdeskRequestLog" />
           <NavigationProperty Name="House" Relationship="Self.FK_User_House" FromRole="User" ToRole="House" />
@@ -1659,12 +1666,13 @@
         </EntityType>
         <EntityType Name="UserReportPost">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="PostId" />
+            <PropertyRef Name="ReportId" />
           </Key>
-          <Property Name="UserId" Type="Int32" />
-          <Property Name="PostId" Type="Int32" />
-          <Property Name="ReportId" Type="Int32" />
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="PostId" Type="Int32" Nullable="false" />
+          <Property Name="ReportId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Post" Relationship="Self.FK_UserReportPost_Post" FromRole="UserReportPost" ToRole="Post" />
           <NavigationProperty Name="Report" Relationship="Self.FK_UserReportPost_Report" FromRole="UserReportPost" ToRole="Report" />
           <NavigationProperty Name="User" Relationship="Self.FK_UserReportPost_User" FromRole="UserReportPost" ToRole="User" />
@@ -1895,6 +1903,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_HelpdeskRequest_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="HelpdeskRequest" Type="Self.HelpdeskRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="HelpdeskRequest">
+              <PropertyRef Name="SupporterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HelpdeskRequest_User1">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="HelpdeskRequest" Type="Self.HelpdeskRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="HelpdeskRequest">
+              <PropertyRef Name="SupporterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_HelpdeskRequestLog_HelpdeskReq">
           <End Role="HelpdeskRequest" Type="Self.HelpdeskRequest" Multiplicity="0..1" />
           <End Role="HelpdeskRequestLog" Type="Self.HelpdeskRequestLog" Multiplicity="*" />
@@ -1903,18 +1935,6 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="HelpdeskRequestLog">
-              <PropertyRef Name="HelpdeskRequestId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tbl_h_desk_req_h_desk_tbl_h_desk_request">
-          <End Role="HelpdeskRequest" Type="Self.HelpdeskRequest" Multiplicity="0..1" />
-          <End Role="HelpdeskRequestHelpdeskSupporter" Type="Self.HelpdeskRequestHelpdeskSupporter" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="HelpdeskRequest">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="HelpdeskRequestHelpdeskSupporter">
               <PropertyRef Name="HelpdeskRequestId" />
             </Dependent>
           </ReferentialConstraint>
@@ -1928,18 +1948,6 @@
             </Principal>
             <Dependent Role="HelpdeskRequest">
               <PropertyRef Name="HouseId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tbl_h_desk_req_h_desk_tbl_user">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="HelpdeskRequestHelpdeskSupporter" Type="Self.HelpdeskRequestHelpdeskSupporter" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="HelpdeskRequestHelpdeskSupporter">
-              <PropertyRef Name="HelpdeskSupporterId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2052,7 +2060,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserReportPost_Post">
-          <End Role="Post" Type="Self.Post" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="1" />
           <End Role="UserReportPost" Type="Self.UserReportPost" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Post">
@@ -2114,7 +2122,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserReportPost_Report">
-          <End Role="Report" Type="Self.Report" Multiplicity="0..1" />
+          <End Role="Report" Type="Self.Report" Multiplicity="1" />
           <End Role="UserReportPost" Type="Self.UserReportPost" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Report">
@@ -2126,7 +2134,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tbl_user_tbl_role">
-          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
           <End Role="User" Type="Self.User" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Role">
@@ -2162,7 +2170,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserReportPost_User">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="UserReportPost" Type="Self.UserReportPost" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -2308,21 +2316,21 @@
             <End Role="HelpdeskService" EntitySet="HelpdeskServices" />
             <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
           </AssociationSet>
+          <AssociationSet Name="FK_HelpdeskRequest_User" Association="Self.FK_HelpdeskRequest_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HelpdeskRequest_User1" Association="Self.FK_HelpdeskRequest_User1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
+          </AssociationSet>
           <AssociationSet Name="FK_HelpdeskRequestLog_HelpdeskReq" Association="Self.FK_HelpdeskRequestLog_HelpdeskReq">
             <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
             <End Role="HelpdeskRequestLog" EntitySet="HelpdeskRequestLogs" />
           </AssociationSet>
-          <AssociationSet Name="FK_tbl_h_desk_req_h_desk_tbl_h_desk_request" Association="Self.FK_tbl_h_desk_req_h_desk_tbl_h_desk_request">
-            <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
-            <End Role="HelpdeskRequestHelpdeskSupporter" EntitySet="HelpdeskRequestHelpdeskSupporters" />
-          </AssociationSet>
           <AssociationSet Name="FK_tbl_h_desk_request_tbl_house" Association="Self.FK_tbl_h_desk_request_tbl_house">
             <End Role="House" EntitySet="Houses" />
             <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tbl_h_desk_req_h_desk_tbl_user" Association="Self.FK_tbl_h_desk_req_h_desk_tbl_user">
-            <End Role="User" EntitySet="Users" />
-            <End Role="HelpdeskRequestHelpdeskSupporter" EntitySet="HelpdeskRequestHelpdeskSupporters" />
           </AssociationSet>
           <AssociationSet Name="FK_HelpdeskRequestLog_User1" Association="Self.FK_HelpdeskRequestLog_User1">
             <End Role="User" EntitySet="Users" />
@@ -2551,6 +2559,8 @@
               <MappingFragment StoreEntitySet="Block">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="BlockName" ColumnName="BlockName" />
+                <ScalarProperty Name="NoFloor" ColumnName="NoFloor" />
+                <ScalarProperty Name="NoRoomPerFloor" ColumnName="NoRoomPerFloor" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2590,6 +2600,7 @@
                 <ScalarProperty Name="HelpdeskServiceId" ColumnName="HelpdeskServiceId" />
                 <ScalarProperty Name="HouseId" ColumnName="HouseId" />
                 <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="SupporterId" ColumnName="SupporterId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2810,7 +2821,6 @@
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="RoleId" ColumnName="RoleId" />
-                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
                 <ScalarProperty Name="HouseId" ColumnName="HouseId" />
                 <ScalarProperty Name="ResidentType" ColumnName="ResidentType" />
                 <ScalarProperty Name="Creator" ColumnName="Creator" />
@@ -2823,6 +2833,7 @@
                 <ScalarProperty Name="LastModified" ColumnName="LastModified" />
                 <ScalarProperty Name="FamilyLevel" ColumnName="FamilyLevel" />
                 <ScalarProperty Name="IDCreatedDate" ColumnName="IDCreatedDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2852,7 +2863,6 @@
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="PostId" ColumnName="PostId" />
                 <ScalarProperty Name="ReportId" ColumnName="ReportId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

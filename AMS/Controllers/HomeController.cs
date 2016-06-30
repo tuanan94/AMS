@@ -11,15 +11,16 @@ using AMS.ViewModel;
 using Microsoft.AspNet.Identity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Xml.Linq;
 using AMS.Constant;
 using AMS.Enum;
 using AMS.Models;
 using AMS.ViewModel;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
-
 using Newtonsoft.Json;
 using AMS.ObjectMapping;
 
@@ -40,7 +41,12 @@ namespace AMS.Controllers
         HdReqHdSupporterServices _hdReqHdSupporterServices = new HdReqHdSupporterServices();
         HouseServices houseService = new HouseServices();
         NotificationService notificationService = new NotificationService();
+        AroundProviderService _aroundProviderService = new AroundProviderService();
+        AroundProviderProductService _aroundProviderProductService = new AroundProviderProductService();
         readonly string parternTime = "dd-MM-yyyy HH:mm";
+        private const int foodId = 1;
+        private const int entertainId = 2;
+        private const int kidCornerId = 3;
 
         public ActionResult Test()
         {
@@ -1046,12 +1052,47 @@ namespace AMS.Controllers
         public bool deleteRequest(int id)
         {
             User u = userService.findById(id);
-            if(u==null || u.IsApproved == 1)
+            if (u == null || u.IsApproved == 1)
             {
                 return false;
             }
             userService.deleteUser(u);
             return true;
+        }
+            public ActionResult ViewAroundProvider()
+        {
+            ViewBag.AllProviders = _aroundProviderService.GetAllProviders();
+            return View();
+        }
+
+        public ActionResult ViewAroundProviderDetail()
+        {
+            ViewBag.AllProviders = _aroundProviderService.GetAllProviders();
+            return View();
+        }
+
+        public ActionResult SingleProviderDetail(int id)
+        {
+            List<AroundProviderProduct> products = _aroundProviderProductService.GetAroundProviderProduct(id);
+            AroundProvider curProvider = _aroundProviderService.GetProvider(id);
+            string address = curProvider.Address;
+            var requestUri = string.Format("http://maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false", 
+                                                Uri.EscapeDataString(address));
+            var request = WebRequest.Create(requestUri);
+            var response = request.GetResponse();
+            var xdoc = XDocument.Load(response.GetResponseStream());
+
+            var result = xdoc.Element("GeocodeResponse").Element("result");
+            var locationElement = result.Element("geometry").Element("location");
+            var lat = locationElement.Element("lat");
+            var lng = locationElement.Element("lng");
+            //Double.Parse(lng.Value);
+            ViewBag.Products = products;
+            ViewBag.CurProvider = curProvider;
+            ViewBag.Lat = Double.Parse(lat.Value);
+            ViewBag.Lng = Double.Parse(lng.Value);
+
+            return View();
         }
     }
 }

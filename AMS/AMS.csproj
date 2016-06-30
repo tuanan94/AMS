@@ -46,9 +46,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+
     <Reference Include="LINQtoCSV, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>AmsDLL\LINQtoCSV.dll</HintPath>
+    </Reference>
+    <Reference Include="Geocoding">
+      <HintPath>..\packages\Geocoding.net.3.4.0\lib\net40\Geocoding.dll</HintPath>
+
     </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.0.1011, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
@@ -84,6 +89,10 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -148,9 +157,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -312,6 +318,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BalanceSheetViewModels.cs" />
     <Compile Include="Models\ConfigViewModels.cs" />
+    <Compile Include="Models\AroundProviderModels.cs" />
     <Compile Include="Models\HelpdeskServiceModels.cs" />
     <Compile Include="Models\HouseModels.cs" />
     <Compile Include="Models\ManageHouseViewModels.cs" />
@@ -355,6 +362,8 @@
     <Compile Include="Service\BalanceSheetServices.cs" />
     <Compile Include="Service\BlockService.cs" />
     <Compile Include="Service\BlockSurveyService.cs" />
+    <Compile Include="Service\AroundProviderProductService.cs" />
+    <Compile Include="Service\AroundProviderService.cs" />
     <Compile Include="Service\HdReqHdSupporterServices.cs" />
     <Compile Include="Service\HelpdeskRequestHelpdeskSupporterService.cs" />
     <Compile Include="Service\HelpdeskRequestLogServices.cs" />
@@ -391,6 +400,12 @@
     <Compile Include="Transaction.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Transaction.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TransactionCategory.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="User.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -415,6 +430,9 @@
     <Compile Include="UtilServiceForHouseCat.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="UserRateAroundProvider.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\AddMemberViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\HelpdeskSupporterViewModel.cs" />
@@ -426,6 +444,11 @@
     <Content Include="AmsDLL\LINQtoCSV.dll" />
     <Content Include="AmsDLL\LinqToExcel.dll" />
     <Content Include="AmsDLL\Remotion.Data.Linq.dll" />
+    <Content Include="Content\aroundProvider\animate.min.css" />
+    <Content Include="Content\aroundProvider\font-awesome.min.css" />
+    <Content Include="Content\aroundProvider\main.css" />
+    <Content Include="Content\aroundProvider\owl.carousel.css" />
+    <Content Include="Content\aroundProvider\responsive.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\blue.css" />
@@ -449,6 +472,7 @@
     <Content Include="Content\css\_vendor.min.css" />
     <Content Include="Content\images\addimage.png" />
     <Content Include="Content\images\banner-842.jpg" />
+    <Content Include="Content\images\defaultPhoto.png" />
     <Content Include="Content\images\defaultProfile.png" />
     <Content Include="Content\images\familycover.jpg" />
     <Content Include="Content\images\guy-5.jpg" />
@@ -479,6 +503,26 @@
     <Content Include="images\Post\SEO_survey_reuslts-1024x768.jpg" />
     <Content Include="images\Post\survey-icon.png" />
     <Content Include="LinqToExcel.dll" />
+    <Content Include="Content\rating.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="images\aroundProvider\banh-canh-cua.jpg" />
+    <Content Include="images\aroundProvider\bida-123.jpg" />
+    <Content Include="images\aroundProvider\blog-bg.jpg" />
+    <Content Include="images\aroundProvider\bun-bo-cay-cot-dien.jpg" />
+    <Content Include="images\aroundProvider\bun-bo-gio.jpg" />
+    <Content Include="images\aroundProvider\bun-bo-thit-cha-1.jpg" />
+    <Content Include="images\aroundProvider\bun-bo-thit-cha.jpg" />
+    <Content Include="images\aroundProvider\hu-tieu-nam-vang.jpg" />
+    <Content Include="images\aroundProvider\karaoke-gia-dinh.jpg" />
+    <Content Include="images\aroundProvider\khu-vui-choi-tre-em.jpg" />
+    <Content Include="images\aroundProvider\marker.png" />
+    <Content Include="images\aroundProvider\img-2.jpg" />
+    <Content Include="images\aroundProvider\background.jpg" />
+    <Content Include="images\aroundProvider\nha-tre-hai-con-meo.jpg" />
+    <Content Include="images\aroundProvider\pho-bo.jpg" />
+    <Content Include="images\rating.png" />
     <Content Include="Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
@@ -506,6 +550,14 @@
     <Content Include="Scripts\amsScript\vendor.js" />
     <Content Include="Scripts\amsScript\vendor.min.js" />
     <Content Include="Scripts\bootstrap-switch.js" />
+    <Content Include="Scripts\aroundProvider\jquery.mixitup.js" />
+    <Content Include="Scripts\aroundProvider\map.js" />
+    <Content Include="Scripts\aroundProvider\jquery.nav.js" />
+    <Content Include="Scripts\aroundProvider\jquery.sticky.js" />
+    <Content Include="Scripts\aroundProvider\main.js" />
+    <Content Include="Scripts\aroundProvider\main.min.js" />
+    <Content Include="Scripts\aroundProvider\plugins.js" />
+    <Content Include="Scripts\aroundProvider\wow.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config" />
@@ -598,6 +650,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\rating.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
@@ -694,6 +747,11 @@
     <Content Include="Views\Receipt\DownloadWaterConsumptionTemplate.cshtml" />
     <Content Include="Views\Config\ManageUtilityService.cshtml" />
     <Content Include="Views\Config\UpdateUtilityService.cshtml" />
+    <Content Include="Views\Home\ViewAroundProvider.cshtml" />
+    <Content Include="Views\Home\ViewAroundProviderDetail.cshtml" />
+    <Content Include="Views\Home\SingleProviderDetail.cshtml" />
+    <Content Include="Views\Management\ManageAroundProvider.cshtml" />
+    <Content Include="Views\Management\AddAroundProvider.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
