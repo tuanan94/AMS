@@ -131,7 +131,7 @@ td.highlight {
 
         .manager-header > li > a {
             color: #152C40 !important;
-            margin: 0 auto 2px;
+            margin: 0 auto;
             display: block;
             height: 100%;
             text-align: center;
@@ -284,3 +284,18 @@ canvas {
 .line-height {
     line-height: 34px;
 }
+
+td span.label  {
+    font-size: 85%;
+}
+
+td {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+    th.dt-center, td.dt-center {
+        text-align: center;
+    }

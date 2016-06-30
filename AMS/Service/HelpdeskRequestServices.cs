@@ -37,6 +37,10 @@ namespace AMS.Service
             helpdeskReqRepository.Update(hdRequest);
         }
 
+        public List<HelpdeskRequest> GetAllHdRequestBySupporterId(int supporterId)
+        {
+            return helpdeskReqRepository.List.Where(r => r.SupporterId == supporterId).OrderBy(r => r.CreateDate).ToList();
+        }
         
     }
 }

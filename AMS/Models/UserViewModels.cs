@@ -20,4 +20,25 @@ namespace AMS.Models
             Count = count;
         }
     }
-}
+
+    public class UserInfoViewModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Idenity { get; set; }
+        public string HouseName { get; set; }
+        public string Block { get; set; }
+        public string Floor { get; set; }
+        public int RoldId { get; set; }
+        public int Gender { get; set; }
+        public string RolName { get; set; }
+        public string Dob { get; set; }
+        public string HouseHolder { get; set; }
+        public int HouseHolderid { get; set; }
+        public int IsHouseOwner { get; set; }
+        public int Status { get; set; }
+        public string CreateDate { get; set; }
+        public string DT_RowId { get; set; }
+
+    }
+} 

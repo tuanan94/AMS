@@ -1,0 +1,274 @@
+﻿@{
+    ViewBag.Title = "CreateHouseInBlock";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+    Block block = ViewBag.block;
+}
+<div class="col-md-12">
+    <div class="panel panel-default">
+
+        <div class="heading-tab">
+            <i class="fa fa-list"> Quản lý phí sinh hoạt</i>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li>
+                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-file-text-o"></i> Phí sinh họat</a>
+                </li>
+                <li>
+                    <a href="/Management/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Quản lý nhà</a>
+                </li>
+                <li class="active">
+                    <a href="/Management/Config/UtilityService/ViewDownloadBLockStructure"><i class="fa fa fa-plus"></i> Cấu trúc phòng</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="panel-body">
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="">
+                    <div class="panel panel-default" style="border-color: transparent">
+                        <form id="addUtilServiceForm" class="form-horizontal" role="form">
+                            <div class="alert alert-info" id="createSuccessNoti" style="display: none">
+                                <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <span>Tạo mới thành công</span>
+                            </div>
+                            <div class="alert alert-danger" id="createFailedNoti" style="display: none">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                                <span>Tạo mới thất bại</span>
+                            </div>
+                            <div class="tab-content">
+                                <div class="tab-pane fade active in" id="">
+                                    <div class="form-group">
+                                        <div class="col-md-offset-3 col-md-6">
+                                            <fieldset class="scheduler-border less-padding">
+                                                <legend class="scheduler-border">Thông tin tòa nhà</legend>
+                                                <div class="form-group">
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label">Tên tòa nhà</label>
+                                                        <div class="col-md-7 ">
+                                                            <input type="text" id="blockName" value="@block.BlockName" class="form-control" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label">Số tầng</label>
+                                                        <div class="col-md-7 ">
+                                                            <input type="text" name="numberOfFloor" value="@block.NoFloor" class="form-control" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label">Số phòng mỗi tầng</label>
+                                                        <div class="col-md-7 ">
+                                                            <input id="numberOfRoom" type="text" name="blockName" value="5" class="form-control" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                    <table id="houseInBlockTbl" class="table table-hover table-bordered" data-block-id="@block.Id">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Tầng</th>
+                                                <th>Tên nhà</th>
+                                                <th>Trạng thái</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Tầng</th>
+                                                <th>Tên nhà</th>
+                                                <th>Trạng thái</th>
+                                                <th></th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="manageHouseModal" class="modal fade ams-modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="title">Cập nhật thông tìn căn hộ</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <div class="alert alert-info" id="addResSuccessNoti" style="display: none">
+                        <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span id="successMsg">Thêm cư dân thành công</span>
+                    </div>
+
+                    <div class="alert alert-danger" id="addResFailedNoti" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                        <span id="failedMsg">Thêm cư dân thất bại</span>
+                    </div>
+                    <div class="alert alert-danger" id="msgAddFailedNoty" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span id="notyMsg"></span>
+                    </div>
+
+                    <form id="manageHouseForm" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="resName" class="col-md-3 control-label">Tên</label>
+                            <div class="col-md-6">
+                                <input name="" type="text" class="form-control room-name">
+                            </div>
+                            <label style="text-align: left" class="col-md-3 control-label"></label>
+                        </div>
+                        <div class="form-group">
+                            <label for="resName" class="col-md-3 control-label">Tầng</label>
+                            <div class="col-md-9">
+                                <input name="" type="text" class="form-control room-name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="resName" class="col-md-3 control-label">Diện tích</label>
+                            <div class="col-md-9">
+                                <input name="" type="text" class="form-control room-name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="resName" class="col-md-3 control-label">Loại nhà</label>
+                            <div class="col-md-9">
+                                <select class="form-control">
+                                    <option>Hộ khẩu thường trú</option>
+                                    <option>KT3</option>
+                                    <option>Khác</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <span id="btnAdd" type="button" class="btn btn-info">Chấp nhận</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var blockId = document.getElementById("houseInBlockTbl").dataset.blockId;
+        window.houseInBlockTbl = $("#houseInBlockTbl").DataTable({
+            "ajax": {
+                url: "/Management/Config/UtilityService/GetHouseInBlock?blockId=" + blockId,
+                dataSrc: function (data) {
+                    window.utilityServices = data;
+                    return data;
+                }
+            },
+            "destroy": true,
+            "bLengthChange": false,
+            "bInfo": false,
+            "drawCallback": function (settings) {
+                var addBtn = "<div class='col-md-1'>" +
+                "<a id='createFirstBlsBtn' class='btn btn-info' href='/Management/Config/UtilityService/Create'>" +
+                "<i class='fa fa-plus'></i>" +
+                "</a>" +
+                "</div>";
+                $("#utilityServices_wrapper > div:nth-child(1) > div:nth-child(1)").html(addBtn);
+
+                var deleteBtn =
+            "<div class='hide' id='delConsumptionRecordBtnGroup'>" +
+                "<span class='btn btn-warning btn-stroke' onclick='cancelDeleteConsumptionRecord()'>" +
+                    "<i class='fa fa-plus'></i> Hủy" +
+                "</span>" +
+                "<span class='btn btn-primary' style='margin-left: 5px' onclick='commitDeleteConsumptionRecord()'>" +
+                    "<i class='fa fa-plus'></i> Chấp nhận" +
+                "</span>" +
+            "</div>";
+                $("#utilityServices_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(deleteBtn);
+
+            },
+            "order": [[3, "asc"]],
+            "columns": [
+                { data: "FloorName" },
+                { data: "FloorName" },
+                { data: "Name" },
+                { data: "Status" },
+                { data: "Id" }
+            ],
+            "columnDefs": [
+                {
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0
+                },
+
+                {
+                    "targets": 2,
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            return "<span class='label house-color label-warning'>" + data + "</span>";
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "targets": 3,
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            if (data === -1) {
+                                return "<span class='label label-danger'>Đóng</span>";
+                            } else {
+                                return "<span class='label label-success'>Đóng</span>";
+                            }
+                        }
+                        return data;
+                    }
+                },
+                {
+//                    "width": "8%",
+                    "targets": 4,
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            //                            if (full.Status === window.Enable) {
+                            //                                return "<div class='text-right'>" +
+                            //                                    "<span onclick='updateUtilSrvForHouseCat(\"" +
+                            //                                    data +
+                            //                                    "\")' class='btn btn-default btn-xs'>" +
+                            //                                    " <i class='fa fa-pencil'></i>" +
+                            //                                    "</span>" +
+                            //                                    " </div>";
+                            //                            } else {
+                            //                                return "<div class='text-right'>"
+                            //                                + "<span onclick='updateUtilSrvForHouseCat(\"" + data + "\")' class='btn btn-default btn-xs'>"
+                            //                                + " <i class='fa fa-pencil'></i>"
+                            //                                + "</span>"
+                            //                                + " <span onclick='deleteConsumptionRecord(" + data + ")' class='btn btn-danger btn-xs' >"
+                            //                                + "  <i class='fa fa-times'></i>"
+                            //                                + " </span>"
+                            //                                + " </div>";
+                            //                            }
+                                return "<div class='text-right'>" +
+                                    "<span onclick='viewHouseInfo(\"" +
+                                    data +
+                                    "\")' class='btn btn-default btn-xs'>" +
+                                    " <i class='fa fa-pencil'></i>" +
+                                    "</span>" +
+                                    " </div>";// just testing
+                        }
+                        return data;
+                    }
+                },
+
+            ]
+        });
+        generateTableIndex(window.houseInBlockTbl);
+    });
+
+    function viewHouseInfo() {
+        $("#manageHouseModal").modal("show");
+    }
+</script>

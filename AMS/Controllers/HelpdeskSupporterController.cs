@@ -17,19 +17,15 @@ namespace AMS.Views.HelpdeskSupporter
         private readonly UserService _userService = new UserService();
         private readonly HelpdeskRequestHelpdeskSupporterService _hrhs = new HelpdeskRequestHelpdeskSupporterService();
         private readonly HelpdeskRequestLogServices _helpdeskRequestLogService = new HelpdeskRequestLogServices();
+        private readonly HelpdeskRequestServices _helpdeskRequestServices = new HelpdeskRequestServices();
         readonly string patternDate = "dd-MM-yyyy HH:mm";
 
         [HttpGet]
         [ValidateInput(false)]
         public ActionResult Index()
         {
-            User currUser = _userService.findById(int.Parse(User.Identity.GetUserId()));
-            List<HelpdeskRequestHelpdeskSupporter> allRequest = _hrhs.GetCurrentHelpdeskRequest(currUser.Id);
-            List<HelpdeskRequest> hr = new List<HelpdeskRequest>();
-            foreach (var request in allRequest)
-            {
-                hr.Add(request.HelpdeskRequest);
-            }
+            User currUser = _userService.findById(int.Parse(User.Identity.GetUserId()));//AnLTNM
+            List<HelpdeskRequest> hr = _helpdeskRequestServices.GetAllHdRequestBySupporterId(currUser.Id);//AnLTNM
             ViewBag.hr = hr;
             ViewBag.currHelpdeskSupporterId = currUser.Id;
             return View();

@@ -11,11 +11,7 @@ namespace AMS.Repository
     {
         public IEnumerable<HelpdeskRequest> ListAll()
         {
-            return
-                    table.Include(p => p.HelpdeskService).Include(p => p.HelpdeskRequestHelpdeskSupporters).Include(p => p.House);
+            return List.ToList();
         }
-
-
-
     }
 }

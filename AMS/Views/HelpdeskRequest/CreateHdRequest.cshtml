@@ -1,0 +1,113 @@
+﻿@using Microsoft.AspNet.Identity
+@{
+    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+
+    ViewBag.Title = "ManageMember";
+}
+@{
+    List<HelpdeskServiceCategory> hdSrvCats = ViewBag.hdSrvCats;
+}
+<div class="col-md-12">
+    <div class="panel panel-default">
+
+        <div class="heading-tab">
+            <i class="fa fa-list"> Gửi yêu cầu sửa chữa</i>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li class="active">
+                    <a href="/Home/HelpdeskRequest/Create"><i class="fa fa-send"></i> Gửi yêu cầu sữa chửa</a>
+                </li>
+                <li>
+                    <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-life-ring"></i> Quản lý yêu cầu</a>
+                </li>
+            </ul>
+        </div>
+        <div class="panel-body">
+
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="">
+                    <form class="form-horizontal" id="createHdService" role="form">
+                        <div class="alert alert-info hide" id="createHdSrvSuccessNoti" @*style="display: none"*@>
+                            <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Yêu cầu dịch vụ hổ trợ thành công. Anh/Chị xin vui lòng đợi ban quản lý xử lý!</span>
+                        </div>
+                        <div class="alert alert-danger hide" id="createHdSrvFailedNoti">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                            <span>Yêu cầu dịch vụ hổ trợ thất bại! Xin vui lòng thử lại một lần nữa</span>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <fieldset class="scheduler-border less-padding">
+                                    <legend class="scheduler-border bold-black">Thông tin dịch vụ hổ trợ</legend>
+                                    <div class="form-group">
+                                        <label for="hdSrvCatName" class="col-md-3 control-label">Loại dịch vụ</label>
+                                        <div class="col-md-9 full-width-select">
+                                            <select id="hdSrvCatName" title="Dịch vụ hổ trợ" name="hdSrvCatName" class="selectpicker">
+                                                <option value="" selected="selected"> Hãy chọn loại dịch vụ</option>
+                                                @foreach (var cat in hdSrvCats)
+                                                {
+                                                    <option value="@cat.Id"> @cat.Name</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="hdServiceId" class="col-md-3 control-label">Tên dịch vụ</label>
+                                        <div class="col-md-9 full-width-select">
+                                            <select id="hdServiceId" name="HdServiceId" class="selectpicker">
+                                                <option value="" selected="selected"> Hãy chọn dịch vụ</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="hdSrvPrice" class="col-md-3 control-label">Giá tiền</label>
+                                        <div class="col-md-9">
+                                            <input disabled id="hdSrvPrice" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="hdSrvDesc" class="col-md-3 control-label">Miêu tả</label>
+                                        <div class="col-md-9">
+                                            <textarea disabled id="hdSrvDesc" class="form-control" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    @*Test hard code user 3*@
+                                    <input type="hidden" name="hdReqUserId" value="@User.Identity.GetUserId()" />
+                                </fieldset>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-12">
+                                    <fieldset class="scheduler-border less-padding">
+                                        <legend class="scheduler-border bold-black">Ghi chú của cư dân</legend>
+                                        <div class="form-group">
+                                            <label for="hdReqTitle" class="col-md-3 control-label">Tiêu đề</label>
+                                            <div class="col-md-9">
+                                                <input id="hdReqTitle" name="hdReqTitle" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="hdReqUserDesc" class="col-md-3 control-label">Mô tả</label>
+                                            <div class="col-md-9">
+                                                <textarea name="hdReqUserDesc" id="hdReqUserDesc" class="form-control" style="max-width: initial;" rows="8"></textarea>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="pull-right">
+                                <button type="submit" id="addNewHdRequest" class="btn btn-primary">Gửi yêu cầu</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#slide-left").children().removeClass("active");
+        $($("#slide-left li")[4]).addClass("active");
+    });
+</script>

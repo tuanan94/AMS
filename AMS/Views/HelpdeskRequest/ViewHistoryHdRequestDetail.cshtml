@@ -75,7 +75,7 @@
                                     {
                                         @*                                <span class="btn btn-info" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Processing), @User.Identity.GetUserId())">Bắt đầu công việc</span>*@
                                     }
-                                    else if (hd.Status == (int)StatusEnum.Processing && (roleId == SLIM_CONFIG.USER_ROLE_SUPPORTER || roleId == SLIM_CONFIG.USER_ROLE_MANAGER) && hd.HelpdeskRequestHelpdeskSupporters.Count != 0)
+                                    else if (hd.Status == (int)StatusEnum.Processing && (roleId == SLIM_CONFIG.USER_ROLE_SUPPORTER || roleId == SLIM_CONFIG.USER_ROLE_MANAGER) && hd.User1 != null)
                                     {
                                         <span class="btn btn-success" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Done), @User.Identity.GetUserId())"> Hoàn thành</span>
                                     }
@@ -92,7 +92,7 @@
                                     if ((hd.Status == (int)StatusEnum.Open || hd.Status == (int)StatusEnum.Processing) && roleId == (int)SLIM_CONFIG.USER_ROLE_MANAGER)
                                     {
                                         <span id="btnDuedate" class="btn btn-default" data-id="@hd.Id" data-userid="@User.Identity.GetUserId()"
-                                              data-toggle="modal" data-target="#setDuedateModal"><i class="fa fa-clock-o" aria-hidden="true"></i> Cài đặt ngày hoàn thành</span>
+                                              data-toggle="modal" data-target="#setDuedateModal"><i class="fa fa-clock-o" aria-hidden="true"></i>Cài đặt ngày hoàn thành</span>
                                         <span id="assignHdReqBtn" data-id="@hd.Id" data-fromuser="@User.Identity.GetUserId()" class="btn btn-default" onclick="openModalAssignHdReq(@hd.Id)">
                                             <i class="fa fa-tasks" aria-hidden="true"></i> Giao việc
                                         </span>
@@ -189,13 +189,13 @@
                                         <div class="col-sm-9">
                                             @{
                                                 string assignee = "";
-                                                if (hd.HelpdeskRequestHelpdeskSupporters.Count == 0)
+                                                if (hd.User1 == null)
                                                 {
                                                     assignee = "Đang chờ giao việc";
                                                 }
                                                 else
                                                 {
-                                                    assignee = hd.HelpdeskRequestHelpdeskSupporters.OrderByDescending(hdSup => hdSup.CreateDate).First().User.Fullname;
+                                                    assignee = hd.User1.Fullname;
                                                 }
                                                 <input id="HdReqSupporter" name="HdReqSupporter" class="form-control" value="@assignee" />
                                             }
@@ -205,14 +205,15 @@
                                 <fieldset class="scheduler-border less-padding">
                                     <legend class="scheduler-border bold-black">Thời gian</legend>
                                     <div class="form-group">
-                                        @{string parternTime = "HH:mm";
-                                        string parternDateTime = "dd-MM-yyyy HH:mm";
-                                        string parternDate = "dd-MM-yyyy ";
-                                        string strTime = hd.CreateDate.Value.ToString(parternTime);
-                                        string strDate = hd.CreateDate.Value.ToString(parternDate);
-                                        string strDateTime = hd.CreateDate.Value.ToString(parternDateTime);
+                                        @{
+//                                            string parternTime = "HH:mm";
+//                                            string parternDateTime = "dd-MM-yyyy HH:mm";
+//                                            string parternDate = "dd-MM-yyyy ";
+                                            string strTime = hd.CreateDate.Value.ToString(AmsConstants.TimeFormat);
+                                            string strDate = hd.CreateDate.Value.ToString(AmsConstants.DateFormat);
+                                            string strDateTime = hd.CreateDate.Value.ToString(AmsConstants.DateTimeFormat);
 
-                                        <label for="HdReqCreate" class="col-sm-3 control-label">Khởi tạo</label>
+                                            <label for="HdReqCreate" class="col-sm-3 control-label">Khởi tạo</label>
                                             <div class="col-sm-9">
                                                 <input type="text" class="form-control timepicker" readonly="readonly" data-date-format="dd/mm/yyyy" value="@strDateTime" />
                                             </div>
@@ -221,7 +222,7 @@
                                     @{
                                         if (hd.ModifyDate != null)
                                         {
-                                            strDateTime = hd.ModifyDate.Value.ToString(parternDateTime);
+                                            strDateTime = hd.ModifyDate.Value.ToString(AmsConstants.DateTimeFormat);
                                             <div class="form-group">
                                                 <label for="HdReqUpdate" class="col-sm-3 control-label">Cập nhật</label>
                                                 <div class="col-sm-9">
@@ -233,7 +234,7 @@
                                     @{
                                         if (hd.DueDate != null)
                                         {
-                                            strDateTime = hd.DueDate.Value.ToString(parternDateTime);
+                                            strDateTime = hd.DueDate.Value.ToString(AmsConstants.DateTimeFormat);
                                             <div class="form-group">
                                                 <label for="HdReqUpdate" class="col-sm-3 control-label">Hết hạn</label>
                                                 <div class="col-sm-9">
@@ -245,7 +246,7 @@
                                     @{
                                         if (hd.CloseDate != null)
                                         {
-                                            strDateTime = hd.CloseDate.Value.ToString(parternDateTime);
+                                            strDateTime = hd.CloseDate.Value.ToString(AmsConstants.DateTimeFormat);
                                             <div class="form-group">
                                                 <label for="HdReqFinished" class="col-sm-3 control-label">Hoàn thành</label>
                                                 <div class="col-sm-9">
@@ -259,7 +260,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-md-12">
-                                <fieldset class="scheduler-border less-padding border-top">
+                                <fieldset class="scheduler-border less-padding">
                                     <legend class="scheduler-border bold-black">Lịch sử</legend>
                                     <div class="table-responsive">
                                         <table class="table v-middle table-bordered">
@@ -360,8 +361,8 @@
                                                     }
                                                         }
                                                         @{
-                                                    strDate = log.CreateDate.Value.ToString(parternDate);
-                                                    strTime = log.CreateDate.Value.ToString(parternTime);
+                                                    strDate = log.CreateDate.Value.ToString(AmsConstants.DateFormat);
+                                                    strTime = log.CreateDate.Value.ToString(AmsConstants.TimeFormat);
                                                         }
                                                         <td><span class="label date-color" style="margin-right: 5px">@strDate</span> <span class="label time-color">@strTime</span></td>
                                                     </tr>
@@ -448,14 +449,14 @@
                                 <select id="lstSupporter" name="ToUserId" class="form-control" data-size="3"></select>
                             </div>
                         </div>
-                        <input id="HdReqId" name="HdReqId" value="" type="hidden"/>
-                        <input id="FromUserId" name="FromUserId" value="" type="hidden"/>
+                        <input id="HdReqId" name="HdReqId" value="" type="hidden" />
+                        <input id="FromUserId" name="FromUserId" value="" type="hidden" />
                     </form>
                 </div>
             </div>
             <div class="modal-footer">
                 <button id="assignTask" onclick="submitAssignTask()" name="assignTask" type="submit" class="btn btn-info">Chấp nhận</button>
-                
+
             </div>
         </div>
     </div>
@@ -482,9 +483,9 @@
                                 <input id="hdReqDueDateTime" type="text" class="form-control time">
                             </div>
                         </div>
-                        <input id="HdReqId_2" name="HdReqId" value="" type="hidden"/>
-                        <input id="FromUserId_2" name="FromUserId" value="" type="hidden"/>
-                        <input id="DueDate" name="DueDate" value="" type="hidden"/>
+                        <input id="HdReqId_2" name="HdReqId" value="" type="hidden" />
+                        <input id="FromUserId_2" name="FromUserId" value="" type="hidden" />
+                        <input id="DueDate" name="DueDate" value="" type="hidden" />
                     </form>
                 </div>
             </div>

@@ -28,7 +28,7 @@
                         <table id="residentApproveTbl" data-fromuserid="@User.Identity.GetUserId()" class="table table-hover table-bordered">
                             <thead>
                                 <tr>
-                                    <th></th>
+                                    <th>#</th>
                                     <th>Tên cư dân</th>
                                     <th>Căn hộ</th>
                                     <th>Chủ hộ</th>
@@ -38,7 +38,7 @@
                             </thead>
                             <tfoot>
                                 <tr>
-                                    <th></th>
+                                    <th>#</th>
                                     <th>Tên cư dân</th>
                                     <th>Căn hộ</th>
                                     <th>Chủ hộ</th>
@@ -59,7 +59,7 @@
     </div>
 </div>
 
-<div id="residentInfoDetail" class="modal fade" role="dialog">
+<div id="residentInfoDetail" class="modal fade ams-modal" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -108,10 +108,13 @@
                     </div>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
         </div>
     </div>
 </div>
-<div id="confirmModal" class="modal fade" role="dialog">
+<div id="confirmModal" class="modal fade  ams-modal" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -138,5 +141,93 @@
     $(document).ready(function () {
         $("#slide-left").children().removeClass("active");
         $($("#slide-left li")[4]).addClass("active");
+
+        var userId = document.getElementById("residentApproveTbl");
+        if (userId) {
+            userId = userId.dataset.fromuserid;
+        }
+        window.dataTable2 = $("#residentApproveTbl").DataTable({
+            "ajax": {
+                url: "/Management/ResidentApprovement/GetResidentApprovementList?userId=" + userId,
+                dataSrc: ""
+            },
+            "rowId": 'UserId',
+            "bLengthChange": false,
+            "bInfo": false,
+            "columns": [
+                { data: "UserId" },
+                { data: "FullName" },
+                { data: "HouseName" },
+                { data: "HouseHolderName" },
+                { data: "CreateDate" },
+                { data: "UserId" }
+            ],
+            "columnDefs": [
+                {
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0
+                },
+                {
+                    "targets": 1,
+                    "width":"30%"
+                },
+                {
+                    "targets": 2,
+                    "data": "HouseName",
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            return "<span class='label house-color label-warning'>" + data + "</span>";
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "targets": 4,
+                    "data": "CreateDate",
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            if (data !== null && data !== undefined) {
+                                var dateTime = data.split(" ");
+                                return "<span class='label date-color label-warning'>" + dateTime[0] +
+                                    "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";
+                            }
+                            return "Đang xác nhận";
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "targets": 5,
+                    "width": "12%",
+                    "data": "UserId",
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            var test = data + ",'" + full.FullName + "','" + full.HouseName + ",";
+                 return "<div class='text-right'> " +
+                        "<td> " +
+                       "<span onclick='resInfoDetail(" + data + ")' class='btn btn-default btn-xs lbl-margin-right'>" +
+                        "<i class='fa fa-info-circle'></i>" +
+                       "</span> " +
+                        "<span class='btn btn-primary btn-xs lbl-margin-right' onclick='showConfirmMsg(\"" + "accept" + "\"," + "\"" + data + "\",\"" + full.FullName + "\"" + ",\"" + full.HouseName + "\"" + ")'>" +
+                            "<i class='fa fa-check-square-o'></i>" +
+                        "</span>" +
+                        "<span class='btn btn-danger btn-xs lbl-margin-right' onclick='showConfirmMsg(\"" + "reject" + "\"," + "\"" + data + "\",\"" + full.FullName + "\"" + ",\"" + full.HouseName + "\"" + ")'>" +
+                            "<i class='fa fa-times'></i>" +
+                        "</span>" +
+                    "</td>" +
+                    "</div>";
+                        }
+                        return data;
+                    }
+                }
+
+            ], "order": [[1, "asc"]]
+        });
+        generateTableIndex(dataTable2);
+        $('#residentApproveTbl').on('click', 'tr', function () {
+            window.currentRow = $(this);
+        });
+
     });
 </script>

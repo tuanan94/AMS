@@ -1512,6 +1512,7 @@ namespace AMS.Controllers
             List<House> floor = _houseServices.GetFloorInBlock(blockId);
             List<string> floorStr = new List<string>();
             List<string> roomStr = new List<string>();
+            List<string> roomIdStr = new List<string>();
 
             if (floor != null && floor.Count > 0)
             {
@@ -1535,13 +1536,14 @@ namespace AMS.Controllers
                     foreach (var room in rooms)
                     {
                         roomStr.Add(room.HouseName);
+                        roomIdStr.Add(room.Id.ToString());
                     }
                 }
-                response.Data = new { Floor = floorStr, Room = roomStr };
+                response.Data = new { Floor = floorStr, Room = roomStr, RoomId = roomIdStr };
             }
             else
             {
-                response.Data = new { Floor = floorStr, Room = roomStr };
+                response.Data = new { Floor = floorStr, Room = roomStr, RoomId = roomIdStr };
             }
             return Json(response, JsonRequestBehavior.AllowGet);
         }

@@ -10,6 +10,7 @@ namespace AMS.Constant
         public static string DateFormat { get { return "dd-MM-yyyy"; } }
         public static string DateTimeFormat { get { return "dd-MM-yyyy HH:mm"; } }
         public static string MonthYearFormat { get { return "MM-yyyy"; } }
+        public static string TimeFormat { get { return "HH:mm"; } }
         public static string MsgUserNotFound { get { return "Không tìm thấy người dùng"; } }
         public static string UtilityServiceElectricity { get { return "Điện"; } }
         public static string UtilityServiceWater { get { return "Nước"; } }

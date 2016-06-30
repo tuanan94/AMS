@@ -15,6 +15,12 @@ namespace AMS.Models
         public string Name { get; set; }
     }
 
+    public class HouseLocationModel
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+    }
+
     public class UtilServiceForHouseCategoryModel
     {
         public int Id { get; set; }

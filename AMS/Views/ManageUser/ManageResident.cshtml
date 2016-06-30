@@ -1,0 +1,558 @@
+﻿@using AMS.Enum
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "ManageMember";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+}
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="heading-tab">
+            <i class="fa fa-list"> Danh sách yêu cầu</i>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li class="active">
+                    <a href="/Management/ManageUser/ViewResidentList"><i class="fa fa-life-ring"></i> Dân cư</a>
+                </li>
+                <li>
+                    <a href="/Management/ManageUser/ViewSupporterList"><i class="fa fa-group"></i> NV Hổ trợ</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="panel-body">
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="">
+
+                    <div class="form-horizontal" id="searchHdSrv" role="form">
+                        <!-- Data table -->
+                        <table id="manageUserListTbl" data-fromuserid="@User.Identity.GetUserId()" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tên</th>
+                                    <th>Căn hộ</th>
+                                    <th>Chủ hộ</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ngày tạo</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tên</th>
+                                    <th>Căn hộ</th>
+                                    <th>Chủ hộ</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ngày tạo</th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                            <tbody></tbody>
+                        </table>
+                        <!-- // Data table -->
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div id="addResidentModal" class="modal fade ams-modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="title">Thêm mới cư dân</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <div class="alert alert-info" id="addResSuccessNoti" style="display: none">
+                        <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span id="successMsg">Thêm cư dân thành công</span>
+                    </div>
+
+                    <div class="alert alert-danger" id="addResFailedNoti" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                        <span id="failedMsg">Thêm cư dân thất bại</span>
+                    </div>
+                    <div class="alert alert-danger" id="msgAddFailedNoty" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span id="notyMsg"></span>
+                    </div>
+
+                    <form id="addResidentForm" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="resName" class="col-md-2 control-label">Họ tên</label>
+                            <div class="col-md-10">
+                                <input id="resName" name="Name" type="text" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="form-group res-info">
+                            <label class="col-md-2 control-label">Giới tính</label>
+                            <div class="col-md-10">
+                                <label class="radio-inline">
+                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_MALE" name="Gender" />Nam
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_FEMALE" name="Gender" />Nữ
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_ORTHER" name="Gender" checked="checked" />Khác
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group res-info">
+                            <label for="resId" class="col-md-2 control-label">Ngày sinh</label>
+                            <div class="col-md-4">
+                                <input id="dob" type="text" name="Dob" class="form-control datepicker" data-date-format="dd-mm-yyyy" data-date-language="vi"
+                                       data-date-min-view-mode="0" data-date-today-highlight="true" data-date-end-date="0m">
+                            </div>
+                            <label for="resId" class="col-md-2 control-label">CMND</label>
+                            <div class="col-md-4">
+                                <input id="resId" type="text" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="form-group res-info">
+                            <label for="houseName" class="col-md-2 control-label">Tòa nhà</label>
+                            <div class="col-md-10 ">
+                                <div class="input-group">
+                                    <select id="houseBlock" name="Block" class="form-control">
+                                        <option></option>
+                                    </select>
+                                    <label for="houseName" class="input-group-addon control-label">Tầng</label>
+                                    <select id="houseFloor" name="Floor" class="form-control">
+                                        <option></option>
+                                    </select>
+                                    <label for="houseName" class="input-group-addon control-label">Nhà</label>
+                                    <select id="houseName" name="HouseName" class="form-control">
+                                        <option></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group res-info">
+                            <label for="resHouseName" class="col-md-2 control-label ">Chủ hộ</label>
+                            <div class="col-md-10">
+                                <label class="radio-inline">
+                                    <input type="radio" value="@SLIM_CONFIG.USER_ROLE_HOUSEHOLDER" name="IsHouseOwner" />Có
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" value="@SLIM_CONFIG.USER_ROLE_RESIDENT" name="IsHouseOwner" checked="checked" />Không
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group security hide">
+                            <label for="userName" class="col-md-2 control-label ">Tên đăng nhập</label>
+                            <div class="col-md-10">
+                                <input id="userName" class="form-control" type="text" />
+                            </div>
+                        </div>
+                        <div class="form-group security hide">
+                            <label for="password" class="col-md-2 control-label ">Mật khẩu</label>
+                            <div class="col-md-10">
+                                <input id="password" class="form-control" type="text" />
+                            </div>
+                        </div>
+                        <input type="hidden" id="accountId" name="Id" />
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <span id="btnAdd" type="button" class="btn btn-info hide" onclick="addNewResident()">Chấp nhận</span>
+                <span id="btnUpdate" type="button" class="btn btn-info hide" onclick="updateResident()">Chấp nhận</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="confirmModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Thông tin xác nhận</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <p style="    font-size: 17px;" id="msgConfirm"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="acceptApproveUser()">Chấp nhận</button>
+            </div>
+            <input type="hidden" id="residentId" value="" />
+            <input type="hidden" id="mode" value="" />
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#slide-left").children().removeClass("active");
+        $($("#slide-left li")[4]).addClass("active");
+
+        window.mode = window.INSERTMODE;
+        window.deleteRes = [];
+
+        window.manageUserListTbl = $("#manageUserListTbl").DataTable({
+            "ajax": {
+                url: "/Management/ManageUser/GetResidentList",
+                dataSrc: function (data) {
+                    window.residentList = data;
+                    return data;
+                }
+            },
+            "drawCallback": function (settings) {
+                var addBtn = "<div class='col-md-1'>" +
+                                "<span class='btn btn-info' onclick='openAddNewUserModal()'>" +
+                                "<i class='fa fa-plus'></i>" +
+                                "</span>" +
+                            "</div>";
+                $("#manageUserListTbl_wrapper > div:nth-child(1) > div:nth-child(1)").html(addBtn);
+
+                var deleteBtn =
+            "<div class='hide' id='delConsumptionRecordBtnGroup'>" +
+                "<span class='btn btn-warning btn-stroke' onclick='cancelDeleteConsumptionRecord()'>" +
+                    "<i class='fa fa-plus'></i> Hủy" +
+                "</span>" +
+                "<span class='btn btn-primary' style='margin-left: 5px' onclick='commitDeleteConsumptionRecord()'>" +
+                    "<i class='fa fa-plus'></i> Chấp nhận" +
+                "</span>" +
+            "</div>";
+                $("#manageUserListTbl_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(deleteBtn);
+            },
+            "rowId": 'UserId',
+            "bLengthChange": false,
+            "bInfo": false,
+            "columns": [
+                { data: "Id" },
+                { data: "Name" },
+                { data: "HouseName" },
+                { data: "RoldId" },
+                { data: "Status" },
+//                { data: "RoleName" },
+                { data: "CreateDate" },
+                { data: "Id" }
+            ],
+            "columnDefs": [
+                {
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0,
+                    "class": "dt_center",
+                    "width": "5%"
+                },
+                {
+                    "targets": 1,
+                    "width": "30%"
+                },
+                {
+                    "targets": 2,
+                    "width": "15%",
+                    "data": "HouseName",
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            return "<span class='label date-color' style='margin-right: 5px'>" + full.Block + "</span>" +
+                                "<span class='label time-color' style='margin-right: 5px'>" + full.Floor + "</span>" +
+                                "<span class='label room-color' >" + full.HouseName + "</span>";
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "targets": 3,
+                    "data": "Status",
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            if (data === window.UserRoleHouseHolder) {
+                                return "<strong>Chủ hộ</strong>";
+                                //                                return "<span class='label label-info'>Chủ hộ</div>";
+                            } else {
+                                return "Dân cư";
+                                //                                return "<span class='label processing'>Dân cư</div>";
+                            }
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "targets": 4,
+                    "data": "Status",
+                    "width": "10%",
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            var msg = "";
+                            if (data === window.UserStatusDisable) {
+                                msg = "Đóng";
+                                return "<span class='label label-danger'>" +
+                                    msg + "</div>";
+                            } else if (data === window.UserStatusEnable) {
+                                msg = "Mở";
+                                return "<span class='label label-success'>" +
+                                    msg + "</div>";
+                            } else if (data === window.UserStatusReject) {
+                                msg = "Từ chối";
+                                return "<span class='label label-default'>" +
+                                    msg + "</div>";
+                            }
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "targets": 5,
+                    "data": "CreateDate",
+                    "width": "15%",
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            if (data !== null && data !== undefined) {
+                                var dateTime = data.split(" ");
+                                return "<strong>" + dateTime[0] +
+                                    "</strong>  " + dateTime[1];
+                            }
+                            return "Đang xác nhận";
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "targets": 6,
+                    "width": "12%",
+                    "data": "Id",
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            if (full.RoldId === window.UserRoleHouseHolder) {
+                                return "<div class='text-right'> " +
+                                   "<td> " +
+                                  "<span onclick='getResidentInfor(" + data + ")' class='btn btn-default btn-xs'>" +
+                                   "<i class='fa fa-pencil'></i>" +
+                               "</td>" +
+                               "</div>";
+                            }
+                            return "<div class='text-right'> " +
+                                   "<td> " +
+                                  "<span onclick='getResidentInfor(" + data + ")' class='btn btn-default btn-xs'>" +
+                                   "<i class='fa fa-pencil'></i>" +
+                                  "</span> " +
+                                   "<span class='btn btn-danger btn-xs' onclick='deleteConsumptionRecord(\"" + data + "\"" + ")'>" +
+                                       "<i class='fa fa-times'></i>" +
+                                   "</span>" +
+                               "</td>" +
+                               "</div>";
+                        }
+                        return data;
+                    }
+                }
+
+            ], "order": [[5, "desc"]]
+        });
+
+        generateTableIndex(window.manageUserListTbl);
+        $('#residentApproveTbl').on('click', 'tr', function () {
+            window.currentRow = $(this);
+        });
+
+    });
+
+    function openAddNewUserModal() {
+        $(".security").addClass("hide");
+        $(".res-info").removeClass("hide");
+        $("#btnAdd").removeClass("hide");
+
+        $.ajax({
+            url: "/Management/ManageUser/GetHouseList",
+            type: "get",
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    var block = parseJsonToSelectTags(data.Data.blocks);
+                    var floor = parseJsonToSelectTags(data.Data.floors);
+                    var room = parseJsonToSelectTags(data.Data.rooms);
+                    $("#houseBlock").html(block);
+                    $("#houseFloor").html(floor);
+                    $("#houseName").html(room);
+                    window.mode = window.INSERTMODE;
+
+                    $("#successMsg").text("Thêm mới cư dân thành công.");
+                    $("#failedMsg").text("Thêm mới cư dân thất bại.");
+                    $("#title").text("Thêm mới cư dân");
+
+                    $("#btnUpdate").addClass("hide");
+                    $("#btnAdd").removeClass("hide");
+                    $("#addResidentModal").modal("show");
+                }
+            }
+        });
+    }
+
+    function getResidentInfor(residentId) {
+
+        $(".security").addClass("hide");
+        $(".res-info").removeClass("hide");
+        $("#btnAdd").removeClass("hide");
+
+        $.ajax({
+            url: "/Management/ManageUser/GetResidentInFor",
+            data: {
+                residentId: residentId
+            },
+            type: "get",
+            success: function (data) {
+                if (data.StatusCode === 0) {
+
+                    var obj = data.Data.data;
+
+                    $("#resName").val(obj.Name);
+                    $("#dob").val(obj.Dob);
+                    $("#resId").val(obj.Idenity);
+                    $("#accountId").val(obj.Id);
+
+                    $("input:radio[name=Gender]").filter("[value=" + obj.Gender + "]").prop("checked", "true");
+                    $("input:radio[name=IsHouseOwner]").filter("[value=" + obj.RoldId + "]").prop("checked", "true");
+                    if (obj.RoldId === window.UserRoleHouseHolder) {
+                        $("input:radio[name=IsHouseOwner]").prop("disabled", "disabled");
+                    } else {
+                        $("input:radio[name=IsHouseOwner]").prop("disabled", "");
+                    }
+
+
+                    var block = parseJsonToSelectTags(data.Data.blocks, obj.Block);
+                    var floor = parseJsonToSelectTags(data.Data.floors, obj.Floor);
+                    var room = parseJsonToSelectTags(data.Data.rooms, obj.HouseName);
+                    $("#houseBlock").html(block);
+                    $("#houseFloor").html(floor);
+                    $("#houseName").html(room);
+
+
+                    window.mode = window.UPDATEMODE;
+                    $("#successMsg").text("Cập nhật cư dân thành công.");
+                    $("#failedMsg").text("Cập nhật cư dân thất bại.");
+                    $("#title").text("Cập nhật cư dân");
+
+                    $("#btnUpdate").removeClass("hide");
+                    $("#btnAdd").addClass("hide");
+                    $("#addResidentModal").modal("show");
+                }
+            }
+        });
+    }
+
+
+    function addNewResident() {
+        $.ajax({
+            "url": "/Management/ManageUser/AddNewResident",
+            data: $("#addResidentForm").serialize(),
+            type: "POST",
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    $("#successMsg").html("Thêm mới cư dân thành công.");
+
+                    $("#userName").val(data.Data.username);
+                    $("#password").val(data.Data.password);
+
+                    $(".security").removeClass("hide");
+                    $(".res-info").addClass("hide");
+                    $("#btnAdd").addClass("hide");
+
+                    $("#addResSuccessNoti").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#addResSuccessNoti").fadeOut("fast");
+                    }, 3000);
+
+                    window.manageUserListTbl.ajax.reload();
+                } else if (data.StatusCode === 2) {
+                    $("#addTransMsg").text("Căn hộ này chưa có chủ nhà!");
+                    $("#msgAddFailedNoty").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#msgAddFailedNoty").fadeOut("fast");
+                    }, 3000);
+                } else {
+                    $("#addResFailedNoti").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#addResFailedNoti").fadeOut("fast");
+                    }, 3000);
+                }
+                console.log(data);
+            }
+        });
+    }
+
+    function updateResident() {
+        $.ajax({
+            "url": "/Management/ManageUser/UpdateResident",
+            data: $("#addResidentForm").serialize(),
+            type: "POST",
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    $("#addResSuccessNoti").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#addResSuccessNoti").fadeOut("fast");
+                        resetFormData("addResidentForm");
+                        $("#addResidentModal").modal("hide");
+                    }, 3000);
+
+                    window.manageUserListTbl.ajax.reload();
+                } else if (data.StatusCode === 2) {
+                    $("#addTransMsg").text("Căn hộ này chưa có chủ nhà!");
+                    $("#msgAddFailedNoty").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#msgAddFailedNoty").fadeOut("fast");
+                    }, 3000);
+                } else {
+                    $("#addResFailedNoti").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#addResFailedNoti").fadeOut("fast");
+                    }, 3000);
+                }
+                console.log(data);
+            }
+        });
+    }
+
+
+
+    function deleteConsumptionRecord(id) {
+        //        var element = $("#resident_" + id).addClass("hide");
+        window.deleteRes.push(id);
+        window.manageUserListTbl.row("#resident_" + id).remove().draw();
+        $("#delConsumptionRecordBtnGroup").removeClass("hide").addClass("show");
+    }
+    function cancelDeleteConsumptionRecord() {
+        for (var i = 0; i < window.residentList.length; i++) {
+            var originItem = window.residentList[i];
+            for (var z = 0; z < window.deleteRes.length; z++) {
+                var deleteItem = window.deleteRes[z];
+                if (originItem.Id.toString() === deleteItem) {
+                    window.manageUserListTbl.row.add(originItem).draw();
+                }
+            }
+        }
+        window.deleteRes = new Array();
+        $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
+    }
+    function commitDeleteConsumptionRecord() {
+        $.ajax({
+            url: "/Management/ManageUser/DeleteResident",
+            type: "POST",
+            data: {
+                listResId: window.deleteRes
+            },
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
+                    window.deleteRes = new Array();
+                    window.manageUserListTbl.ajax.reload();
+                } else {
+
+                }
+            }
+        });
+    }
+
+</script>
