@@ -525,13 +525,13 @@ namespace AMS.Controllers
             if (res != null && fromUser != null && fromUser.RoleId == SLIM_CONFIG.USER_ROLE_MANAGER)
             {
                 bool isUpdated = true;
-                if (mode == SLIM_CONFIG.USER_APPROVE_YES)
+                if (mode == SLIM_CONFIG.TRANS_CAT_STATUS_ENABLE)
                 {
-                    res.IsApproved = SLIM_CONFIG.USER_APPROVE_YES;
+                    res.Status = SLIM_CONFIG.TRANS_CAT_STATUS_ENABLE;
                 }
                 else if (mode == SLIM_CONFIG.USER_APPROVE_REJECT)
                 {
-                    res.IsApproved = SLIM_CONFIG.USER_APPROVE_REJECT;
+                    res.Status = SLIM_CONFIG.USER_APPROVE_REJECT;
                 }
                 else
                 {

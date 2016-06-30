@@ -15,6 +15,10 @@ namespace AMS.Service
         {
             return _houseRepository.FindById(id);
         }
+        public void Add(House house)
+        {
+            _houseRepository.Add(house);
+        }
         public House FindByHouseName(string houseName)
         {
             return _houseRepository.List.Where(h => h.HouseName.ToLower().Contains(houseName.ToLower())).First();
@@ -41,11 +45,11 @@ namespace AMS.Service
         {
             return _houseRepository.List.Where(h => h.OwnerID != null).OrderBy(h => h.HouseName).ToList();
         }
-            public void updateHouse(House h)
-            {
-                _houseRepository.Update(h);
-            }
+        public void Update(House h)
+        {
+            _houseRepository.Update(h);
         }
+    }
 
 
     public class BlockServices
@@ -60,6 +64,11 @@ namespace AMS.Service
         public List<Block> GetAllBlocks()
         {
             return _blockRepository.List.OrderBy(b => b.BlockName).ToList();
+        }
+
+        public void Add(Block block)
+        {
+            _blockRepository.Add(block);
         }
     }
 
@@ -76,7 +85,7 @@ namespace AMS.Service
             return _houseCatRepository.FindById(id);
         }
 
-       
+
     }
 
     public class UtilServiceForHouseCatServices

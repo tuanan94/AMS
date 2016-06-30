@@ -21,6 +21,8 @@ namespace AMS.Controllers
         private ReceiptDetailServices _receiptDetailServices = new ReceiptDetailServices();
         private TransactionService _transactionService = new TransactionService();
         private UtilityServiceCateoryService _utilityServiceCateoryService = new UtilityServiceCateoryService();
+        private BlockServices _blockServices = new BlockServices();
+        private HouseServices _houseServices = new HouseServices();
 
         [HttpGet]
         [Route("Management/Config/UtilityService/Create")]
@@ -563,6 +565,111 @@ namespace AMS.Controllers
             }
 
             return Json(response);
+        }
+
+        [HttpGet]
+        [Route("Management/Config/UtilityService/ViewDownloadBLockStructure")]
+        public ActionResult ViewDownloadBLockStructure()
+        {
+            return View("DownloadBlockStructure");
+        }
+        [HttpGet]
+        [Route("Management/Config/UtilityService/ViewHousesInBlock")]
+        public ActionResult ViewHousesInBlock(int blockId)
+        {
+            Block block = _blockServices.FindById(blockId);
+            if (null != block)
+            {
+                ViewBag.block = block;
+            }
+            return View("CreateHouseInBlock");
+        }
+        
+        [HttpPost]
+        [Route("Management/Config/UtilityService/CreateHouseInBlock")]
+        public ActionResult CreateHouseInBlock(BlockViewModel housesInBlock)
+        {
+            MessageViewModels response = new MessageViewModels();
+            if (null != housesInBlock.Name)
+            {
+                try
+                {
+                    Block block = new Block();
+                    block.BlockName = housesInBlock.Name;
+                    block.NoFloor = housesInBlock.NoOfFloor;
+                    block.NoFloor = housesInBlock.NoRoomPerFloor;
+                    _blockServices.Add(block);
+
+                    if (null != housesInBlock.Houses || housesInBlock.NoOfFloor == 0)
+                    {
+                        House eHouse = null;
+                        for (int i = 0; i < housesInBlock.NoOfFloor; i++)
+                        {
+                            foreach (var house in housesInBlock.Houses)
+                            {
+                                eHouse = new House();
+                                eHouse.Area = house.Area;
+                                eHouse.Floor = i.ToString();
+                                if (i == 0)
+                                {
+                                    eHouse.Floor = "G";
+                                }
+                                eHouse.HouseName = new StringBuilder(block.BlockName).Append("-").Append(eHouse.Floor).Append("-").Append(house.Name).ToString();
+                                eHouse.BlockId = block.Id;
+                                _houseServices.Add(eHouse);
+                            }
+                        }
+                        response.Data = block.Id;
+                    }
+                    else
+                    {
+                        response.StatusCode = -1;
+                        return Json(response);
+                    }
+                }
+                catch (Exception)
+                {
+                    response.StatusCode = -1;
+                    return Json(response);
+                }
+            }
+            else
+            {
+                response.StatusCode = -1;
+                return Json(response);
+            }
+            return Json(response);
+        }
+
+        [HttpGet]
+        [Route("Management/Config/UtilityService/GetHouseInBlock")]
+        public ActionResult ViewCreateHouseInBlock(int blockId)
+        {
+            List<HouseViewModel> houses = new List<HouseViewModel>();
+            Block block = _blockServices.FindById(blockId);
+            if (null != block)
+            {
+                List<House> listHouse = block.Houses.ToList();
+                HouseViewModel house = null;
+                foreach (var h in listHouse)
+                {
+                    house = new HouseViewModel();
+                    house.Id = h.Id;
+                    house.Name = h.HouseName;
+                    house.FloorName = h.Floor;
+                    house.Area = h.Area.Value;
+                    if (h.OwnerID == null)
+                    {
+                        house.Status = -1;
+                    }
+                    else
+                    {
+                        house.Status = -1;
+                    }
+                    houses.Add(house);
+                }
+            }
+            return Json(houses, JsonRequestBehavior.AllowGet);
         }
 
 

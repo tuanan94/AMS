@@ -46,6 +46,14 @@ window.Disable = 2;
 window.Utility_Service_Water = 2;
 window.Utility_Service_Fixed_Cost = 5;
 
+window.UserStatusWaiting = 0;
+window.UserStatusEnable = 1;
+window.UserStatusReject = 2;
+window.UserStatusDisable = 4;
+
+window.UserRoleResident = 3;
+window.UserRoleHouseHolder = 4;
+
 
 
 function loadHelpdeskServiceType() {
@@ -460,12 +468,7 @@ $(document).ready(function () {
         submitHandler: function () {
             addNewHdRequest();
         }
-
-
-
     });
-
-    
 
     $("#addHdSrvCat").on("click", function () {
         console.log($("#hdSrvCategoryForm").serialize());
@@ -530,9 +533,6 @@ $(document).ready(function () {
                 }
             }
         }
-
-
-
     });
     $("#addNewHdRequest").on("click", function () {
         console.log($("#createHdService").serialize());
@@ -542,210 +542,6 @@ $(document).ready(function () {
         console.log($("#updateHelpdeskRequestForm").serialize());
         //        $("#createHdService").valid();
         $("#createHdService").submit();
-    });
-    var userId = document.getElementById("hdRequestTbl");
-    if (null !== userId && undefined != userId) {
-        userId = userId.dataset.userid;
-    }
-    var datatable = $("#hdRequestTbl").DataTable({
-        "ajax": {
-            url: "/Home/HelpdeskRequest/GetListRequest?userId=" + userId,
-            dataSrc: ""
-        },
-
-        "bLengthChange": false,
-        "bInfo": false,
-
-        //"serverSide": true,
-        "columns": [
-            { data: "HdReqTitle" },
-            { data: "HdReqTitle" },
-            { data: "HdReqHouse" },
-            { data: "HdReqSrvName" },
-            { data: "HdReqStatus" },
-            { data: "HdReqSupporter" },
-            { data: "HdReqCreateDate" },
-            { data: "HdReqDeadline" },
-            { data: "HdReqId" }
-        ],
-        "columnDefs": [
-            {
-                "searchable": false,
-                "orderable": false,
-                "targets": 0
-            },
-            {
-                "targets": 2,
-                "data": "HdReqHouse",
-                "render": function (data, type, full, meta) {
-                    if (type === "display" || type === "filter") {
-                        return "<span class='label house-color label-warning'>" + data + "</span>";
-                    }
-                    return data;
-                }
-            },
-            {
-                "targets": 4,
-                "data": "HdReqStatus",
-                "render": function (data, type, full) {
-                    if (type === "display" || type === "filter") {
-                        var msg = "";
-                        if (data === window.StatusOpen) {
-                            msg = "Chưa giải quyết";
-                            return "<span class='label label-info'>" +
-                                msg + "</div>";
-                        } else if (data === window.StatusProcessing) {
-                            msg = "Đang xử lý";
-                            return "<span class='label processing'>" +
-                                msg + "</div>";
-                        } else if (data === window.StatusDone) {
-                            msg = "Hoàn thành";
-                            return "<span class='label label-success'>" +
-                                msg + "</div>";
-                        } else if (data === window.StatusClose) {
-                            msg = "Đóng";
-                            return "<span class='label label-danger'>" +
-                                msg + "</div>";
-                        } else if (data === window.StatusCancel) {
-                            msg = "Hủy";
-                            return "<span class='label label-gray'>" +
-                                msg + "</div>";
-                        }
-                    }
-                    return data;
-                }
-            },
-            {
-                "targets": 5,
-                "data": "HdReqSupporter",
-                "render": function (data, type, full) {
-                    if (type === "display" || type === "filter") {
-                        if (data === null || data === undefined) {
-                            return "Đang chờ xử lý";
-                        }
-                    }
-                    return data;
-                }
-            },
-            {
-                "targets": 6,
-                "data": "HdReqCreateDate",
-                "render": function (data, type, full, meta) {
-                    if (type === "display" || type === "filter") {
-                        var dateTime = data.split(" ");
-                        return "<span class='label date-color label-warning'>" + dateTime[0] +
-                            "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";
-                    }
-                    return data;
-                }
-            },
-            {
-                "targets": 7,
-                "data": "HdReqDeadline",
-                "render": function (data, type, full, meta) {
-                    if (type === "display" || type === "filter") {
-                        if (data !== null && data !== undefined) {
-                            var dateTime = data.split(" ");
-                            return "<span class='label date-color label-warning'>" + dateTime[0] +
-                                "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";
-                        }
-                        return "Đang xác nhận";
-                    }
-                    return data;
-                }
-            },
-            {
-                "targets": 8,
-                "data": "HdReqId",
-                "render": function (data, type, full, meta) {
-                    if (type === "display" || type === "filter") {
-                        return "<span class='btn btn-default btn-xs' onclick='getHelpdeskDetail(" + data + ")'> <i class='fa fa-pencil'></i> </span>";
-                    }
-                    return data;
-                }
-            }
-        ], "order": [[1, 'asc']]
-    });
-    generateTableIndex(datatable);
-
-    userId = document.getElementById("residentApproveTbl");
-    if (userId) {
-        userId = userId.dataset.fromuserid;
-    }
-    window.dataTable2 = $("#residentApproveTbl").DataTable({
-        "ajax": {
-            url: "/Management/ResidentApprovement/GetResidentApprovementList?userId=" + userId,
-            dataSrc: ""
-        },
-        "rowId": 'UserId',
-        "bLengthChange": false,
-        "bInfo": false,
-        "columns": [
-            { data: "UserId" },
-            { data: "FullName" },
-            { data: "HouseName" },
-            { data: "HouseHolderName" },
-            { data: "CreateDate" },
-            { data: "UserId" }
-        ],
-        "columnDefs": [
-            {
-                "searchable": false,
-                "orderable": false,
-                "targets": 0
-            },
-            {
-                "targets": 2,
-                "data": "HouseName",
-                "render": function (data, type, full, meta) {
-                    if (type === "display" || type === "filter") {
-                        return "<span class='label house-color label-warning'>" + data + "</span>";
-                    }
-                    return data;
-                }
-            },
-            {
-                "targets": 4,
-                "data": "CreateDate",
-                "render": function (data, type, full, meta) {
-                    if (type === "display" || type === "filter") {
-                        if (data !== null && data !== undefined) {
-                            var dateTime = data.split(" ");
-                            return "<span class='label date-color label-warning'>" + dateTime[0] +
-                                "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";
-                        }
-                        return "Đang xác nhận";
-                    }
-                    return data;
-                }
-            },
-            {
-                "targets": 5,
-                "data": "UserId",
-                "render": function (data, type, full, meta) {
-                    if (type === "display" || type === "filter") {
-                        var test = data + ",'" + full.FullName + "','" + full.HouseName + ",";
-                        return "<td class='text-right'> " +
-                   "<span onclick='resInfoDetail(" + data + ")' class='btn btn-default btn-xs lbl-margin-right'>" +
-                    "<i class='fa fa-info-circle'></i>" +
-                   "</span> " +
-                    "<span class='btn btn-primary btn-xs lbl-margin-right' onclick='showConfirmMsg(\"" + "accept" + "\"," + "\"" + data + "\",\"" + full.FullName + "\"" + ",\"" + full.HouseName + "\"" + ")'>" +
-                        "<i class='fa fa-check-square-o'></i>" +
-                    "</span>" +
-                    "<span class='btn btn-danger btn-xs lbl-margin-right' onclick='showConfirmMsg(\"" + "reject" + "\"," + "\"" + data + "\",\"" + full.FullName + "\"" + ",\"" + full.HouseName + "\"" + ")'>" +
-                        "<i class='fa fa-times'></i>" +
-                    "</span>" +
-                "</td>";
-                    }
-                    return data;
-                }
-            }
-
-        ], "order": [[1, "asc"]]
-    });
-    generateTableIndex(dataTable2);
-    $('#residentApproveTbl').on('click', 'tr', function () {
-        window.currentRow = $(this);
     });
 
     var dataTable3 = $("#hdSrvCatTable").DataTable({
@@ -811,6 +607,8 @@ function activeNavigationBar() {
         $("#balanceSheetNav").addClass("active");
     } else if (pathName.indexOf("/Config/") > -1) {
         $("#configNav").addClass("active");
+    } else if (pathName.indexOf("/ManageUser/") > -1) {
+        $("#userNav").addClass("active");
     } else {
     }
 }
@@ -1178,7 +976,7 @@ function calculateTotal() {
 
 
 window.getHouseMode = "";
-function parseJsonToSelectTag(floor, room) {
+function parseJsonToSelectTag(floor, room, roomId) {
     var selectTagList = [];
     var selectTag = "";
     if (getHouseMode !== "floor") {
@@ -1199,7 +997,7 @@ function parseJsonToSelectTag(floor, room) {
     $("#houseName").html(selectTagList);
 }
 
-function getRoomAndFloor(blockId, floorName, mode) {
+function getRoomAndFloor(blockId, floorName, mode, callback) {
     window.getHouseMode = mode;
     $.ajax({
         type: "GET",
@@ -1211,15 +1009,19 @@ function getRoomAndFloor(blockId, floorName, mode) {
         success: function (data) {
             var floor = data.Data.Floor;
             var room = data.Data.Room;
-            var msg = "<option value=\"\">" + "Tòa nhà không có dân cư ở" + "</option>";
-            var msg2 = "<option value=\"\">" + "Tần của toàn nhà không có dân cư ở" + "</option>";
+            var roomId = data.Data.RoomId;
+            var msg = "<option value=\"\">" + "Không có dữ liệu " + "</option>";
+            var msg2 = "<option value=\"\">" + "Không có dữ liệu" + "</option>";
             if (floor === undefined || floor === null || floor.length === 0) {
                 $("#houseFloor").html(msg);
                 $("#houseName").html(msg2);
             } else if (room === undefined || room === null || room.length === 0) {
                 $("#houseName").html(msg2);
             } else {
-                parseJsonToSelectTag(floor, room, mode);
+                parseJsonToSelectTag(floor, room, roomId, mode);
+            }
+            if (callback && isFunction(callback)) {
+                callback();
             }
         },
         error: function () {
@@ -1237,7 +1039,7 @@ $(document).ready(function () {
     //        });
 
 
-    
+
     //        jQuery.validator.addClassRules("order-item-qty", {
     //            required: true,
     //            number: true
@@ -1259,8 +1061,8 @@ $(document).ready(function () {
     });
 
     $(".ams-modal").on("hidden.bs.modal", function () {
-        $(this).closest("form").find("input[type=text], textarea").val("");
-        $(this).closest("form").find("select option").prop("selected", function () {
+        $(this.querySelector("form")).find("input[type=text], textarea").val("");
+        $(this.querySelector("form")).find("select option").prop("selected", function () {
             return this.defaultSelected;
         });
         removeHiddenBackgroundPopup();
@@ -1398,7 +1200,7 @@ function electricAggressiveCalculating(consumption, rangePrices) {
     var total = 0;
     for (var i = 0; i < rangePrices.length; i++) {
         rangePrice = rangePrices[i];
-        var toAmount = parseFloat(rangePrice.ToAmount) ;
+        var toAmount = parseFloat(rangePrice.ToAmount);
         var fromAmount = parseFloat(rangePrice.FromAmount);
 
         var calculatingPart = 0;
@@ -1424,7 +1226,7 @@ function waterAggressiveCalculating(consumption, rangePrices) {
 
         rangePrice = rangePrices[i];
         toAmount = parseFloat(rangePrice.ToAmount);
-        fromAmount = parseFloat(rangePrice.FromAmount) ;
+        fromAmount = parseFloat(rangePrice.FromAmount);
 
         var calculatingPart = 0;
         if (consumption >= toAmount) {

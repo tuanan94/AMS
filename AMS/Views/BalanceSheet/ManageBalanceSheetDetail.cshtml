@@ -581,9 +581,9 @@
             "data": $("#addTransactionTypeForm").serialize(),
             "success": function (data) {
                 if (data.StatusCode === 0) {
-                    $("#successAddTransTypeNotify").fadeIn("fast");
+                    $("#successAddTransTypeNotify").fadeIn("slow");
                     setTimeout(function () {
-                        $("#successAddTransTypeNotify").fadeOut("fast");
+                        $("#successAddTransTypeNotify").fadeOut("slow");
                         resetFormData("addTransactionTypeForm");
                     }, 3000);
                 }
@@ -687,29 +687,29 @@
             data: $("#addIncomeLineForm").serialize(),
             success: function (data) {
                 if (data.StatusCode === 0) {
-                    $("#successAddTransNotify").fadeIn("fast");
+                    $("#successAddTransNotify").fadeIn("slow");
                     setTimeout(function () {
                         resetFormData("addIncomeLineForm");
-                        $("#successAddTransNotify").fadeOut("fast");
+                        $("#successAddTransNotify").fadeOut("slow");
                         $("#addIncomeLineModal").modal("hide");
                     }, 3000);
                     window.listIncomeTable.ajax.reload();
                 } else if (data.StatusCode === 2) {
                     $("#addTransMsg").text("Không tìm thấy giao dịch");
-                    $("#failedAddTransWithMsgNotify").fadeIn("fast");
+                    $("#failedAddTransWithMsgNotify").fadeIn("slow");
                     setTimeout(function () {
-                        $("#failedAddTransWithMsgNotify").fadeOut("fast");
+                        $("#failedAddTransWithMsgNotify").fadeOut("slow");
                     }, 3000);
                 } else if (data.StatusCode === 3) {
                     $("#addTransMsg").text("Bảng thu chi đã đóng");
-                    $("#failedAddTransWithMsgNotify").fadeIn("fast");
+                    $("#failedAddTransWithMsgNotify").fadeIn("slow");
                     setTimeout(function () {
-                        $("#failedAddTransWithMsgNotify").fadeOut("fast");
+                        $("#failedAddTransWithMsgNotify").fadeOut("slow");
                     }, 3000);
                 } else {
-                    $("#failedAddTransNotify").fadeIn("fast");
+                    $("#failedAddTransNotify").fadeIn("slow");
                     setTimeout(function () {
-                        $("#failedAddTransNotify").fadeOut("fast");
+                        $("#failedAddTransNotify").fadeOut("slow");
                     }, 3000);
                 }
                 console.log(data);
@@ -754,9 +754,9 @@
                         $("#failedAddTransWithMsgNotify").fadeOut("slow");
                     }, 3000);
                 } else {
-                    $("#failedAddTransNotify").fadeIn("fast");
+                    $("#failedAddTransNotify").fadeIn("slow");
                     setTimeout(function () {
-                        $("#failedAddTransNotify").fadeOut("fast");
+                        $("#failedAddTransNotify").fadeOut("slow");
                     }, 3000);
                 }
                 console.log(data);
@@ -812,16 +812,16 @@
             data: $("#closeMonthlyBalanceSheetForm").serialize(),
             success: function (data) {
                 if (data.StatusCode === 0) {
-                    $("#successCloseBlsNotify").fadeIn("fast");
+                    $("#successCloseBlsNotify").fadeIn("slow");
                     resetFormData("closeMonthlyBalanceSheetForm");
                     setTimeout(function () {
-                        $("#successCloseBlsNotify").fadeOut("fast");
+                        $("#successCloseBlsNotify").fadeOut("slow");
                         location.href = "/Management/BalanceSheet/ManageBalanceSheetView";
                     }, 3000);
                 } else {
-                    $("#failedCloseBlsNotify").fadeIn("fast");
+                    $("#failedCloseBlsNotify").fadeIn("slow");
                     setTimeout(function () {
-                        $("#failedCloseBlsNotify").fadeOut("fast");
+                        $("#failedCloseBlsNotify").fadeOut("slow");
                     }, 3000);
                 }
             }

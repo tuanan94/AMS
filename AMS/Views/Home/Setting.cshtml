@@ -1,9 +1,8 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Setting";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
     House curHouse = ViewBag.curHouse;
-    var pendingMembers = curHouse.Users.Where(u => u.IsApproved != 1).ToList();
+    var pendingMembers = curHouse.Users.Where(u => u.Status != 1).ToList();
 }
 
 <link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css" />
@@ -39,29 +38,29 @@
                             <i class="icon-user-1"></i> Thành viên đang đợi duyệt
                         </div>
                         <div class="panel-body" id="pendingMember">
-                            
+
                             <div class="row" style="text-align:center">
                                 @{
                                     foreach (User pendingU in pendingMembers)
                                     {   <div class="familymember">
-                                    <a href="#" class="" onclick="LoadUserProfile(@pendingU.Id)">
-                                        <div style="height:120px;float:left">
-                                            <img src="@(pendingU.ProfileImage==null||pendingU.ProfileImage.Equals("")?"/Content/Images/defaultProfile.png":pendingU.ProfileImage)" style="height:80%" />
-                                            <div style="margin-top: 5px; font-size: small;font-weight: 700;background-color: aliceblue;">
-                                                @pendingU.Fullname
-                                            </div>
+                                        <a href="#" class="" onclick="LoadUserProfile(@pendingU.Id)">
+                                            <div style="height:120px;float:left">
+                                                <img src="@(pendingU.ProfileImage==null||pendingU.ProfileImage.Equals("")?"/Content/Images/defaultProfile.png":pendingU.ProfileImage)" style="height:80%" />
+                                                <div style="margin-top: 5px; font-size: small;font-weight: 700;background-color: aliceblue;">
+                                                    @pendingU.Fullname
+                                                </div>
 
-                                        </div>
-                                    </a>
-                                            <div>
-                                                <button class="btn cancelRequest btn-danger" onclick="deleteRequest(@pendingU.Id)">
-                                                    Hủy yêu cầu
-                                                </button>
                                             </div>
+                                        </a>
+                                        <div>
+                                            <button class="btn cancelRequest btn-danger" onclick="deleteRequest(@pendingU.Id)">
+                                                Hủy yêu cầu
+                                            </button>
                                         </div>
+                                    </div>
                                     }
                                 }
-                                
+
                             </div>
                         </div>
                     </div>
@@ -156,25 +155,25 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-4" style="text-align:center">
-                        <img src="/Content/images/defaultProfile.png" style="width:100%;height:auto" id="addNewMemberProfilePreview"/>
+                        <img src="/Content/images/defaultProfile.png" style="width:100%;height:auto" id="addNewMemberProfilePreview" />
                         <button class="btn btn-primary btn-xs" style="width:100%;margin-top:10px" onclick="chooseNewMemberProfile()">Chọn ảnh đại diện</button>
-                        <input type="file" id="selectNewMemberProfileImage" style="display:none"/>
+                        <input type="file" id="selectNewMemberProfileImage" style="display:none" />
                         <div class="form-group">
                             <label>Cư trú theo diện</label>
                             <div>
                                 <input type="radio" name="type" value="KT1" />KT1
                             </div>
                             <div>
-                                <input type="radio" name="type" value="KT2"/>KT2
+                                <input type="radio" name="type" value="KT2" />KT2
                             </div>
                             <div>
-                                <input type="radio" name="type" value="KT3"/>KT3
+                                <input type="radio" name="type" value="KT3" />KT3
                             </div>
                             <div>
-                                <input type="radio" name="type" value="KT4"/>KT4
+                                <input type="radio" name="type" value="KT4" />KT4
                             </div>
                             <div>
-                                <input type="radio" name="type" value="None"/>Chưa đăng kí
+                                <input type="radio" name="type" value="None" />Chưa đăng kí
                             </div>
 
                         </div>
@@ -196,7 +195,7 @@
                             <select class="form-control" id="gender">
                                 <option value="@SLIM_CONFIG.USER_SEX_MALE" selected="selected">Nam</option>
                                 <option value="@SLIM_CONFIG.USER_SEX_FEMALE">Nữ</option>
-                                </select>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label>Ngày tháng năm sinh</label>
@@ -225,10 +224,10 @@
                 </div>
                 <div id="alertInfo" class="alert-danger"></div>
                 <div id="alertInfoSuccess" class="alert-success" style="text-align:center"></div>
-                
+
             </div>
             <div class="modal-footer">
-                <button type="button" id="sendrequestButton"  class="btn btn-primary" onclick="sendCreateMemberRequest()">Gửi đăng kí</button>
+                <button type="button" id="sendrequestButton" class="btn btn-primary" onclick="sendCreateMemberRequest()">Gửi đăng kí</button>
 
                 <button type="button" id="createNewCloseBtn" class="btn btn-default" data-dismiss="modal">Đóng</button>
             </div>
@@ -349,7 +348,7 @@
         if (files.length > 0) {
             data.append("HelpSectionImages", files[0]);
         }
-       // progessBar(true);
+        // progessBar(true);
         $.ajax({
             url: "/Image/Upload/",
             type: "POST",
@@ -359,12 +358,12 @@
             success: function (dir) {
                 //alert(dir)
                 $("#addNewMemberProfilePreview").attr("src", dir);
-         //       progessBar(false);
+                //       progessBar(false);
 
             },
             error: function (er) {
                 alert(er);
-           //     progessBar(false);
+                //     progessBar(false);
             }
 
         });
@@ -462,7 +461,7 @@
             $("#alertInfo").append('Bạn phải chọn diện cư trú <br/>');
 
         }
-           
+
         var fullname  = $("#createMemberFullname").val();
         if (fullname == ""){
             isValid = false;
@@ -498,7 +497,7 @@
         var gender = $( "#gender option:selected" ).val();
         //var info = type + " "  + fullname + " "+ username + " " + dateOfBirth;
         //alert(info);
-       
+
         if(isValid){
             $.ajax({
                 url: "/Home/addMember/",
@@ -523,7 +522,7 @@
                         disableAll()
                     }
 
-                  //  alert(successData)
+                    //  alert(successData)
 
                 },
                 error: function (er) {
@@ -563,6 +562,6 @@
             }
 
         });
-        
+
     }
 </script>

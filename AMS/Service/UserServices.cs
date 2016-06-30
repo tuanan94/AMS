@@ -15,22 +15,28 @@ namespace AMS.Service
         {
             return userRepository.FindById(id);
         }
-        public List<User> FindUserByRole(int id)
+
+        public bool FindByUserName(string username)
         {
-            return userRepository.List.Where(u => u.RoleId == SLIM_CONFIG.USER_ROLE_SUPPORTER).ToList();
+            return userRepository.List.Any(u => u.Username.Equals(username));
         }
+       
         public List<User> GetAllUnapproveUsers()
         {
             return
                 userRepository.List.Where(
-                    u => u.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT 
-
-                    && u.IsApproved != null && u.IsApproved == SLIM_CONFIG.USER_APPROVE_WAITING).ToList();
+                    u => u.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT
+                    && u.Status != null && u.Status == SLIM_CONFIG.USER_APPROVE_WAITING).ToList();
         }
 
         public void Update(User u)
         {
             userRepository.Update(u);
+        }
+
+        public void Add(User u)
+        {
+            userRepository.Add(u);
         }
 
         public List<User> GetKindOfUserInHouse(int houseId)
@@ -40,6 +46,18 @@ namespace AMS.Service
                     .Select(r => r.First())
                     .ToList();
         }
-
+        public List<User> GetAllResident()
+        {
+            return userRepository.List.Where(u => u.Status != null && u.Status != SLIM_CONFIG.USER_APPROVE_WAITING && u.Status != SLIM_CONFIG.USER_STATUS_DELETE
+                && u.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT || u.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER).
+                OrderByDescending(userRepository => userRepository.CreateDate)
+                    .ToList();
+        }
+        public List<User> GetAllSupporter()
+        {
+            return userRepository.List.Where(u => u.Status != null && u.Status != SLIM_CONFIG.USER_STATUS_DELETE && u.RoleId == SLIM_CONFIG.USER_ROLE_SUPPORTER).
+                OrderByDescending(userRepository => userRepository.CreateDate)
+                    .ToList();
+        }
     }
 }

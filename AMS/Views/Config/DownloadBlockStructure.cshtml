@@ -1,0 +1,213 @@
+﻿@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+}
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="heading-tab">
+            <i class="fa fa-list"> Quản lý nhà</i>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li>
+                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-file-text-o"></i> Phí sinh họat</a>
+                </li>
+                <li>
+                    <a href="/Management/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Quản lý nhà</a>
+                </li>
+                <li class="active">
+                    <a href="/Management/Config/UtilityService/ViewDownloadBLockStructure"><i class="fa fa fa-plus"></i> Cấu trúc phòng</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="panel-body">
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="">
+                    <div class="panel panel-default" style="border-color: transparent">
+                        <form id="addUtilServiceForm" class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <div class="col-md-offset-3 col-md-6">
+                                    <div class="form-group">
+                                        <fieldset class="scheduler-border less-padding">
+                                            <legend class="scheduler-border">Thông tin tòa nhà</legend>
+                                            <div class="form-group">
+                                                <div class="form-group">
+                                                    <label class="col-md-4 control-label">Tên tòa nhà</label>
+                                                    <div class="col-md-7 ">
+                                                        <input type="text" id="blockName" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-4 control-label">Số tầng</label>
+                                                    <div class="col-md-7 ">
+                                                        <input type="text" id="numberOfFloor" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-4 control-label">Số phòng mỗi tầng</label>
+                                                    <div class="col-md-7 ">
+                                                        <input id="numberOfRoom" type="text" name="blockName" value="5" class="form-control" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="pull-right">
+                                            <span class="btn btn-info" onclick="generateTohouse()"> Tạo phòng</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-8">
+                                    <fieldset class="scheduler-border less-padding">
+                                        <legend class="scheduler-border">Tên phòng mỗi tầng</legend>
+                                        <div class="form-group">
+                                            <div class="col-md-offset-1 col-md-5">
+                                                <strong style="align-content: center">Tên phòng</strong>
+                                            </div>
+                                            @*                                            <div class="col-md-5">*@
+                                            @*                                                <strong style="align-content: center">Thành tên</strong>*@
+                                            @*                                            </div>*@
+                                        </div>
+                                        <div id="roomInFloorWrapper">
+                                            @{
+                                                for (int i = 0; i < 5; i++)
+                                                {
+                                                    <div class="form-group" id="row_id_@i">
+                                                        <span style="font-size: 1.2em" class="col-md-1 control-label">#@(i + 1)</span>
+                                                        <div class="col-md-5">
+                                                            <input id="house_name_@i" name="" type="text" class="form-control order-item room-name">
+                                                        </div>
+                                                        <label id="house_name_to_name_@i" style="text-align: left" class="col-md-4 control-label"></label>
+                                                        <div class="col-md-2">
+                                                            <input id="house_area_@i" name="" type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $(".room-name").on("change", function (event) {
+            var blockName = $("#blockName").val();
+            if (blockName) {
+                var nextElement = event.target.parentNode.nextElementSibling;
+                nextElement.textContent = $("#blockName").val() + "-01-" + event.target.value;
+            }
+        });
+        $("#numberOfRoom").on("change", function (event) {
+            if (event.which >= 37 && event.which <= 40) {
+                event.preventDefault();
+            }
+            var roomNumber = event.target.value;
+            if (roomNumber && !isNaN(roomNumber) && parseInt(roomNumber) <= 100) {
+                $("#roomInFloorWrapper").html("");
+                for (var i = 0; i < roomNumber; i++) {
+                    var inputId = "house_name_" + i;
+                    var labelId = "house_name_to_name" + i;
+                    var rowId = "row_id_" + i;
+                    var houseArea = "house_area_" + i;
+                    var label = $("<span>", {
+                        "class": "col-md-1 control-label",
+                        "css": {
+                            "font-size": "1.2em"
+                        },
+                        "text": "#" + (i + 1)
+                    });
+
+                    var div = $("<div>", {
+                        "class": "col-md-5"
+
+                    }).append(
+                    $("<input>", {
+                        "class": "form-control order-item",
+                        "change": function (event2) {
+                            var blockName = $("#blockName").val();
+                            if (blockName) {
+                                var nextElement = event2.target.parentNode.nextElementSibling;
+                                nextElement.textContent = $("#blockName").val() + "-01-" + event2.target.value;
+                            }
+                        },
+                        "id": inputId
+                    }));
+
+                    var label2 = $("<label>", {
+                        "id": labelId,
+                        "class": "col-md-4 control-label",
+                        "css": {
+                            "text-align": "left"
+                        }
+                    });
+
+                    var div2 = $("<div>", {
+                        "class": "col-md-2"
+                    }).append(
+                    $("<input>", {
+                        "class": "form-control order-item",
+                    }));
+                    var row = $("<div>", {
+                        "class": "form-group",
+                        "type": "text",
+                        "id": houseArea
+                    }).append(label).append(div).append(label2).append(div2);
+                    $("#roomInFloorWrapper").append(row);
+                }
+            } else {
+            }
+        });
+        $("#blockName").on("change", function (event) {
+            var roomInFloor = $("#numberOfRoom").val();
+            if (roomInFloor && !isNaN(roomInFloor) && parseInt(roomInFloor) <= 100) {
+                for (var i = 0; i < roomInFloor; i++) {
+                    var houseName = $("#house_name_" + (i)).val();
+                    if (houseName) {
+                        $("#house_name_to_name_" + (i)).text(event.target.value + "-01-" + houseName);
+                    }
+                }
+            }
+        });
+    });
+
+    function generateTohouse() {
+        var blockName = $("#blockName").val();
+        var noOfFloor = $("#numberOfFloor").val();
+        var noRoomPerFloor = $("#numberOfRoom").val();
+        var houses = [];
+        if (noRoomPerFloor && !isNaN(noRoomPerFloor) && parseInt(noRoomPerFloor) <= 100) {
+            for (var i = 0; i < noRoomPerFloor; i++) {
+                var houseName = $("#house_name_" + (i)).val();
+                var houseArea = $("#house_area_" + (i)).val();
+                var obj = {
+                    Area: houseArea,
+                    Name: houseName,
+                }
+                houses.push(obj);
+            }
+        }// remember to validate when there is one row empty
+        $.ajax({
+            type: "POST",
+            data: {
+                Name: blockName,
+                NoOfFloor: noOfFloor,
+                NoRoomPerFloor: noRoomPerFloor,
+                Houses: houses
+            },
+            url: "/Management/Config/UtilityService/CreateHouseInBlock",
+            success: function (data) {
+                location.href = "/Management/Config/UtilityService/ViewHousesInBlock?blockId=" + data.Data;
+            }
+
+        });
+    }
+</script>

@@ -8,7 +8,7 @@ namespace AMS.Service
 {
     interface IHelpdeskRequestHelpdeskSupporterService
     {
-        List<HelpdeskRequestHelpdeskSupporter> GetCurrentHelpdeskRequest(int helpdeskSupporterId);
+//        List<HelpdeskRequestHelpdeskSupporter> GetCurrentHelpdeskRequest(int helpdeskSupporterId);
 
     }
 }

@@ -84,6 +84,10 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="RestSharp, Version=105.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.2\lib\net45\RestSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -138,6 +142,18 @@
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Twilio.Api, Version=3.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Twilio.4.7.2\lib\3.5\Twilio.Api.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Twilio.Mvc, Version=3.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Twilio.Mvc.3.2.0\lib\3.5\Twilio.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Twilio.Twiml, Version=3.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Twilio.TwiML.3.5.0\lib\3.5\Twilio.Twiml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -241,10 +257,12 @@
     </Compile>
     <Compile Include="Constant.cs" />
     <Compile Include="Constant\AmsConstants.cs" />
+    <Compile Include="Constant\CommonUtil.cs" />
     <Compile Include="Constant\RoleEnum.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BalanceSheetController.cs" />
     <Compile Include="Controllers\ConfigController.cs" />
+    <Compile Include="Controllers\HelpdeskRequestController.cs" />
     <Compile Include="Controllers\HelpdeskServiceController.cs" />
     <Compile Include="Controllers\HelpdeskSupporterController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
@@ -253,6 +271,7 @@
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ManagementController.cs" />
+    <Compile Include="Controllers\ManageUserController.cs" />
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\ReceiptController.cs" />
@@ -314,6 +333,7 @@
     <Compile Include="Models\ConfigViewModels.cs" />
     <Compile Include="Models\HelpdeskServiceModels.cs" />
     <Compile Include="Models\HouseModels.cs" />
+    <Compile Include="Models\HouseViewModels.cs" />
     <Compile Include="Models\ManageHouseViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -648,9 +668,9 @@
     <Content Include="Views\Home\Test.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Management\_helpdeskServiceCategoryTablePartial.cshtml" />
-    <Content Include="Views\Home\CreateHdRequest.cshtml" />
-    <Content Include="Views\Home\ViewRequestingHdRequestsOfManager.cshtml" />
-    <Content Include="Views\Home\ViewHistoryHdRequests.cshtml" />
+    <Content Include="Views\HelpdeskRequest\CreateHdRequest.cshtml" />
+    <Content Include="Views\HelpdeskRequest\ViewRequestingHdRequestsOfManager.cshtml" />
+    <Content Include="Views\HelpdeskRequest\ViewHistoryHdRequests.cshtml" />
     <Content Include="Views\Home\TimeLine.cshtml" />
     <Content Include="Views\HelpdeskSupporter\Index.cshtml" />
     <Content Include="Views\HelpdeskSupporter\__HelpdeskSupporterLayout.cshtml" />
@@ -666,11 +686,11 @@
     <Content Include="Views\Management\_helpdeskServiceCategoryPartial.cshtml" />
     <Content Include="Views\Management\HelpdeskServiceTabPartial.cshtml" />
     <Content Include="Views\Management\ManageRequest.cshtml" />
-    <Content Include="Views\Home\_helpdeskRequestDetail.cshtml" />
+    <Content Include="Views\HelpdeskRequest\_helpdeskRequestDetail.cshtml" />
     <Content Include="Views\House\Index.cshtml" />
     <Content Include="Views\Profile\Index.cshtml" />
     <Content Include="Views\Home\Setting.cshtml" />
-    <Content Include="Views\Home\ViewHistoryHdRequestDetail.cshtml" />
+    <Content Include="Views\HelpdeskRequest\ViewHistoryHdRequestDetail.cshtml" />
     <Content Include="Views\Management\_helpdeskSeviceTablePartial.cshtml" />
     <Content Include="Views\BalanceSheet\BalanceSheet.cshtml" />
     <Content Include="Views\BalanceSheet\ManageTransaction.cshtml" />
@@ -693,6 +713,10 @@
     <Content Include="Views\Receipt\DownloadWaterConsumptionTemplate.cshtml" />
     <Content Include="Views\Config\ManageUtilityService.cshtml" />
     <Content Include="Views\Config\UpdateUtilityService.cshtml" />
+    <Content Include="Views\ManageUser\ManageSupporter.cshtml" />
+    <Content Include="Views\ManageUser\ManageResident.cshtml" />
+    <Content Include="Views\Config\DownloadBlockStructure.cshtml" />
+    <Content Include="Views\Config\CreateHouseInBlock.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

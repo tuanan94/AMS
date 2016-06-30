@@ -34,7 +34,7 @@
                         <table id="managerOrderTbl" data-userid="@User.Identity.GetUserId()" class="table table-hover table-bordered">
                             <thead>
                                 <tr>
-                                    <th></th>
+                                    <th>#</th>
                                     <th>Loại</th>
                                     <th>Tiêu đề</th>
                                     <th>Căn hộ</th>
@@ -46,7 +46,7 @@
                             </thead>
                             <tfoot>
                                 <tr>
-                                    <th></th>
+                                    <th>#</th>
                                     <th>Loại</th>
                                     <th>Tiêu đề</th>
                                     <th>Căn hộ</th>
@@ -98,6 +98,8 @@
             },
             {
                 "targets": 1,
+                "width": "1%",
+                "className": "dt-center",
                 "data": "IsAutomation",
                 "render": function (data, type, full, meta) {
                     if (type === "display" || type === "filter") {
@@ -109,6 +111,10 @@
                     }
                     return data;
                 }
+            },
+            {
+                "targets": 2,
+                "width": "30%"
             },
             {
                 "targets": 3,
@@ -128,6 +134,7 @@
             {
                 "targets": 4,
                 "data": "TotalOrder",
+                "width": "10%",
                 "render": function (data, type, full, meta) {
                     if (type === "display" || type === "filter") {
                         if (full.IsAutomation !== window.StatusAutomationReceipt) {
@@ -157,6 +164,7 @@
             {
                 "targets": 6,
                 "data": "CreateDate",
+                "width": "15%",
                 "render": function (data, type, full) {
                     if (type === "display" || type === "filter") {
                         if (data !== null && data !== undefined) {
@@ -167,23 +175,23 @@
                     }
                     return data;
                 }
-            }, {
-                "targets": 7,
-                "data": "ReceiptId",
-                "render": function (data, type, full) {
-                    if (type === "display" || type === "filter") {
-                        if (data !== null && data !== undefined) {
-                            return "<span onclick='editOrderDetail(\"" + data + "\",\"" + full.IsAutomation+ "\",\"" + fromUserId + "\")' class='btn btn-default btn-xs lbl-margin-right'>" +
-                                "<i class='fa fa-pencil'></i>" +
-                                "</span> ";
-                        }
-                    }
-                    return data;
+    }, {
+        "targets": 7,
+        "data": "ReceiptId",
+        "render": function (data, type, full) {
+            if (type === "display" || type === "filter") {
+                if (data !== null && data !== undefined) {
+                    return "<span onclick='editOrderDetail(\"" + data + "\",\"" + full.IsAutomation+ "\",\"" + fromUserId + "\")' class='btn btn-default btn-xs lbl-margin-right'>" +
+                        "<i class='fa fa-pencil'></i>" +
+                        "</span> ";
                 }
             }
-            ]
-        });
-        generateTableIndex(dataTable5);
+            return data;
+        }
+    }
+    ]
+    });
+    generateTableIndex(dataTable5);
     });
     function editOrderDetail(receiptId, isAutomation, userId) {
         if (parseInt(isAutomation,10) === window.StatusAutomationReceipt) {
