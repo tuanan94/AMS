@@ -406,6 +406,7 @@
 
     }
     $("#createMemberFullname").change(function () {
+        console.log
         $.ajax({
             url: "/Home/getHintUsername/",
             type: "GET",

@@ -422,7 +422,7 @@ namespace AMS.Controllers
             string json = JsonConvert.SerializeObject(notis, settings);
             return json;
         }
-        [HttpPost]
+        [HttpGet]
         [Authorize]
         public String getHintUsername(String fullname,int? startNumber)
         {
