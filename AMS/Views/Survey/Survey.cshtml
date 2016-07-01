@@ -198,10 +198,19 @@
                                 <div class="col-sm-7">
 
                                     @{
+                                        int check = 0;
                                         foreach (var item in listBlock)
                                         {
-                                            <label class="checkbox-inline"><input type="checkbox" name="block" class="blockss" value="@item">@item</label>
-
+                                            if (check == 0)
+                                            {
+                                                <label class="checkbox-inline"><input type="checkbox" checked="checked" name="block" class="blockss" value="@item">@item</label>
+                                            }
+                                            else
+                                            {
+                                            <label class="checkbox-inline"><input type="checkbox"  name="block" class="blockss" value="@item">@item</label>
+  
+                                            }
+                                            check++;
                                         }
                                     }
                                 </div>
