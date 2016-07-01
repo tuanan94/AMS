@@ -211,7 +211,9 @@
             }
             foreach (var item in listSurveys)
             {
-                listUserAnswer = (userAnswerService.GetListUserAnswerPollsByPollId(item.Id));
+                if (DateTime.Now >= item.PublishDate)
+                {
+                    listUserAnswer = (userAnswerService.GetListUserAnswerPollsByPollId(item.Id));
                 List<BlockPoll> listBlockPolls = BlockPollService.FindByPollId(item.Id);
                 int k = 0;
                 int p = 0;
@@ -233,7 +235,7 @@
                                 p++;
                             }
                         }
-                        if (k != 1 || p == 1)
+                        if ((k != 1 && p == 1) || p == 0)
                         //if (k != 1)
                         {
                            <fieldset class="scheduler-border less-padding aass">
@@ -287,7 +289,7 @@
                                 p++;
                             }
                         }
-                        if ((k != 1 && p == 1) || p==0)
+                        if ((k != 1 && p == 1) )
                        // if (k != 1)
                         {
                               <fieldset class="scheduler-border less-padding aass">
@@ -341,7 +343,7 @@
                                 p++;
                             }
                         }
-                        if ((k != 1 && p == 1) || p == 0)
+                        if ((k != 1 && p == 1) )
                        // if (k != 1)
                         {
                               <fieldset class="scheduler-border less-padding aass">
@@ -385,6 +387,7 @@
                 else if (listSurveys.Count == 0)
                 {
 
+                }
                 }
             }
 
