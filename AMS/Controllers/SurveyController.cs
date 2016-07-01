@@ -143,7 +143,11 @@ namespace AMS.Controllers
         public ActionResult DoSurvey()
         {
             User currentUser = userService.FindById(int.Parse(User.Identity.GetUserId()));
-            House currentHouse = houseServices.FindById(currentUser.HouseId.Value);
+            House currentHouse = null;
+            if(currentUser.HouseId == null && currentUser.HouseId.HasValue)
+            {
+                currentHouse = houseServices.FindById(currentUser.HouseId.Value);
+            }
             List<Poll> listSurveys = PollService.GetListPolls();
             List<UserAnswerPoll> listUserAnswerPolls = userAnswerService.GetListUserAnswerPollsByPollId();
             List<UserAnswerPoll> listAnswerSurveys = userAnswerService.GetListUserAnswerPoll();
