@@ -1,0 +1,125 @@
+﻿@{
+    ViewBag.Title = "ManageHouseBlock";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+}
+<div class="col-md-12">
+    <div class="panel panel-default">
+
+        <div class="heading-tab">
+            <i class="fa fa-list"> Quản lý tòa nhà</i>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li>
+                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-file-text-o"></i> Phí sinh họat</a>
+                </li>
+                <li>
+                    <a href="/Management/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Quản lý nhà</a>
+                </li>
+                <li class="active">
+                    <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-home"></i> Căn hộ</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="panel-body">
+
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="">
+
+                    <div class="form-horizontal" role="form">
+                        <table id="managerBlockTbl" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tên</th>
+                                    <th>Tổng số căn hộ</th>
+                                    <th>Đang mở</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tên</th>
+                                    <th>Tổng số căn hộ</th>
+                                    <th>Đang mở</th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        window.houseInBlockTbl = $("#managerBlockTbl").DataTable({
+            "ajax": {
+                url: "/Management/Config/UtilityService/GetBlockList",
+                dataSrc: function (data) {
+                    return data;
+                }
+            },
+            "destroy": true,
+            "bLengthChange": false,
+            "bInfo": false,
+            "drawCallback": function (settings) {
+                var addBtn = "<div class='col-md-1'>" +
+                "<a id='createFirstBlsBtn' class='btn btn-info' href='/Management/Config/UtilityService/ViewCreateHouseBlock' >" +
+                "<i class='fa fa-plus'></i>" +
+                "</a>" +
+                "</div>";
+                $("#managerBlockTbl_wrapper > div:nth-child(1) > div:nth-child(1)").html(addBtn);
+
+                //                var deleteBtn =
+                //                "<div class='hide' id='delConsumptionRecordBtnGroup'>" +
+                //                "<span class='btn btn-warning btn-stroke' onclick='cancelDeleteConsumptionRecord()'>" +
+                //                "<i class='fa fa-plus'></i> Hủy" +
+                //                "</span>" +
+                //                "<span class='btn btn-primary' style='margin-left: 5px' onclick='commitDeleteConsumptionRecord()'>" +
+                //                "<i class='fa fa-plus'></i> Chấp nhận" +
+                //                "</span>" +
+                //                "</div>";
+                //                $("#houseInBlockTbl_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(deleteBtn);
+
+            },
+            "order": [[1, "asc"]],
+            "columns": [
+            { data: "Name" },
+            { data: "Name" },
+            { data: "TotalRoom" },
+            { data: "TotalActiveRoom" },
+            { data: "Id" }
+            ],
+            "columnDefs": [
+            {
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+            },
+            {
+                "targets": 4,
+                "render": function (data, type, full, meta) {
+                    if (type === "display" || type === "filter") {
+                        return "<div class='text-right'>" +
+                        "<span onclick='viewBlockInfo(\"" + data + "\")' class='btn btn-info btn-xs'>" +
+                        " <i class='fa fa-info'></i>" +
+                        "</span>" +
+                        " </div>";
+
+                    }
+                    return data;
+                }
+            }
+            ]
+        });
+        generateTableIndex(window.houseInBlockTbl);
+    });
+
+    function viewBlockInfo(id) {
+        location.href = "/Management/Config/UtilityService/ViewHousesInBlock?blockId=" + id;
+    }
+</script>

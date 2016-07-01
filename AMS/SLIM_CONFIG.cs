@@ -80,6 +80,16 @@ namespace AMS
         public static int TRANS_CAT_STATUS_DISABLE = 2;
         public static int TRANS_CAT_STATUS_DENY_REMOVE = 3;
 
+        public static int HOUSE_STATUS_ENABLE = 1;
+        public static int HOUSE_STATUS_DISABLE = 2;
+
+        public static int HOUSE_ADD_NEW_FLOOR = 0;
+        public static int HOUSE_ADD_EXISTING_FLOOR = 1;
+
+        public static int GET_ALL = 1;
+        public static int GET_ALL_ACTIVE= 2;
+
+
 
         public static double MAX_NUMBER = 999999999.0;
 

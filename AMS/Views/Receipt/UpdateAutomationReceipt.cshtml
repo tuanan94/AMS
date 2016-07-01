@@ -720,7 +720,7 @@
             type: "POST",
             success: function (data) {
                 if (data.StatusCode === 0) {
-                    window.autoReceiptTbl.ajax.reload();
+                    window.autoReceiptTbl.ajax.reload(null, false);
                     $("#successUpdateOrderTypeNotify").fadeIn("fast");
                     resetFormData("updateHouseConsumptionForm");
                     setTimeout(function () {
@@ -764,7 +764,7 @@
     function publishOrder(id) {
         updateStatus(id, window.Mode_Publish, function (data) {
             if (data.StatusCode === 0) {
-                window.autoReceiptTbl.ajax.reload();
+                window.autoReceiptTbl.ajax.reload(null, false);
                 $("#btnEdit").addClass("hide");
                 $("#btnPublish").addClass("hide");
                 $("#btnDel").addClass("hide");
@@ -806,7 +806,7 @@
             },
             success: function (data) {
                 if (data.Data.paymentDate !== undefined) {
-                    window.autoReceiptTbl.ajax.reload();
+                    window.autoReceiptTbl.ajax.reload(null, false);
                     $("#btnPurchaseReceipt").addClass("hide");
                     //                    var rowId = $("#rowId").val();
                     //                    $("#" + rowId + " > td:nth-child(9)").html("<span class='label label-success'>" + "Đã thanh toán" + "</div>");
@@ -834,7 +834,7 @@
             },
             success: function (data) {
                 if (data.StatusCode === 0) {
-                    window.autoReceiptTbl.ajax.reload();
+                    window.autoReceiptTbl.ajax.reload(null, false);
                     $("#successAddTransTypeNotify").fadeIn("fast");
                     setTimeout(function () {
                         $("#successAddTransTypeNotify").fadeOut("fast");
@@ -853,7 +853,7 @@
     function deleteConsumptionRecord(id) {
         var element = $("#receipt_id_" + id).addClass("hide");
         window.deleteConsumptionRecordList.push(id);
-        window.autoReceiptTbl.row("#receipt_id_" + id).remove().draw();
+        window.autoReceiptTbl.row("#receipt_id_" + id).remove().draw(false);
         $("#delConsumptionRecordBtnGroup").removeClass("hide").addClass("show");
     }
     function cancelDeleteConsumptionRecord() {
@@ -880,7 +880,7 @@
                 if (data.StatusCode === 0) {
                     $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
                     window.deleteConsumptionRecordList = new Array();
-                    window.autoReceiptTbl.ajax.reload();
+                    window.autoReceiptTbl.ajax.reload(null, false);
                 }
             }
         });

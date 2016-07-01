@@ -693,7 +693,7 @@
                         $("#successAddTransNotify").fadeOut("slow");
                         $("#addIncomeLineModal").modal("hide");
                     }, 3000);
-                    window.listIncomeTable.ajax.reload();
+                    window.listIncomeTable.ajax.reload(null, false);
                 } else if (data.StatusCode === 2) {
                     $("#addTransMsg").text("Không tìm thấy giao dịch");
                     $("#failedAddTransWithMsgNotify").fadeIn("slow");
@@ -740,7 +740,7 @@
                         $("#successAddTransNotify").fadeOut("slow");
                     }, 3000);
                     resetFormData("addIncomeLineForm");
-                    window.listIncomeTable.ajax.reload();
+                    window.listIncomeTable.ajax.reload(null, false);
                 } else if (data.StatusCode === 2) {
                     $("#addTransMsg").text("Không tìm thấy giao dịch");
                     $("#failedAddTransWithMsgNotify").fadeIn("slow");
@@ -792,7 +792,7 @@
             success: function (data) {
                 reloadHdSrvTable();
                 if (data.StatusCode === 0) {
-                    window.listIncomeTable.ajax.reload();
+                    window.listIncomeTable.ajax.reload(null, false);
                     window.deleteHdSrvList = new Array();
                 } else {
                     $("#delBtnGroup").removeClass("show");

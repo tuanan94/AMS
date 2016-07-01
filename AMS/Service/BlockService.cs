@@ -14,14 +14,19 @@ namespace AMS.Service
         {
             return blockRepository.List.ToList();
         }
-        public Block  FindBlockByName(string name)
+        public Block FindBlockByName(string name)
         {
-            return blockRepository.List.FirstOrDefault(t=>t.BlockName== name);
+            //            return blockRepository.List.FirstOrDefault(t=>t.BlockName == name);// Code ngu vãi
+            return blockRepository.List.FirstOrDefault(t => t.BlockName.Equals(name));
+        }
+        public bool CheckBlockNameIsExisted(string name)
+        {
+            return blockRepository.List.Where(t => t.BlockName.Equals(name)).ToList().Count == 0 ? false: true;
         }
         public Block FindBlockById(int blockId)
         {
             return blockRepository.List.FirstOrDefault(t => t.Id == blockId);
         }
-       
+
     }
 }

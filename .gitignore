@@ -37,6 +37,8 @@ AMS/obj/Debug/edmxResourcesToEmbed/Model1.msl
 
 AMS/bin/AMS.dll.config
 
+packages
+
 AMS/bin/AMS.pdb
 =======
 AMS/AMS.csproj

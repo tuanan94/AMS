@@ -14,7 +14,7 @@
                     <a href="/Management/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Quản lý nhà</a>
                 </li>
                 <li class="active">
-                    <a href="/Management/Config/UtilityService/ViewDownloadBLockStructure"><i class="fa fa fa-plus"></i> Cấu trúc phòng</a>
+                    <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-home"></i> Căn hộ</a>
                 </li>
             </ul>
         </div>
@@ -25,10 +25,10 @@
                     <div class="panel panel-default" style="border-color: transparent">
                         <form id="addUtilServiceForm" class="form-horizontal" role="form">
                             <div class="form-group">
-                                <div class="col-md-offset-3 col-md-6">
+                                <div class="col-md-offset-2 col-md-8">
                                     <div class="form-group">
                                         <fieldset class="scheduler-border less-padding">
-                                            <legend class="scheduler-border">Thông tin tòa nhà</legend>
+                                            <legend class="scheduler-border bold-black">Thông tin tòa nhà</legend>
                                             <div class="form-group">
                                                 <div class="form-group">
                                                     <label class="col-md-4 control-label">Tên tòa nhà</label>
@@ -39,55 +39,56 @@
                                                 <div class="form-group">
                                                     <label class="col-md-4 control-label">Số tầng</label>
                                                     <div class="col-md-7 ">
-                                                        <input type="text" id="numberOfFloor" class="form-control" />
+                                                        <input type="text" id="numberOfFloor" class="form-control"/>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="col-md-4 control-label">Số phòng mỗi tầng</label>
+                                                    <label for="numberOfRoom" class="col-md-4 control-label">Số căn hộ mỗi tầng</label>
                                                     <div class="col-md-7 ">
-                                                        <input id="numberOfRoom" type="text" name="blockName" value="5" class="form-control" />
+                                                        <input type="text" id="numberOfRoom" class="form-control" value="5"/>
                                                     </div>
                                                 </div>
                                             </div>
                                         </fieldset>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="pull-right">
-                                            <span class="btn btn-info" onclick="generateTohouse()"> Tạo phòng</span>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-md-offset-2 col-md-8">
+                                <div class="col-md-offset-1 col-md-10">
                                     <fieldset class="scheduler-border less-padding">
-                                        <legend class="scheduler-border">Tên phòng mỗi tầng</legend>
+                                        <legend class="scheduler-border bold-black">Tên căn hộ mỗi tầng</legend>
                                         <div class="form-group">
-                                            <div class="col-md-offset-1 col-md-5">
-                                                <strong style="align-content: center">Tên phòng</strong>
+                                            <div class="col-md-offset-2 col-md-5">
+                                                <strong style="align-content: center">Tên</strong>
                                             </div>
-                                            @*                                            <div class="col-md-5">*@
-                                            @*                                                <strong style="align-content: center">Thành tên</strong>*@
-                                            @*                                            </div>*@
+                                            <div class="col-md-5">
+                                                <strong style="align-content: center">Diện tích</strong>
+                                            </div>
                                         </div>
                                         <div id="roomInFloorWrapper">
                                             @{
                                                 for (int i = 0; i < 5; i++)
                                                 {
                                                     <div class="form-group" id="row_id_@i">
-                                                        <span style="font-size: 1.2em" class="col-md-1 control-label">#@(i + 1)</span>
+                                                        <span style="font-size: 1.2em" class="col-md-offset-1 col-md-1 control-label">#@(i + 1)</span>
                                                         <div class="col-md-5">
                                                             <input id="house_name_@i" name="" type="text" class="form-control order-item room-name">
                                                         </div>
-                                                        <label id="house_name_to_name_@i" style="text-align: left" class="col-md-4 control-label"></label>
                                                         <div class="col-md-2">
                                                             <input id="house_area_@i" name="" type="text" class="form-control">
                                                         </div>
+                                                        <label id="house_name_to_name_@i" style="text-align: left" class="col-md-3 control-label"></label>
                                                     </div>
                                                 }
                                             }
                                         </div>
                                     </fieldset>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="btn btn-info" onclick="generateTohouse()"><i class="fa fa-plus"></i> Tạo mới</span>
                                 </div>
                             </div>
                         </form>
@@ -102,8 +103,8 @@
         $(".room-name").on("change", function (event) {
             var blockName = $("#blockName").val();
             if (blockName) {
-                var nextElement = event.target.parentNode.nextElementSibling;
-                nextElement.textContent = $("#blockName").val() + "-01-" + event.target.value;
+                var lastElement = event.currentTarget.parentNode.parentNode.lastElementChild;
+                lastElement.textContent = $("#blockName").val() + "-01-" + event.target.value;
             }
         });
         $("#numberOfRoom").on("change", function (event) {
@@ -119,7 +120,7 @@
                     var rowId = "row_id_" + i;
                     var houseArea = "house_area_" + i;
                     var label = $("<span>", {
-                        "class": "col-md-1 control-label",
+                        "class": "col-md-offset-1 col-md-1 control-label",
                         "css": {
                             "font-size": "1.2em"
                         },
@@ -135,7 +136,7 @@
                         "change": function (event2) {
                             var blockName = $("#blockName").val();
                             if (blockName) {
-                                var nextElement = event2.target.parentNode.nextElementSibling;
+                                var nextElement = event2.currentTarget.parentNode.parentNode.lastElementChild;
                                 nextElement.textContent = $("#blockName").val() + "-01-" + event2.target.value;
                             }
                         },
@@ -144,7 +145,7 @@
 
                     var label2 = $("<label>", {
                         "id": labelId,
-                        "class": "col-md-4 control-label",
+                        "class": "col-md-3 control-label",
                         "css": {
                             "text-align": "left"
                         }
@@ -160,7 +161,7 @@
                         "class": "form-group",
                         "type": "text",
                         "id": houseArea
-                    }).append(label).append(div).append(label2).append(div2);
+                    }).append(label).append(div).append(div2).append(label2);
                     $("#roomInFloorWrapper").append(row);
                 }
             } else {

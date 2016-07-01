@@ -285,8 +285,8 @@ namespace AMS.Controllers
                         ViewBag.forMonthOfBls = null;
                     }
 
-                    List<House> floor = _houseServices.GetFloorInBlock(receipt.House.Block.Id);
-                    List<House> rooms = _houseServices.GetRoomsInFloor(receipt.House.Block.Id, receipt.House.Floor);
+                    List<House> floor = _houseServices.GetFloorHasResidentInBlock(receipt.House.Block.Id);
+                    List<House> rooms = _houseServices.GetActiveRoomsInFloor(receipt.House.Block.Id, receipt.House.Floor);
                     ViewBag.block = _blockServices.GetAllBlocks();
                     ViewBag.firstBlockFloor = floor;
                     ViewBag.rooms = rooms;
@@ -1050,8 +1050,8 @@ namespace AMS.Controllers
             }
             if (block != null && block.Count != 0)
             {
-                List<House> floor = _houseServices.GetFloorInBlock(block[0].Id);
-                List<House> rooms = _houseServices.GetRoomsInFloor(block[0].Id, floor[0].Floor);
+                List<House> floor = _houseServices.GetFloorHasResidentInBlock(block[0].Id);
+                List<House> rooms = _houseServices.GetActiveRoomsInFloor(block[0].Id, floor[0].Floor);
                 ViewBag.block = block;
                 ViewBag.firstBlockFloor = floor;
                 ViewBag.rooms = rooms;
@@ -1509,7 +1509,7 @@ namespace AMS.Controllers
         public ActionResult GetRoomAndFloor(int blockId, string floorName)
         {
             MessageViewModels response = new MessageViewModels();
-            List<House> floor = _houseServices.GetFloorInBlock(blockId);
+            List<House> floor = _houseServices.GetFloorHasResidentInBlock(blockId);
             List<string> floorStr = new List<string>();
             List<string> roomStr = new List<string>();
             List<string> roomIdStr = new List<string>();
@@ -1524,11 +1524,11 @@ namespace AMS.Controllers
                 List<House> rooms = null;
                 if (floorName.IsNullOrWhiteSpace())
                 {
-                    rooms = _houseServices.GetRoomsInFloor(blockId, floor[0].Floor);
+                    rooms = _houseServices.GetActiveRoomsInFloor(blockId, floor[0].Floor);
                 }
                 else
                 {
-                    rooms = _houseServices.GetRoomsInFloor(blockId, floorName);
+                    rooms = _houseServices.GetActiveRoomsInFloor(blockId, floorName);
                 }
 
                 if (rooms != null && rooms.Count > 0)

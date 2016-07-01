@@ -113,9 +113,9 @@ namespace AMS.Controllers
                 item.Name = block.BlockName;
                 blockList.Add(item);
             }
-            if (blocks != null && blocks.Count != 0)
+            if (blocks.Count != 0)
             {
-                List<House> floors = _houseServices.GetFloorInBlock(blocks[0].Id);
+                List<House> floors = _houseServices.GetFloorHasResidentInBlock(blocks[0].Id);
                 foreach (var floor in floors)
                 {
                     item = new HouseCategoryModel();
@@ -124,7 +124,7 @@ namespace AMS.Controllers
                     floorList.Add(item);
                 }
 
-                List<House> rooms = _houseServices.GetRoomsInFloor(blocks[0].Id, floors[0].Floor);
+                List<House> rooms = _houseServices.GetActiveRoomsInFloor(blocks[0].Id, floors[0].Floor);
                 foreach (var room in rooms)
                 {
                     item = new HouseCategoryModel();
@@ -160,9 +160,12 @@ namespace AMS.Controllers
                 userModel.Dob = resident.DateOfBirth.Value.ToString(AmsConstants.DateFormat);
                 userModel.HouseName = resident.House.HouseName;
                 userModel.CreateDate = resident.CreateDate.Value.ToString(AmsConstants.DateTimeFormat);
+                userModel.IdCreateDate = resident.IDCreatedDate == null ? "" : resident.CreateDate.Value.ToString(AmsConstants.DateFormat);
                 userModel.RoldId = resident.RoleId.Value;
                 userModel.RolName = resident.Role.RoleName;
                 userModel.Status = resident.Status.Value;
+                userModel.RelationLevel = resident.FamilyLevel.Value;;
+                userModel.UserAccountName = resident.Username;
 
                 List<Block> blocks = _blockServices.GetAllBlocks();
                 List<HouseLocationModel> blockList = new List<HouseLocationModel>();
@@ -179,7 +182,7 @@ namespace AMS.Controllers
                 }
                 if (blocks != null && blocks.Count != 0)
                 {
-                    List<House> floors = _houseServices.GetFloorInBlock(resident.House.Block.Id);
+                    List<House> floors = _houseServices.GetFloorHasResidentInBlock(resident.House.Block.Id);
                     foreach (var floor in floors)
                     {
                         item = new HouseLocationModel();
@@ -188,7 +191,7 @@ namespace AMS.Controllers
                         floorList.Add(item);
                     }
 
-                    List<House> rooms = _houseServices.GetRoomsInFloor(resident.House.Block.Id, resident.House.Floor);
+                    List<House> rooms = _houseServices.GetActiveRoomsInFloor(resident.House.Block.Id, resident.House.Floor);
                     foreach (var room in rooms)
                     {
                         item = new HouseLocationModel();
@@ -219,19 +222,21 @@ namespace AMS.Controllers
         public ActionResult GetSupporterInfor(int supporterId)
         {
             MessageViewModels response = new MessageViewModels();
-            User resident = _userServices.FindById(supporterId);
-            if (null != resident)
+            User supporter = _userServices.FindById(supporterId);
+            if (null != supporter)
             {
                 UserInfoViewModel userModel = new UserInfoViewModel();
-                userModel.Id = resident.Id;
-                userModel.Name = resident.Fullname;
-                userModel.Idenity = resident.IDNumber;
-                userModel.Gender = resident.Gender.Value;
-                userModel.Dob = resident.DateOfBirth.Value.ToString(AmsConstants.DateFormat);
-                userModel.CreateDate = resident.CreateDate.Value.ToString(AmsConstants.DateTimeFormat);
-                userModel.RoldId = resident.RoleId.Value;
-                userModel.RolName = resident.Role.RoleName;
-                userModel.Status = resident.Status.Value;
+                userModel.Id = supporter.Id;
+                userModel.Name = supporter.Fullname;
+                userModel.Idenity = supporter.IDNumber;
+                userModel.Gender = supporter.Gender.Value;
+                userModel.Dob = supporter.DateOfBirth.Value.ToString(AmsConstants.DateFormat);
+                userModel.CreateDate = supporter.CreateDate.Value.ToString(AmsConstants.DateTimeFormat);
+                userModel.IdCreateDate = supporter.IDCreatedDate == null ? "" : supporter.IDCreatedDate.Value.ToString(AmsConstants.DateFormat);
+                userModel.UserAccountName = supporter.Username;
+                userModel.RoldId = supporter.RoleId.Value;
+                userModel.RolName = supporter.Role.RoleName;
+                userModel.Status = supporter.Status.Value;
 
                 response.Data = userModel;
             }
@@ -255,9 +260,9 @@ namespace AMS.Controllers
                     if (null != house)
                     {
                         User u = new User();
-                        if (house.OwnerID == null && user.IsHouseOwner == SLIM_CONFIG.USER_ROLE_RESIDENT)
+                        if (house.Status == SLIM_CONFIG.HOUSE_STATUS_ENABLE && house.OwnerID == null && user.IsHouseOwner == SLIM_CONFIG.USER_ROLE_RESIDENT)
                         {
-                            response.Data = 2;
+                            response.StatusCode = 2;
                             response.Msg = "Nhà này vẫn chưa có chủ hộ !";
                             return Json(response);
                         }
@@ -270,13 +275,14 @@ namespace AMS.Controllers
                         u.Status = SLIM_CONFIG.USER_STATUS_ENABLE;
                         u.Gender = user.Gender;
                         u.DateOfBirth = DateTime.ParseExact(user.Dob, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
+                        if (user.IdCreateDate != null)
+                        {
+                            u.IDCreatedDate = DateTime.ParseExact(user.IdCreateDate, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
+                        }
+                        u.Username = user.UserAccountName;
                         u.Creator = Int32.Parse(User.Identity.GetUserId());
                         u.RoleId = user.IsHouseOwner;
-                        int totalMenber = u.House.Users.Count;
-                        u.Username = new StringBuilder(house.HouseName).Append("_tv_").Append((totalMenber + 1).ToString()).ToString();
-                        u.Password = u.Password = CommonUtil.GetUniqueKey(8);
-                        _userServices.Update(u);
-
+                        u.FamilyLevel = user.RelationLevel;
                         _userServices.Add(u);
                         if (user.IsHouseOwner == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)
                         {
@@ -349,19 +355,12 @@ namespace AMS.Controllers
                 u.Status = SLIM_CONFIG.USER_STATUS_ENABLE;
                 u.Gender = user.Gender;
                 u.DateOfBirth = DateTime.ParseExact(user.Dob, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
+                u.IDCreatedDate = DateTime.ParseExact(user.IdCreateDate, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
+                u.Username = user.UserAccountName;
                 u.Creator = Int32.Parse(User.Identity.GetUserId());
                 u.RoleId = user.RoldId;
                 _userServices.Add(u);
-
-                u.Username = new StringBuilder("ams_nv_").Append(u.Id.ToString()).ToString();
-                u.Password = CommonUtil.GetUniqueKey(8);
-                _userServices.Update(u);
-
-                response.Data = new
-                {
-                    username = u.Username,
-                    password = u.Password,
-                };
+                
                 //                    var accountSid = "AC10ae7ed64035004a9f1ed772747b94dc"; // Your Account SID from www.twilio.com/console
                 //                    var authToken = "c867c6dadb271752b1fa0bb988f1c284";  // Your Auth Token from www.twilio.com/console
                 //
@@ -401,9 +400,9 @@ namespace AMS.Controllers
 
                         if (null != u)
                         {
-                            if (house.OwnerID == null && user.IsHouseOwner == SLIM_CONFIG.USER_ROLE_RESIDENT)
+                            if (house.Status == SLIM_CONFIG.HOUSE_STATUS_ENABLE && house.OwnerID == null && user.IsHouseOwner == SLIM_CONFIG.USER_ROLE_RESIDENT)
                             {
-                                response.Data = 2;
+                                response.StatusCode = 2;
                                 response.Msg = "Nhà này vẫn chưa có chủ hộ !";
                                 return Json(response);
                             }
@@ -413,10 +412,16 @@ namespace AMS.Controllers
                             u.IDNumber = user.Idenity;
                             u.Gender = user.Gender;
                             u.DateOfBirth = DateTime.ParseExact(user.Dob, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
+                            u.LastModified = DateTime.Now;
+                            u.FamilyLevel = user.RelationLevel;
+                            if (user.IdCreateDate != null)
+                            {
+                                u.IDCreatedDate = DateTime.ParseExact(user.IdCreateDate, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
+                            }
                             u.Status = SLIM_CONFIG.USER_STATUS_ENABLE;
                             u.RoleId = user.IsHouseOwner;
 
-                            if (user.IsHouseOwner == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)
+                            if (u.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)
                             {
                                 house.OwnerID = u.Id;
                                 _houseServices.Update(house);
@@ -473,6 +478,7 @@ namespace AMS.Controllers
                     u.Gender = user.Gender;
                     u.DateOfBirth = DateTime.ParseExact(user.Dob, AmsConstants.DateFormat,
                         CultureInfo.CurrentCulture);
+                    u.IDCreatedDate = DateTime.ParseExact(user.IdCreateDate, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
                     u.Status = SLIM_CONFIG.USER_STATUS_ENABLE;
                     u.RoleId = user.RoldId;
                     _userServices.Update(u);
@@ -505,11 +511,11 @@ namespace AMS.Controllers
                     {
                         if (u.RoleId == SLIM_CONFIG.USER_ROLE_SUPPORTER)
                         {
-                            if (u.HelpdeskRequests1.Any(r => r.Status == (int) StatusEnum.Processing))
+                            if (u.HelpdeskRequests1.Any(r => r.Status == (int)StatusEnum.Processing))
                             {
                                 response.StatusCode = 2;
                                 response.Data = u.Fullname;
-                                return Json(response); 
+                                return Json(response);
                             }
                         }
                         u.Status = SLIM_CONFIG.USER_STATUS_DELETE;
