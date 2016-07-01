@@ -59,3 +59,5 @@ AMS/obj/Debug/AMS.pdb
 AMS/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
 
 AMS/obj/Debug/AMS.csproj.FileListAbsolute.txt
+
+*.pdb

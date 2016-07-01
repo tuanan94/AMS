@@ -427,9 +427,6 @@
     <Compile Include="UserRateAroundProvider.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="UserReportPost.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="UtilityService.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
