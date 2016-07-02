@@ -81,44 +81,52 @@
                     </div>
                     <div class="alert alert-danger" id="msgAddFailedNoty" style="display: none">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span id="notyMsg"></span>
+                        <span id="addTransMsg"></span>
                     </div>
 
                     <form id="addResidentForm" class="form-horizontal" role="form">
                         <div class="form-group">
-                            <label for="resName" class="col-md-2 control-label">Họ tên</label>
-                            <div class="col-md-10">
+                            <label for="resName" class="col-md-3 control-label">Họ tên</label>
+                            <div class="col-md-9">
                                 <input id="resName" name="Name" type="text" class="form-control" value="">
                             </div>
                         </div>
-                        <div class="form-group res-info">
-                            <label class="col-md-2 control-label">Giới tính</label>
-                            <div class="col-md-10">
-                                <label class="radio-inline">
-                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_MALE" name="Gender" />Nam
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_FEMALE" name="Gender" />Nữ
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_ORTHER" name="Gender" checked="checked" />Khác
-                                </label>
+                        <div class="form-group">
+                            <label for="resName" class="col-md-3 control-label">Tên đăng nhập</label>
+                            <div class="col-md-9">
+                                <input id="userAccountName" name="UserAccountName" type="text" class="form-control" value="">
                             </div>
                         </div>
                         <div class="form-group res-info">
-                            <label for="resId" class="col-md-2 control-label">Ngày sinh</label>
+                            <label for="resId" class="col-md-3 control-label">Ngày sinh</label>
                             <div class="col-md-4">
                                 <input id="dob" type="text" name="Dob" class="form-control datepicker" data-date-format="dd-mm-yyyy" data-date-language="vi"
                                        data-date-min-view-mode="0" data-date-today-highlight="true" data-date-end-date="0m">
                             </div>
-                            <label for="resId" class="col-md-2 control-label">CMND</label>
+                            <label class="col-md-1 control-label">Giới tính</label>
                             <div class="col-md-4">
-                                <input id="resId" type="text" class="form-control" value="">
+                                <label class="radio-inline">
+                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_MALE" name="Gender" />Nam
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_FEMALE" name="Gender" checked="checked" />Nữ
+                                </label>
                             </div>
                         </div>
                         <div class="form-group res-info">
-                            <label for="houseName" class="col-md-2 control-label">Tòa nhà</label>
-                            <div class="col-md-10 ">
+                            <label for="resId" class="col-md-3 control-label">CMND</label>
+                            <div class="col-md-4">
+                                <input id="resId" type="text" name="Idenity" class="form-control" value="">
+                            </div>
+                            <label for="idCreateDate" class="col-md-1 control-label">Ngày cấp</label>
+                            <div class="col-md-4">
+                                <input id="idCreateDate" type="text" name="IdCreateDate" class="form-control datepicker" data-date-format="dd-mm-yyyy" data-date-language="vi"
+                                       data-date-min-view-mode="0" data-date-today-highlight="true" data-date-end-date="0m">
+                            </div>
+                        </div>
+                        <div class="form-group res-info">
+                            <label for="houseName" class="col-md-3 control-label">Tòa nhà</label>
+                            <div class="col-md-9 ">
                                 <div class="input-group">
                                     <select id="houseBlock" name="Block" class="form-control">
                                         <option></option>
@@ -135,8 +143,8 @@
                             </div>
                         </div>
                         <div class="form-group res-info">
-                            <label for="resHouseName" class="col-md-2 control-label ">Chủ hộ</label>
-                            <div class="col-md-10">
+                            <label class="col-md-3 control-label ">Chủ hộ</label>
+                            <div class="col-md-9">
                                 <label class="radio-inline">
                                     <input type="radio" value="@SLIM_CONFIG.USER_ROLE_HOUSEHOLDER" name="IsHouseOwner" />Có
                                 </label>
@@ -145,18 +153,31 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="form-group security hide">
-                            <label for="userName" class="col-md-2 control-label ">Tên đăng nhập</label>
-                            <div class="col-md-10">
-                                <input id="userName" class="form-control" type="text" />
+                        <div class="form-group res-info">
+                            <label class="col-md-3 control-label ">Mối quan hệ</label>
+                            <div class="col-md-9">
+                                <select class="form-control" id="ownerRelationShip" name="RelationLevel">
+                                    <option value="0">Vợ, Chồng, Anh, Chị, Em, Bạn...</option>
+                                    <option value="-2">Ông, bà (Lớn hơn 2 bậc)</option>
+                                    <option value="-1">Bố, mẹ, cô, dì, chú, bác, cậu, mợ...(Lớn hơn 1 bậc)</option>
+                                    <option value="1">Con, cháu (gọi bằng cô, dì, chú, bác)</option>
+                                    <option value="2">Cháu (gọi bằng ông, bà)</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="form-group security hide">
-                            <label for="password" class="col-md-2 control-label ">Mật khẩu</label>
-                            <div class="col-md-10">
-                                <input id="password" class="form-control" type="text" />
-                            </div>
-                        </div>
+
+                        @*                        <div class="form-group security hide">*@
+                        @*                            <label for="userName" class="col-md-2 control-label ">Tên đăng nhập</label>*@
+                        @*                            <div class="col-md-10">*@
+                        @*                                <input id="userName" class="form-control" type="text" />*@
+                        @*                            </div>*@
+                        @*                        </div>*@
+                        @*                        <div class="form-group security hide">*@
+                        @*                            <label for="password" class="col-md-2 control-label ">Mật khẩu</label>*@
+                        @*                            <div class="col-md-10">*@
+                        @*                                <input id="password" class="form-control" type="text" />*@
+                        @*                            </div>*@
+                        @*                        </div>*@
                         <input type="hidden" id="accountId" name="Id" />
                     </form>
                 </div>
@@ -209,6 +230,8 @@
                     return data;
                 }
             },
+            "order": [[5, "desc"]],
+            stateSave: true,
             "drawCallback": function (settings) {
                 var addBtn = "<div class='col-md-1'>" +
                                 "<span class='btn btn-info' onclick='openAddNewUserModal()'>" +
@@ -259,9 +282,10 @@
                     "data": "HouseName",
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
-                            return "<span class='label date-color' style='margin-right: 5px'>" + full.Block + "</span>" +
+                            return "<span class='label room-color' >" + full.HouseName + "</span>";
+                            /*"<span class='label date-color' style='margin-right: 5px'>" + full.Block + "</span>" +
                                 "<span class='label time-color' style='margin-right: 5px'>" + full.Floor + "</span>" +
-                                "<span class='label room-color' >" + full.HouseName + "</span>";
+                                "<span class='label room-color' >" + full.HouseName + "</span>";*/
                         }
                         return data;
                     }
@@ -351,7 +375,7 @@
                     }
                 }
 
-            ], "order": [[5, "desc"]]
+            ], 
         });
 
         generateTableIndex(window.manageUserListTbl);
@@ -359,12 +383,48 @@
             window.currentRow = $(this);
         });
 
+        $("#resName").on("change", function (event) {
+            if (window.mode === window.INSERTMODE) {
+
+                $.ajax({
+                    url: "/Home/getHintUsername",
+                    type: "get",
+                    data: {
+                        fullName: event.target.value,
+                        startNumber: 0
+                    },
+                    success: function (data) {
+                        $("#userAccountName").val(data);
+                    }
+                });
+            }
+        });
+        $("#userAccountName").on("change", function (event) {
+            if (window.mode === window.INSERTMODE) {
+
+                $.ajax({
+                    url: "/Home/checkAvailableUsername",
+                    type: "get",
+                    data: {
+                        username: event.target.value,
+                    },
+                    success: function (data) {
+                        if (data === "True") {
+                            $("#msgAddFailedNoty").css("display", "none");
+                            //                        $("#userAccountName").val(data);
+
+                        } else {
+                            $("#msgAddFailedNoty").css("display", "none");
+                            $("#addTransMsg").text("Tên đang nhập đã tồn tại");
+                            $("#msgAddFailedNoty").fadeIn("fast");
+                        }
+                    }
+                });
+            }
+        });
     });
 
     function openAddNewUserModal() {
-        $(".security").addClass("hide");
-        $(".res-info").removeClass("hide");
-        $("#btnAdd").removeClass("hide");
 
         $.ajax({
             url: "/Management/ManageUser/GetHouseList",
@@ -383,8 +443,10 @@
                     $("#failedMsg").text("Thêm mới cư dân thất bại.");
                     $("#title").text("Thêm mới cư dân");
 
-                    $("#btnUpdate").addClass("hide");
                     $("#btnAdd").removeClass("hide");
+                    $("#btnUpdate").addClass("hide");
+                    $("#userAccountName").prop("readonly", "");
+
                     $("#addResidentModal").modal("show");
                 }
             }
@@ -392,10 +454,6 @@
     }
 
     function getResidentInfor(residentId) {
-
-        $(".security").addClass("hide");
-        $(".res-info").removeClass("hide");
-        $("#btnAdd").removeClass("hide");
 
         $.ajax({
             url: "/Management/ManageUser/GetResidentInFor",
@@ -412,15 +470,25 @@
                     $("#dob").val(obj.Dob);
                     $("#resId").val(obj.Idenity);
                     $("#accountId").val(obj.Id);
+                    $("#userAccountName").val(obj.UserAccountName);
+                    $("#idCreateDate").val(obj.IdCreateDate);
 
-                    $("input:radio[name=Gender]").filter("[value=" + obj.Gender + "]").prop("checked", "true");
-                    $("input:radio[name=IsHouseOwner]").filter("[value=" + obj.RoldId + "]").prop("checked", "true");
+                    $("input:radio[name=Gender]").filter("[value=" + obj.Gender + "]").prop("checked", "checked");
+                    $("input:radio[name=IsHouseOwner]").filter("[value=" + obj.RoldId + "]").prop("checked", "checked");
+
+                    $("#ownerRelationShip").val(obj.RelationLevel);
+
                     if (obj.RoldId === window.UserRoleHouseHolder) {
                         $("input:radio[name=IsHouseOwner]").prop("disabled", "disabled");
+                        $("#houseName").prop("disabled", "disabled");
+                        $("#houseBlock").prop("disabled", "disabled");
+                        $("#houseFloor").prop("disabled", "disabled");
                     } else {
                         $("input:radio[name=IsHouseOwner]").prop("disabled", "");
+                        $("#houseName").prop("disabled", "");
+                        $("#houseBlock").prop("disabled", "");
+                        $("#houseFloor").prop("disabled", "");
                     }
-
 
                     var block = parseJsonToSelectTags(data.Data.blocks, obj.Block);
                     var floor = parseJsonToSelectTags(data.Data.floors, obj.Floor);
@@ -429,14 +497,15 @@
                     $("#houseFloor").html(floor);
                     $("#houseName").html(room);
 
-
                     window.mode = window.UPDATEMODE;
                     $("#successMsg").text("Cập nhật cư dân thành công.");
                     $("#failedMsg").text("Cập nhật cư dân thất bại.");
                     $("#title").text("Cập nhật cư dân");
 
-                    $("#btnUpdate").removeClass("hide");
                     $("#btnAdd").addClass("hide");
+                    $("#btnUpdate").removeClass("hide");
+
+                    $("#userAccountName").prop("readonly", "readonly");
                     $("#addResidentModal").modal("show");
                 }
             }
@@ -452,20 +521,13 @@
             success: function (data) {
                 if (data.StatusCode === 0) {
                     $("#successMsg").html("Thêm mới cư dân thành công.");
-
-                    $("#userName").val(data.Data.username);
-                    $("#password").val(data.Data.password);
-
-                    $(".security").removeClass("hide");
-                    $(".res-info").addClass("hide");
-                    $("#btnAdd").addClass("hide");
-
                     $("#addResSuccessNoti").fadeIn("fast");
                     setTimeout(function () {
                         $("#addResSuccessNoti").fadeOut("fast");
+                        resetFormData("addResidentForm");
                     }, 3000);
 
-                    window.manageUserListTbl.ajax.reload();
+                    window.manageUserListTbl.ajax.reload(null, false);
                 } else if (data.StatusCode === 2) {
                     $("#addTransMsg").text("Căn hộ này chưa có chủ nhà!");
                     $("#msgAddFailedNoty").fadeIn("fast");
@@ -497,7 +559,7 @@
                         $("#addResidentModal").modal("hide");
                     }, 3000);
 
-                    window.manageUserListTbl.ajax.reload();
+                    window.manageUserListTbl.ajax.reload(null, false);
                 } else if (data.StatusCode === 2) {
                     $("#addTransMsg").text("Căn hộ này chưa có chủ nhà!");
                     $("#msgAddFailedNoty").fadeIn("fast");
@@ -520,7 +582,7 @@
     function deleteConsumptionRecord(id) {
         //        var element = $("#resident_" + id).addClass("hide");
         window.deleteRes.push(id);
-        window.manageUserListTbl.row("#resident_" + id).remove().draw();
+        window.manageUserListTbl.row("#resident_" + id).remove().draw(false);
         $("#delConsumptionRecordBtnGroup").removeClass("hide").addClass("show");
     }
     function cancelDeleteConsumptionRecord() {
@@ -547,7 +609,7 @@
                 if (data.StatusCode === 0) {
                     $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
                     window.deleteRes = new Array();
-                    window.manageUserListTbl.ajax.reload();
+                    window.manageUserListTbl.ajax.reload(null, false);
                 } else {
 
                 }

@@ -87,9 +87,9 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="RestSharp, Version=105.2.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RestSharp.105.2.2\lib\net45\RestSharp.dll</HintPath>
@@ -548,7 +548,6 @@
       <DependentUpon>Model1.edmx</DependentUpon>
       <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
-    <Content Include="Remotion.Data.Linq.dll" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\amsScript\additional-methods.min.js" />
@@ -773,10 +772,17 @@
     <Content Include="Views\Management\AddAroundProvider.cshtml" />
     <Content Include="Views\ManageUser\ManageSupporter.cshtml" />
     <Content Include="Views\ManageUser\ManageResident.cshtml" />
-    <Content Include="Views\Config\DownloadBlockStructure.cshtml" />
-    <Content Include="Views\Config\CreateHouseInBlock.cshtml" />
+    <Content Include="Views\Config\CreateHouseBlock.cshtml" />
+    <Content Include="Views\Config\ManageHouseInBlock.cshtml" />
     <Content Include="Views\Survey\ViewHistory.cshtml" />
     <Content Include="Views\Survey\ListPoll.cshtml" />
+    <Content Include="Views\Config\ManageHouseBlock.cshtml" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
     <Content Include="Views\Management\ResidentApprovement.cshtml" />
     <Content Include="Views\Management\ManageHelpdeskServiceCategory.cshtml" />
     <Content Include="Views\Receipt\ViewReceipt.cshtml" />

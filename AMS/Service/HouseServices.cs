@@ -19,6 +19,10 @@ namespace AMS.Service
         {
             _houseRepository.Add(house);
         }
+        public void Delete(House house)
+        {
+            _houseRepository.Delete(house);
+        }
         public House FindByHouseName(string houseName)
         {
             return _houseRepository.List.Where(h => h.HouseName.ToLower().Contains(houseName.ToLower())).First();
@@ -30,17 +34,36 @@ namespace AMS.Service
                                                             && h.HouseName.ToLower().Contains(houseName.ToLower()));
             return houses.Count() == 0 ? null : houses.First();
         }
-        public List<House> GetFloorInBlock(int blockId)
+
+        public List<House> GetAllFloorInBlock(int blockId)
         {
-            return _houseRepository.List.Where(h => h.Block.Id == blockId && h.OwnerID != null).
+            return _houseRepository.List.Where(h => h.Block.Id == blockId).
                 OrderBy(h => h.Floor).GroupBy(h => h.Floor).Select(h => h.First()).ToList();
-        }
-        public List<House> GetRoomsInFloor(int blockId, string floorName)
-        {
-            return _houseRepository.List.Where(h => h.Floor.Contains(floorName) && h.Block.Id == blockId && h.OwnerID != null).
-                OrderBy(h => h.HouseName).ToList();
+            //            return _houseRepository.List.Where(h => h.Block.Id == blockId).
+            //                OrderBy(h => h.Floor).GroupBy(h => h.Floor).Select(h => h.First()).ToList();
         }
 
+        public List<House> GetFloorHasResidentInBlock(int blockId)
+        {
+            return _houseRepository.List.Where(h => h.Block.Id == blockId && h.Status == SLIM_CONFIG.HOUSE_STATUS_ENABLE).
+                OrderBy(h => h.Floor).GroupBy(h => h.Floor).Select(h => h.First()).ToList();
+            //            return _houseRepository.List.Where(h => h.Block.Id == blockId && h.OwnerID != null).
+            //                OrderBy(h => h.Floor).GroupBy(h => h.Floor).Select(h => h.First()).ToList();
+            //            return _houseRepository.List.Where(h => h.Block.Id == blockId).
+            //                OrderBy(h => h.Floor).GroupBy(h => h.Floor).Select(h => h.First()).ToList();
+        }
+        public List<House> GetActiveRoomsInFloor(int blockId, string floorName)
+        {
+            return _houseRepository.List.Where(h => h.Floor.Contains(floorName) && h.Block.Id == blockId && h.Status == SLIM_CONFIG.HOUSE_STATUS_ENABLE).
+                OrderBy(h => h.HouseName).ToList();
+            //            return _houseRepository.List.Where(h => h.Floor.Contains(floorName) && h.Block.Id == blockId && h.OwnerID != null).
+            //                OrderBy(h => h.HouseName).ToList();
+        }
+        public List<House> GetAlllRoomsInFloor(int blockId, string floorName)
+        {
+            return _houseRepository.List.Where(h => h.Floor.Contains(floorName) && h.Block.Id == blockId).
+                OrderBy(h => h.HouseName).ToList();
+        }
         public List<House> GetAllOwnedHousesThisMonth()
         {
             return _houseRepository.List.Where(h => h.OwnerID != null).OrderBy(h => h.HouseName).ToList();
@@ -48,6 +71,18 @@ namespace AMS.Service
         public void Update(House h)
         {
             _houseRepository.Update(h);
+        }
+        public bool CheckHouseNameIsExist(int houseId, string houseName)
+        {
+            return _houseRepository.List.Where(house => house.HouseName.Equals(houseName) && house.Id != houseId).ToList().Count == 0 ? false : true;
+        }
+        public bool CheckFloorIsExist(int blockId, string floorName)
+        {
+            return _houseRepository.List.Where(house => house.BlockId == blockId && house.Floor.Equals(floorName.Trim())).ToList().Count == 0 ? false : true;
+        }
+        public bool CheckHouseNameIsExistInFloor(int blockId, string floorName, string houseName)
+        {
+            return _houseRepository.List.Where(house => house.BlockId == blockId && house.HouseName.Equals(houseName.Trim()) && house.Floor.Equals(floorName.Trim())).ToList().Count == 0 ? false : true;
         }
     }
 
@@ -65,10 +100,17 @@ namespace AMS.Service
         {
             return _blockRepository.List.OrderBy(b => b.BlockName).ToList();
         }
-
+        public bool CheckBlockNameIsExisted(int blockId, string name)
+        {
+            return _blockRepository.List.Where(t => t.Id != blockId && t.BlockName.Equals(name)).ToList().Count == 0 ? false : true;
+        }
         public void Add(Block block)
         {
             _blockRepository.Add(block);
+        }
+        public void Update(Block block)
+        {
+            _blockRepository.Update(block);
         }
     }
 

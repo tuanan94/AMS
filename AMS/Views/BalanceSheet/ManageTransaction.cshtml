@@ -459,7 +459,7 @@
                         $("#successAddTransNotify").fadeOut("slow");
                     }, 3000);
                     resetFormData("addIncomeLineForm");
-                    window.listIncomeTable.ajax.reload();
+                    window.listIncomeTable.ajax.reload(null, false);
                 } else {
                     $("#failedAddTransNotify").fadeIn("fast");
                     setTimeout(function () {
@@ -494,7 +494,7 @@
                         $("#successAddTransNotify").fadeOut("slow");
                     }, 3000);
                     resetFormData("addIncomeLineForm");
-                    window.listIncomeTable.ajax.reload();
+                    window.listIncomeTable.ajax.reload(null, false);
                 } else {
                     $("#failedAddTransNotify").fadeIn("fast");
                     setTimeout(function () {
@@ -529,7 +529,7 @@
             success: function (data) {
                 reloadHdSrvTable();
                 if (data.StatusCode === 0) {
-                    window.listIncomeTable.ajax.reload();
+                    window.listIncomeTable.ajax.reload(null, false);
                     window.deleteHdSrvList = new Array();
                 } else {
                     $("#delBtnGroup").removeClass("show");

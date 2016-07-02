@@ -77,51 +77,47 @@
                     </div>
                     <div class="alert alert-danger" id="msgAddFailedNoty" style="display: none">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span id="notyMsg"></span>
+                        <span id="addTransMsg"></span>
                     </div>
 
                     <form id="addResidentForm" class="form-horizontal" role="form">
                         <div class="form-group">
-                            <label for="resName" class="col-md-2 control-label">Tên</label>
-                            <div class="col-md-10">
+                            <label for="resName" class="col-md-3 control-label">Họ tên</label>
+                            <div class="col-md-9">
                                 <input id="resName" name="Name" type="text" class="form-control" value="">
                             </div>
                         </div>
-                        <div class="form-group res-info">
-                            <label class="col-md-2 control-label">Giới tính</label>
-                            <div class="col-md-10">
-                                <label class="radio-inline">
-                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_MALE" name="Gender" />Nam
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_FEMALE" name="Gender" />Nữ
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_ORTHER" name="Gender" checked="checked" />Khác
-                                </label>
+                        <div class="form-group">
+                            <label for="resName" class="col-md-3 control-label">Tên đăng nhập</label>
+                            <div class="col-md-9">
+                                <input id="userAccountName" name="UserAccountName" type="text" class="form-control" value="">
                             </div>
                         </div>
                         <div class="form-group res-info">
-                            <label for="resId" class="col-md-2 control-label">Ngày sinh</label>
+                            <label for="resId" class="col-md-3 control-label">Ngày sinh</label>
                             <div class="col-md-4">
                                 <input id="dob" type="text" name="Dob" class="form-control datepicker" data-date-format="dd-mm-yyyy" data-date-language="vi"
                                        data-date-min-view-mode="0" data-date-today-highlight="true" data-date-end-date="0m">
                             </div>
-                            <label for="resId" class="col-md-2 control-label">CMND</label>
+                            <label class="col-md-1 control-label">Giới tính</label>
                             <div class="col-md-4">
-                                <input id="resId" name="Idenity" type="text" class="form-control" value="">
+                                <label class="radio-inline">
+                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_MALE" name="Gender" />Nam
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_FEMALE" name="Gender" checked="checked" />Nữ
+                                </label>
                             </div>
                         </div>
-                        <div class="form-group security hide">
-                            <label for="userName" class="col-md-2 control-label ">Tên đăng nhập</label>
-                            <div class="col-md-10">
-                                <input id="userName" class="form-control" type="text" />
+                        <div class="form-group res-info">
+                            <label for="resId" class="col-md-3 control-label">CMND</label>
+                            <div class="col-md-4">
+                                <input id="resId" type="text" name="Idenity" class="form-control" value="">
                             </div>
-                        </div>
-                        <div class="form-group security hide">
-                            <label for="password" class="col-md-2 control-label ">Mật khẩu</label>
-                            <div class="col-md-10">
-                                <input id="password" class="form-control" type="text" />
+                            <label for="idCreateDate" class="col-md-1 control-label">Ngày cấp</label>
+                            <div class="col-md-4">
+                                <input id="idCreateDate" type="text" name="IdCreateDate" class="form-control datepicker" data-date-format="dd-mm-yyyy" data-date-language="vi"
+                                       data-date-min-view-mode="0" data-date-today-highlight="true" data-date-end-date="0m">
                             </div>
                         </div>
                         <input type="hidden" id="accountId" name="Id" />
@@ -309,7 +305,41 @@
         $('#residentApproveTbl').on('click', 'tr', function () {
             window.currentRow = $(this);
         });
-
+        $("#resName").on("change", function (event) {
+            if (window.mode === window.INSERTMODE) {
+                $.ajax({
+                    url: "/Home/getHintUsername",
+                    type: "get",
+                    data: {
+                        fullName: event.target.value,
+                        startNumber: 0
+                    },
+                    success: function (data) {
+                        $("#userAccountName").val(data);
+                    }
+                });
+            }
+        });
+        $("#userAccountName").on("change", function (event) {
+            if (window.mode === window.INSERTMODE) {
+                $.ajax({
+                    url: "/Home/checkAvailableUsername",
+                    type: "get",
+                    data: {
+                        username: event.target.value,
+                    },
+                    success: function (data) {
+                        if (data === "True") {
+                            $("#msgAddFailedNoty").css("display", "none");
+                        } else {
+                            $("#msgAddFailedNoty").css("display", "none");
+                            $("#addTransMsg").text("Tên đang nhập đã tồn tại");
+                            $("#msgAddFailedNoty").fadeIn("fast");
+                        }
+                    }
+                });
+            }
+        });
     });
 
     function openAddNewUserModal() {
@@ -325,6 +355,8 @@
 
         $("#btnUpdate").addClass("hide");
         $("#btnAdd").removeClass("hide");
+
+        $("#userAccountName").prop("readonly", "");
         $("#addResidentModal").modal("show");
     }
 
@@ -349,9 +381,11 @@
                     $("#resId").val(obj.Idenity);
                     $("#accountId").val(obj.Id);
                     $("#roleId").val(obj.RoldId);
+                    $("#userAccountName").val(obj.UserAccountName);
+                    $("#idCreateDate").val(obj.IdCreateDate);
 
-                    $("input:radio[name=Gender]").filter("[value=" + obj.Gender + "]").prop("checked", "true");
-                    
+                    $("input:radio[name=Gender]").filter("[value=" + obj.Gender + "]").prop("checked", "checked");
+
                     window.mode = window.UPDATEMODE;
                     $("#successMsg").text("Cập nhật nhân viên hổ trợ thành công.");
                     $("#failedMsg").text("Cập nhật nhân viên hổ trợ thất bại.");
@@ -359,6 +393,8 @@
 
                     $("#btnUpdate").removeClass("hide");
                     $("#btnAdd").addClass("hide");
+
+                    $("#userAccountName").prop("readonly", "readonly");
                     $("#addResidentModal").modal("show");
                 }
             }
@@ -372,21 +408,12 @@
             type: "POST",
             success: function (data) {
                 if (data.StatusCode === 0) {
-
-                    $("#userName").val(data.Data.username);
-                    $("#password").val(data.Data.password);
-
-                    $(".security").removeClass("hide");
-                    $(".res-info").addClass("hide");
-                    $("#btnAdd").addClass("hide");
-
                     $("#addResSuccessNoti").fadeIn("fast");
                     setTimeout(function () {
                         $("#addResSuccessNoti").fadeOut("fast");
-//                        resetFormData("addResidentForm");
+                        resetFormData("addResidentForm");
                     }, 3000);
-
-                    window.manageUserListTbl.ajax.reload();
+                    window.manageUserListTbl.ajax.reload(null, false);
                 } else if (data.StatusCode === 2) {
                     $("#addTransMsg").text("Căn hộ này chưa có chủ nhà!");
                     $("#msgAddFailedNoty").fadeIn("fast");
@@ -418,7 +445,7 @@
                         $("#addResidentModal").modal("hide");
                     }, 3000);
 
-                    window.manageUserListTbl.ajax.reload();
+                    window.manageUserListTbl.ajax.reload(null, false);
                 } else if (data.StatusCode === 2) {
                     $("#addTransMsg").text("Căn hộ này chưa có chủ nhà!");
                     $("#msgAddFailedNoty").fadeIn("fast");
@@ -439,9 +466,9 @@
 
 
     function deleteConsumptionRecord(id) {
-//        var element = $("#resident_" + id).addClass("hide");
+        //        var element = $("#resident_" + id).addClass("hide");
         window.deleteRes.push(id);
-        window.manageUserListTbl.row("#employee_" + id).remove().draw();
+        window.manageUserListTbl.row("#employee_" + id).remove().draw(false);
         $("#delConsumptionRecordBtnGroup").removeClass("hide").addClass("show");
     }
     function cancelDeleteConsumptionRecord() {
@@ -466,11 +493,11 @@
             },
             success: function (data) {
                 window.deleteRes = new Array();
-                window.manageUserListTbl.ajax.reload();
+                window.manageUserListTbl.ajax.reload(null, false);
                 $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
                 if (data.StatusCode === 0) {
                     window.deleteRes = new Array();
-                    window.manageUserListTbl.ajax.reload();
+                    window.manageUserListTbl.ajax.reload(null, false);
                 } else if (data.StatusCode === 2) {
                     $("#messageNotify").html("Xóa nhân viên [<strong>" + data.Data + "</strong>] không thành công. Chuyển hết công việc sang nhân viên khác trước khi xóa !");
                     $("#messageModal").modal("show");

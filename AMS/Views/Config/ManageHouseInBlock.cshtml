@@ -1,0 +1,852 @@
+﻿@{
+    ViewBag.Title = "CreateHouseInBlock";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+    Block block = ViewBag.block;
+}
+<div class="col-md-12">
+    <div class="panel panel-default">
+
+        <div class="heading-tab">
+            <i class="fa fa-list"> Quản lý phí sinh hoạt</i>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li>
+                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-file-text-o"></i> Phí sinh họat</a>
+                </li>
+                <li>
+                    <a href="/Management/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Quản lý nhà</a>
+                </li>
+                <li class="active">
+                    <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-home"></i> Căn hộ</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="panel-body">
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="">
+                    <div class="panel panel-default" style="border-color: transparent">
+                        <form id="addUtilServiceForm" class="form-horizontal" role="form">
+                            <div class="alert alert-info" id="createSuccessNoti" style="display: none">
+                                <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <span>Tạo mới thành công</span>
+                            </div>
+                            <div class="alert alert-danger" id="createFailedNoti" style="display: none">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                                <span>Tạo mới thất bại</span>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-8">
+                                    <fieldset class="scheduler-border less-padding">
+                                        <legend class="scheduler-border bold-black">Thông tin tòa nhà</legend>
+                                        <div class="form-group">
+                                            <div class="form-group">
+                                                <label class="col-md-4 control-label">Tên tòa nhà</label>
+                                                <div class="col-md-7">
+                                                    <div class="input-group">
+                                                        <input type="text" id="blockName" value="@block.BlockName" class="form-control" />
+                                                        <span class="input-group-addon" onclick="showPopupEditBlockName()"><i class="fa fa-pencil"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-4 control-label">Số tầng</label>
+                                                <div class="col-md-7">
+                                                    <div class="input-group">
+                                                        <input type="text" name="numberOfFloor" value="@block.NoFloor" class="form-control" />
+                                                        <span class="input-group-addon" onclick="showPopupEditFloorName()"><i class="fa fa-pencil"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <table id="houseInBlockTbl" class="table table-hover table-bordered" data-block-id="@block.Id">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tầng</th>
+                                        <th>Tên nhà</th>
+                                        <th>Trạng thái</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tầng</th>
+                                        <th>Tên nhà</th>
+                                        <th>Trạng thái</th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
+                                <tbody></tbody>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="manageHouseModal" class="modal fade ams-modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="title">Cập nhật thông tìn căn hộ</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <div class="alert alert-info" id="updateHouseSuccessNoti" style="display: none">
+                        <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span id="successMsg">Cập nhật căn hộ thành công</span>
+                    </div>
+
+                    <div class="alert alert-danger" id="updateHouseFailedNoti" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                        <span id="failedMsg">Cập nhật căn hộ thất bại</span>
+                    </div>
+                    <div class="alert alert-danger" id="msgUpdateFailedNoti" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span id="updateHouseMsg"></span>
+                    </div>
+                    <div class="alert alert-warning" id="msgWarningNoti" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span id="warningMsg"></span>
+                    </div>
+
+                    <form id="manageHouseForm" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="mBlockName" class="col-md-3 control-label">Tên</label>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <input id="mBlockName" type="text" class="form-control room-name" readonly="readonly" value="">
+                                    <span class="input-group-addon">-</span>
+                                    <input id="floorName" name="" type="text" class="form-control room-name" readonly="readonly" value="">
+                                    <span class="input-group-addon">-</span>
+                                    <input id="name" name="Name" type="text" class="form-control room-name" value="">
+                                </div>
+                            </div>
+                            <label style="text-align: left" class="col-md-3 control-label"></label>
+                        </div>
+                        <div class="form-group">
+                            <label for="area" class="col-md-3 control-label">Diện tích</label>
+                            <div class="col-md-9">
+                                <input id="area" name="Area" type="text" class="form-control room-name">
+                            </div>
+                        </div>
+                        <div class="form-group hide" id="houseHolderRow">
+                            <label for="houseHolder" class="col-md-3 control-label">Chủ hộ</label>
+                            <div class="col-md-9">
+                                <input id="houseHolder" name="HouseOwner" type="text" class="form-control room-name">
+                            </div>
+                        </div>
+                        <div class="form-group" id="houseTypeRow">
+                            <label for="Type" class="col-md-3 control-label">Loại căn hộ</label>
+                            <div class="col-md-9">
+                                <select id="Type" name="Type" class="form-control">
+                                    @*                                    <option>--Chọn loại căn hộ--</option>*@
+                                    @*                                    <option>Hộ khẩu thường trú</option>*@
+                                    @*                                    <option>KT3</option>*@
+                                    @*                                    <option>Khác</option>*@
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group res-info">
+                            <label class="col-md-3 control-label">Trạng thái</label>
+                            <div class="col-md-9">
+                                <label class="radio-inline">
+                                    <input type="radio" value="@SLIM_CONFIG.HOUSE_STATUS_ENABLE" name="Status" />Mở
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" value="@SLIM_CONFIG.HOUSE_STATUS_DISABLE" checked="checked" name="Status" />Đóng
+                                </label>
+                            </div>
+                        </div>
+                        <input type="hidden" id="houseId" name="Id" />
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <span id="btnUpdate" type="button" onclick="updateHouseInfo()" class="btn btn-info">Chấp nhận</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="addHouseModal" class="modal fade ams-modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="addHouseTitle">Thêm căn hộ</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <div class="alert alert-info" id="addHouseSuccessNoti" style="display: none">
+                        <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span id="addHouseSuccessMsg">Tạo mới căn hộ thành công</span>
+                    </div>
+
+                    <div class="alert alert-danger" id="addHouseFailedNoti" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                        <span id="addHouseFailedMsg">Tạo mới căn hộ thất bại</span>
+                    </div>
+                    <div class="alert alert-danger" id="msgAddFailedNoti" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span id="addHouseMsg"></span>
+                    </div>
+                    <div class="alert alert-warning" id="msgAddWarningNoti" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span id="addHouseWarningMsg"></span>
+                    </div>
+
+                    <form id="addHouseForm" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="mBlockName" class="col-md-3 control-label">Tên tòa nhà</label>
+                            <div class="col-md-9">
+                                <input id="addBlockName" type="text" class="form-control room-name" readonly="readonly" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="mBlockName" class="col-md-3 control-label">Tầng</label>
+                            <div class="col-md-4">
+                                <label class="radio-inline">
+                                    <input type="radio" value="@SLIM_CONFIG.HOUSE_ADD_EXISTING_FLOOR" name="AddFloor" checked="checked" />Hiện có
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" value="@SLIM_CONFIG.HOUSE_ADD_NEW_FLOOR" name="AddFloor" />Mới
+                                </label>
+                            </div>
+                            <div class="col-md-5">
+                                <select id="addFloorNameSelect" name="FloorName" class="form-control"></select>
+                                <input id="addFloorNameInput" name="FloorNameNew" class="form-control hide" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="mBlockName" class="col-md-3 control-label">Tên căn hộ</label>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <input id="addName" name="Name" type="text" class="form-control room-name" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="area" class="col-md-3 control-label">Diện tích</label>
+                            <div class="col-md-9">
+                                <input id="addArea" name="Area" type="text" class="form-control room-name">
+                            </div>
+                        </div>
+                        <div class="form-group res-info">
+                            <label class="col-md-3 control-label">Trạng thái</label>
+                            <div class="col-md-9">
+                                <label class="radio-inline">
+                                    <input type="radio" value="@SLIM_CONFIG.HOUSE_STATUS_ENABLE" name="AddStatus" />Mở
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" value="@SLIM_CONFIG.HOUSE_STATUS_DISABLE" checked="checked" name="AddStatus" />Đóng
+                                </label>
+                            </div>
+                        </div>
+                        <input type="hidden" name="BlockId" value="@block.Id" />
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <span id="btnAdd" type="button" onclick="addNewHosue()" class="btn btn-info">Chấp nhận</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="confirmModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Thông tin xác nhận</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <p style="font-size: 17px;" id="msgConfirm"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="acceptApproveUser()">Chấp nhận</button>
+            </div>
+            <input type="hidden" id="residentId" value="" />
+            <input type="hidden" id="mode" value="" />
+        </div>
+    </div>
+</div>
+
+<div id="messageModal" class="modal fade ams-modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <p style="    font-size: 17px;" id="messageNotify"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="editBlockModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Cập nhật thông tin tòa nhà</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <div class="alert alert-info" id="editBlockSuccessNoti" style="display: none">
+                        <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span id="editBlockSuccessMsg">Cập nhật thông tin tòa nhà thành công</span>
+                    </div>
+
+                    <div class="alert alert-danger" id="editBlockFailedNoti" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                        <span id="editBlockFailedMsg">Cập nhật thông tin tòa nhà thất bại</span>
+                    </div>
+                    <div class="alert alert-danger" id="editBlockMsgNoti" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span id="editBlockMsg"></span>
+                    </div>
+                    <form id="editBlockForm" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="mBlockName" class="col-md-3 control-label">Tên tòa nhà</label>
+                            <div class="col-md-9">
+                                <input id="editBlockName" type="text" class="form-control" value="">
+                            </div>
+                        </div>
+                        <input type="hidden" name="BlockId" value="@block.Id" />
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-info" onclick="changeBlockName()">Chấp nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="editFloorModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Cập nhật thông tin tầng tòa nhà</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <div class="alert alert-info" id="editFloorSuccessNoti" style="display: none">
+                        <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span id="editFloorSuccessMsg">Cập nhật thành công</span>
+                    </div>
+                    <div class="alert alert-danger" id="editFloorFailedNoti" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                        <span id="editFloorFailedMsg">Cập nhật thất bại</span>
+                    </div>
+                    <div class="alert alert-danger" id="editFloorMsgNoti" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span id="editFloorMsg"></span>
+                    </div>
+                    <form id="editFloorForm" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="mBlockName" class="col-md-3 control-label">Tầng</label>
+                            <div class="col-md-9">
+                                <select id="listFloorSelect" class="form-control"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="mBlockName" class="col-md-3 control-label">Tên mới</label>
+                            <div class="col-md-9">
+                                <input id="newFloorName" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <span type="button" class="btn btn-info" onclick="changeFloorName()">Chấp nhận</span>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var blockId = document.getElementById("houseInBlockTbl").dataset.blockId;
+        window.deletedHouseId = [];
+
+        window.houseInBlockTbl = $("#houseInBlockTbl").DataTable({
+            "ajax": {
+                url: "/Management/Config/UtilityService/GetHouseInBlock?blockId=" + blockId,
+                dataSrc: function (data) {
+                    window.houseInBlock = data;
+                    return data;
+                }
+            },
+            "destroy": true,
+            "bLengthChange": false,
+            "bInfo": false,
+            "drawCallback": function (settings) {
+                var addBtn = "<div class='col-md-1'>" +
+                "<a id='createFirstBlsBtn' class='btn btn-info' onclick='openAddNewHouseModal()' >" +
+                "<i class='fa fa-plus'></i>" +
+                "</a>" +
+                "</div>";
+                $("#houseInBlockTbl_wrapper > div:nth-child(1) > div:nth-child(1)").html(addBtn);
+
+                var deleteBtn =
+                "<div class='hide' id='delConsumptionRecordBtnGroup'>" +
+                "<span class='btn btn-warning btn-stroke' onclick='cancelDeleteConsumptionRecord()'>" +
+                "<i class='fa fa-plus'></i> Hủy" +
+                "</span>" +
+                "<span class='btn btn-primary' style='margin-left: 5px' onclick='commitDeleteConsumptionRecord()'>" +
+                "<i class='fa fa-plus'></i> Chấp nhận" +
+                "</span>" +
+                "</div>";
+                $("#houseInBlockTbl_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(deleteBtn);
+
+            },
+            "order": [[2, "asc"]],
+            "columns": [
+            { data: "FloorName" },
+            { data: "FloorName" },
+            { data: "Name" },
+            { data: "Status" },
+            { data: "Id" }
+            ],
+            "columnDefs": [
+            {
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+            },
+            {
+                "targets": 2,
+                "render": function (data, type, full, meta) {
+                    if (type === "display" || type === "filter") {
+                        return "<span class='label house-color label-warning'>" + data + "</span>";
+                    }
+                    return data;
+                }
+            },
+            {
+                "targets": 3,
+                "render": function (data, type, full, meta) {
+                    if (type === "display" || type === "filter") {
+                        if (data === window.Disable) {
+                            return "<span class='label label-danger'>Đóng</span>";
+                        } else {
+                            return "<span class='label label-success'>Mở</span>";
+                        }
+                    }
+                    return data;
+                }
+            },
+            {
+                "targets": 4,
+                "render": function (data, type, full, meta) {
+                    if (type === "display" || type === "filter") {
+                        if (full.Status === window.Enable) {
+                            return "<div class='text-right'>" +
+                            "<span onclick='viewHouseInfo(\"" +
+                            data +
+                            "\")' class='btn btn-default btn-xs'>" +
+                            " <i class='fa fa-pencil'></i>" +
+                            "</span>" +
+                            " </div>";
+                        } else {
+                            return "<div class='text-right'>"
+                            + "<span onclick='viewHouseInfo(\"" + data + "\")' class='btn btn-default btn-xs'>"
+                            + " <i class='fa fa-pencil'></i>"
+                            + "</span>"
+                            + " <span onclick='deleteConsumptionRecord(\"" + data + "\")' class='btn btn-danger btn-xs' >"
+                            + "  <i class='fa fa-times'></i>"
+                            + " </span>"
+                            + " </div>";
+                        }
+                    }
+                    return data;
+                }
+            }
+            ]
+        });
+        generateTableIndex(window.houseInBlockTbl);
+        $("#name").on("change", function (event) {
+            $("#msgUpdateFailedNoti").css("display", "none");
+            $.ajax({
+                type: "get",
+                data: {
+                    houseId: $("#houseId").val(),
+                    roomName: event.target.value
+                },
+                url: "/Management/Config/UtilityService/CheckRoomName",
+                success: function (data) {
+                    if (data.StatusCode === window.IsExisted) {
+                        $("#updateHouseMsg").text("Tên căn hộ đã tồn tại");
+                        $("#msgUpdateFailedNoti").fadeIn("fast");
+                    }
+                }
+            });
+        });
+
+        $("input[type='radio'][name='AddFloor']").on("change", function (event) {
+            $("#addFloorNameInput").addClass("hide");
+            $("#addFloorNameSelect").addClass("hide");
+            if (parseInt(this.value, 10) === 1) {
+                var blockId = document.getElementById("houseInBlockTbl").dataset.blockId;
+                $.ajax({
+                    url: "/Management/Config/UtilityService/GetFloorInBlock",
+                    type: "GET",
+                    data: {
+                        blockId: blockId
+                    },
+                    success: function (data) {
+                        if (data.StatusCode === 0) {
+                            var obj = data.Data;
+                            var floorTags = parseJsonToSelectTags(obj);
+                            $("#addFloorNameSelect").html(floorTags);
+                            $("#addFloorNameSelect").removeClass("hide");
+                        } else {
+
+                        }
+                    }
+                });
+            } else {
+                $("#addFloorNameInput").removeClass("hide");
+            }
+        });
+
+    });
+
+    function openAddNewHouseModal() {
+        var blockId = document.getElementById("houseInBlockTbl").dataset.blockId;
+        $("#addHouseModal").modal("show");
+        $.ajax({
+            url: "/Management/Config/UtilityService/GetBlockInfo",
+            type: "GET",
+            data: {
+                blockId: blockId
+            },
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    var obj = data.Data;
+                    $("#addBlockName").val(obj.blockName);
+                    var floorTags = parseJsonToSelectTags(obj.floor);
+                    $("#addFloorNameSelect").html(floorTags);
+                } else {
+
+                }
+            }
+        });
+    }
+
+    function viewHouseInfo(houseId) {
+        $.ajax({
+            url: "/Management/Config/UtilityService/GetHouseInfoDetail",
+            type: "GET",
+            data: {
+                houseId: houseId
+            },
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    var obj = data.Data.houseInfo;
+                    var listHouseType = data.Data.houseTypeList;
+
+                    $("#mBlockName").val(obj.BlockName);
+                    $("#name").val(obj.Name);
+                    $("#floorName").val(obj.FloorName);
+                    $("#area").val(obj.Area);
+                    $("#houseId").val(obj.Id);
+
+                    if (obj.Status === window.Enable) {
+                        $("#houseHolderRow").removeClass("hide");
+                        $("#houseTypeRow").removeClass("hide");
+
+                        if (obj.HouseOwner) {
+                            $("#houseHolder").val(obj.HouseOwner);
+                            $("input:radio[name=Status]").prop("disabled", "disabled");
+                        } else {
+                            $("#houseHolder").val("Chưa có chủ hộ");
+                            $("input:radio[name=Status]").prop("disabled", "");
+                        }
+
+                        if (listHouseType.length !== 0) {
+                            var houseTypeSelects = {};
+                            if (obj.Type && obj.Type !== -1) {
+                                houseTypeSelects = parseJsonToSelectTags(listHouseType, obj.Type);
+                            } else {
+                                houseTypeSelects = parseJsonToSelectTags(listHouseType);
+                            }
+                            $("#Type").html(houseTypeSelects);
+                        } else {
+                            var noOption = "<option value='-1'>Chưa thiết lập<option>";
+                            $("#Type").html(noOption);
+                        }
+                    } else {
+                        $("#houseHolderRow").addClass("hide");
+                        $("#houseTypeRow").addClass("hide");
+                        $("input:radio[name=Status]").prop("disabled", "");
+                    }
+
+                    $("input:radio[name=Status]").filter("[value=" + obj.Status + "]").prop("checked", "checked");
+
+                    $("#manageHouseModal").modal("show");
+                }
+            }
+        });
+    }
+
+    function updateHouseInfo() {
+        $.ajax({
+            "url": "/Management/Config/UtilityService/UpdateHouseInfo",
+            data: $("#manageHouseForm").serialize(),
+            type: "POST",
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    $("#successMsg").html("Cập nhật căn hộ thành công");
+                    $("#updateHouseSuccessNoti").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#updateHouseSuccessNoti").fadeOut("fast");
+                        resetFormData("addResidentForm");
+                        $("#manageHouseModal").modal("hide");
+                    }, 3000);
+                    window.houseInBlockTbl.ajax.reload(null, false);
+                } else if (data.StatusCode === 2) {
+                    $("#updateHouseMsg").text("Căn hộ này chưa có chủ nhà!");
+                    $("#msgUpdateFailedNoti").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#msgUpdateFailedNoti").fadeOut("fast");
+                    }, 3000);
+                } else if (data.StatusCode === 4) {
+                    $("#updateHouseMsg").text("Tên căn hộ đã tồn tại");
+                    $("#msgUpdateFailedNoti").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#msgUpdateFailedNoti").fadeOut("fast");
+                    }, 3000);
+                } else if (data.StatusCode === 5) {
+                    $("#updateHouseMsg").text("Căn hộ này vẫn còn cư dân đang định cư");
+                    $("#msgUpdateFailedNoti").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#msgUpdateFailedNoti").fadeOut("fast");
+                    }, 3000);
+                } else {
+                    $("#updateHouseFailedNoti").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#updateHouseFailedNoti").fadeOut("fast");
+                    }, 3000);
+                }
+            }
+        });
+    }
+
+    function addNewHosue() {
+        $.ajax({
+            "url": "/Management/Config/UtilityService/AddNewHouse",
+            data: $("#addHouseForm").serialize(),
+            type: "POST",
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    $("#addHouseSuccessMsg").html("Tạo căn hộ thành công");
+                    $("#addHouseSuccessNoti").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#addHouseSuccessNoti").fadeOut("fast");
+                        resetFormData("addHouseForm");
+                    }, 3000);
+                    window.houseInBlockTbl.ajax.reload(null, false);
+                } else if (data.StatusCode === 2) {
+                    $("#addHouseMsg").text("Tên căn hộ đã tồn tại");
+                    $("#msgAddFailedNoti").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#msgAddFailedNoti").fadeOut("fast");
+                    }, 3000);
+                } else {
+                    $("#addHouseFailedNoti").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#addHouseFailedNoti").fadeOut("fast");
+                    }, 3000);
+                }
+            }
+        });
+    }
+
+    function deleteConsumptionRecord(id) {
+        window.deletedHouseId.push(id);
+        //        window.houseInBlockTbl.row("#house_" + id).remove()/*.draw()*/;
+        window.houseInBlockTbl.row("#house_" + id).remove().draw(false);
+        $("#delConsumptionRecordBtnGroup").removeClass("hide").addClass("show");
+    }
+
+    function cancelDeleteConsumptionRecord() {
+        for (var i = 0; i < window.houseInBlock.length; i++) {
+            var originItem = window.houseInBlock[i];
+            for (var z = 0; z < window.deletedHouseId.length; z++) {
+                var deleteItem = window.deletedHouseId[z];
+                if (originItem.Id.toString() === deleteItem) {
+                    window.houseInBlockTbl.row.add(originItem).draw();
+                }
+            }
+        }
+        window.deletedHouseId = new Array();
+        $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
+    }
+
+    function commitDeleteConsumptionRecord() {
+        $.ajax({
+            url: "/Management/Config/UtilityService/DeleteHouse",
+            type: "POST",
+            data: {
+                houseIdList: window.deletedHouseId
+            },
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
+                    window.deletedHouseId = new Array();
+                    window.houseInBlockTbl.ajax.reload(null, false);
+                } else if (data.StatusCode === 2) {
+                    $("#messageNotify").html("Căn hộ <strong>" + data.Data + "</strong> đang có cư dân đang cư trú.");
+                    $("#messageModal").modal("show");
+                    $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
+                    window.deletedHouseId = new Array();
+                    window.houseInBlockTbl.ajax.reload(null, false);
+                }
+            }
+        });
+    }
+
+    function showPopupEditBlockName() {
+        var blockId = document.getElementById("houseInBlockTbl").dataset.blockId;
+        $.ajax({
+            url: "/Management/Config/UtilityService/GetBlockname",
+            type: "Get",
+            data: {
+                blockId: blockId
+            },
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    $("#editBlockName").val(data.Data);
+                    $("#editBlockModal").modal("show");
+                }
+            }
+        });
+    }
+
+    function changeBlockName() {
+        var blockId = document.getElementById("houseInBlockTbl").dataset.blockId;
+        var newName = $("#editBlockName").val();
+
+        if (newName) {
+            $.ajax({
+                url: "/Management/Config/UtilityService/UpdateBlockName",
+                type: "POST",
+                data: {
+                    blockId: blockId,
+                    blockName: newName
+                },
+                success: function (data) {
+                    if (data.StatusCode === 0) {
+                        $("#editBlockSuccessNoti").fadeIn("fast");
+                        $("#blockName").val($("#editBlockName").val());
+                        setTimeout(function () {
+                            $("#editBlockModal").modal("hide");
+                            $("#editBlockSuccessNoti").fadeOut("fast");
+                        }, 3000);
+                        window.houseInBlockTbl.ajax.reload(null, false);
+                    } else if (data.StatusCode === 2) {
+                        $("#editBlockMsg").text("Tên tòa nhà đã tồn tại");
+                        $("#editBlockMsgNoti").fadeIn("fast");
+                        setTimeout(function () {
+                            $("#editBlockMsgNoti").fadeOut("fast");
+                        }, 3000);
+                    } else {
+                        $("#editBlockFailedNoti").fadeIn("fast");
+                        setTimeout(function () {
+                            $("#editFloorFailedNoti").fadeOut("fast");
+                        }, 3000);
+                    }
+                }
+            });
+        }
+    }
+
+    function showPopupEditFloorName() {
+        getFloorInBlock(function (selectTag) {
+            $("#listFloorSelect").html(selectTag);
+            $("#editFloorModal").modal("show");
+        });
+    }
+
+    function getFloorInBlock(callback) {
+        var blockId = document.getElementById("houseInBlockTbl").dataset.blockId;
+        $.ajax({
+            url: "/Management/Config/UtilityService/GetFloorInBlock",
+            type: "GET",
+            data: {
+                blockId: blockId
+            },
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    var obj = data.Data;
+                    var floorTags = parseJsonToSelectTags(obj);
+                    callback(floorTags);
+                } else {
+
+                }
+            }
+        });
+    }
+
+    function changeFloorName() {
+        var blockId = document.getElementById("houseInBlockTbl").dataset.blockId;
+        var oldName = $("#listFloorSelect").find("option:selected").val();
+        var newName = $("#newFloorName").val();
+        if (oldName && newName) {
+            $.ajax({
+                url: "/Management/Config/UtilityService/ChangeFloorName",
+                type: "POST",
+                data: {
+                    blockId: blockId,
+                    oldFloorName: oldName,
+                    newFloorName: newName
+                },
+                success: function (data) {
+                    if (data.StatusCode === 0) {
+                        getFloorInBlock(function (data2) {
+                            window.houseInBlockTbl.ajax.reload(null, false);
+                            $("#editFloorSuccessNoti").fadeIn("fast");
+                            $("#listFloorSelect").html(data2);
+                            setTimeout(function () {
+                                $("#editFloorSuccessNoti").fadeOut("fast");
+                            }, 3000);
+                        });
+                    } else if (data.StatusCode === 2) {
+                        $("#editFloorMsg").text("Tên tầng đã tồn tại");
+                        $("#editFloorMsgNoti").fadeIn("fast");
+                        setTimeout(function () {
+                            $("#editFloorMsgNoti").fadeOut("fast");
+                        }, 3000);
+                    }
+                }
+            });
+        }
+    }
+</script>

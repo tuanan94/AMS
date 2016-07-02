@@ -270,7 +270,7 @@
             data: $("#openBalanceSheetForm").serialize(),
             success: function (data) {
                 if (data.StatusCode === 0) {
-                    window.listBalanceSheetTbl.ajax.reload();
+                    window.listBalanceSheetTbl.ajax.reload(null, false);
                     $("#successAddTransTypeNotify").fadeIn("fast");
                     resetFormData("openBalanceSheetForm");
                     setTimeout(function () {

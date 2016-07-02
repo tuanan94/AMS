@@ -31,7 +31,6 @@ namespace AMS.Models
         public int Type { get; set; }
         public string CreateDate { get; set; }
         public string DT_RowId { get; set; }
-
     }
 
 }

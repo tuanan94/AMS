@@ -484,7 +484,7 @@
         var element = $("#consump_house_" + id).addClass("hide");
         window.deleteConsumptionRecordList.push(id);
 
-        window.utilityConsumptionTbl.row("#consump_house_" + id).remove().draw();
+        window.utilityConsumptionTbl.row("#consump_house_" + id).remove().draw(false);
         $("#delConsumptionRecordBtnGroup").removeClass("hide").addClass("show");
 
     }

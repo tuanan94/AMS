@@ -43,6 +43,10 @@ window.Mode_Publish = 2;
 window.Enable = 1;
 window.Disable = 2;
 
+window.IsNotExisted = 1;
+window.IsExisted = 2;
+
+
 window.Utility_Service_Water = 2;
 window.Utility_Service_Fixed_Cost = 5;
 
@@ -1094,9 +1098,8 @@ function replaceSpaceNumber(x) {
 }
 function resetFormData(id) {
     $("#" + id).closest("form").find("input[type=text], textarea").val("");
+    $("#" + id).closest("form").find("input, select").prop("disabled", "");
 }
-
-
 
 function removeHiddenBackgroundPopup() {
     $("body").removeClass("modal-open");
@@ -1262,6 +1265,7 @@ function onChangeFromNumber() {
 
         if (nextElement == null) {
             event.target.value = "*";
+            return;
             return;
         } else {
             nextFromValue = nextElement.querySelector(".order-item-qty");

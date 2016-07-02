@@ -205,7 +205,7 @@
             traditional: true,
             success: function (data) {
                 if (data.StatusCode === 0) {
-                    window.lstTransCatTable.ajax.reload(); 
+                    window.lstTransCatTable.ajax.reload(null, false); 
                     window.deleteTransCatList = new Array();
                 } else {
                     $("#delBtnGroup").removeClass("show");
@@ -235,7 +235,7 @@
             "success": function (data) {
                 if (data.StatusCode === 0) {
                     $("#successAddTransTypeNotify").fadeIn("fast");
-                    window.lstTransCatTable.ajax.reload();
+                    window.lstTransCatTable.ajax.reload(null, false);
                     setTimeout(function () {
                         $("#successAddTransTypeNotify").fadeOut("fast");
                         resetFormData("addTransactionTypeForm");
@@ -252,7 +252,7 @@
             "success": function (data) {
                 if (data.StatusCode === 0) {
                     $("#successAddTransTypeNotify").fadeIn("fast");
-                    window.lstTransCatTable.ajax.reload();
+                    window.lstTransCatTable.ajax.reload(null, false);
                     setTimeout(function () {
                         $("#successAddTransTypeNotify").fadeOut("fast");
                         $("#addTransactionTypeModal").modal("hide");

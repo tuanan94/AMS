@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
+using System.Web.Compilation;
 using System.Web.Mvc;
 using AMS.Constant;
 using AMS.Models;
@@ -568,11 +569,19 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
-        [Route("Management/Config/UtilityService/ViewDownloadBLockStructure")]
-        public ActionResult ViewDownloadBLockStructure()
+        [Route("Management/Config/UtilityService/ViewManageHouseBlock")]
+        public ActionResult ViewManageHouseBlock()
         {
-            return View("DownloadBlockStructure");
+            return View("ManageHouseBlock");
         }
+
+        [HttpGet]
+        [Route("Management/Config/UtilityService/ViewCreateHouseBlock")]
+        public ActionResult ViewCreateHouseBlock()
+        {
+            return View("CreateHouseBlock");
+        }
+
         [HttpGet]
         [Route("Management/Config/UtilityService/ViewHousesInBlock")]
         public ActionResult ViewHousesInBlock(int blockId)
@@ -580,11 +589,12 @@ namespace AMS.Controllers
             Block block = _blockServices.FindById(blockId);
             if (null != block)
             {
+                block.NoFloor = block.Houses.GroupBy(h => h.Floor).Count();
                 ViewBag.block = block;
             }
-            return View("CreateHouseInBlock");
+            return View("ManageHouseInBlock");
         }
-        
+
         [HttpPost]
         [Route("Management/Config/UtilityService/CreateHouseInBlock")]
         public ActionResult CreateHouseInBlock(BlockViewModel housesInBlock)
@@ -614,8 +624,9 @@ namespace AMS.Controllers
                                 {
                                     eHouse.Floor = "G";
                                 }
-                                eHouse.HouseName = new StringBuilder(block.BlockName).Append("-").Append(eHouse.Floor).Append("-").Append(house.Name).ToString();
+                                eHouse.HouseName = new StringBuilder(block.BlockName).Append("-").Append(eHouse.Floor.Trim()).Append("-").Append(house.Name.Trim()).ToString();
                                 eHouse.BlockId = block.Id;
+                                eHouse.Status = SLIM_CONFIG.HOUSE_STATUS_DISABLE;
                                 _houseServices.Add(eHouse);
                             }
                         }
@@ -643,7 +654,7 @@ namespace AMS.Controllers
 
         [HttpGet]
         [Route("Management/Config/UtilityService/GetHouseInBlock")]
-        public ActionResult ViewCreateHouseInBlock(int blockId)
+        public ActionResult GetHouseInBlock(int blockId)
         {
             List<HouseViewModel> houses = new List<HouseViewModel>();
             Block block = _blockServices.FindById(blockId);
@@ -658,20 +669,412 @@ namespace AMS.Controllers
                     house.Name = h.HouseName;
                     house.FloorName = h.Floor;
                     house.Area = h.Area.Value;
-                    if (h.OwnerID == null)
-                    {
-                        house.Status = -1;
-                    }
-                    else
-                    {
-                        house.Status = -1;
-                    }
+                    house.Status = h.Status.Value;
                     houses.Add(house);
+                    house.DT_RowId = new StringBuilder("house_").Append(house.Id).ToString();
                 }
             }
             return Json(houses, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        [Route("Management/Config/UtilityService/GetHouseInfoDetail")]
+        public ActionResult GetHouseInfoDetail(int houseId)
+        {
+            MessageViewModels response = new MessageViewModels();
+            House house = _houseServices.FindById(houseId);
+            if (null != house)
+            {
+                HouseViewModel houseModel = new HouseViewModel();
+                houseModel.Id = house.Id;
+                houseModel.Name = house.HouseName.Split('-')[2];
+                houseModel.FloorName = house.Floor;
+                houseModel.BlockName = house.Block.BlockName;
+                houseModel.Area = house.Area.Value;
+                houseModel.Status = house.Status.Value;
+                houseModel.TypeName = house.HouseCategory == null ? "Chưa thiết lập" : house.HouseCategory.Name;
+                houseModel.Type = house.TypeId == null ? -1 : house.TypeId.Value;
+                if (house.Status.Value == SLIM_CONFIG.HOUSE_STATUS_ENABLE && house.OwnerID != null)
+                {
+                    houseModel.HouseOwner =
+                        house.Users.Where(u => u.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER).ToList().First().Fullname;
+                }
+
+                List<HouseCategoryModel> houseTypeList = new List<HouseCategoryModel>();
+                HouseCategoryModel houseTypeModel = null;
+                List<HouseCategory> listHouseCategory = _houseCategoryServices.GetAll();
+                foreach (var houseCat in listHouseCategory)
+                {
+                    houseTypeModel = new HouseCategoryModel();
+                    houseTypeModel.Id = houseCat.Id;
+                    houseTypeModel.Name = houseCat.Name;
+                    houseTypeList.Add(houseTypeModel);
+                }
+                object obj = new
+                {
+                    houseInfo = houseModel,
+                    houseTypeList = houseTypeList
+                };
+                response.Data = obj;
+            }
+            else
+            {
+                response.StatusCode = -1;
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [Route("Management/Config/UtilityService/AddNewHouse")]
+        public ActionResult AddNewHouse(HouseViewModel houseInfo)
+        {
+            MessageViewModels response = new MessageViewModels();
+            Block block = _blockServices.FindById(houseInfo.BlockId);
+            if (null != block)
+            {
+                string floorName = "";
+                string houseNameModel = houseInfo.Name.Trim();
+                if (houseInfo.AddFloor == SLIM_CONFIG.HOUSE_ADD_NEW_FLOOR)
+                {
+                    floorName = houseInfo.FloorNameNew.Trim();
+                }
+                else
+                {
+                    floorName = houseInfo.FloorName.Trim();
+                }
+                string houseName = new StringBuilder(block.BlockName).Append("-").Append(floorName).Append("-").Append(houseNameModel).ToString();
+                if (_houseServices.CheckFloorIsExist(block.Id, floorName))
+                {
+                    if (_houseServices.CheckHouseNameIsExistInFloor(block.Id, floorName, houseName))
+                    {
+                        response.StatusCode = 2;
+                        return Json(response);
+                    }
+                }
+                House house = new House();
+                house.Floor = floorName;
+                house.BlockId = block.Id;
+                house.Status = houseInfo.Status;
+                house.Area = houseInfo.Area;
+                HouseCategory houseCat = _houseCategoryServices.FindById(houseInfo.Type);
+                if (null != houseCat)
+                {
+                    house.TypeId = houseInfo.Type;
+                }
+                house.HouseName = houseName;
+                _houseServices.Add(house);
+            }
+            else
+            {
+                response.StatusCode = -1;
+            }
+
+            return Json(response);
+        }
+
+        [HttpPost]
+        [Route("Management/Config/UtilityService/UpdateHouseInfo")]
+        public ActionResult UpdateHouseInfo(HouseViewModel houseInfo)
+        {
+            MessageViewModels response = new MessageViewModels();
+            House house = _houseServices.FindById(houseInfo.Id);
+            if (null != house)
+            {
+                if (houseInfo.Status == SLIM_CONFIG.HOUSE_STATUS_DISABLE && house.OwnerID != null)
+                {
+                    response.StatusCode = 5;
+                    return Json(response);
+                }
+                house.Status = houseInfo.Status;
+                house.Area = houseInfo.Area;
+                HouseCategory houseCat = _houseCategoryServices.FindById(houseInfo.Type);
+                if (null != houseCat)
+                {
+                    house.TypeId = houseInfo.Type;
+                }
+
+                string houseName = new StringBuilder(house.Block.BlockName).Append("-").Append(house.Floor.Trim()).Append("-").Append(houseInfo.Name.Trim()).ToString();
+                if (_houseServices.CheckHouseNameIsExist(house.Id, houseName.Trim()))
+                {
+                    response.StatusCode = 4;
+                    return Json(response);
+                }
+                house.HouseName = houseName;
+                _houseServices.Update(house);
+            }
+            else
+            {
+                response.StatusCode = -1;
+            }
+            return Json(response);
+        }
+
+        [HttpGet]
+        [Route("Management/Config/UtilityService/CheckRoomName")]
+        public ActionResult CheckRoomName(int houseId, string roomName)
+        {
+            MessageViewModels response = new MessageViewModels();
+            House house = _houseServices.FindById(houseId);
+            if (null != house)
+            {
+                string houseName = new StringBuilder(house.Block.BlockName).Append("-").Append(house.Floor).Append("-").Append(roomName).ToString();
+                if (_houseServices.CheckHouseNameIsExist(house.Id, houseName))
+                {
+                    response.StatusCode = 2;
+                }
+                else
+                {
+                    response.StatusCode = 1;
+                }
+            }
+            else
+            {
+                response.StatusCode = -1;
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        [Route("Management/Config/UtilityService/CheckFloorOrRoom")]
+        public ActionResult CheckRoomName(int mode, int blockId, string floorName, string roomName)
+        {
+            MessageViewModels response = new MessageViewModels();
+            // 1 is check floor    
+            if (mode == 1)
+            {
+                if (_houseServices.CheckFloorIsExist(blockId, floorName))
+                {
+                    response.StatusCode = 2;
+                }
+                else
+                {
+                    response.StatusCode = 1;
+                }
+            }
+            else if (mode == 2)
+            {
+                Block block = _blockServices.FindById(blockId);
+                if (block != null)
+                {
+                    string houseName =
+                        new StringBuilder(block.BlockName).Append("-").Append(floorName).Append("-").Append(roomName).ToString();
+                    if (_houseServices.CheckHouseNameIsExistInFloor(blockId, floorName, houseName))
+                    {
+                        response.StatusCode = 2;
+                    }
+                    else
+                    {
+                        response.StatusCode = 1;
+                    }
+                }
+                else
+                {
+                    response.StatusCode = -1;
+                }
+
+            }// mode 2 check room is exist in floor of the block
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [Route("Management/Config/UtilityService/DeleteHouse")]
+        public ActionResult DeleteRoom(List<int> houseIdList)
+        {
+            MessageViewModels response = new MessageViewModels();
+            if (null != houseIdList)
+            {
+                foreach (var houseId in houseIdList)
+                {
+                    House house = _houseServices.FindById(houseId);
+                    if (null != house)
+                    {
+                        if (house.Status == SLIM_CONFIG.HOUSE_STATUS_DISABLE && house.OwnerID == null)
+                        {
+                            _houseServices.Delete(house);
+                        }
+                        else
+                        {
+                            response.StatusCode = 2;
+                            response.Data = house.HouseName;
+                            return Json(response);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                response.StatusCode = -1;
+            }
+            return Json(response);
+        }
+
+        [HttpGet]
+        [Route("Management/Config/UtilityService/GetBlockInfo")]
+        public ActionResult GetBlockInfo(int blockId)
+        {
+            MessageViewModels response = new MessageViewModels();
+            Block block = _blockServices.FindById(blockId);
+            List<FloorModel> listFloorModel = new List<FloorModel>();
+            FloorModel floorModel = null;
+            if (null != block)
+            {
+                List<House> listFloor = _houseServices.GetAllFloorInBlock(block.Id);
+                foreach (var floor in listFloor)
+                {
+                    floorModel = new FloorModel();
+                    floorModel.Name = floor.Floor;
+                    floorModel.Id = floor.Floor;
+                    listFloorModel.Add(floorModel);
+                }
+                object obj = new
+                {
+                    blockName = block.BlockName,
+                    floor = listFloorModel
+                };
+                response.Data = obj;
+            }
+            else
+            {
+                response.StatusCode = -1;
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        [Route("Management/Config/UtilityService/GetFloorInBlock")]
+        public ActionResult GetFloorInBlock(int blockId)
+        {
+            MessageViewModels response = new MessageViewModels();
+            List<FloorModel> floorList = new List<FloorModel>();
+            FloorModel floorModel = null;
+            Block block = _blockServices.FindById(blockId);
+            if (null != block)
+            {
+                List<House> listFloor = _houseServices.GetAllFloorInBlock(blockId);
+                foreach (var floor in listFloor)
+                {
+                    floorModel = new FloorModel();
+                    floorModel.Id = floor.Floor;
+                    floorModel.Name = floor.Floor;
+                    floorList.Add(floorModel);
+                }
+                response.Data = floorList;
+            }
+            else
+            {
+                response.StatusCode = -1;
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        [Route("Management/Config/UtilityService/GetBlockList")]
+        public ActionResult GetBlockList()
+        {
+            List<BlockViewModel> blockList = new List<BlockViewModel>();
+            BlockViewModel block = null;
+            List<Block> blocks = _blockServices.GetAllBlocks();
+            foreach (var b in blocks)
+            {
+                block = new BlockViewModel();
+                block.Name = b.BlockName;
+                block.Id = b.Id;
+                block.NoOfFloor = b.Houses.GroupBy(h => h.Floor).ToList().Count();
+                block.TotalRoom = b.Houses.ToList().Count;
+                block.TotalActiveRoom = b.Houses.Where(h => h.Status != null && h.Status == SLIM_CONFIG.HOUSE_STATUS_ENABLE).ToList().Count();
+                blockList.Add(block);
+            }
+            return Json(blockList, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        [Route("Management/Config/UtilityService/GetBlockname")]
+        public ActionResult GetBlockname(int blockId)
+        {
+            MessageViewModels response = new MessageViewModels();
+            Block block = _blockServices.FindById(blockId);
+            if (null != block)
+            {
+                response.Data = block.BlockName;
+            }
+            else
+            {
+                response.StatusCode = -1;
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [Route("Management/Config/UtilityService/ChangeFloorName")]
+        public ActionResult ChangeFloorName(int blockId, string oldFloorName, string newFloorName)
+        {
+            MessageViewModels response = new MessageViewModels();
+            Block block = _blockServices.FindById(blockId);
+            if (null != block && oldFloorName != null && newFloorName != null)
+            {
+                oldFloorName = oldFloorName.Trim();
+                newFloorName = newFloorName.Trim();
+                if (_houseServices.CheckFloorIsExist(block.Id, newFloorName))
+                {
+                    response.StatusCode = 2;
+                }
+                else
+                {
+                    List<House> getHouseInFloor = _houseServices.GetAlllRoomsInFloor(block.Id, oldFloorName);
+                    string name = "";
+                    string houseName = "";
+                    foreach (var h in getHouseInFloor)
+                    {
+                        name = h.HouseName.Split('-')[2];
+                        houseName = new StringBuilder(block.BlockName).Append("-").Append(newFloorName).Append("-").Append(name).ToString();
+                        h.Floor = newFloorName;
+                        h.HouseName = houseName;
+                        _houseServices.Update(h);
+                    }
+                }
+            }
+            else
+            {
+                response.StatusCode = -1;
+            }
+            return Json(response);
+        }
+
+        [HttpPost]
+        [Route("Management/Config/UtilityService/UpdateBlockName")]
+        public ActionResult UpdateBlockName(int blockId, string blockName)
+        {
+            MessageViewModels response = new MessageViewModels();
+            Block block = _blockServices.FindById(blockId);
+            if (null != block && blockName != null)
+            {
+                blockName = blockName.Trim();
+                if (_blockServices.CheckBlockNameIsExisted(block.Id, blockName))
+                {
+                    response.StatusCode = 2;
+                }
+                else
+                {
+                    string name = "";
+                    string houseName = "";
+                    block.BlockName = blockName;
+                    _blockServices.Update(block);
+                    foreach (var h in block.Houses)
+                    {
+                        House eHouse = _houseServices.FindById(h.Id);
+                        name = h.HouseName.Split('-')[2];
+                        houseName = new StringBuilder(blockName).Append("-").Append(h.Floor).Append("-").Append(name).ToString();
+                        eHouse.HouseName = houseName;
+                        _houseServices.Update(eHouse);
+                    }
+                }
+            }
+            else
+            {
+                response.StatusCode = -1;
+            }
+            return Json(response);
+        }
 
         private bool ParseData(List<UtilityServiceRangePriceModel> priceList, int type, int utilServiceId)
         {

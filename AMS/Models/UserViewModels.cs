@@ -39,6 +39,8 @@ namespace AMS.Models
         public int Status { get; set; }
         public string CreateDate { get; set; }
         public string DT_RowId { get; set; }
-
+        public string IdCreateDate { get; set; }
+        public string UserAccountName { get; set; }
+        public int RelationLevel { get; set; }
     }
 } 
