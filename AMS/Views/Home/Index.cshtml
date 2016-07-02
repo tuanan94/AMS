@@ -44,6 +44,7 @@
 <link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css" />
 <script src="~/Scripts/amsScript/LoadFamilyTree.js"></script>
 <script src="~/Scripts/amsScript/LoadUserProfile.js"></script>
+<script src="~/Scripts/amsScript/ReportPost.js"></script>
 
 <style>
     .button {
@@ -233,13 +234,40 @@
     </div>
 </div>
 
+<!-- Report modal -->
+<div class="modal fade" id="reportModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Báo cáo vi phạm</h4>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="reportPostId" placeholder="PostId" />
+
+                <input class="form-control" id="reportContent" placeholder="Bài viết này đã vi phạm....?" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="processSendReport()">Gửi đến quản lí</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
 
 
 
 
 @{
-    if (alert!="")
+    if (alert!="" && SLIM_CONFIG.CURRENT_MODE == SLIM_CONFIG.PROGRAM_MODE_PRODUCT)
     {
+        
         @*<div id="openModal" class="modalDialog">
             <div class="modal-content">
 
@@ -615,6 +643,14 @@
         $("#postContent").val('');
     }
     function report(id) {
-        alert('Chức năng report (chưa xử lí)' + id);
+        $("#reportPostId").val(id)
+        $("#reportContent").val("")
+        $("#reportModal").modal()
+    }
+    function processSendReport() {
+        var postId = $("#reportPostId").val()
+        var reportContent = $("#reportContent").val()
+        console.log("processSendReport: postid=" + postId + "reportContent=" + reportContent)
+        sendReport(postId,reportContent)
     }
 </script>

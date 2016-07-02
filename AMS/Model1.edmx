@@ -234,6 +234,7 @@
           <Property Name="DisplayMember" Type="bit" />
           <Property Name="AllowOtherView" Type="bit" />
           <Property Name="TypeId" Type="int" />
+          <Property Name="Status" Type="int" />
         </EntityType>
         <EntityType Name="HouseCategory">
           <Key>
@@ -336,9 +337,10 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Description" Type="nvarchar" MaxLength="250" />
-          <Property Name="CreateDate" Type="datetime" />
-          <Property Name="Disable" Type="int" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="PostId" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ReportContent" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -410,16 +412,6 @@
           <Property Name="UserId" Type="int" />
           <Property Name="AroundProviderId" Type="int" />
           <Property Name="Point" Type="int" />
-        </EntityType>
-        <EntityType Name="UserReportPost">
-          <Key>
-            <PropertyRef Name="UserId" />
-            <PropertyRef Name="PostId" />
-            <PropertyRef Name="ReportId" />
-          </Key>
-          <Property Name="UserId" Type="int" Nullable="false" />
-          <Property Name="PostId" Type="int" Nullable="false" />
-          <Property Name="ReportId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="UtilityService">
           <Key>
@@ -727,6 +719,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Report_Post">
+          <End Role="Post" Type="Self.Post" Multiplicity="0..1" />
+          <End Role="Report" Type="Self.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Report_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Report" Type="Self.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tbl_arround_srv_tbl_around_srv_cat">
           <End Role="AroundProviderCategory" Type="Self.AroundProviderCategory" Multiplicity="0..1" />
           <End Role="AroundProvider" Type="Self.AroundProvider" Multiplicity="*" />
@@ -897,42 +913,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_UserReportPost_Post">
-          <End Role="Post" Type="Self.Post" Multiplicity="1" />
-          <End Role="UserReportPost" Type="Self.UserReportPost" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Post">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="UserReportPost">
-              <PropertyRef Name="PostId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserReportPost_Report">
-          <End Role="Report" Type="Self.Report" Multiplicity="1" />
-          <End Role="UserReportPost" Type="Self.UserReportPost" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Report">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="UserReportPost">
-              <PropertyRef Name="ReportId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserReportPost_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="UserReportPost" Type="Self.UserReportPost" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="UserReportPost">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_UtilityService_UtilServiceCategory">
           <End Role="UtilServiceCategory" Type="Self.UtilServiceCategory" Multiplicity="0..1" />
           <End Role="UtilityService" Type="Self.UtilityService" Multiplicity="*" />
@@ -1016,7 +996,6 @@
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserAnswerPoll" EntityType="Self.UserAnswerPoll" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRateAroundProvider" EntityType="Self.UserRateAroundProvider" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="UserReportPost" EntityType="Self.UserReportPost" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UtilityService" EntityType="Self.UtilityService" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UtilityServiceRangePrices" EntityType="Self.UtilityServiceRangePrices" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UtilServiceCategory" EntityType="Self.UtilServiceCategory" Schema="dbo" store:Type="Tables" />
@@ -1105,6 +1084,14 @@
             <End Role="Receipt" EntitySet="Receipt" />
             <End Role="ReceiptDetail" EntitySet="ReceiptDetail" />
           </AssociationSet>
+          <AssociationSet Name="FK_Report_Post" Association="Self.FK_Report_Post">
+            <End Role="Post" EntitySet="Post" />
+            <End Role="Report" EntitySet="Report" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Report_User" Association="Self.FK_Report_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Report" EntitySet="Report" />
+          </AssociationSet>
           <AssociationSet Name="FK_tbl_arround_srv_tbl_around_srv_cat" Association="Self.FK_tbl_arround_srv_tbl_around_srv_cat">
             <End Role="AroundProviderCategory" EntitySet="AroundProviderCategory" />
             <End Role="AroundProvider" EntitySet="AroundProvider" />
@@ -1160,18 +1147,6 @@
           <AssociationSet Name="FK_UserDoServey_User" Association="Self.FK_UserDoServey_User">
             <End Role="User" EntitySet="User" />
             <End Role="UserAnswerPoll" EntitySet="UserAnswerPoll" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserReportPost_Post" Association="Self.FK_UserReportPost_Post">
-            <End Role="Post" EntitySet="Post" />
-            <End Role="UserReportPost" EntitySet="UserReportPost" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserReportPost_Report" Association="Self.FK_UserReportPost_Report">
-            <End Role="Report" EntitySet="Report" />
-            <End Role="UserReportPost" EntitySet="UserReportPost" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserReportPost_User" Association="Self.FK_UserReportPost_User">
-            <End Role="User" EntitySet="User" />
-            <End Role="UserReportPost" EntitySet="UserReportPost" />
           </AssociationSet>
           <AssociationSet Name="FK_UtilityService_UtilServiceCategory" Association="Self.FK_UtilityService_UtilServiceCategory">
             <End Role="UtilServiceCategory" EntitySet="UtilServiceCategory" />
@@ -1447,6 +1422,7 @@
           <Property Name="DisplayMember" Type="Boolean" />
           <Property Name="AllowOtherView" Type="Boolean" />
           <Property Name="TypeId" Type="Int32" />
+          <Property Name="Status" Type="Int32" />
           <NavigationProperty Name="Block" Relationship="Self.FK_House_Block" FromRole="House" ToRole="Block" />
           <NavigationProperty Name="HelpdeskRequests" Relationship="Self.FK_tbl_h_desk_request_tbl_house" FromRole="House" ToRole="HelpdeskRequest" />
           <NavigationProperty Name="HouseCategory" Relationship="Self.FK_House_HouseType" FromRole="House" ToRole="HouseCategory" />
@@ -1512,8 +1488,8 @@
           <Property Name="EmbedCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Disable" Type="Int32" />
           <NavigationProperty Name="Comments" Relationship="Self.FK_Comment_Post" FromRole="Post" ToRole="Comment" />
+          <NavigationProperty Name="Reports" Relationship="Self.FK_Report_Post" FromRole="Post" ToRole="Report" />
           <NavigationProperty Name="User" Relationship="Self.FK_tbl_post_tbl_user" FromRole="Post" ToRole="User" />
-          <NavigationProperty Name="UserReportPosts" Relationship="Self.FK_UserReportPost_Post" FromRole="Post" ToRole="UserReportPost" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -1568,10 +1544,12 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <Property Name="Disable" Type="Int32" />
-          <NavigationProperty Name="UserReportPosts" Relationship="Self.FK_UserReportPost_Report" FromRole="Report" ToRole="UserReportPost" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="PostId" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ReportContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Post" Relationship="Self.FK_Report_Post" FromRole="Report" ToRole="Post" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Report_User" FromRole="Report" ToRole="User" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -1636,10 +1614,10 @@
           <NavigationProperty Name="House" Relationship="Self.FK_User_House" FromRole="User" ToRole="House" />
           <NavigationProperty Name="Posts" Relationship="Self.FK_tbl_post_tbl_user" FromRole="User" ToRole="Post" />
           <NavigationProperty Name="Receipts" Relationship="Self.FK_Receipt_User" FromRole="User" ToRole="Receipt" />
+          <NavigationProperty Name="Reports" Relationship="Self.FK_Report_User" FromRole="User" ToRole="Report" />
           <NavigationProperty Name="Role" Relationship="Self.FK_tbl_user_tbl_role" FromRole="User" ToRole="Role" />
           <NavigationProperty Name="UserRateAroundProviders" Relationship="Self.FK_tbl_resident_rate_around_srv_tbl_user" FromRole="User" ToRole="UserRateAroundProvider" />
           <NavigationProperty Name="UserAnswerPolls" Relationship="Self.FK_UserDoServey_User" FromRole="User" ToRole="UserAnswerPoll" />
-          <NavigationProperty Name="UserReportPosts" Relationship="Self.FK_UserReportPost_User" FromRole="User" ToRole="UserReportPost" />
         </EntityType>
         <EntityType Name="UserAnswerPoll">
           <Key>
@@ -1663,19 +1641,6 @@
           <Property Name="Point" Type="Int32" />
           <NavigationProperty Name="AroundProvider" Relationship="Self.FK_tbl_resident_rate_around_srv_tbl_arround_srv" FromRole="UserRateAroundProvider" ToRole="AroundProvider" />
           <NavigationProperty Name="User" Relationship="Self.FK_tbl_resident_rate_around_srv_tbl_user" FromRole="UserRateAroundProvider" ToRole="User" />
-        </EntityType>
-        <EntityType Name="UserReportPost">
-          <Key>
-            <PropertyRef Name="UserId" />
-            <PropertyRef Name="PostId" />
-            <PropertyRef Name="ReportId" />
-          </Key>
-          <Property Name="UserId" Type="Int32" Nullable="false" />
-          <Property Name="PostId" Type="Int32" Nullable="false" />
-          <Property Name="ReportId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Post" Relationship="Self.FK_UserReportPost_Post" FromRole="UserReportPost" ToRole="Post" />
-          <NavigationProperty Name="Report" Relationship="Self.FK_UserReportPost_Report" FromRole="UserReportPost" ToRole="Report" />
-          <NavigationProperty Name="User" Relationship="Self.FK_UserReportPost_User" FromRole="UserReportPost" ToRole="User" />
         </EntityType>
         <EntityType Name="UtilityService">
           <Key>
@@ -2047,6 +2012,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Report_Post">
+          <End Role="Post" Type="Self.Post" Multiplicity="0..1" />
+          <End Role="Report" Type="Self.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tbl_post_tbl_user">
           <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="Post" Type="Self.Post" Multiplicity="*" />
@@ -2056,18 +2033,6 @@
             </Principal>
             <Dependent Role="Post">
               <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserReportPost_Post">
-          <End Role="Post" Type="Self.Post" Multiplicity="1" />
-          <End Role="UserReportPost" Type="Self.UserReportPost" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Post">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="UserReportPost">
-              <PropertyRef Name="PostId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2121,15 +2086,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_UserReportPost_Report">
-          <End Role="Report" Type="Self.Report" Multiplicity="1" />
-          <End Role="UserReportPost" Type="Self.UserReportPost" Multiplicity="*" />
+        <Association Name="FK_Report_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Report" Type="Self.Report" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Report">
+            <Principal Role="User">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="UserReportPost">
-              <PropertyRef Name="ReportId" />
+            <Dependent Role="Report">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2165,18 +2130,6 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="UserAnswerPoll">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserReportPost_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="UserReportPost" Type="Self.UserReportPost" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="UserReportPost">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
@@ -2255,7 +2208,6 @@
           <EntitySet Name="Users" EntityType="Self.User" />
           <EntitySet Name="UserAnswerPolls" EntityType="Self.UserAnswerPoll" />
           <EntitySet Name="UserRateAroundProviders" EntityType="Self.UserRateAroundProvider" />
-          <EntitySet Name="UserReportPosts" EntityType="Self.UserReportPost" />
           <EntitySet Name="UtilityServices" EntityType="Self.UtilityService" />
           <EntitySet Name="UtilityServiceRangePrices" EntityType="Self.UtilityServiceRangePrice" />
           <EntitySet Name="UtilServiceCategories" EntityType="Self.UtilServiceCategory" />
@@ -2364,13 +2316,13 @@
             <End Role="Poll" EntitySet="Polls" />
             <End Role="UserAnswerPoll" EntitySet="UserAnswerPolls" />
           </AssociationSet>
+          <AssociationSet Name="FK_Report_Post" Association="Self.FK_Report_Post">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
           <AssociationSet Name="FK_tbl_post_tbl_user" Association="Self.FK_tbl_post_tbl_user">
             <End Role="User" EntitySet="Users" />
             <End Role="Post" EntitySet="Posts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserReportPost_Post" Association="Self.FK_UserReportPost_Post">
-            <End Role="Post" EntitySet="Posts" />
-            <End Role="UserReportPost" EntitySet="UserReportPosts" />
           </AssociationSet>
           <AssociationSet Name="FK_Receipt_User" Association="Self.FK_Receipt_User">
             <End Role="User" EntitySet="Users" />
@@ -2388,9 +2340,9 @@
             <End Role="ReceiptDetail" EntitySet="ReceiptDetails" />
             <End Role="Transaction" EntitySet="Transactions" />
           </AssociationSet>
-          <AssociationSet Name="FK_UserReportPost_Report" Association="Self.FK_UserReportPost_Report">
+          <AssociationSet Name="FK_Report_User" Association="Self.FK_Report_User">
+            <End Role="User" EntitySet="Users" />
             <End Role="Report" EntitySet="Reports" />
-            <End Role="UserReportPost" EntitySet="UserReportPosts" />
           </AssociationSet>
           <AssociationSet Name="FK_tbl_user_tbl_role" Association="Self.FK_tbl_user_tbl_role">
             <End Role="Role" EntitySet="Roles" />
@@ -2403,10 +2355,6 @@
           <AssociationSet Name="FK_UserDoServey_User" Association="Self.FK_UserDoServey_User">
             <End Role="User" EntitySet="Users" />
             <End Role="UserAnswerPoll" EntitySet="UserAnswerPolls" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserReportPost_User" Association="Self.FK_UserReportPost_User">
-            <End Role="User" EntitySet="Users" />
-            <End Role="UserReportPost" EntitySet="UserReportPosts" />
           </AssociationSet>
           <AssociationSet Name="FK_UtilityService_UtilServiceCategory" Association="Self.FK_UtilityService_UtilServiceCategory">
             <End Role="UtilServiceCategory" EntitySet="UtilServiceCategories" />
@@ -2665,6 +2613,7 @@
                 <ScalarProperty Name="DisplayMember" ColumnName="DisplayMember" />
                 <ScalarProperty Name="AllowOtherView" ColumnName="AllowOtherView" />
                 <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2775,9 +2724,10 @@
             <EntityTypeMapping TypeName="AMSModel.Report">
               <MappingFragment StoreEntitySet="Report">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="Disable" ColumnName="Disable" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ReportContent" ColumnName="ReportContent" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2854,15 +2804,6 @@
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="AroundProviderId" ColumnName="AroundProviderId" />
                 <ScalarProperty Name="Point" ColumnName="Point" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserReportPosts">
-            <EntityTypeMapping TypeName="AMSModel.UserReportPost">
-              <MappingFragment StoreEntitySet="UserReportPost">
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="PostId" ColumnName="PostId" />
-                <ScalarProperty Name="ReportId" ColumnName="ReportId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

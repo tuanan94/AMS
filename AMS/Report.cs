@@ -14,18 +14,13 @@ namespace AMS
     
     public partial class Report
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Report()
-        {
-            this.UserReportPosts = new HashSet<UserReportPost>();
-        }
-    
         public int Id { get; set; }
-        public string Description { get; set; }
-        public Nullable<System.DateTime> CreateDate { get; set; }
-        public Nullable<int> Disable { get; set; }
+        public Nullable<int> UserId { get; set; }
+        public Nullable<int> PostId { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
+        public string ReportContent { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserReportPost> UserReportPosts { get; set; }
+        public virtual Post Post { get; set; }
+        public virtual User User { get; set; }
     }
 }

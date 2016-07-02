@@ -28,5 +28,19 @@ namespace AMS.Service
         {
             reportRepository.Update(obj);
         }
+        public List<User> findAllReportedUserByPostId(int id)
+        {
+            List<User> result = new List<User>();
+            List<Report> allReport = GetListReport();
+            foreach(Report rp in allReport)
+            {
+                if(rp.Post!=null && rp.Post.Id == id && rp.User!=null)
+                {
+                    result.Add(rp.User);   
+                }
+            }
+            return result;
+        }
+
     }
 }

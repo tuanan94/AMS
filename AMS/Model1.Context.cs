@@ -58,7 +58,6 @@ namespace AMS
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAnswerPoll> UserAnswerPolls { get; set; }
         public virtual DbSet<UserRateAroundProvider> UserRateAroundProviders { get; set; }
-        public virtual DbSet<UserReportPost> UserReportPosts { get; set; }
         public virtual DbSet<UtilityService> UtilityServices { get; set; }
         public virtual DbSet<UtilityServiceRangePrice> UtilityServiceRangePrices { get; set; }
         public virtual DbSet<UtilServiceCategory> UtilServiceCategories { get; set; }

@@ -7,7 +7,17 @@ using System.Web;
 namespace AMS
 {
     public class SLIM_CONFIG
-    {
+    {  
+
+
+        public static int PROGRAM_MODE_PRODUCT = 1;
+        public static int PROGRAM_MODE_DEBUG = 0;
+
+        /// <summary>
+        /// Thay đổi Current_mode thành mode_debug sẽ bỏ 1 vài tính năng của survey
+        /// </summary>
+        public static int CURRENT_MODE = PROGRAM_MODE_DEBUG;
+
         public enum LoginResult { Success, NoUser, WrongPassword }
         public static String imagePath = "~/Images/";
         public static int Role_RESIDENT = 3;

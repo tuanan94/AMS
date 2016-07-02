@@ -18,7 +18,7 @@ namespace AMS
         public Post()
         {
             this.Comments = new HashSet<Comment>();
-            this.UserReportPosts = new HashSet<UserReportPost>();
+            this.Reports = new HashSet<Report>();
         }
     
         public int Id { get; set; }
@@ -35,8 +35,8 @@ namespace AMS
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Comment> Comments { get; set; }
-        public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserReportPost> UserReportPosts { get; set; }
+        public virtual ICollection<Report> Reports { get; set; }
+        public virtual User User { get; set; }
     }
 }

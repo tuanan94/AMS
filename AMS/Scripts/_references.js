@@ -8,9 +8,18 @@
 /// <reference path="amsScript/jquery.validate.min.js" />
 /// <reference path="amsscript/loadfamilytree.js" />
 /// <reference path="amsscript/loaduserprofile.js" />
+/// <reference path="amsScript/moment.min.js" />
+/// <reference path="amsscript/reportpost.js" />
 /// <reference path="amsscript/scripts.js" />
 /// <reference path="amsscript/social.js" />
 /// <reference path="amsscript/vendor.js" />
+/// <reference path="aroundProvider/jquery.mixitup.js" />
+/// <reference path="aroundProvider/jquery.nav.js" />
+/// <reference path="aroundProvider/jquery.sticky.js" />
+/// <reference path="aroundProvider/main.js" />
+/// <reference path="aroundProvider/map.js" />
+/// <reference path="aroundProvider/plugins.js" />
+/// <reference path="aroundProvider/wow.min.js" />
 /// <reference path="bootstrap.js" />
 /// <reference path="bootstrap-switch.js" />
 /// <reference path="Chart.min.js" />
@@ -18,28 +27,20 @@
 /// <reference path="exporting.js" />
 /// <reference path="graph.js" />
 /// <reference path="highcharts.js" />
+/// <reference path="jquery.datetimepicker.full.js" />
+/// <reference path="jquery.datetimepicker.min.js" />
+/// <reference path="jquery.min.js" />
 /// <reference path="jquery.unobtrusive-ajax.js" />
 /// <reference path="jquery.validate.js" />
 /// <reference path="jquery.validate.unobtrusive.js" />
 /// <reference path="jquery-1.10.2.js" />
+/// <reference path="jquery-ui.min.js" />
 /// <reference path="modernizr-2.6.2.js" />
+/// <reference path="rating.js" />
 /// <reference path="respond.js" />
 
-/// <reference path="graph.js" />
-/// <reference path="amsscript/social.js" />
-/// <reference path="jquery.unobtrusive-ajax.js" />
-/// <reference path="datatables.js" />
-/// <reference path="amsscript/custom.js" />
-/// <reference path="exporting.js" />
-
-/// <reference path="highcharts.js" />
 
 
-/// <reference path="highcharts.js" />
-/// <reference path="jquery.datetimepicker.full.js" />
-/// <reference path="jquery-ui.js" />
-/// <reference path="jquery.js" />
-/// <reference path="amsscript/moment.js" />
-/// <reference path="jquery.datetimepicker.js" />
+
 
 

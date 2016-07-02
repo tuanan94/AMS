@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="3a02186c4e9c4aedbfce6090fcab7a34" Name="Diagram1">
+      <Diagram DiagramId="a10e348b8eee48e7a6f1ba39c4ed79bb" Name="Diagram1">
         <EntityTypeShape EntityType="AMSModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.Answer" Width="1.5" PointX="2.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.AroundProvider" Width="1.5" PointX="17.25" PointY="5.5" IsExpanded="true" />
@@ -23,7 +23,7 @@
         <EntityTypeShape EntityType="AMSModel.HelpdeskRequestLog" Width="1.5" PointX="19.5" PointY="16.5" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.HelpdeskService" Width="1.5" PointX="6" PointY="9.5" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.HelpdeskServiceCategory" Width="1.5" PointX="3.75" PointY="10" IsExpanded="true" />
-        <EntityTypeShape EntityType="AMSModel.House" Width="1.5" PointX="6" PointY="15.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="AMSModel.House" Width="1.5" PointX="6" PointY="15.75" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.HouseCategory" Width="1.5" PointX="3.75" PointY="14" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.Image" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.Poll" Width="1.5" PointX="0.75" PointY="10.75" IsExpanded="true" />
@@ -31,14 +31,13 @@
         <EntityTypeShape EntityType="AMSModel.Question" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.Receipt" Width="1.5" PointX="11.25" PointY="15.875" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.ReceiptDetail" Width="1.5" PointX="13.5" PointY="10.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="AMSModel.Report" Width="1.5" PointX="19.5" PointY="24.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="AMSModel.Report" Width="1.5" PointX="21.75" PointY="19" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.Role" Width="1.5" PointX="12" PointY="21.25" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.sysdiagram" Width="1.5" PointX="7.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.Transaction" Width="1.5" PointX="21.75" PointY="12.875" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.User" Width="1.5" PointX="14.25" PointY="14.5" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.UserAnswerPoll" Width="1.5" PointX="16.5" PointY="19" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.UserRateAroundProvider" Width="1.5" PointX="19.5" PointY="13" IsExpanded="true" />
-        <EntityTypeShape EntityType="AMSModel.UserReportPost" Width="1.5" PointX="21.75" PointY="19" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.UtilityService" Width="1.5" PointX="11.25" PointY="10.5" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.UtilityServiceRangePrice" Width="1.5" PointX="13.5" PointY="1.5" IsExpanded="true" />
         <EntityTypeShape EntityType="AMSModel.UtilServiceCategory" Width="1.5" PointX="9" PointY="11" IsExpanded="true" />
@@ -69,17 +68,16 @@
         <AssociationConnector Association="AMSModel.FK_User_House" ManuallyRouted="false" />
         <AssociationConnector Association="AMSModel.FK_UtilServiceForHouseCat_HouseCategory" ManuallyRouted="false" />
         <AssociationConnector Association="AMSModel.FK_UserDoServey_Survey" ManuallyRouted="false" />
+        <AssociationConnector Association="AMSModel.FK_Report_Post" ManuallyRouted="false" />
         <AssociationConnector Association="AMSModel.FK_tbl_post_tbl_user" ManuallyRouted="false" />
-        <AssociationConnector Association="AMSModel.FK_UserReportPost_Post" ManuallyRouted="false" />
         <AssociationConnector Association="AMSModel.FK_Receipt_User" ManuallyRouted="false" />
         <AssociationConnector Association="AMSModel.FK_ReceiptDetail_Receipt" ManuallyRouted="false" />
         <AssociationConnector Association="AMSModel.FK_tbl_receipt_detail_tbl_service_fee" ManuallyRouted="false" />
         <AssociationConnector Association="AMSModel.FK_Transaction_ReceiptDetail" ManuallyRouted="false" />
-        <AssociationConnector Association="AMSModel.FK_UserReportPost_Report" ManuallyRouted="false" />
+        <AssociationConnector Association="AMSModel.FK_Report_User" ManuallyRouted="false" />
         <AssociationConnector Association="AMSModel.FK_tbl_user_tbl_role" ManuallyRouted="false" />
         <AssociationConnector Association="AMSModel.FK_tbl_resident_rate_around_srv_tbl_user" ManuallyRouted="false" />
         <AssociationConnector Association="AMSModel.FK_UserDoServey_User" ManuallyRouted="false" />
-        <AssociationConnector Association="AMSModel.FK_UserReportPost_User" ManuallyRouted="false" />
         <AssociationConnector Association="AMSModel.FK_UtilityService_UtilServiceCategory" ManuallyRouted="false" />
         <AssociationConnector Association="AMSModel.FK_UtilityServiceRangePrices_UtilityService" ManuallyRouted="false" />
         <AssociationConnector Association="AMSModel.FK_UtilServiceForHouseCat_UtilityService" ManuallyRouted="false" />
