@@ -61,24 +61,42 @@ namespace AMS.Service
         }
         public List<PostMapping> getAllPostMapping(int? tokenId, int? houseId)
         {
-            List<Post> allPost = new List<Post>();
+            List<Post> allPostWithHouseID = new List<Post>();
             List<Post> allRaw = getAllPost();
+            List<Post> result = new List<Post>();
+            
             if (houseId != null)
             {
                 foreach (Post p in allRaw)
                 {
                     if (p.User.HouseId == houseId)
                     {
-                        allPost.Add(p);
+                        allPostWithHouseID.Add(p);
                     }
                 }
             }
             else
             {
-                allPost = allRaw;
+                allPostWithHouseID = allRaw;
             }
-            List<PostMapping> result = new List<PostMapping>();
-            foreach(Post p in allPost)
+            allPostWithHouseID.OrderByDescending(p => p.CreateDate);
+
+            int position;
+            if (tokenId == null)
+            {
+                position = -1;
+            }
+            else
+            {
+                position = allPostWithHouseID.FindIndex(p => p.Id == tokenId);
+            }
+            for(int i = position + 1; i < allPostWithHouseID.Count && result.Count < SLIM_CONFIG.POST_NUMBER_SOCIAL_FEED;i++)
+            {
+                result.Add(allPostWithHouseID.ElementAt(i));
+            }
+             
+            List<PostMapping> postMappingResult = new List<PostMapping>();
+            foreach(Post p in result)
             {
                 PostMapping pMapping = new PostMapping();
                 pMapping.Id = p.Id;
@@ -88,9 +106,9 @@ namespace AMS.Service
                 pMapping.UserId = p.UserId;
                 pMapping.username = p.User == null ? "Không xác định sở hữu" : p.User.Username;
                 pMapping.userProfile = p.User == null || p.User.ProfileImage == null || p.User.ProfileImage.Equals("") ? "/Content/Images/defaultProfile.png" : p.User.ProfileImage;
-                result.Add(pMapping);
+                postMappingResult.Add(pMapping);
             }
-            return result;
+            return postMappingResult;
         }
         public List<Post> getAllPostByRole(int roleId)
         {

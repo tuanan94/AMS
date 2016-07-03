@@ -40,6 +40,8 @@ namespace AMS
         public static int POST_STATUS_PUBLIC = 0;
         public static int POST_STATUS_PROTECTED = 1;
         public static int POST_STATUS_HIDE = 2;
+        public static int POST_NUMBER_SOCIAL_FEED = 4;
+
         public static String dirPostImage = "postImage";
         public static String dirHouseProfileImage = "houseImage";
         public static String dirProfileImage = "profileImage";
