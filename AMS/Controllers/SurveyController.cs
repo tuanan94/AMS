@@ -143,7 +143,7 @@ namespace AMS.Controllers
         public ActionResult DoSurvey()
         {
             User currentUser = userService.FindById(int.Parse(User.Identity.GetUserId()));
-            House currentHouse = houseServices.FindById(currentUser.HouseId.Value);
+            //House currentHouse = houseServices.FindById(currentUser.HouseId.Value);
             List<Poll> listSurveys = PollService.GetListPolls();
             List<UserAnswerPoll> listUserAnswerPolls = userAnswerService.GetListUserAnswerPollsByPollId();
             List<UserAnswerPoll> listAnswerSurveys = userAnswerService.GetListUserAnswerPoll();
@@ -164,7 +164,7 @@ namespace AMS.Controllers
             ViewBag.ListSurvey = listSurveys;
             ViewBag.ListUserAnswer = listPollId;
             ViewBag.currentUser = currentUser;
-            ViewBag.currentHouse = currentHouse;
+         //   ViewBag.currentHouse = currentHouse;
             return View();
         }
         public ActionResult DoDetailSurvey(int PollId)

@@ -103,7 +103,7 @@
                                             <td>
 
                                                 @{
-                                        if (@item.EndDate >= DateTime.Now && @item.Status == 1)
+                                        if (@item.EndDate >= DateTime.Now || @item.Status == 1)
                                         {
                                             <span class="label" style="background-color: #3366ff; font-size: 14px; color: white">Đang mở</span>
 

@@ -9,15 +9,22 @@
     List<List<Double>> each = ViewBag.Each;
 }
 <style>
-    /*hr {
-        display: block;
-        margin-top: 0.5em;
-        margin-bottom: 0.5em;
-        margin-left: auto;
-        margin-right: auto;
-        border-style: inset;
-        border-width: 1px;
-    }*/
+    #rcorners2 {
+        border: 2px solid #73AD21;
+      
+        height: 50px;
+        width: auto
+    }
+    #rcorners3 {
+      
+        height: 50px;
+        
+    }
+    #rcorners1 {
+       
+        height: 50px;
+       
+    }
 </style>
 <script src="~/Scripts/jquery-1.10.2.js"></script>
 <script src="~/Scripts/highcharts.js"></script>
@@ -129,58 +136,74 @@
                                             
                                         </div>
                                         <div class="modal-body">
-                                            <fieldset class="scheduler-border less-padding">
+                                          
 
 
 
-                                                <div class="col-sm-5" style="margin-top: 20px">
+                                            <fieldset >
 
+
+
+                                                <div  class="col-sm-5" style="margin-top: 20px">
+                                                
                                                     @{
                             foreach (var obj in answers.ElementAt(k))
-                            {  <div style="height:30px">
-                              <label>@obj</label>
-                                  
-                                <br />
-                            </div> <hr>
+                            {
+                                if (obj != null && !obj.Equals(""))
+                                {
+                                    <div id="rcorners2">
+                                        <label style="padding: 5px;text-align: center">@obj</label>
+
+                                        <br />
+                                    </div>
+                                }
+                                                                                        <hr>
                             }
                                                     }
 
 
                                                 </div>
                                                 <div class="col-sm-4" style="margin-top: 20px">
-                                                    @{
+                                                   
+                                                                                                        @{
                             foreach (var a in listAnswer.ElementAt(k))
                             {
-                                <div style="height: 30px">
-                                    <div class="progress" style="width: 100%; margin-bottom: 20px">
+                                <div id="rcorners1">
+                                    <progress value="@a" max="100">
+                                    </progress> @a %
+                                    @*<div class="progress" style="width: 100%; margin-bottom: 20px">
                                         <div class="progress-bar" role="progressbar" aria-valuenow="@a"
-                                             aria-valuemin="0" aria-valuemax="100" style="width:100%">
+                                             aria-valuemin="0" aria-valuemax="100" style="width: 100%">
                                             @a%
                                         </div>
-                                    </div>
+                                    </div>*@
                                 </div><hr>
 
-                                                        <input type="hidden" id="answer" name="countAnser" value="@a" />
-                            }
+                                                            <input type="hidden" id="answer" name="countAnser" value="@a"/>
+                                                        }
                                                     }
                                                 </div>
                                                 <div class="col-sm-3" style="margin-top: 20px">
-                                                    @{
+                                                   
+                                                                                                        @{
                             foreach (var a in each.ElementAt(k))
                             {
-                                 <div style="height:30px"><label>@a Phiếu</label><br /></div><hr>
-                                
+                                                <div id="rcorners3">
+                                                    <label>@a Phiếu </label><br />
+                                                </div><hr>
 
-                            }
+
+                                                        }
                                                     }
                                                 </div>
-                                                <div class="col-sm-12" style="text-align: center"><label>Tổng cộng</label>:  @each.ElementAt(k).Sum() phiếu</div>
+                                                <div class="col-sm-12" style="text-align: center"><label>Tổng cộng</label>: @each.ElementAt(k).Sum() phiếu
+                                                </div>
 
 
 
 
 
-                                                @*<div id="container" style="min-width: 500px; height: 400px; margin: 0 auto"></div>*@
+                                              
                                             </fieldset>
                                         </div>
                                         <div class="modal-footer" style="background-color: #99ccff"></div>
@@ -416,6 +439,31 @@
         };
     });
     $("#myTables").DataTable({
+        "oLanguage": {
+            //    "sSearch": "Tìm Kiếm" //search,
+            "sProcessing": "Đang xử lý...",
+            "sLengthMenu": "Xem _MENU_ mục",
+            "sZeroRecords": "Không tìm thấy dòng nào phù hợp",
+            "sInfo": "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+            "sInfoEmpty": "Đang xem 0 đến 0 trong tổng số 0 mục",
+            "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+            "sInfoPostFix": "",
+            "sSearch": "Tìm:",
+            "sUrl": "",
+            "oPaginate": {
+                "sFirst": "Đầu",
+                "sPrevious": "Trước",
+                "sNext": "Tiếp",
+                "sLast": "Cuối"
+            }
+        }
+        //"language": {
+        //    "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Vietnamese.json"
+        //}
+
+
+    });
+    $("#myTabless").DataTable({
         "oLanguage": {
             //    "sSearch": "Tìm Kiếm" //search,
             "sProcessing": "Đang xử lý...",
