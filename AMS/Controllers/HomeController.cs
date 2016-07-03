@@ -497,15 +497,18 @@ namespace AMS.Controllers
             userService.deleteUser(u);
             return true;
         }
-            public ActionResult ViewAroundProvider()
+            public ActionResult ViewAroundProvider(String cat)
         {
-            ViewBag.AllProviders = _aroundProviderService.GetAllProviders();
+
+            ViewBag.AllProviders = _aroundProviderService.GetAllProviderWithCat(cat);
             return View();
         }
 
-        public ActionResult ViewAroundProviderDetail()
+        public ActionResult ViewAroundProviderDetail(String cat)
         {
-            ViewBag.AllProviders = _aroundProviderService.GetAllProviders();
+            ViewBag.AllProviders = _aroundProviderService.GetAllProviderWithCat(cat);
+            ViewBag.AllCategorys = _aroundProviderService.getAllCategory();
+            ViewBag.activeCat = cat;
             return View();
         }
 
