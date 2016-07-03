@@ -211,143 +211,156 @@
             }
             foreach (var item in listSurveys)
             {
-                listUserAnswer = (userAnswerService.GetListUserAnswerPollsByPollId(item.Id));
-                List<BlockPoll> listBlockPolls = BlockPollService.FindByPollId(item.Id);
-                int k = 0;
-                int p = 0;
-                if (listSurveys.Count != 0)
+                if (DateTime.Now >= item.PublishDate)
                 {
-                    if (item.Mode == 1 && item.Status == 1)
+
+                    listUserAnswer = (userAnswerService.GetListUserAnswerPollsByPollId(item.Id));
+                    List<BlockPoll> listBlockPolls = BlockPollService.FindByPollId(item.Id);
+                    int k = 0;
+                    int p = 0;
+                    if (listSurveys.Count != 0)
+
                     {
-                        foreach (var VARIABLE in listUserAnswer)
+                        if (item.Mode == 1 && item.Status == 1)
                         {
-                            if (VARIABLE.UserId == currentUser.Id)
+                            foreach (var VARIABLE in listUserAnswer)
                             {
-                                k++;
+                                if (VARIABLE.UserId == currentUser.Id)
+                                {
+                                    k++;
+                                }
                             }
-                        }
-                        foreach (var obj in listBlockPolls)
-                        {
-                            if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                            foreach (var obj in listBlockPolls)
                             {
-                                p++;
+                                if (currentUser.HouseId != null)
+                                {
+                                    if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                                    {
+                                        p++;
+                                    }
+                                }
+
                             }
-                        }
-                        if (k != 1 || p == 1)
-                        //if (k != 1)
-                        {
-                            <fieldset class="scheduler-border poll less-padding aass">
-                                <div class="media-item-ctr-1">
-                                    <div class="col-xs-5 col-sm-3">
-                                        <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { PollId = @item.Id })">
-                                            <img class="img-responsive" src="@item.ImageUrl">
-                                            <div class="media-ribbon">
-                                                <i class="fa fa-heart"></i> @item.Id
+
+                            if ((k != 1 && p == 1 && item.Status == 1) || (k != 1 && p == 0 && item.Status == 1))
+                            //if (k != 1)
+                            {
+                                <fieldset class="scheduler-border poll less-padding aass">
+                                    <div class="media-item-ctr-1">
+                                        <div class="col-xs-5 col-sm-3">
+                                            <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { PollId = @item.Id })">
+                                                <img class="img-responsive" src="@item.ImageUrl">
+                                                <div class="media-ribbon">
+                                                    <i class="fa fa-heart"></i> @item.Id
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-xs-7 col-sm-9 media-item-overview">
+
+                                            <span style="font-size: 17px">
+                                                <a href="@Url.Action("DoDetailSurvey", "Survey", new { PollId = @item.Id })">@item.Question</a>
+                                            </span>
+                                           
+                                            <div class="media-meta-data">
+                                                @Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.PublishDate))
+
                                             </div>
-                                        </a>
-                                    </div>
-                                    <div class="col-xs-7 col-sm-9 media-item-overview">
 
-                                        <span style="font-size: 17px">
-                                            <a href="@Url.Action("DoDetailSurvey", "Survey", new {PollId = @item.Id})">@item.Question</a>
-                                        </span>
 
-                                        <p>@item.Description</p>
-                                        <div class="media-meta-data">
-                                            @Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.PublishDate))
+                                            @{
+                                if (item.Priority == 1)
+                                {
+                                    <h3> <span class="label label-warning">Bắt Buộc</span></h3>
+
+                                }
+                                            }
+
+
                                         </div>
 
-                                        @{
-                            if (item.Priority == 1)
-                            {
-                                <h3> <span class="label label-warning">Bắt Buộc</span></h3>
-
-                            }
-                                        }
-
-
                                     </div>
-
-                                </div>
-                            </fieldset>
-                        }
-                    }
-                    else if (item.Mode == 2 && currentUser.RoleId == 4 && item.Status == 1)
-                    {
-                        foreach (var VARIABLE in listUserAnswer)
-                        {
-                            if (VARIABLE.UserId == currentUser.Id)
-                            {
-                                k++;
+                                </fieldset><br/>
                             }
+
                         }
-                        foreach (var obj in listBlockPolls)
+                        else if (item.Mode == 2 && currentUser.RoleId == 4 && item.Status == 1)
                         {
-                            if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                            foreach (var VARIABLE in listUserAnswer)
                             {
-                                p++;
+                                if (VARIABLE.UserId == currentUser.Id)
+                                {
+                                    k++;
+                                }
                             }
-                        }
-                        if ((k != 1 && p == 1) || p == 0)
-                        // if (k != 1)
-                        {
-                            <fieldset class="scheduler-border poll less-padding aass">
-                                <div class="media-item-ctr-1">
-                                    <div class="col-xs-5 col-sm-3">
-                                        <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { PollId = @item.Id })">
-                                            <img class="img-responsive" src="@item.ImageUrl">
-                                            <div class="media-ribbon">
-                                                <i class="fa fa-heart"></i> @item.Id
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="col-xs-7 col-sm-9 media-item-overview">
+                            foreach (var obj in listBlockPolls)
+                            {
+                                if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                                {
+                                    p++;
+                                }
+                            }
 
-                                        <span style="font-size: 17px">
-                                            <a href="@Url.Action("DoDetailSurvey", "Survey", new {PollId = @item.Id})">@item.Question</a>
-                                        </span>
-
-                                        <p>@item.Description</p>
-                                        <div class="media-meta-data">
-                                            @Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.PublishDate))
+                            if (k != 1 && p == 1 && item.Status == 1)
+                            // if (k != 1)
+                            {
+                                <fieldset class="scheduler-border poll less-padding aass">
+                                    <div class="media-item-ctr-1">
+                                        <div class="col-xs-5 col-sm-3">
+                                            <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { PollId = @item.Id })">
+                                                <img class="img-responsive" src="@item.ImageUrl">
+                                                <div class="media-ribbon">
+                                                    <i class="fa fa-heart"></i> @item.Id
+                                                </div>
+                                            </a>
                                         </div>
+                                        <div class="col-xs-7 col-sm-9 media-item-overview">
 
-                                        @{
-                            if (item.Priority == 1)
-                            {
-                                <h3> <span class="label label-warning">Bắt Buộc</span></h3>
+                                            <span style="font-size: 17px">
+                                                <a href="@Url.Action("DoDetailSurvey", "Survey", new { PollId = @item.Id })">@item.Question</a>
+                                            </span>
+                                           
+                                            <div class="media-meta-data">
+                                                @Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.PublishDate))
 
-                            }
-                                        }
+                                            </div>
+                                            @{
+                                if (item.Priority == 1)
+                                {
+                                    <h3> <span class="label label-warning">Bắt Buộc</span></h3>
+
+
+                                }
+                                            }
+                                        </div>
+                                        <div class="social-share-ctr hidden-xs">
+
+
+                                        </div>
                                     </div>
-                                    <div class="social-share-ctr hidden-xs">
-
-
-                                    </div>
-                                </div>
-                            </fieldset>
-                        }
-                    }
-                    else if ((item.Mode == 3 && currentUser.RoleId == 4 && item.Status == 1) || (item.Mode == 3 && currentUser.RoleId == 3 && item.Status == 1))
-                    {
-                        foreach (var VARIABLE in listUserAnswer)
-                        {
-                            if (VARIABLE.UserId == currentUser.Id)
-                            {
-                                k++;
+                                </fieldset>
                             }
                         }
-                        foreach (var obj in listBlockPolls)
+                        else if ((item.Mode == 3 && currentUser.RoleId == 4 && item.Status == 1) || (item.Mode == 3 && currentUser.RoleId == 3 && item.Status == 1))
                         {
-                            if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                            foreach (var VARIABLE in listUserAnswer)
                             {
-                                p++;
+                                if (VARIABLE.UserId == currentUser.Id)
+                                {
+                                    k++;
+                                }
                             }
-                        }
-                        if ((k != 1 && p == 1) || p == 0)
-                        // if (k != 1)
-                        {
-                            <fieldset class="scheduler-border poll less-padding aass">
+                            foreach (var obj in listBlockPolls)
+                            {
+                                if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                                {
+                                    p++;
+                                }
+                            }
+
+                            if (k != 1 && p == 1 && item.Status == 1)
+                            // if (k != 1)
+                            {
+                              <fieldset class="scheduler-border poll less-padding aass">
                                 <div class="media-item-ctr-1">
                                     <div class="col-xs-5 col-sm-3">
                                         <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new { PollId = @item.Id })">
@@ -361,19 +374,20 @@
 
                                         <span style="font-size: 17px">
                                             <a href="@Url.Action("DoDetailSurvey", "Survey", new { PollId = @item.Id })">@item.Question</a>
-                                        </span>
-                                        <p>@item.Description</p>
-                                        <div class="media-meta-data">
-                                            @Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.PublishDate))
-                                        </div>
-                                        @{
+
+                                             </span>
+                                           
+                                            <div class="media-meta-data">
+                                                @Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.PublishDate))
+                                            </div>
+                                            @{
                             if (item.Priority == 1)
                             {
                                 <h3> <span class="label label-warning">Bắt Buộc</span></h3>
 
                             }
-                                        }
-                                    </div>
+                                            }
+</div>
                                     <div class="social-share-ctr hidden-xs">
 
 
@@ -388,6 +402,7 @@
                 else if (listSurveys.Count == 0)
                 {
 
+                }
                 }
             }
 

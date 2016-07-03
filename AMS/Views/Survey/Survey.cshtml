@@ -134,15 +134,9 @@
                                     <input id="image_from_list" name="image_from_list" type="hidden" value="" />
                                 </div><br/>
                             </div><br/>
+                           
                             <div class="form-group">
-                                <div class="col-sm-3"></div>
-                                <div class="col-sm-7">
-                                    <label class="checkbox-inline"><input type="checkbox" name="blockFilter" id="check" value="1"
-                                                                          onchange="">Lọc Theo Khu</label>
-                                </div><br/>
-                            </div><br/>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Ngày bắt đầu</label>
+                                <label class="col-sm-3 control-label">Ngày đăng</label>
                                 <div class="col-sm-7">
 
                                     @Html.TextBoxFor(m => m.PublishDate, new {@class = "form-control binh", onchange = "bInfos()"})<br>
@@ -190,19 +184,37 @@
                                 </div>
 
                             </div><br>
+                            <div class="form-group">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-7">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="blockFilter" id="check" value="1"
+                                               onchange="">Lọc Theo Khu
+                                    </label>
+                                </div><br />
+                            </div><br />
                             <div class="form-group" id="other" style="visibility: hidden;">
                                 <label class="col-sm-3 control-label">Khu</label>
                                 <div class="col-sm-7">
-
                                     @{
-                                        foreach (var item in listBlock)
-                                        {
-                                            <label class="checkbox-inline"><input type="checkbox" name="block" class="blockss" value="@item">@item</label>
+                            int check = 0;
+                            foreach (var item in listBlock)
+                            {
+                                if (check == 0)
+                                {
+                                    <label class="checkbox-inline"><input type="checkbox" checked="checked" name="block" class="blockss" value="@item">@item</label>
+                                }
+                                else
+                                {
+                                    <label class="checkbox-inline"><input type="checkbox" name="block" class="blockss" value="@item">@item</label>
 
-                                        }
+                                }
+                                check++;
+                            }
                                     }
                                 </div>
-                            </div><br/><br/>
+                            </div>
+
                         </div>
                         <div class="col-sm-3"><img id="review" src="" style="border: 10px" width="100%"/>
                         </div>
@@ -296,11 +308,9 @@
 
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header login" style="text-align: center; font-size: 42px; background-color: greenyellow">
+            <div class="modal-header login" style="text-align: center; font-size: 42px">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <div class="isa_success">
-                    <label class="label label-success">Danh Sách Hình</label>
-                </div>
+               
             </div>
             <div class="modal-body" id="image_container">
                 <div class="row">
