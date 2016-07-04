@@ -28,6 +28,7 @@ namespace AMS.Models
         public string Idenity { get; set; }
         public string HouseName { get; set; }
         public string Block { get; set; }
+        public int BlockId { get; set; }
         public string Floor { get; set; }
         public int RoldId { get; set; }
         public int Gender { get; set; }
@@ -38,9 +39,11 @@ namespace AMS.Models
         public int IsHouseOwner { get; set; }
         public int Status { get; set; }
         public string CreateDate { get; set; }
+        public long CreateDateLong { get; set; }
         public string DT_RowId { get; set; }
         public string IdCreateDate { get; set; }
         public string UserAccountName { get; set; }
+        public string CellNumb { get; set; }
         public int RelationLevel { get; set; }
     }
 } 

@@ -35,6 +35,7 @@ namespace AMS
         public Nullable<bool> AllowOtherView { get; set; }
         public Nullable<int> TypeId { get; set; }
         public Nullable<int> Status { get; set; }
+        public Nullable<int> WaterMeter { get; set; }
     
         public virtual Block Block { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

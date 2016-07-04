@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "ManageTransactionCategory";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
 }
@@ -13,7 +12,7 @@
                 <li>
                     <a href="/Management/BalanceSheet/View"><i class="fa fa-file-text-o"></i> Báo cáo thu chi</a>
                 </li>
-                <li >
+                <li>
                     <a href="/Management/BalanceSheet/ManageBalanceSheetView"><i class="fa fa fa-plus"></i> Quản lý thu chi</a>
                 </li>
                 <li class="active">
@@ -25,26 +24,22 @@
         <div class="panel-body">
             <div class="tab-content">
                 <div class="tab-pane fade active in" id="">
-                    <div class="panel panel-default" style="border-color: transparent">
-                        <form class="form-horizontal" role="form">
-                            <div class="col-md-12">
-                                <div class="table-responsive">
-                                    <table id="listTransTypeTbl" class="table v-middle table-striped table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Tên</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        
-                                        </tbody>
-                                    </table>
-                                </div>
+                    <form class="form-horizontal" role="form">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table id="listTransTypeTbl" class="table v-middle table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Tên</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -176,7 +171,7 @@
 
     function openUpdateTransCatModal(id) {
         $.ajax({
-            url: "/Management/BalanceSheet/GetDetailTransCat?transCat="+id,
+            url: "/Management/BalanceSheet/GetDetailTransCat?transCat=" + id,
             type: "Get",
             success: function (data) {
                 if (data.StatusCode === 0) {
@@ -189,7 +184,7 @@
                     $("#addTransactionTypeModalTitle").text("Cập nhật loại giao dịch");
                     $("#successAddTransTypeNotify").text("Cập nhật loại giao dịch thành công.");
                     $("#failedAddTransTypeNotify").text("Cập nhật loại giao dịch thất bại.");
-                } 
+                }
             },
             error: function () {
             }
@@ -206,7 +201,7 @@
             traditional: true,
             success: function (data) {
                 if (data.StatusCode === 0) {
-                    window.lstTransCatTable.ajax.reload(null, false); 
+                    window.lstTransCatTable.ajax.reload(null, false);
                     window.deleteTransCatList = new Array();
                 } else {
                     $("#delBtnGroup").removeClass("show");
@@ -263,5 +258,5 @@
             }
         });
     }
-    
+
 </script>

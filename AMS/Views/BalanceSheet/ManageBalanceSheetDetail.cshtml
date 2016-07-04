@@ -26,166 +26,162 @@
 
         <div class="panel-body">
             <div class="tab-content">
-                <div class="tab-pane fade active in" id="">
-                    <div class="panel panel-default" style="border-color: transparent">
-                        <form class="form-horizontal" role="form">
-                            <div class="row">
-                                <div class="pull-right">
-                                    @{
-                                        if (bls.Status == SLIM_CONFIG.BALANCE_SHEET_OPEN)
-                                        {
-                                            <span id="btnDuedate" class="btn btn-default">
-                                                <i class="fa fa-pencil" aria-hidden="true"></i> Chỉnh sửa
-                                            </span>
-                                            <span id="assignHdReqBtn" class="btn btn-danger" onclick="openCloseBlsModal()">
-                                                Đóng
-                                            </span>
-                                        }
-                                    }
-                                </div>
-                            </div>
-                            <div class=" form-group">
-                                <fieldset class="scheduler-border less-padding">
-                                    <legend class="scheduler-border bold-black">Thông tin</legend>
+                <form class="form-horizontal" role="form">
+                    <div class="row">
+                        <div class="pull-right">
+                            @{
+                                if (bls.Status == SLIM_CONFIG.BALANCE_SHEET_OPEN)
+                                {
+                                    <span id="btnDuedate" class="btn btn-default">
+                                        <i class="fa fa-pencil" aria-hidden="true"></i> Chỉnh sửa
+                                    </span>
+                                    <span id="assignHdReqBtn" class="btn btn-danger" onclick="openCloseBlsModal()">
+                                        Đóng
+                                    </span>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class=" form-group">
+                        <fieldset class="scheduler-border less-padding">
+                            <legend class="scheduler-border bold-black">Thông tin</legend>
+                            <div class="form-group">
+                                <div class="col-md-6">
                                     <div class="form-group">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="title" class="col-md-3 control-label">Tiêu đề</label>
+                                        <label for="title" class="col-md-3 control-label">Tiêu đề</label>
 
-                                                <div class="col-md-9">
-                                                    <input id="title" class="form-control" value="@bls.Title" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-md-3 control-label">Từ ngày</label>
-                                                <div class="col-md-9">
-                                                    <div class="input-group">
-                                                        @{
-                                                            if (@bls.CreateDate.Value.Date == DateTime.Today)
-                                                            {
-                                                                <input class="form-control" value="@bls.StartDate.Value.ToString(AmsConstants.DateFormat)" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <input class="form-control" value="@bls.StartDate.Value.ToString(AmsConstants.DateFormat)" />
-                                                                <span class="input-group-addon">đến</span>
-                                                                <input class="form-control" value="@(bls.ClosingDate == null ? "Hôm nay" : bls.ClosingDate.Value.ToString(AmsConstants.DateFormat))" />
-                                                            }
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="title" class="col-md-3 control-label">Trạng thái</label>
+                                        <div class="col-md-9">
+                                            <input id="title" class="form-control" value="@bls.Title" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">Từ ngày</label>
+                                        <div class="col-md-9">
+                                            <div class="input-group">
                                                 @{
-                                                    if (bls.Status == SLIM_CONFIG.BALANCE_SHEET_CLOSE)
+                                                    if (@bls.CreateDate.Value.Date == DateTime.Today)
                                                     {
-                                                        <div class="col-md-9">
-                                                            <span class="btn btn-danger">Đóng</span>
-                                                        </div>
+                                                        <input class="form-control" value="@bls.StartDate.Value.ToString(AmsConstants.DateFormat)" />
                                                     }
                                                     else
                                                     {
-                                                        <div class="col-md-9">
-                                                            <span class="btn btn-info">Mở</span>
-                                                        </div>
+                                                        <input class="form-control" value="@bls.StartDate.Value.ToString(AmsConstants.DateFormat)" />
+                                                        <span class="input-group-addon">đến</span>
+                                                        <input class="form-control" value="@(bls.ClosingDate == null ? "Hôm nay" : bls.ClosingDate.Value.ToString(AmsConstants.DateFormat))" />
                                                     }
                                                 }
                                             </div>
-                                            <div class="form-group">
-                                                <label class="col-md-3 control-label">Cập nhật</label>
-                                                <div class="col-md-9">
-                                                    <input id="lastUpdate" class="form-control" value="@bls.LastModified.Value.ToString(AmsConstants.DateTimeFormat)" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-
-                                            <div class="table-responsive">
-                                                <table class="table v-middle table-bordered table-condensed table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th style="width: 20%" rowspan="2">Tên</th>
-                                                            <th colspan="4" class="text-capitalize text-center" style="background-color: #dddddd">
-                                                                Bảng thu chi tháng @bls.StartDate.Value.ToString(AmsConstants.MonthYearFormat)
-                                                            </th>
-                                                        </tr>
-                                                        <tr>
-                                                            <th style="width: 20%;">Tồn</th>
-                                                            <th style="width: 20%;">Tổng</th>
-                                                            <th style="width: 20%;">Thực thu</th>
-                                                            <th style="width: 20%;">Thực chi</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td><strong>Đầu kỳ</strong></td>
-                                                            <td id="redudancyStartMonth" colspan="4"></td>
-                                                        </tr>
-                                                    <tr>
-                                                        <td><strong>Doanh thu</strong></td>
-                                                        <td></td>
-                                                        <td id="forecastIncome"></td>
-                                                        <td id="actualIncome"></td>
-                                                        <td></td>
-                                                    </tr>
-                                                        <tr>
-                                                            <td><strong>Chi phí</strong></td>
-                                                            <td></td>
-                                                            <td id="forecastExpense"></td>
-                                                            <td></td>
-                                                            <td id="actualExpense"></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><strong>Cuối kỳ</strong></td>
-                                                            <td id="redudancyEndMonth" colspan="4"></td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-
                                         </div>
                                     </div>
-                                </fieldset>
-                            </div>
+                                    <div class="form-group">
+                                        <label for="title" class="col-md-3 control-label">Trạng thái</label>
+                                        @{
+                                            if (bls.Status == SLIM_CONFIG.BALANCE_SHEET_CLOSE)
+                                            {
+                                                <div class="col-md-9">
+                                                    <span class="btn btn-danger">Đóng</span>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-9">
+                                                    <span class="btn btn-info">Mở</span>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">Cập nhật</label>
+                                        <div class="col-md-9">
+                                            <input id="lastUpdate" class="form-control" value="@bls.LastModified.Value.ToString(AmsConstants.DateTimeFormat)" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
 
-                            <div class="form-group">
+                                    <div class="table-responsive">
+                                        <table class="table v-middle table-bordered table-condensed table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 20%" rowspan="2">Tên</th>
+                                                    <th colspan="4" class="text-capitalize text-center" style="background-color: #dddddd">
+                                                        Bảng thu chi tháng @bls.StartDate.Value.ToString(AmsConstants.MonthYearFormat)
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th style="width: 20%;">Tồn</th>
+                                                    <th style="width: 20%;">Tổng</th>
+                                                    <th style="width: 20%;">Thực thu</th>
+                                                    <th style="width: 20%;">Thực chi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td><strong>Đầu kỳ</strong></td>
+                                                    <td id="redudancyStartMonth" colspan="4"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Doanh thu</strong></td>
+                                                    <td></td>
+                                                    <td id="forecastIncome"></td>
+                                                    <td id="actualIncome"></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Chi phí</strong></td>
+                                                    <td></td>
+                                                    <td id="forecastExpense"></td>
+                                                    <td></td>
+                                                    <td id="actualExpense"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Cuối kỳ</strong></td>
+                                                    <td id="redudancyEndMonth" colspan="4"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
 
-                                <div class="table-responsive">
-                                    <table id="blsTransDetailTbl" data-bls-id="@bls.Id" data-bls-status="@bls.Status" class="table v-middle table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Tên</th>
-                                                <th>Loại</th>
-                                                <th>Nhóm</th>
-                                                <th>Tháng</th>
-                                                <th>Tổng</th>
-                                                <th>Đã thanh toán</th>
-                                                <th>Ngày tạo</th>
-                                                <th class="text-right"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Tên</th>
-                                                <th>Loại</th>
-                                                <th>Nhóm</th>
-                                                <th>Tháng</th>
-                                                <th>Tổng</th>
-                                                <th>Đã thanh toán</th>
-                                                <th>Ngày tạo</th>
-                                                <th class="text-right"></th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
                                 </div>
                             </div>
-                        </form>
+                        </fieldset>
                     </div>
-                </div>
+
+                    <div class="form-group">
+
+                        <div class="table-responsive">
+                            <table id="blsTransDetailTbl" data-bls-id="@bls.Id" data-bls-status="@bls.Status" class="table v-middle table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tên</th>
+                                        <th>Loại</th>
+                                        <th>Nhóm</th>
+                                        <th>Tháng</th>
+                                        <th>Tổng</th>
+                                        <th>Đã thanh toán</th>
+                                        <th>Ngày tạo</th>
+                                        <th class="text-right"></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tên</th>
+                                        <th>Loại</th>
+                                        <th>Nhóm</th>
+                                        <th>Tháng</th>
+                                        <th>Tổng</th>
+                                        <th>Đã thanh toán</th>
+                                        <th>Ngày tạo</th>
+                                        <th class="text-right"></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

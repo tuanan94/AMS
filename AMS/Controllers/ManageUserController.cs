@@ -51,6 +51,7 @@ namespace AMS.Controllers
                 userModel.Floor = user.House.Floor;
                 userModel.HouseName = user.House.HouseName;
                 userModel.CreateDate = user.CreateDate.Value.ToString(AmsConstants.DateTimeFormat);
+                userModel.CreateDateLong = user.CreateDate.Value.Ticks;
                 userModel.RoldId = user.RoleId.Value;
                 userModel.RolName = user.Role.RoleName;
                 userModel.Status = user.Status.Value;
@@ -86,6 +87,7 @@ namespace AMS.Controllers
                 userModel.Name = user.Fullname;
                 userModel.Idenity = user.IDNumber;
                 userModel.CreateDate = user.CreateDate.Value.ToString(AmsConstants.DateTimeFormat);
+                userModel.CreateDateLong = user.CreateDate.Value.Ticks;
                 userModel.RoldId = user.RoleId.Value;
                 userModel.RolName = user.Role.RoleName;
                 userModel.Status = user.Status.Value;
@@ -155,6 +157,7 @@ namespace AMS.Controllers
                 userModel.Name = resident.Fullname;
                 userModel.Idenity = resident.IDNumber;
                 userModel.Block = resident.House.Block.BlockName;
+                userModel.BlockId = resident.House.Block.Id;
                 userModel.Floor = resident.House.Floor;
                 userModel.Gender = resident.Gender.Value;
                 userModel.Dob = resident.DateOfBirth.Value.ToString(AmsConstants.DateFormat);
@@ -164,7 +167,8 @@ namespace AMS.Controllers
                 userModel.RoldId = resident.RoleId.Value;
                 userModel.RolName = resident.Role.RoleName;
                 userModel.Status = resident.Status.Value;
-                userModel.RelationLevel = resident.FamilyLevel.Value;;
+                userModel.RelationLevel = resident.FamilyLevel.Value; ;
+                userModel.CellNumb = resident.SendPasswordTo; ;
                 userModel.UserAccountName = resident.Username;
 
                 List<Block> blocks = _blockServices.GetAllBlocks();
@@ -236,6 +240,7 @@ namespace AMS.Controllers
                 userModel.UserAccountName = supporter.Username;
                 userModel.RoldId = supporter.RoleId.Value;
                 userModel.RolName = supporter.Role.RoleName;
+                userModel.CellNumb = supporter.SendPasswordTo;
                 userModel.Status = supporter.Status.Value;
 
                 response.Data = userModel;
@@ -283,15 +288,15 @@ namespace AMS.Controllers
                         u.Creator = Int32.Parse(User.Identity.GetUserId());
                         u.RoleId = user.IsHouseOwner;
                         u.FamilyLevel = user.RelationLevel;
+                        u.Password = CommonUtil.GetUniqueKey(8);
+                        u.SendPasswordTo = user.CellNumb;
                         _userServices.Add(u);
                         if (user.IsHouseOwner == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)
                         {
                             house.OwnerID = u.Id;
                             _houseServices.Update(house);
 
-                            foreach (
-                                var userInHouse in
-                                    house.Users.Where(usr => usr.Id != u.Id && u.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)
+                            foreach (var userInHouse in house.Users.Where(usr => usr.Id != u.Id && u.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)
                                 )
                             {
                                 User usr = _userServices.FindById(userInHouse.Id);
@@ -301,11 +306,12 @@ namespace AMS.Controllers
                             }
                         }
 
-                        response.Data = new
-                        {
-                            username = u.Username,
-                            password = u.Password,
-                        };
+                        StringBuilder message = new StringBuilder();
+                        message.Append("Chung cu AMS. Tai khoan duoc tao thanh cong! Ten đang nhap: ")
+                            .Append(u.Username)
+                            .Append(". Mat khau: ")
+                            .Append(u.Password);
+                        CommonUtil.SentSms(u.SendPasswordTo, message.ToString());
 
                         //                    var accountSid = "AC10ae7ed64035004a9f1ed772747b94dc"; // Your Account SID from www.twilio.com/console
                         //                    var authToken = "c867c6dadb271752b1fa0bb988f1c284";  // Your Auth Token from www.twilio.com/console
@@ -357,23 +363,17 @@ namespace AMS.Controllers
                 u.DateOfBirth = DateTime.ParseExact(user.Dob, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
                 u.IDCreatedDate = DateTime.ParseExact(user.IdCreateDate, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
                 u.Username = user.UserAccountName;
+                u.SendPasswordTo = user.CellNumb;
                 u.Creator = Int32.Parse(User.Identity.GetUserId());
                 u.RoleId = user.RoldId;
+                u.Password = CommonUtil.GetUniqueKey(8);
                 _userServices.Add(u);
-                
-                //                    var accountSid = "AC10ae7ed64035004a9f1ed772747b94dc"; // Your Account SID from www.twilio.com/console
-                //                    var authToken = "c867c6dadb271752b1fa0bb988f1c284";  // Your Auth Token from www.twilio.com/console
-                //
-                //                    var twilio = new TwilioRestClient(accountSid, authToken);
-                //                    var message = twilio.SendMessage(
-                //                        "+12057198424", // From (Replace with your Twilio number)
-                //                        "+84934876200", // To (Replace with your phone number)
-                //                        "One time password: chào bạn"
-                //                        );
-                //
-                //                    Console.WriteLine(message.Sid);
-                //                    Console.Write("Press any key to continue.");
-                //                    Console.ReadKey();
+                StringBuilder message = new StringBuilder();
+                message.Append("Chung cu AMS. Tai khoan duoc tao thanh cong! Ten đang nhap: ")
+                    .Append(u.Username)
+                    .Append(". Mat khau: ")
+                    .Append(u.Password);
+                CommonUtil.SentSms(u.SendPasswordTo, message.ToString());
             }
             catch (Exception)
             {
@@ -414,6 +414,7 @@ namespace AMS.Controllers
                             u.DateOfBirth = DateTime.ParseExact(user.Dob, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
                             u.LastModified = DateTime.Now;
                             u.FamilyLevel = user.RelationLevel;
+                            u.SendPasswordTo = user.CellNumb;
                             if (user.IdCreateDate != null)
                             {
                                 u.IDCreatedDate = DateTime.ParseExact(user.IdCreateDate, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
@@ -476,6 +477,7 @@ namespace AMS.Controllers
                     u.LastModified = DateTime.Now;
                     u.IDNumber = user.Idenity;
                     u.Gender = user.Gender;
+                    u.SendPasswordTo = user.CellNumb;
                     u.DateOfBirth = DateTime.ParseExact(user.Dob, AmsConstants.DateFormat,
                         CultureInfo.CurrentCulture);
                     u.IDCreatedDate = DateTime.ParseExact(user.IdCreateDate, AmsConstants.DateFormat, CultureInfo.CurrentCulture);

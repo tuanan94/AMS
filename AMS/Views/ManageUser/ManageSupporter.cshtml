@@ -89,8 +89,12 @@
                         </div>
                         <div class="form-group">
                             <label for="resName" class="col-md-3 control-label">Tên đăng nhập</label>
-                            <div class="col-md-9">
+                            <div class="col-md-4">
                                 <input id="userAccountName" name="UserAccountName" type="text" class="form-control" value="">
+                            </div>
+                            <label for="resName" class="col-md-1 control-label">ĐTDĐ </label>
+                            <div class="col-md-4">
+                                <input id="cellNumb" name="CellNumb" type="text" class="form-control" value="">
                             </div>
                         </div>
                         <div class="form-group res-info">
@@ -266,7 +270,7 @@
                             }
                             return "Đang xác nhận";
                         }
-                        return data;
+                        return full.CreateDateLong;
                     }
                 },
                 {
@@ -382,6 +386,7 @@
                     $("#accountId").val(obj.Id);
                     $("#roleId").val(obj.RoldId);
                     $("#userAccountName").val(obj.UserAccountName);
+                    $("#cellNumb").val(obj.CellNumb);
                     $("#idCreateDate").val(obj.IdCreateDate);
 
                     $("input:radio[name=Gender]").filter("[value=" + obj.Gender + "]").prop("checked", "checked");
@@ -413,7 +418,7 @@
                         $("#addResSuccessNoti").fadeOut("fast");
                         resetFormData("addResidentForm");
                     }, 3000);
-                    window.manageUserListTbl.ajax.reload(null, false);
+                    window.manageUserListTbl.ajax.reload(null, true);
                 } else if (data.StatusCode === 2) {
                     $("#addTransMsg").text("Căn hộ này chưa có chủ nhà!");
                     $("#msgAddFailedNoty").fadeIn("fast");
@@ -445,7 +450,7 @@
                         $("#addResidentModal").modal("hide");
                     }, 3000);
 
-                    window.manageUserListTbl.ajax.reload(null, false);
+                    window.manageUserListTbl.ajax.reload(null, true);
                 } else if (data.StatusCode === 2) {
                     $("#addTransMsg").text("Căn hộ này chưa có chủ nhà!");
                     $("#msgAddFailedNoty").fadeIn("fast");

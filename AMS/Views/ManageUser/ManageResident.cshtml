@@ -22,7 +22,6 @@
         <div class="panel-body">
             <div class="tab-content">
                 <div class="tab-pane fade active in" id="">
-
                     <div class="form-horizontal" id="searchHdSrv" role="form">
                         <!-- Data table -->
                         <table id="manageUserListTbl" data-fromuserid="@User.Identity.GetUserId()" class="table table-hover table-bordered">
@@ -52,12 +51,9 @@
                         </table>
                         <!-- // Data table -->
                     </div>
-
                 </div>
             </div>
-
         </div>
-
     </div>
 </div>
 
@@ -70,6 +66,7 @@
             </div>
             <div class="modal-body">
                 <div class="panel-body">
+                    
                     <div class="alert alert-info" id="addResSuccessNoti" style="display: none">
                         <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <span id="successMsg">Thêm cư dân thành công</span>
@@ -93,8 +90,12 @@
                         </div>
                         <div class="form-group">
                             <label for="resName" class="col-md-3 control-label">Tên đăng nhập</label>
-                            <div class="col-md-9">
+                            <div class="col-md-4">
                                 <input id="userAccountName" name="UserAccountName" type="text" class="form-control" value="">
+                            </div>
+                            <label for="resName" class="col-md-1 control-label">ĐTDĐ </label>
+                            <div class="col-md-4">
+                                <input id="cellNumb" name="CellNumb" type="text" class="form-control" value="">
                             </div>
                         </div>
                         <div class="form-group res-info">
@@ -106,10 +107,10 @@
                             <label class="col-md-1 control-label">Giới tính</label>
                             <div class="col-md-4">
                                 <label class="radio-inline">
-                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_MALE" name="Gender" />Nam
+                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_MALE" name="Gender"/>Nam
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_FEMALE" name="Gender" checked="checked" />Nữ
+                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_FEMALE" name="Gender" checked="checked"/>Nữ
                                 </label>
                             </div>
                         </div>
@@ -146,10 +147,10 @@
                             <label class="col-md-3 control-label ">Chủ hộ</label>
                             <div class="col-md-9">
                                 <label class="radio-inline">
-                                    <input type="radio" value="@SLIM_CONFIG.USER_ROLE_HOUSEHOLDER" name="IsHouseOwner" />Có
+                                    <input type="radio" value="@SLIM_CONFIG.USER_ROLE_HOUSEHOLDER" name="IsHouseOwner"/>Có
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" value="@SLIM_CONFIG.USER_ROLE_RESIDENT" name="IsHouseOwner" checked="checked" />Không
+                                    <input type="radio" value="@SLIM_CONFIG.USER_ROLE_RESIDENT" name="IsHouseOwner" checked="checked"/>Không
                                 </label>
                             </div>
                         </div>
@@ -165,20 +166,7 @@
                                 </select>
                             </div>
                         </div>
-
-                        @*                        <div class="form-group security hide">*@
-                        @*                            <label for="userName" class="col-md-2 control-label ">Tên đăng nhập</label>*@
-                        @*                            <div class="col-md-10">*@
-                        @*                                <input id="userName" class="form-control" type="text" />*@
-                        @*                            </div>*@
-                        @*                        </div>*@
-                        @*                        <div class="form-group security hide">*@
-                        @*                            <label for="password" class="col-md-2 control-label ">Mật khẩu</label>*@
-                        @*                            <div class="col-md-10">*@
-                        @*                                <input id="password" class="form-control" type="text" />*@
-                        @*                            </div>*@
-                        @*                        </div>*@
-                        <input type="hidden" id="accountId" name="Id" />
+                        <input type="hidden" id="accountId" name="Id"/>
                     </form>
                 </div>
             </div>
@@ -343,7 +331,7 @@
                             }
                             return "Đang xác nhận";
                         }
-                        return data;
+                        return full.CreateDateLong;
                     }
                 },
                 {
@@ -471,6 +459,7 @@
                     $("#resId").val(obj.Idenity);
                     $("#accountId").val(obj.Id);
                     $("#userAccountName").val(obj.UserAccountName);
+                    $("#cellNumb").val(obj.CellNumb);
                     $("#idCreateDate").val(obj.IdCreateDate);
 
                     $("input:radio[name=Gender]").filter("[value=" + obj.Gender + "]").prop("checked", "checked");
@@ -490,7 +479,7 @@
                         $("#houseFloor").prop("disabled", "");
                     }
 
-                    var block = parseJsonToSelectTags(data.Data.blocks, obj.Block);
+                    var block = parseJsonToSelectTags(data.Data.blocks, obj.BlockId.toString());
                     var floor = parseJsonToSelectTags(data.Data.floors, obj.Floor);
                     var room = parseJsonToSelectTags(data.Data.rooms, obj.HouseName);
                     $("#houseBlock").html(block);
@@ -546,9 +535,14 @@
     }
 
     function updateResident() {
+        var form = $("#addResidentForm");
+        var disabled = form.find(':input:disabled').removeAttr('disabled');
+        var serializedForm = form.serialize();
+        disabled.attr('disabled', 'disabled');
+
         $.ajax({
             "url": "/Management/ManageUser/UpdateResident",
-            data: $("#addResidentForm").serialize(),
+            data: serializedForm,
             type: "POST",
             success: function (data) {
                 if (data.StatusCode === 0) {
@@ -575,6 +569,7 @@
                 console.log(data);
             }
         });
+        disabled.attr('disabled', 'disabled');
     }
 
 
