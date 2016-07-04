@@ -563,95 +563,93 @@ namespace AMS.Controllers
 
         [HttpGet]
         [Route("Management/ManageReceipt/GetBatchReceiptList")]
-        public ActionResult GetBatchReceiptList(int receiptId)
+        public ActionResult GetBatchReceiptList(long receiptId)
         {
             MessageViewModels response = new MessageViewModels();
-            Receipt receipt = _receiptServices.FindById(receiptId);
-            if (receipt != null)
+            List<Receipt> receiptsGroupByCreateDate =
+                _receiptServices.GetReceiptsByCreateDate(new DateTime(receiptId));
+            List<MonthlyReceiptModel> receiptModel = new List<MonthlyReceiptModel>();
+            if (null != receiptsGroupByCreateDate && receiptsGroupByCreateDate.Count != 0)
             {
-                List<Receipt> receiptsGroupByCreateDate =
-                    _receiptServices.GetReceiptsByCreateDate(receipt.CreateDate.Value);
-                List<MonthlyReceiptModel> receiptModel = new List<MonthlyReceiptModel>();
-                if (null != receiptsGroupByCreateDate && receiptsGroupByCreateDate.Count != 0)
+                var receipt = receiptsGroupByCreateDate.First();
+
+                MonthlyReceiptModel model = null;
+                int status = SLIM_CONFIG.RECEIPT_STATUS_PAID;
+                foreach (var r in receiptsGroupByCreateDate)
                 {
-                    MonthlyReceiptModel model = null;
-                    int status = SLIM_CONFIG.RECEIPT_STATUS_PAID;
-                    foreach (var r in receiptsGroupByCreateDate)
+                    if (r.PublishDate != null && r.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED &&
+                        DateTime.Today.Date >= r.PublishDate)
                     {
-                        if (r.PublishDate != null && r.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED &&
-                            DateTime.Today.Date >= r.PublishDate)
-                        {
-                            r.Status = SLIM_CONFIG.RECEIPT_STATUS_UNPAID;
-                            r.LastModified = DateTime.Now;
-                            _receiptServices.Update(r);
-                        }
-                        if (r.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED ||
-                            r.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPAID)
-                        {
-                            status = r.Status.Value;
-                        }
-
-                        model = new MonthlyReceiptModel();
-                        model.ReceiptId = r.Id;
-                        model.Status = r.Status.Value;
-                        model.Block = r.House.Block.BlockName;
-                        model.Floor = r.House.Floor;
-                        model.HouseName = r.House.HouseName;
-                        model.DT_RowId = new StringBuilder("receipt_id_").Append(r.Id).ToString();
-
-                        List<ReceiptDetail> orderDetails = r.ReceiptDetails.ToList();
-                        double total = 0;
-                        foreach (var od in orderDetails)
-                        {
-                            if (od.UtilityService.Type ==
-                                     SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
-                            {
-                                model.FromNumber =
-                                model.Water = od.Quantity.Value;
-                                model.WaterCost = od.Total.Value;
-                                model.FromNumber = od.FromNumber.Value;
-                                model.ToNumber = od.ToNumber.Value;
-                            }
-                            else if (od.UtilityService.Type ==
-                                    SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST)
-                            {
-                                model.FixedCost = od.Total.Value;
-                            }
-                            total += od.Total.Value;
-                        }
-                        model.Total = total;
-                        receiptModel.Add(model);
+                        r.Status = SLIM_CONFIG.RECEIPT_STATUS_UNPAID;
+                        r.LastModified = DateTime.Now;
+                        _receiptServices.Update(r);
                     }
-                    String waterName = "Chưa có giá";
-                    String fixedCostName = "Chưa có giá";
-
-                    var utilService = receipt.ReceiptDetails.Where(rd => rd.UtilityService.Type ==
-                                    SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER).ToList();
-                    if (utilService.Count != 0)
+                    if (r.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED ||
+                        r.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPAID)
                     {
-                        waterName = utilService.First().UtilityService.Name;
+                        status = r.Status.Value;
                     }
 
-                    utilService = receipt.ReceiptDetails.Where(rd => rd.UtilityService.Type ==
-                                    SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST).ToList();
-                    if (utilService.Count != 0)
+                    model = new MonthlyReceiptModel();
+                    model.ReceiptId = r.Id;
+                    model.Status = r.Status.Value;
+                    model.Block = r.House.Block.BlockName;
+                    model.Floor = r.House.Floor;
+                    model.HouseName = r.House.HouseName;
+                    model.DT_RowId = new StringBuilder("receipt_id_").Append(r.Id).ToString();
+
+                    List<ReceiptDetail> orderDetails = r.ReceiptDetails.ToList();
+                    double total = 0;
+                    foreach (var od in orderDetails)
                     {
-                        fixedCostName = utilService.First().UtilityService.Name;
+                        if (od.UtilityService.Type ==
+                                 SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
+                        {
+                            model.FromNumber =
+                            model.Water = od.Quantity.Value;
+                            model.WaterCost = od.Total.Value;
+                            model.FromNumber = od.FromNumber.Value;
+                            model.ToNumber = od.ToNumber.Value;
+                        }
+                        else if (od.UtilityService.Type ==
+                                SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST)
+                        {
+                            model.FixedCost = od.Total.Value;
+                        }
+                        total += od.Total.Value;
                     }
-                    Object obj = new
-                    {
-                        data = receiptModel,
-                        publishDate = receipt.PublishDate.Value.ToString(AmsConstants.DateFormat),
-                        title = receipt.Title,
-                        forMonth = receipt.BalanceSheet.StartDate.Value.ToString(AmsConstants.MonthYearFormat),
-                        blsId = receipt.BalanceSheet.Id,
-                        status = status,
-                        description = receipt.Description,
-                        waterName = waterName,
-                        fixedCostName = fixedCostName
-                    };
-                    return Json(obj, JsonRequestBehavior.AllowGet);
+                    model.Total = total;
+                    receiptModel.Add(model);
                 }
+                String waterName = "Chưa có giá";
+                String fixedCostName = "Chưa có giá";
+
+                var utilService = receipt.ReceiptDetails.Where(rd => rd.UtilityService.Type ==
+                                SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER).ToList();
+                if (utilService.Count != 0)
+                {
+                    waterName = utilService.First().UtilityService.Name;
+                }
+
+                utilService = receipt.ReceiptDetails.Where(rd => rd.UtilityService.Type ==
+                                SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST).ToList();
+                if (utilService.Count != 0)
+                {
+                    fixedCostName = utilService.First().UtilityService.Name;
+                }
+                Object obj = new
+                {
+                    data = receiptModel,
+                    publishDate = receipt.PublishDate.Value.ToString(AmsConstants.DateFormat),
+                    title = receipt.Title,
+                    forMonth = receipt.BalanceSheet.StartDate.Value.ToString(AmsConstants.MonthYearFormat),
+                    blsId = receipt.BalanceSheet.Id,
+                    status = status,
+                    description = receipt.Description,
+                    waterName = waterName,
+                    fixedCostName = fixedCostName
+                };
+                return Json(obj, JsonRequestBehavior.AllowGet);
             }
             return Json(response, JsonRequestBehavior.AllowGet);
         }
@@ -1246,7 +1244,7 @@ namespace AMS.Controllers
                                             house.WaterMeter = toNumber;
                                             _houseServices.Update(house);
                                         }
-                                        
+
                                     }
                                 }
                             }
