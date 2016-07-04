@@ -39,7 +39,7 @@
             }
             if (k != 1)
             {
-                alert = "Bạn Có Một Survey Cần phải Làm!";
+                alert = "Bạn Có Bình Chọn Cần phải Làm!";
             }
         }
     }
@@ -193,21 +193,9 @@
 
     <div class="col-sm-offset-1 col-md-8">
         @{
-            if (alert != "")
+            if (!alert.Equals(""))
             {
-                <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-3 control-label"></label>
-                    <div class="col-sm-7" id="label1">
-                        @*<div class="alert alert-success" style="width: 330px">
-                                <strong><span class="label date-color label-gray center">Tao thanh cong</span></strong>
-                            </div>*@
-                        <div class="isa_success" style="width: 330px">
-                            <i class="fa fa-warning"></i>
-                            @alert
-                        </div>
-                    </div>
-
-                </div><br>
+               
             }
             foreach (var item in listSurveys)
             {
@@ -257,11 +245,14 @@
                                             <span style="font-size: 17px">
                                                 <a href="@Url.Action("DoDetailSurvey", "Survey", new { PollId = @item.Id })">@item.Question</a>
                                             </span>
-                                           
-                                            <div class="media-meta-data">
-                                                @Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.PublishDate))
+                                            
+                                            <div>
+                                                <span style="font-size: 14px">Ngày kết thúc:</span>  @Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.EndDate))
                                             </div>
-
+                                            <span style="font-size: 14px;margin-top: 20px">
+                                                <span style="font-size: 14px">Số người tham gia:</span>  @listUserAnswer.Count người 
+                                            </span>
+                                           
                                             @{
                                 if (item.Priority == 1)
                                 {
