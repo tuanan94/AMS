@@ -11,13 +11,13 @@
     <div class="panel panel-default">
 
         <div class="heading-tab">
-            <i class="fa fa-list"> Gửi yêu cầu sửa chữa</i>
+            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Gửi yêu cầu sửa chữa</span>
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li class="active">
                     <a href="/Home/HelpdeskRequest/Create"><i class="fa fa-send"></i> Gửi yêu cầu sữa chửa</a>
                 </li>
                 <li>
-                    <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-life-ring"></i> Quản lý yêu cầu</a>
+                    <a href="/Home/HelpdeskRequest/ViewHistory" style="color:#25ad9f"><i class="fa fa-life-ring" style="color:#25ad9f"></i> Quản lý yêu cầu</a>
                 </li>
             </ul>
         </div>
@@ -35,9 +35,15 @@
                             <span>Yêu cầu dịch vụ hổ trợ thất bại! Xin vui lòng thử lại một lần nữa</span>
                         </div>
                         <div class="form-group">
-                            <div class="col-md-6">
+                            <div class="col-md-offset-1 col-md-10">
                                 <fieldset class="scheduler-border less-padding">
                                     <legend class="scheduler-border bold-black">Thông tin dịch vụ hổ trợ</legend>
+                                    <div class="form-group">
+                                        <label for="hdReqTitle" class="col-md-3 control-label">Tiêu đề</label>
+                                        <div class="col-md-9">
+                                            <input id="hdReqTitle" name="hdReqTitle" type="text" class="form-control">
+                                        </div>
+                                    </div>
                                     <div class="form-group">
                                         <label for="hdSrvCatName" class="col-md-3 control-label">Loại dịch vụ</label>
                                         <div class="col-md-9 full-width-select">
@@ -59,44 +65,19 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="hdSrvPrice" class="col-md-3 control-label">Giá tiền</label>
+                                        <label for="hdReqUserDesc" class="col-md-3 control-label">Mô tả</label>
                                         <div class="col-md-9">
-                                            <input disabled id="hdSrvPrice" type="text" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="hdSrvDesc" class="col-md-3 control-label">Miêu tả</label>
-                                        <div class="col-md-9">
-                                            <textarea disabled id="hdSrvDesc" class="form-control" rows="3"></textarea>
+                                            <textarea name="hdReqUserDesc" id="hdReqUserDesc" class="form-control" style="max-width: initial;" rows="5"></textarea>
                                         </div>
                                     </div>
                                     @*Test hard code user 3*@
                                     <input type="hidden" name="hdReqUserId" value="@User.Identity.GetUserId()" />
                                 </fieldset>
                             </div>
-                            <div class="col-md-6">
-                                <div class="col-md-12">
-                                    <fieldset class="scheduler-border less-padding">
-                                        <legend class="scheduler-border bold-black">Ghi chú của cư dân</legend>
-                                        <div class="form-group">
-                                            <label for="hdReqTitle" class="col-md-3 control-label">Tiêu đề</label>
-                                            <div class="col-md-9">
-                                                <input id="hdReqTitle" name="hdReqTitle" type="text" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="hdReqUserDesc" class="col-md-3 control-label">Mô tả</label>
-                                            <div class="col-md-9">
-                                                <textarea name="hdReqUserDesc" id="hdReqUserDesc" class="form-control" style="max-width: initial;" rows="8"></textarea>
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                </div>
-                            </div>
                         </div>
                         <div class="form-group">
                             <div class="pull-right">
-                                <button type="submit" id="addNewHdRequest" class="btn btn-primary"><i class="fa fa-send"></i>Gửi</button>
+                                <button type="submit" id="addNewHdRequest" class="btn btn-primary"><i class="fa fa-send"></i> Gửi</button>
                             </div>
                         </div>
                     </form>

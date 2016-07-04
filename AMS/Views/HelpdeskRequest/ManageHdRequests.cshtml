@@ -1,37 +1,10 @@
 ﻿@using Microsoft.AspNet.Identity
 @using AMS.Enum
 @{
-    int roleId = ViewBag.roleId;
-}
-@{
     ViewBag.Title = "ManageMember";
-    if (roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT)
-    {
-        Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
-    }
-    else
-    {
-        Layout = "~/Views/Management/__ManagementLayout.cshtml";
-    }
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
 }
 
-@*<nav class="navbar navbar-subnav navbar-static-top" role="navigation">*@
-@*    <div class="container-fluid">*@
-@**@
-@*        <!-- Collect the nav links, forms, and other content for toggling -->*@
-@*        <div class="collapse navbar-collapse" id="subnav">*@
-@*            <ul class="nav navbar-nav">*@
-@*                <li>*@
-@*                    <a href="/Home/HelpdeskRequest/Create"><i class="fa fa-send"></i> Tạo yêu cầu sửa chữa</a>*@
-@*                </li>*@
-@*                <li class="active">*@
-@*                    <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-history"></i> Lịch sử</a>*@
-@*                </li>*@
-@*            </ul>*@
-@*        </div>*@
-@*        <!-- /.navbar-collapse -->*@
-@*    </div>*@
-@*</nav>*@
 
 <div class="col-md-12">
     <div class="panel panel-default">
@@ -39,11 +12,13 @@
         <div class="heading-tab">
             <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Danh sách yêu cầu</span>
             <ul class="nav nav-tabs pull-right" role="tablist">
-                <li>
-                    <a href="/Home/HelpdeskRequest/Create" style="color:#25ad9f"><i class="fa fa-send" style="color:#25ad9f"></i> Gửi yêu cầu sữa chửa</a>
-                </li>
+
                 <li class="active">
-                    <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa fa-life-ring"></i> Quản lý yêu cầu</a>
+                    <a href="/Management/HelpdeskRequest/ManageHdRequest"><i class="fa fa-life-ring"></i> Yêu cầu sửa chữa</a>
+                </li>
+
+                <li>
+                    <a href="/Management/ResidentApprovement/@User.Identity.GetUserId()"><i class="fa fa-group"></i> Xác nhận dân cư</a>
                 </li>
 
             </ul>
@@ -52,15 +27,14 @@
             <div class="tab-content">
                 <div class="tab-pane fade active in" id="">
                     <div class="form-horizontal" id="searchHdSrv" role="form">
-                        <div class="form-group">
-                        <div class="table-responsive">
+                        <div class="table-responsive col-md-12">
                             <!-- Data table -->
                             <table id="hdRequestTbl" data-userid="@User.Identity.GetUserId()" class="table v-middle  table-hover table-bordered">
                                 <thead>
                                     <tr>
                                         <th>#</th>
                                         <th>Tiêu đề</th>
-                                        @*                                        <th>Căn hộ</th>*@
+                                        <th>Căn hộ</th>
                                         @*                                <th>DV hổ trợ</th>*@
                                         <th>Trạng thái</th>
                                         <th>NV hổ trợ</th>
@@ -73,7 +47,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Tiêu đề</th>
-                                        @*                                        <th>Căn hộ</th>*@
+                                        <th>Căn hộ</th>
                                         @*                                <th>DV hổ trợ</th>*@
                                         <th>Trạng thái</th>
                                         <th>NV hổ trợ</th>
@@ -86,7 +60,6 @@
                             </table>
                             <!-- // Data table -->
                         </div>
-                    </div>
                     </div>
                 </div>
             </div>
@@ -117,7 +90,7 @@
             "columns": [
                 { data: "HdReqTitle" },
                 { data: "HdReqTitle" },
-//                { data: "HdReqHouse" },
+                { data: "HdReqHouse" },
 //                { data: "HdReqSrvName" },
                 { data: "HdReqStatus" },
                 { data: "HdReqSupporter" },
@@ -137,6 +110,16 @@
                 },
                 {
                     "targets": 2,
+                    "data": "HdReqHouse",
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            return "<span class='label house-color label-warning'>" + data + "</span>";
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "targets": 3,
                     "data": "HdReqStatus",
                     "render": function (data, type, full) {
                         if (type === "display" || type === "filter") {
@@ -167,7 +150,7 @@
                     }
                 },
                 {
-                    "targets": 3,
+                    "targets": 4,
                     "data": "HdReqSupporter",
                     "render": function (data, type, full) {
                         if (type === "display" || type === "filter") {
@@ -179,22 +162,22 @@
                     }
                 },
                 {
-                    "targets": 4,
+                    "targets": 5,
                     "data": "HdReqCreateDate",
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
-                            var dateTime = data.split(" ");
-                            return "<strong>" + dateTime[0] + "</strong> " + dateTime[1];
-
+                            //                            var dateTime = data.split(" ");
                             //                            return "<span class='label date-color label-warning'>" + dateTime[0] +
                             //                                "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";
+                            var dateTime = data.split(" ");
+                            return "<strong>" + dateTime[0] + "</strong> " + dateTime[1];
                         }
                         return data;
                     },
                     "width": "15%"
                 },
                 {
-                    "targets": 5,
+                    "targets": 6,
                     "data": "HdReqDeadline",
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
@@ -212,11 +195,11 @@
                     "width": "15%"
                 },
                 {
-                    "targets": 6,
+                    "targets": 7,
                     "data": "HdReqId",
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
-                            return "<div style='text-align:right'><span class='btn btn-default btn-xs' onclick='getHelpdeskDetail(" + data + ")'> <i class='fa fa-pencil'></i> </span></div>";
+                            return "<span class='btn btn-default btn-xs' onclick='getHelpdeskDetail(" + data + ")'> <i class='fa fa-pencil'></i> </span>";
                         }
                         return data;
                     }

@@ -20,7 +20,6 @@
     }
 }
 @{
-    ViewBag.Title = "ManageMember";
     if (roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT)
     {
         Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
@@ -36,19 +35,31 @@
 
 
         <div class="heading-tab">
-            <i class="fa fa-list"> Chi tiết yêu cầu</i>
+            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Chi tiết yêu cầu</span>
             <ul class="nav nav-tabs pull-right" role="tablist">
                 @{
                     if (roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT)
                     {
                         <li>
-                            <a href="/Home/HelpdeskRequest/Create/@User.Identity.GetUserId()"><i class="fa fa-send"></i> Tạo yêu cầu sửa chữa</a>
+                            <a href="/Home/HelpdeskRequest/Create"><i class="fa fa-send"></i> Gữi yêu cầu sửa chữa</a>
                         </li>
                     }
                 }
-                <li class="active">
-                    <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-history"></i> Yêu cầu sửa chữa</a>
-                </li>
+                @{
+                    if (roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT)
+                    {
+                        <li class="active">
+                            <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-life-ring"></i> Quản lý yêu cầu</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="active">
+                            <a href="/Management/HelpdeskRequest/ManageHdRequest"><i class="fa fa-life-ring"></i> Quản lý yêu cầu</a>
+                        </li>
+                    }
+                }
+
                 @{
                     if (roleId == SLIM_CONFIG.USER_ROLE_MANAGER)
                     {
@@ -102,7 +113,7 @@
                             </div>
 
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" id="content-div">
                             <div class="col-md-7">
                                 <fieldset class="scheduler-border less-padding">
                                     <legend class="scheduler-border bold-black">Chi tiết</legend>
@@ -206,9 +217,9 @@
                                     <legend class="scheduler-border bold-black">Thời gian</legend>
                                     <div class="form-group">
                                         @{
-//                                            string parternTime = "HH:mm";
-//                                            string parternDateTime = "dd-MM-yyyy HH:mm";
-//                                            string parternDate = "dd-MM-yyyy ";
+                                            //                                            string parternTime = "HH:mm";
+                                            //                                            string parternDateTime = "dd-MM-yyyy HH:mm";
+                                            //                                            string parternDate = "dd-MM-yyyy ";
                                             string strTime = hd.CreateDate.Value.ToString(AmsConstants.TimeFormat);
                                             string strDate = hd.CreateDate.Value.ToString(AmsConstants.DateFormat);
                                             string strDateTime = hd.CreateDate.Value.ToString(AmsConstants.DateTimeFormat);
@@ -364,7 +375,7 @@
                                                     strDate = log.CreateDate.Value.ToString(AmsConstants.DateFormat);
                                                     strTime = log.CreateDate.Value.ToString(AmsConstants.TimeFormat);
                                                         }
-                                                        <td><span class="label date-color" style="margin-right: 5px">@strDate</span> <span class="label time-color">@strTime</span></td>
+                                                        <td><strong>@strDate</strong> @strTime</td>
                                                     </tr>
                                                 }
                                                 }
@@ -495,3 +506,6 @@
         </div>
     </div>
 </div>
+<script>
+
+</script>

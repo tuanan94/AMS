@@ -1,0 +1,274 @@
+﻿@using AMS.Models
+<script src="~/Scripts/Chart.min.js"></script>
+<script src="~/Scripts/amsScript/moment.min.js"></script>
+@{
+    ViewBag.Title = "ViewWateBiiling";
+    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+    MonthlyReceiptModel waterReceipt = ViewBag.monthlyReceiptModel;
+    string rangePriceName = ViewBag.utilServPriceFrame;
+}
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="heading-tab">
+            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Hóa đơn nước</span>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li class="active">
+                    <a href="/Home/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Hóa đơn</a>
+                </li>
+            </ul>
+        </div>
+        <div class="panel-body">
+            <form id="createNewOrder" class="form-horizontal" role="form">
+                <div class="form-group">
+                    <div class="col-md-offset-1 col-md-10">
+                        <fieldset class="scheduler-border less-padding">
+                            <legend class="scheduler-border bold-black">Sử dụng nước</legend>
+                            <div class="form-group">
+                                <label for="from" class="col-md-4 control-label">Số ghi tháng trước</label>
+                                <div class=" col-md-8">
+                                    <input id="from" class="form-control" value="@waterReceipt.FromNumber" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="from" class="col-md-4 control-label">Số ghi tháng này</label>
+                                <div class="col-md-8">
+                                    <input id="from" class="form-control" value="@waterReceipt.ToNumber" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="from" class="col-md-4 control-label">Tổng</label>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <input id="from" class="form-control" value="@waterReceipt.Qty"/>
+                                        <span id="from" class="input-group-addon">Khối</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="from" class="col-md-4 control-label">Khung giá nước</label>
+                                <div class=" col-md-8">
+                                    <textarea id="to" class="form-control col-md-3" rows="2" >@rangePriceName</textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-6" style="margin-top: 30px">
+                        <canvas style="width: 100% !important; max-width: 400px; height: auto !important;" id="expenseStatus" width="100%" height="100%"></canvas>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <fieldset class="scheduler-border less-padding">
+                                    <legend class="scheduler-border bold-black">Giá tiền nước</legend>
+                                    <div class="table-responsive">
+                                        <table class="table v-middle table-bordered table-striped" id="receiptDetailTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Tên</th>
+                                                    <th>SL</th>
+                                                    <th>Giá</th>
+                                                    <th>Thành tiền</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    foreach (var rangePrice in waterReceipt.WaterRangePrices)
+                                                    {
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>@rangePrice.Name</td>
+                                                            <td>@rangePrice.Qty</td>
+                                                            <td>@rangePrice.Price.ToString("N0")</td>
+                                                            <td>@rangePrice.Total.ToString("N0")</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="4" style="text-align: right;"><strong>Tổng</strong></td>
+                                                    <td style="background: #f9f9f9;font-size: 18px;">@waterReceipt.Total.ToString("N0")</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        //        var rightHeight = $("#rightCol").outerHeight(true);
+        //        $("#leftCol").css("height", rightHeight);
+        //        $("#leftCol > canvas").addClass("align-middle");
+        var temp = [
+            {
+                Name: moment("2015-01-01", "YYYY-MM-DD"),
+                TotalAmount: 0
+            },
+        {
+            Name: moment("2015-02-01", "YYYY-MM-DD"),
+            TotalAmount: 30
+        },
+        {
+            Name: moment("2015-03-01", "YYYY-MM-DD"),
+            TotalAmount: 40
+        },
+        {
+            Name: moment("2015-04-01", "YYYY-MM-DD"),
+            TotalAmount: 10
+        },
+        {
+            Name: moment("2015-05-01", "YYYY-MM-DD"),
+            TotalAmount: 15
+        },
+        {
+            Name: moment("2015-06-01", "YYYY-MM-DD"),
+            TotalAmount: 7
+        },
+        {
+            Name: moment("2015-07-01", "YYYY-MM-DD"),
+            TotalAmount: 25
+        },
+        {
+            Name: moment("2015-08-01", "YYYY-MM-DD"),
+            TotalAmount: 40
+        },
+        {
+            Name: moment("2015-09-01", "YYYY-MM-DD"),
+            TotalAmount: 30
+        },
+        {
+            Name: moment("2015-10-01", "YYYY-MM-DD"),
+            TotalAmount: 35
+        },
+        {
+            Name: moment("2015-11-01", "YYYY-MM-DD"),
+            TotalAmount: 10
+        },
+        {
+            Name: moment("2015-12-01", "YYYY-MM-DD"),
+            TotalAmount: 20
+        }
+
+        ];
+
+        //        var expenseChart = createChartbar("expenseStatus", temp, 0, 100);
+
+        $.ajax({
+            type: "Get",
+            url: "/Home/ManageReceipt/GetLast12MonthReceiptBill?receiptDetailId=" + "@waterReceipt.ReceiptDetailId",
+            success: function (data) {
+                var obj = data.Data.Data;
+                var month = {};
+                var listMonth = [];
+                for (var i = 0; i < obj.length; i++) {
+                    var temp = obj[i];
+                    month = {};
+                    //                                month.Name = moment(temp.Month, "DD-MM-YYYY");
+                    month.Name = moment(temp.Month, "DD-MM-YYYY").format("MM-YYYY");
+                    month.TotalAmount = temp.Amount;
+                    listMonth.push(month);
+                }
+                var expenseChart = createChartbar("expenseStatus", listMonth, data.Data.Min, data.Data.Max);
+            }
+        });
+    });
+
+    function createChartbar(id, data, min, max) {
+        var obj = {};
+        var listLbl = [];
+        var listVal = [];
+        var bgColorList = [];
+
+        for (var i = 0; i < data.length; i++) {
+            obj = data[i];
+            listLbl.push(obj.Name);
+            listVal.push(obj.TotalAmount);
+            bgColorList.push(randomColor2());
+        }
+        var config = {
+            type: 'bar',
+            data: {
+                labels: listLbl,
+                datasets: [
+                    {
+                        label: "Lịch sử sử dụng nước",
+                        borderWidth: 2,
+                        borderColor: "#25ad9f",
+                        data: listVal
+                    }
+                ]
+            },
+            options: {
+                tooltips: {
+                    enabled: true
+                },
+                legend: {
+                    display: true,
+                    labels: {
+                        fontSize: 15
+                    },
+                    position: "bottom"
+                },
+                scales: {
+                    yAxes: [
+                    {
+                        ticks: {
+                            suggestedMax: max + 5,
+                            beginAtZero: true,
+                            callback: function (value, index, values) {
+                                return numberWithCommas(value);
+                            }
+                        }
+                    }
+                    ]
+                    //                    xAxes: [
+                    //                    {
+                    //                        type: 'time',
+                    //                        time: {
+                    //                            // string/callback - By default, date objects are expected. You may use a pattern string from http://momentjs.com/docs/#/parsing/string-format/ to parse a time string format, or use a callback function that is passed the label, and must return a moment() instance.
+                    //                            parser: false,
+                    //                            // string - By default, unit will automatically be detected.  Override with 'week', 'month', 'year', etc. (see supported time measurements)
+                    //                            unit: 'month',
+                    //                            //                                unit: 'day',
+                    //                            // Number - The number of steps of the above unit between ticks
+                    ////                            unitStepSize: 1,
+                    //                            // string - By default, no rounding is applied.  To round, set to a supported time unit eg. 'week', 'month', 'year', etc.
+                    //                            round: false,
+                    //                            // Moment js for each of the units. Replaces `displayFormat`
+                    //                            // To override, use a pattern string from http://momentjs.com/docs/#/displaying/format/
+                    //                            displayFormats: {
+                    ////                                max: moment().endOf("year"),
+                    ////                                min: moment().startOf("year"),
+                    ////                                'millisecond': 'SSS [ms]',
+                    ////                                'second': 'h:mm:ss a', // 11:20:01 AM
+                    ////                                'minute': 'h:mm:ss a', // 11:20:01 AM
+                    ////                                'hour': 'MMM D, hA', // Sept 4, 5PM
+                    ////                                'day': 'MMM Do', // Sep 4 2015
+                    ////                                'week': 'll', // Week 46, or maybe "[W]WW - YYYY" ?
+                    ////                                'month': 'MM-YYYY', // Sept 2015
+                    ////                                'quarter': '[Q]Q - YYYY', // Q3
+                    ////                                'year': 'YYYY', // 2015
+                    //                            },
+                    //                        }
+                    //                    }
+                    //                    ]
+                }
+            }
+        };
+        var ctx2 = document.getElementById(id).getContext("2d");
+        return new Chart(ctx2, config);
+    }
+</script>

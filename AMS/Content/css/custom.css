@@ -187,7 +187,8 @@ td.highlight {
     font-weight: 400;
     margin: 0;
     background: whitesmoke;
-    border-bottom: 1px solid #efefef;
+    /*border-bottom: 1px solid #efefef;*/
+    border-bottom: 1px solid #dddddd;
 }
 
     .heading-tab i {
@@ -205,6 +206,17 @@ td.highlight {
 
     .heading-tab ul li a, .heading-tab ul li a i {
         color: #428bca;
+    }
+
+    .heading-tab ul li.active a, .heading-tab ul li.active a:active, .heading-tab ul li.active a:hover  {
+        background-color: #fff;
+        border: 1px solid #dddddd;
+        border-bottom-color: transparent;
+    }
+
+    .heading-tab ul li a:active, .heading-tab ul li a:hover, .heading-tab ul li a:hover i {
+        background-color: #eee;
+        color: #000000 !important;
     }
 
     .heading-tab ul li.active a, .heading-tab ul li.active a i {
@@ -248,7 +260,7 @@ canvas {
 /*Start edit layout table*/
 .table-striped > tbody > tr:nth-child(odd) > td,
 .table-striped > tbody > tr:nth-child(odd) > th {
-    background: #e9e9e9;
+    background: #f9f9f9;
 }
 
 .table-hover > tbody > tr:hover > td,
@@ -289,21 +301,39 @@ canvas {
 
 td span.label {
     font-size: 85%;
+    /*font-size: 75%;*/
 }
 
-td {
+/*td {
     max-width: 200px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
+}*/
 
-    th.dt-center, td.dt-center {
-        text-align: center;
-    }
+th.dt-center, td.dt-center {
+    text-align: center;
+}
 
 .alert-warning {
     color: #c09853 !important;
-    background-color: #fcf8e3!important;
+    background-color: #fcf8e3 !important;
     border-color: #fbeed5 !important;
-}/*Return default of Bootraap*/
+}
+/*Return default of Bootraap*/
+
+body {
+    padding-top: 60px !important;
+}
+
+.tab-location {
+    font-size: 17px;
+    font-weight: bold;
+    color: #777777;
+}
+/*.panel-default {
+    border-color: #ccc;
+}*/
+.panel {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+}

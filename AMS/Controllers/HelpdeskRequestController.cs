@@ -14,16 +14,11 @@ namespace AMS.Controllers
 {
     public class HelpdeskRequestController : Controller
     {
-        UserInHouseService userInHouseService = new UserInHouseService();
-        PostService postService = new PostService();
-        UserService userService = new UserService();
-        PendingMemberService pendingMemberService = new PendingMemberService();
         HelpdeskServiceCatService _helpdeskServiceCat = new HelpdeskServiceCatService();
         HelpdeskServicesService _helpdeskServices = new HelpdeskServicesService();
         UserServices _userServices = new UserServices();
         HelpdeskRequestServices _hdReqServices = new HelpdeskRequestServices();
         HelpdeskRequestLogServices _helpdeskRequestLogServices = new HelpdeskRequestLogServices();
-        HdReqHdSupporterServices _hdReqHdSupporterServices = new HdReqHdSupporterServices();
 
         [Authorize]
         [HttpGet]
@@ -133,6 +128,21 @@ namespace AMS.Controllers
             }
             ViewBag.roleId = u.RoleId;
             return View("ViewHistoryHdRequests");
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("Management/HelpdeskRequest/ManageHdRequest")]
+        public ActionResult ManageHdRequest()
+        {
+            User u = _userServices.FindById(int.Parse(User.Identity.GetUserId()));
+            if (u == null)
+            {
+                return View("error");
+
+            }
+            ViewBag.roleId = u.RoleId;
+            return View("ManageHdRequests");
         }
 
         [HttpGet]
