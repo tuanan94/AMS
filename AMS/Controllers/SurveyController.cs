@@ -643,7 +643,7 @@ namespace AMS.Controllers
             }
             ViewBag.Alert = "Tạo survey thành công!!";
             //  return View("Survey");
-            return RedirectToAction("Survey", new { alerts = "Tạo survey thành công!!" });
+            return RedirectToAction("ListPoll", new { alerts = "Tạo survey thành công!!" });
         }
     }
 
