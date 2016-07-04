@@ -64,5 +64,9 @@ namespace AMS
 
         }
 
+        public static string genPassword()
+        {
+            return System.Web.Security.Membership.GeneratePassword(8,0);
+        }
     }
 }

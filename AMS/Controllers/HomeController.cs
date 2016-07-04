@@ -479,7 +479,8 @@ namespace AMS.Controllers
             u.FamilyLevel = relationShipLevel;
             u.CreateDate = DateTime.Now;
             u.LastModified = DateTime.Now;
-            u.Password = "123123";
+            //u.Password = "123123"; AnTT 4/7/2016
+            u.Password = StringUtil.genPassword(); //AnTT 4/7/2016
             u.ProfileImage = profileImage;
             userService.addUser(u);
             return JsonConvert.SerializeObject(u);
