@@ -28,6 +28,7 @@ namespace AMS.Models
         public string ReceiptTitle { get; set; }
         public double TotalOrder { get; set; }
         public string CreateDate { get; set; }
+        public long CreateDateLong { get; set; }
         public string PublishDate { get; set; }
         public long PublishDateStick { get; set; }
         public string Block { get; set; }

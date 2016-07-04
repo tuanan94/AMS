@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using AMS.Constant;
 using AMS.Models;
 using AMS.Service;
 using Microsoft.Ajax.Utilities;
@@ -21,7 +23,7 @@ namespace AMS.Controllers
         HelpdeskServiceCatService _helpdeskServiceCatService = new HelpdeskServiceCatService();
         UserServices _userServices = new UserServices();
         AroundProviderService _aroundProviderService = new AroundProviderService();
-        
+
         readonly string parternTime = "dd-MM-yyyy HH:mm";
         [Authorize]
         public ActionResult Index()
@@ -459,9 +461,6 @@ namespace AMS.Controllers
         }
 
 
-        
-
-
         [HttpGet]
         [Route("Management/ResidentApprovement/{userId}")]
         public ActionResult ViewResidentApprovement(int userId)
@@ -526,9 +525,9 @@ namespace AMS.Controllers
             if (res != null && fromUser != null && fromUser.RoleId == SLIM_CONFIG.USER_ROLE_MANAGER)
             {
                 bool isUpdated = true;
-                if (mode == SLIM_CONFIG.TRANS_CAT_STATUS_ENABLE)
+                if (mode == SLIM_CONFIG.USER_STATUS_ENABLE)
                 {
-                    res.Status = SLIM_CONFIG.TRANS_CAT_STATUS_ENABLE;
+                    res.Status = SLIM_CONFIG.USER_STATUS_ENABLE;
                 }
                 else if (mode == SLIM_CONFIG.USER_APPROVE_REJECT)
                 {
@@ -542,6 +541,15 @@ namespace AMS.Controllers
                 {
                     res.LastModified = DateTime.Now;
                     _userServices.Update(res);
+                    if (res.Status.Value == SLIM_CONFIG.USER_STATUS_ENABLE)
+                    {
+                        StringBuilder message = new StringBuilder();
+                        message.Append("Chung cu AMS. Tai khoan duoc kich hoat thanh cong! Ten đang nhap: ")
+                                .Append(res.Username)
+                                .Append(". Mat khau: ")
+                                .Append(res.Password);
+                        CommonUtil.SentSms(res.SendPasswordTo, message.ToString());
+                    }
                 }
             }
             else

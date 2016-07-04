@@ -3,7 +3,7 @@
     ViewBag.Title = "DownloadWaterConsumptionTemplate";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
     BalanceSheet currentActiveBls = ViewBag.currentActiveBls;
-    
+
 }
 
 
@@ -32,24 +32,18 @@
         <div class="panel-body">
             <div class="tab-content">
                 <div class="tab-pane fade active in" id="">
-                    <div class="panel panel-default" style="border-color: transparent">
-                        <form id="addUtilServiceForm" class="form-horizontal" role="form" method="GET" action="/Management/ManageReceipt/DownloadRecordTemplate">
-                            <div class="tab-content">
-                                <div class="tab-pane fade active in" id="">
-                                    <div class="form-group">
-                                        <label class="col-md-offset-3 col-md-1 control-label">Tháng</label>
-                                        <div class="col-md-3 ">
-                                            <input type="text" id="publishDate" value="@currentActiveBls.StartDate.Value.ToString(AmsConstants.MonthYearFormat)" name="forMonth" class="form-control datepicker" data-date-format="mm-yyyy" data-date-language="vi"
-                                                   data-date-min-view-mode="1" data-date-end-date="+1m" data-date-start-date="-1m" data-date-today-highlight="true" @*data-date-start-date="0m"*@/>
-                                        </div>
-                                        <button class="btn btn-info" type="submit">
-                                            <i class="fa fa-cloud-download"></i> Tải về
-                                        </button>
-                                    </div>
-                                </div>
+                    <form id="addUtilServiceForm" class="form-horizontal" role="form" method="GET" action="/Management/ManageReceipt/DownloadRecordTemplate">
+                        <div class="form-group">
+                            <label class="col-md-offset-3 col-md-1 control-label">Tháng</label>
+                            <div class="col-md-3 ">
+                                <input type="text" id="publishDate" value="@currentActiveBls.StartDate.Value.ToString(AmsConstants.MonthYearFormat)" name="forMonth" class="form-control datepicker" data-date-format="mm-yyyy" data-date-language="vi"
+                                       data-date-min-view-mode="1" data-date-end-date="+1m" data-date-start-date="-1m" data-date-today-highlight="true" @*data-date-start-date="0m"*@ />
                             </div>
-                        </form>
-                    </div>
+                            <button class="btn btn-info" type="submit">
+                                <i class="fa fa-cloud-download"></i> Tải về
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

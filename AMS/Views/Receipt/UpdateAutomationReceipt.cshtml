@@ -397,7 +397,7 @@
 
         window.autoReceiptTbl = $("#autoReceiptTbl").DataTable({
             "ajax": {
-                url: "/Management/ManageReceipt/GetBatchReceiptList?receiptId=" + "@receipt.Id",
+                url: "/Management/ManageReceipt/GetBatchReceiptList?receiptId=" + "@receipt.CreateDate.Value.Ticks",
                 dataSrc: function (data) {
 
                     var unpublished = $("#receiptStatusUnpublish");
@@ -851,7 +851,7 @@
     }
 
     function deleteConsumptionRecord(id) {
-        var element = $("#receipt_id_" + id).addClass("hide");
+//        var element = $("#receipt_id_" + id).addClass("hide");
         window.deleteConsumptionRecordList.push(id);
         window.autoReceiptTbl.row("#receipt_id_" + id).remove().draw(false);
         $("#delConsumptionRecordBtnGroup").removeClass("hide").addClass("show");
@@ -881,6 +881,7 @@
                     $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
                     window.deleteConsumptionRecordList = new Array();
                     window.autoReceiptTbl.ajax.reload(null, false);
+//                    window.autoReceiptTbl.ajax.reload();
                 }
             }
         });

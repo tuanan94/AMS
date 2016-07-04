@@ -603,7 +603,7 @@ $(document).ready(function () {
 function activeNavigationBar() {
     $("#main-nav > ul > li").removeClass("active");
     var pathName = window.location.pathname;
-    if (pathName.indexOf("/HelpdeskRequest/") > -1) {
+    if (pathName.indexOf("/HelpdeskRequest/") > -1 || pathName.indexOf("/ResidentApprovement/") > -1) {
         $("#hdRequestNav").addClass("active");
     } else if (pathName.indexOf("/ManageReceipt/") > -1) {
         $("#receiptNav").addClass("active");
@@ -1069,6 +1069,8 @@ $(document).ready(function () {
         $(this.querySelector("form")).find("select option").prop("selected", function () {
             return this.defaultSelected;
         });
+        $(this.querySelector("form")).find("input[type=text], textarea").val("");
+        $(this.querySelector("form")).find("input, select").prop("disabled", "");
         removeHiddenBackgroundPopup();
     });
 

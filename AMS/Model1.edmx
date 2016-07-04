@@ -235,6 +235,7 @@
           <Property Name="AllowOtherView" Type="bit" />
           <Property Name="TypeId" Type="int" />
           <Property Name="Status" Type="int" />
+          <Property Name="WaterMeter" Type="int" />
         </EntityType>
         <EntityType Name="HouseCategory">
           <Key>
@@ -393,6 +394,7 @@
           <Property Name="FamilyLevel" Type="int" />
           <Property Name="IDCreatedDate" Type="datetime" />
           <Property Name="Status" Type="int" />
+          <Property Name="SendPasswordTo" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="UserAnswerPoll">
           <Key>
@@ -1188,7 +1190,6 @@
           <EntitySet Name="HelpdeskRequestLogs" EntityType="AMSModel.HelpdeskRequestLog" />
           <EntitySet Name="HelpdeskServices" EntityType="AMSModel.HelpdeskService" />
           <EntitySet Name="HelpdeskServiceCategories" EntityType="AMSModel.HelpdeskServiceCategory" />
-          <EntitySet Name="Houses" EntityType="AMSModel.House" />
           <EntitySet Name="HouseCategories" EntityType="AMSModel.HouseCategory" />
           <EntitySet Name="Images" EntityType="AMSModel.Image" />
           <EntitySet Name="Polls" EntityType="AMSModel.Poll" />
@@ -1243,10 +1244,6 @@
             <End Role="Block" EntitySet="Blocks" />
             <End Role="BlockPoll" EntitySet="BlockPolls" />
           </AssociationSet>
-          <AssociationSet Name="FK_House_Block" Association="AMSModel.FK_House_Block">
-            <End Role="Block" EntitySet="Blocks" />
-            <End Role="House" EntitySet="Houses" />
-          </AssociationSet>
           <AssociationSet Name="FK_BlockSurvey_Survey" Association="AMSModel.FK_BlockSurvey_Survey">
             <End Role="Poll" EntitySet="Polls" />
             <End Role="BlockPoll" EntitySet="BlockPolls" />
@@ -1275,10 +1272,6 @@
             <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
             <End Role="HelpdeskRequestLog" EntitySet="HelpdeskRequestLogs" />
           </AssociationSet>
-          <AssociationSet Name="FK_tbl_h_desk_request_tbl_house" Association="AMSModel.FK_tbl_h_desk_request_tbl_house">
-            <End Role="House" EntitySet="Houses" />
-            <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
-          </AssociationSet>
           <AssociationSet Name="FK_HelpdeskRequestLog_User1" Association="AMSModel.FK_HelpdeskRequestLog_User1">
             <End Role="User" EntitySet="Users" />
             <End Role="HelpdeskRequestLog" EntitySet="HelpdeskRequestLogs" />
@@ -1290,18 +1283,6 @@
           <AssociationSet Name="FK_HelpdeskService_HelpdeskServiceCategory" Association="AMSModel.FK_HelpdeskService_HelpdeskServiceCategory">
             <End Role="HelpdeskServiceCategory" EntitySet="HelpdeskServiceCategories" />
             <End Role="HelpdeskService" EntitySet="HelpdeskServices" />
-          </AssociationSet>
-          <AssociationSet Name="FK_House_HouseType" Association="AMSModel.FK_House_HouseType">
-            <End Role="HouseCategory" EntitySet="HouseCategories" />
-            <End Role="House" EntitySet="Houses" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tbl_receipt_tbl_house" Association="AMSModel.FK_tbl_receipt_tbl_house">
-            <End Role="House" EntitySet="Houses" />
-            <End Role="Receipt" EntitySet="Receipts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_User_House" Association="AMSModel.FK_User_House">
-            <End Role="House" EntitySet="Houses" />
-            <End Role="User" EntitySet="Users" />
           </AssociationSet>
           <AssociationSet Name="FK_UtilServiceForHouseCat_HouseCategory" Association="AMSModel.FK_UtilServiceForHouseCat_HouseCategory">
             <End Role="HouseCategory" EntitySet="HouseCategories" />
@@ -1366,6 +1347,27 @@
           <AssociationSet Name="AspNetUserRoles" Association="AMSModel.AspNetUserRoles">
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
+          </AssociationSet>
+          <EntitySet Name="Houses" EntityType="AMSModel.House" />
+          <AssociationSet Name="FK_House_Block" Association="AMSModel.FK_House_Block">
+            <End Role="Block" EntitySet="Blocks" />
+            <End Role="House" EntitySet="Houses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_h_desk_request_tbl_house" Association="AMSModel.FK_tbl_h_desk_request_tbl_house">
+            <End Role="House" EntitySet="Houses" />
+            <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_House_HouseType" Association="AMSModel.FK_House_HouseType">
+            <End Role="HouseCategory" EntitySet="HouseCategories" />
+            <End Role="House" EntitySet="Houses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_receipt_tbl_house" Association="AMSModel.FK_tbl_receipt_tbl_house">
+            <End Role="House" EntitySet="Houses" />
+            <End Role="Receipt" EntitySet="Receipts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_House" Association="AMSModel.FK_User_House">
+            <End Role="House" EntitySet="Houses" />
+            <End Role="User" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="C__MigrationHistory">
@@ -1604,29 +1606,6 @@
           <Property Name="LastModified" Type="DateTime" Precision="3" />
           <NavigationProperty Name="HelpdeskServices" Relationship="AMSModel.FK_HelpdeskService_HelpdeskServiceCategory" FromRole="HelpdeskServiceCategory" ToRole="HelpdeskService" />
         </EntityType>
-        <EntityType Name="House">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="BlockId" Type="Int32" />
-          <Property Name="Floor" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="HouseName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Area" Type="Double" />
-          <Property Name="OwnerID" Type="Int32" />
-          <Property Name="ProfileImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CoverImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DisplayMember" Type="Boolean" />
-          <Property Name="AllowOtherView" Type="Boolean" />
-          <Property Name="TypeId" Type="Int32" />
-          <Property Name="Status" Type="Int32" />
-          <NavigationProperty Name="Block" Relationship="AMSModel.FK_House_Block" FromRole="House" ToRole="Block" />
-          <NavigationProperty Name="HelpdeskRequests" Relationship="AMSModel.FK_tbl_h_desk_request_tbl_house" FromRole="House" ToRole="HelpdeskRequest" />
-          <NavigationProperty Name="HouseCategory" Relationship="AMSModel.FK_House_HouseType" FromRole="House" ToRole="HouseCategory" />
-          <NavigationProperty Name="Receipts" Relationship="AMSModel.FK_tbl_receipt_tbl_house" FromRole="House" ToRole="Receipt" />
-          <NavigationProperty Name="Users" Relationship="AMSModel.FK_User_House" FromRole="House" ToRole="User" />
-        </EntityType>
         <EntityType Name="HouseCategory">
           <Key>
             <PropertyRef Name="Id" />
@@ -1635,8 +1614,8 @@
           <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="LastModified" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Houses" Relationship="AMSModel.FK_House_HouseType" FromRole="HouseCategory" ToRole="House" />
           <NavigationProperty Name="UtilServiceForHouseCats" Relationship="AMSModel.FK_UtilServiceForHouseCat_HouseCategory" FromRole="HouseCategory" ToRole="UtilServiceForHouseCat" />
+          <NavigationProperty Name="Houses" Relationship="AMSModel.FK_House_HouseType" FromRole="HouseCategory" ToRole="House" />
         </EntityType>
         <EntityType Name="Image">
           <Key>
@@ -1715,9 +1694,9 @@
           <Property Name="IsAutomation" Type="Int32" />
           <Property Name="BlsId" Type="Int32" />
           <NavigationProperty Name="BalanceSheet" Relationship="AMSModel.FK_Receipt_BalanceSheet" FromRole="Receipt" ToRole="BalanceSheet" />
-          <NavigationProperty Name="House" Relationship="AMSModel.FK_tbl_receipt_tbl_house" FromRole="Receipt" ToRole="House" />
           <NavigationProperty Name="User" Relationship="AMSModel.FK_Receipt_User" FromRole="Receipt" ToRole="User" />
           <NavigationProperty Name="ReceiptDetails" Relationship="AMSModel.FK_ReceiptDetail_Receipt" FromRole="Receipt" ToRole="ReceiptDetail" />
+          <NavigationProperty Name="House" Relationship="AMSModel.FK_tbl_receipt_tbl_house" FromRole="Receipt" ToRole="House" />
         </EntityType>
         <EntityType Name="ReceiptDetail">
           <Key>
@@ -1803,19 +1782,20 @@
           <Property Name="FamilyLevel" Type="Int32" />
           <Property Name="IDCreatedDate" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="Int32" />
+          <Property Name="SendPasswordTo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="BalanceSheets" Relationship="AMSModel.FK_Transaction_User" FromRole="User" ToRole="BalanceSheet" />
           <NavigationProperty Name="Comments" Relationship="AMSModel.FK_Comment_User1" FromRole="User" ToRole="Comment" />
           <NavigationProperty Name="HelpdeskRequests" Relationship="AMSModel.FK_HelpdeskRequest_User" FromRole="User" ToRole="HelpdeskRequest" />
           <NavigationProperty Name="HelpdeskRequests1" Relationship="AMSModel.FK_HelpdeskRequest_User1" FromRole="User" ToRole="HelpdeskRequest" />
           <NavigationProperty Name="HelpdeskRequestLogs" Relationship="AMSModel.FK_HelpdeskRequestLog_User1" FromRole="User" ToRole="HelpdeskRequestLog" />
           <NavigationProperty Name="HelpdeskRequestLogs1" Relationship="AMSModel.FK_HelpdeskRequestLog_User2" FromRole="User" ToRole="HelpdeskRequestLog" />
-          <NavigationProperty Name="House" Relationship="AMSModel.FK_User_House" FromRole="User" ToRole="House" />
           <NavigationProperty Name="Posts" Relationship="AMSModel.FK_tbl_post_tbl_user" FromRole="User" ToRole="Post" />
           <NavigationProperty Name="Receipts" Relationship="AMSModel.FK_Receipt_User" FromRole="User" ToRole="Receipt" />
           <NavigationProperty Name="Reports" Relationship="AMSModel.FK_Report_User" FromRole="User" ToRole="Report" />
           <NavigationProperty Name="Role" Relationship="AMSModel.FK_tbl_user_tbl_role" FromRole="User" ToRole="Role" />
           <NavigationProperty Name="UserRateAroundProviders" Relationship="AMSModel.FK_tbl_resident_rate_around_srv_tbl_user" FromRole="User" ToRole="UserRateAroundProvider" />
           <NavigationProperty Name="UserAnswerPolls" Relationship="AMSModel.FK_UserDoServey_User" FromRole="User" ToRole="UserAnswerPoll" />
+          <NavigationProperty Name="House" Relationship="AMSModel.FK_User_House" FromRole="User" ToRole="House" />
         </EntityType>
         <EntityType Name="UserAnswerPoll">
           <Key>
@@ -2006,18 +1986,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_House_Block">
-          <End Type="AMSModel.Block" Role="Block" Multiplicity="0..1" />
-          <End Type="AMSModel.House" Role="House" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Block">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="House">
-              <PropertyRef Name="BlockId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_BlockSurvey_Survey">
           <End Type="AMSModel.Poll" Role="Poll" Multiplicity="1" />
           <End Type="AMSModel.BlockPoll" Role="BlockPoll" Multiplicity="*" />
@@ -2102,18 +2070,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tbl_h_desk_request_tbl_house">
-          <End Type="AMSModel.House" Role="House" Multiplicity="0..1" />
-          <End Type="AMSModel.HelpdeskRequest" Role="HelpdeskRequest" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="House">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="HelpdeskRequest">
-              <PropertyRef Name="HouseId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_HelpdeskRequestLog_User1">
           <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
           <End Type="AMSModel.HelpdeskRequestLog" Role="HelpdeskRequestLog" Multiplicity="*" />
@@ -2147,42 +2103,6 @@
             </Principal>
             <Dependent Role="HelpdeskService">
               <PropertyRef Name="HelpdeskServiceCategoryId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_House_HouseType">
-          <End Type="AMSModel.HouseCategory" Role="HouseCategory" Multiplicity="0..1" />
-          <End Type="AMSModel.House" Role="House" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="HouseCategory">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="House">
-              <PropertyRef Name="TypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tbl_receipt_tbl_house">
-          <End Type="AMSModel.House" Role="House" Multiplicity="0..1" />
-          <End Type="AMSModel.Receipt" Role="Receipt" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="House">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Receipt">
-              <PropertyRef Name="HouseId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_User_House">
-          <End Type="AMSModel.House" Role="House" Multiplicity="0..1" />
-          <End Type="AMSModel.User" Role="User" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="House">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="User">
-              <PropertyRef Name="HouseId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2371,6 +2291,90 @@
         <Association Name="AspNetUserRoles">
           <End Type="AMSModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="AMSModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
+        </Association>
+        <EntityType Name="House">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BlockId" Type="Int32" />
+          <Property Name="Floor" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="HouseName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Area" Type="Double" />
+          <Property Name="OwnerID" Type="Int32" />
+          <Property Name="ProfileImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CoverImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DisplayMember" Type="Boolean" />
+          <Property Name="AllowOtherView" Type="Boolean" />
+          <Property Name="TypeId" Type="Int32" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="WaterMeter" Type="Int32" />
+          <NavigationProperty Name="Block" Relationship="AMSModel.FK_House_Block" FromRole="House" ToRole="Block" />
+          <NavigationProperty Name="HelpdeskRequests" Relationship="AMSModel.FK_tbl_h_desk_request_tbl_house" FromRole="House" ToRole="HelpdeskRequest" />
+          <NavigationProperty Name="HouseCategory" Relationship="AMSModel.FK_House_HouseType" FromRole="House" ToRole="HouseCategory" />
+          <NavigationProperty Name="Receipts" Relationship="AMSModel.FK_tbl_receipt_tbl_house" FromRole="House" ToRole="Receipt" />
+          <NavigationProperty Name="Users" Relationship="AMSModel.FK_User_House" FromRole="House" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_House_Block">
+          <End Type="AMSModel.Block" Role="Block" Multiplicity="0..1" />
+          <End Type="AMSModel.House" Role="House" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Block">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="House">
+              <PropertyRef Name="BlockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_h_desk_request_tbl_house">
+          <End Type="AMSModel.House" Role="House" Multiplicity="0..1" />
+          <End Type="AMSModel.HelpdeskRequest" Role="HelpdeskRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="House">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="HelpdeskRequest">
+              <PropertyRef Name="HouseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_House_HouseType">
+          <End Type="AMSModel.HouseCategory" Role="HouseCategory" Multiplicity="0..1" />
+          <End Type="AMSModel.House" Role="House" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HouseCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="House">
+              <PropertyRef Name="TypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_receipt_tbl_house">
+          <End Type="AMSModel.House" Role="House" Multiplicity="0..1" />
+          <End Type="AMSModel.Receipt" Role="Receipt" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="House">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Receipt">
+              <PropertyRef Name="HouseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_House">
+          <End Type="AMSModel.House" Role="House" Multiplicity="0..1" />
+          <End Type="AMSModel.User" Role="User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="House">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="HouseId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         </Schema>
     </edmx:ConceptualModels>
@@ -2597,25 +2601,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Houses">
-            <EntityTypeMapping TypeName="AMSModel.House">
-              <MappingFragment StoreEntitySet="House">
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
-                <ScalarProperty Name="AllowOtherView" ColumnName="AllowOtherView" />
-                <ScalarProperty Name="DisplayMember" ColumnName="DisplayMember" />
-                <ScalarProperty Name="CoverImage" ColumnName="CoverImage" />
-                <ScalarProperty Name="ProfileImage" ColumnName="ProfileImage" />
-                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
-                <ScalarProperty Name="Area" ColumnName="Area" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="HouseName" ColumnName="HouseName" />
-                <ScalarProperty Name="Floor" ColumnName="Floor" />
-                <ScalarProperty Name="BlockId" ColumnName="BlockId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="HouseCategories">
             <EntityTypeMapping TypeName="AMSModel.HouseCategory">
               <MappingFragment StoreEntitySet="HouseCategory">
@@ -2765,6 +2750,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="AMSModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="SendPasswordTo" ColumnName="SendPasswordTo" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="IDCreatedDate" ColumnName="IDCreatedDate" />
                 <ScalarProperty Name="FamilyLevel" ColumnName="FamilyLevel" />
@@ -2864,6 +2850,26 @@
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="Houses">
+            <EntityTypeMapping TypeName="AMSModel.House">
+              <MappingFragment StoreEntitySet="House">
+                <ScalarProperty Name="WaterMeter" ColumnName="WaterMeter" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+                <ScalarProperty Name="AllowOtherView" ColumnName="AllowOtherView" />
+                <ScalarProperty Name="DisplayMember" ColumnName="DisplayMember" />
+                <ScalarProperty Name="CoverImage" ColumnName="CoverImage" />
+                <ScalarProperty Name="ProfileImage" ColumnName="ProfileImage" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="HouseName" ColumnName="HouseName" />
+                <ScalarProperty Name="Floor" ColumnName="Floor" />
+                <ScalarProperty Name="BlockId" ColumnName="BlockId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

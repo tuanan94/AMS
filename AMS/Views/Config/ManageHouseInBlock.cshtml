@@ -24,68 +24,64 @@
 
         <div class="panel-body">
             <div class="tab-content">
-                <div class="tab-pane fade active in" id="">
-                    <div class="panel panel-default" style="border-color: transparent">
-                        <form id="addUtilServiceForm" class="form-horizontal" role="form">
-                            <div class="alert alert-info" id="createSuccessNoti" style="display: none">
-                                <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                <span>Tạo mới thành công</span>
-                            </div>
-                            <div class="alert alert-danger" id="createFailedNoti" style="display: none">
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                                <span>Tạo mới thất bại</span>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-offset-2 col-md-8">
-                                    <fieldset class="scheduler-border less-padding">
-                                        <legend class="scheduler-border bold-black">Thông tin tòa nhà</legend>
-                                        <div class="form-group">
-                                            <div class="form-group">
-                                                <label class="col-md-4 control-label">Tên tòa nhà</label>
-                                                <div class="col-md-7">
-                                                    <div class="input-group">
-                                                        <input type="text" id="blockName" value="@block.BlockName" class="form-control" />
-                                                        <span class="input-group-addon" onclick="showPopupEditBlockName()"><i class="fa fa-pencil"></i></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-md-4 control-label">Số tầng</label>
-                                                <div class="col-md-7">
-                                                    <div class="input-group">
-                                                        <input type="text" name="numberOfFloor" value="@block.NoFloor" class="form-control" />
-                                                        <span class="input-group-addon" onclick="showPopupEditFloorName()"><i class="fa fa-pencil"></i></span>
-                                                    </div>
-                                                </div>
+                <form id="addUtilServiceForm" class="form-horizontal" role="form">
+                    <div class="alert alert-info" id="createSuccessNoti" style="display: none">
+                        <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span>Tạo mới thành công</span>
+                    </div>
+                    <div class="alert alert-danger" id="createFailedNoti" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                        <span>Tạo mới thất bại</span>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-8">
+                            <fieldset class="scheduler-border less-padding">
+                                <legend class="scheduler-border bold-black">Thông tin tòa nhà</legend>
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label">Tên tòa nhà</label>
+                                        <div class="col-md-7">
+                                            <div class="input-group">
+                                                <input type="text" id="blockName" value="@block.BlockName" class="form-control" />
+                                                <span class="input-group-addon" onclick="showPopupEditBlockName()"><i class="fa fa-pencil"></i></span>
                                             </div>
                                         </div>
-                                    </fieldset>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label">Số tầng</label>
+                                        <div class="col-md-7">
+                                            <div class="input-group">
+                                                <input type="text" name="numberOfFloor" value="@block.NoFloor" class="form-control" />
+                                                <span class="input-group-addon" onclick="showPopupEditFloorName()"><i class="fa fa-pencil"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <table id="houseInBlockTbl" class="table table-hover table-bordered" data-block-id="@block.Id">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Tầng</th>
-                                        <th>Tên nhà</th>
-                                        <th>Trạng thái</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Tầng</th>
-                                        <th>Tên nhà</th>
-                                        <th>Trạng thái</th>
-                                        <th></th>
-                                    </tr>
-                                </tfoot>
-                                <tbody></tbody>
-                            </table>
-                        </form>
+                            </fieldset>
+                        </div>
                     </div>
-                </div>
+                    <table id="houseInBlockTbl" class="table table-hover table-bordered" data-block-id="@block.Id">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Tầng</th>
+                                <th>Tên nhà</th>
+                                <th>Trạng thái</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>#</th>
+                                <th>Tầng</th>
+                                <th>Tên nhà</th>
+                                <th>Trạng thái</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                        <tbody></tbody>
+                    </table>
+                </form>
             </div>
         </div>
     </div>
@@ -232,6 +228,10 @@
                             <label for="mBlockName" class="col-md-3 control-label">Tên căn hộ</label>
                             <div class="col-md-9">
                                 <div class="input-group">
+                                    <input id="viewAddBlockName" type="text" class="form-control room-name" readonly="readonly" value="">
+                                    <span class="input-group-addon">-</span>
+                                    <input id="addfloorName" name="" type="text" class="form-control room-name" readonly="readonly" value="">
+                                    <span class="input-group-addon">-</span>
                                     <input id="addName" name="Name" type="text" class="form-control room-name" value="">
                                 </div>
                             </div>
@@ -513,6 +513,7 @@
         $("input[type='radio'][name='AddFloor']").on("change", function (event) {
             $("#addFloorNameInput").addClass("hide");
             $("#addFloorNameSelect").addClass("hide");
+            $("#addfloorName").val("");
             if (parseInt(this.value, 10) === 1) {
                 var blockId = document.getElementById("houseInBlockTbl").dataset.blockId;
                 $.ajax({
@@ -527,6 +528,7 @@
                             var floorTags = parseJsonToSelectTags(obj);
                             $("#addFloorNameSelect").html(floorTags);
                             $("#addFloorNameSelect").removeClass("hide");
+                            $("#addfloorName").val($("#addFloorNameSelect").val());
                         } else {
 
                         }
@@ -537,11 +539,23 @@
             }
         });
 
+        /*<input id="viewAddBlockName" type="text" class="form-control room-name" readonly="readonly" value="">
+                                    <span class="input-group-addon">-</span>
+                                    <input id="addfloorName" name="" type="text" class="form-control room-name" readonly="readonly" value="">
+                                    <span class="input-group-addon">-</span>
+                                    <input id="addName" name="Name" type="text" class="form-control room-name" value="">*/
+        $("#addFloorNameInput").on("change", function () {
+            $("#addfloorName").val(this.value);
+        });
+        $("#addFloorNameSelect").on("change", function () {
+            var selected = $(this).find("option:selected").val();
+            $("#addfloorName").val(selected);
+        });
+
     });
 
     function openAddNewHouseModal() {
         var blockId = document.getElementById("houseInBlockTbl").dataset.blockId;
-        $("#addHouseModal").modal("show");
         $.ajax({
             url: "/Management/Config/UtilityService/GetBlockInfo",
             type: "GET",
@@ -554,6 +568,9 @@
                     $("#addBlockName").val(obj.blockName);
                     var floorTags = parseJsonToSelectTags(obj.floor);
                     $("#addFloorNameSelect").html(floorTags);
+                    $("#addfloorName").val($("#addFloorNameSelect").val());
+                    $("#viewAddBlockName").val($("#blockName").val());
+                    $("#addHouseModal").modal("show");
                 } else {
 
                 }

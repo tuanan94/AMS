@@ -517,7 +517,6 @@
     <Content Include="images\Post\question_button.png" />
     <Content Include="images\Post\SEO_survey_reuslts-1024x768.jpg" />
     <Content Include="images\Post\survey-icon.png" />
-    <Content Include="LinqToExcel.dll" />
     <Content Include="Content\rating.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />

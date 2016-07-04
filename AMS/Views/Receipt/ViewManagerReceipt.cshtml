@@ -122,9 +122,10 @@
                 "render": function (data, type, full, meta) {
                     if (type === "display" || type === "filter") {
                         if (full.IsAutomation !== window.StatusAutomationReceipt) {
-                            return "<span class='label date-color' style='margin-right: 5px'>" + full.Block + "</span>" +
-                                "<span class='label time-color' style='margin-right: 5px'>" + full.Floor + "</span>" +
-                                "<span class='label room-color' >" + full.HouseName + "</span>";
+//                            return "<span class='label date-color' style='margin-right: 5px'>" + full.Block + "</span>" +
+//                                "<span class='label time-color' style='margin-right: 5px'>" + full.Floor + "</span>" +
+//                                "<span class='label room-color' >" + full.HouseName + "</span>";
+                            return "<span class='label room-color' >" + full.HouseName + "</span>";
                         }
                         return "";
                     }
@@ -169,32 +170,40 @@
                     if (type === "display" || type === "filter") {
                         if (data !== null && data !== undefined) {
                             var dateTime = data.split(" ");
-                            return "<span class='label date-color label-warning'>" + dateTime[0] +
-                                "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";
+//                            return "<span class='label date-color label-warning'>" + dateTime[0] +
+//                                "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";
+                            return "<strong>" + dateTime[0] +
+                                "</strong> " + dateTime[1];
+                        }
+                    }
+                    return full.CreateDateLong;
+                }
+            },
+            {
+                "targets": 7,
+                "data": "ReceiptId",
+                "render": function (data, type, full) {
+                    if (type === "display" || type === "filter") {
+                        if (data !== null && data !== undefined) {
+                            if (full.IsAutomation === window.StatusAutomationReceipt) {
+                                return "<div style='text-align:right'><span onclick='editOrderDetail(\"" + full.CreateDateLong + "\",\"" + full.IsAutomation + "\",\"" + fromUserId + "\")' class='btn btn-default btn-xs lbl-margin-right'>" +
+                                "<i class='fa fa-pencil'></i>" +
+                                "</span> </div>";
+                            }
+                            return "<div style='text-align:right'><span onclick='editOrderDetail(\"" + data + "\",\"" + full.IsAutomation + "\",\"" + fromUserId + "\")' class='btn btn-default btn-xs lbl-margin-right'>" +
+                                "<i class='fa fa-pencil'></i>" +
+                                "</span> </div>";
                         }
                     }
                     return data;
                 }
-    }, {
-        "targets": 7,
-        "data": "ReceiptId",
-        "render": function (data, type, full) {
-            if (type === "display" || type === "filter") {
-                if (data !== null && data !== undefined) {
-                    return "<span onclick='editOrderDetail(\"" + data + "\",\"" + full.IsAutomation+ "\",\"" + fromUserId + "\")' class='btn btn-default btn-xs lbl-margin-right'>" +
-                        "<i class='fa fa-pencil'></i>" +
-                        "</span> ";
-                }
             }
-            return data;
-        }
-    }
-    ]
-    });
-    generateTableIndex(dataTable5);
+            ]
+        });
+        generateTableIndex(dataTable5);
     });
     function editOrderDetail(receiptId, isAutomation, userId) {
-        if (parseInt(isAutomation,10) === window.StatusAutomationReceipt) {
+        if (parseInt(isAutomation, 10) === window.StatusAutomationReceipt) {
             location.href = "/Management/ManageReceipt/ViewBatchReceipt?receiptId=" + receiptId;
         } else {
             location.href = "/Management/ManageReceipt/Edit/Detail?userId=" + userId + "&orderId=" + receiptId;
