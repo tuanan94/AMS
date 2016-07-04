@@ -450,7 +450,7 @@ namespace AMS.Controllers
 
         }
 
-        [HttpGet]
+        [HttpPost]
         [Authorize]
         public Object addMember(String fullname, String username, String profileImage,int gender, DateTime birthDate, String IDNumber, DateTime idDate, int relationShipLevel)
         {

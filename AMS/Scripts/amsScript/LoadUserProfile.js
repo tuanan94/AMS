@@ -13,7 +13,7 @@ function getUser(userid,loadMember) {
             UserId: userid,
         },
         success: function (successData) {
-            alert(successData)
+            //alert(successData)
             var obj = JSON.parse(successData);
             addModal(obj,loadMember);
             showModal(obj);
@@ -41,7 +41,7 @@ function clearModal(id) {
 function addModal(data, loadMember) {
    
     var imgSrc = "/Content/images/defaultProfile.png";
-    alert(data['DateOfBirth']);
+   // alert(data['DateOfBirth']);
     var DateOfBirth = new Date(data['DateOfBirth']);
     var StringDateOfBirth = DateOfBirth.toDateString();
     if (StringDateOfBirth == 'Invalid Date') {
