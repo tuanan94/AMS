@@ -197,19 +197,19 @@
                                 <label class="col-sm-3 control-label">Khu</label>
                                 <div class="col-sm-7">
                                     @{
-                            int check = 0;
+                            //int check = 0;
                             foreach (var item in listBlock)
                             {
-                                if (check == 0)
-                                {
-                                    <label class="checkbox-inline"><input type="checkbox" checked="checked" name="block" class="blockss" value="@item">@item</label>
-                                }
-                                else
-                                {
-                                    <label class="checkbox-inline"><input type="checkbox" name="block" class="blockss" value="@item">@item</label>
+                                //if (check == 0)
+                                //{
+                                    <label class="checkbox-inline"><input type="checkbox"  name="block" class="blockss" value="@item">@item</label>
+                                //}
+                                //else
+                                //{
+                                    @*<label class="checkbox-inline"><input type="checkbox" name="block" class="blockss" value="@item">@item</label>
 
                                 }
-                                check++;
+                                check++;*@
                             }
                                     }
                                 </div>
