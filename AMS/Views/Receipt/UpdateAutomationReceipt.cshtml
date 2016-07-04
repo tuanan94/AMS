@@ -44,8 +44,7 @@
                         </div>
 
                         <div class="form-group">
-                            <div class="col-md-1"></div>
-                            <div class="col-md-offset-1 col-md-10">
+                            <div class="pull-right">
                                 @{
                                     if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
                                     {
@@ -428,7 +427,7 @@
                     return data.data;
                 }
             },
-            "order": [["2", "asc"]],
+            "order": [["1", "asc"]],
             "bLengthChange": false,
             "bInfo": false,
             "columns": [
@@ -551,6 +550,7 @@
             },
              {
                  "targets": 9,
+                 "width":"8%",
                  "data": "ReceiptId",
                  "render": function (data, type, full) {
                      if (type === "display" || type === "filter") {

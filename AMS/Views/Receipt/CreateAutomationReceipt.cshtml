@@ -46,7 +46,7 @@
                             <span>Tạo mới thất bại.</span>
                         </div>
                         <div class="alert alert-danger" id="msgAddFailedNoty" style="display: none">
-                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <a href="#" class="close" onclick="$('.alert').hide()" aria-label="close">&times;</a>
                             <span id="notyMsg"></span>
                         </div>
                         @{
@@ -318,8 +318,28 @@
             "ajax": {
                 url: "/Management/ManageReceipt/GetMonthlyResidentExpenseList?csvFilePath=" + fileCsvName,
                 dataSrc: function (data) {
-                    window.houseConsumptionList = data.Data;
-                    return data.Data;
+                    var msg = "";
+                    if (data.StatusCode === 0) {
+                        window.houseConsumptionList = data.Data;
+                        $("#msgAddFailedNoty").fadeOut("fast");
+                        return data.Data;
+                    } else  if(data.StatusCode === -1) {
+                        msg = "Có lỗi xãy ra. Kiểm tra lại file ghi điện nước";
+                    }else if (data.StatusCode === 2) {
+                        msg = "Tòa nhà, Tầng và Căn hộ không đươc để trống";
+                    }else if (data.StatusCode === 4) {
+                        msg = "Không tìm thấy căn hộ: <strong>"+ data.Data+ "</strong>";
+                    }else if (data.StatusCode === 5) {
+                        msg = "Số ghi nước tháng trước không chính xác: : <strong>"+ data.Data+ "</strong>";
+                    }else if (data.StatusCode === 6) {
+                        msg = "Số ghi nước tháng mới phải lớn hơn số tháng trước: : <strong>"+ data.Data+ "</strong>";
+                    }
+                    $("#notyMsg").html(msg);
+                    $("#msgAddFailedNoty").fadeIn("fast");
+//                    setTimeout(function() {
+//                        $("#msgAddFailedNoty").fadeOut("fast");
+//                    },3000);
+                    return [];
                 }
             },
             "destroy": true,
