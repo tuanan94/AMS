@@ -720,7 +720,6 @@
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Management\_helpdeskServiceCategoryTablePartial.cshtml" />
     <Content Include="Views\HelpdeskRequest\CreateHdRequest.cshtml" />
-    <Content Include="Views\HelpdeskRequest\ViewRequestingHdRequestsOfManager.cshtml" />
     <Content Include="Views\HelpdeskRequest\ViewHistoryHdRequests.cshtml" />
     <Content Include="Views\Home\TimeLine.cshtml" />
     <Content Include="Views\HelpdeskSupporter\Index.cshtml" />
@@ -776,6 +775,8 @@
     <Content Include="Views\Survey\ViewHistory.cshtml" />
     <Content Include="Views\Survey\ListPoll.cshtml" />
     <Content Include="Views\Config\ManageHouseBlock.cshtml" />
+    <Content Include="Views\HelpdeskRequest\ManageHdRequests.cshtml" />
+    <Content Include="Views\Receipt\ViewWateBiiling.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

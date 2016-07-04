@@ -16,6 +16,8 @@ namespace AMS.Models
         public string FromAmount { get; set; }
         public string ToAmount { get; set; }
         public double Price { get; set; }
+        public double Total { get; set; }
+        public double Qty { get; set; }
     }
     public class UtilityServiceModel
     {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using AMS.Constant;
+﻿using System.Collections.Generic;
 using LINQtoCSV;
 
 namespace AMS.Models
@@ -32,6 +28,8 @@ namespace AMS.Models
         public string ReceiptTitle { get; set; }
         public double TotalOrder { get; set; }
         public string CreateDate { get; set; }
+        public string PublishDate { get; set; }
+        public long PublishDateStick { get; set; }
         public string Block { get; set; }
         public string Floor { get; set; }
         public string ForMonth { get; set; }
@@ -88,6 +86,7 @@ namespace AMS.Models
     {
         public int HouseId { get; set; }
         public int ReceiptId { get; set; }
+        public int ReceiptDetailId { get; set; }
         public string Block { get; set; }
         public string Floor { get; set; }
         public string HouseName { get; set; }
@@ -95,6 +94,7 @@ namespace AMS.Models
         public int Water { get; set; }
         public int FromNumber { get; set; }
         public int ToNumber { get; set; }
+        public int Qty { get; set; }
         public double WaterCost { get; set; }
         public double FixedCost { get; set; }
         public double Total { get; set; }
@@ -176,4 +176,19 @@ namespace AMS.Models
         public ReceiptDetail ReceiptDetail { get; set; }
         public double  TotalAmount { get; set; }
     }
+
+    public class HistoryWaterUsingModel
+    {
+        public string Month{ get; set; }
+        public double Amount { get; set; }
+    }
+//    public class HouseReceiptReceipt
+//    {
+//        public int ReceiptId { get; set; }
+//        public string Title { get; set; }
+//        public string CreateDate { get; set; }
+//        public string PublishDate { get; set; }
+//        public string PublishDate { get; set; }
+//        
+//    }
 }

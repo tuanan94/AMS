@@ -5,51 +5,60 @@
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
     Receipt receipt = ViewBag.receipt;
 }
-<nav class="navbar navbar-subnav navbar-static-top" role="navigation">
-    <div class="container-fluid">
+@*<nav class="navbar navbar-subnav navbar-static-top" role="navigation">
+        <div class="container-fluid">
 
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subnav">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="fa fa-ellipsis-h"></span>
-            </button>
-        </div>
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subnav">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="fa fa-ellipsis-h"></span>
+                </button>
+            </div>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="subnav">
-            <ul class="nav navbar-nav">
-                <li class="active">
-                    <a href="/Home/ManageReceipt/View/@User.Identity.GetUserId()"><i class="fa fa-file-text-o"></i> Hóa đơn</a>
-                </li>
-            </ul>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="subnav">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="/Home/ManageReceipt/View/@User.Identity.GetUserId()"><i class="fa fa-file-text-o"></i> Hóa đơn</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
         </div>
-        <!-- /.navbar-collapse -->
-    </div>
-</nav>
+    </nav>*@
 
 <div class="col-md-12">
     <div class="panel panel-default">
-        <div class="panel-heading panel-heading-gray"><i class="fa fa-info-circle"></i> Xem hóa đơn chi tiết</div>
+
+        <div class="heading-tab">
+            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Chi tiết hóa đơn</span>
+
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li class="active">
+                    <a href="/Home/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Hóa đơn</a>
+                </li>
+            </ul>
+        </div>
         <div class="panel-body">
             <form id="createNewOrder" class="form-horizontal" role="form">
                 <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-8">
+                    <div class="col-md-offset-1 col-md-10">
                         <fieldset class="scheduler-border less-padding">
-                            <legend class="scheduler-border">Thông tin hóa đơn</legend>
+                            <legend class="scheduler-border bold-black">Thông tin hóa đơn</legend>
                             <div class="form-group">
                                 <label for="receiptTitle" class="col-md-2 control-label">Tiêu đề</label>
                                 <div class="col-md-10">
                                     <input readonly="readonly" value="@receipt.Title" id="receiptTitle" type="text" class="form-control">
                                 </div>
-                            </div> 
+                            </div>
                             <div class="form-group">
                                 <label for="houseBlock" class="col-md-2 control-label">Người tạo</label>
-                                <div class="col-md-5">
+                                <div class="col-md-4">
                                     <input readonly="readonly" value="@receipt.User.Fullname" id="creator" type="text" class="form-control">
                                 </div>
                                 <label for="createDate" class="col-md-2 control-label">Ngày tạo</label>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     @{
                                         string date = receipt.CreateDate.Value.ToString(AmsConstants.DateFormat);
                                     }
@@ -59,7 +68,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="houseBlock" class="col-md-2 control-label">Trạng thái</label>
-                                <div class="col-md-5">
+                                <div class="col-md-3">
                                     @{
                                         if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_PAID)
                                         {
@@ -71,8 +80,8 @@
                                         }
                                     }
                                 </div>
-                                <label for="paidDate" class="col-md-2 control-label">Ngày thanh toán</label>
-                                <div class="col-md-3">
+                                <label for="paidDate" class="col-md-3 control-label">Ngày thanh toán</label>
+                                <div class="col-md-4">
                                     @{
                                         string paidDateStr = "";
                                         if (null == receipt.PaymentDate)
@@ -98,54 +107,91 @@
                 </div>
 
                 <div class="form-group">
-                    <div class="col-sm-12">
+                    <div class="col-md-12">
                         <fieldset class="scheduler-border less-padding">
-                            <legend class="scheduler-border">Chi tiết hóa đơn</legend>
-                            <div class="table-responsive">
-                                <table class="table v-middle table-bordered table-striped" id="receiptDetailTable">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Tên</th>
-                                            <th>Số lượng</th>
-                                            <th>Đơn giá</th>
-                                            <th>Thành tiền</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @{
-                                            double total = 0;
-                                            double qtyPrice = 0;
-                                            foreach (var detail in receipt.ReceiptDetails)
-                                            {
-                                                <tr>
-                                                    <td></td>
-                                                    <td>@detail.UtilityService.Name</td>
-                                                    <td>@detail.Quantity.Value.ToString("N0")</td>
-                                                    <td>@detail.UnitPrice.Value.ToString("N0")</td>
-                                                    @{
-                                                        qtyPrice = (detail.UnitPrice*detail.Quantity).Value; 
-                                                    }
-                                                    <td>@(qtyPrice.ToString("N0"))</td>
-                                                </tr>
+                            <legend class="scheduler-border  bold-black">Chi tiết hóa đơn</legend>
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table class="table v-middle table-bordered table-striped" id="receiptDetailTable">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Tên</th>
+                                                <th>Số lượng</th>
+                                                <th>Đơn giá</th>
+                                                <th>Thành tiền</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{
+                                                double total = 0;
+                                                foreach (var detail in receipt.ReceiptDetails)
                                                 {
-                                                    total += (detail.UnitPrice*detail.Quantity).Value;
+                                                    <tr>
+                                                        <td></td>
+                                                        <td>@detail.UtilityService.Name</td>
+
+                                                        <td>
+                                                            @if (detail.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER || detail.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST)
+                                                            {
+                                                                <div style="text-align: center">-</div>
+                                                            }
+                                                            else
+                                                            {
+                                                                @(detail.Quantity == null ? "-" : detail.Quantity.Value.ToString())
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @if (detail.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER || detail.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST)
+                                                            {
+                                                                <div style="text-align: center">-</div>
+                                                            }
+                                                            else
+                                                            {
+                                                                @(detail.UnitPrice == null ? "-" : detail.UnitPrice.Value.ToString())
+                                                            }
+                                                        </td>
+                                                        <td>@(detail.Total.Value.ToString("N0"))</td>
+                                                        <td>
+                                                            @if (detail.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
+                                                            {
+                                                                <div class='text-right'>
+                                                                    <a class="btn btn-info btn-stroke btn-xs" href="/Home/ManageReceipt/ViewElectricBill?receiptDetailId=@detail.Id"><i class='fa fa-info'></i></a>
+                                                                </div>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                            {
+                                                                total += detail.Total.Value;
+                                                            }
                                                 }
                                             }
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="panel-footer">
-                                <div class="form-group" style="font-size: 20px; text-align: right">
-                                    <div class="col-sm-offset-8 col-sm-2">
-                                        <strong style="align-content: center">Tổng cộng</strong>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <label class="lbl">@total.ToString("N0")</label>
-                                    </div>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="4" style="text-align: right;font-size: 18px;"><strong>Tổng</strong></td>
+                                                <td colspan="2" style="background: #f9f9f9;font-size: 18px;">@total.ToString("N0")</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
                                 </div>
+
                             </div>
+
+                            @*                            <div class="col-md-12" style="font-size: 20px;">*@
+                            @*                                <div class="pull-right">*@
+                            @*                                    <div class="col-md-offset-4 col-md-4" style="text-align: right">*@
+                            @*                                        <strong style="align-content: center;">Tổng</strong>*@
+                            @*                                    </div>*@
+                            @*                                    <div class="col-md-4">*@
+                            @*                                        <div class="input-group">*@
+                            @*                                            <input id="total" class="form-control" value="@total.ToString("N0")" />*@
+                            @*                                            <span class="input-group-addon">đồng</span>*@
+                            @*                                        </div>*@
+                            @*                                    </div>*@
+                            @*                                </div>*@
+                            @*                            </div>*@
                         </fieldset>
                     </div>
                 </div>
@@ -154,12 +200,20 @@
     </div>
 </div>
 <script>
-    $(document).ready(function() {
-        var datatable5 = $("#receiptDetailTable").DataTable({
-            "bLengthChange": false,
-            "bPaginate": false,
-            "bInfo": false
-        });
-        generateTableIndex(datatable5);
-    });
+    //    $(document).ready(function () {
+    //        var datatable5 = $("#receiptDetailTable").DataTable({
+    //            "bLengthChange": false,
+    //            "bPaginate": false,
+    //            "bInfo": false,
+    //            "order": [[4, "asc"]],
+    //            "columnDefs": [
+    //                {
+    //                    "searchable": false,
+    //                    "orderable": false,
+    //                    "targets": 0
+    //                }
+    //            ]
+    //        });
+    //        generateTableIndex(datatable5);
+    //    });
 </script>

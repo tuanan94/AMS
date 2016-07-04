@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity;
-@{ 
+@{
     var currentUser = User.Identity;
     String url = HttpContext.Current.Request.Url.AbsolutePath;
 
@@ -14,14 +14,15 @@
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/css/css")
     @Scripts.Render("~/bundles/modernizr")
-   
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-    
-@*    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>*@
+
+    @*    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>*@
+    @*    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">*@
+
+    @*    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>*@
     <script src="~/Scripts/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="~/Content/css/jquery-ui.min.css">
     <link rel="stylesheet" href="~/Content/css/dataTables.bootstrap.min.css">
+    <link href="~/Content/css/jquery.datetimepicker.css" rel="stylesheet" />
 
 </head>
 <body class="breakpoint-1024">
@@ -36,11 +37,11 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a data-toggle="sidebar-chat" class="btn btn-link navbar-btn visible-xs"><i class="fa fa-comments"></i></a>
-               
+
                 <a class="navbar-brand" href="/" style="margin-left: 30px;">
-                        <img src="~/Content/images/logo.png" style="height: 100px;margin-top: -37px;margin-bottom: -20px;" />
-                        AMS
-                    
+                    <img src="~/Content/images/logo.png" style="height: 100px;margin-top: -37px;margin-bottom: -20px;" />
+                    AMS
+
                 </a>
             </div>
 
@@ -58,7 +59,7 @@
                     <li>
                         <a href="/Survey/doSurvey"><i class="fa fa-fw fa-stumbleupon-circle"></i> Khảo sát</a>
                     </li>
-          
+
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="hidden-xs">
@@ -115,25 +116,26 @@
         </div>
     </div>
     -->
-        @*AnLTNM change*@
-@*     <div class="st-container body-content">*@
-     <div class="st-container">
+    @*AnLTNM change*@
+    @*     <div class="st-container body-content">*@
+    <div class="st-container">
         @RenderBody()
         <hr />
         @*<footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>*@
+                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            </footer>*@
     </div>
 
-   
+
     @Scripts.Render("~/bundles/bootstrap")
     <script src="~/Scripts/amsScript/vendor.js"></script>
     <script src="~/Scripts/amsScript/scripts.js"></script>
     <script src="~/Scripts/amsScript/custom.js"></script>
     <script src="~/Scripts/amsScript/additional-methods.min.js"></script>
     <script src="~/Scripts/amsScript/jquery.validate.min.js"></script>
-<script src="~/Scripts/amsScript/jquery.timepicker.min.js"></script>
+    <script src="~/Scripts/amsScript/jquery.timepicker.min.js"></script>
     <script src="~/Scripts/aroundProvider/jquery.mixitup.js"></script>
+    <script src="~/Scripts/jquery.datetimepicker.full.js"></script>
 
     @RenderSection("scripts", required: false)
 

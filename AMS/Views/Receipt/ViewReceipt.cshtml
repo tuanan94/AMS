@@ -4,146 +4,396 @@
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
 }
 
-<nav class="navbar navbar-subnav navbar-static-top" role="navigation">
-    <div class="container-fluid">
+@*<nav class="navbar navbar-subnav navbar-static-top" role="navigation">
+        <div class="container-fluid">
 
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subnav">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="fa fa-ellipsis-h"></span>
-            </button>
-        </div>
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subnav">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="fa fa-ellipsis-h"></span>
+                </button>
+            </div>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="subnav">
-            <ul class="nav navbar-nav">
-                <li class="">
-                    <a href="/Home/ManageReceipt/View/HouseExpenseStatus"><i class="fa fa-file-text-o"></i> Khoản thu</a>
-                </li>
-                <li class="active">
-                    <a href="/Home/ManageReceipt/View/@User.Identity.GetUserId()"><i class="fa fa-file-text-o"></i> Hóa đơn</a>
-                </li>
-            </ul>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="subnav">
+                <ul class="nav navbar-nav">
+                    <li class="">
+                        <a href="/Home/ManageReceipt/View/HouseExpenseStatus"><i class="fa fa-file-text-o"></i> Khoản thu</a>
+                    </li>
+                    <li class="active">
+                        <a href="/Home/ManageReceipt/View/@User.Identity.GetUserId()"><i class="fa fa-file-text-o"></i> Hóa đơn</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
         </div>
-        <!-- /.navbar-collapse -->
-    </div>
-</nav>
+    </nav>*@
 
 <div class="col-md-12">
     <div class="panel panel-default">
-        <div class="panel-heading panel-heading-gray"><i style="color: #000" class="fa fa-list-ul"></i> Lịch sử hóa đơn</div>
+        <div class="heading-tab">
+            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Lịch sử hóa đơn</span>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li class="active">
+                    <a href="/Home/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Hóa đơn</a>
+                </li>
+            </ul>
+        </div>
         <div class="panel-body">
             <div class="form-horizontal" role="form">
-                <table id="houseOrderTbl" data-userid="@User.Identity.GetUserId()" class="table table-hover table-bordered">
+                <div class="form-group">
+                    <div class="col-md-10 col-md-offset-1">
+                        <div class="alert alert-danger" id="noReceipt" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Không có hóa đơn trong thời gian từ [<strong id="fromMsg"></strong>] đến [<strong id="toMsg"></strong>]</span>
+                        </div>
+                    </div>
+                    <div class="col-md-10 col-md-offset-1">
+                        <fieldset class="scheduler-border less-padding">
+                            <legend class="scheduler-border bold-black">Thông tin hóa đơn</legend>
+                            <div class="form-group">
+                                <label for="from" class="col-md-3 control-label">Từ</label>
+                                <div class=" col-md-8">
+                                    <div class="input-group">
+                                        <input id="from" class="form-control" value="" />
+                                        <span class="input-group-addon">Đến</span>
+                                        <input id="to" class="form-control  col-md-3" value="" />
+                                        <span class="input-group-addon btn btn-stroke btn-info btn-sm" onclick="GetReceiptListFromDateToDate()"><i class="fa fa-search"></i> Xem</span>
+
+                                    </div>
+                                </div>
+                                @*                                <div class="col-md-3">*@
+                                @*                                    <span class="btn btn-info" onclick="GetReceiptListFromDateToDate()"> Xem</span>*@
+                                @*                                </div>*@
+                            </div>
+
+                            <div class="form-group payment-info hide">
+                                <label for="title" class="col-md-3 control-label">Tổng</label>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <input id="totalAmount" class="form-control" value="" />
+                                        <span class="input-group-addon">đồng</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group payment-info hide">
+                                <label class="col-md-3 control-label">Đã thanh toán</label>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <input id="paidAmount" class="form-control" value="" />
+                                        <span class="input-group-addon">đồng</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group payment-info hide">
+                                <label class="col-md-3 control-label">Còn nợ</label>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <input id="restAmount" class="form-control" value="" />
+                                        <span class="input-group-addon">đồng</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <table id="houseOrderTbl" data-userid="@User.Identity.GetUserId()" class="table table-hover table-bordered hide">
                     <thead>
-                    <tr>
-                        <th></th>
-                        <th>Tiêu đề</th>
-                        <th>Căn hộ</th>
-                        <th>Tổng</th>
-                        <th>Trạng thái</th>
-                        <th>Ngày tạo</th>
-                        <th></th>
-                    </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>Tiêu đề</th>
+                            <th>Tổng</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày tạo</th>
+                            <th></th>
+                        </tr>
                     </thead>
                     <tfoot>
-                    <tr>
-                        <th></th>
-                        <th>Tiêu đề</th>
-                        <th>Căn hộ</th>
-                        <th>Tổng</th>
-                        <th>Trạng thái</th>
-                        <th>Ngày tạo</th>
-                        <th></th>
-                    </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>Tiêu đề</th>
+                            <th>Tổng</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày tạo</th>
+                            <th></th>
+                        </tr>
                     </tfoot>
                     <tbody></tbody>
                 </table>
-
             </div>
         </div>
     </div>
 </div>
-
 <script>
+
     $(document).ready(function () {
+        $.datetimepicker.setLocale('vi');
+        $("#from").datetimepicker({
+            format: 'd-m-Y',
+            onShow: function (ct) {
+                var value = "";
+                if ($('#to').val()) {
+                    var date = $('#to').val().split('-');
+                    value = date[2] + "-" + date[1] + "-" + date[0];
+                } else {
+                    value = false;
+                }
+                this.setOptions({
+                    maxDate: value
+                });
+            },
+            timepicker: false
+        });
+        $("#to").datetimepicker({
+            format: 'd-m-Y',
+            onShow: function (ct) {
+                var value = "";
+                if ($('#from').val()) {
+                    var date = $('#from').val().split('-');
+                    value = date[2] + "-" + date[1] + "-" + date[0];
+                } else {
+                    value = false;
+                }
+                this.setOptions({
+                    minDate: value
+                });
+            },
+            timepicker: false
+        });
+        GetAllUnpaidReceiptByHouse();
+    });
+    function GetReceiptListFromDateToDate() {
         var fromUserId = document.getElementById("houseOrderTbl").dataset.userid;
-        var dataTable5 = $("#houseOrderTbl").DataTable({
+        var from = $("#from").val();
+        var to = $("#to").val();
+        if (!from || !to) {
+            return;
+        }
+        var data = {
+            from: from,
+            to: to,
+            userId: fromUserId
+        }
+        if (window.dataTable5) {
+            window.dataTable5.destroy();
+        }
+        $("#houseOrderTbl").removeClass("hide");
+
+        window.dataTable5 = $("#houseOrderTbl").DataTable({
             "ajax": {
-                url: "/Home/ManageReceipt/GetOrderList?userId=" + fromUserId,
-                dataSrc: ""
+                url: "/Home/ManageReceipt/GetOrderList?" + $.param(data),
+                dataSrc: function (data) {
+                    if (data.StatusCode === 0) {
+                        var obj = data.Data;
+                        $("#totalAmount").val(numberWithCommas(obj.Total));
+                        $("#restAmount").val(numberWithCommas(obj.RestAmount));
+                        $("#paidAmount").val(numberWithCommas(obj.PaidAmount));
+                        $(".payment-info").removeClass("hide");
+
+                        return obj.Data;
+                    } else {
+                        $(".payment-info").addClass("hide");
+                        $("#totalAmount").val("");
+                        $("#restAmount").val("");
+                        $("#paidAmount").val("");
+                        $("#fromMsg").text($("#from").val());
+                        $("#toMsg").text($("#to").val());
+                        $("#noReceipt").fadeIn("fast");
+                        setTimeout(function () {
+                            $("#noReceipt").fadeOut("fast");
+
+                        }, 3000);
+                        return [];
+                    }
+                }
             },
             "bLengthChange": false,
             "bInfo": false,
+            "order": [[4, "desc"]],
             "columns": [
                 { data: "ReceiptTitle" },
                 { data: "ReceiptTitle" },
-                { data: "HouseName" },
                 { data: "TotalOrder" },
                 { data: "Status" },
-                { data: "CreateDate" },
+                { data: "PublishDate" },
                 { data: "ReceiptId" }
             ],
             "columnDefs": [
-            {
-                "searchable": false,
-                "orderable": false,
-                "targets": 0
-            },
-            {
-                "targets": 2,
-                "data": "HouseName",
-                "render": function (data, type, full, meta) {
-                    if (type === "display" || type === "filter") {
-                        return "<span class='label house-color label-warning'>" + data + "</span>";
-                    }
-                    return data;
-                }
-            },
-            {
-                "targets": 4,
-                "data": "Status",
-                "render": function (data, type, full) {
-                    if (type === "display" || type === "filter") {
-                        if (data === window.StatusUnpaid) {
-                            return "<span class='label label-danger'> Chưa thanh toán</div>";
-                        } else if (data === window.StatusPaid) {
-                            return "<span class='label label-success'>" + "Đã thanh toán" + "</div>";
+                {
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0
+                },
+                {
+                    "targets": 2,
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            return numberWithCommas(data);
                         }
+                        return data;
                     }
-                    return data;
-                }
-            },
-            {
-                "targets": 5,
-                "data": "CreateDate",
-                "render": function (data, type, full) {
-                    if (type === "display" || type === "filter") {
-                        if (data !== null && data !== undefined) {
-                            var dateTime = data.split(" ");
-                            return "<span class='label date-color label-warning'>" + dateTime[0] +
-                                "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";
+                },
+                {
+                    "targets": 3,
+                    "data": "Status",
+                    "render": function (data, type, full) {
+                        if (type === "display" || type === "filter") {
+                            if (data === window.StatusUnpaid) {
+                                return "<span class='label label-danger'> Chưa thanh toán</div>";
+                            } else if (data === window.StatusPaid) {
+                                return "<span class='label label-success'>" + "Đã thanh toán" + "</div>";
+                            }
                         }
+                        return data;
                     }
-                    return data;
-                }
-            }, {
-                "targets": 6,
-                "data": "ReceiptId",
-                "render": function (data, type, full) {
-                    if (type === "display" || type === "filter") {
-                        if (data !== null && data !== undefined) {
-                            return "<span onclick='showOrderDetail(" + data + "," + fromUserId + ")' class='btn btn-default btn-xs lbl-margin-right'>" +
-                                "<i class='fa fa-info-circle'></i>" +
-                                "</span> ";
+                },
+                {
+                    "targets": 4,
+                    "data": "CreateDate",
+                    "render": function (data, type, full) {
+                        if (type === "display" || type === "filter") {
+                            if (data !== null && data !== undefined) {
+                                var dateTime = data.split(" ");
+                                return "<strong>" + dateTime[0] +
+                                    "</strong> " + dateTime[1];
+                                /*return "<span class='label date-color label-warning'>" + dateTime[0] +
+                                    "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";*/
+                            }
                         }
+                        return full.PublishDateStick;
                     }
-                    return data;
+                }, {
+
+                    "targets": 5,
+                    "data": "ReceiptId",
+                    "render": function (data, type, full) {
+                        if (type === "display" || type === "filter") {
+                            if (data !== null && data !== undefined) {
+                                return "<span onclick='showOrderDetail(" + data + "," + fromUserId + ")' class='btn btn-info btn-xs lbl-margin-right'>" +
+                                    "<i class='fa fa-info'></i>" +
+                                    "</span> ";
+                            }
+                        }
+                        return data;
+                    },
+                    "searchable": false,
+                    "orderable": false,
                 }
-            }
             ]
         });
         generateTableIndex(dataTable5);
-    });
+    }
+
+    function GetAllUnpaidReceiptByHouse() {
+
+        var fromUserId = document.getElementById("houseOrderTbl").dataset.userid;
+        if (window.dataTable5) {
+            window.dataTable5.destroy();
+        }
+        $("#houseOrderTbl").removeClass("hide");
+
+        window.dataTable5 = $("#houseOrderTbl").DataTable({
+            "ajax": {
+                url: "/Home/ManageReceipt/GetUnpaidReceipt?userId=" + fromUserId,
+                dataSrc: function (data) {
+                    if (data.StatusCode === 0) {
+                        var obj = data.Data;
+                        $("#totalAmount").val(numberWithCommas(obj.Total));
+                        $("#restAmount").val(numberWithCommas(obj.RestAmount));
+                        $("#paidAmount").val(numberWithCommas(obj.PaidAmount));
+                        $(".payment-info").removeClass("hide");
+
+                        return obj.Data;
+                    } else {
+                        $(".payment-info").addClass("hide");
+                        $("#totalAmount").val("");
+                        $("#restAmount").val("");
+                        $("#paidAmount").val("");
+                        $("#fromMsg").text($("#from").val());
+                        $("#toMsg").text($("#to").val());
+                        $("#noReceipt").fadeIn("fast");
+                        setTimeout(function () {
+                            $("#noReceipt").fadeOut("fast");
+
+                        }, 3000);
+                        return [];
+                    }
+                }
+            },
+            "bLengthChange": false,
+            "bInfo": false,
+            "order": [[4, "desc"]],
+            "columns": [
+                { data: "ReceiptTitle" },
+                { data: "ReceiptTitle" },
+                { data: "TotalOrder" },
+                { data: "Status" },
+                { data: "PublishDate" },
+                { data: "ReceiptId" }
+            ],
+            "columnDefs": [
+                {
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0
+                },
+                {
+                    "targets": 2,
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            return numberWithCommas(data);
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "targets": 3,
+                    "data": "Status",
+                    "render": function (data, type, full) {
+                        if (type === "display" || type === "filter") {
+                            if (data === window.StatusUnpaid) {
+                                return "<span class='label label-danger'> Chưa thanh toán</div>";
+                            } else if (data === window.StatusPaid) {
+                                return "<span class='label label-success'>" + "Đã thanh toán" + "</div>";
+                            }
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "targets": 4,
+                    "data": "CreateDate",
+                    "render": function (data, type, full) {
+                        if (type === "display" || type === "filter") {
+                            if (data !== null && data !== undefined) {
+                                var dateTime = data.split(" ");
+                                return "<strong>" + dateTime[0] +
+                                    "</strong> " + dateTime[1];
+                                /*return "<span class='label date-color label-warning'>" + dateTime[0] +
+                                    "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";*/
+                            }
+                        }
+                        return full.PublishDateStick;
+                    }
+                }, {
+                    "targets": 5,
+                    "data": "ReceiptId",
+                    "render": function (data, type, full) {
+                        if (type === "display" || type === "filter") {
+                            if (data !== null && data !== undefined) {
+                                return "<div style='text-align:right'>" +
+                                        "<span onclick='showOrderDetail(" + data + "," + fromUserId + ")' class='btn btn-info btn-xs lbl-margin-right'>" +
+                                            "<i class='fa fa-info'></i>" +
+                                            "</span> " +
+                                        "</div> ";
+                            }
+                        }
+                        return data;
+                    }
+                }
+            ]
+        });
+        generateTableIndex(dataTable5);
+    }
 </script>

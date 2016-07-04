@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
+using System.Xml;
 using AMS.Constant;
 using AMS.Models;
 using AMS.Service;
@@ -37,73 +38,183 @@ namespace AMS.Controllers
         //        private readonly string parternTime = "dd-MM-yyyy HH:mm";
 
         [HttpGet]
-        [Route("Home/ManageReceipt/View/{userId}")]
-        public ActionResult GetUserReceipt(int userId)
+        [Route("Home/ManageReceipt/View")]
+        public ActionResult GetUserReceipt()
         {
-            ViewBag.userId = userId;
+            //            User u = _userServices.FindById(Int32.Parse(User.Identity.GetUserId()));
+            //            if (null != u)
+            //            {
+            //                Receipt lastPaidReceipt = _receiptServices.GetAllReceiptFromTheLastPayment(u.HouseId.Value);
+            //                if (lastPaidReceipt != null)
+            //                {
+            //                    List<Receipt> receiptFromTheLastPaymentDate = _receiptServices.GetAllReceiptFromLastPaidReceipt(u.HouseId.Value, lastPaidReceipt.PaymentDate.Value);
+            //
+            //                    List<Receipt> unpaidReceipts =
+            //                    receiptFromTheLastPaymentDate.Where(r => r.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPAID).ToList();
+            //                    double unpaid = 0;
+            //                    double paid = 0;
+            //                    foreach (var r in unpaidReceipts)
+            //                    {
+            //                        unpaid += r.ReceiptDetails.Sum(rd => rd.Total).Value;
+            //                    }
+            //                    List<Receipt> paidReceipts =
+            //                        receiptFromTheLastPaymentDate.Where(r => r.Status == SLIM_CONFIG.RECEIPT_STATUS_PAID).ToList();
+            //                    foreach (var r in paidReceipts)
+            //                    {
+            //                        paid += r.ReceiptDetails.Sum(rd => rd.Total).Value;
+            //                    }
+            //                }
+            //                
+            //
+            //                ViewBag.unpaidTotal = unpaid;
+            //                ViewBag.paidTotal = paid;
+            //                ViewBag.total = paid + unpaid;
+            //                ViewBag.receipts = receipts;
+            //            }
             return View("ViewReceipt");
         }
 
         [HttpGet]
         [Route("Home/ManageReceipt/View/HouseExpenseStatus")]
-        public ActionResult ViewHouseExpenseStatus(string month)
+        public ActionResult ViewHouseExpenseStatus()
         {
-            //            User u = _userServices.FindById(Int32.Parse(User.Identity.GetUserId()));
-            //            if (null != u)
-            //            {
-            //                DateTime thisMonth = DateTime.Now.Date;
-            //
-            //                if (!month.IsNullOrWhiteSpace())
-            //                {
-            //                    thisMonth = DateTime.ParseExact(month, AmsConstants.MonthYearFormat, CultureInfo.CurrentCulture);
-            //                }
-            //
-            //                List<Receipt> receipts = _receiptServices.GetMonthlyReceiptByHouseId(u.HouseId.Value, thisMonth);
-            //                List<Receipt> unpaidReceipts =
-            //                    receipts.Where(r => r.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPAID).ToList();
-            //                double unpaid = 0;
-            //                double paid = 0;
-            //                foreach (var r in unpaidReceipts)
-            //                {
-            //                    foreach (var detail in r.ReceiptDetails)
-            //                    {
-            //                        //                        unpaid += detail.Quantity.Value * detail.UnitPrice.Value;
-            //                        unpaid += detail.TotalBill.Value;
-            //                    }
-            //                }
-            //                List<Receipt> paidReceipts =
-            //                    receipts.Where(r => r.Status == SLIM_CONFIG.RECEIPT_STATUS_PAID).ToList();
-            //                foreach (var r in paidReceipts)
-            //                {
-            //                    foreach (var detail in r.ReceiptDetails)
-            //                    {
-            //                        //                        paid += detail.Quantity.Value * detail.UnitPrice.Value;
-            //                        paid += detail.TotalBill.Value;
-            //                    }
-            //                }
-            //                ViewBag.unpaidTotal = unpaid;
-            //                ViewBag.paidTotal = paid;
-            //                ViewBag.total = paid + unpaid;
-            //                ViewBag.unpaidReceipts = unpaidReceipts;
-            //                ViewBag.paidReceipts = paidReceipts;
-            //                ViewBag.thisMonth = thisMonth.ToString("MM-yyyy");
-            //            }
+            User u = _userServices.FindById(Int32.Parse(User.Identity.GetUserId()));
+            if (null != u)
+            {
+                List<Receipt> receipts = _receiptServices.GetReceiptByHouseId(u.HouseId.Value);
+                List<Receipt> unpaidReceipts =
+                    receipts.Where(r => r.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPAID).ToList();
+                double unpaid = 0;
+                double paid = 0;
+                foreach (var r in unpaidReceipts)
+                {
+                    unpaid += r.ReceiptDetails.Sum(rd => rd.Total).Value;
+                }
+                List<Receipt> paidReceipts =
+                    receipts.Where(r => r.Status == SLIM_CONFIG.RECEIPT_STATUS_PAID).ToList();
+                foreach (var r in paidReceipts)
+                {
+                    paid += r.ReceiptDetails.Sum(rd => rd.Total).Value;
+                }
+
+                ViewBag.unpaidTotal = unpaid;
+                ViewBag.paidTotal = paid;
+                ViewBag.total = paid + unpaid;
+                ViewBag.receipts = receipts;
+            }
 
             return View("HouseExpenseStatus");
         }
 
         [HttpGet]
         [Route("Home/ManageReceipt/GetOrderList")]
+        public ActionResult GetOrderList(int userId, string from, string to)
+        {
+            MessageViewModels response = new MessageViewModels();
+            User u = _userServices.FindById(userId);
+            if (null != u)
+            {
+                try
+                {
+                    DateTime fromDate = DateTime.ParseExact(from, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
+                    DateTime toDate = DateTime.ParseExact(to, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
+
+                    List<Receipt> receipts = _receiptServices.GetReceiptByHouseFromDateToDate(u.HouseId.Value, fromDate, toDate);
+                    List<ReceiptInfoModel> receiptModel = new List<ReceiptInfoModel>();
+                    double sum = 0;
+                    double paidAmount = 0;
+                    double restAmount = 0;
+                    if (null != receipts && receipts.Count != 0)
+                    {
+                        ReceiptInfoModel model = null;
+                        foreach (var receipt in receipts)
+                        {
+                            if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
+                            {
+                                if (DateTime.Today.Date >= receipt.PublishDate.Value.Date)
+                                {
+                                    receipt.Status = SLIM_CONFIG.RECEIPT_STATUS_UNPAID;
+                                    receipt.LastModified = DateTime.Now;
+                                    _receiptServices.Update(receipt);
+                                }
+                                else
+                                {
+                                    continue;
+                                }
+                            }
+                            model = new ReceiptInfoModel();
+                            model.ReceiptId = receipt.Id;
+                            model.PublishDate = receipt.PublishDate.Value.ToString(AmsConstants.DateTimeFormat);
+                            model.PublishDateStick = receipt.PublishDate.Value.Ticks;
+                            model.Status = receipt.Status.Value;
+                            model.HouseName = receipt.House.HouseName;
+                            model.ReceiptTitle = receipt.Title;
+
+                            List<ReceiptDetail> receipDetail = receipt.ReceiptDetails.ToList();
+                            double total = 0;
+                            foreach (var trans in receipDetail)
+                            {
+                                total += trans.Total.Value;
+                            }
+                            model.TotalOrder = total;
+                            sum += total;
+                            if (model.Status == SLIM_CONFIG.RECEIPT_STATUS_PAID)
+                            {
+                                paidAmount += model.TotalOrder;
+                            }
+                            receiptModel.Add(model);
+                        }
+                        restAmount = sum - paidAmount;
+                        object obj = new
+                        {
+                            Data = receiptModel,
+                            Total = sum,
+                            PaidAmount = paidAmount,
+                            RestAmount = restAmount
+                        };
+                        response.Data = obj;
+                        return Json(response, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        response.StatusCode = -1;
+                        response.Msg = "Không tìn thấy cư dân";
+                    }
+                }
+                catch (Exception)
+                {
+                    response.StatusCode = -1;
+                    response.Msg = "Không tìn thấy cư dân";
+                }
+            }
+            else
+            {
+                response.StatusCode = -1;
+                response.Msg = "Không tìn thấy cư dân";
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        [Route("Home/ManageReceipt/GetUnpaidReceipt")]
         public ActionResult GetOrderList(int userId)
         {
             MessageViewModels response = new MessageViewModels();
             User u = _userServices.FindById(userId);
             if (null != u)
             {
-                List<Receipt> receipts = _receiptServices.GetReceiptByHouseId(u.HouseId.Value);
-                List<ReceiptInfoModel> receiptModel = new List<ReceiptInfoModel>();
-                if (null != receipts && receipts.Count != 0)
+                try
                 {
+                    List<Receipt> receipts = _receiptServices.GetAllUnpaidReceip(u.HouseId.Value);
+                    List<ReceiptInfoModel> receiptModel = new List<ReceiptInfoModel>();
+                    double sum = 0;
+                    double paidAmount = 0;
+                    double restAmount = 0;
+                    if (receipts.Count == 0)
+                    {
+                        receipts = _receiptServices.GetLastActivityReceipt(u.HouseId.Value);
+                    }
+                    
                     ReceiptInfoModel model = null;
                     foreach (var receipt in receipts)
                     {
@@ -115,7 +226,8 @@ namespace AMS.Controllers
                         }
                         model = new ReceiptInfoModel();
                         model.ReceiptId = receipt.Id;
-                        model.CreateDate = receipt.CreateDate.Value.ToString(AmsConstants.DateTimeFormat);
+                        model.PublishDate = receipt.PublishDate.Value.ToString(AmsConstants.DateTimeFormat);
+                        model.PublishDateStick = receipt.PublishDate.Value.Ticks;
                         model.Status = receipt.Status.Value;
                         model.HouseName = receipt.House.HouseName;
                         model.ReceiptTitle = receipt.Title;
@@ -124,15 +236,28 @@ namespace AMS.Controllers
                         double total = 0;
                         foreach (var trans in receipDetail)
                         {
-                            //                            total += od.UnitPrice.Value * od.Quantity.Value;
                             total += trans.Total.Value;
                         }
                         model.TotalOrder = total;
+                        sum += total;
+                        if (model.Status == SLIM_CONFIG.RECEIPT_STATUS_PAID)
+                        {
+                            paidAmount += model.TotalOrder;
+                        }
                         receiptModel.Add(model);
                     }
-                    return Json(receiptModel, JsonRequestBehavior.AllowGet);
+                    restAmount = sum - paidAmount;
+                    object obj = new
+                    {
+                        Data = receiptModel,
+                        Total = sum,
+                        PaidAmount = paidAmount,
+                        RestAmount = restAmount
+                    };
+                    response.Data = obj;
+                    return Json(response, JsonRequestBehavior.AllowGet);
                 }
-                else
+                catch (Exception)
                 {
                     response.StatusCode = -1;
                     response.Msg = "Không tìn thấy cư dân";
@@ -171,6 +296,100 @@ namespace AMS.Controllers
         {
             ViewBag.userId = User.Identity.GetUserId();
             return View("ViewManagerReceipt");
+        }
+
+        [HttpGet]
+        [Route("Home/ManageReceipt/ViewElectricBill")]
+        public ActionResult ViewElectricBill(int receiptDetailId)
+        {
+            ReceiptDetail rd = _receiptDetailServices.FindById(receiptDetailId);
+            List<UtilityServiceRangePrice> rangePrice = rd.UtilityService.UtilityServiceRangePrices.ToList();
+            MonthlyReceiptModel monthlyReceiptModel = new MonthlyReceiptModel();
+
+            double total = 0;
+            double tempTotal = 0;
+            double previous = 0;
+            double fromAmount = 0;
+            double toAmount = 0;
+            int consumption = rd.Quantity.Value;
+            UtilityServiceRangePriceModel rangePriceIncash = null;
+            List<UtilityServiceRangePriceModel> listRangePriceIncash = new List<UtilityServiceRangePriceModel>();
+
+            foreach (UtilityServiceRangePrice u in rangePrice)
+            {
+                rangePriceIncash = new UtilityServiceRangePriceModel();
+                rangePriceIncash.ToAmount = u.ToAmount.Value.ToString();
+                rangePriceIncash.FromAmount = u.FromAmount.Value.ToString();
+
+                fromAmount = u.FromAmount.Value;
+                toAmount = u.ToAmount.Value;
+
+                double calculatingPart = 0;
+                if (consumption >= toAmount)
+                {
+                    calculatingPart = toAmount - previous;
+                    previous = toAmount;
+                }
+                else if (consumption >= fromAmount && consumption < toAmount)
+                {
+                    calculatingPart = consumption - previous;
+                }
+
+                if (calculatingPart == 0)
+                {
+                    continue;
+                }
+
+                tempTotal = calculatingPart * u.Price.Value;
+                total += tempTotal;
+
+                rangePriceIncash.Qty = calculatingPart;
+                rangePriceIncash.Price = u.Price.Value;
+                rangePriceIncash.Total = tempTotal;
+                rangePriceIncash.Name = u.Name;
+                listRangePriceIncash.Add(rangePriceIncash);
+            }
+
+            monthlyReceiptModel.WaterRangePrices = listRangePriceIncash;
+            monthlyReceiptModel.Total = rd.Total.Value;
+            monthlyReceiptModel.FromNumber = rd.FromNumber.Value;
+            monthlyReceiptModel.ToNumber = rd.ToNumber.Value;
+            monthlyReceiptModel.Qty = rd.Quantity.Value;
+            monthlyReceiptModel.ReceiptDetailId = rd.Id;
+
+            ViewBag.monthlyReceiptModel = monthlyReceiptModel;
+            ViewBag.utilServPriceFrame = rd.UtilityService.Name;
+
+            return View("ViewWateBiiling");
+        }
+
+        [HttpGet]
+        [Route("Home/ManageReceipt/GetLast12MonthReceiptBill")]
+        public ActionResult GetLast12MonthReceiptBill(int receiptDetailId)
+        {
+            MessageViewModels response = new MessageViewModels();
+            ReceiptDetail rd = _receiptDetailServices.FindById(receiptDetailId);
+            List<ReceiptDetail> last12BillFromThisBill =
+                _receiptDetailServices.Get12ReceiptFromThisReceipt(rd.Receipt.HouseId.Value, rd.Receipt.PublishDate.Value.Date);
+            HistoryWaterUsingModel waterUsing = null;
+            List<HistoryWaterUsingModel> last12MonthUsing = new List<HistoryWaterUsingModel>();
+            foreach (var lastRd in last12BillFromThisBill)
+            {
+                waterUsing = new HistoryWaterUsingModel();
+                waterUsing.Amount = lastRd.Quantity.Value;
+                waterUsing.Month = lastRd.Receipt.BalanceSheet.StartDate.Value.ToString(AmsConstants.DateFormat);
+                last12MonthUsing.Add(waterUsing);
+            }
+            int min = last12BillFromThisBill.Min(t => t.Quantity).Value;
+            int max = last12BillFromThisBill.Max(t => t.Quantity).Value;
+            object obj = new
+            {
+                Data = last12MonthUsing,
+                Min = min,
+                Max = max
+            };
+            response.Data = obj;
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -1613,7 +1832,7 @@ namespace AMS.Controllers
         {
             if (forMonth != null)
             {
-                    
+
                 List<MonthlyResidentExpenseOutput> lastMonthRecordList = new List<MonthlyResidentExpenseOutput>();
                 MonthlyResidentExpenseOutput record = new MonthlyResidentExpenseOutput();
                 record.ForMonth = forMonth;

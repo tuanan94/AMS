@@ -11298,7 +11298,7 @@ html {
   -webkit-font-smoothing: antialiased;
 }
 body {
-  padding-top: 71px;
+  /*padding-top: 71px;*//*ANTLNM*/
   position: relative;
 }
 h1,
@@ -29252,7 +29252,8 @@ html {
   -webkit-font-smoothing: antialiased;
 }
 body {
-  padding-top: 71px;
+  /*padding-top: 71px;*/
+  /*padding-top: 71px;*//*ANTLNM*/
   position: relative;
 }
 h1,
