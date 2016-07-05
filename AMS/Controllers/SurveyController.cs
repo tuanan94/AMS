@@ -25,9 +25,9 @@ namespace AMS.Controllers
         [Authorize]
         public ActionResult ViewHistory()
         {
-           
-         
-          
+
+
+         //   string[] counts = Request.Form.GetValues("Count");
             User currentUser = userService.FindById(int.Parse(User.Identity.GetUserId()));
             List<SurveyViewModel> listPolls = new List<SurveyViewModel>();
             List<List<string>> listAll = new List<List<string>>();
@@ -80,6 +80,117 @@ namespace AMS.Controllers
                 listAnswers.Add(answer5);
                 listAll.Add(listAnswers);
             }
+            List<Poll> lists = new List<Poll>();
+            List<Poll> listSurveys = PollService.GetListPolls();
+            List<UserAnswerPoll> listUserAnswer = new List<UserAnswerPoll>();
+            int aa = 0;
+            foreach (var item in listSurveys)
+            {
+                if (DateTime.Now >= item.PublishDate)
+                {
+
+                    listUserAnswer = (userAnswerService.GetListUserAnswerPollsByPollId(item.Id));
+                    List<BlockPoll> listBlockPolls = BlockPollService.FindByPollId(item.Id);
+                    int k = 0;
+                    int p = 0;
+
+                    if (listSurveys.Count != 0)
+                    {
+                        if (item.Mode == 1 && item.Status == 1)
+                        {
+                            foreach (var VARIABLE in listUserAnswer)
+                            {
+                                if (VARIABLE.UserId == currentUser.Id)
+                                {
+                                    k++;
+                                }
+                            }
+                            foreach (var obj in listBlockPolls)
+                            {
+                                if (currentUser.HouseId != null)
+                                {
+                                    if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                                    {
+                                        p++;
+                                    }
+                                }
+
+                            }
+
+                            if ((k != 1 && p == 1 && item.Status == 1) || (k != 1 && p == 0 && item.Status == 1))
+                            //if (k != 1)
+                            {
+                                //po.Question = item.Question;
+                                //po.Answer1 = item.Answer1;
+                                //po.Answer2 = item.Answer2;
+
+                                //po.Answer3 = item.Answer3;
+                                //po.Answer4 = item.Answer4;
+                                //po.Answer5 = item.Answer5;
+                                //po.EndDate = item.EndDate;
+                                lists.Add(item);
+                                aa++;
+                            }
+
+                        }
+                        else if (item.Mode == 2 && currentUser.RoleId == 4 && item.Status == 1)
+                        {
+                            foreach (var VARIABLE in listUserAnswer)
+                            {
+                                if (VARIABLE.UserId == currentUser.Id)
+                                {
+                                    k++;
+                                }
+                            }
+                            foreach (var obj in listBlockPolls)
+                            {
+                                if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                                {
+                                    p++;
+                                }
+                            }
+
+                            if (k != 1 && p == 1 && item.Status == 1)
+                            // if (k != 1)
+                            {
+                                lists.Add(item);
+                            }
+                        }
+                        else if ((item.Mode == 3 && currentUser.RoleId == 4 && item.Status == 1) || (item.Mode == 3 && currentUser.RoleId == 3 && item.Status == 1))
+                        {
+                            foreach (var VARIABLE in listUserAnswer)
+                            {
+                                if (VARIABLE.UserId == currentUser.Id)
+                                {
+                                    k++;
+                                }
+                            }
+                            foreach (var obj in listBlockPolls)
+                            {
+                                if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                                {
+                                    p++;
+                                }
+                            }
+
+                            if (k != 1 && p == 1 && item.Status == 1)
+                            // if (k != 1)
+                            {
+                                lists.Add(item);
+                            }
+                        }
+
+                    }
+
+                    else if (listSurveys.Count == 0)
+                    {
+
+                    }
+                }
+                
+            }
+
+           ViewBag.Count = aa;
             ViewBag.Each = listEach;
             ViewBag.Answer = listAll;
             ViewBag.ListCount = listCountAll;
@@ -148,7 +259,8 @@ namespace AMS.Controllers
             {
                 currentHouse = houseServices.FindById(currentUser.HouseId.Value);
             }
-
+            List<UserAnswerPoll> listUserAnswer = new List<UserAnswerPoll>();
+            List<Poll> lists = new List<Poll>();
             List<Poll> listSurveys = PollService.GetListPolls();
             List<UserAnswerPoll> listUserAnswerPolls = userAnswerService.GetListUserAnswerPollsByPollId();
             List<UserAnswerPoll> listAnswerSurveys = userAnswerService.GetListUserAnswerPoll();
@@ -163,6 +275,110 @@ namespace AMS.Controllers
             {
                 list = userAnswerService.GetListUserAnswerPollsByPollId(obj);
             }
+            foreach (var item in listSurveys)
+            {
+                if (DateTime.Now >= item.PublishDate)
+                {
+                    
+                    listUserAnswer = (userAnswerService.GetListUserAnswerPollsByPollId(item.Id));
+                    List<BlockPoll> listBlockPolls = BlockPollService.FindByPollId(item.Id);
+                    int k = 0;
+                    int p = 0;
+
+                    if (listSurveys.Count != 0)
+                    {
+                        if (item.Mode == 1 && item.Status == 1)
+                        {
+                            foreach (var VARIABLE in listUserAnswer)
+                            {
+                                if (VARIABLE.UserId == currentUser.Id)
+                                {
+                                    k++;
+                                }
+                            }
+                            foreach (var obj in listBlockPolls)
+                            {
+                                if (currentUser.HouseId != null)
+                                {
+                                    if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                                    {
+                                        p++;
+                                    }
+                                }
+
+                            }
+
+                            if ((k != 1 && p == 1 && item.Status == 1) || (k != 1 && p == 0 && item.Status == 1))
+                            //if (k != 1)
+                            {
+                                //po.Question = item.Question;
+                                //po.Answer1 = item.Answer1;
+                                //po.Answer2 = item.Answer2;
+                               
+                                //po.Answer3 = item.Answer3;
+                                //po.Answer4 = item.Answer4;
+                                //po.Answer5 = item.Answer5;
+                                //po.EndDate = item.EndDate;
+                                lists.Add(item);
+                            }
+
+                        }
+                        else if (item.Mode == 2 && currentUser.RoleId == 4 && item.Status == 1)
+                        {
+                            foreach (var VARIABLE in listUserAnswer)
+                            {
+                                if (VARIABLE.UserId == currentUser.Id)
+                                {
+                                    k++;
+                                }
+                            }
+                            foreach (var obj in listBlockPolls)
+                            {
+                                if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                                {
+                                    p++;
+                                }
+                            }
+
+                            if (k != 1 && p == 1 && item.Status == 1)
+                            // if (k != 1)
+                            {
+                                lists.Add(item);
+                            }
+                        }
+                        else if ((item.Mode == 3 && currentUser.RoleId == 4 && item.Status == 1) || (item.Mode == 3 && currentUser.RoleId == 3 && item.Status == 1))
+                        {
+                            foreach (var VARIABLE in listUserAnswer)
+                            {
+                                if (VARIABLE.UserId == currentUser.Id)
+                                {
+                                    k++;
+                                }
+                            }
+                            foreach (var obj in listBlockPolls)
+                            {
+                                if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                                {
+                                    p++;
+                                }
+                            }
+
+                            if (k != 1 && p == 1 && item.Status == 1)
+                            // if (k != 1)
+                            {
+                                lists.Add(item);
+                            }
+                        }
+
+                    }
+
+                    else if (listSurveys.Count == 0)
+                    {
+
+                    }
+                }
+            }
+            ViewBag.ListSurveys = lists;
             //   int a = listCount.Count;
             ViewBag.ListUserAnswerPoll = listAnswerSurveys;
             ViewBag.List = list;
