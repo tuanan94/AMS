@@ -47,6 +47,7 @@ namespace AMS.Controllers
             ViewBag.allHouse = allHouse;
             return View(allHouse);
         }
+
         [Authorize]
 
         public ActionResult Index()
@@ -61,6 +62,7 @@ namespace AMS.Controllers
             ViewBag.curHouse = curUser.House;
             weatherResult weatherResult = WeatherUtil.getWeatherResult();
             ViewBag.weather = weatherResult;
+            ViewBag.notifiations = notificationService.getAllNotificationChange(curUser.Id);
             return View();
         }
         [HttpPost]
@@ -535,6 +537,15 @@ namespace AMS.Controllers
             ViewBag.Lng = Double.Parse(lng.Value);
 
             return View();
+        }
+        [HttpPost]
+        [Authorize]
+        public void deleteNotification(String data,String type)
+        {
+            if (SLIM_CONFIG.NOTIC_DELETE_TYPE_CHANGEID.Equals(type))
+            {
+                notificationService.deleteNoticByNchangeID(int.Parse(data));
+            }
         }
     }
 }

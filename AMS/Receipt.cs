@@ -35,9 +35,9 @@ namespace AMS
         public Nullable<int> BlsId { get; set; }
     
         public virtual BalanceSheet BalanceSheet { get; set; }
+        public virtual House House { get; set; }
         public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ReceiptDetail> ReceiptDetails { get; set; }
-        public virtual House House { get; set; }
     }
 }

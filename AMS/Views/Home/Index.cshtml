@@ -15,6 +15,7 @@
     UserServices userServices = new UserServices();
     List<Poll> listSurveys = surveyService.GetListPolls();
     weatherResult weather = ViewBag.weather;
+    List<NotificationChange> notificationChanges = ViewBag.notifiations;
     string alert = "";
 
 
@@ -270,20 +271,24 @@
                     Thông báo
                 </div>
                 <div class="panel-body">
-                    <div style="margin-bottom:10px">
-                        <i class="fa fa-fw fa-info"></i>
-                        Yêu cầu helpdesk của bạn đả được xử lí
-                        <br />
-                    </div>
-                    <div style="margin-bottom:10px">
-                        <i class="fa fa-fw fa-info"></i>
-                        Bạn có 1 hóa đơn mới cần thanh toán
-                        <br />
-                    </div>
-                    <div style="margin-bottom:10px">
-                        <i class="fa fa-fw fa-info"></i>
-                        Yêu cầu helpdesk của bạn đả được xử lí
-                    </div>
+                        @{
+                            foreach (NotificationChange nChange in notificationChanges)
+                            {
+                                if(nChange.User.Id == curUser.Id)
+                                {
+                                    continue;
+                                }
+                                <div style="margin-bottom:10px" id="@("notification"+nChange.ID)">
+                                <i class="fa fa-fw fa-info"></i>
+                                @nChange.User.Fullname <span>đã</span> @nChange.Verb <span>trên @nChange.NotificationObject.TargetObject @nChange.NotificationObject.TargetObjectID của bạn</span>
+                                    <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float:right"></i></a>
+
+                                 <br />
+                            </div>
+                            }
+                        }
+                   
+
 
                 </div>
             </div>
@@ -713,5 +718,24 @@
         var reportContent = $("#reportContent").val()
         console.log("processSendReport: postid=" + postId + "reportContent=" + reportContent)
         sendReport(postId,reportContent)
+    }
+    function deleteNotification(noticChangedId) {
+        console.log('deleteNotification' + noticChangedId)
+        $.ajax({
+            url: "/Home/deleteNotification",
+            type: "POST",
+            data: {
+                data: noticChangedId,
+                type: "@SLIM_CONFIG.NOTIC_DELETE_TYPE_CHANGEID",
+            },
+            success: function (successData) {
+                //alert(successData);
+                $("#notification"+noticChangedId).hide('slow', function(){ $("#notification11").remove(); });
+            },
+            error: function (er) {
+                alert(er);
+            }
+
+        });
     }
 </script>
