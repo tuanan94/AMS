@@ -154,6 +154,7 @@ namespace AMS.Controllers
                             // if (k != 1)
                             {
                                 lists.Add(item);
+                                aa++;
                             }
                         }
                         else if ((item.Mode == 3 && currentUser.RoleId == 4 && item.Status == 1) || (item.Mode == 3 && currentUser.RoleId == 3 && item.Status == 1))
@@ -177,6 +178,7 @@ namespace AMS.Controllers
                             // if (k != 1)
                             {
                                 lists.Add(item);
+                                aa++;
                             }
                         }
 

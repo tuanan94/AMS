@@ -187,14 +187,14 @@
         </li>
 
         <li class="active">
-            <a href=""><i class="fa fa-book"></i>Danh Sách Các Bình Chọn (@mm)</a>
+            <a href=""><i class="fa fa-book"></i>Danh Sách Các Bình Chọn </a>
         </li>
 
 
 
     </ul>
 </div>
-<div class="col-sm-offset-1 col-md-8">
+<div class="col-sm-offset-2 col-md-8">
     @{
         foreach (var item in listSurveyss)
         {
@@ -208,7 +208,7 @@
                                 if (item.Priority == 1)
                                 {
                                     <div class="media-ribbon">
-                                        <i class="fa fa-heart"></i>Bắt buộc
+                                        <i class="fa fa-exclamation-circle"></i>Bắt buộc
                                     </div>
                                 }
                             }
@@ -224,10 +224,10 @@
                             {
                                 if (item.Answer1 != null && !item.Answer1.Equals(""))
                                 {
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-12">
                                         <div class="col-sm-1"><input type="radio" name="answer" value="@item.Answer1">
                                         </div>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-11">
                                             <span style="font-size: 14px; margin-top: 20px">
                                                                     @item.Answer1
                                                                 </span>
@@ -238,10 +238,10 @@
                                 }
                                 if (item.Answer2 != null && !item.Answer2.Equals(""))
                                 {
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-12">
                                         <div class="col-sm-1"><input type="radio" name="answer" value="@item.Answer2">
                                         </div>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-11">
                                             <span style="font-size: 14px; margin-top: 20px">
                                                                     @item.Answer2
                                                                 </span>
@@ -251,10 +251,10 @@
                                 }
                                 if (item.Answer3 != null && !item.Answer3.Equals(""))
                                 {
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-12">
                                         <div class="col-sm-1"><input type="radio" name="answer" value="@item.Answer3">
                                         </div>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-11">
                                             <span style="font-size: 14px; margin-top: 20px">
                                                                     @item.Answer3
                                                                 </span>
@@ -264,10 +264,10 @@
                                 }
                                 if (item.Answer4 != null && !item.Answer4.Equals(""))
                                 {
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-12">
                                         <div class="col-sm-1"><input type="radio" name="answer" value="@item.Answer4">
                                         </div>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-11">
                                             <span style="font-size: 14px; margin-top: 20px">
                                                                     @item.Answer4
                                                                 </span>
@@ -277,10 +277,10 @@
                                 }
                                 if (item.Answer5 != null && !item.Answer5.Equals(""))
                                 {
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-12">
                                         <div class="col-sm-1"><input type="radio" name="answer" value="@item.Answer5">
                                         </div>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-11">
                                             <span style="font-size: 14px; margin-top: 20px">
                                                                     @item.Answer5
                                                                 </span>
@@ -288,7 +288,7 @@
 
                                     </div><br/>
                                 }
-                                <div class="col-sm-10">
+                                <div class="col-sm-12">
                                     <div>
                                         <i class="fa fa-calendar"></i> <span style="font-size: 14px; font-weight: bold;">Ngày kết thúc:</span>  @Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.EndDate))
                                     </div>
@@ -309,7 +309,7 @@
                                     }
                                 </div>
                             }
-                            <div class="col-sm-10" style="margin-top: 15px"><span><button type="submit" onclick="addCommentByAjax()" class="btn btn-primary">Bình chọn</button></span>
+                            <div class="col-sm-12" style="margin-top: 15px"><span><button type="submit" onclick="addCommentByAjax()" class="btn btn-primary">Bình chọn</button></span>
                             </div>
                             mm++;
                         }
@@ -321,9 +321,7 @@
             </fieldset><br/>
 
         }
-    }
-</div>
-    <div class="w100 categoryFooter">
+         <div class="w100 categoryFooter">
 
         <ul class="pagination" id="paginations">
 
@@ -336,6 +334,9 @@
         </ul>
 
     </div>
+    }
+</div>
+   
 
 </body>
 <script>
