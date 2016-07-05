@@ -492,9 +492,19 @@ namespace AMS.Controllers
             //    }
             //    questionService.DeleteQuestion(itemQuestion);
             //}
+            List<UserAnswerPoll> listUserAnswerPolls = userAnswerService.GetListUserAnswerPollsByPollId(obj.Id);
+            foreach (var item in listUserAnswerPolls)
+            {
+                userAnswerService.DeleteUserAnswer(item);
+            }
+            List<BlockPoll> listBlockPolls = BlockPollService.FindByPollId(obj.Id);
+            foreach (var item1 in listBlockPolls)
+            {
+                BlockPollService.DeleteBlockPoll(item1);
+            }
             PollService.DeletePoll(obj);
 
-            return RedirectToAction("Survey");
+            return RedirectToAction("ListPoll");
         }
 
         public ActionResult DetailSurvey(int PollId, string alert)
