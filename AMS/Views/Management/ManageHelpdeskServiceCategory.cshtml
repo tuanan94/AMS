@@ -8,42 +8,46 @@
 <div class="col-md-12">
     <div class="panel panel-default">
         <div class="heading-tab">
-            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Danh sách loại dịch vụ sửa chữa</span>
+            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Quản lý nhóm DV sửa chữa</span>
             <ul class="nav nav-tabs pull-right" role="tablist">
-                <li>
-                    <a href="/Management/ManageRequestView/@User.Identity.GetUserId()"><i class="fa fa-cogs"></i> Dịch vụ sửa chữa</a>
+                <li class="">
+                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-usd"></i> Phí sinh họat</a>
+                </li>
+                <li class="">
+                    <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-home"></i> Căn hộ</a>
+                </li>
+                <li >
+                    <a href="/Management/ManageRequestView"><i class="fa fa-wrench"></i> DV sửa chữa</a>
                 </li>
                 <li class="active">
-                    <a href="/Management/ViewHelpdeskServiceCategory/@User.Identity.GetUserId()"><i class="fa fa fa-tags"></i> Loại dịch vụ sửa chữa</a>
+                    <a href="/Management/ViewHelpdeskServiceCategory"><i class="fa fa fa-tags"></i> Nhóm DV sửa chữa</a>
+                </li>
+                <li class="">
+                    <a href="/Management/BalanceSheet/ManageTransactionCatView"><i class="fa fa-tags"></i> Nhóm thu chi</a>
                 </li>
             </ul>
         </div>
 
         <div class="panel-body">
-            
             <div class="tab-content">
-                <div class="tab-pane fade active in" id="">
-                    <div class="panel panel-default" style="border-color: transparent">
-                        <form class="form-horizontal" id="searchHdSrv" role="form" onkeypress="return event.keyCode !== 13;">
-                            <div class="col-md-12">
-                                <div class="table-responsive">
-                                    <table id="hdSrvCatTable" class="table v-middle  table-bordered table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th>No.</th>
-                                            <th>Tên</th>
-                                            <th class="text-right">Thao tác</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="hdSrvCatTblBody">
-                                        @Html.Partial("_helpdeskServiceCategoryTablePartial")
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </form>
+                <form class="form-horizontal" id="searchHdSrv" role="form" onkeypress="return event.keyCode !== 13;">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table id="hdSrvCatTable" class="table v-middle  table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Tên</th>
+                                        <th class="text-right">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="hdSrvCatTblBody">
+                                    @Html.Partial("_helpdeskServiceCategoryTablePartial")
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
 
         </div>

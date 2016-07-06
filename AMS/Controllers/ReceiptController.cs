@@ -764,7 +764,7 @@ namespace AMS.Controllers
                                     house.WaterMeter = 0;
                                     _houseServices.Update(house);
                                 }
-                                if (houseConsummption.FromNumber != house.WaterMeter.Value )
+                                if (houseConsummption.FromNumber != house.WaterMeter.Value)
                                 {
                                     response.StatusCode = 5;
                                     response.Data = houseConsummption.HouseName;
@@ -772,15 +772,15 @@ namespace AMS.Controllers
                                     return Json(response, JsonRequestBehavior.AllowGet);
                                 }
 
-                                if (houseConsummption.ToNumber != 0 && (houseConsummption.ToNumber < houseConsummption.FromNumber ||  house.WaterMeter.Value > houseConsummption.ToNumber))
+                                if (houseConsummption.ToNumber != 0 && (houseConsummption.ToNumber < houseConsummption.FromNumber || house.WaterMeter.Value > houseConsummption.ToNumber))
                                 {
                                     response.StatusCode = 6;
                                     response.Msg = "Số ghi nước tháng mới phải lớn hơn số tháng trước: " + houseConsummption.HouseName;
-                                    response.Data =  houseConsummption.HouseName;
+                                    response.Data = houseConsummption.HouseName;
                                     return Json(response, JsonRequestBehavior.AllowGet);
                                 }
 
-                                if (houseConsummption.ToNumber == 0 )
+                                if (houseConsummption.ToNumber == 0)
                                 {
                                     monthlyResidentExpense.Status =
                                         SLIM_CONFIG.UTILITY_SERVICE_GET_CONSUMPTION_UN_COMPLETE;
@@ -829,7 +829,7 @@ namespace AMS.Controllers
                 return Json(response, JsonRequestBehavior.AllowGet);
                 throw;
             }
-            
+
             return Json(response, JsonRequestBehavior.AllowGet);
         }
 
@@ -1675,11 +1675,19 @@ namespace AMS.Controllers
                             {
                                 receipt.HouseId = updateHouse.Id;
                             }
+                            receipt.PublishDate = DateTime.ParseExact(receiptModel.PublishDate, AmsConstants.DateFormat,
+                                CultureInfo.CurrentCulture);
                             receipt.Title = receiptModel.ReceiptTitle;
                             receipt.Description = receiptModel.ReceiptDesc;
                             receipt.LastModified = DateTime.Now;
                             _receiptServices.Update(receipt);
+                            if (receipt.PublishDate.Value.Date == DateTime.Today)
+                            {
+                                receipt.Status = SLIM_CONFIG.RECEIPT_STATUS_UNPAID;
+                                response.Data = new {publishDate = receipt.PublishDate.Value.ToString(AmsConstants.DateFormat)};
+                            }
                         }
+                        
                         else
                         {
                             response.StatusCode = 5;

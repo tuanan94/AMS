@@ -249,10 +249,12 @@ namespace AMS.Controllers
                                 if (null != req.CreateDate)
                                 {
                                     row.HdReqCreateDate = req.CreateDate.Value.ToString(AmsConstants.DateTimeFormat);
+                                    row.HdReqCreateDateLong = req.CreateDate.Value.Ticks;
                                 }
                                 if (null != req.DueDate)
                                 {
                                     row.HdReqDeadline = req.DueDate.Value.ToString(AmsConstants.DateTimeFormat);
+                                    row.HdReqDeadlineLong = req.DueDate.Value.Ticks;
                                 }
                                 row.HdReqSrvName = req.HelpdeskService.Name;
                                 row.HdReqHouse = req.House.HouseName;
@@ -480,6 +482,37 @@ namespace AMS.Controllers
             return RedirectToAction("ViewHistoryHdRequest", new { userId = hdReqChngStatus.FromUserId });
         }
 
+        [HttpGet]
+        [Route("Home/HelpdeskRequest/GetRequestDeadline")]
+        public ActionResult GetRequestDeadline(int reqId)
+        {
+            MessageViewModels response = new MessageViewModels();
+            HelpdeskRequest hdReq = _hdReqServices.FindById(reqId);
+            if (null != hdReq)
+            {
+                string date = "";
+                string time = "";
+                var createDate = hdReq.CreateDate.Value.ToString(AmsConstants.DateFormat);
+                if (null == hdReq.DueDate)
+                {
+                    date = "-1";
+                    time = "-1";
+                }
+                else
+                {
+                    date = hdReq.DueDate.Value.ToString(AmsConstants.DateFormat);
+                    time = hdReq.DueDate.Value.ToString(AmsConstants.TimeFormat);
+                }
+                object obj = new { date = date, time = time, createDate = createDate};
+                response.Data = obj;
+            }
+            else
+            {
+                response.StatusCode = -1;
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         [Route("Home/HelpdeskRequest/SetDuedate")]
         public ActionResult SetDuedate(HdRequestChangeStatusModel hdReqChngStatus)
@@ -494,9 +527,20 @@ namespace AMS.Controllers
 
                     if (hdRequest.Status != (int)StatusEnum.Done && hdRequest.Status != (int)StatusEnum.Close && fromUser.RoleId == SLIM_CONFIG.USER_ROLE_MANAGER)
                     {
+                        HelpdeskRequestLog hdRequestLog = new HelpdeskRequestLog();
+                        hdRequestLog.StatusFrom = (int)StatusEnum.ChangeDueDate;
+                        hdRequestLog.StatusTo = (int)StatusEnum.ChangeDueDate;
+                        hdRequestLog.ChangeFromUserId = fromUser.Id;
+                        hdRequestLog.HelpdeskRequestId = hdRequest.Id;
+                        hdRequestLog.ChangeToUserId = fromUser.Id;
+                        hdRequestLog.DeadLine = DateTime.Parse(hdReqChngStatus.DueDate);
+                        hdRequestLog.CreateDate = DateTime.Now;
+
                         hdRequest.DueDate = DateTime.Parse(hdReqChngStatus.DueDate);
                         hdRequest.ModifyDate = DateTime.Now;
+
                         _hdReqServices.Update(hdRequest);
+                        _helpdeskRequestLogServices.Add(hdRequestLog);
 
                         return RedirectToAction("ViewHdRequestDetail", new { hdReqId = hdRequest.Id, userId = fromUser.Id });
                     }

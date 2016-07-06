@@ -2,22 +2,29 @@
     ViewBag.Title = "CreateHouseInBlock";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
     Block block = ViewBag.block;
+    bool canRemoveBlock = ViewBag.canRemoveBlock;
 }
 <div class="col-md-12">
     <div class="panel panel-default">
 
         <div class="heading-tab">
-            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Quản lý phí sinh hoạt</span>
+            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Chi tiết tòa nhà</span>
 
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li>
-                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-file-text-o"></i> Phí sinh họat</a>
-                </li>
-                <li>
-                    <a href="/Management/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Quản lý nhà</a>
+                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-usd"></i> Phí sinh họat</a>
                 </li>
                 <li class="active">
                     <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-home"></i> Căn hộ</a>
+                </li>
+                <li class="">
+                    <a href="/Management/ManageRequestView"><i class="fa fa-wrench"></i> DV sửa chữa</a>
+                </li>
+                <li>
+                    <a href="/Management/ViewHelpdeskServiceCategory"><i class="fa fa fa-tags"></i> Nhóm DV sửa chữa</a>
+                </li>
+                <li class="">
+                    <a href="/Management/BalanceSheet/ManageTransactionCatView"><i class="fa fa-tags"></i> Nhóm thu chi</a>
                 </li>
             </ul>
         </div>
@@ -33,6 +40,15 @@
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
                         <span>Tạo mới thất bại</span>
                     </div>
+                    @if (canRemoveBlock)
+                    {
+                        <div class="col-md-12">
+                            <div class="pull-right">
+                                <span class="btn btn-danger" onclick="openModalDeleteBlock()"><i class="fa fa-plus"></i> Xóa</span>
+                            </div>
+                        </div>
+                    }
+
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-8">
                             <fieldset class="scheduler-border less-padding">
@@ -49,12 +65,23 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">Số tầng</label>
-                                        <div class="col-md-7">
-                                            <div class="input-group">
-                                                <input type="text" name="numberOfFloor" value="@block.NoFloor" class="form-control" />
-                                                <span class="input-group-addon" onclick="showPopupEditFloorName()"><i class="fa fa-pencil"></i></span>
-                                            </div>
-                                        </div>
+                                        @{
+                                            if (@block.NoFloor > 0)
+                                            {
+                                                <div class="col-md-7">
+                                                    <div class="input-group">
+                                                        <input type="text" name="numberOfFloor" value="@block.NoFloor" class="form-control" />
+                                                        <span class="input-group-addon" onclick="showPopupEditFloorName()"><i class="fa fa-pencil"></i></span>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-7">
+                                                    <input type="text" name="numberOfFloor" value="@block.NoFloor" class="form-control" />
+                                                </div>
+                                            }
+                                        }
                                     </div>
                                 </div>
                             </fieldset>
@@ -95,27 +122,27 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="title">Cập nhật thông tìn căn hộ</h4>
             </div>
-            <div class="modal-body">
-                <div class="panel-body">
-                    <div class="alert alert-info" id="updateHouseSuccessNoti" style="display: none">
-                        <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span id="successMsg">Cập nhật căn hộ thành công</span>
-                    </div>
+            <form id="manageHouseForm" class="form-horizontal" role="form">
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <div class="alert alert-info" id="updateHouseSuccessNoti" style="display: none">
+                            <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span id="successMsg">Cập nhật căn hộ thành công</span>
+                        </div>
 
-                    <div class="alert alert-danger" id="updateHouseFailedNoti" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                        <span id="failedMsg">Cập nhật căn hộ thất bại</span>
-                    </div>
-                    <div class="alert alert-danger" id="msgUpdateFailedNoti" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span id="updateHouseMsg"></span>
-                    </div>
-                    <div class="alert alert-warning" id="msgWarningNoti" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span id="warningMsg"></span>
-                    </div>
+                        <div class="alert alert-danger" id="updateHouseFailedNoti" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                            <span id="failedMsg">Cập nhật căn hộ thất bại</span>
+                        </div>
+                        <div class="alert alert-danger" id="msgUpdateFailedNoti" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span id="updateHouseMsg"></span>
+                        </div>
+                        <div class="alert alert-warning" id="msgWarningNoti" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span id="warningMsg"></span>
+                        </div>
 
-                    <form id="manageHouseForm" class="form-horizontal" role="form">
                         <div class="form-group">
                             <label for="mBlockName" class="col-md-3 control-label">Tên</label>
                             <div class="col-md-9">
@@ -144,12 +171,7 @@
                         <div class="form-group" id="houseTypeRow">
                             <label for="Type" class="col-md-3 control-label">Loại căn hộ</label>
                             <div class="col-md-9">
-                                <select id="Type" name="Type" class="form-control">
-                                    @*                                    <option>--Chọn loại căn hộ--</option>*@
-                                    @*                                    <option>Hộ khẩu thường trú</option>*@
-                                    @*                                    <option>KT3</option>*@
-                                    @*                                    <option>Khác</option>*@
-                                </select>
+                                <select id="Type" name="Type" class="form-control"></select>
                             </div>
                         </div>
                         <div class="form-group res-info">
@@ -164,13 +186,13 @@
                             </div>
                         </div>
                         <input type="hidden" id="houseId" name="Id" />
-                    </form>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                <span id="btnUpdate" type="button" onclick="updateHouseInfo()" class="btn btn-info">Chấp nhận</span>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button id="btnUpdate" type="submit" class="btn btn-info">Chấp nhận</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -182,27 +204,27 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="addHouseTitle">Thêm căn hộ</h4>
             </div>
-            <div class="modal-body">
-                <div class="panel-body">
-                    <div class="alert alert-info" id="addHouseSuccessNoti" style="display: none">
-                        <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span id="addHouseSuccessMsg">Tạo mới căn hộ thành công</span>
-                    </div>
+            <form id="addHouseForm" class="form-horizontal" role="form">
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <div class="alert alert-info" id="addHouseSuccessNoti" style="display: none">
+                            <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span id="addHouseSuccessMsg">Tạo mới căn hộ thành công</span>
+                        </div>
 
-                    <div class="alert alert-danger" id="addHouseFailedNoti" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                        <span id="addHouseFailedMsg">Tạo mới căn hộ thất bại</span>
-                    </div>
-                    <div class="alert alert-danger" id="msgAddFailedNoti" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span id="addHouseMsg"></span>
-                    </div>
-                    <div class="alert alert-warning" id="msgAddWarningNoti" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span id="addHouseWarningMsg"></span>
-                    </div>
+                        <div class="alert alert-danger" id="addHouseFailedNoti" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                            <span id="addHouseFailedMsg">Tạo mới căn hộ thất bại</span>
+                        </div>
+                        <div class="alert alert-danger" id="msgAddFailedNoti" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span id="addHouseMsg"></span>
+                        </div>
+                        <div class="alert alert-warning" id="msgAddWarningNoti" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span id="addHouseWarningMsg"></span>
+                        </div>
 
-                    <form id="addHouseForm" class="form-horizontal" role="form">
                         <div class="form-group">
                             <label for="mBlockName" class="col-md-3 control-label">Tên tòa nhà</label>
                             <div class="col-md-9">
@@ -254,13 +276,13 @@
                             </div>
                         </div>
                         <input type="hidden" name="BlockId" value="@block.Id" />
-                    </form>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                <span id="btnAdd" type="button" onclick="addNewHosue()" class="btn btn-info">Chấp nhận</span>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button id="btnAdd" type="submit" class="btn btn-info">Chấp nhận</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -279,10 +301,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary" onclick="acceptApproveUser()">Chấp nhận</button>
+                <button id="btnOk" type="button" class="btn btn-info">Chấp nhận</button>
             </div>
-            <input type="hidden" id="residentId" value="" />
-            <input type="hidden" id="mode" value="" />
         </div>
     </div>
 </div>
@@ -313,36 +333,36 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">Cập nhật thông tin tòa nhà</h4>
             </div>
-            <div class="modal-body">
-                <div class="panel-body">
-                    <div class="alert alert-info" id="editBlockSuccessNoti" style="display: none">
-                        <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span id="editBlockSuccessMsg">Cập nhật thông tin tòa nhà thành công</span>
-                    </div>
+            <form id="editBlockForm" class="form-horizontal" role="form">
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <div class="alert alert-info" id="editBlockSuccessNoti" style="display: none">
+                            <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span id="editBlockSuccessMsg">Cập nhật thông tin tòa nhà thành công</span>
+                        </div>
 
-                    <div class="alert alert-danger" id="editBlockFailedNoti" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                        <span id="editBlockFailedMsg">Cập nhật thông tin tòa nhà thất bại</span>
-                    </div>
-                    <div class="alert alert-danger" id="editBlockMsgNoti" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span id="editBlockMsg"></span>
-                    </div>
-                    <form id="editBlockForm" class="form-horizontal" role="form">
+                        <div class="alert alert-danger" id="editBlockFailedNoti" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                            <span id="editBlockFailedMsg">Cập nhật thông tin tòa nhà thất bại</span>
+                        </div>
+                        <div class="alert alert-danger" id="editBlockMsgNoti" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span id="editBlockMsg"></span>
+                        </div>
                         <div class="form-group">
                             <label for="mBlockName" class="col-md-3 control-label">Tên tòa nhà</label>
                             <div class="col-md-9">
-                                <input id="editBlockName" type="text" class="form-control" value="">
+                                <input id="editBlockName" name="EditBlockName" type="text" class="form-control" value="">
                             </div>
                         </div>
                         <input type="hidden" name="BlockId" value="@block.Id" />
-                    </form>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-info" onclick="changeBlockName()">Chấp nhận</button>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-info">Chấp nhận</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -354,21 +374,21 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">Cập nhật thông tin tầng tòa nhà</h4>
             </div>
-            <div class="modal-body">
-                <div class="panel-body">
-                    <div class="alert alert-info" id="editFloorSuccessNoti" style="display: none">
-                        <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span id="editFloorSuccessMsg">Cập nhật thành công</span>
-                    </div>
-                    <div class="alert alert-danger" id="editFloorFailedNoti" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                        <span id="editFloorFailedMsg">Cập nhật thất bại</span>
-                    </div>
-                    <div class="alert alert-danger" id="editFloorMsgNoti" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span id="editFloorMsg"></span>
-                    </div>
-                    <form id="editFloorForm" class="form-horizontal" role="form">
+            <form id="editFloorForm" class="form-horizontal" role="form">
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <div class="alert alert-info" id="editFloorSuccessNoti" style="display: none">
+                            <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span id="editFloorSuccessMsg">Cập nhật thành công</span>
+                        </div>
+                        <div class="alert alert-danger" id="editFloorFailedNoti" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                            <span id="editFloorFailedMsg">Cập nhật thất bại</span>
+                        </div>
+                        <div class="alert alert-danger" id="editFloorMsgNoti" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span id="editFloorMsg"></span>
+                        </div>
                         <div class="form-group">
                             <label for="mBlockName" class="col-md-3 control-label">Tầng</label>
                             <div class="col-md-9">
@@ -378,16 +398,16 @@
                         <div class="form-group">
                             <label for="mBlockName" class="col-md-3 control-label">Tên mới</label>
                             <div class="col-md-9">
-                                <input id="newFloorName" type="text" class="form-control" />
+                                <input id="newFloorName" name="NewFloorName" type="text" class="form-control" />
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                <span type="button" class="btn btn-info" onclick="changeFloorName()">Chấp nhận</span>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-info">Chấp nhận</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -418,10 +438,10 @@
                 var deleteBtn =
                 "<div class='hide' id='delConsumptionRecordBtnGroup'>" +
                 "<span class='btn btn-warning btn-stroke' onclick='cancelDeleteConsumptionRecord()'>" +
-                "<i class='fa fa-plus'></i> Hủy" +
+                " Hủy" +
                 "</span>" +
                 "<span class='btn btn-primary' style='margin-left: 5px' onclick='commitDeleteConsumptionRecord()'>" +
-                "<i class='fa fa-plus'></i> Chấp nhận" +
+                " Chấp nhận" +
                 "</span>" +
                 "</div>";
                 $("#houseInBlockTbl_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(deleteBtn);
@@ -551,7 +571,7 @@
             var selected = $(this).find("option:selected").val();
             $("#addfloorName").val(selected);
         });
-
+        validateManageHouseForm();
     });
 
     function openAddNewHouseModal() {
@@ -866,5 +886,179 @@
                 }
             });
         }
+    }
+    function openModalDeleteBlock() {
+        var houseName = $("#blockName").val();
+        $("#msgConfirm").html("Bạn có chắc chắn muốn xóa tòa nhà <strong>" + houseName + "</strong>?");
+
+        $('#confirmModal').unbind("click", "#btnOK");
+        $('#confirmModal').on('click', '#btnOk', function (e) {
+            var $modalDiv = $(e.delegateTarget);
+            $modalDiv.addClass('loading');
+
+            var blockId = document.getElementById("houseInBlockTbl").dataset.blockId;
+
+            $.ajax({
+                url: "/Management/Config/UtilityService/DeleteBlock",
+                type: "POST",
+                data: {
+                    blockId: blockId
+                },
+                success: function (data) {
+                    $("#confirmModal").removeClass("loading");
+                    if (data.StatusCode === 0) {
+                        $("#msgConfirm").text("Xóa tòa nhà thành công. Đang chuyển về trang tòa nhà.");
+                        setTimeout(function () {
+                            location.href = "/Management/Config/UtilityService/ViewManageHouseBlock";
+                        }, 3000);
+                    } else if (data.StatusCode === 2) {
+                        $("#msgConfirm").text("Vẫn còn cư dân tồn tại trong tòa nhà !");
+                        setTimeout(function () {
+                            $('#confirmModal').modal("hide");
+                        }, 3000);
+                    } else {
+                        $("#confirmModal > div > div > div.modal-body > p").text("Xóa tòa nhà thất bại. Đang chuyển về trang tòa nhà.");
+                    }
+                    //                    setTimeout(function () {
+                    //                        location.href = "/Management/Config/UtilityService/ViewManageHouseBlock";
+                    //                    }, 2000);
+                }
+            });
+        });
+        $("#confirmModal").modal("show");
+    }
+
+    function validateManageHouseForm() {
+        $("#manageHouseForm").validate({
+            rules: {
+                Name: {
+                    required: true,
+                    maxlength: 15
+                },
+                Area: {
+                    required: true,
+                    number: true
+                }
+            },
+            messages: {
+                Name: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 15 ký tự."
+                },
+                Area: {
+                    required: "Trường bắt buộc",
+                    number: "Phải là số"
+                }
+            },
+            submitHandler: function () {
+                updateHouseInfo();
+            },
+            errorPlacement: function (error, element) {
+                if (element.parent('.input-group').length) {
+                    if (!element.parent().next().hasClass("error") || element.parent().next().css("display") == "none") {
+                        error.insertAfter(element.parent());
+                    }
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            showErrors: function (errorMap, errorList) {
+                for (var i = 0; errorList[i]; i++) {
+                    var element = this.errorList[i].element;
+                    //solves the problem with brute force
+                    //remove existing error label and thus force plugin to recreate it
+                    //recreation == call to errorplacement function
+                    this.errorsFor(element).remove();
+                }
+                this.defaultShowErrors();
+            }
+        });
+
+        $("#addHouseForm").validate({
+            rules: {
+                Name: {
+                    required: true,
+                    maxlength: 15
+                },
+                FloorNameNew: {
+                    required: true,
+                    maxlength: 15
+                },
+                Area: {
+                    required: "Trường bắt buộc",
+                    number: "Phải là số"
+                }
+            },
+            messages: {
+                Name: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 15 ký tự."
+                },
+                Area: {
+                    required: "Trường bắt buộc",
+                    number: "Phải là số"
+                },
+                FloorNameNew: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 15 ký tự."
+                },
+            },
+            submitHandler: function () {
+                addNewHosue();
+            },
+            errorPlacement: function (error, element) {
+                if (element.parent('.input-group').length) {
+                    if (!element.parent().next().hasClass("error") || element.parent().next().css("display") == "none") {
+                        error.insertAfter(element.parent());
+                    }
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            showErrors: function (errorMap, errorList) {
+                for (var i = 0; errorList[i]; i++) {
+                    var element = this.errorList[i].element;
+                    //solves the problem with brute force
+                    //remove existing error label and thus force plugin to recreate it
+                    //recreation == call to errorplacement function
+                    this.errorsFor(element).remove();
+                }
+                this.defaultShowErrors();
+            }
+        });
+        $("#editBlockForm").validate({
+            rules: {
+                EditBlockName: {
+                    required: true,
+                    maxlength: 15
+                }
+            },
+            messages: {
+                EditBlockName: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 15 ký tự."
+                }
+            },
+            submitHandler: function () {
+                changeBlockName();
+            },
+        });
+        $("#editBlockForm").validate({
+            rules: {
+                NditBlockName: {
+                    required: true,
+                    maxlength: 15
+                }
+            },
+            messages: {
+                NewFloorName: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 15 ký tự."
+                }
+            },
+            submitHandler: function () {
+                changeFloorName();
+            },
+        });
     }
 </script>

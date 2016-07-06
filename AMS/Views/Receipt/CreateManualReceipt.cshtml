@@ -59,11 +59,11 @@
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-8">
                                     <fieldset class="scheduler-border less-padding">
-                                        <legend class="scheduler-border">Thông tin hóa đơn</legend>
+                                        <legend class="scheduler-border bold-black">Thông tin hóa đơn</legend>
                                         <div class="form-group">
                                             <label for="receiptTitle" class="col-md-2 control-label">Tiêu đề</label>
                                             <div class="col-md-10">
-                                                <input id="receiptTitle" type="text" class="form-control">
+                                                <input id="receiptTitle" name="ReceiptTitle" type="text" class="form-control">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -71,9 +71,9 @@
                                             <div class="col-md-3 full-width-select">
                                                 <select id="houseBlock" name="select" class="form-control">
                                                     @{foreach (var b in block)
-                                                    {
-                                                        <option value="@b.Id">@b.BlockName</option>
-                                                    }
+                                                      {
+                                                          <option value="@b.Id">@b.BlockName</option>
+                                                      }
                                                     }
                                                 </select>
                                             </div>
@@ -81,9 +81,9 @@
                                             <div class="col-md-2">
                                                 <select id="houseFloor" name="select" class="form-control">
                                                     @{foreach (var f in firstBlockFloor)
-                                                    {
-                                                        <option value="@f.Floor">@f.Floor</option>
-                                                    }
+                                                      {
+                                                          <option value="@f.Floor">@f.Floor</option>
+                                                      }
                                                     }
                                                 </select>
                                             </div>
@@ -91,9 +91,9 @@
                                             <div class="col-md-3">
                                                 <select id="houseName" name="select" class="form-control">
                                                     @{foreach (var r in firstBlockFloor)
-                                                    {
-                                                        <option value="@r.HouseName">@r.HouseName</option>
-                                                    }
+                                                      {
+                                                          <option value="@r.HouseName">@r.HouseName</option>
+                                                      }
                                                     }
                                                 </select>
                                             </div>
@@ -101,27 +101,27 @@
                                         <div class="form-group">
                                             <label class="col-md-2 control-label">Tháng</label>
                                             <div class="col-md-4">
-                                                <input type="text" id="forMonthView" value="@balanceSheet.StartDate.Value.ToString(AmsConstants.MonthYearFormat)" class="form-control" readonly="readonly" />
-                                                <input type="hidden" id="blsId" value="@balanceSheet.Id" name="ForMonth" readonly="readonly" />
+                                                <input type="text" id="forMonthView" value="@balanceSheet.StartDate.Value.ToString(AmsConstants.MonthYearFormat)" class="form-control" readonly="readonly"/>
+                                                <input type="hidden" id="blsId" value="@balanceSheet.Id" name="ForMonth" readonly="readonly"/>
                                             </div>
-                                            <label for="receiptDesc" class="col-md-2 control-label">Ngày phát hành</label>
+                                            <label for="publishDate" class="col-md-2 control-label">Ngày phát hành</label>
                                             <div class="col-md-4">
                                                 @*Donot clean this code*@
-                                                <input type="text" id="publishDate" class="form-control datepicker" data-date-format="dd-mm-yyyy" data-date-language="vi"
-                                                       data-date-min-view-mode="0" data-date-today-highlight="true" data-date-start-date="0m" />
+                                                <input type="text" id="publishDate" name="PublishDate" class="form-control datepicker" data-date-format="dd-mm-yyyy" data-date-language="vi"
+                                                       data-date-min-view-mode="0" data-date-today-highlight="true" data-date-start-date="0d"/>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="receiptDesc" class="col-md-2 control-label">Loại hóa đơn</label>
                                             <div class="col-md-4">
-                                                <input class="form-control" id="receiptType"  type="text" value="Dịch vụ sửa chữa" />
-                                                <input type="hidden" value="@SLIM_CONFIG.UTILITY_SERVICE_TYPE_HD_REQUEST" name="ReceiptType" />
+                                                <input class="form-control" id="receiptType" type="text" value="Dịch vụ sửa chữa"/>
+                                                <input type="hidden" value="@SLIM_CONFIG.UTILITY_SERVICE_TYPE_HD_REQUEST" name="ReceiptType"/>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="receiptDesc" class="col-md-2 control-label">Mô tả</label>
                                             <div class="col-md-10">
-                                                <textarea id="receiptDesc" class="form-control" rows="3"></textarea>
+                                                <textarea id="receiptDesc" name="ReceiptDesc" class="form-control" rows="3"></textarea>
                                             </div>
                                         </div>
                                     </fieldset>
@@ -131,7 +131,7 @@
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <fieldset class="scheduler-border less-padding">
-                                        <legend class="scheduler-border">Chi tiết hóa đơn</legend>
+                                        <legend class="scheduler-border bold-black">Chi tiết hóa đơn</legend>
                                         <div class="form-group">
                                             <div class="col-md-5">
                                                 <strong style="align-content: center">Tên</strong>
@@ -147,51 +147,25 @@
                                             </div>
                                         </div>
                                         <div id="receiptWrapper">
-                                            <div id="row_1" class="form-group">
-                                                <div class="col-md-5">
-                                                    <input id="item_name_1" name="" type="text" class="form-control order-item">
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <input id="item_qty_1" name="" type="text" class="form-control order-item-qty">
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <input id="item_unit_price_1" name="" type="text" class="form-control order-item-price">
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <input id="item_qty_price_1" readonly="readonly" name="" type="text" class="form-control total-order">
-                                                </div>
-                                                <span class="btn btn-danger btn-xs" onclick="deleteItem(1)"><i class="fa fa-times"></i></span>
-                                            </div>
-                                            <div id="row_2" class="form-group">
-                                                <div class="col-md-5">
-                                                    <input id="item_name_2" name="" type="text" class="form-control order-item">
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <input id="item_qty_2" name="" type="text" class="form-control order-item-qty">
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <input id="item_unit_price_2" name="" type="text" class="form-control order-item-price">
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <input id="item_qty_price_2" readonly="readonly" name="" type="text" class="form-control total-order">
-                                                </div>
-                                                <span class="btn btn-danger btn-xs" onclick="deleteItem(2)"><i class="fa fa-times"></i></span>
-                                            </div>
-                                            <div id="row_3" class="form-group">
-                                                <div class="col-md-5">
-                                                    <input id="item_name_3" name="" type="text" class="form-control order-item">
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <input id="item_qty_3" name="" type="text" class="form-control order-item-qty">
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <input id="item_unit_price_3" name="" type="text" class="form-control order-item-price">
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <input id="item_qty_price_3" readonly="readonly" name="" type="text" class="form-control total-order">
-                                                </div>
-                                                <span class="btn btn-danger btn-xs" onclick="deleteItem(3)"><i class="fa fa-times"></i></span>
-                                            </div>
+                                            @{for (int i = 0; i < 3; i++)
+                                              {
+                                                  <div id="row_@(i + 1)" class="form-group">
+                                                      <div class="col-md-5">
+                                                          <input id="item_name_@(i + 1)" name="order-item-name" type="text" class="form-control order-item">
+                                                      </div>
+                                                      <div class="col-md-2">
+                                                          <input id="item_qty_@(i + 1)" name="order-item-qty" type="text" class="form-control order-item-qty">
+                                                      </div>
+                                                      <div class="col-md-2">
+                                                          <input id="item_unit_price_@(i + 1)" name="order-item-price" type="text" class="form-control order-item-price">
+                                                      </div>
+                                                      <div class="col-md-2">
+                                                          <input id="item_qty_price_@(i + 1)" readonly="readonly" name="total-order" type="text" class="form-control total-order">
+                                                      </div>
+                                                      <span class="btn btn-danger btn-xs" onclick="deleteItem(@(i + 1))"><i class="fa fa-times"></i></span>
+                                                  </div>
+                                              }
+                                            }
                                         </div>
 
                                         <div class="form-group">
@@ -216,12 +190,14 @@
 
                             <div class="form-group">
                                 <div class="pull-right">
-                                    <span onclick="createReceipt(@User.Identity.GetUserId(), 1)" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Lưu</span>
-                                    <span onclick="createReceipt(@User.Identity.GetUserId(), 2)" class="btn btn-info"><i class="fa fa-globe"></i> Công bố</span>
+                                    <button type="submit" onclick="validateSubmit('1')" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Lưu</button>
+                                    <button type="submit" onclick="validateSubmit('2')" class="btn btn-info"><i class="fa fa-globe"></i> Công bố</button>
                                 </div>
                             </div>
                         }
                     </div>
+                    <input type="hidden" id="mode"/>
+                    <input type="hidden" id="userId" value="@User.Identity.GetUserId()"/>
                 </div>
             </form>
         </div>
@@ -229,30 +205,42 @@
 </div>
 
 <script>
-//    document.getElementById("publishDate").dataset.dateEndDate = "+" + calculateDateFromTodayToEndOfMonth() + "d";
+    //    document.getElementById("publishDate").dataset.dateEndDate = "+" + calculateDateFromTodayToEndOfMonth() + "d";
 
     $(document).ready(function () {
-        $("#publishDate").datepicker({
-        });
 
         window.index = 3;
         $("#addNewRow").on("click", function () {
             window.index++;
             var tag = "<div id=\"row_" + index + "\" class='form-group'>" +
-                "<div class='col-md-5'><input id=\"item_name_" + index + "\" type='text' class='form-control order-item'></div>" +
-                "<div class='col-md-2'><input type='text' id=\"item_qty_" + index + "\" class='form-control order-item-qty'></div>" +
-                "<div class='col-md-2'><input id=\"item_unit_price_" + index + "\"type='text' class='form-control order-item-price'></div>" +
-                "<div class='col-md-2'><input id=\"item_qty_price_" + index + "\" type='text' readonly='readonly' class='form-control'></div>" +
+                "<div class='col-md-5'><input id=\"item_name_" + index + "\" type='text' name='order-item-name' class='form-control order-item'></div>" +
+                "<div class='col-md-2'><input type='text' id=\"item_qty_" + index + "\" name='order-item-qty' class='form-control order-item-qty'></div>" +
+                "<div class='col-md-2'><input id=\"item_unit_price_" + index + "\"type='text' name='order-item-price' class='form-control order-item-price'></div>" +
+                "<div class='col-md-2'><input id=\"item_qty_price_" + index + "\" type='text' name='total-order' readonly='readonly' class='form-control'></div>" +
                 "<span class='btn btn-danger btn-xs' onclick='deleteItem(\"" + index + "\")'><i class='fa fa-times'></i></span>" +
                 "</div>";
             $("#receiptWrapper").append(tag);
         });
         bindingCalculateSubTotal();
+//        jQuery.validator.addMethod("date",
+//            function(value, element) {
+//                var date = value.split("-");
+//                var d = parseInt(date[0], 10),
+//                    m = parseInt(date[1], 10),
+//                    y = parseInt(date[2], 10);
+//                return new Date(y, m - 1, d);
+//            },
+//            "Thời gian không chính xác");
+        validCreateManualReceipt();
     });
     function deleteItem(id) {
         if ($("#receiptWrapper").children().length > 1) {
             $("#row_" + id)[0].parentNode.removeChild($("#row_" + id)[0]);
         }
+    }
+    function validateSubmit(mode) {
+        $("#mode").val(mode);
+        $("#createNewOrder").valid();
     }
     function createReceipt(fromUserId, mode) {
         var contentObj = $("#receiptWrapper > .form-group");
@@ -333,5 +321,60 @@
     }
     function resetFromNotField(id) {
         $("#createNewOrder").closest("form").find("input[type=text]:not(#forMonthView,#receiptType), textarea").val("");
+    }
+    function validCreateManualReceipt() {
+        $("#createNewOrder").validate({
+            rules: {
+                ReceiptTitle: {
+                    required: true,
+                    maxlength: 255
+                },
+                PublishDate: {
+                    required: true
+                },
+                ReceiptDesc: {
+                    maxlength: 1000
+                },
+                "order-item-name": {
+                    required: true,
+                    maxlength: 255
+                },
+                "order-item-qty": {
+                    required: true
+                },
+                "order-item-price": {
+                    required: true
+                },
+
+            },
+            messages: {
+                ReceiptTitle: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 255 ký tự."
+                },
+                PublishDate: {
+                    required: "Trường bắt buộc"
+                },
+                ReceiptDesc: {
+                    maxlength: "Tối đa 1000 ký tự."
+                },
+                "order-item-name": {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 255 ký tự."
+                },
+                "order-item-qty": {
+                    required: "Trường bắt buộc",
+                },
+                "order-item-price": {
+                    required: "Trường bắt buộc",
+                },
+
+            },
+            submitHandler: function () {
+                var userId = $("#userId").val();
+                var mode = $("#mode").val();
+                createReceipt(userId, mode);
+            }
+        });
     }
 </script>

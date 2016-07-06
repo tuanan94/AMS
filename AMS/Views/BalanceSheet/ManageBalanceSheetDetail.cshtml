@@ -13,13 +13,10 @@
             <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Chi tiết bảng thu chi</span>
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li>
-                    <a href="/Management/BalanceSheet/View"><i class="fa fa-file-text-o"></i> Báo cáo thu chi</a>
+                    <a href="/Management/BalanceSheet/View"><i class="fa fa-tachometer"></i> Báo cáo thu chi</a>
                 </li>
                 <li class="active">
-                    <a href="/Management/BalanceSheet/ManageBalanceSheetView"><i class="fa fa fa-plus"></i> Quản lý thu chi</a>
-                </li>
-                <li>
-                    <a href="/Management/BalanceSheet/ManageTransactionCatView"><i class="fa fa fa-plus"></i> Quản lý nhóm thu chi</a>
+                    <a href="/Management/BalanceSheet/ManageBalanceSheetView"><i class="fa fa-calculator"></i> Quản lý thu chi</a>
                 </li>
             </ul>
         </div>
@@ -187,30 +184,30 @@
     </div>
 </div>
 
-<div id="addIncomeLineModal" class="modal fade" role="dialog">
+<div id="addIncomeLineModal" class="modal fade ams-modal" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 id="incomeLineModalTitle" class="modal-title">Thêm giao dịch</h4>
             </div>
-            <div class="modal-body">
-                <div class="panel-body">
+            <form id="addIncomeLineForm" class="form-horizontal" role="form">
+                <div class="modal-body">
+                    <div class="panel-body">
 
-                    <div class="alert alert-info" id="successAddTransNotify" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span>Thêm giao dịch thành công.</span>
-                    </div>
-                    <div class="alert alert-danger" id="failedAddTransNotify" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span>Thêm giao dịch thất bại.</span>
-                    </div>
-                    <div class="alert alert-danger" id="failedAddTransWithMsgNotify" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span id="addTransMsg"></span>
-                    </div>
+                        <div class="alert alert-info" id="successAddTransNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Thêm giao dịch thành công.</span>
+                        </div>
+                        <div class="alert alert-danger" id="failedAddTransNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Thêm giao dịch thất bại.</span>
+                        </div>
+                        <div class="alert alert-danger" id="failedAddTransWithMsgNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span id="addTransMsg"></span>
+                        </div>
 
-                    <form id="addIncomeLineForm" class="form-horizontal" role="form">
                         <div class="form-group">
                             <label for="transTitle" class="col-md-3 control-label">Tên </label>
                             <div class="col-md-9">
@@ -242,10 +239,10 @@
                             <label for="transTotalAmount" class="col-md-3 control-label">Thanh toán</label>
                             <div class="col-md-9">
                                 <div class="input-group">
-                                    <input id="transPaidInMonthView" type="text" class="form-control" value="">
+                                    <input id="transPaidInMonthView" name="TransPaidInMonthView" type="text" class="form-control" value="">
 
                                     <label for="transTotalAmount" class="control-label input-group-addon" style="color: #333333; font-weight: 600;">Tổng</label>
-                                    <input id="transTotalAmountView" type="text" class="form-control" value="">
+                                    <input id="transTotalAmountView" name="TransTotalAmountView" type="text" class="form-control" value="">
                                     <span class="input-group-addon">đồng</span>
                                 </div>
                             </div>
@@ -263,19 +260,14 @@
                         <input type="hidden" id="transTotalAmount" name="TransTotalAmount" value="" />
                         <input type="hidden" id="ReceiptId" name="ReceiptId" value="" />
                         <input type="hidden" id="balanceSheetId" name="BalanceSheetId" value="@bls.Id" />
-                    </form>
-                </div>
-            </div>
-            <div class="modal-footer" style="margin-top: 0">
-                <div class="form-group">
-                    <div class="col-md-offset-9 col-md-2">
-                        <span id="addIncomeTrans" onclick="addIncomeTransaction()" class="btn btn-info">Chấp nhận</span>
-                    </div>
-                    <div class="col-md-offset-9 col-md-2">
-                        <span id="updateIncomeTrans" onclick="updateIncomeTransaction()" class="btn btn-info hide">Chấp nhận</span>
                     </div>
                 </div>
-            </div>
+                <div class="modal-footer" style="margin-top: 0">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button type="submit" id="addIncomeTrans"  class="btn btn-info">Chấp nhận</button>
+                    <button type="submit"  id="updateIncomeTrans" class="btn btn-info hide">Chấp nhận</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -287,31 +279,32 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 id="hdSrvModalTitle" class="modal-title">Thêm loại giao dịch</h4>
             </div>
-            <div class="modal-body">
-                <div class="panel-body">
+            <form id="addTransactionTypeForm" class="form-horizontal" role="form">
+                <div class="modal-body">
+                    <div class="panel-body">
 
-                    <div class="alert alert-info" id="successAddTransTypeNotify" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span>Thêm loại giao dịch thành công.</span>
-                    </div>
-                    <div class="alert alert-danger" id="failedAddTransTypeNotify" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span>Thêm loại giao dịch thất bại.</span>
-                    </div>
+                        <div class="alert alert-info" id="successAddTransTypeNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Thêm loại giao dịch thành công.</span>
+                        </div>
+                        <div class="alert alert-danger" id="failedAddTransTypeNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Thêm loại giao dịch thất bại.</span>
+                        </div>
 
-                    <form id="addTransactionTypeForm" class="form-horizontal" role="form">
                         <div class="form-group">
                             <label for="transCategoryName" class="col-md-3 control-label">Tên </label>
                             <div class="col-md-9">
                                 <input id="transCategoryName" type="text" name="TransCategoryName" class="form-control" value="">
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer" style="margin-top: 0">
-                <span id="addHdSrv" onclick="addTransactionItemCat()" class="btn btn-info">Chấp nhận</span>
-            </div>
+                <div class="modal-footer" style="margin-top: 0">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <span id="addHdSrv" onclick="addTransactionItemCat()" class="btn btn-info">Chấp nhận</span>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -323,19 +316,17 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 id="" class="modal-title"> Đóng quản lý thu chi</h4>
             </div>
-            <div class="modal-body">
-                <div class="panel-body">
-
-                    <div class="alert alert-info" id="successCloseBlsNotify" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span>Đóng bảng thu chi thành công.</span>
-                    </div>
-                    <div class="alert alert-danger" id="failedCloseBlsNotify" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span>Đóng bảng thu chi thất bại.</span>
-                    </div>
-
-                    <form id="closeMonthlyBalanceSheetForm" class="form-horizontal" role="form">
+            <form id="closeMonthlyBalanceSheetForm" class="form-horizontal" role="form">
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <div class="alert alert-info" id="successCloseBlsNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Đóng bảng thu chi thành công.</span>
+                        </div>
+                        <div class="alert alert-danger" id="failedCloseBlsNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Đóng bảng thu chi thất bại.</span>
+                        </div>
                         <div class="form-group text-center">
                             <span>
                                 Đóng bảng thu chi "<strong id="blsTitle"></strong>". Mở tháng tiếp theo.
@@ -348,12 +339,13 @@
                             </div>
                         </div>
                         <input type="hidden" name="ThisMonthId" value="@bls.Id" />
-                    </form>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer" style="margin-top: 0">
-                <span onclick="closeBalanceSheet()" class="btn btn-info">Chấp nhận</span>
-            </div>
+                <div class="modal-footer" style="margin-top: 0">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <span onclick="closeBalanceSheet()" class="btn btn-info">Chấp nhận</span>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -414,6 +406,7 @@
                     if (data.balanceSheetId) {
                         window.thisBalanceSheet = data.balanceSheetId;
                     }
+                    window.listTransaction = data.data;
                     return data.data;
                 }
 
@@ -434,10 +427,10 @@
                 var deleteBtn =
             "<div class='hide' id='delHdSrvBtnGroup'>" +
                 "<span class='btn btn-warning btn-stroke' onclick='cancelDeleteTrans()'>" +
-                    "<i class='fa fa-plus'></i> Hủy" +
+                    "Hủy" +
                 "</span>" +
                 "<span class='btn btn-primary' style='margin-left: 5px' onclick='commitDeleteTrans()'>" +
-                    "<i class='fa fa-plus'></i> Chấp nhận" +
+                    "Chấp nhận" +
                 "</span>" +
             "</div>";
                 $("#blsTransDetailTbl_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(deleteBtn);
@@ -451,7 +444,7 @@
                 { data: "TransTotalAmount" },
                 { data: "TransPaidAmount" },
                 { data: "TransCreateDate" },
-                { data: "ReceiptId" }
+                { data: "TransactionId" }
             ],
             "columnDefs": [
                 {
@@ -511,8 +504,10 @@
                 },
                 {
                     "targets": 8,
+                    "searchable": false,
+                    "orderable": false,
                     "width": "7%",
-                    "data": "ReceiptId",
+                    "data": "TransactionId",
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
                             if (full.TransEditable === -1) {
@@ -540,11 +535,6 @@
                         return data;
                     }
                 },
-                {
-                    "searchable": false,
-                    "orderable": false,
-                    "targets": 8
-                }
             ]
         });
         generateTableIndex(listIncomeTable);
@@ -558,7 +548,7 @@
 
         bindingNumberWithComma("transTotalAmountView");
         bindingNumberWithComma("transPaidInMonthView");
-
+        validateAddNewInComeLine();
     });
 
     function closePopupAndShowOther() {
@@ -643,7 +633,7 @@
             url: "/Management/BalanceSheet/GetTransItemDetail",
             type: "GET",
             data: {
-                id: id,
+                transId: id,
                 blsId: window.thisBalanceSheet,
                 utilSrvCatId: utilSrvId
             },
@@ -764,21 +754,33 @@
         $("#blsTitle").text($("#title").val());
         $("#closeMonthlyBalanceSheetModal").modal("show");
     }
-
+    
     function deleteTrans(id) {
-        $("#delHdSrvBtnGroup").removeClass("show").addClass("show");
-        $("#trans_" + id).css("display", "none");
-        window.deleteTransList.push(id);
+        //        var element = $("#receipt_id_" + id).addClass("hide");
+        window.deleteTransList.push(parseInt(id));
+        window.listIncomeTable.row("#trans_" + id).remove().draw(false);
+        $("#delHdSrvBtnGroup").removeClass("hide").addClass("show");
     }
     function cancelDeleteTrans() {
-        for (var i = 0; i < window.deleteTransList.length; i++) {
-            $("#trans_" + window.deleteTransList[i]).css("display", "table-row");
+        for (var i = 0; i < window.listTransaction.length; i++) {
+            var originItem = window.listTransaction[i];
+            for (var z = 0; z < window.deleteTransList.length; z++) {
+                var deleteItem = window.deleteTransList[z];
+                if (originItem.TransactionId === deleteItem) {
+                    window.listIncomeTable.row.add(originItem).draw();
+                }
+            }
         }
         window.deleteTransList = new Array();
         $("#delHdSrvBtnGroup").removeClass("show").addClass("hide");;
     }
+
     function commitDeleteTrans() {
-        var postData = { transDeletedList: window.deleteTransList }
+        var blsId = document.getElementById("blsTransDetailTbl").dataset.blsId;
+        var postData = {
+            listTransaction: window.deleteTransList,
+            balanceSheetId: blsId
+        }
         $.ajax({
             url: "/Management/BalanceSheet/DeleteTransactions",
             type: "post",
@@ -791,8 +793,8 @@
                     window.listIncomeTable.ajax.reload(null, false);
                     window.deleteHdSrvList = new Array();
                 } else {
-                    $("#delBtnGroup").removeClass("show");
-                    $("#delBtnGroup").addClass("hide");
+                    $("#delHdSrvBtnGroup").removeClass("show");
+                    $("#delHdSrvBtnGroup").addClass("hide");
                     $("#messageModal .msgContent").text("Xóa dịch vụ hổ trợ thất bại!");
                 }
             },
@@ -820,6 +822,92 @@
                         $("#failedCloseBlsNotify").fadeOut("slow");
                     }, 3000);
                 }
+            }
+        });
+    }
+    function validateAddNewInComeLine() {
+/*        $.validator.setDefaults({
+//            highlight: function (element) {
+//                $(element).closest('.form-group').addClass('has-error');
+//            },
+//            unhighlight: function (element) {
+//                $(element).closest('.form-group').removeClass('has-error');
+//            },
+//            errorElement: 'span',
+//            errorClass: 'help-block',
+            errorPlacement: function (error, element) {
+                
+            }
+        });*/
+
+        $.validator.addMethod('compareValue', function (value, element, param) {
+            value = replaceCommaNumber(value);
+            var paramValue = replaceCommaNumber($(param).val());
+            return this.optional(element) || parseInt(value) >= paramValue;
+        }, 'Invalid value');
+
+        $("#addIncomeLineForm").validate({
+            rules: {
+                TransTitle: {
+                    required: true,
+                    maxlength: 255
+                },
+                TransPaidInMonthView: {
+                    required: true,
+                    maxlength: 15
+                },
+                TransTotalAmountView: {
+                    required: true,
+                    maxlength: 15,
+                    compareValue: "#transPaidInMonthView"
+                },
+                TransDesc: {
+                    maxlength: 1000
+                }
+            },
+            messages: {
+                TransTitle: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 255 ký tự."
+                },
+                TransPaidInMonthView: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 12 ký số.",
+                },
+                TransTotalAmountView: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 12 ký số.",
+                    compareValue: "Tổng phải lớn hơn đẵ thanh toán"
+                },
+                TransDesc: {
+                    maxlength: "Tối đa 1000 ký tự."
+                }
+            },
+            submitHandler: function () {
+                if ($("#updateIncomeTrans").hasClass("hide")) {
+                    addIncomeTransaction();
+                } else {
+                    updateIncomeTransaction();
+                }
+            },
+            errorPlacement: function (error, element) {
+                if (element.parent('.input-group').length) {
+                    if (!element.parent().next().hasClass("error") || element.parent().next().css("display") == "none") {
+                        error.insertAfter(element.parent());
+                    }
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            showErrors: function (errorMap, errorList) {
+                for (var i = 0; errorList[i]; i++) {
+                    var element = this.errorList[i].element;
+                    //solves the problem with brute force
+                    //remove existing error label and thus force plugin to recreate it
+                    //recreation == call to errorplacement function
+                    this.errorsFor(element).remove();
+                }
+                this.defaultShowErrors();
             }
         });
     }

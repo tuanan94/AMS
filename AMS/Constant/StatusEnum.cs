@@ -14,6 +14,7 @@ namespace AMS.Enum
         Close = 4,
         Cancel = 5,
         AssignTask = 6,
+        ChangeDueDate = 7,
 
     }
 }

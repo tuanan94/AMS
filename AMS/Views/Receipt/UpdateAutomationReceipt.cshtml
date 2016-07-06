@@ -288,6 +288,7 @@
                 </div>
             </div>
             <div class="modal-footer" style="margin-top: 0">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                 <span id="btnPurchaseReceipt" onclick="purchaseReceipt()" class="btn btn-info hide">Thanh toán</span>
                 <span id="btnEditUtilityServiceQuantity" onclick="updateHouseConsumption()" class="btn btn-info hide">Cập nhật</span>
             </div>
@@ -302,23 +303,23 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 id="hdSrvModalTitle" class="modal-title">Cập nhật thông tin hóa đơn</h4>
             </div>
-            <div class="modal-body">
-                <div class="panel-body">
+            <form id="updateHouseConsumptionForm" class="form-horizontal" role="form">
+                <div class="modal-body">
+                    <div class="panel-body">
 
-                    <div class="alert alert-info" id="successUpdateOrderTypeNotify" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span>Cập nhật thành công.</span>
-                    </div>
-                    <div class="alert alert-danger" id="failedpdateOrderTypeNotify" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span>Cập nhật thất bại.</span>
-                    </div>
-                    <div class="alert alert-danger" id="orderIsExistedNotify" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span>Hóa đơn tháng <strong id="forMonthMsg"></strong> đã được tạo</span>
-                    </div>
+                        <div class="alert alert-info" id="successUpdateOrderTypeNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Cập nhật thành công.</span>
+                        </div>
+                        <div class="alert alert-danger" id="failedpdateOrderTypeNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Cập nhật thất bại.</span>
+                        </div>
+                        <div class="alert alert-danger" id="orderIsExistedNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Hóa đơn tháng <strong id="forMonthMsg"></strong> đã được tạo</span>
+                        </div>
 
-                    <form id="updateHouseConsumptionForm" class="form-horizontal" role="form">
                         <div class="form-group">
                             <label for="autoReceiptTitle" class="col-md-3 control-label">Tiêu đề </label>
                             <div class="col-md-9">
@@ -352,13 +353,13 @@
                             </div>
                         </div>
                         <input type="hidden" name="ReceiptId" id="autoReceiptReceiptId" value="@receipt.CreateDate.Value.Ticks" />
-                    </form>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer" style="margin-top: 0">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <span onclick="updateAutomationReceiptHeader(@receipt.CreateDate.Value.Ticks)" class="btn btn-info">Chấp nhận</span>
-            </div>
+                <div class="modal-footer" style="margin-top: 0">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-info">Chấp nhận</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -377,7 +378,7 @@
                 </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                 <button id="delBtn" type="button" class="btn btn-danger btn-ok" data-receipt-id="@receipt.CreateDate.Value.Ticks">Xóa</button>
             </div>
         </div>
@@ -446,10 +447,10 @@
                 var deleteBtn =
             "<div class='hide' id='delConsumptionRecordBtnGroup'>" +
                 "<span class='btn btn-warning btn-stroke' onclick='cancelDeleteConsumptionRecord()'>" +
-                    "<i class='fa fa-plus'></i> Hủy" +
+                    "Hủy" +
                 "</span>" +
                 "<span class='btn btn-primary' style='margin-left: 5px' onclick='commitDeleteConsumptionRecord()'>" +
-                    "<i class='fa fa-plus'></i> Chấp nhận" +
+                    "Chấp nhận" +
                 "</span>" +
             "</div>";
                 $("#autoReceiptTbl_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(deleteBtn);
@@ -587,7 +588,7 @@
         });
         generateTableIndex(window.autoReceiptTbl);
 
-        $("#toNumber").on("keyup", function (event) {
+        $("#toNumber").on("change", function (event) {
             if (event.which >= 37 && event.which <= 40) {
                 event.preventDefault();
             }
@@ -597,7 +598,7 @@
                 fromValue = replaceSpaceNumber(fromValue);
                 var toValue = $this.val();
                 toValue = replaceSpaceNumber(toValue);
-                if (!isNaN(toValue) && parseInt(toValue, 10) >= 0) {
+                if (!isNaN(toValue) && parseInt(toValue, 10) >= 0 && toValue >= fromValue) {
                     var quantity = parseInt(toValue) - parseInt(fromValue);
                     var waterCost = waterAggressiveCalculating(quantity, window.waterRangePrices);
                     var fixedCost = parseInt(replaceCommaNumber($("#monthlyFixedCost").val()));
@@ -607,15 +608,18 @@
                 } else {
                     $this.val("");
                     $("#houseConsumptWater").text("0");
+                    $("#waterCost").val(0);
+                    $("#houseConsumptWater").text("0");
                 }
             } else {
                 var fixedCost = parseInt(replaceCommaNumber($("#monthlyFixedCost").val()));
-                $("#houseConsumptWater").text(0);
+                $("#houseConsumptWater").text("0");
                 $("#waterCost").val(0);
                 $("#monthlyTotal").val(numberWithCommas(fixedCost));
             }
 
         });
+        validateUpdateReceiptHeader();
     });
 
     function viewMonthlyReceiptDetail(id, rowId) {
@@ -881,6 +885,41 @@
                     window.autoReceiptTbl.ajax.reload(null, false);
                     //                    window.autoReceiptTbl.ajax.reload();
                 }
+            }
+        });
+    }
+
+    function validateUpdateReceiptHeader() {
+        $("#updateHouseConsumptionForm").validate({
+            rules: {
+                Title: {
+                    required: true,
+                    maxlength: 255
+                },
+                PublishDate: {
+                    required: true,
+                    maxlength: 255
+                },
+                Description: {
+                    maxlength: 1000
+                }
+            },
+            messages: {
+                Title: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 255 ký tự."
+                },
+                PublishDate: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 255 ký tự."
+                },
+                Description: {
+                    maxlength: "Tối đa 1000 ký tự."
+                }
+
+            },
+            submitHandler: function () {
+                updateAutomationReceiptHeader(@receipt.CreateDate.Value.Ticks);
             }
         });
     }

@@ -25,6 +25,7 @@ namespace AMS
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<HelpdeskRequestLog> HelpdeskRequestLogs { get; set; }
         public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
         public virtual DbSet<Answer> Answers { get; set; }
         public virtual DbSet<AroundProvider> AroundProviders { get; set; }
@@ -40,12 +41,13 @@ namespace AMS
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<HelpdeskRequest> HelpdeskRequests { get; set; }
         public virtual DbSet<HelpdeskRequestHelpdeskSupporter> HelpdeskRequestHelpdeskSupporters { get; set; }
-        public virtual DbSet<HelpdeskRequestLog> HelpdeskRequestLogs { get; set; }
         public virtual DbSet<HelpdeskService> HelpdeskServices { get; set; }
         public virtual DbSet<HelpdeskServiceCategory> HelpdeskServiceCategories { get; set; }
         public virtual DbSet<House> Houses { get; set; }
         public virtual DbSet<HouseCategory> HouseCategories { get; set; }
         public virtual DbSet<Image> Images { get; set; }
+        public virtual DbSet<NotificationChange> NotificationChanges { get; set; }
+        public virtual DbSet<NotificationObject> NotificationObjects { get; set; }
         public virtual DbSet<Poll> Polls { get; set; }
         public virtual DbSet<Post> Posts { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
