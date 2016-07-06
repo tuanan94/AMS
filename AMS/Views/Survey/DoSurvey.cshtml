@@ -10,6 +10,10 @@
     House currentHouse = ViewBag.currentHouse;
     List<int> listPollId = ViewBag.ListUserAnswer;
     List<Poll> listSurveyss = ViewBag.ListSurveys;
+
+   // listSurveyss.AddRange(listSurveyss);
+
+
     List<UserAnswerPoll> listUserAnswer = new List<UserAnswerPoll>();
     UserAnswerService userAnswerService = new UserAnswerService();
     BlockPollService BlockPollService = new BlockPollService();
@@ -136,7 +140,6 @@
             text-transform: uppercase;
             line-height: 24px;
             font-size: 11px;
-            margin-left: 15px;
         }
 
         .media-item-ctr-1 .media-item-overview {
@@ -195,12 +198,12 @@
             <div class="panel-body">
                 <div class="form-horizontal" role="form">
                     <div class="form-group">
+                        @{
+                            foreach (var item in listSurveyss)
+                            {
+                                 <div class="col-md-offset-2 col-md-8">
 
-                        <div class="col-md-offset-2 col-md-8">
-                            @{
-                                foreach (var item in listSurveyss)
-                                {
-                                    <div class="panel panel-primary" style="border-radius: 5px;">
+                                    <div class="panel panel-primary aass" style="border-radius: 5px;">
                                         <div class="panel-heading">
                                             <h3 class="panel-title" style="line-height: 1.5;">
                                                 <span style="font-size: 17px" class="glyphicon glyphicon-hand-right"></span> @item.Question
@@ -212,12 +215,13 @@
                                                     <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new {PollId = @item.Id})">
                                                         <img class="img-responsive" src="@item.ImageUrl">
 
-                                                        @{if (item.Priority == 1)
-                                                        {
-                                                            <div class="media-ribbon">
-                                                                <i class="fa fa-exclamation-circle"></i>Bắt buộc
-                                                            </div>
-                                                        }
+                                                        @{
+                                if (item.Priority == 1)
+                                {
+                                    <div class="media-ribbon">
+                                        <i class="fa fa-exclamation-circle"></i>Bắt buộc
+                                    </div>
+                                }
                                                         }
                                                     </a>
                                                 </div>
@@ -294,27 +298,28 @@
                                                 <div class="col-md-6">
                                                     <div class="pull-left">
                                                         <button type="submit" onclick="addCommentByAjax()" class="btn btn-sm btn-info">Bình chọn</button>
-                                                   
+                                                        <a href="#">Xem kết quả</a>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <div class="pull-right">
-                                                        <div class="col-md-12">
+                                                    <div class="pull-right" style="text-align: right">
+                                                        <div style="text-align: left">
                                                             <i class="fa fa-calendar"></i> <span style="font-size: 14px;">Kết thúc:</span> <strong>@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.EndDate))</strong>
                                                         </div>
-                                                        <div class="col-md-12">
-                                                            @{if (listUserAnswer.Count == 0)
-                                                            {
-                                                                <span style="font-size: 14px; margin-top: 20px">
-                                                                    <i class="fa fa-users"></i>  <span style="font-size: 14px;">Tham gia:</span> <strong>Chưa có</strong>
-                                                                </span>
-                                                            }
-                                                            else
-                                                            {
-                                                                <span style="font-size: 14px; margin-top: 20px">
-                                                                    <i class="fa fa-users"></i>  <span style="font-size: 14px;">Tham gia:</span>  <strong>@listUserAnswer.Count</strong> người
-                                                                </span>
-                                                            }
+                                                        <div style="text-align: left">
+                                                            @{
+                                if (listUserAnswer.Count == 0)
+                                {
+                                    <span style="font-size: 14px; margin-top: 20px">
+                                        <i class="fa fa-users"></i>  <span style="font-size: 14px;">Tham gia:</span> <strong>Chưa có</strong>
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span style="font-size: 14px; margin-top: 20px">
+                                        <i class="fa fa-users"></i>  <span style="font-size: 14px;">Tham gia:</span>  <strong>@listUserAnswer.Count</strong> người
+                                    </span>
+                                }
                                                             }
                                                         </div>
                                                     </div>
@@ -324,22 +329,23 @@
 
                                         </div>
                                     </div>
-                                }
-                                <div class="w100 categoryFooter">
 
-                                    <ul class="pagination" id="paginations">
-
-                                        <li class="current"><a href="#">1</a></li>
-                                        <li> <a href="#">2</a></li>
-                                        <li> <a href="#">3</a></li>
-                                        <li> <a href="#">4</a></li>
-                                        <li> <a href="#">5</a></li>
-
-                                    </ul>
                                 </div>
-                            }
-                        </div>
 
+                            }
+                        }
+                        <div class="w100 categoryFooter">
+
+                                <ul class="pagination" id="paginations">
+
+                                    <li class="current"><a href="#">1</a></li>
+                                    <li> <a href="#">2</a></li>
+                                    <li> <a href="#">3</a></li>
+                                    <li> <a href="#">4</a></li>
+                                    <li> <a href="#">5</a></li>
+
+                                </ul>
+                            </div>
                     </div>
                 </div>
             </div>
@@ -383,8 +389,26 @@
         $("#paginations li a").click(function () {
             $("#paginations li a").removeClass("current");
             $(this).addClass("current");
-            showPage(parseInt($(this).text()))
+            showPage(parseInt($(this).text()));
         });
     }
 </script>
+<style>
+    /* CSS used here will be applied after bootstrap.css */
+    /* one item */
 
+    .col-md-auto {
+        padding: 0 15px 0 15px;
+        float: left;
+    }
+
+    /*.col-md-auto:first-child:nth-last-child(1) {
+            width: 100%;
+        }
+
+        /* two items !1!
+        .col-md-auto:first-child:nth-last-child(2),
+        .col-md-auto:first-child:nth-last-child(2) ~ div {
+            width: 50%;
+        }*/
+</style>
