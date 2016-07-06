@@ -454,7 +454,7 @@ namespace AMS.Controllers
 
         [HttpPost]
         [Authorize]
-        public Object addMember(String fullname, String username, String profileImage,int gender, DateTime birthDate, String IDNumber, DateTime idDate, int relationShipLevel)
+        public Object addMember(String fullname, String username, String profileImage,int gender, DateTime birthDate, String IDNumber, DateTime idDate, int relationShipLevel, String sendPasswordTo)
         {
             User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
 
@@ -471,7 +471,7 @@ namespace AMS.Controllers
             u.RoleId = SLIM_CONFIG.USER_ROLE_RESIDENT;
             u.Status = 0;
             u.HouseId = curUser.HouseId;
-            u.Gender = null;
+            u.Gender = gender;
             if (!IDNumber.Equals(""))
             {
                 u.IDNumber = IDNumber;
@@ -484,6 +484,7 @@ namespace AMS.Controllers
             //u.Password = "123123"; AnTT 4/7/2016
             u.Password = StringUtil.genPassword(); //AnTT 4/7/2016
             u.ProfileImage = profileImage;
+            u.SendPasswordTo = sendPasswordTo;
             userService.addUser(u);
             return JsonConvert.SerializeObject(u);
         }

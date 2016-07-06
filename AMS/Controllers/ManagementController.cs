@@ -23,7 +23,7 @@ namespace AMS.Controllers
         HelpdeskServiceCatService _helpdeskServiceCatService = new HelpdeskServiceCatService();
         UserServices _userServices = new UserServices();
         AroundProviderService _aroundProviderService = new AroundProviderService();
-
+        NotificationService notificationService = new NotificationService();
         readonly string parternTime = "dd-MM-yyyy HH:mm";
         [Authorize]
         public ActionResult Index()
@@ -548,7 +548,16 @@ namespace AMS.Controllers
                                 .Append(res.Username)
                                 .Append(". Mat khau: ")
                                 .Append(res.Password);
+                        
+
                         CommonUtil.SentSms(res.SendPasswordTo, message.ToString());
+
+                        //Thông báo đến tất cả những người trong nhà
+                        List<User> members = res.House.Users.ToList();
+                        foreach(User u in members)
+                        {
+                            notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_ADD_MEMBER_REQUEST,u.Id,SLIM_CONFIG.NOTIC_VERB_APPROVE,fromUser.Id,null);
+                        }
                     }
                 }
             }
