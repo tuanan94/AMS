@@ -345,6 +345,12 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MessageViewModels.cs" />
     <Compile Include="Models\ReceiptViewModels.cs" />
+    <Compile Include="NotificationChange.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NotificationObject.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="ObjectMapping\CommentMapping.cs" />
     <Compile Include="ObjectMapping\Notification.cs" />
     <Compile Include="ObjectMapping\PostMapping.cs" />

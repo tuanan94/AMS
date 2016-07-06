@@ -23,6 +23,8 @@ namespace AMS
             this.HelpdeskRequests1 = new HashSet<HelpdeskRequest>();
             this.HelpdeskRequestLogs = new HashSet<HelpdeskRequestLog>();
             this.HelpdeskRequestLogs1 = new HashSet<HelpdeskRequestLog>();
+            this.NotificationChanges = new HashSet<NotificationChange>();
+            this.NotificationObjects = new HashSet<NotificationObject>();
             this.Posts = new HashSet<Post>();
             this.Receipts = new HashSet<Receipt>();
             this.Reports = new HashSet<Report>();
@@ -62,6 +64,11 @@ namespace AMS
         public virtual ICollection<HelpdeskRequestLog> HelpdeskRequestLogs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HelpdeskRequestLog> HelpdeskRequestLogs1 { get; set; }
+        public virtual House House { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<NotificationChange> NotificationChanges { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<NotificationObject> NotificationObjects { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Post> Posts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -73,6 +80,5 @@ namespace AMS
         public virtual ICollection<UserRateAroundProvider> UserRateAroundProviders { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserAnswerPoll> UserAnswerPolls { get; set; }
-        public virtual House House { get; set; }
     }
 }

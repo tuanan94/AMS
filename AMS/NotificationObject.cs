@@ -12,23 +12,21 @@ namespace AMS
     using System;
     using System.Collections.Generic;
     
-    public partial class HouseCategory
+    public partial class NotificationObject
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public HouseCategory()
+        public NotificationObject()
         {
-            this.Houses = new HashSet<House>();
-            this.UtilServiceForHouseCats = new HashSet<UtilServiceForHouseCat>();
+            this.NotificationChanges = new HashSet<NotificationChange>();
         }
     
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public Nullable<System.DateTime> CreateDate { get; set; }
-        public Nullable<System.DateTime> LastModified { get; set; }
+        public int ID { get; set; }
+        public int UserID { get; set; }
+        public string TargetObject { get; set; }
+        public Nullable<int> TargetObjectID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<House> Houses { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UtilServiceForHouseCat> UtilServiceForHouseCats { get; set; }
+        public virtual ICollection<NotificationChange> NotificationChanges { get; set; }
+        public virtual User User { get; set; }
     }
 }
