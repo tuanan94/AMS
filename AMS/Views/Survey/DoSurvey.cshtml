@@ -182,174 +182,175 @@
 
 
 
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="heading-tab">
-                <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Bình Chọn</span>
-                <ul class="nav nav-tabs pull-right" role="tablist">
-                    <li>
-                        <a href="/Survey/ViewHistory"><i class="fa fa-history"></i>Các Bình Chọn Bạn Đã Làm</a>
-                    </li>
-                    <li class="active">
-                        <a href=""><i class="fa fa-book"></i>Danh Sách Các Bình Chọn </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="panel-body">
-                <div class="form-horizontal" role="form">
-                    <div class="form-group">
-                        @{
-                            foreach (var item in listSurveyss)
-                            {
-                                 <div class="col-md-offset-2 col-md-8">
-
-                                    <div class="panel panel-primary aass" style="border-radius: 5px;">
-                                        <div class="panel-heading">
-                                            <h3 class="panel-title" style="line-height: 1.5;">
-                                                <span style="font-size: 17px" class="glyphicon glyphicon-hand-right"></span> @item.Question
-                                            </h3>
-                                        </div>
-                                        <div class="panel-body">
-                                            <div class="row">
-                                                <div class="col-md-3">
-                                                    <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new {PollId = @item.Id})">
-                                                        <img class="img-responsive" src="@item.ImageUrl">
-
-                                                        @{
-                                if (item.Priority == 1)
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="heading-tab">
+            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Bình Chọn</span>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li>
+                    <a href="/Survey/ViewHistory"><i class="fa fa-history"></i>Các Bình Chọn Bạn Đã Làm</a>
+                </li>
+                <li class="active">
+                    <a href=""><i class="fa fa-book"></i>Danh Sách Các Bình Chọn </a>
+                </li>
+            </ul>
+        </div>
+        <div class="panel-body">
+            <div class="form-horizontal" role="form">
+                <div class="form-group">
+                    @{
+                        foreach (var item in listSurveyss)
+                        {
+                            <div class="col-md-offset-2 col-md-8">
+                                @using (Html.BeginForm("DoDetailSurvey", "Survey", FormMethod.Post))
                                 {
-                                    <div class="media-ribbon">
-                                        <i class="fa fa-exclamation-circle"></i>Bắt buộc
-                                    </div>
-                                }
-                                                        }
-                                                    </a>
-                                                </div>
-                                                <div class="col-md-9">
-                                                    @using (Html.BeginForm("DoDetailSurvey", "Survey", FormMethod.Post))
-                                                    {
-                                                        @Html.TextBoxFor(m => m.Id, new { @type = "hidden", @Value = item.Id })
-                                                        {
-                                                            <ul class="list-group">
-                                                                @if (item.Answer1 != null && !item.Answer1.Equals(""))
-                                                                {
-                                                                    <li class="list-group-item">
-                                                                        <div class="radio">
-                                                                            <label>
-                                                                                <input type="radio" name="answer" value="@item.Answer1">
-                                                                                @item.Answer1
-                                                                            </label>
-                                                                        </div>
-                                                                    </li>
-                                                                }
-                                                                @if (item.Answer2 != null && !item.Answer2.Equals(""))
-                                                                {
-                                                                    <li class="list-group-item">
-                                                                        <div class="radio">
-                                                                            <label>
-                                                                                <input type="radio" name="answer" value="@item.Answer2">
-                                                                                @item.Answer2
-                                                                            </label>
-                                                                        </div>
-                                                                    </li>
-                                                                }
-                                                                @if (item.Answer3 != null && !item.Answer3.Equals(""))
-                                                                {
-                                                                    <li class="list-group-item">
-                                                                        <div class="radio">
-                                                                            <label>
-                                                                                <input type="radio" name="answer" value="@item.Answer3">
-                                                                                @item.Answer3
-                                                                            </label>
-                                                                        </div>
-                                                                    </li>
-                                                                }
-                                                                @if (item.Answer4 != null && !item.Answer4.Equals(""))
-                                                                {
-                                                                    <li class="list-group-item">
-                                                                        <div class="radio">
-                                                                            <label>
-                                                                                <input type="radio" name="answer" value="@item.Answer4">
-                                                                                @item.Answer4
-                                                                            </label>
-                                                                        </div>
-                                                                    </li>
-                                                                }
-                                                                @if (item.Answer5 != null && !item.Answer5.Equals(""))
-                                                                {
-                                                                    <li class="list-group-item">
-                                                                        <div class="radio">
-                                                                            <label>
-                                                                                <input type="radio" name="answer" value="@item.Answer5">
-                                                                                @item.Answer5
-                                                                            </label>
-                                                                        </div>
-                                                                    </li>
-                                                                }
-                                                            </ul>
-                                                        }
-                                                    }
-                                                </div>
+                                    @Html.TextBoxFor(m => m.Id, new {@type = "hidden", @Value = item.Id})
+                                    {
+                                        <div class="panel panel-primary aass" style="border-radius: 5px;">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title" style="line-height: 1.5;">
+                                                    <span style="font-size: 17px" class="glyphicon glyphicon-hand-right"></span> @item.Question
+                                                </h3>
                                             </div>
-                                        </div>
-                                        <div class="panel-footer">
-                                            <div class="row">
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <a class="media-item-thumbnail" href="@Url.Action("DoDetailSurvey", "Survey", new {PollId = @item.Id})">
+                                                            <img class="img-responsive" src="@item.ImageUrl">
 
-                                                <div class="col-md-6">
-                                                    <div class="pull-left">
-                                                        <button type="submit" onclick="addCommentByAjax()" class="btn btn-sm btn-info">Bình chọn</button>
-                                                        @*<a href="#">Xem kết quả</a>*@
+                                                            @{
+                                                                if (item.Priority == 1)
+                                                                {
+                                                                    <div class="media-ribbon">
+                                                                        <i class="fa fa-exclamation-circle"></i>Bắt buộc
+                                                                    </div>
+                                                                }
+                                                            }
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-md-9">
+
+                                                        <ul class="list-group">
+                                                            @if (item.Answer1 != null && !item.Answer1.Equals(""))
+                                                            {
+                                                                <li class="list-group-item">
+                                                                    <div class="radio">
+                                                                        <label>
+                                                                            <input type="radio" name="answer" value="@item.Answer1">
+                                                                            @item.Answer1
+                                                                        </label>
+                                                                    </div>
+                                                                </li>
+                                                            }
+                                                            @if (item.Answer2 != null && !item.Answer2.Equals(""))
+                                                            {
+                                                                <li class="list-group-item">
+                                                                    <div class="radio">
+                                                                        <label>
+                                                                            <input type="radio" name="answer" value="@item.Answer2">
+                                                                            @item.Answer2
+                                                                        </label>
+                                                                    </div>
+                                                                </li>
+                                                            }
+                                                            @if (item.Answer3 != null && !item.Answer3.Equals(""))
+                                                            {
+                                                                <li class="list-group-item">
+                                                                    <div class="radio">
+                                                                        <label>
+                                                                            <input type="radio" name="answer" value="@item.Answer3">
+                                                                            @item.Answer3
+                                                                        </label>
+                                                                    </div>
+                                                                </li>
+                                                            }
+                                                            @if (item.Answer4 != null && !item.Answer4.Equals(""))
+                                                            {
+                                                                <li class="list-group-item">
+                                                                    <div class="radio">
+                                                                        <label>
+                                                                            <input type="radio" name="answer" value="@item.Answer4">
+                                                                            @item.Answer4
+                                                                        </label>
+                                                                    </div>
+                                                                </li>
+                                                            }
+                                                            @if (item.Answer5 != null && !item.Answer5.Equals(""))
+                                                            {
+                                                                <li class="list-group-item">
+                                                                    <div class="radio">
+                                                                        <label>
+                                                                            <input type="radio" name="answer" value="@item.Answer5">
+                                                                            @item.Answer5
+                                                                        </label>
+                                                                    </div>
+                                                                </li>
+                                                            }
+                                                        </ul>
+
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <div class="pull-right" style="text-align: right">
-                                                        <div style="text-align: left">
-                                                            <i class="fa fa-calendar"></i> <span style="font-size: 14px;">Kết thúc:</span> <strong>@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.EndDate))</strong>
+                                            </div>
+                                            <div class="panel-footer">
+                                                <div class="row">
+
+                                                    <div class="col-md-6">
+                                                        <div class="pull-left">
+                                                            <button type="submit" class="btn btn-sm btn-info">Bình chọn</button>
+                                                            @*<a href="#">Xem kết quả</a>*@
                                                         </div>
-                                                        <div style="text-align: left">
-                                                            @{
-                                if (listUserAnswer.Count == 0)
-                                {
-                                    <span style="font-size: 14px; margin-top: 20px">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pull-right" style="text-align: right">
+                                                            <div style="text-align: left">
+                                                                <i class="fa fa-calendar"></i> <span style="font-size: 14px;">Kết thúc:</span> <strong>@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.EndDate))</strong>
+                                                            </div>
+                                                            <div style="text-align: left">
+                                                                @{
+                                                                    if (listUserAnswer.Count == 0)
+                                                                    {
+                                                                        <span style="font-size: 14px; margin-top: 20px">
                                         <i class="fa fa-users"></i>  <span style="font-size: 14px;">Tham gia:</span> <strong>Chưa có</strong>
                                     </span>
-                                }
-                                else
-                                {
-                                    <span style="font-size: 14px; margin-top: 20px">
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span style="font-size: 14px; margin-top: 20px">
                                         <i class="fa fa-users"></i>  <span style="font-size: 14px;">Tham gia:</span>  <strong>@listUserAnswer.Count</strong> người
                                     </span>
-                                }
-                                                            }
+                                                                    }
+                                                                }
+                                                            </div>
                                                         </div>
                                                     </div>
+
                                                 </div>
 
                                             </div>
-
                                         </div>
-                                    </div>
-
-                                </div>
-
-                            }
-                        }
-                        <div class="w100 categoryFooter">
-
-                                <ul class="pagination" id="paginations">
-
-                                    <li class="current"><a href="#">1</a></li>
-                                    <li> <a href="#">2</a></li>
-                                    <li> <a href="#">3</a></li>
-                                    <li> <a href="#">4</a></li>
-                                    <li> <a href="#">5</a></li>
-
-                                </ul>
+                                    }
+                                }
                             </div>
-                    </div>
+
+                        }
+                    }
+
                 </div>
             </div>
         </div>
+    </div>
+</div>
+    <div class="w100 categoryFooter">
+
+        <ul class="pagination" id="paginations">
+
+            <li class="current"><a href="#">1</a></li>
+            <li> <a href="#">2</a></li>
+            <li> <a href="#">3</a></li>
+            <li> <a href="#">4</a></li>
+            <li> <a href="#">5</a></li>
+
+        </ul>
     </div>
 </body>
 <script>
