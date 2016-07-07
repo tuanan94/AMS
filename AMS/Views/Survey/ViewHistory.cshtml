@@ -153,10 +153,20 @@
                                 if (obj != null && !obj.Equals(""))
                                 {
                                     <div id="rcorners2">
-                                        <label style="padding: 5px;text-align: center">@obj</label>
+                                        <label style="padding: 5px; text-align: center">@obj</label>
 
-                                        <br />
-                                    </div> <hr>
+                                        <br/>
+                                    </div>
+                                    <hr>
+                                }
+                                else
+                                {
+                                      <div id="rcorners2">
+                                        <label style="padding: 5px; text-align: center"></label>
+
+                                        <br/>
+                                    </div>
+                                    <hr>
                                 }
                                                                                        
                             }
@@ -171,13 +181,25 @@
                             {
                                 if (a != 0)
                                 {
-                                     <div id="rcorners1">
-                                    <progress value="@a" max="100">
-                                    </progress> @a %
-                                   
-                                </div><hr>
+                                    <div id="rcorners1">
+                                        <progress value="@a" max="100">
+                                        </progress> @a %
 
-                                                            <input type="hidden" id="answer" name="countAnser" value="@a"/>
+                                    </div>
+                                    <hr>
+
+                                    <input type="hidden" id="answer" name="countAnser" value="@a"/>
+                                }
+                                else
+                                {
+                                    <div id="rcorners1">
+                                        <progress value="0" max="100">
+                                        </progress> 0 %
+
+                                    </div>
+                                    <hr>
+
+                                    <input type="hidden" id="answer" name="countAnser" value="0"/> 
                                 }
                                                         }
                                                     }
@@ -189,9 +211,17 @@
                             {
                                 if (a != 0)
                                 {
-                                       <div id="rcorners3">
-                                                    <label>@a Phiếu </label><br />
-                                                </div><hr>
+                                    <div id="rcorners3">
+                                        <label>@a Phiếu </label><br/>
+                                    </div>
+                                    <hr>
+                                }
+                                else
+                                {
+                                   <div id="rcorners3">
+                                        <label>0 Phiếu </label><br/>
+                                    </div>
+                                    <hr>  
                                 }
 
 

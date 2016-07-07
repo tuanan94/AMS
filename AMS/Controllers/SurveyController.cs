@@ -50,6 +50,7 @@ namespace AMS.Controllers
                 model.AnswerDate = item.AnswerDate;
                 listPolls.Add(model);
                 List<UserAnswerPoll> listAnswerss = userAnswerService.GetListUserAnswerPollsByAnswer(item.PollId);
+               // List<UserAnswerPoll> listAnswerss = userAnswerService.GetListUserAnswerPollsByPollId(item.PollId);
                 foreach (var items in listAnswerss)
                 {
 
