@@ -73,15 +73,11 @@ namespace AMS.Controllers
                 string answer5 = PollService.FindById(item.PollId).Answer5;
                 listEach.Add(listeach);
                listCountAll.Add(listCountss);
-              
-                listAnswers.Add(answer5);
-               
-                listAnswers.Add(answer4);
-            
-                listAnswers.Add(answer3);
-           
-                listAnswers.Add(answer2);
                 listAnswers.Add(answer1);
+                listAnswers.Add(answer2);
+                listAnswers.Add(answer3);
+                listAnswers.Add(answer4);
+                listAnswers.Add(answer5);
                 listAll.Add(listAnswers);
             }
             List<Poll> lists = new List<Poll>();
