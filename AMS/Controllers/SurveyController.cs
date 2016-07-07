@@ -49,8 +49,8 @@ namespace AMS.Controllers
                 model.ImageUrl = PollService.FindById(item.PollId).ImageUrl;
                 model.AnswerDate = item.AnswerDate;
                 listPolls.Add(model);
-                List<UserAnswerPoll> listAnswerss = userAnswerService.GetListUserAnswerPollsByAnswer(item.PollId);
-               // List<UserAnswerPoll> listAnswerss = userAnswerService.GetListUserAnswerPollsByPollId(item.PollId);
+             //  List<UserAnswerPoll> listAnswerss = userAnswerService.GetListUserAnswerPollsByAnswer(item.PollId);
+                List<UserAnswerPoll> listAnswerss = userAnswerService.GetListUserAnswerPollsByAnswerN(item.PollId);
                 foreach (var items in listAnswerss)
                 {
 
