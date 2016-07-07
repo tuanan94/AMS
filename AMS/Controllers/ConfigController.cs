@@ -124,7 +124,7 @@ namespace AMS.Controllers
                             utilityService.Id))
                     {
                         response.StatusCode = -1;
-                        response.Msg = "Đã có lỗi xãy ra!";
+                        response.Msg = "Đã có lỗi xảy ra!";
                         return Json(response);
                     }
                     UtilServiceForHouseCat utilSrvForHouseCat = new UtilServiceForHouseCat();
@@ -139,7 +139,7 @@ namespace AMS.Controllers
             else
             {
                 response.StatusCode = -1;
-                response.Msg = "Không tìm thấy loại nhà";
+                response.Msg = "Không tìm thấy dạng cư trú";
             }
 
             return Json(response);

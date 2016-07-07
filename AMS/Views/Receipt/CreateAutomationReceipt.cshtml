@@ -16,7 +16,7 @@
     <div class="panel panel-default">
 
         <div class="heading-tab">
-            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Tạo mới phí sinh hoạt</span>
+            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Tạo hóa đơn tự động</span>
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li>
                     <a href="/Management/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Quản lý hóa đơn</a>
@@ -115,9 +115,9 @@
                                                     <table class="table v-middle table-bordered table-striped table-condensed ">
                                                         <thead>
                                                             <tr>
-                                                                <th style="width: 40%" class="text-capitalize">Loại nhà</th>
+                                                                <th style="width: 40%" class="text-capitalize">Dạng cư trú</th>
                                                                 <th style="width: 60%" class="text-capitalize text-center">
-                                                                    Tên giá
+                                                                    Khung giá
                                                                 </th>
                                                             </tr>
                                                         </thead>
@@ -540,7 +540,7 @@
                         $("#msgAddFailedNoty").fadeOut("fast");
                     },5000);
                 }else if (data.StatusCode === 3) {
-                    var msg = "Không tìm được khung giá nước cho loại nhà <strong>" + data.Data + "</strong>.";
+                    var msg = "Không tìm được khung giá nước cho dạng cư trú <strong>" + data.Data + "</strong>.";
                     $("#notyMsg").html(msg);
                     $("#msgAddFailedNoty").fadeIn("fast");
                     setTimeout(function() {

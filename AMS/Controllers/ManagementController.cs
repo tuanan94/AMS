@@ -181,7 +181,7 @@ namespace AMS.Controllers
                         else
                         {
                             var message = new List<object>();
-                            message.Add(new { txt_error = "Không tìm thấy hổ trợ dịch vụ !" });
+                            message.Add(new { txt_error = "Không tìm thấy hỗ trợ dịch vụ !" });
                             response.Data = message;
                             response.StatusCode = 4;
                         }
@@ -287,7 +287,7 @@ namespace AMS.Controllers
                         else
                         {
                             response.StatusCode = 4;
-                            response.Msg = "Không tìm thấy nhóm dịch vụ hổ trợ.";
+                            response.Msg = "Không tìm thấy nhóm dịch vụ hỗ trợ.";
                         }
                         return Json(response, JsonRequestBehavior.AllowGet);
 
@@ -338,14 +338,14 @@ namespace AMS.Controllers
                         else
                         {
                             response.StatusCode = 4;
-                            response.Msg = "Không tìm thấy nhóm dịch vụ hổ trợ.";
+                            response.Msg = "Không tìm thấy nhóm dịch vụ hỗ trợ.";
                         }
                         return Json(response);
                     }
                     catch (Exception)
                     {
                         response.StatusCode = -1;
-                        response.Msg = "Lỗi cập nhật nhóm dịch vụ hổ trợ.";
+                        response.Msg = "Lỗi cập nhật nhóm dịch vụ hỗ trợ.";
                         return Json(response);
                     }
                 }
@@ -412,14 +412,14 @@ namespace AMS.Controllers
                         else
                         {
                             response.StatusCode = 4;
-                            response.Msg = "Không tìm thấy nhóm dịch vụ hổ trợ.";
+                            response.Msg = "Không tìm thấy nhóm dịch vụ hỗ trợ.";
                         }
                         return Json(response, JsonRequestBehavior.AllowGet);
                     }
                     catch (Exception)
                     {
                         response.StatusCode = -1;
-                        response.Msg = "Lỗi cập nhật nhóm dịch vụ hổ trợ.";
+                        response.Msg = "Lỗi cập nhật nhóm dịch vụ hỗ trợ.";
                         return Json(response);
                     }
                 }

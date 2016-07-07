@@ -9,13 +9,13 @@
 <div class="col-md-12">
     <div class="panel panel-default">
         <div class="heading-tab">
-            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Quản lý nhân viên hổ trợ</span>
+            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Quản lý nhân viên hỗ trợ</span>
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li>
                     <a href="/Management/ManageUser/ViewResidentList"><i class="fa fa-users"></i> Dân cư</a>
                 </li>
                 <li class="active">
-                    <a href="/Management/ManageUser/ViewSupporterList"><i class="fa fa-user-md "></i> NV Hổ trợ</a>
+                    <a href="/Management/ManageUser/ViewSupporterList"><i class="fa fa-user-md "></i> Nhân viên hỗ trợ</a>
                 </li>
             </ul>
         </div>
@@ -63,17 +63,17 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="title">Thêm mới cư dân</h4>
+                <h4 class="modal-title" id="title">Thêm cư dân</h4>
             </div>
             <div class="modal-body">
                 <div class="panel-body">
                     <div class="alert alert-info" id="addResSuccessNoti" style="display: none">
                         <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span id="successMsg">Thêm nhân viên hổ trợ thành công</span>
+                        <span id="successMsg">Thêm nhân viên hỗ trợ thành công</span>
                     </div>
                     <div class="alert alert-danger" id="addResFailedNoti" style="display: none">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                        <span id="failedMsg">Thêm nhân viên hổ trợ thất bại</span>
+                        <span id="failedMsg">Thêm nhân viên hỗ trợ thất bại</span>
                     </div>
                     <div class="alert alert-danger" id="msgAddFailedNoty" style="display: none">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -353,9 +353,9 @@
 
         window.mode = window.INSERTMODE;
 
-        $("#successMsg").text("Thêm mới nhân viên hổ trợ thành công.");
-        $("#failedMsg").text("Thêm mới nhân viên hổ trợ thất bại.");
-        $("#title").text("Thêm mới nhân viên hổ trợ");
+        $("#successMsg").text("Thêm mới nhân viên hỗ trợ thành công.");
+        $("#failedMsg").text("Thêm mới nhân viên hỗ trợ thất bại.");
+        $("#title").text("Thêm mới nhân viên hỗ trợ");
 
         $("#btnUpdate").addClass("hide");
         $("#btnAdd").removeClass("hide");
@@ -392,9 +392,9 @@
                     $("input:radio[name=Gender]").filter("[value=" + obj.Gender + "]").prop("checked", "checked");
 
                     window.mode = window.UPDATEMODE;
-                    $("#successMsg").text("Cập nhật nhân viên hổ trợ thành công.");
-                    $("#failedMsg").text("Cập nhật nhân viên hổ trợ thất bại.");
-                    $("#title").text("Cập nhật nhân viên hổ trợ");
+                    $("#successMsg").text("Cập nhật nhân viên hỗ trợ thành công.");
+                    $("#failedMsg").text("Cập nhật nhân viên hỗ trợ thất bại.");
+                    $("#title").text("Cập nhật nhân viên hỗ trợ");
 
                     $("#btnUpdate").removeClass("hide");
                     $("#btnAdd").addClass("hide");

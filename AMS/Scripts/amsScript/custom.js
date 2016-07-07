@@ -1,19 +1,19 @@
 ﻿window.POPUPMODE = 0;
 window.UPDATEMODE = 2;
 window.INSERTMODE = 1;
-window.UPDATEMODALTITLE = "Cập nhật dịch vụ hổ trợ";
-window.UpdateServiceFailedMsg = "Cập nhật dịch vụ hổ trợ thất bại";
-window.UpdateServiceSuccessMsg = "Cập nhật dịch vụ hổ trợ thành công";
-window.INSERTMODALTITLE = "Thêm dịch vụ hổ trợ";
-window.AddServiceFailedMsg = "Thêm dịch vụ hổ trợ thất bại";
-window.AddServiceSuccessMsg = "Thêm dịch vụ hổ trợ thành công";
+window.UPDATEMODALTITLE = "Cập nhật dịch vụ hỗ trợ";
+window.UpdateServiceFailedMsg = "Cập nhật dịch vụ hỗ trợ thất bại";
+window.UpdateServiceSuccessMsg = "Cập nhật dịch vụ hỗ trợ thành công";
+window.INSERTMODALTITLE = "Thêm dịch vụ hỗ trợ";
+window.AddServiceFailedMsg = "Thêm dịch vụ hỗ trợ thất bại";
+window.AddServiceSuccessMsg = "Thêm dịch vụ hỗ trợ thành công";
 
-window.UpdateHdSrvCategoryModalTitle = "Cập nhật nhóm dịch vụ hổ trợ";
-window.UpdateHdSrvCategoryFailedMsg = "Cập nhật nhóm dịch vụ hổ trợ thất bại";
-window.UpdateHdSrvCategorySuccessMsg = "Cập nhật nhóm dịch vụ hổ trợ thành công";
-window.InsertHdSrvCategoryModalTitle = "Thêm nhóm dịch vụ hổ trợ";
-window.AddHdSrvCategoryFailedMsg = "Thêm nhóm dịch vụ hổ trợ thất bại";
-window.AddHdSrvCategorySuccessMsg = "Thêm nhóm dịch vụ hổ trợ thành công";
+window.UpdateHdSrvCategoryModalTitle = "Cập nhật nhóm dịch vụ hỗ trợ";
+window.UpdateHdSrvCategoryFailedMsg = "Cập nhật nhóm dịch vụ hỗ trợ thất bại";
+window.UpdateHdSrvCategorySuccessMsg = "Cập nhật nhóm dịch vụ hỗ trợ thành công";
+window.InsertHdSrvCategoryModalTitle = "Thêm nhóm dịch vụ hỗ trợ";
+window.AddHdSrvCategoryFailedMsg = "Thêm nhóm dịch vụ hỗ trợ thất bại";
+window.AddHdSrvCategorySuccessMsg = "Thêm nhóm dịch vụ hỗ trợ thành công";
 
 window.deleteHdSrvList = new Array();
 window.deleteHdSrvCatList = new Array();
@@ -93,7 +93,7 @@ function getHelpdeskServiceType(tagId, callback) {
             console.log(data.HdSrvCategories);
             var objList = data.HdSrvCategories;
             var selectTagList = [];
-            var selectTag = "<option value='' selected='selected'> Hãy chọn dịch vụ hổ trợ</option>";
+            var selectTag = "<option value='' selected='selected'> Hãy chọn dịch vụ hỗ trợ</option>";
             selectTagList.push(selectTag);
             for (var i = 0; i < objList.length; i++) {
                 var obj = objList[i];
@@ -127,7 +127,7 @@ function helpdeskServiceDetail(id) {
 
             var objList = data.HdSrvCategories;
             var selectTagList = [];
-            var selectTag = "<option value='' selected='selected'>  Hãy chọn nhóm dịch vụ hổ trợ</option>";
+            var selectTag = "<option value='' selected='selected'>  Hãy chọn nhóm dịch vụ hỗ trợ</option>";
             selectTagList.push(selectTag);
             for (var i = 0; i < objList.length; i++) {
                 var obj = objList[i];
@@ -174,7 +174,7 @@ function commitDeleteHelpdeskService() {
             } else {
                 $("#delBtnGroup").removeClass("show");
                 $("#delBtnGroup").addClass("hide");
-                $("#messageModal .msgContent").text("Xóa dịch vụ hổ trợ thất bại!");
+                $("#messageModal .msgContent").text("Xóa dịch vụ hỗ trợ thất bại!");
             }
         },
         error: function () {
@@ -275,7 +275,7 @@ function commitDeleteHdSrvCategory() {
             } else {
                 $("#delHdSrvBtnGroup").removeClass("show");
                 $("#delHdSrvBtnGroup").addClass("hide");
-                $("#messageModal .msgContent").text("Xóa dịch vụ hổ trợ thất bại!");
+                $("#messageModal .msgContent").text("Xóa dịch vụ hỗ trợ thất bại!");
             }
             setTimeout(function () {
                 $("#delBtnGroup").removeClass("show");
@@ -325,13 +325,13 @@ $(document).ready(function () {
         },
         messages: {
             hdSrvName: {
-                required: "Vui lòng nhập vào tên dịch vụ hổ trợ.",
-                maxlength: "Tên dịch vụ hổ trợ không dài quá 255 ký tự."
+                required: "Vui lòng nhập vào tên dịch vụ hỗ trợ.",
+                maxlength: "Tên dịch vụ hỗ trợ không dài quá 255 ký tự."
             },
             hdSrvPrice: {
-                required: "Vui lòng nhập vào giá dịch vụ hổ trợ.",
-                maxlength: "Giá dịch vụ hổ trợ không quá 9 chữ số",
-                number: "Giá dịch vụ hổ trợ phải là con số."
+                required: "Vui lòng nhập vào giá dịch vụ hỗ trợ.",
+                maxlength: "Giá dịch vụ hỗ trợ không quá 9 chữ số",
+                number: "Giá dịch vụ hỗ trợ phải là con số."
             },
             hdSrvDesc: {
                 maxlength: "Mô tả dịch vụ sửa chữa không quá 500 ký tự."
@@ -387,8 +387,8 @@ $(document).ready(function () {
         },
         messages: {
             hdSrvCatName: {
-                required: "Vui lòng nhập vào tên nhóm dịch vụ hổ trợ.",
-                maxlength: "Tên nhóm dịch vụ hổ trợ không dài quá 255 ký tự."
+                required: "Vui lòng nhập vào tên nhóm dịch vụ hỗ trợ.",
+                maxlength: "Tên nhóm dịch vụ hỗ trợ không dài quá 255 ký tự."
             }
         },
         success: function (label, element) {
@@ -446,9 +446,9 @@ $(document).ready(function () {
         },
         messages: {
             hdSrvCatName: {
-                required: "Vui lòng chọn nhóm dịch vụ hổ trợ."
+                required: "Vui lòng chọn nhóm dịch vụ hỗ trợ."
             }, hdService: {
-                required: "Vui lòng chọn dịch vụ hổ trợ."
+                required: "Vui lòng chọn dịch vụ hỗ trợ."
             }, hdReqTitle: {
                 required: "Vui lòng nhập vắn tắt mô tả yêu cầu.",
                 maxlength: "Tiêu đề không dài quá 255 ký tự."
@@ -497,7 +497,7 @@ $(document).ready(function () {
             });
         } else if (selected === 2) {
             $("#hdReqFilterResult").prop("disabled", false);
-            var opt = "<option value='1'>Hổ trợ</option><option value='0'>Không hổ trợ</option>";
+            var opt = "<option value='1'>hỗ trợ</option><option value='0'>Không hỗ trợ</option>";
             $("#hdReqFilterResult").html(opt);
         }
     });
@@ -517,7 +517,7 @@ $(document).ready(function () {
                 $("#hdServiceId").selectpicker("refresh");
             });
         } else {
-            var selectTag = "<option value='' selected='selected'> " + "Hãy chọn dịch vụ hổ trợ" + " </option>";
+            var selectTag = "<option value='' selected='selected'> " + "Hãy chọn dịch vụ hỗ trợ" + " </option>";
             $("#hdServiceId").html(selectTag);
             $("#hdServiceId").selectpicker("refresh");
         }
@@ -661,7 +661,7 @@ function getHdSrvByCatId(id, tagId, callback) {
         success: function (data) {
             console.log(data);
             var selectTagList = [];
-            var selectTag = "<option value='' selected='selected'> Hãy chọn dịch vụ hổ trợ</option>";
+            var selectTag = "<option value='' selected='selected'> Hãy chọn dịch vụ hỗ trợ</option>";
             selectTagList.push(selectTag);
             if (data.StatusCode === 0) {
                 window.hdSrvList = data.Data;
@@ -817,13 +817,13 @@ function getHdReqDetail(id) {
             //            console.log(data.Data.SelectedHdSrvId);
 
             var objList = data.Data.HdSrvCategories;
-            var returnHtml = parseJsonToSelectTags(objList, data.Data.SelectedHdSrvCatId, "Hãy chọn loại dịch vụ hổ trợ");
+            var returnHtml = parseJsonToSelectTags(objList, data.Data.SelectedHdSrvCatId, "Hãy chọn loại dịch vụ hỗ trợ");
             $("#hdSrvCatName").html(returnHtml);
             $("#hdSrvCatName").selectpicker("refresh");
 
 
             objList = data.Data.ListHdSrvBySelectedCat;
-            var returnHtml2 = parseJsonToSelectTags(objList, data.Data.SelectedHdSrvId, "Hãy chọn dịch vụ hổ trợ");
+            var returnHtml2 = parseJsonToSelectTags(objList, data.Data.SelectedHdSrvId, "Hãy chọn dịch vụ hỗ trợ");
             $("#hdServiceId").html(returnHtml2);
             $("#hdServiceId").selectpicker("refresh");
 
