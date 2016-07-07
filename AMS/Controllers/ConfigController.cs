@@ -590,7 +590,13 @@ namespace AMS.Controllers
             if (null != block)
             {
                 block.NoFloor = block.Houses.GroupBy(h => h.Floor).Count();
+                bool canRemoveBlock = true;
+                if (block.Houses.Any(house => house.Status == SLIM_CONFIG.HOUSE_STATUS_ENABLE && house.OwnerID != null ))
+                {
+                    canRemoveBlock = false;
+                }
                 ViewBag.block = block;
+                ViewBag.canRemoveBlock = canRemoveBlock;
             }
             return View("ManageHouseInBlock");
         }
@@ -604,37 +610,51 @@ namespace AMS.Controllers
             {
                 try
                 {
-                    Block block = new Block();
-                    block.BlockName = housesInBlock.Name;
-                    block.NoFloor = housesInBlock.NoOfFloor;
-                    block.NoFloor = housesInBlock.NoRoomPerFloor;
-                    _blockServices.Add(block);
-
-                    if (null != housesInBlock.Houses || housesInBlock.NoOfFloor == 0)
+                    housesInBlock.Name = housesInBlock.Name.Trim();
+                    if (!_blockServices.CheckBlockNameIsExisted(housesInBlock.Name))
                     {
-                        House eHouse = null;
-                        for (int i = 0; i < housesInBlock.NoOfFloor; i++)
+                        Block block = new Block();
+                        block.BlockName = housesInBlock.Name;
+                        block.NoFloor = housesInBlock.NoOfFloor;
+                        block.NoFloor = housesInBlock.NoRoomPerFloor;
+                        _blockServices.Add(block);
+
+                        if (null != housesInBlock.Houses || housesInBlock.NoOfFloor == 0)
                         {
-                            foreach (var house in housesInBlock.Houses)
+                            House eHouse = null;
+                            for (int i = 0; i < housesInBlock.NoOfFloor; i++)
                             {
-                                eHouse = new House();
-                                eHouse.Area = house.Area;
-                                eHouse.Floor = i.ToString();
-                                if (i == 0)
+                                foreach (var house in housesInBlock.Houses)
                                 {
-                                    eHouse.Floor = "G";
+                                    eHouse = new House();
+                                    eHouse.Area = house.Area;
+                                    eHouse.Floor = i.ToString();
+                                    if (i == 0)
+                                    {
+                                        eHouse.Floor = "G";
+                                    }
+                                    eHouse.HouseName =
+                                        new StringBuilder(block.BlockName).Append("-")
+                                            .Append(eHouse.Floor.Trim())
+                                            .Append("-")
+                                            .Append(house.Name.Trim())
+                                            .ToString();
+                                    eHouse.BlockId = block.Id;
+                                    eHouse.Status = SLIM_CONFIG.HOUSE_STATUS_DISABLE;
+                                    _houseServices.Add(eHouse);
                                 }
-                                eHouse.HouseName = new StringBuilder(block.BlockName).Append("-").Append(eHouse.Floor.Trim()).Append("-").Append(house.Name.Trim()).ToString();
-                                eHouse.BlockId = block.Id;
-                                eHouse.Status = SLIM_CONFIG.HOUSE_STATUS_DISABLE;
-                                _houseServices.Add(eHouse);
                             }
+                            response.Data = block.Id;
                         }
-                        response.Data = block.Id;
+                        else
+                        {
+                            response.StatusCode = -1;
+                            return Json(response);
+                        }
                     }
                     else
                     {
-                        response.StatusCode = -1;
+                        response.StatusCode = 2;
                         return Json(response);
                     }
                 }
@@ -754,6 +774,10 @@ namespace AMS.Controllers
                 House house = new House();
                 house.Floor = floorName;
                 house.BlockId = block.Id;
+                if (houseInfo.Status == 0)
+                {
+                    houseInfo.Status = SLIM_CONFIG.HOUSE_STATUS_DISABLE;
+                }
                 house.Status = houseInfo.Status;
                 house.Area = houseInfo.Area;
                 HouseCategory houseCat = _houseCategoryServices.FindById(houseInfo.Type);
@@ -785,7 +809,10 @@ namespace AMS.Controllers
                     response.StatusCode = 5;
                     return Json(response);
                 }
-                house.Status = houseInfo.Status;
+                if (houseInfo.Status != 0)
+                {
+                    house.Status = houseInfo.Status;
+                }
                 house.Area = houseInfo.Area;
                 HouseCategory houseCat = _houseCategoryServices.FindById(houseInfo.Type);
                 if (null != houseCat)
@@ -899,6 +926,34 @@ namespace AMS.Controllers
                             return Json(response);
                         }
                     }
+                }
+            }
+            else
+            {
+                response.StatusCode = -1;
+            }
+            return Json(response);
+        }
+
+        [HttpPost]
+        [Route("Management/Config/UtilityService/DeleteBlock")]
+        public ActionResult DeleteBlock(int blockId)
+        {
+            MessageViewModels response = new MessageViewModels();
+            Block block = _blockServices.FindById(blockId);
+            if (null != block)
+            {
+                if (block.Houses.Any(house => house.Status == SLIM_CONFIG.HOUSE_STATUS_ENABLE && house.OwnerID != null))
+                {
+                    response.StatusCode = 2;// Tòa nhà vẫn còn tồn tại cư dân dang ở
+                    return Json(response);
+                }
+                List<House> houses = block.Houses.ToList();
+                block.Houses = null;
+                _blockServices.Delete(block);
+                foreach (var house in houses)
+                {
+                    _houseServices.DeleteById(house.Id);
                 }
             }
             else
@@ -1075,6 +1130,7 @@ namespace AMS.Controllers
             }
             return Json(response);
         }
+
 
         private bool ParseData(List<UtilityServiceRangePriceModel> priceList, int type, int utilServiceId)
         {

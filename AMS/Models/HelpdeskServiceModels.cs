@@ -55,7 +55,9 @@ namespace AMS.Models
         public int HdReqStatus { get; set; }
         public string HdReqSrvName { get; set; }
         public string HdReqCreateDate { get; set; }
+        public long HdReqCreateDateLong { get; set; }
         public string HdReqDeadline { get; set; }
+        public long HdReqDeadlineLong { get; set; }
         public string HdReqSupporter { get; set; }
     }
 

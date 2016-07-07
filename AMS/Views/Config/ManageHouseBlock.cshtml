@@ -10,13 +10,19 @@
 
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li>
-                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-file-text-o"></i> Phí sinh họat</a>
-                </li>
-                <li>
-                    <a href="/Management/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Quản lý nhà</a>
+                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-usd"></i> Phí sinh họat</a>
                 </li>
                 <li class="active">
                     <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-home"></i> Căn hộ</a>
+                </li>
+                <li class="">
+                    <a href="/Management/ManageRequestView"><i class="fa fa-wrench"></i> DV sửa chữa</a>
+                </li>
+                <li>
+                    <a href="/Management/ViewHelpdeskServiceCategory"><i class="fa fa fa-tags"></i> Nhóm DV sửa chữa</a>
+                </li>
+                <li class="">
+                    <a href="/Management/BalanceSheet/ManageTransactionCatView"><i class="fa fa-tags"></i> Nhóm thu chi</a>
                 </li>
             </ul>
         </div>
@@ -106,8 +112,8 @@
                 "render": function (data, type, full, meta) {
                     if (type === "display" || type === "filter") {
                         return "<div class='text-right'>" +
-                        "<span onclick='viewBlockInfo(\"" + data + "\")' class='btn btn-info btn-xs'>" +
-                        " <i class='fa fa-info'></i>" +
+                        "<span onclick='viewBlockInfo(\"" + data + "\")' class='btn btn-default btn-xs'>" +
+                        " <i class='fa fa-pencil'></i>" +
                         "</span>" +
                         " </div>";
 

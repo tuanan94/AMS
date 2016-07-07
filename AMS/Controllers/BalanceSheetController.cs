@@ -321,7 +321,7 @@ namespace AMS.Controllers
                     eTransaction.BlsId = balanceSheet.Id;
                     eTransaction.ReceiptDetailId = receiptDetail.Id;
                     _transactionService.Add(eTransaction);
-                    
+
                     balanceSheet.LastModified = DateTime.Now;
                     _balanceSheetService.Update(balanceSheet);
                 }
@@ -475,17 +475,17 @@ namespace AMS.Controllers
 
         [HttpPost]
         [Route("Management/BalanceSheet/DeleteTransactions")]
-        public ActionResult DeleteTransactions(List<int> transDeletedList, int balanceSheetId)
+        public ActionResult DeleteTransactions(List<int> listTransaction, int balanceSheetId)
         {
             MessageViewModels response = new MessageViewModels();
             User u = _userServices.FindById(Int32.Parse(User.Identity.GetUserId()));
             if (u != null)
             {
-                Receipt receipt = null;
+                Transaction currentTransaction = null;
                 //                int receiptId = 0;
-                List<ReceiptDetail> receiptDetails = null;
-                List<UtilityService> utilSrvLists = null;
-                List<Transaction> transactions = null;
+                ReceiptDetail receiptDetail = null;
+                int receiptId = 0;
+                int receiptDetailId = 0;
                 int blsId = 0;
                 BalanceSheet curBalanceSheet = _balanceSheetService.FindById(balanceSheetId);
                 if (curBalanceSheet == null)
@@ -493,33 +493,19 @@ namespace AMS.Controllers
                     response.StatusCode = -1;
                     return Json(response);
                 }
-                else
+                foreach (var transactionId in listTransaction)
                 {
-                    foreach (var receiptId in transDeletedList)
+                    currentTransaction = _transactionService.FindById(transactionId);
+
+                    if (currentTransaction != null && curBalanceSheet.Id == currentTransaction.BalanceSheet.Id && currentTransaction.BalanceSheet.Status != SLIM_CONFIG.BALANCE_SHEET_CLOSE)
                     {
-                        receipt = _receiptService.FindById(receiptId);
-                        blsId = receipt.BlsId.Value;
+                        blsId = currentTransaction.BlsId.Value;
+                        receiptId = currentTransaction.ReceiptDetail.ReceiptId.Value;
+                        receiptDetailId = currentTransaction.ReceiptDetailId.Value;
 
-                        if (receipt != null && curBalanceSheet.Id == receipt.BalanceSheet.Id && receipt.BalanceSheet.Status != SLIM_CONFIG.BALANCE_SHEET_CLOSE)
-                        {
-                            receiptDetails = receipt.ReceiptDetails.ToList();
-                            receipt.ReceiptDetails = null;
-                            _receiptService.Delete(receipt);
-
-                            foreach (var receiptDetail in receiptDetails)
-                            {
-                                int utlSrvId = receiptDetail.UtilityServiceId.Value;
-                                receiptDetail.UtilityServiceId = null;
-                                _receiptDetailServices.DeleteById(receiptDetail.Id);
-                                _utilityServiceServices.DeleteById(utlSrvId);
-
-                                foreach (var trans in receiptDetail.Transactions.Where(trans => trans.BlsId == curBalanceSheet.Id))
-                                {
-                                    _transactionService.DeleteById(trans.Id);
-                                }
-                            }
-
-                        }
+                        _transactionService.DeleteById(currentTransaction.Id);
+                        _receiptDetailServices.DeleteById(receiptDetailId);
+                        _receiptService.DeleteById(receiptId);
                     }
                 }
 
@@ -647,17 +633,17 @@ namespace AMS.Controllers
 
         [HttpGet]
         [Route("Management/BalanceSheet/GetTransItemDetail")]
-        public ActionResult GetTransItemDetail(int id, int utilSrvCatId, int blsId)
+        public ActionResult GetTransItemDetail(int transId, int blsId)
         {
             MessageViewModels response = new MessageViewModels();
             User u = _userServices.FindById(Int32.Parse(User.Identity.GetUserId()));
             if (u != null)
             {
-                Receipt receipt = _receiptService.FindById(id);
+                Transaction currentTransaction = _transactionService.FindById(transId);
                 BalanceSheet thisBalanceSheet = _balanceSheetService.FindById(blsId);
                 ReceiptDetail receiptDetail = null;
                 Transaction currentTran = null;
-                if (null != receipt && thisBalanceSheet != null)
+                if (null != currentTransaction && thisBalanceSheet != null)
                 {
                     TransactionModel model = new TransactionModel();
 
@@ -666,30 +652,21 @@ namespace AMS.Controllers
                     double totalAmountMonth = 0;
 
                     List<Transaction> currentTrans = null;
-                    if (receipt.House == null)
-                    {
-                        currentTrans =
-                            thisBalanceSheet.Transactions.Where(trans => trans.ReceiptDetail.ReceiptId == id).ToList();
-                        currentTran = currentTrans.First();
 
-                        foreach (var oldTrans in currentTrans)
-                        {
-                            if (oldTrans.BlsId == thisBalanceSheet.Id)
-                            {
-                                totalPaidThisMonth += oldTrans.PaidAmount.Value;
-                                totalAmountMonth += oldTrans.TotalAmount.Value;
-                            }
-                        }
+
+                    if (currentTransaction.ReceiptDetail.Receipt.House == null)
+                    {
+                        totalPaidThisMonth = currentTransaction.PaidAmount.Value;
+                        totalAmountMonth = currentTransaction.TotalAmount.Value;
                     }
                     else
                     {
                         var groupByCatTrans = new List<UtilSrvCatTransaction>();
                         List<Transaction> listTransaction = thisBalanceSheet.Transactions
-                            .Where(trans => trans.ReceiptDetail.UtilityService.UtilSrvCatId == utilSrvCatId && trans.ReceiptDetail.Receipt.BlsId == receipt.BlsId).ToList();
+                            .Where(trans => trans.ReceiptDetail.UtilityService.UtilSrvCatId == currentTransaction.ReceiptDetail.UtilityService.UtilSrvCatId).ToList();
                         groupByCatTrans = listTransaction
                                 .GroupBy(trans => new
                                 {
-                                    trans.ReceiptDetail.Receipt.BlsId,
                                     trans.ReceiptDetail.UtilityService.UtilSrvCatId
                                 })
                                 .Select(trans => new UtilSrvCatTransaction(trans.First(),
@@ -699,10 +676,9 @@ namespace AMS.Controllers
                         currentTran = groupByCatTrans.First().Transaction;
                         totalAmountMonth = groupByCatTrans.First().TotalAmount;
                         totalPaidThisMonth = groupByCatTrans.First().TotalPaid;
-
                     }
-                    receiptDetail = currentTran.ReceiptDetail;
 
+                    receiptDetail = currentTran.ReceiptDetail;
                     currentTran.TotalAmount = totalAmountMonth;
                     currentTran.PaidAmount = totalPaidThisMonth;
 
@@ -712,10 +688,10 @@ namespace AMS.Controllers
 
                     model.UtilSrvCatName = receiptDetail.UtilityService.UtilServiceCategory.Name;
                     model.UtilSrvCatId = receiptDetail.UtilityService.UtilServiceCategory.Id;
-                    model.TransDesc = receipt.Description;
+                    model.TransDesc = currentTransaction.ReceiptDetail.Receipt.Description;
                     model.TransStartDate =
-                        receipt.BalanceSheet.CreateDate.Value.ToString(AmsConstants.MonthYearFormat);
-                    model.TransType = receipt.Type.Value;
+                        currentTransaction.ReceiptDetail.Receipt.BalanceSheet.CreateDate.Value.ToString(AmsConstants.MonthYearFormat);
+                    model.TransType = currentTransaction.ReceiptDetail.Receipt.Type.Value;
 
                     model.TransTitle = receiptDetail.Receipt.Title;
 
@@ -732,8 +708,8 @@ namespace AMS.Controllers
                         model.TransTitle = new StringBuilder("Thu tiền dịch vụ sửa chữa [ ").Append(model.TransStartDate).Append(" ]").ToString();
                     }
 
-                    model.ReceiptId = receipt.Id;
-                    model.BalanceSheetId = receipt.BalanceSheet.Id;
+                    model.ReceiptId = currentTransaction.ReceiptDetail.Receipt.Id;
+                    model.BalanceSheetId = currentTransaction.ReceiptDetail.Receipt.BalanceSheet.Id;
                     response.Data = model;
                 }
                 else

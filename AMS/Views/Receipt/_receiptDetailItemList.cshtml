@@ -20,9 +20,12 @@
                 <input id="item_unit_price_@index" value="@detail.UnitPrice.Value.ToString("N0")" type="text" class="form-control order-item-price">
             </div>
             <div class="col-sm-2">
-                <input id="item_qty_price_@index" readonly="readonly" value="@((detail.UnitPrice * detail.Quantity).Value.ToString("N0"))" name="" type="text" class="form-control total-order">
+                <input id="item_qty_price_@index" readonly="readonly" value="@((detail.UnitPrice*detail.Quantity).Value.ToString("N0"))" name="" type="text" class="form-control total-order">
             </div>
-            <span class="btn btn-danger btn-xs" onclick="deleteItem(@index)"><i class="fa fa-times"></i></span>
+            @if (detail.Receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
+            {
+                <span class="btn btn-danger btn-xs" onclick="deleteItem(@index)"><i class="fa fa-times"></i></span>
+            }
             <input type="hidden" id="item_id_@index" value="@detail.Id" name="" />
         </div>
     }

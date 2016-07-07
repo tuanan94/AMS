@@ -12,7 +12,7 @@
             <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Quản lý nhân viên hỗ trợ</span>
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li>
-                    <a href="/Management/ManageUser/ViewResidentList"><i class="fa fa-users"></i> Dân cư</a>
+                    <a href="/Management/ManageUser/ViewResidentList"><i class="fa fa-users"></i> Cư dân</a>
                 </li>
                 <li class="active">
                     <a href="/Management/ManageUser/ViewSupporterList"><i class="fa fa-user-md "></i> Nhân viên hỗ trợ</a>
@@ -65,6 +65,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="title">Thêm cư dân</h4>
             </div>
+            <form id="addResidentForm" class="form-horizontal" role="form">
             <div class="modal-body">
                 <div class="panel-body">
                     <div class="alert alert-info" id="addResSuccessNoti" style="display: none">
@@ -80,7 +81,6 @@
                         <span id="addTransMsg"></span>
                     </div>
 
-                    <form id="addResidentForm" class="form-horizontal" role="form">
                         <div class="form-group">
                             <label for="resName" class="col-md-3 control-label">Họ tên</label>
                             <div class="col-md-9">
@@ -126,14 +126,15 @@
                         </div>
                         <input type="hidden" id="accountId" name="Id" />
                         <input type="hidden" id="roleId" value="@SLIM_CONFIG.USER_ROLE_SUPPORTER" name="RoldId" />
-                    </form>
+
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                <span id="btnAdd" type="button" class="btn btn-info hide" onclick="addNewResident()">Chấp nhận</span>
-                <span id="btnUpdate" type="button" class="btn btn-info hide" onclick="updateResident()">Chấp nhận</span>
+                    <button id="btnAdd" type="submit" class="btn btn-info hide">Chấp nhận</button>
+                    <button id="btnUpdate" type="submit" class="btn btn-info hide">Chấp nhận</button>
             </div>
+            </form>
         </div>
     </div>
 </div>
@@ -207,10 +208,10 @@
                 var deleteBtn =
             "<div class='hide' id='delConsumptionRecordBtnGroup'>" +
                 "<span class='btn btn-warning btn-stroke' onclick='cancelDeleteConsumptionRecord()'>" +
-                    "<i class='fa fa-plus'></i> Hủy" +
+                    " Hủy" +
                 "</span>" +
                 "<span class='btn btn-primary' style='margin-left: 5px' onclick='commitDeleteConsumptionRecord()'>" +
-                    "<i class='fa fa-plus'></i> Chấp nhận" +
+                    "Chấp nhận" +
                 "</span>" +
             "</div>";
                 $("#manageUserListTbl_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(deleteBtn);
@@ -344,6 +345,7 @@
                 });
             }
         });
+        validateForm();
     });
 
     function openAddNewUserModal() {
@@ -467,15 +469,54 @@
             }
         });
     }
-
-
-
     function deleteConsumptionRecord(id) {
         //        var element = $("#resident_" + id).addClass("hide");
         window.deleteRes.push(id);
         window.manageUserListTbl.row("#employee_" + id).remove().draw(false);
         $("#delConsumptionRecordBtnGroup").removeClass("hide").addClass("show");
+    } $("#addResidentForm").validate({
+        rules: {
+            Name: {
+                required: true,
+                maxlength: 255
+            },
+            UserAccountName: {
+                required: true,
+                maxlength: 255
+            },
+            CellNumb: {
+                required: true,
+                maxlength: 11
+            },
+            Dob: {
+                required: true
     }
+        },
+        messages: {
+            Name: {
+                required: "Vui lòng nhập họ tên.",
+                maxlength: "Họ tên không dài quá 255 ký tự."
+            },
+            UserAccountName: {
+                required: "Vui lòng nhập tên đăng nhập",
+                maxlength: "Tên đăng nhập không dài quá 255 ký tự."
+            },
+            CellNumb: {
+                required: "Vui lòng nhập số điện thoại.",
+                maxlength: "Số điện thoại không dài quá 11 ký số."
+            },
+            Dob: {
+                required: "Vui lòng nhập ngày sinh.",
+            }
+        },
+        submitHandler: function () {
+            if ($("#btnUpdate").hasClass("hide")) {
+                addNewResident();
+            } else {
+                updateResident();
+            }
+        }
+    });
     function cancelDeleteConsumptionRecord() {
         for (var i = 0; i < window.residentList.length; i++) {
             var originItem = window.residentList[i];
@@ -514,4 +555,63 @@
         });
     }
 
+    function validateForm() {
+        $("#addResidentForm").validate({
+            rules: {
+                Name: {
+                    required: true,
+                    maxlength: 255
+                },
+                UserAccountName: {
+                    required: true,
+                    maxlength: 255
+                },
+                CellNumb: {
+                    required: true,
+                    maxlength: 11
+                },
+                Dob: {
+                    required: true
+                },
+                Idenity: {
+                    required: true,
+                    maxlength: 9
+                },
+                IdCreateDate: {
+                    required: true
+                }
+            },
+            messages: {
+                Name: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 255 ký tự."
+                },
+                UserAccountName: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 255 ký tự."
+                },
+                CellNumb: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 11 ký tự."
+                },
+                Dob: {
+                    required: "Trường bắt buộc"
+                },
+                Idenity: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 9 ký tự."
+                },
+                IdCreateDate: {
+                    required: "Trường bắt buộc",
+                },
+            },
+            submitHandler: function () {
+                if ($("#btnUpdate").hasClass("hide")) {
+                    addNewResident();
+                } else {
+                    updateResident();
+                }
+            }
+        });
+    }
 </script>

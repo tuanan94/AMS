@@ -64,24 +64,23 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="title">Thêm mới cư dân</h4>
             </div>
-            <div class="modal-body">
-                <div class="panel-body">
-                    
-                    <div class="alert alert-info" id="addResSuccessNoti" style="display: none">
-                        <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span id="successMsg">Thêm cư dân thành công</span>
-                    </div>
+            <form id="addResidentForm" class="form-horizontal" role="form">
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <div class="alert alert-info" id="addResSuccessNoti" style="display: none">
+                            <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span id="successMsg">Thêm cư dân thành công</span>
+                        </div>
 
-                    <div class="alert alert-danger" id="addResFailedNoti" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                        <span id="failedMsg">Thêm cư dân thất bại</span>
-                    </div>
-                    <div class="alert alert-danger" id="msgAddFailedNoty" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span id="addTransMsg"></span>
-                    </div>
+                        <div class="alert alert-danger" id="addResFailedNoti" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                            <span id="failedMsg">Thêm cư dân thất bại</span>
+                        </div>
+                        <div class="alert alert-danger" id="msgAddFailedNoty" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span id="addTransMsg"></span>
+                        </div>
 
-                    <form id="addResidentForm" class="form-horizontal" role="form">
                         <div class="form-group">
                             <label for="resName" class="col-md-3 control-label">Họ tên</label>
                             <div class="col-md-9">
@@ -89,17 +88,17 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="resName" class="col-md-3 control-label">Tên đăng nhập</label>
+                            <label for="userAccountName" class="col-md-3 control-label">Tên đăng nhập</label>
                             <div class="col-md-4">
                                 <input id="userAccountName" name="UserAccountName" type="text" class="form-control" value="">
                             </div>
-                            <label for="resName" class="col-md-1 control-label">ĐTDĐ </label>
+                            <label for="cellNumb" class="col-md-1 control-label">ĐTDĐ </label>
                             <div class="col-md-4">
                                 <input id="cellNumb" name="CellNumb" type="text" class="form-control" value="">
                             </div>
                         </div>
                         <div class="form-group res-info">
-                            <label for="resId" class="col-md-3 control-label">Ngày sinh</label>
+                            <label for="dob" class="col-md-3 control-label">Ngày sinh</label>
                             <div class="col-md-4">
                                 <input id="dob" type="text" name="Dob" class="form-control datepicker" data-date-format="dd-mm-yyyy" data-date-language="vi"
                                        data-date-min-view-mode="0" data-date-today-highlight="true" data-date-end-date="0m">
@@ -107,10 +106,10 @@
                             <label class="col-md-1 control-label">Giới tính</label>
                             <div class="col-md-4">
                                 <label class="radio-inline">
-                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_MALE" name="Gender"/>Nam
+                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_MALE" name="Gender" />Nam
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_FEMALE" name="Gender" checked="checked"/>Nữ
+                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_FEMALE" name="Gender" checked="checked" />Nữ
                                 </label>
                             </div>
                         </div>
@@ -147,15 +146,15 @@
                             <label class="col-md-3 control-label ">Chủ hộ</label>
                             <div class="col-md-9">
                                 <label class="radio-inline">
-                                    <input type="radio" value="@SLIM_CONFIG.USER_ROLE_HOUSEHOLDER" name="IsHouseOwner"/>Có
+                                    <input type="radio" value="@SLIM_CONFIG.USER_ROLE_HOUSEHOLDER" name="IsHouseOwner" />Có
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" value="@SLIM_CONFIG.USER_ROLE_RESIDENT" name="IsHouseOwner" checked="checked"/>Không
+                                    <input type="radio" value="@SLIM_CONFIG.USER_ROLE_RESIDENT" name="IsHouseOwner" checked="checked" />Không
                                 </label>
                             </div>
                         </div>
                         <div class="form-group res-info">
-                            <label class="col-md-3 control-label ">Mối quan hệ</label>
+                            <label for="ownerRelationShip" class="col-md-3 control-label ">Mối quan hệ</label>
                             <div class="col-md-9">
                                 <select class="form-control" id="ownerRelationShip" name="RelationLevel">
                                     <option value="0">Vợ, Chồng, Anh, Chị, Em, Bạn...</option>
@@ -166,15 +165,17 @@
                                 </select>
                             </div>
                         </div>
-                        <input type="hidden" id="accountId" name="Id"/>
-                    </form>
+                        <input type="hidden" id="accountId" name="Id" />
+
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                <span id="btnAdd" type="button" class="btn btn-info hide" onclick="addNewResident()">Chấp nhận</span>
-                <span id="btnUpdate" type="button" class="btn btn-info hide" onclick="updateResident()">Chấp nhận</span>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    @*                    <button id="btnAdd" type="button" class="btn btn-info hide" onclick="addNewResident()">Chấp nhận</button>*@
+                    <button id="btnAdd" name="btnAdd" type="submit" class="btn btn-info hide">Chấp nhận</button>
+                    <button id="btnUpdate" type="submit" type="button" class="btn btn-info hide">Chấp nhận</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -204,6 +205,8 @@
 
 <script>
     $(document).ready(function () {
+        validateAddNewResident();
+
         $("#slide-left").children().removeClass("active");
         $($("#slide-left li")[4]).addClass("active");
 
@@ -231,10 +234,10 @@
                 var deleteBtn =
             "<div class='hide' id='delConsumptionRecordBtnGroup'>" +
                 "<span class='btn btn-warning btn-stroke' onclick='cancelDeleteConsumptionRecord()'>" +
-                    "<i class='fa fa-plus'></i> Hủy" +
+                    "Hủy" +
                 "</span>" +
                 "<span class='btn btn-primary' style='margin-left: 5px' onclick='commitDeleteConsumptionRecord()'>" +
-                    "<i class='fa fa-plus'></i> Chấp nhận" +
+                    "Chấp nhận" +
                 "</span>" +
             "</div>";
                 $("#manageUserListTbl_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(deleteBtn);
@@ -363,7 +366,7 @@
                     }
                 }
 
-            ], 
+            ],
         });
 
         generateTableIndex(window.manageUserListTbl);
@@ -410,6 +413,7 @@
                 });
             }
         });
+
     });
 
     function openAddNewUserModal() {
@@ -501,7 +505,6 @@
         });
     }
 
-
     function addNewResident() {
         $.ajax({
             "url": "/Management/ManageUser/AddNewResident",
@@ -572,8 +575,6 @@
         disabled.attr('disabled', 'disabled');
     }
 
-
-
     function deleteConsumptionRecord(id) {
         //        var element = $("#resident_" + id).addClass("hide");
         window.deleteRes.push(id);
@@ -612,4 +613,63 @@
         });
     }
 
+    //    function validForm() {
+    //        $("#addResidentForm").valid();
+    //    }
+
+    function validateAddNewResident() {
+        $("#addResidentForm").validate({
+            rules: {
+                Name: {
+                    required: true,
+                    maxlength: 255
+                },
+                UserAccountName: {
+                    required: true,
+                    maxlength: 255
+                },
+                CellNumb: {
+                    required: true,
+                    number: true,
+                    maxlength: 11
+                },
+                Dob: {
+                    required: true
+                },
+                Idenity: {
+                    maxlength: 9,
+                    number: true
+                },
+            },
+            messages: {
+                Name: {
+                    required: "Vui lòng nhập họ tên.",
+                    maxlength: "Họ tên không dài quá 255 ký tự."
+                },
+                UserAccountName: {
+                    required: "Vui lòng nhập tên đăng nhập",
+                    maxlength: "Tên đăng nhập không dài quá 255 ký tự."
+                },
+                CellNumb: {
+                    required: "Vui lòng nhập số điện thoại.",
+                    number: "Số điện thoại phải là ký số",
+                    maxlength: "Số điện thoại không dài quá 11 ký số."
+                },
+                Dob: {
+                    required: "Vui lòng nhập ngày sinh.",
+                },
+                Idenity: {
+                    number: "CMND phải là ký số",
+                    maxlength: "Tối đa 9 ký tự."
+                }
+            },
+            submitHandler: function () {
+                if ($("#btnUpdate").hasClass("hide")) {
+                    addNewResident();
+                } else {
+                    updateResident();
+                }
+            }
+        });
+    }
 </script>

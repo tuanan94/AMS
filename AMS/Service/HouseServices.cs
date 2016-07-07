@@ -23,6 +23,14 @@ namespace AMS.Service
         {
             _houseRepository.Delete(house);
         }
+        public void DeleteById(int houseId)
+        {
+            House house = _houseRepository.FindById(houseId);
+            if (house != null)
+            {
+                _houseRepository.Delete(house);
+            }
+        }
         public House FindByHouseName(string houseName)
         {
             return _houseRepository.List.Where(h => h.HouseName.ToLower().Contains(houseName.ToLower())).First();
@@ -104,6 +112,10 @@ namespace AMS.Service
         {
             return _blockRepository.List.Where(t => t.Id != blockId && t.BlockName.Equals(name)).ToList().Count == 0 ? false : true;
         }
+        public bool CheckBlockNameIsExisted(string name)
+        {
+            return _blockRepository.List.Where(t => t.BlockName.Equals(name)).ToList().Count == 0 ? false : true;
+        }
         public void Add(Block block)
         {
             _blockRepository.Add(block);
@@ -111,6 +123,18 @@ namespace AMS.Service
         public void Update(Block block)
         {
             _blockRepository.Update(block);
+        }
+        public void Delete(Block block)
+        {
+            _blockRepository.Delete(block);
+        }
+        public void Delete(int blockId)
+        {
+            Block block = _blockRepository.FindById(blockId);
+            if (block != null)
+            {
+                _blockRepository.Delete(block);
+            }
         }
     }
 

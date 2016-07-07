@@ -16,21 +16,25 @@
 
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li class="active">
-                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-file-text-o"></i> Phí sinh họat</a>
-                </li>
-                <li>
-                    <a href="/Management/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Quản lý nhà</a>
+                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-usd"></i> Phí sinh họat</a>
                 </li>
                 <li class="">
                     <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-home"></i> Căn hộ</a>
+                </li>
+                <li class="">
+                    <a href="/Management/ManageRequestView"><i class="fa fa-wrench"></i> DV sửa chữa</a>
+                </li>
+                <li>
+                    <a href="/Management/ViewHelpdeskServiceCategory"><i class="fa fa fa-tags"></i> Nhóm DV sửa chữa</a>
+                </li>
+                <li class="">
+                    <a href="/Management/BalanceSheet/ManageTransactionCatView"><i class="fa fa-tags"></i> Nhóm thu chi</a>
                 </li>
             </ul>
         </div>
 
         <div class="panel-body">
             <div class="tab-content">
-                <div class="tab-pane fade active in" id="">
-                    <div class="panel panel-default" style="border-color: transparent">
                         <form id="addUtilServiceForm" class="form-horizontal" role="form">
                             <div class="alert alert-info" id="createSuccessNoti" style="display: none">
                                 <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -55,7 +59,7 @@
                                     <div class="form-group">
                                         <div class="col-md-offset-1 col-md-10">
                                             <fieldset class="scheduler-border less-padding">
-                                                <legend class="scheduler-border">Thông tin</legend>
+                                        <legend class="scheduler-border bold-black">Thông tin</legend>
                                                 <div class="form-group">
                                                     <div class="col-md-2">
                                                         <div class="form-group">
@@ -84,10 +88,9 @@
                                                                             <span id="btnOpen" class="btn btn-success btn-block">Mở</span>
                                                                         }
                                                                     }
-                                                                    </
-                                                                    div>
                                                                 </div>
                                                             </div>
+                                                </div>
                                                             <div class="form-group">
                                                                 <div class="col-md-6">
                                                                     @{
@@ -122,6 +125,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
                                             </fieldset>
                                         </div>
                                     </div>
@@ -130,7 +134,7 @@
                                         <div class="form-group" id="UtilityServiceWrapper">
                                             <div class="col-md-offset-1 col-md-10">
                                                 <fieldset class="scheduler-border less-padding">
-                                                    <legend class="scheduler-border">Cư dân trong hộ khẩu</legend>
+                                            <legend class="scheduler-border bold-black">Cư dân trong hộ khẩu</legend>
 
                                                     <div>
                                                         <div class="form-group">
@@ -152,17 +156,17 @@
                                                             {
                                                                 <div id="row_@index" class="form-group">
                                                                     <div class="col-md-offset-1 col-md-4">
-                                                                        <input id="range_name_@index" name="" type="text" class="form-control order-item" value="@rangePrice.Name">
+                                                                <input id="range_name_@index" name="RangeName" type="text" class="form-control order-item" value="@rangePrice.Name">
                                                                     </div>
                                                                     <div class="col-md-2">
-                                                                        <input id="from_amount_@index" name="" readonly="readonly" type="text" class="form-control order-item-qty" value="@rangePrice.FromAmount">
+                                                                <input id="from_amount_@index" name="RangeFrom" readonly="readonly" type="text" class="form-control order-item-qty" value="@rangePrice.FromAmount">
                                                                     </div>
                                                                     <div class="col-md-2">
-                                                                        <input id="to_amount_@index" name="" type="text" class="form-control order-item-price" 
+                                                                <input id="to_amount_@index" name="RangeTo" type="text" class="form-control order-item-price"
                                                                                value="@(rangePrice.ToAmount.Value == (SLIM_CONFIG.MAX_NUMBER) ? "*" : rangePrice.ToAmount.Value.ToString())">
                                                                     </div>
                                                                     <div class="col-md-2">
-                                                                        <input id="price_@index" name="" type="text" class="form-control total-order"
+                                                                <input id="price_@index" name="RangePrice" type="text" class="form-control total-order"
                                                                                value="@(rangePrice.Price.Value.ToString("N0"))">
                                                                     </div>
                                                                     <span class="btn btn-danger btn-xs on-delete"><i class="fa fa-times"></i></span>
@@ -175,6 +179,7 @@
                                                             }
                                                         </div>
                                                         <input type="hidden" id="utilSrvForHouseCatId" value="@utilSrvForHouseCat.Id">
+                                                <input type="hidden" id="utilSrvCat" value="@utilSrvForHouseCat.UtilityService.Type" />
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="col-md-3">
@@ -190,7 +195,7 @@
                                         <div class="form-group" id="UtilityServiceWrapper">
                                             <div class="col-md-offset-1 col-md-10">
                                                 <fieldset class="scheduler-border less-padding">
-                                                    <legend class="scheduler-border">Phí cố định</legend>
+                                            <legend class="scheduler-border bold-black">Phí cố định</legend>
                                                     <div class="form-group">
                                                         <div class="col-md-offset-2 col-md-6">
                                                             <strong style="align-content: center">Tên phí cố định</strong>
@@ -202,15 +207,16 @@
                                                     <div id="fixedCostWrapper">
                                                         <div id="row_1" class="form-group">
                                                             <div class="col-md-offset-2 col-md-7">
-                                                                <input id="fixed_cost_name_1" value="@utilSrvForHouseCat.UtilityService.Name" type="text" class="form-control order-item">
+                                                        <input id="fixed_cost_name_1" name="FixCostName" value="@utilSrvForHouseCat.UtilityService.Name" type="text" class="form-control order-item">
                                                             </div>
                                                             <div class="col-md-2">
-                                                                <input id="fixed_cost_price_1" value="@utilSrvForHouseCat.UtilityService.UtilityServiceRangePrices.ToList().First().Price.Value.ToString("N0")"
+                                                        <input id="fixed_cost_price_1" name="FixCosPrice" value="@utilSrvForHouseCat.UtilityService.UtilityServiceRangePrices.ToList().First().Price.Value.ToString("N0")"
                                                                        type="text" class="form-control order-item-qty">
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <input type="hidden" id="fixedCostUtilSrvId" value="@utilSrvForHouseCat.UtilityService.Id" />
+                                            <input type="hidden" id="utilSrvCat" value="@utilSrvForHouseCat.UtilityService.Type" />
                                                 </fieldset>
                                             </div>
                                         </div>
@@ -220,7 +226,7 @@
                                     <div class="form-horizontal">
                                         <div class="form-group">
                                             <div class="pull-right">
-                                                <span class="btn btn-info" onclick="updateUtilServicePrice(@utilSrvForHouseCat.UtilityService.Type)"><i class="fa fa-floppy-o"></i> Cập nhật</span>
+                                        <button type="submit" class="btn btn-info" ><i class="fa fa-floppy-o"></i> Cập nhật</button>
                                             </div>
                                         </div>
                                     </div>
@@ -231,8 +237,6 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
 <div id="fixedCostFrame" class="hide">
 
@@ -262,6 +266,8 @@
             bindingEventOnDelet();
         });
         onChangeFromNumber();
+        bindingClassNumberWithComma("total-order");
+        validCreateUtilityService();
     });
     function onDeleteRow(event) {
         event.stopPropagation();
@@ -277,6 +283,7 @@
             //            window.deleteRangePrice
         }
         event.stopPropagation();
+        $("#addUtilServiceForm").closest("form").find("input[type=text].order-item-qty:first").val("0");
     }
     function bindingEventOnDelet() {
         $(".on-delete").unbind();
@@ -295,6 +302,7 @@
         addRangePrice(index, wrapperId);
         bindingEventOnDelet();
         onChangeFromNumber();
+        bindingClassNumberWithComma("total-order");
     }
     function createNewFixedCostRow(wrapperId) {
         window.index++;
@@ -313,10 +321,10 @@
     }
     function addRangePrice(index, parentTagId) {
         var tag = "<div id=\"row_" + index + "\" class='form-group'>" +
-                "<div class='col-md-offset-1 col-md-4'><input id=\"range_name_" + index + "\" type='text' class='form-control order-item'></div>" +
-                "<div class='col-sm-2'><input  readonly='readonly' type='text' id=\"from_amount_" + index + "\" class='form-control order-item-qty'></div>" +
-                "<div class='col-sm-2'><input id=\"to_amount_" + index + "\"type='text' class='form-control order-item-price'></div>" +
-                "<div class='col-sm-2'><input id=\"price_" + index + "\" type='text' class='form-control'></div>" +
+                "<div class='col-md-offset-1 col-md-4'><input id=\"range_name_" + index + "\" type='text' name='RangeName' class='form-control order-item'></div>" +
+                "<div class='col-sm-2'><input  readonly='readonly' type='text' id=\"from_amount_" + index + "\" name='RangeFrom'  class='form-control order-item-qty'></div>" +
+                "<div class='col-sm-2'><input id=\"to_amount_" + index + "\"type='text' name='RangeTo'class='form-control order-item-price'></div>" +
+                "<div class='col-sm-2'><input id=\"price_" + index + "\" type='text' name='RangePrice'class='form-control total-order'></div>" +
                 "<span class='btn btn-danger btn-xs on-delete'><i class='fa fa-times'></i></span>" +
                 "<input type='hidden' id='range_price_id_" + index + "' name='rangePriceId' value='0'/>"+
                 "</div>";
@@ -332,8 +340,6 @@
                     "    </div>" +
                     "   <span class='btn btn-danger btn-xs on-delete'><i class='fa fa-times'></i></span>" +
                     "  </div>";
-
-
         $("#" + parentTagId).append(tag);
     }
 
@@ -392,6 +398,7 @@
                 success: function (data) {
                     if (data.StatusCode === 0) {
                         $("#createSuccessNoti").fadeIn("fast");
+                        window.deleteRangePrice = new Array();
                         setTimeout(function () {
                             $("#createSuccessNoti").fadeOut("fast");
                         }, 3000);
@@ -466,6 +473,74 @@
                         $("#createFailedNoti").fadeOut("fast");
                     },3000);
                 }
+            }
+        });
+    }
+    function validCreateUtilityService() {
+        $("#addUtilServiceForm").validate({
+            rules: {
+                ServiceTypeName: {
+                    required: true,
+                    maxlength: 255
+                },
+                RangeName: {
+                    required: function (elem) {
+                        if ($(elem).val()) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                },
+                RangeTo: {
+                    required: function (elem) {
+                        if ($(elem).val()) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                },
+                RangePrice: {
+                    required: function (elem) {
+                        if ($(elem).val()) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                },
+                FixCostName: {
+                    required: true,
+                },
+                FixCosPrice: {
+                    required: true,
+                }
+            },
+            messages: {
+                ServiceTypeName: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 255 ký tự."
+                },
+                RangeName: {
+                    required: "Trường bắt buộc"
+                },
+                RangeTo: {
+                    required: "Trường bắt buộc"
+                },
+                RangePrice: {
+                    required: "Trường bắt buộc"
+                },
+                FixCostName: {
+                    required: "Trường bắt buộc"
+                },
+                FixCosPrice: {
+                    required: "Trường bắt buộc"
+                }
+            },
+            submitHandler: function () {
+                var utilSrvCat = $("#utilSrvCat").val();
+                updateUtilServicePrice(parseInt(utilSrvCat));
             }
         });
     }

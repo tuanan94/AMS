@@ -306,8 +306,28 @@ function hdRequestDetail(id) {
     $("#hdReq_" + id).addClass("active");
     getHelpdeskDetail(id);
 }
+$.extend(true, $.fn.dataTable.defaults, {
+    oLanguage: {
+        //    "sSearch": "Tìm Kiếm" //search,
+        "sProcessing": "Đang xử lý...",
+        "sLengthMenu": "Xem _MENU_ mục",
+        "sEmptyTable": "Không tìm thấy dòng nào phù hợp",
+        "sZeroRecords": "Không tìm thấy dòng nào phù hợp",
+        "sInfo": "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+        "sInfoEmpty": "Đang xem 0 đến 0 trong tổng số 0 mục",
+        "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+        "sInfoPostFix": "",
+        "sSearch": "Tìm:",
+        "sUrl": "",
+        "oPaginate": {
+            "sFirst": "Đầu",
+            "sPrevious": "Trước",
+            "sNext": "Tiếp",
+            "sLast": "Cuối"
+        }
+    }
+});
 $(document).ready(function () {
-    $("#hdReqDueDateTime").timepicker({ "scrollDefault": "5:30 pm" });
     $("#addHelpdeskRequestForm").validate({
         rules: {
             hdSrvName: {
@@ -554,12 +574,11 @@ $(document).ready(function () {
         "drawCallback": function (settings) {
             var html =
             "<div class='hide' id='delHdSrvBtnGroup'>" +
-                "<span class='btn btn-inverse' onclick='cancelDeleteHdSrvCategory()'" +
-                    "style='color: #ab7a4b; border-color: transparent;'>" +
-                    "<i class='fa fa-plus'></i> Cancel" +
+                "<span class='btn btn-warning btn-stroke' onclick='cancelDeleteHdSrvCategory()'>" +
+                    "Hủy" +
                 "</span>" +
                 "<span class='btn btn-primary' style='margin-left: 5px' onclick='commitDeleteHdSrvCategory()'>" +
-                    "<i class='fa fa-plus'></i> Delete" +
+                    "Cấp nhận" +
                 "</span>" +
             "</div>";
             $("#hdSrvCatTable_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(html);
@@ -578,12 +597,11 @@ $(document).ready(function () {
         "drawCallback": function (settings) {
             var html =
             "<div class='hide' id='delBtnGroup'>" +
-                "<span class='btn btn-inverse' onclick='cancelDeleteHelpdeskService()'" +
-                    "style='color: #ab7a4b; border-color: transparent;'>" +
-                    "<i class='fa fa-plus'></i> Cancel" +
+                "<span class='btn btn-warning btn-stroke' onclick='cancelDeleteHelpdeskService()'" +
+                    "<i class='fa fa-plus'></i> Hủy" +
                 "</span>" +
                 "<span class='btn btn-primary' style='margin-left: 5px' onclick='commitDeleteHelpdeskService()'>" +
-                    "<i class='fa fa-plus'></i> Delete" +
+                    "<i class='fa fa-plus'></i> Chấp nhận" +
                 "</span>" +
             "</div>";
             $("#hdSrvTable_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(html);
@@ -597,6 +615,8 @@ $(document).ready(function () {
         }
     });
 
+    
+
     activeNavigationBar();
 });
 
@@ -607,12 +627,18 @@ function activeNavigationBar() {
         $("#hdRequestNav").addClass("active");
     } else if (pathName.indexOf("/ManageReceipt/") > -1) {
         $("#receiptNav").addClass("active");
-    } else if (pathName.indexOf("/BalanceSheet/") > -1) {
+    } else if (pathName.indexOf("/BalanceSheet/") > -1 && pathName.indexOf("/BalanceSheet/ManageTransactionCatView") == -1) {
         $("#balanceSheetNav").addClass("active");
-    } else if (pathName.indexOf("/Config/") > -1) {
+    } else if (pathName.indexOf("/Config/") > -1 || pathName.indexOf("/ManageRequestView") > -1
+        || pathName.indexOf("/ViewHelpdeskServiceCategory") > -1
+        || pathName.indexOf("/BalanceSheet/ManageTransactionCatView") > -1) {
         $("#configNav").addClass("active");
     } else if (pathName.indexOf("/ManageUser/") > -1) {
         $("#userNav").addClass("active");
+    } else if (pathName.indexOf("/Report/") > -1) {
+        $("#reportNav").addClass("active");
+    } else if (pathName.indexOf("/Survey/") > -1) {
+        $("#surveyNav").addClass("active");
     } else {
     }
 }
@@ -780,20 +806,7 @@ function openModalAssignHdReq(hdReqId) {
         }
     });
 }
-function submitAssignTask() {
-    $("#assignTaskForm").submit();
-}
-function setDueDate() {
-    var dataTag = document.getElementById("btnDuedate");
-    var hdReqId = dataTag.dataset.id;
-    var fromUserId = dataTag.dataset.userid;
-    $("#HdReqId_2").val(hdReqId);
-    $("#FromUserId_2").val(fromUserId);
-    var dueDate = $("#hdReqDueDateDate").val();
-    var dueTime = $("#hdReqDueDateTime").val();
-    $("#DueDate").val(dueDate + " " + dueTime);
-    $("#setDuedateForm").submit();
-}
+
 
 function showEditHdReqModal(id) {
     //    getHelpdeskServiceType("hdSrvCatName", function () {
@@ -865,59 +878,7 @@ function parseJsonToSelectTags(listJson, selectedId, msg) {
     return selectTagList;
 }
 
-function resInfoDetail(id) {
-    var action = "GetResidentInfo";
-    $.ajax({
-        type: "get",
-        url: "/Management/ResidentApprovement/" + action,
-        data: { userId: id },
-        success: function (data) {
-            var obj = data.Data;
-            var fullName = obj.FullName;
-            var houseName = obj.HouseName;
-            var houseHolderName = obj.HouseHolderName;
-            var createDate = obj.CreateDate;
-            var id = obj.Id;
-            var gender = obj.Gender;
 
-            $("#resName").val(fullName);
-            $("#resHouseName").val(houseName);
-            $("#resId").val(id);
-            $("#resHouseHolder").val(houseHolderName);
-            $("#resCreateDate").val(createDate);
-
-            var genderText = "";
-            if (gender === 0) {
-                genderText = "Nữ";
-            } else if (gender === 1) {
-                genderText = "Nam";
-            } else {
-                genderText = "Chưa xác định";
-            }
-            $("#resGender").val(genderText);
-            $("#residentInfoDetail").modal("show");
-        },
-        error: function (data) {
-
-        }
-    });
-}
-/* Start Js for controller*/
-function showConfirmMsg(mode, id, userName, houseName) {
-    $("#residentId").val(id);
-    var modeNum = 0;
-    var msg = "";
-    if (mode === "accept") {
-        msg = "<strong>Chấp nhận</strong> yêu cầu cư dân <strong>" + userName + "</strong> là thành viên của căn hộ <strong>" + houseName + "</strong>";
-        modeNum = 1;
-    } else {
-        msg = "<strong>Từ chối</strong> yêu cầu cư dân <strong>" + userName + "</strong> là thành viên của căn hộ <strong>" + houseName + "</strong>";
-        modeNum = 2;
-    }
-    $("#mode").val(modeNum);
-    $("#msgConfirm").html(msg);
-    $("#confirmModal").modal("show");
-}
 function acceptApproveUser() {
     var resId = $("#residentId").val();
     var mode = $("#mode").val();
@@ -1071,6 +1032,7 @@ $(document).ready(function () {
         });
         $(this.querySelector("form")).find("input[type=text], textarea").val("");
         $(this.querySelector("form")).find("input, select").prop("disabled", "");
+        $(this.querySelector("form")).find("label.error").remove();
         removeHiddenBackgroundPopup();
     });
 

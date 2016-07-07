@@ -14,6 +14,10 @@ namespace AMS.Service
         {
             logRepository.Add(log);
         }
+        public void Update(HelpdeskRequestLog log)
+        {
+            logRepository.Update(log);
+        }
 
         public HelpdeskRequestLog FindLastHelpdeskRequestLog(int id)
         {

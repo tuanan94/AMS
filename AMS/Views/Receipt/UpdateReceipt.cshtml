@@ -61,7 +61,7 @@
                                     <div class="form-group">
                                         <label for="receiptTitle" class="col-md-2 control-label">Tiêu đề</label>
                                         <div class="col-md-10">
-                                            <input id="receiptTitle" value="@receipt.Title" type="text" class="form-control">
+                                            <input id="receiptTitle" name="ReceiptTitle" value="@receipt.Title" type="text" class="form-control">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -150,7 +150,7 @@
                                     <div class="form-group">
                                         <label for="receiptDesc" class="col-md-2 control-label">Mô tả</label>
                                         <div class="col-md-10">
-                                            <textarea id="receiptDesc" class="form-control" rows="3">@receipt.Description</textarea>
+                                            <textarea id="receiptDesc" name="ReceiptDesc" class="form-control" rows="3">@receipt.Description</textarea>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -171,12 +171,13 @@
                                     <fieldset class="scheduler-border less-padding">
                                         <legend class="scheduler-border bold-black">Thời gian</legend>
                                         <div class="form-group">
-                                            <label for="createDate" class="col-md-4 control-label">Ngày xuất</label>
+                                            <label for="publishDate" class="col-md-4 control-label">Ngày xuất</label>
                                             <div class="col-md-8">
                                                 @{
-                                                    string date = receipt.PublishDate.Value.ToString(AmsConstants.DateTimeFormat);
+                                                    string date = receipt.PublishDate.Value.ToString(AmsConstants.DateFormat);
                                                 }
-                                                <input readonly="readonly" value="@date" id="publishDate" type="text" class="form-control">
+                                                <input type="text" id="publishDate" value="@date" name="PublishDate" class="form-control datepicker" data-date-format="dd-mm-yyyy" data-date-language="vi"
+                                                       data-date-min-view-mode="0" data-date-today-highlight="true" data-date-start-date="0d" />
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -231,32 +232,29 @@
 
                                             <div id="row_@index" class="form-group">
                                                 <div class="col-sm-5">
-                                                    <input id="item_name_@index" value="@detail.UtilityService.Name" name="" type="text" class="form-control order-item">
+                                                    <input id="item_name_@index" value="@detail.UtilityService.Name" name="order-item-name" type="text" class="form-control order-item">
                                                 </div>
                                                 <div class="col-sm-2">
-                                                    <input id="item_qty_@index" value="@detail.Quantity.Value.ToString("N0")" type="text" class="form-control order-item-qty">
+                                                    <input id="item_qty_@index" value="@detail.Quantity.Value.ToString("N0")" name="order-item-qty" type="text" class="form-control order-item-qty">
                                                 </div>
                                                 <div class="col-sm-2">
-                                                    <input id="item_unit_price_@index" value="@detail.UnitPrice.Value.ToString("N0")" type="text" class="form-control order-item-price">
+                                                    <input id="item_unit_price_@index" value="@detail.UnitPrice.Value.ToString("N0")" name="order-item-price" type="text" class="form-control order-item-price">
                                                 </div>
                                                 <div class="col-sm-2">
-                                                    @{
-                                            qtyPrice = (detail.UnitPrice * detail.Quantity).Value;
-                                                    }
+                                                    @{qtyPrice = (detail.UnitPrice * detail.Quantity).Value;}
                                                     <input id="item_qty_price_@index" readonly="readonly" value="@qtyPrice.ToString("N0")" name="" type="text" class="form-control total-order">
                                                 </div>
-                                                @{
-                                            if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
-                                            {
-                                                <span class="btn btn-danger btn-xs rmv-order-item" onclick="deleteItem(@index)"><i class="fa fa-times"></i></span>
-                                            }
+                                                @{if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
+                                                {
+                                                    <span class="btn btn-danger btn-xs rmv-order-item" onclick="deleteItem(@index)"><i class="fa fa-times"></i></span>
+                                                }
                                                 }
 
                                                 <input type="hidden" id="item_id_@index" value="@detail.Id" name="" />
                                             </div>
-                                            {
-                                                total += (detail.UnitPrice * detail.Quantity).Value;
-                                            }
+                                                {
+                                                    total += (detail.UnitPrice * detail.Quantity).Value;
+                                                }
                                         }
                                     }
                                 </div>
@@ -288,17 +286,24 @@
                             <div class="pull-right">
                                 @{if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
                                 {
-                                    <span id="btnPublished" onclick="changeStatusReceipt(@receipt.Id, @User.Identity.GetUserId(), @SLIM_CONFIG.RECEIPT_STATUS_UNPAID)" class="btn btn-info"><i class="fa fa-reply"></i> Công bố</span>
-                                    <span id="btnUpdate" onclick="updateReceipt(@User.Identity.GetUserId())" class="btn btn-primary"><i class="fa fa-pencil"></i> Cập nhật</span>
-                                    <span id="btnPaid" onclick="changeStatusReceipt(@receipt.Id, @User.Identity.GetUserId(), @SLIM_CONFIG.RECEIPT_STATUS_PAID)" class="btn btn-success hide"><i class="fa fa-check"></i> Thanh toán</span>
+                                    <span id="btnPublished" onclick="changeStatusReceipt(@receipt.Id, @User.Identity.GetUserId(), @SLIM_CONFIG.RECEIPT_STATUS_UNPAID)" class="btn btn-info"><i class="fa fa-globe"></i> Công bố</span>
+                                    <button type="submit" id="btnUpdate" class="btn btn-primary"><i class="fa fa-pencil"></i>Cập nhật</button>
+                                    <span id="btnPaid" onclick="changeStatusReceipt(@receipt.Id,    @User.Identity.GetUserId(),
+                                          @SLIM_CONFIG.RECEIPT_STATUS_PAID )" class="btn btn-success hide">
+                                        <i class="fa fa-check"></i> Thanh toán
+                                    </span>
                                 }
                                 else if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPAID)
                                 {
-                                    <span id="btnPaid" onclick="changeStatusReceipt(@receipt.Id, @User.Identity.GetUserId(), @SLIM_CONFIG.RECEIPT_STATUS_PAID)" class="btn btn-success"><i class="fa fa-check"></i> Thanh toán</span>
+                                    <span id="btnPaid" onclick="changeStatusReceipt(@receipt.Id,    @User.Identity.GetUserId(),
+                                          @SLIM_CONFIG.RECEIPT_STATUS_PAID )" class="btn btn-success">
+                                        <i class="fa fa-check"></i> Thanh toán
+                                    </span>
                                 }
                                 }
                             </div>
                         </div>
+                        <input type="hidden" id="userId" value="@User.Identity.GetUserId()" />
                     </form>
                 </div>
             </div>
@@ -312,17 +317,18 @@
         $("#addNewRow").on("click", function () {
             window.index++;
             var tag = "<div id=\"row_" + index + "\" class='form-group'>" +
-                            "<div class='col-sm-5'><input id=\"item_name_" + index + "\" type='text' class='form-control order-item'></div>" +
-                            "<div class='col-sm-2'><input type='text' id=\"item_qty_" + index + "\" class='form-control order-item-qty'></div>" +
-                            "<div class='col-sm-2'><input id=\"item_unit_price_" + index + "\"type='text' class='form-control order-item-price'></div>" +
+                            "<div class='col-sm-5'><input id=\"item_name_" + index + "\" type='text' name='order-item-name' class='form-control order-item'></div>" +
+                            "<div class='col-sm-2'><input type='text' id=\"item_qty_" + index + "\" name='order-item-qty' class='form-control order-item-qty'></div>" +
+                            "<div class='col-sm-2'><input id=\"item_unit_price_" + index + "\"type='text' name='order-item-price' class='form-control order-item-price'></div>" +
                             "<div class='col-sm-2'><input id=\"item_qty_price_" + index + "\" type='text' readonly='readonly' class='form-control'></div>" +
                             "<input type='hidden' id=\"" + "item_id_" + index + "\" value='0'  />" +
                             "<span class='btn btn-danger btn-xs' onclick='deleteItem(\"" + index + "\")'><i class='fa fa-times'></i></span>" +
                         "</div>";
             $("#receiptWrapper").append(tag);
         });
-//        bindingClassNumberWithComma("order-item-price");
+        //        bindingClassNumberWithComma("order-item-price");
         bindingCalculateSubTotal();
+        validCreateManualReceipt();
     });
     function deleteItem(id) {
         $("#row_" + id)[0].parentNode.removeChild($("#row_" + id)[0]);
@@ -335,6 +341,7 @@
         var receiptDesc = $("#receiptDesc").val();
         var receiptHouseName = $("#houseName").val();
         var forMonth = $("#forMonth").val();
+        var publishDate = $("#publishDate").val();
         var receiptId = document.getElementById("updateOrder").dataset.receiptid;
         var userId = fromUserId;
 
@@ -365,6 +372,7 @@
             ForMonth: forMonth,
             ReceiptTitle: receiptName,
             ReceiptDesc: receiptDesc,
+            PublishDate: publishDate,
             ReceiptHouseName: receiptHouseName,
             ListItem: listItem
         };
@@ -376,6 +384,17 @@
             success: function (data) {
                 smoothScrollToTop();
                 if (data.StatusCode === 0) {
+                    if (data.Data.publishDate) {
+                        $("#unpublished").addClass("hide");
+                        $("#btnUpdate").remove();
+                        $("#btnPublished").addClass("hide");
+
+                        $("#unPaid").removeClass("hide");
+                        $("#btnPaid").removeClass("hide");
+                        $(".rmv-order-item").addClass("hide");
+                        $("#addNewRow").addClass("hide");
+                        $("#publishDate").val(data.Data.publishDate);
+                    }
                     $("#createReceiptSuccessNoti").fadeIn("fast");
                     setTimeout(function () {
                         $("#createReceiptSuccessNoti").fadeOut("fast");
@@ -427,7 +446,7 @@
                 if (data.StatusCode !== -1) {
                     if (data.Data.publishDate) {
                         $("#unpublished").addClass("hide");
-                        $("#btnUpdate").addClass("hide");
+                        $("#btnUpdate").remove();
                         $("#btnPublished").addClass("hide");
 
                         $("#unPaid").removeClass("hide");
@@ -452,5 +471,61 @@
     }
     function resetFromNotField(id) {
         $("#createNewOrder").closest("form").find("input[type=text]:not(#forMonthView,#receiptType), textarea").val("");
+    }
+    function validCreateManualReceipt() {
+        $("#updateOrder").validate({
+            rules: {
+                ReceiptTitle: {
+                    required: true,
+                    maxlength: 255
+                },
+                PublishDate: {
+                    required: true
+                },
+                ReceiptDesc: {
+                    maxlength: 1000
+                },
+                "order-item-name": {
+                    required: true,
+                    maxlength: 255
+                },
+                "order-item-qty": {
+                    required: true
+                },
+                "order-item-price": {
+                    required: true
+                },
+
+            },
+            messages: {
+                ReceiptTitle: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 255 ký tự."
+                },
+                PublishDate: {
+                    required: "Trường bắt buộc"
+                },
+                ReceiptDesc: {
+                    maxlength: "Tối đa 1000 ký tự."
+                },
+                "order-item-name": {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 255 ký tự."
+                },
+                "order-item-qty": {
+                    required: "Trường bắt buộc",
+                },
+                "order-item-price": {
+                    required: "Trường bắt buộc",
+                },
+
+            },
+            submitHandler: function () {
+                if ($("#btnUpdate").length && (!$("#btnUpdate").hasClass("hide"))) {
+                    var fromUserId = $("#userId").val();
+                    updateReceipt(fromUserId);
+                }
+            }
+        });
     }
 </script>

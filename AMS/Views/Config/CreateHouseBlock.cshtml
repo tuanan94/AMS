@@ -5,96 +5,110 @@
 <div class="col-md-12">
     <div class="panel panel-default">
         <div class="heading-tab">
-            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Quản lý nhà</span>
+            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Tạo mới tòa nhà</span>
 
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li>
-                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-file-text-o"></i> Phí sinh họat</a>
-                </li>
-                <li>
-                    <a href="/Management/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Quản lý nhà</a>
+                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-usd"></i> Phí sinh họat</a>
                 </li>
                 <li class="active">
                     <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-home"></i> Căn hộ</a>
+                </li>
+                <li class="">
+                    <a href="/Management/ManageRequestView"><i class="fa fa-wrench"></i> DV sửa chữa</a>
+                </li>
+                <li>
+                    <a href="/Management/ViewHelpdeskServiceCategory"><i class="fa fa fa-tags"></i> Nhóm DV sửa chữa</a>
+                </li>
+                <li class="">
+                    <a href="/Management/BalanceSheet/ManageTransactionCatView"><i class="fa fa-tags"></i> Nhóm thu chi</a>
                 </li>
             </ul>
         </div>
 
         <div class="panel-body">
             <div class="tab-content">
-                <div class="tab-pane fade active in" id="">
-                    <div class="panel panel-default" style="border-color: transparent">
-                        <form id="addUtilServiceForm" class="form-horizontal" role="form">
-                            <div class="form-group">
-                                <div class="col-md-offset-2 col-md-8">
-                                    <div class="form-group">
-                                        <fieldset class="scheduler-border less-padding">
-                                            <legend class="scheduler-border bold-black">Thông tin tòa nhà</legend>
-                                            <div class="form-group">
-                                                <div class="form-group">
-                                                    <label class="col-md-4 control-label">Tên tòa nhà</label>
-                                                    <div class="col-md-7 ">
-                                                        <input type="text" id="blockName" class="form-control" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-md-4 control-label">Số tầng</label>
-                                                    <div class="col-md-7 ">
-                                                        <input type="text" id="numberOfFloor" class="form-control"/>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="numberOfRoom" class="col-md-4 control-label">Số căn hộ mỗi tầng</label>
-                                                    <div class="col-md-7 ">
-                                                        <input type="text" id="numberOfRoom" class="form-control" value="5"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </fieldset>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-offset-1 col-md-10">
-                                    <fieldset class="scheduler-border less-padding">
-                                        <legend class="scheduler-border bold-black">Tên căn hộ mỗi tầng</legend>
-                                        <div class="form-group">
-                                            <div class="col-md-offset-2 col-md-5">
-                                                <strong style="align-content: center">Tên</strong>
-                                            </div>
-                                            <div class="col-md-5">
-                                                <strong style="align-content: center">Diện tích</strong>
-                                            </div>
-                                        </div>
-                                        <div id="roomInFloorWrapper">
-                                            @{
-                                                for (int i = 0; i < 5; i++)
-                                                {
-                                                    <div class="form-group" id="row_id_@i">
-                                                        <span style="font-size: 1.2em" class="col-md-offset-1 col-md-1 control-label">#@(i + 1)</span>
-                                                        <div class="col-md-5">
-                                                            <input id="house_name_@i" name="" type="text" class="form-control order-item room-name">
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <input id="house_area_@i" name="" type="text" class="form-control">
-                                                        </div>
-                                                        <label id="house_name_to_name_@i" style="text-align: left" class="col-md-3 control-label"></label>
-                                                    </div>
-                                                }
-                                            }
-                                        </div>
-                                    </fieldset>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="pull-right">
-                                    <span class="btn btn-info" onclick="generateTohouse()"><i class="fa fa-plus"></i> Tạo mới</span>
-                                </div>
-                            </div>
-                        </form>
+                <form id="addUtilServiceForm" class="form-horizontal" role="form">
+                    <div class="alert alert-info" id="addBlockSuccessNoti" style="display: none">
+                        <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span id="successMsg">Tạo mới tòa nhà thành công. Đang chuyển tới trang chi tiết.</span>
                     </div>
-                </div>
+                    <div class="alert alert-danger" id="addBlockFailedNoti" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                        <span id="failedMsg">Tạo mới tòa mới thất bại.</span>
+                    </div>
+                    <div class="alert alert-danger" id="msgAddFailedNoty" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span id="addTransMsg"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-8">
+                            <div class="form-group">
+                                <fieldset class="scheduler-border less-padding">
+                                    <legend class="scheduler-border bold-black">Thông tin tòa nhà</legend>
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label class="col-md-4 control-label">Tên tòa nhà</label>
+                                            <div class="col-md-7 ">
+                                                <input type="text" id="blockName" name="HouseBlock" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4 control-label">Số tầng</label>
+                                            <div class="col-md-7 ">
+                                                <input type="text" id="numberOfFloor" name="NumberOfFloor" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="numberOfRoom" class="col-md-4 control-label">Số căn hộ mỗi tầng</label>
+                                            <div class="col-md-7 ">
+                                                <input type="text" id="numberOfRoom" name="NumberOfRoom" class="form-control" value="5" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-1 col-md-10">
+                            <fieldset class="scheduler-border less-padding">
+                                <legend class="scheduler-border bold-black">Tên căn hộ mỗi tầng</legend>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-5">
+                                        <strong style="align-content: center">Tên</strong>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <strong style="align-content: center">Diện tích</strong>
+                                    </div>
+                                </div>
+                                <div id="roomInFloorWrapper">
+                                    @{
+                                        for (int i = 0; i < 5; i++)
+                                        {
+                                            <div class="form-group" id="row_id_@i">
+                                                <span style="font-size: 1.2em" class="col-md-offset-1 col-md-1 control-label">#@(i + 1)</span>
+                                                <div class="col-md-5">
+                                                    <input id="house_name_@i" name="HouseName" type="text" class="form-control order-item room-name">
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <input id="house_area_@i" name="HouseArea" type="text" class="form-control">
+                                                </div>
+                                                <label id="house_name_to_name_@i" style="text-align: left" class="col-md-3 control-label"></label>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="pull-right">
+                            <button type="submit" class="btn btn-info"><i class="fa fa-plus"></i> Tạo mới</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -117,7 +131,7 @@
                 $("#roomInFloorWrapper").html("");
                 for (var i = 0; i < roomNumber; i++) {
                     var inputId = "house_name_" + i;
-                    var labelId = "house_name_to_name" + i;
+                    var labelId = "house_name_to_name_" + i;
                     var rowId = "row_id_" + i;
                     var houseArea = "house_area_" + i;
                     var label = $("<span>", {
@@ -179,6 +193,7 @@
                 }
             }
         });
+        validateCreateHouseBlock();
     });
 
     function generateTohouse() {
@@ -207,9 +222,84 @@
             },
             url: "/Management/Config/UtilityService/CreateHouseInBlock",
             success: function (data) {
-                location.href = "/Management/Config/UtilityService/ViewHousesInBlock?blockId=" + data.Data;
+                if (data.StatusCode === 0) {
+                    $("#addBlockSuccessNoti").fadeIn("fast");
+                    setTimeout(function () {
+                        location.href = "/Management/Config/UtilityService/ViewHousesInBlock?blockId=" + data.Data;
+                    },2000);
+                } else if (data.StatusCode === 2) {
+                    $("#addTransMsg").text("Tên tòa nhà đã tồn tại");
+                    $("#msgAddFailedNoty").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#msgAddFailedNoty").fadeOut("fast");
+                    }, 3000);
+                } else {
+                    $("#addBlockFailedNoti").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#addBlockFailedNoti").fadeOut("fast");
+                    }, 3000);
+                }
             }
+        });
+    }
+    function validateCreateHouseBlock() {
+        $("#addUtilServiceForm").validate({
+            rules: {
+                HouseBlock: {
+                    required: true,
+                    maxlength: 10
+                },
+                NumberOfFloor: {
+                    required: true,
+                    number: true
+                },
+                NumberOfRoom: {
+                    required: true,
+                    number: true
+                },
+                HouseName: {
+                    required: function (elem) {
+                        if ($(elem).val()) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                },
+                HouseArea: {
+                    required: function (elem) {
+                        if ($(elem).val()) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                }
+            },
+            messages: {
+                HouseBlock: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 10 ký tự."
+                },
+                NumberOfFloor: {
+                    required: "Trường bắt buộc",
+                    number: "Phải là số"
+                },
+                NumberOfRoom: {
+                    required: "Trường bắt buộc",
+                    number: "Phải là số"
+                },
+                HouseName: {
+                    required: "Trường bắt buộc"
+                },
+                HouseArea: {
+                    required: "Trường bắt buộc"
+                }
 
+            },
+            submitHandler: function () {
+                generateTohouse();
+            }
         });
     }
 </script>

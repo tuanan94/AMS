@@ -172,7 +172,7 @@
                             var dateTime = data.split(" ");
                             return "<strong>" + dateTime[0] + "</strong> " + dateTime[1];
                         }
-                        return data;
+                        return full.HdReqCreateDateLong;
                     },
                     "width": "15%"
                 },
@@ -190,16 +190,18 @@
                             }
                             return "Đang xác nhận";
                         }
-                        return data;
+                        return full.HdReqDeadlineLong;
                     },
                     "width": "15%"
                 },
                 {
                     "targets": 7,
                     "data": "HdReqId",
+                    "searchable": false,
+                    "orderable": false,
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
-                            return "<span class='btn btn-default btn-xs' onclick='getHelpdeskDetail(" + data + ")'> <i class='fa fa-pencil'></i> </span>";
+                            return "<span class='btn btn-default btn-xs' data-loading-text='Loading...' onclick='getHelpdeskDetail(" + data + ")'> <i class='fa fa-pencil'></i> </span>";
                         }
                         return data;
                     }

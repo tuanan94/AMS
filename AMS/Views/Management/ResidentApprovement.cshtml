@@ -11,7 +11,7 @@
             <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Danh sách yêu cầu</span>
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li>
-                    <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-life-ring"></i> Yêu cầu sửa chữa</a>
+                    <a href="/Management/HelpdeskRequest/ManageHdRequest"><i class="fa fa-life-ring"></i> Yêu cầu sửa chữa</a>
                 </li>
                 <li class="active">
                     <a href="/Management/ResidentApprovement/@User.Identity.GetUserId()"><i class="fa fa-group"></i> Xác nhận cư dân</a>
@@ -70,38 +70,56 @@
                 <div class="panel-body">
                     <div class="form-horizontal" role="form">
                         <div class="form-group">
-                            <label for="resName" class="col-md-4 control-label">Tên</label>
-                            <div class="col-md-6">
+                            <label for="resName" class="col-md-3 control-label">Tên</label>
+                            <div class="col-md-9">
                                 <input id="resName" readonly="readonly" type="text" class="form-control" value="">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="resHouseName" class="col-md-4 control-label">Căn hộ</label>
-                            <div class="col-md-6">
-                                <input id="resHouseName" readonly="readonly" type="text" class="form-control" value="">
+
+                        <div class="form-group res-info">
+                            <label for="resId" class="col-md-3 control-label">Ngày sinh</label>
+                            <div class="col-md-4">
+                                <input id="dob" type="text" readonly="readonly"  name="Dob" class="form-control">
+                            </div>
+                            <label class="col-md-1 control-label">Giới tính</label>
+                            <div class="col-md-4">
+                                <label class="radio-inline">
+                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_MALE" name="Gender" disabled="disabled" />Nam
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" value="@SLIM_CONFIG.USER_SEX_FEMALE" name="Gender" checked="checked" disabled="disabled" />Nữ
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group res-info">
+                            <label for="resId" class="col-md-3 control-label">CMND</label>
+                            <div class="col-md-4">
+                                <input id="resId" readonly="readonly"  type="text" name="Idenity" class="form-control" value="">
+                            </div>
+                            <label for="idCreateDate" class="col-md-1 control-label">Ngày cấp</label>
+                            <div class="col-md-4">
+                                <input id="idCreateDate" readonly="readonly" type="text" name="IdCreateDate" class="form-control">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="resId" class="col-md-4 control-label">CMND</label>
-                            <div class="col-md-6">
-                                <input id="resId" readonly="readonly" type="text" class="form-control" value="">
+                            <label for="resHouseName" class="col-md-3 control-label">Căn hộ</label>
+                            <div class="col-md-2">
+                                <span id="resHouseName" class="btn btn-sm house-color btn-warning btn-block"></span>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="resGender" class="col-md-4 control-label">Giới tính</label>
-                            <div class="col-md-6">
-                                <input id="resGender" readonly="readonly" type="text" class="form-control" value="">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="resHouseHolder" class="col-md-4 control-label">Chủ hộ</label>
-                            <div class="col-md-6">
+                            <label for="resHouseHolder" class="col-md-offset-2 col-md-1 control-label">Chủ hộ</label>
+                            <div class="col-md-4">
                                 <input id="resHouseHolder" readonly="readonly" type="text" class="form-control" value="">
                             </div>
                         </div>
+@*                        <div class="form-group">*@
+@*                            <label for="resHouseHolder" class="col-md- control-label">Chủ hộ</label>*@
+@*                            <div class="col-md-4">*@
+@*                                <input id="resHouseHolder" readonly="readonly" type="text" class="form-control" value="">*@
+@*                            </div>*@
+@*                        </div>*@
                         <div class="form-group">
-                            <label for="resCreateDate" class="col-md-4 control-label">Ngày nhập căn hộ</label>
-                            <div class="col-md-6">
+                            <label for="resCreateDate" class="col-md-3 control-label">Ngày yêu cầu</label>
+                            <div class="col-md-4">
                                 <input id="resCreateDate" readonly="readonly" type="text" class="form-control" value="">
                             </div>
                         </div>
@@ -128,7 +146,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary" onclick="acceptApproveUser()">Chấp nhận</button>
+                <button type="button" class="btn btn-info" onclick="acceptApproveUser()">Chấp nhận</button>
             </div>
             <input type="hidden" id="residentId" value="" />
             <input type="hidden" id="mode" value="" />
@@ -189,8 +207,10 @@
                         if (type === "display" || type === "filter") {
                             if (data !== null && data !== undefined) {
                                 var dateTime = data.split(" ");
-                                return "<span class='label date-color label-warning'>" + dateTime[0] +
-                                    "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";
+                                return "<strong>" + dateTime[0] +
+                                    "</strong> " + dateTime[1] ;
+                                /*return "<span class='label date-color label-warning'>" + dateTime[0] +
+                                    "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";*/
                             }
                             return "Đang xác nhận";
                         }
@@ -206,8 +226,8 @@
                             var test = data + ",'" + full.FullName + "','" + full.HouseName + ",";
                  return "<div class='text-right'> " +
                         "<td> " +
-                       "<span onclick='resInfoDetail(" + data + ")' class='btn btn-default btn-xs lbl-margin-right'>" +
-                        "<i class='fa fa-info-circle'></i>" +
+                       "<span onclick='resInfoDetail(" + data + ")' class='btn btn-info btn-xs lbl-margin-right'>" +
+                        "<i class='fa fa-info'></i>" +
                        "</span> " +
                         "<span class='btn btn-primary btn-xs lbl-margin-right' onclick='showConfirmMsg(\"" + "accept" + "\"," + "\"" + data + "\",\"" + full.FullName + "\"" + ",\"" + full.HouseName + "\"" + ")'>" +
                             "<i class='fa fa-check-square-o'></i>" +
@@ -228,6 +248,55 @@
         $('#residentApproveTbl').on('click', 'tr', function () {
             window.currentRow = $(this);
         });
-
     });
+
+    function resInfoDetail(id) {
+        var action = "GetResidentInfo";
+        $.ajax({
+            type: "get",
+            url: "/Management/ResidentApprovement/" + action,
+            data: { userId: id },
+            success: function (data) {
+                var obj = data.Data;
+                var fullName = obj.FullName;
+                var houseName = obj.HouseName;
+                var houseHolderName = obj.HouseHolderName;
+                var createDate = obj.CreateDate;
+                var id = obj.Identity;
+                var gender = obj.Gender;
+                var dob = obj.Dob;
+                var idCreateDate = obj.IdentityIssuedDate;
+
+                $("#resName").val(fullName);
+                $("#resHouseName").text(houseName);
+                $("#resId").val(id);
+                $("#resHouseHolder").val(houseHolderName);
+                $("#resCreateDate").val(createDate);
+                $("#idCreateDate").val(idCreateDate);
+                $("#dob").val(dob);
+                $("input:radio[name=Gender]").filter("[value=" + gender + "]").prop("checked", "checked");
+                
+                $("#residentInfoDetail").modal("show");
+            },
+            error: function (data) {
+
+            }
+        });
+    }
+    /* Start Js for controller*/
+    function showConfirmMsg(mode, id, userName, houseName) {
+        $("#residentId").val(id);
+        var modeNum = 0;
+        var msg = "";
+        if (mode === "accept") {
+            msg = "<strong>Chấp nhận</strong> yêu cầu cư dân <strong>" + userName + "</strong> là thành viên của căn hộ <strong>" + houseName + "</strong>";
+            modeNum = 1;
+        } else {
+            msg = "<strong>Từ chối</strong> yêu cầu cư dân <strong>" + userName + "</strong> là thành viên của căn hộ <strong>" + houseName + "</strong>";
+            modeNum = 2;
+        }
+        $("#mode").val(modeNum);
+        $("#msgConfirm").html(msg);
+        $("#confirmModal").modal("show");
+    }
 </script>

@@ -21,9 +21,6 @@
                     @hdSrv.HelpdeskServiceCategory.Name
                 </td>
                 <td>
-                    @(hdSrv.Price == 0 ? "Miễn phí" : hdSrv.Price.ToString())
-                </td>
-                <td>
                     @if (hdSrv.Status == 0)
                     {
                         <span class="label label-default">Ngưng hỗ trợ</span>
