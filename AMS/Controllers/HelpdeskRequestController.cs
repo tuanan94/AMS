@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using AMS.App_Start;
 using AMS.Constant;
 using AMS.Enum;
 using AMS.Models;
@@ -115,8 +116,10 @@ namespace AMS.Controllers
             return RedirectToAction("ViewHistoryHdRequest", new { userId = request.HdReqUserId });
         }
 
-        [Authorize]
         [HttpGet]
+        [Authorize]
+        //        [AuthorizationPrivilegeFilter.MandatorySurveyRedirect]
+        //        [AuthorizationPrivilegeFilter.CheckHouseIsDeleted]
         [Route("Home/HelpdeskRequest/ViewHistory")]
         public ActionResult ViewHistoryHdRequest()
         {
@@ -132,6 +135,7 @@ namespace AMS.Controllers
 
         [Authorize]
         [HttpGet]
+        //[AuthorizationPrivilegeFilter.ManagerAdminAuthorize]
         [Route("Management/HelpdeskRequest/ManageHdRequest")]
         public ActionResult ManageHdRequest()
         {
@@ -503,7 +507,7 @@ namespace AMS.Controllers
                     date = hdReq.DueDate.Value.ToString(AmsConstants.DateFormat);
                     time = hdReq.DueDate.Value.ToString(AmsConstants.TimeFormat);
                 }
-                object obj = new { date = date, time = time, createDate = createDate};
+                object obj = new { date = date, time = time, createDate = createDate };
                 response.Data = obj;
             }
             else

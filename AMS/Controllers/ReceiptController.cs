@@ -291,6 +291,7 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [Route("Management/ManageReceipt/View")]
         public ActionResult ViewManagerOrderList()
         {
