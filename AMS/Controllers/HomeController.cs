@@ -49,7 +49,7 @@ namespace AMS.Controllers
         }
 
         [Authorize]
-
+        [AutoRedirect.MandatorySurveyRedirect]
         public ActionResult Index()
         {
             User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
@@ -306,6 +306,7 @@ namespace AMS.Controllers
 
         [HttpGet]
         [Authorize]
+        [AutoRedirect.MandatorySurveyRedirect]
         public ActionResult Setting()
         {
             User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
@@ -501,13 +502,14 @@ namespace AMS.Controllers
             userService.deleteUser(u);
             return true;
         }
+           [AutoRedirect.MandatorySurveyRedirect]
             public ActionResult ViewAroundProvider(String cat)
         {
 
             ViewBag.AllProviders = _aroundProviderService.GetAllProviderWithCat(cat);
             return View();
         }
-
+           [AutoRedirect.MandatorySurveyRedirect]
         public ActionResult ViewAroundProviderDetail(String cat)
         {
             ViewBag.AllProviders = _aroundProviderService.GetAllProviderWithCat(cat);
@@ -515,7 +517,7 @@ namespace AMS.Controllers
             ViewBag.activeCat = cat;
             return View();
         }
-
+          [AutoRedirect.MandatorySurveyRedirect]
         public ActionResult SingleProviderDetail(int id)
         {
             List<AroundProviderProduct> products = _aroundProviderProductService.GetAroundProviderProduct(id);

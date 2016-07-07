@@ -38,6 +38,7 @@ namespace AMS.Controllers
         //        private readonly string parternTime = "dd-MM-yyyy HH:mm";
 
         [HttpGet]
+        [AutoRedirect.MandatorySurveyRedirect]
         [Route("Home/ManageReceipt/View")]
         public ActionResult GetUserReceipt()
         {
