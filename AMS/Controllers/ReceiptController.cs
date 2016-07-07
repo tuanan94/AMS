@@ -292,6 +292,7 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [Route("Management/ManageReceipt/View")]
         public ActionResult ViewManagerOrderList()
         {
@@ -720,64 +721,117 @@ namespace AMS.Controllers
         public ActionResult GetMonthlyResidentExpenseList(string csvFilePath)
         {
             MessageViewModels response = new MessageViewModels();
-            CsvFileDescription inputFileDescription = new CsvFileDescription
+            try
             {
-                SeparatorChar = ',',
-                FirstLineHasColumnNames = true
-            };
-            CsvContext cc = new CsvContext();
-            List<MonthlyResidentExpense> consumptionRecords =
-                cc.Read<MonthlyResidentExpense>(
-                    Server.MapPath(new StringBuilder(AmsConstants.CsvFilePath).Append(csvFilePath).ToString()),
-                    inputFileDescription).ToList();
-            //            var productsByName =
-            //                from p in products
-            //                orderby p.ProductName
-            //                select new { p.ProductName, p.LaunchDate, p.Price, p.Description };
-            MonthlyResidentExpenseModel monthlyResidentExpense = null;
-            List<MonthlyResidentExpenseModel> monthlyResidentExpenseList = new List<MonthlyResidentExpenseModel>();
-            House house = null;
-            MonthlyResidentExpense houseConsummption = null;
-            for (int i = 0; i < consumptionRecords.Count(); i++)
-            {
-                houseConsummption = consumptionRecords[i];
-                if (i == 0)
+                CsvFileDescription inputFileDescription = new CsvFileDescription
                 {
-
-                }
-                else
+                    SeparatorChar = ',',
+                    FirstLineHasColumnNames = true
+                };
+                CsvContext cc = new CsvContext();
+                List<MonthlyResidentExpense> consumptionRecords =
+                    cc.Read<MonthlyResidentExpense>(
+                        Server.MapPath(new StringBuilder(AmsConstants.CsvFilePath).Append(csvFilePath).ToString()),
+                        inputFileDescription).ToList();
+                //            var productsByName =
+                //                from p in products
+                //                orderby p.ProductName
+                //                select new { p.ProductName, p.LaunchDate, p.Price, p.Description };
+                MonthlyResidentExpenseModel monthlyResidentExpense = null;
+                List<MonthlyResidentExpenseModel> monthlyResidentExpenseList = new List<MonthlyResidentExpenseModel>();
+                House house = null;
+                MonthlyResidentExpense houseConsummption = null;
+                for (int i = 0; i < consumptionRecords.Count(); i++)
                 {
-                    if (houseConsummption.Block != null && houseConsummption.Floor != null && houseConsummption.HouseName != null)
-                        house = _houseServices.FindByBlockFloorHouseName(houseConsummption.Block, houseConsummption.Floor, houseConsummption.HouseName);
-                    if (null != house)
+                    houseConsummption = consumptionRecords[i];
+                    if (i == 0)
                     {
-                        double totalWater = 0;
-                        monthlyResidentExpense = new MonthlyResidentExpenseModel();
-                        monthlyResidentExpense.Status = SLIM_CONFIG.UTILITY_SERVICE_GET_CONSUMPTION_COMPLETE;
-                        if (houseConsummption.ToNumber == 0 || houseConsummption.ToNumber <= houseConsummption.FromNumber)
+
+                    }
+                    else
+                    {
+                        if (houseConsummption.Block != null && houseConsummption.Floor != null &&
+                            houseConsummption.HouseName != null)
                         {
-                            monthlyResidentExpense.Status = SLIM_CONFIG.UTILITY_SERVICE_GET_CONSUMPTION_UN_COMPLETE;
-                            monthlyResidentExpense.ToNumber = 0;
-                            monthlyResidentExpense.Water = 0;
-                        } // currently i don not validate FromNumber is validated in db.
+                            house = _houseServices.FindByBlockFloorHouseName(houseConsummption.Block,
+                                houseConsummption.Floor, houseConsummption.HouseName);
+
+                            if (null != house)
+                            {
+                                double totalWater = 0;
+                                monthlyResidentExpense = new MonthlyResidentExpenseModel();
+                                monthlyResidentExpense.Status = SLIM_CONFIG.UTILITY_SERVICE_GET_CONSUMPTION_COMPLETE;
+                                if (null == house.WaterMeter)
+                                {
+                                    house.WaterMeter = 0;
+                                    _houseServices.Update(house);
+                                }
+                                if (houseConsummption.FromNumber != house.WaterMeter.Value)
+                                {
+                                    response.StatusCode = 5;
+                                    response.Data = houseConsummption.HouseName;
+                                    response.Msg = "Số tháng trước không chính xác: " + houseConsummption.HouseName;
+                                    return Json(response, JsonRequestBehavior.AllowGet);
+                                }
+
+                                if (houseConsummption.ToNumber != 0 && (houseConsummption.ToNumber < houseConsummption.FromNumber || house.WaterMeter.Value > houseConsummption.ToNumber))
+                                {
+                                    response.StatusCode = 6;
+                                    response.Msg = "Số ghi nước tháng mới phải lớn hơn số tháng trước: " + houseConsummption.HouseName;
+                                    response.Data = houseConsummption.HouseName;
+                                    return Json(response, JsonRequestBehavior.AllowGet);
+                                }
+
+                                if (houseConsummption.ToNumber == 0)
+                                {
+                                    monthlyResidentExpense.Status =
+                                        SLIM_CONFIG.UTILITY_SERVICE_GET_CONSUMPTION_UN_COMPLETE;
+                                    monthlyResidentExpense.ToNumber = 0;
+                                    monthlyResidentExpense.Water = 0;
+                                } // currently i don not validate FromNumber is validated in db.
+                                else
+                                {
+                                    monthlyResidentExpense.ToNumber = houseConsummption.ToNumber;
+                                    monthlyResidentExpense.Water = houseConsummption.ToNumber -
+                                                                   houseConsummption.FromNumber;
+                                }
+                                monthlyResidentExpense.FromNumber = houseConsummption.FromNumber;
+                                monthlyResidentExpense.WaterCost = totalWater;
+                                monthlyResidentExpense.HouseName = houseConsummption.HouseName;
+                                monthlyResidentExpense.Floor = houseConsummption.Floor;
+                                monthlyResidentExpense.Block = houseConsummption.Block;
+                                monthlyResidentExpense.HouseId = house.Id;
+                                monthlyResidentExpense.Total = totalWater;
+                                monthlyResidentExpense.DT_RowId =
+                                    new StringBuilder("consump_house_").Append(house.Id).ToString();
+                                monthlyResidentExpenseList.Add(monthlyResidentExpense);
+                            }
+                            else
+                            {
+                                response.StatusCode = 4;
+                                response.Data = houseConsummption.HouseName;
+                                response.Msg = "Không tìm thấy nhà" + houseConsummption.HouseName;
+                                return Json(response, JsonRequestBehavior.AllowGet);
+                            }
+                        }
                         else
                         {
-                            monthlyResidentExpense.ToNumber = houseConsummption.ToNumber;
-                            monthlyResidentExpense.Water = houseConsummption.ToNumber - houseConsummption.FromNumber;
+                            response.StatusCode = 2;
+                            response.Data = houseConsummption.HouseName;
+                            return Json(response, JsonRequestBehavior.AllowGet);
                         }
-                        monthlyResidentExpense.FromNumber = houseConsummption.FromNumber;
-                        monthlyResidentExpense.WaterCost = totalWater;
-                        monthlyResidentExpense.HouseName = houseConsummption.HouseName;
-                        monthlyResidentExpense.Floor = houseConsummption.Floor;
-                        monthlyResidentExpense.Block = houseConsummption.Block;
-                        monthlyResidentExpense.HouseId = house.Id;
-                        monthlyResidentExpense.Total = totalWater;
-                        monthlyResidentExpense.DT_RowId = new StringBuilder("consump_house_").Append(house.Id).ToString();
-                        monthlyResidentExpenseList.Add(monthlyResidentExpense);
+
                     }
                 }
+                response.Data = monthlyResidentExpenseList;
             }
-            response.Data = monthlyResidentExpenseList;
+            catch (Exception)
+            {
+                response.StatusCode = -1;
+                return Json(response, JsonRequestBehavior.AllowGet);
+                throw;
+            }
+
             return Json(response, JsonRequestBehavior.AllowGet);
         }
 
@@ -1623,11 +1677,19 @@ namespace AMS.Controllers
                             {
                                 receipt.HouseId = updateHouse.Id;
                             }
+                            receipt.PublishDate = DateTime.ParseExact(receiptModel.PublishDate, AmsConstants.DateFormat,
+                                CultureInfo.CurrentCulture);
                             receipt.Title = receiptModel.ReceiptTitle;
                             receipt.Description = receiptModel.ReceiptDesc;
                             receipt.LastModified = DateTime.Now;
                             _receiptServices.Update(receipt);
+                            if (receipt.PublishDate.Value.Date == DateTime.Today)
+                            {
+                                receipt.Status = SLIM_CONFIG.RECEIPT_STATUS_UNPAID;
+                                response.Data = new {publishDate = receipt.PublishDate.Value.ToString(AmsConstants.DateFormat)};
+                            }
                         }
+                        
                         else
                         {
                             response.StatusCode = 5;

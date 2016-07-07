@@ -130,5 +130,9 @@ namespace AMS.Models
         public string CreateDate { get; set; }
         public string Id { get; set; }
         public int Gender { get; set; }
+        public string CellNumb { get; set; }
+        public string Dob { get; set; }
+        public string IdentityIssuedDate { get; set; }
+        public string Identity { get; set; }
     }
 }

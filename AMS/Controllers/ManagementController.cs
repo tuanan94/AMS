@@ -430,20 +430,18 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
-        [Route("Management/ManageRequestView/{userId}")]
-        public ActionResult ManageRequestView(int userId)
+        [Route("Management/ManageRequestView")]
+        public ActionResult ManageRequestView()
         {
             ViewBag.helpdeskServices = _helpdeskServicesService.GetHelpdeskServices();
-            ViewBag.userId = userId;
             return View("ManageHelpdeskService");
         }
 
         [HttpGet]
-        [Route("Management/ViewHelpdeskServiceCategory/{userId}")]
-        public ActionResult ViewHelpdeskServiceCategory(int userId)
+        [Route("Management/ViewHelpdeskServiceCategory")]
+        public ActionResult ViewHelpdeskServiceCategory()
         {
             ViewBag.helpdeskServiceCategories = _helpdeskServiceCatService.GetAll();
-            ViewBag.userId = userId;
             return View("ManageHelpdeskServiceCategory");
         }
 
@@ -503,8 +501,17 @@ namespace AMS.Controllers
                 resdident.FullName = res.Fullname;
                 resdident.HouseId = res.HouseId.Value;
                 resdident.HouseName = res.House.HouseName;
-                resdident.HouseHolderName = res.House.Users.First().Fullname;
-                resdident.CreateDate = res.CreateDate.Value.ToString(parternTime);
+                User houseOwner = _userServices.FindById(res.House.OwnerID.Value);
+                if (null != houseOwner)
+                {
+                    resdident.HouseHolderName = houseOwner.Fullname;
+                }
+                resdident.Gender = res.Gender.Value;
+                resdident.CreateDate = res.CreateDate.Value.ToString(AmsConstants.DateFormat);
+                resdident.IdentityIssuedDate = res.IDCreatedDate == null ? "" : res.IDCreatedDate.Value.ToString(AmsConstants.DateFormat);
+                resdident.Dob = res.DateOfBirth == null ? "" : res.DateOfBirth.Value.ToString(AmsConstants.DateFormat);
+                resdident.Identity = res.IDNumber;
+                resdident.CellNumb = res.SendPasswordTo;
                 response.Data = resdident;
             }
             else

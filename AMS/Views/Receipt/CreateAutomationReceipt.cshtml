@@ -46,7 +46,7 @@
                             <span>Tạo mới thất bại.</span>
                         </div>
                         <div class="alert alert-danger" id="msgAddFailedNoty" style="display: none">
-                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <a href="#" class="close" onclick="$('.alert').hide()" aria-label="close">&times;</a>
                             <span id="notyMsg"></span>
                         </div>
                         @{
@@ -181,7 +181,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="pull-right">
-                                    <span id="btnAddAutomationReceipt" class="btn btn-info hide" onclick="saveAutomationReceipt()"> <i class="fa fa-save"></i> Lưu</span>
+                                    <button type="submit" id="btnAddAutomationReceipt" class="btn btn-info hide"> <i class="fa fa-save"></i> Lưu</button>
                                 </div>
                             </div>
                             }
@@ -201,19 +201,19 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 id="hdSrvModalTitle" class="modal-title">Cập nhật số lượng sử dụng</h4>
             </div>
-            <div class="modal-body">
-                <div class="panel-body">
+            <form id="editHouseConsumptionForm" class="form-horizontal" role="form">
+                <div class="modal-body">
+                    <div class="panel-body">
 
-                    <div class="alert alert-info" id="successAddTransTypeNotify" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span>Thêm loại giao dịch thành công.</span>
-                    </div>
-                    <div class="alert alert-danger" id="failedAddTransTypeNotify" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span>Thêm loại giao dịch thất bại.</span>
-                    </div>
+                        <div class="alert alert-info" id="successAddTransTypeNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Thêm loại giao dịch thành công.</span>
+                        </div>
+                        <div class="alert alert-danger" id="failedAddTransTypeNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Thêm loại giao dịch thất bại.</span>
+                        </div>
 
-                    <form id="editHouseConsumptionForm" class="form-horizontal" role="form">
                         <div class="form-group">
                             <label for="houseConsumptHouseName" class="col-md-2 control-label">Căn hộ </label>
                             <div class="col-md-2">
@@ -243,12 +243,13 @@
                         </div>
 
                         <input type="hidden" id="houseId" />
-                    </form>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <span id="addHdSrv" onclick="updateHouseUtilServieConsume()" class="btn btn-info">Chấp nhận</span>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <span id="addHdSrv" onclick="updateHouseUtilServieConsume()" class="btn btn-info">Chấp nhận</span>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -310,6 +311,7 @@
 
             }
         });
+        validateHeaderReceipt();
     });
     function processAutomationReceipt(fileCsvName) {
         /*location.href = "/Management/ManageReceipt/UtilityConsumptionView";*/
@@ -318,8 +320,28 @@
             "ajax": {
                 url: "/Management/ManageReceipt/GetMonthlyResidentExpenseList?csvFilePath=" + fileCsvName,
                 dataSrc: function (data) {
-                    window.houseConsumptionList = data.Data;
-                    return data.Data;
+                    var msg = "";
+                    if (data.StatusCode === 0) {
+                        window.houseConsumptionList = data.Data;
+                        $("#msgAddFailedNoty").fadeOut("fast");
+                        return data.Data;
+                    } else  if(data.StatusCode === -1) {
+                        msg = "Có lỗi xãy ra. Kiểm tra lại file ghi điện nước";
+                    }else if (data.StatusCode === 2) {
+                        msg = "Tòa nhà, Tầng và Căn hộ không đươc để trống";
+                    }else if (data.StatusCode === 4) {
+                        msg = "Không tìm thấy căn hộ: <strong>"+ data.Data+ "</strong>";
+                    }else if (data.StatusCode === 5) {
+                        msg = "Số ghi nước tháng trước không chính xác: : <strong>"+ data.Data+ "</strong>";
+                    }else if (data.StatusCode === 6) {
+                        msg = "Số ghi nước tháng mới phải lớn hơn số tháng trước: : <strong>"+ data.Data+ "</strong>";
+                    }
+                    $("#notyMsg").html(msg);
+                    $("#msgAddFailedNoty").fadeIn("fast");
+                    //                    setTimeout(function() {
+                    //                        $("#msgAddFailedNoty").fadeOut("fast");
+                    //                    },3000);
+                    return [];
                 }
             },
             "destroy": true,
@@ -329,10 +351,10 @@
                 var deleteBtn =
             "<div class='hide' id='delConsumptionRecordBtnGroup'>" +
                 "<span class='btn btn-warning btn-stroke' onclick='cancelDeleteConsumptionRecord()'>" +
-                    "<i class='fa fa-plus'></i> Hủy" +
+                    "Hủy" +
                 "</span>" +
                 "<span class='btn btn-primary' style='margin-left: 5px' onclick='commitDeleteConsumptionRecord()'>" +
-                    "<i class='fa fa-plus'></i> Chấp nhận" +
+                    "Chấp nhận" +
                 "</span>" +
             "</div>";
                 $("#utilityConsumptionTbl_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(deleteBtn);
@@ -499,6 +521,7 @@
         window.deleteConsumptionRecordList = new Array();
         $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
     }
+
     function saveAutomationReceipt() {
         var title = $("#receiptTitle").val();
         var publishDate = $("#publishDate").val();
@@ -578,5 +601,40 @@
         $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
         window.deleteConsumptionRecordList = new Array();
 
+    }
+    function validateHeaderReceipt() {
+        $("#addUtilServiceForm").validate({
+            rules: {
+                ReceiptTitle: {
+                    required: true,
+                    maxlength: 255
+                },
+                PublishDate: {
+                    required: true,
+                    maxlength: 255
+                },
+                ReceiptDesc: {
+                    maxlength: 1000
+                }
+            },
+            messages: {
+                ReceiptTitle: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 255 ký tự."
+                },
+                PublishDate: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 255 ký tự."
+                },
+                ReceiptDesc: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 100 ký tự."
+                }
+
+            },
+            submitHandler: function () {
+                saveAutomationReceipt();
+            }
+        });
     }
 </script>

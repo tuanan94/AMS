@@ -11,13 +11,19 @@
             <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Quản lý phí sinh hoạt</span>
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li class="active">
-                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-file-text-o"></i> Phí sinh họat</a>
-                </li>
-                <li>
-                    <a href="/Management/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Quản lý nhà</a>
+                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-usd"></i> Phí sinh họat</a>
                 </li>
                 <li class="">
                     <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-home"></i> Căn hộ</a>
+                </li>
+                <li class="">
+                    <a href="/Management/ManageRequestView"><i class="fa fa-wrench"></i> DV sửa chữa</a>
+                </li>
+                <li>
+                    <a href="/Management/ViewHelpdeskServiceCategory"><i class="fa fa fa-tags"></i> Nhóm DV sửa chữa</a>
+                </li>
+                <li class="">
+                    <a href="/Management/BalanceSheet/ManageTransactionCatView"><i class="fa fa-tags"></i> Nhóm thu chi</a>
                 </li>
             </ul>
         </div>
@@ -95,10 +101,10 @@
                 var deleteBtn =
             "<div class='hide' id='delConsumptionRecordBtnGroup'>" +
                 "<span class='btn btn-warning btn-stroke' onclick='cancelDeleteConsumptionRecord()'>" +
-                    "<i class='fa fa-plus'></i> Hủy" +
+                    "Hủy" +
                 "</span>" +
                 "<span class='btn btn-primary' style='margin-left: 5px' onclick='commitDeleteConsumptionRecord()'>" +
-                    "<i class='fa fa-plus'></i> Chấp nhận" +
+                    "Chấp nhận" +
                 "</span>" +
             "</div>";
                 $("#utilityServices_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(deleteBtn);

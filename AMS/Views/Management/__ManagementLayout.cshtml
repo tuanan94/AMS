@@ -16,6 +16,7 @@
     <script src="~/Scripts/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="~/Content/css/jquery-ui.min.css">
     <link rel="stylesheet" href="~/Content/css/dataTables.bootstrap.min.css">
+    <link href="~/Content/css/jquery.datetimepicker.css" rel="stylesheet" />
 </head>
 <body class="breakpoint-1024">
 
@@ -61,10 +62,10 @@
                         <a href="/Management/BalanceSheet/View"><i class="fa fa-dollar"></i> Thu chi</a>
                     </li>
                     <li id="reportNav">
-                        <a href="/Management/ManageReport"><i class="fa fa fa-bell-o"></i> Báo cáo</a>
+                        <a href="/Report/Report"><i class="fa fa fa-bell-o"></i> Báo cáo</a>
                     </li>
                     <li id="surveyNav">
-                        <a href="~/Views/Shared/login.html"><i class="fa fa-list-ol"></i> Khảo sát</a>
+                        <a href="/Survey/Survey"><i class="fa fa-list-ol"></i> Khảo sát</a>
                     </li>
                     <li id="configNav" class="">
                         <a href="/Management/Config/UtilityService/View"><i class="fa fa-wrench"></i> Cấu Hình</a>
@@ -95,6 +96,8 @@
     <script src="~/Scripts/amsScript/additional-methods.min.js"></script>
     <script src="~/Scripts/amsScript/jquery.validate.min.js"></script>
     <script src="~/Scripts/amsScript/jquery.timepicker.min.js"></script>
+    <script src="~/Scripts/jquery.datetimepicker.full.js"></script>
+
     @RenderSection("scripts", required: false)
 
 </body>
