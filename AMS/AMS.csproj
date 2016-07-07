@@ -248,6 +248,7 @@
     <Compile Include="AspNetUserLogin.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="AutoRedirect.cs" />
     <Compile Include="BalanceSheet.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

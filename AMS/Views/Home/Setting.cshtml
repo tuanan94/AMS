@@ -21,7 +21,7 @@
                         </div>
                         <div class="panel-body" id="memberPanelBody">
                             <div class="row" style="text-align:center">
-                                <a href="#" class="familymember">
+                                <a href="javascript:void(0)" class="familymember">
                                     <div style="width:100px;height:120px;float:left">
                                         <img src="~/Content/images/home_default.jpg" style="width:100%;" />
                                         <div style="margin-top: 5px; font-size: small;font-weight: 700;background-color: aliceblue;">
@@ -43,7 +43,7 @@
                                 @{
                                     foreach (User pendingU in pendingMembers)
                                     {   <div class="familymember">
-                                        <a href="#" class="" onclick="LoadUserProfile(@pendingU.Id)">
+                                        <a href="javascript:void(0)" class="" onclick="LoadUserProfile(@pendingU.Id)">
                                             <div style="height:120px;float:left">
                                                 <img src="@(pendingU.ProfileImage==null||pendingU.ProfileImage.Equals("")?"/Content/Images/defaultProfile.png":pendingU.ProfileImage)" style="height:80%" />
                                                 <div style="margin-top: 5px; font-size: small;font-weight: 700;background-color: aliceblue;">
@@ -159,28 +159,6 @@
                         <button class="btn btn-primary btn-xs" style="width:100%;margin-top:10px" onclick="chooseNewMemberProfile()">Chọn ảnh đại diện</button>
                         <input type="file" id="selectNewMemberProfileImage" style="display:none" />
                         <div class="form-group">
-                            <label>Cư trú theo diện</label>
-                            <div>
-                                <input type="radio" name="type" value="KT1" />KT1
-                            </div>
-                            <div>
-                                <input type="radio" name="type" value="KT2" />KT2
-                            </div>
-                            <div>
-                                <input type="radio" name="type" value="KT3" />KT3
-                            </div>
-                            <div>
-                                <input type="radio" name="type" value="KT4" />KT4
-                            </div>
-                            <div>
-                                <input type="radio" name="type" value="None" />Chưa đăng kí
-                            </div>
-
-                        </div>
-                        <a href="http://danluat.thuvienphapluat.vn/giai-dap-ve-kt1-kt2-kt3-kt4-120705.aspx">Tôi thuộc diện nào?</a>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="form-group">
                             <label>Họ và tên</label>
                             <input id="createMemberFullname" class="form-control" placeholder="VD: Nguyễn Văn A" />
                         </div>
@@ -189,6 +167,9 @@
                             <input id="createMemberUsername" class="form-control" />
                             <div id="UsernameAlert" class="hidden">Tên đăng nhập hợp lệ</div>
                         </div>
+                    </div>
+                    <div class="col-md-8">
+                       
 
                         <div class="form-group">
                             <label>Giới tính</label>
@@ -219,6 +200,14 @@
                                 <option value="1">Con, cháu (gọi bằng cô, dì, chú, bác)</option>
                                 <option value="2">Cháu (gọi bằng ông, bà)</option>
                             </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Số điện thoại nhận thông tin tài khoản</label>
+                            <input class="form-control" data-val="true" id="SendPasswordTo" name="SendPasswordTo" type="text" value="" placeholder="0909123321">
+                        </div>
+                        <div class="form-group">
+                            <label>Xác nhận số điện thoại</label>
+                            <input class="form-control" data-val="true" id="ConfirmSendPasswordTo" name="ConfirmSendPasswordTo" type="text" value="">
                         </div>
                     </div>
                 </div>
@@ -456,13 +445,7 @@
         $("#alertInfo").html("");
         var curDate = new Date();
         var isValid  = true;
-        var type = $('input[name=type]:checked').val();
-        if (type == null){
-            isValid = false;
-            $("#alertInfo").append('Bạn phải chọn diện cư trú <br/>');
-
-        }
-
+     
         var fullname  = $("#createMemberFullname").val();
         if (fullname == ""){
             isValid = false;
@@ -496,9 +479,16 @@
             $("#alertInfo").append('Hãy chọn mối quan hệ với chủ hộ<br/>');
         }
         var gender = $( "#gender option:selected" ).val();
-        //var info = type + " "  + fullname + " "+ username + " " + dateOfBirth;
-        //alert(info);
-
+        var sendPasswordTo = $("#SendPasswordTo").val();
+        if(sendPasswordTo==''){
+            isValid = false;
+            $("#alertInfo").append('Số điện thoại để gửi thông tin tài khoản không được để trống<br/>');
+        }
+        var confirmSendPasswordTo =  $("#ConfirmSendPasswordTo").val();
+        if(confirmSendPasswordTo!=sendPasswordTo){
+            isValid = false;
+            $("#alertInfo").append('Số điện thoại và xác nhận không khớp<br/>');
+        }
         if(isValid){
             $.ajax({
                 url: "/Home/addMember/",
@@ -512,6 +502,7 @@
                     relationShipLevel: relationShip,
                     gender: gender,
                     profileImage: $("#addNewMemberProfilePreview").attr("src"),
+                    sendPasswordTo: sendPasswordTo,
                 },
                 success: function (successData) {
                     if(successData=='false'){

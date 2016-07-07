@@ -47,6 +47,7 @@ namespace AMS.Controllers
             ViewBag.allHouse = allHouse;
             return View(allHouse);
         }
+
         [Authorize]
 
         public ActionResult Index()
@@ -61,6 +62,7 @@ namespace AMS.Controllers
             ViewBag.curHouse = curUser.House;
             weatherResult weatherResult = WeatherUtil.getWeatherResult();
             ViewBag.weather = weatherResult;
+            ViewBag.notifiations = notificationService.getAllNotificationChange(curUser.Id);
             return View();
         }
         [HttpPost]
@@ -452,7 +454,7 @@ namespace AMS.Controllers
 
         [HttpPost]
         [Authorize]
-        public Object addMember(String fullname, String username, String profileImage,int gender, DateTime birthDate, String IDNumber, DateTime idDate, int relationShipLevel)
+        public Object addMember(String fullname, String username, String profileImage,int gender, DateTime birthDate, String IDNumber, DateTime idDate, int relationShipLevel, String sendPasswordTo)
         {
             User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
 
@@ -469,7 +471,7 @@ namespace AMS.Controllers
             u.RoleId = SLIM_CONFIG.USER_ROLE_RESIDENT;
             u.Status = 0;
             u.HouseId = curUser.HouseId;
-            u.Gender = null;
+            u.Gender = gender;
             if (!IDNumber.Equals(""))
             {
                 u.IDNumber = IDNumber;
@@ -482,6 +484,7 @@ namespace AMS.Controllers
             //u.Password = "123123"; AnTT 4/7/2016
             u.Password = StringUtil.genPassword(); //AnTT 4/7/2016
             u.ProfileImage = profileImage;
+            u.SendPasswordTo = sendPasswordTo;
             userService.addUser(u);
             return JsonConvert.SerializeObject(u);
         }
@@ -535,6 +538,15 @@ namespace AMS.Controllers
             ViewBag.Lng = Double.Parse(lng.Value);
 
             return View();
+        }
+        [HttpPost]
+        [Authorize]
+        public void deleteNotification(String data,String type)
+        {
+            if (SLIM_CONFIG.NOTIC_DELETE_TYPE_CHANGEID.Equals(type))
+            {
+                notificationService.deleteNoticByNchangeID(int.Parse(data));
+            }
         }
     }
 }

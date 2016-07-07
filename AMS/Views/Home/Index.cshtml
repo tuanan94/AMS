@@ -4,106 +4,111 @@
     ViewBag.Title = "Home Page";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
     User curUser = ViewBag.curUser;
-    List<UserAnswerPoll> listUserAnswer = new List<UserAnswerPoll>();
+    //List<UserAnswerPoll> listUserAnswer = new List<UserAnswerPoll>();
 
-    HouseServices houseServices = new HouseServices();
-    QuestionService questionService = new QuestionService();
-    AnswerService answerService = new AnswerService();
-    BlockPollService BlockPollService = new BlockPollService();
-    PollService surveyService = new PollService();
-    UserAnswerService userAnswerService = new UserAnswerService();
+    //HouseServices houseServices = new HouseServices();
+    //QuestionService questionService = new QuestionService();
+    //AnswerService answerService = new AnswerService();
+    //BlockPollService BlockPollService = new BlockPollService();
+   
+    //UserAnswerService userAnswerService = new UserAnswerService();
     UserServices userServices = new UserServices();
+    PollService surveyService = new PollService();
     List<Poll> listSurveys = surveyService.GetListPolls();
+    User currentUser = userServices.FindById(int.Parse(User.Identity.GetUserId()));
+ AutoRedirect auto = new AutoRedirect();
+   
     weatherResult weather = ViewBag.weather;
+    List<NotificationChange> notificationChanges = ViewBag.notifiations;
     string alert = "";
+    alert = auto.Auto(currentUser);
 
 
+    //foreach (var item in listSurveys)
+    //{
+    //    if (DateTime.Now >= item.PublishDate && item.Priority == 1)
+    //    {
+    //        User currentUser = userServices.FindById(int.Parse(User.Identity.GetUserId()));
+    //        listUserAnswer = (userAnswerService.GetListUserAnswerPollsByPollId(item.Id));
+    //        List<BlockPoll> listBlockPolls = BlockPollService.FindByPollId(item.Id);
+    //        int k = 0;
+    //        int p = 0;
+    //        if (listSurveys.Count != 0)
+    //        {
+    //            if (item.Mode == 1 && item.Status == 1)
+    //            {
+    //                foreach (var VARIABLE in listUserAnswer)
+    //                {
+    //                    if (VARIABLE.UserId == currentUser.Id)
+    //                    {
+    //                        k++;
+    //                    }
+    //                }
+    //                foreach (var obj in listBlockPolls)
+    //                {
+    //                    if (currentUser.HouseId != null)
+    //                    {
+    //                        if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+    //                        {
+    //                            p++;
+    //                        }
+    //                    }
 
-    foreach (var item in listSurveys)
-    {
-        if (DateTime.Now >= item.PublishDate && item.Priority == 1)
-        {
-            User currentUser = userServices.FindById(int.Parse(User.Identity.GetUserId()));
-            listUserAnswer = (userAnswerService.GetListUserAnswerPollsByPollId(item.Id));
-            List<BlockPoll> listBlockPolls = BlockPollService.FindByPollId(item.Id);
-            int k = 0;
-            int p = 0;
-            if (listSurveys.Count != 0)
-            {
-                if (item.Mode == 1 && item.Status == 1)
-                {
-                    foreach (var VARIABLE in listUserAnswer)
-                    {
-                        if (VARIABLE.UserId == currentUser.Id)
-                        {
-                            k++;
-                        }
-                    }
-                    foreach (var obj in listBlockPolls)
-                    {
-                        if (currentUser.HouseId != null)
-                        {
-                            if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
-                            {
-                                p++;
-                            }
-                        }
+    //                }
+    //                if ((k != 1 && p == 1 && item.Status == 1) || (k != 1 && p == 0 && item.Status == 1))
+    //                //if (k != 1)
+    //                {
+    //                    alert = "Bạn Có Một Survey Cần phải Làm!";
+    //                }
+    //            }
+    //            else if (item.Mode == 2 && currentUser.RoleId == 4 && item.Status == 1)
+    //            {
+    //                foreach (var VARIABLE in listUserAnswer)
+    //                {
+    //                    if (VARIABLE.UserId == currentUser.Id)
+    //                    {
+    //                        k++;
+    //                    }
+    //                }
+    //                foreach (var obj in listBlockPolls)
+    //                {
+    //                    if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+    //                    {
+    //                        p++;
+    //                    }
+    //                }
+    //                if (k != 1 && p == 1 && item.Status == 1)
+    //                // if (k != 1)
+    //                {
+    //                    alert = "Bạn Có Một Survey Cần phải Làm!";
+    //                }
+    //            }
+    //            else if ((item.Mode == 3 && currentUser.RoleId == 4 && item.Status == 1) || (item.Mode == 3 && currentUser.RoleId == 3 && item.Status == 1))
+    //            {
+    //                foreach (var VARIABLE in listUserAnswer)
+    //                {
+    //                    if (VARIABLE.UserId == currentUser.Id)
+    //                    {
+    //                        k++;
+    //                    }
+    //                }
+    //                foreach (var obj in listBlockPolls)
+    //                {
+    //                    if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+    //                    {
+    //                        p++;
+    //                    }
+    //                }
+    //                if (k != 1 && p == 1 && item.Status == 1)
+    //                // if (k != 1)
+    //                {
+    //                    alert = "Bạn Có Một Survey Cần phải Làm!";
+    //                }
+    //            }
 
-                    }
-                    if ((k != 1 && p == 1 && item.Status == 1) || (k != 1 && p == 0 && item.Status == 1))
-                    //if (k != 1)
-                    {
-                        alert = "Bạn Có Một Survey Cần phải Làm!";
-                    }
-                }
-                else if (item.Mode == 2 && currentUser.RoleId == 4 && item.Status == 1)
-                {
-                    foreach (var VARIABLE in listUserAnswer)
-                    {
-                        if (VARIABLE.UserId == currentUser.Id)
-                        {
-                            k++;
-                        }
-                    }
-                    foreach (var obj in listBlockPolls)
-                    {
-                        if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
-                        {
-                            p++;
-                        }
-                    }
-                    if (k != 1 && p == 1 && item.Status == 1)
-                    // if (k != 1)
-                    {
-                        alert = "Bạn Có Một Survey Cần phải Làm!";
-                    }
-                }
-                else if ((item.Mode == 3 && currentUser.RoleId == 4 && item.Status == 1) || (item.Mode == 3 && currentUser.RoleId == 3 && item.Status == 1))
-                {
-                    foreach (var VARIABLE in listUserAnswer)
-                    {
-                        if (VARIABLE.UserId == currentUser.Id)
-                        {
-                            k++;
-                        }
-                    }
-                    foreach (var obj in listBlockPolls)
-                    {
-                        if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
-                        {
-                            p++;
-                        }
-                    }
-                    if (k != 1 && p == 1 && item.Status == 1)
-                    // if (k != 1)
-                    {
-                        alert = "Bạn Có Một Survey Cần phải Làm!";
-                    }
-                }
-
-            }
-        }
-    }
+    //        }
+    //    }
+    //}
 }
 <link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css" />
 <script src="~/Scripts/amsScript/LoadFamilyTree.js"></script>
@@ -176,31 +181,7 @@
             margin-left:5%
         }
         
-        .style_prevu_kit
-        {
-            display:inline-block;
-            border:0;
-            position: relative;
-            -webkit-transition: all 200ms ease-in;
-            -webkit-transform: scale(1); 
-            -ms-transform: scale(1); 
-            -moz-transition: all 200ms ease-in;
-            -moz-transform: scale(1);
-            transition: all 200ms ease-in;
-            transform: scale(1);   
-
-        }
-        .style_prevu_kit:hover
-        {
-            z-index: 2;
-            -webkit-transition: all 200ms ease-in;
-            -webkit-transform: scale(1.5);
-            -ms-transform: scale(1.5);   
-            -moz-transition: all 200ms ease-in;
-            -moz-transform: scale(1.5);
-            transition: all 200ms ease-in;
-            transform: scale(1.5);
-        }
+     
        ul.timeline-list li.mediawithoutBorder:before{
            border-left:none
        }
@@ -294,20 +275,25 @@
                     Thông báo
                 </div>
                 <div class="panel-body">
-                    <div style="margin-bottom:10px">
-                        <i class="fa fa-fw fa-info"></i>
-                        Yêu cầu helpdesk của bạn đả được xử lí
-                        <br />
-                    </div>
-                    <div style="margin-bottom:10px">
-                        <i class="fa fa-fw fa-info"></i>
-                        Bạn có 1 hóa đơn mới cần thanh toán
-                        <br />
-                    </div>
-                    <div style="margin-bottom:10px">
-                        <i class="fa fa-fw fa-info"></i>
-                        Yêu cầu helpdesk của bạn đả được xử lí
-                    </div>
+                        @{
+                            foreach (NotificationChange nChange in notificationChanges)
+                            {
+                                if(nChange.User.Id == curUser.Id)
+                                {
+                                    continue;
+                                }
+                                <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
+                                    <i class="fa fa-fw fa-info"></i>
+                                    @nChange.User.Fullname <span>đã</span> @nChange.Verb <span>trên @nChange.NotificationObject.TargetObject @nChange.NotificationObject.TargetObjectID của bạn</span>
+                                    <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
+
+                                    <br/>
+                                </div>
+                          
+                            }
+                        }
+                   
+
 
                 </div>
             </div>
@@ -410,12 +396,12 @@
 
     }
     function saveEmbedCode() {
-        alert("saveEmbedCode");
+       // alert("saveEmbedCode");
         var embedContent = $("#embedCode").val();
         $("#previewContent").html(embedContent);
     }
     function createNewPost() {
-        alert('createNewPost');
+        //alert('createNewPost');
         $.ajax({
             url: "/Post/Create",
             type: "POST",
@@ -537,6 +523,10 @@
         });
     }
     function addPostToTimeline(index, postObject) {
+        var reportDiv = "";
+        if (postObject['UserId'] != '@curUser.Id') {
+            reportDiv = '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>';
+        }
         $("#timeline").append('<li class="media">'
                        + '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile('+postObject['UserId']+',true)">'
                         
@@ -549,7 +539,7 @@
                         + '<div class="media-body">'
                             + '<div class="panel panel-default panel-feed">'
                                 + '<div class="panel-body" >'
-                                    + '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>'
+                                    + reportDiv
                                     + '<p>' + postObject['Body'] + '</p>'
                                     + '<div class="row" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
                                     + '</div>'
@@ -737,5 +727,24 @@
         var reportContent = $("#reportContent").val()
         console.log("processSendReport: postid=" + postId + "reportContent=" + reportContent)
         sendReport(postId,reportContent)
+    }
+    function deleteNotification(noticChangedId) {
+        console.log('deleteNotification' + noticChangedId)
+        $.ajax({
+            url: "/Home/deleteNotification",
+            type: "POST",
+            data: {
+                data: noticChangedId,
+                type: "@SLIM_CONFIG.NOTIC_DELETE_TYPE_CHANGEID",
+            },
+            success: function (successData) {
+                //alert(successData);
+                $("#notification"+noticChangedId).hide('slow', function(){ $("#notification11").remove(); });
+            },
+            error: function (er) {
+                alert(er);
+            }
+
+        });
     }
 </script>

@@ -12,6 +12,7 @@ namespace AMS.Controllers
 {
     public class SurveyController : Controller
     {
+        NotificationService notificationService = new NotificationService();
         BlockService blockService = new BlockService();
         HouseServices houseServices = new HouseServices();
         PollService PollService = new PollService();
@@ -25,19 +26,21 @@ namespace AMS.Controllers
         [Authorize]
         public ActionResult ViewHistory()
         {
-           
-         
-          
+
+
+         //   string[] counts = Request.Form.GetValues("Count");
             User currentUser = userService.FindById(int.Parse(User.Identity.GetUserId()));
             List<SurveyViewModel> listPolls = new List<SurveyViewModel>();
             List<List<string>> listAll = new List<List<string>>();
             List<List<Double>> listEach = new List<List<Double>>();
             List<List<string>> listCountAll = new List<List<string>>();
+            List<List<Double>> listCountAlls = new List<List<Double>>();
             List<UserAnswerPoll> listUserAnswerPolls = userAnswerService.GetListUserAnswerPollsByUserId(currentUser.Id);
             foreach (var item in listUserAnswerPolls)
             {
                 List<Double> listeach = new List<Double>();
                 List<Double> listCount = new List<Double>();
+                List<Double> listCountsss = new List<Double>();
                 List<string> listCountss = new List<string>();
                 List<string> listAnswers = new List<string>();
                 SurveyViewModel model = new SurveyViewModel();
@@ -47,7 +50,8 @@ namespace AMS.Controllers
                 model.ImageUrl = PollService.FindById(item.PollId).ImageUrl;
                 model.AnswerDate = item.AnswerDate;
                 listPolls.Add(model);
-                List<UserAnswerPoll> listAnswerss = userAnswerService.GetListUserAnswerPollsByAnswer(item.PollId);
+             //  List<UserAnswerPoll> listAnswerss = userAnswerService.GetListUserAnswerPollsByAnswer(item.PollId);
+                List<UserAnswerPoll> listAnswerss = userAnswerService.GetListUserAnswerPollsByAnswerN(item.PollId);
                 foreach (var items in listAnswerss)
                 {
 
@@ -56,33 +60,185 @@ namespace AMS.Controllers
 
                 }
                 Double count = listCount.Sum();
-                foreach (var itema in listAnswerss)
-                {
+                //foreach (var itema in listAnswerss)
+                //{
 
-                    Double answerCount = userAnswerService.CountAnswer(itema.Answer, itema.PollId);
-                    listeach.Add(answerCount);
-                    string percent = string.Format("{0:00.0}", (answerCount / count * 100));
-                    listCountss.Add(percent);
+                //    Double answerCount = userAnswerService.CountAnswer(itema.Answer, itema.PollId);
+                //    listeach.Add(answerCount);
+                //    string percent = string.Format("{0:00.0}", (answerCount / count * 100));
+                //    listCountss.Add(percent);
 
 
-                }
+                //}
                 string answer1 = PollService.FindById(item.PollId).Answer1;
+                Double answerCount1 = userAnswerService.CountAnswer(answer1, item.PollId);
+                string percent1 = string.Format("{0:00.0}", (answerCount1 / count * 100));
                 string answer2 = PollService.FindById(item.PollId).Answer2;
+                Double answerCount2 = userAnswerService.CountAnswer(answer2, item.PollId);
+                string percent2 = string.Format("{0:00.0}", (answerCount2 / count * 100));
                 string answer3 = PollService.FindById(item.PollId).Answer3;
+                Double answerCount3 = userAnswerService.CountAnswer(answer3, item.PollId);
+                string percent3 = string.Format("{0:00.0}", (answerCount3 / count * 100));
                 string answer4 = PollService.FindById(item.PollId).Answer4;
+                Double answerCount4 = userAnswerService.CountAnswer(answer4, item.PollId);
+                string percent4 = string.Format("{0:00.0}", (answerCount4 / count * 100));
                 string answer5 = PollService.FindById(item.PollId).Answer5;
-                listEach.Add(listeach);
-               listCountAll.Add(listCountss);
+                Double answerCount5 = userAnswerService.CountAnswer(answer5, item.PollId);
+                string percent5 = string.Format("{0:00.0}", (answerCount5 / count * 100));
+
+                Double a1 = double.Parse(percent1);
+                Double a2 = double.Parse(percent2);
+                Double a3 = double.Parse(percent3);
+                Double a4 = double.Parse(percent4);
+                Double a5 = double.Parse(percent5);
+
+                listCountsss.Add(a1);
+                listCountsss.Add(a2);
+                listCountsss.Add(a3);
+                listCountsss.Add(a4);
+                listCountsss.Add(a5);
+                listCountAlls.Add(listCountsss);
+               listeach.Add(answerCount1);
+               listeach.Add(answerCount2);
+               listeach.Add(answerCount3);
+               listeach.Add(answerCount4);
+               listeach.Add(answerCount5);
+               listEach.Add(listeach);
+                //listAnswers.Add(answer5);
+                //listAnswers.Add(answer4);
+                //listAnswers.Add(answer3);
+                //listAnswers.Add(answer2);
+                //listAnswers.Add(answer1);
                 listAnswers.Add(answer1);
                 listAnswers.Add(answer2);
                 listAnswers.Add(answer3);
                 listAnswers.Add(answer4);
                 listAnswers.Add(answer5);
+
+                listCountss.Add(percent1);
+                listCountss.Add(percent2);
+                listCountss.Add(percent3);
+                listCountss.Add(percent4);
+                listCountss.Add(percent5);
+                listCountAll.Add(listCountss);
                 listAll.Add(listAnswers);
             }
+            List<Poll> lists = new List<Poll>();
+            List<Poll> listSurveys = PollService.GetListPolls();
+            List<UserAnswerPoll> listUserAnswer = new List<UserAnswerPoll>();
+            int aa = 0;
+            foreach (var item in listSurveys)
+            {
+                if (DateTime.Now >= item.PublishDate)
+                {
+
+                    listUserAnswer = (userAnswerService.GetListUserAnswerPollsByPollId(item.Id));
+                    List<BlockPoll> listBlockPolls = BlockPollService.FindByPollId(item.Id);
+                    int k = 0;
+                    int p = 0;
+
+                    if (listSurveys.Count != 0)
+                    {
+                        if (item.Mode == 1 && item.Status == 1)
+                        {
+                            foreach (var VARIABLE in listUserAnswer)
+                            {
+                                if (VARIABLE.UserId == currentUser.Id)
+                                {
+                                    k++;
+                                }
+                            }
+                            foreach (var obj in listBlockPolls)
+                            {
+                                if (currentUser.HouseId != null)
+                                {
+                                    if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                                    {
+                                        p++;
+                                    }
+                                }
+
+                            }
+
+                            if ((k != 1 && p == 1 && item.Status == 1) || (k != 1 && p == 0 && item.Status == 1))
+                            //if (k != 1)
+                            {
+                                //po.Question = item.Question;
+                                //po.Answer1 = item.Answer1;
+                                //po.Answer2 = item.Answer2;
+
+                                //po.Answer3 = item.Answer3;
+                                //po.Answer4 = item.Answer4;
+                                //po.Answer5 = item.Answer5;
+                                //po.EndDate = item.EndDate;
+                                lists.Add(item);
+                                aa++;
+                            }
+
+                        }
+                        else if (item.Mode == 2 && currentUser.RoleId == 4 && item.Status == 1)
+                        {
+                            foreach (var VARIABLE in listUserAnswer)
+                            {
+                                if (VARIABLE.UserId == currentUser.Id)
+                                {
+                                    k++;
+                                }
+                            }
+                            foreach (var obj in listBlockPolls)
+                            {
+                                if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                                {
+                                    p++;
+                                }
+                            }
+
+                            if (k != 1 && p == 1 && item.Status == 1)
+                            // if (k != 1)
+                            {
+                                lists.Add(item);
+                                aa++;
+                            }
+                        }
+                        else if ((item.Mode == 3 && currentUser.RoleId == 4 && item.Status == 1) || (item.Mode == 3 && currentUser.RoleId == 3 && item.Status == 1))
+                        {
+                            foreach (var VARIABLE in listUserAnswer)
+                            {
+                                if (VARIABLE.UserId == currentUser.Id)
+                                {
+                                    k++;
+                                }
+                            }
+                            foreach (var obj in listBlockPolls)
+                            {
+                                if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                                {
+                                    p++;
+                                }
+                            }
+
+                            if (k != 1 && p == 1 && item.Status == 1)
+                            // if (k != 1)
+                            {
+                                lists.Add(item);
+                                aa++;
+                            }
+                        }
+
+                    }
+
+                    else if (listSurveys.Count == 0)
+                    {
+
+                    }
+                }
+                
+            }
+
+           ViewBag.Count = aa;
             ViewBag.Each = listEach;
             ViewBag.Answer = listAll;
-            ViewBag.ListCount = listCountAll;
+            ViewBag.ListCount = listCountAlls;
             ViewBag.List = listPolls;
             return View();
         }
@@ -148,7 +304,8 @@ namespace AMS.Controllers
             {
                 currentHouse = houseServices.FindById(currentUser.HouseId.Value);
             }
-
+            List<UserAnswerPoll> listUserAnswer = new List<UserAnswerPoll>();
+            List<Poll> lists = new List<Poll>();
             List<Poll> listSurveys = PollService.GetListPolls();
             List<UserAnswerPoll> listUserAnswerPolls = userAnswerService.GetListUserAnswerPollsByPollId();
             List<UserAnswerPoll> listAnswerSurveys = userAnswerService.GetListUserAnswerPoll();
@@ -163,6 +320,110 @@ namespace AMS.Controllers
             {
                 list = userAnswerService.GetListUserAnswerPollsByPollId(obj);
             }
+            foreach (var item in listSurveys)
+            {
+                if (DateTime.Now >= item.PublishDate)
+                {
+                    
+                    listUserAnswer = (userAnswerService.GetListUserAnswerPollsByPollId(item.Id));
+                    List<BlockPoll> listBlockPolls = BlockPollService.FindByPollId(item.Id);
+                    int k = 0;
+                    int p = 0;
+
+                    if (listSurveys.Count != 0)
+                    {
+                        if (item.Mode == 1 && item.Status == 1)
+                        {
+                            foreach (var VARIABLE in listUserAnswer)
+                            {
+                                if (VARIABLE.UserId == currentUser.Id)
+                                {
+                                    k++;
+                                }
+                            }
+                            foreach (var obj in listBlockPolls)
+                            {
+                                if (currentUser.HouseId != null)
+                                {
+                                    if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                                    {
+                                        p++;
+                                    }
+                                }
+
+                            }
+
+                            if ((k != 1 && p == 1 && item.Status == 1) || (k != 1 && p == 0 && item.Status == 1))
+                            //if (k != 1)
+                            {
+                                //po.Question = item.Question;
+                                //po.Answer1 = item.Answer1;
+                                //po.Answer2 = item.Answer2;
+                               
+                                //po.Answer3 = item.Answer3;
+                                //po.Answer4 = item.Answer4;
+                                //po.Answer5 = item.Answer5;
+                                //po.EndDate = item.EndDate;
+                                lists.Add(item);
+                            }
+
+                        }
+                        else if (item.Mode == 2 && currentUser.RoleId == 4 && item.Status == 1)
+                        {
+                            foreach (var VARIABLE in listUserAnswer)
+                            {
+                                if (VARIABLE.UserId == currentUser.Id)
+                                {
+                                    k++;
+                                }
+                            }
+                            foreach (var obj in listBlockPolls)
+                            {
+                                if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                                {
+                                    p++;
+                                }
+                            }
+
+                            if (k != 1 && p == 1 && item.Status == 1)
+                            // if (k != 1)
+                            {
+                                lists.Add(item);
+                            }
+                        }
+                        else if ((item.Mode == 3 && currentUser.RoleId == 4 && item.Status == 1) || (item.Mode == 3 && currentUser.RoleId == 3 && item.Status == 1))
+                        {
+                            foreach (var VARIABLE in listUserAnswer)
+                            {
+                                if (VARIABLE.UserId == currentUser.Id)
+                                {
+                                    k++;
+                                }
+                            }
+                            foreach (var obj in listBlockPolls)
+                            {
+                                if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                                {
+                                    p++;
+                                }
+                            }
+
+                            if (k != 1 && p == 1 && item.Status == 1)
+                            // if (k != 1)
+                            {
+                                lists.Add(item);
+                            }
+                        }
+
+                    }
+
+                    else if (listSurveys.Count == 0)
+                    {
+
+                    }
+                }
+            }
+            ViewBag.ListSurveys = lists;
             //   int a = listCount.Count;
             ViewBag.ListUserAnswerPoll = listAnswerSurveys;
             ViewBag.List = list;
@@ -274,9 +535,19 @@ namespace AMS.Controllers
             //    }
             //    questionService.DeleteQuestion(itemQuestion);
             //}
+            List<UserAnswerPoll> listUserAnswerPolls = userAnswerService.GetListUserAnswerPollsByPollId(obj.Id);
+            foreach (var item in listUserAnswerPolls)
+            {
+                userAnswerService.DeleteUserAnswer(item);
+            }
+            List<BlockPoll> listBlockPolls = BlockPollService.FindByPollId(obj.Id);
+            foreach (var item1 in listBlockPolls)
+            {
+                BlockPollService.DeleteBlockPoll(item1);
+            }
             PollService.DeletePoll(obj);
 
-            return RedirectToAction("Survey");
+            return RedirectToAction("ListPoll");
         }
 
         public ActionResult DetailSurvey(int PollId, string alert)
@@ -637,10 +908,34 @@ namespace AMS.Controllers
 
 
                     }
+                    int p = 0;
+                    List<User> listuUsers = userService.GetAllResident();
+                    foreach (var u in listuUsers)
+                    {
+                        int kk = 0;
+                            if (list.ElementAt(p).Id == BlockPollService.FindBlockIdByHouseId(u.HouseId.Value).BlockId && p < list.Count)
+                            {
+                                kk++;
+                            }
+                            if (kk == 1)
+                            {
+                                Console.WriteLine(u);
+                                notificationService.addNotification("", u.Id, SLIM_CONFIG.NOTIC_VERB_POLL, 2, null);
+
+                            }
+                       
+                    }
+                   
+
+                 
                 }
 
               
             }
+
+
+
+
             ViewBag.Alert = "Tạo survey thành công!!";
             //  return View("Survey");
             return RedirectToAction("ListPoll", new { alerts = "Tạo survey thành công!!" });

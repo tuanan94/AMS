@@ -16,6 +16,7 @@ namespace AMS.Controllers
         UserService userService = new UserService();
         PostService postService = new PostService();
         ImageService imageService = new ImageService();
+        NotificationService notificationService = new NotificationService();
         [HttpPost]
         [Authorize]
         [ValidateInput(false)]
@@ -46,6 +47,11 @@ namespace AMS.Controllers
         public String CreateComment(String detail, int postId)
         {
             User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
+            Post targetPost = postService.findPostById(postId);
+            if (targetPost == null||targetPost.UserId==null)
+            {
+                return "error";
+            }
             if (curUser == null)
             {
                 return "error";
@@ -56,6 +62,7 @@ namespace AMS.Controllers
             c.detail = detail;
             c.createdDate = DateTime.Now;
             postService.addComment(c);
+            notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POST, targetPost.UserId.Value, SLIM_CONFIG.NOTIC_VERB_COMMENT, curUser.Id,targetPost.Id);
             return "success";
 
         }

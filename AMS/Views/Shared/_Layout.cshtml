@@ -1,9 +1,17 @@
 ﻿@using Microsoft.AspNet.Identity;
+@using AMS.Service;
 @{
     var currentUser = User.Identity;
     String url = HttpContext.Current.Request.Url.AbsolutePath;
-
+    UserService userService = new UserService();
+    User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
+    String profile = "/Content/images/defaultProfile.png";
+    if (curUser != null && curUser.ProfileImage != null && !curUser.ProfileImage.Equals(""))
+    {
+        profile = curUser.ProfileImage;
+    }
 }
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,10 +44,10 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a data-toggle="sidebar-chat" class="btn btn-link navbar-btn visible-xs"><i class="fa fa-comments"></i></a>
+                @*<a data-toggle="sidebar-chat" class="btn btn-link navbar-btn visible-xs"><i class="fa fa-comments"></i></a>*@
 
                 <a class="navbar-brand" href="/" style="margin-left: 30px;">
-                    <img src="~/Content/images/logo.png" style="height: 100px;margin-top: -37px;margin-bottom: -20px;" />
+                    <img src="~/Content/images/logo.png" style="height: 80px;margin-top: -37px;margin-bottom: -20px;" />
                     AMS
 
                 </a>
@@ -48,7 +56,7 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="navbar-collapse collapse" id="main-nav" style="height: 1px;">
                 <ul class="nav navbar-nav" style="margin-left: 50px;">
-                    <li style="@(url.Equals("/")||url.Equals("/Home")||url.Equals("/Home/Index")?"background-color:#21988c":"")">
+                    <li style="@(url.Equals("/") || url.Equals("/Home") || url.Equals("/Home/Index") ? "background-color:#21988c" : "")">
                         <a href="/">
                             <i class="fa fa-fw fa-users"></i> Mạng xã hội
                         </a>
@@ -62,27 +70,25 @@
 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="hidden-xs">
+
+                    @*<li class="hidden-xs">
                         <a href="#" data-toggle="sidebar-chat">
                             <i class="fa fa-comments"></i>
                         </a>
 
-                    </li>
+                    </li>*@
 
                     <!-- User -->
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle user" data-toggle="dropdown">
-                            <img src="/images/people/110/guy-5.jpg" alt="Bill" class="img-circle" width="40"> @currentUser.GetUserName() <span class="caret"></span>
+                            <img src="@profile" alt="User name" class="img-circle" height="40">@(curUser==null?"Chưa đăng nhập":curUser.Fullname) <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li>
-                                <a href="/Home/ViewProfile">Profile</a>
+                                <a href="/Home/ViewProfile">Thiết lập thông tin cá nhân</a>
                             </li>
                             <li>
-                                <a href="user-private-messages.html">Messages</a>
-                            </li>
-                            <li>
-                                <a href="/Account/LogOff">Logout</a>
+                                <a href="/Account/LogOff">Thoát</a>
                             </li>
 
                         </ul>

@@ -71,5 +71,9 @@ namespace AMS.Service
         {
             return userAnswerRepository.List.ToList().DistinctBy(t => t.Answer ).Where(t=>t.PollId== id).ToList();
         }
+        public List<UserAnswerPoll> GetListUserAnswerPollsByAnswerN(int id)
+        {
+            return userAnswerRepository.List.ToList().Where(t => t.PollId == id).DistinctBy(t => t.Answer).ToList();
+        }
     }
 }

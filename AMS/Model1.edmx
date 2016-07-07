@@ -717,7 +717,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_NotificationChange_User1">
+
+        <Association Name="FK_NotificationChange_User">
+
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="NotificationChange" Type="Self.NotificationChange" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1136,7 +1138,8 @@
             <End Role="NotificationObject" EntitySet="NotificationObject" />
             <End Role="NotificationChange" EntitySet="NotificationChange" />
           </AssociationSet>
-          <AssociationSet Name="FK_NotificationChange_User1" Association="Self.FK_NotificationChange_User1">
+          <AssociationSet Name="FK_NotificationChange_User" Association="Self.FK_NotificationChange_User">
+
             <End Role="User" EntitySet="User" />
             <End Role="NotificationChange" EntitySet="NotificationChange" />
           </AssociationSet>
@@ -1242,7 +1245,7 @@
     <edmx:ConceptualModels>
       <Schema Namespace="AMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="AMSEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="HelpdeskRequestLogs" EntityType="AMSModel.HelpdeskRequestLog" />
+
           <EntitySet Name="C__MigrationHistory" EntityType="AMSModel.C__MigrationHistory" />
           <EntitySet Name="Answers" EntityType="AMSModel.Answer" />
           <EntitySet Name="AroundProviders" EntityType="AMSModel.AroundProvider" />
@@ -1258,6 +1261,8 @@
           <EntitySet Name="Comments" EntityType="AMSModel.Comment" />
           <EntitySet Name="HelpdeskRequests" EntityType="AMSModel.HelpdeskRequest" />
           <EntitySet Name="HelpdeskRequestHelpdeskSupporters" EntityType="AMSModel.HelpdeskRequestHelpdeskSupporter" />
+
+          <EntitySet Name="HelpdeskRequestLogs" EntityType="AMSModel.HelpdeskRequestLog" />
           <EntitySet Name="HelpdeskServices" EntityType="AMSModel.HelpdeskService" />
           <EntitySet Name="HelpdeskServiceCategories" EntityType="AMSModel.HelpdeskServiceCategory" />
           <EntitySet Name="Houses" EntityType="AMSModel.House" />
@@ -1385,7 +1390,9 @@
             <End Role="NotificationObject" EntitySet="NotificationObjects" />
             <End Role="NotificationChange" EntitySet="NotificationChanges" />
           </AssociationSet>
-          <AssociationSet Name="FK_NotificationChange_User1" Association="AMSModel.FK_NotificationChange_User1">
+
+          <AssociationSet Name="FK_NotificationChange_User" Association="AMSModel.FK_NotificationChange_User">
+
             <End Role="User" EntitySet="Users" />
             <End Role="NotificationChange" EntitySet="NotificationChanges" />
           </AssociationSet>
@@ -1453,23 +1460,9 @@
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
-          </EntityContainer>
-        <EntityType Name="HelpdeskRequestLog">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="HelpdeskRequestId" Type="Int32" />
-          <Property Name="ChangeFromUserId" Type="Int32" />
-          <Property Name="ChangeToUserId" Type="Int32" />
-          <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <Property Name="StatusFrom" Type="Int32" />
-          <Property Name="StatusTo" Type="Int32" />
-          <Property Name="DeadLine" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="HelpdeskRequest" Relationship="AMSModel.FK_HelpdeskRequestLog_HelpdeskReq" FromRole="HelpdeskRequestLog" ToRole="HelpdeskRequest" />
-          <NavigationProperty Name="User" Relationship="AMSModel.FK_HelpdeskRequestLog_User1" FromRole="HelpdeskRequestLog" ToRole="User" />
-          <NavigationProperty Name="User1" Relationship="AMSModel.FK_HelpdeskRequestLog_User2" FromRole="HelpdeskRequestLog" ToRole="User" />
-          </EntityType>
+
+        </EntityContainer>
+
         <EntityType Name="C__MigrationHistory">
           <Key>
             <PropertyRef Name="MigrationId" />
@@ -1668,6 +1661,22 @@
           <Property Name="Status" Type="Int32" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="HelpdeskRequestLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HelpdeskRequestId" Type="Int32" />
+          <Property Name="ChangeFromUserId" Type="Int32" />
+          <Property Name="ChangeToUserId" Type="Int32" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="StatusFrom" Type="Int32" />
+          <Property Name="StatusTo" Type="Int32" />
+          <NavigationProperty Name="HelpdeskRequest" Relationship="AMSModel.FK_HelpdeskRequestLog_HelpdeskReq" FromRole="HelpdeskRequestLog" ToRole="HelpdeskRequest" />
+          <NavigationProperty Name="User" Relationship="AMSModel.FK_HelpdeskRequestLog_User1" FromRole="HelpdeskRequestLog" ToRole="User" />
+          <NavigationProperty Name="User1" Relationship="AMSModel.FK_HelpdeskRequestLog_User2" FromRole="HelpdeskRequestLog" ToRole="User" />
+        </EntityType>
+
         <EntityType Name="HelpdeskService">
           <Key>
             <PropertyRef Name="Id" />
@@ -1745,7 +1754,9 @@
           <Property Name="Actor" Type="Int32" Nullable="false" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="NotificationObject" Relationship="AMSModel.FK_NotificationChange_NotificationObject" FromRole="NotificationChange" ToRole="NotificationObject" />
-          <NavigationProperty Name="User" Relationship="AMSModel.FK_NotificationChange_User1" FromRole="NotificationChange" ToRole="User" />
+
+          <NavigationProperty Name="User" Relationship="AMSModel.FK_NotificationChange_User" FromRole="NotificationChange" ToRole="User" />
+
         </EntityType>
         <EntityType Name="NotificationObject">
           <Key>
@@ -1922,7 +1933,9 @@
           <NavigationProperty Name="HelpdeskRequestLogs" Relationship="AMSModel.FK_HelpdeskRequestLog_User1" FromRole="User" ToRole="HelpdeskRequestLog" />
           <NavigationProperty Name="HelpdeskRequestLogs1" Relationship="AMSModel.FK_HelpdeskRequestLog_User2" FromRole="User" ToRole="HelpdeskRequestLog" />
           <NavigationProperty Name="House" Relationship="AMSModel.FK_User_House" FromRole="User" ToRole="House" />
-          <NavigationProperty Name="NotificationChanges" Relationship="AMSModel.FK_NotificationChange_User1" FromRole="User" ToRole="NotificationChange" />
+
+          <NavigationProperty Name="NotificationChanges" Relationship="AMSModel.FK_NotificationChange_User" FromRole="User" ToRole="NotificationChange" />
+
           <NavigationProperty Name="NotificationObjects" Relationship="AMSModel.FK_NotificationObject_User" FromRole="User" ToRole="NotificationObject" />
           <NavigationProperty Name="Posts" Relationship="AMSModel.FK_tbl_post_tbl_user" FromRole="User" ToRole="Post" />
           <NavigationProperty Name="Receipts" Relationship="AMSModel.FK_Receipt_User" FromRole="User" ToRole="Receipt" />
@@ -2324,7 +2337,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_NotificationChange_User1">
+
+        <Association Name="FK_NotificationChange_User">
+
           <End Type="AMSModel.User" Role="User" Multiplicity="1" />
           <End Type="AMSModel.NotificationChange" Role="NotificationChange" Multiplicity="*" />
           <ReferentialConstraint>
@@ -2722,6 +2737,19 @@
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="HelpdeskRequestId" ColumnName="HelpdeskRequestId" />
                 <ScalarProperty Name="HelpdeskSupporterId" ColumnName="HelpdeskSupporterId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HelpdeskRequestLogs">
+            <EntityTypeMapping TypeName="AMSModel.HelpdeskRequestLog">
+              <MappingFragment StoreEntitySet="HelpdeskRequestLog">
+                <ScalarProperty Name="StatusTo" ColumnName="StatusTo" />
+                <ScalarProperty Name="StatusFrom" ColumnName="StatusFrom" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="ChangeToUserId" ColumnName="ChangeToUserId" />
+                <ScalarProperty Name="ChangeFromUserId" ColumnName="ChangeFromUserId" />
+                <ScalarProperty Name="HelpdeskRequestId" ColumnName="HelpdeskRequestId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
