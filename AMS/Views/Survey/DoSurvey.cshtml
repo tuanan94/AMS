@@ -307,6 +307,7 @@
                                                             </div>
                                                             <div style="text-align: left">
                                                                 @{
+                                        listUserAnswer = (userAnswerService.GetListUserAnswerPollsByPollId(item.Id));
                                                                     if (listUserAnswer.Count == 0)
                                                                     {
                                                                         <span style="font-size: 14px; margin-top: 20px">

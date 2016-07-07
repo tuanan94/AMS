@@ -4,7 +4,7 @@
     ViewBag.Title = "ViewHistory";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
     List<SurveyViewModel> list = ViewBag.List;
-    List<List<string>> listAnswer = ViewBag.ListCount;
+    List<List<Double>> listAnswer = ViewBag.ListCount;
     List<List<string>> answers = ViewBag.Answer;
     List<List<Double>> each = ViewBag.Each;
     int count = ViewBag.Count;
@@ -156,9 +156,9 @@
                                         <label style="padding: 5px;text-align: center">@obj</label>
 
                                         <br />
-                                    </div>
+                                    </div> <hr>
                                 }
-                                                                                        <hr>
+                                                                                       
                             }
                                                     }
 
@@ -169,18 +169,16 @@
                                                                                                         @{
                             foreach (var a in listAnswer.ElementAt(k))
                             {
-                                <div id="rcorners1">
+                                if (a != 0)
+                                {
+                                     <div id="rcorners1">
                                     <progress value="@a" max="100">
                                     </progress> @a %
-                                    @*<div class="progress" style="width: 100%; margin-bottom: 20px">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="@a"
-                                             aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                                            @a%
-                                        </div>
-                                    </div>*@
+                                   
                                 </div><hr>
 
                                                             <input type="hidden" id="answer" name="countAnser" value="@a"/>
+                                }
                                                         }
                                                     }
                                                 </div>
@@ -189,9 +187,12 @@
                                                                                                         @{
                             foreach (var a in each.ElementAt(k))
                             {
-                                                <div id="rcorners3">
+                                if (a != 0)
+                                {
+                                       <div id="rcorners3">
                                                     <label>@a Phiếu </label><br />
                                                 </div><hr>
+                                }
 
 
                                                         }

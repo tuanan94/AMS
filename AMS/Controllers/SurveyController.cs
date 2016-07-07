@@ -33,11 +33,13 @@ namespace AMS.Controllers
             List<List<string>> listAll = new List<List<string>>();
             List<List<Double>> listEach = new List<List<Double>>();
             List<List<string>> listCountAll = new List<List<string>>();
+            List<List<Double>> listCountAlls = new List<List<Double>>();
             List<UserAnswerPoll> listUserAnswerPolls = userAnswerService.GetListUserAnswerPollsByUserId(currentUser.Id);
             foreach (var item in listUserAnswerPolls)
             {
                 List<Double> listeach = new List<Double>();
                 List<Double> listCount = new List<Double>();
+                List<Double> listCountsss = new List<Double>();
                 List<string> listCountss = new List<string>();
                 List<string> listAnswers = new List<string>();
                 SurveyViewModel model = new SurveyViewModel();
@@ -56,28 +58,67 @@ namespace AMS.Controllers
 
                 }
                 Double count = listCount.Sum();
-                foreach (var itema in listAnswerss)
-                {
+                //foreach (var itema in listAnswerss)
+                //{
 
-                    Double answerCount = userAnswerService.CountAnswer(itema.Answer, itema.PollId);
-                    listeach.Add(answerCount);
-                    string percent = string.Format("{0:00.0}", (answerCount / count * 100));
-                    listCountss.Add(percent);
+                //    Double answerCount = userAnswerService.CountAnswer(itema.Answer, itema.PollId);
+                //    listeach.Add(answerCount);
+                //    string percent = string.Format("{0:00.0}", (answerCount / count * 100));
+                //    listCountss.Add(percent);
 
 
-                }
+                //}
                 string answer1 = PollService.FindById(item.PollId).Answer1;
+                Double answerCount1 = userAnswerService.CountAnswer(answer1, item.PollId);
+                string percent1 = string.Format("{0:00.0}", (answerCount1 / count * 100));
                 string answer2 = PollService.FindById(item.PollId).Answer2;
+                Double answerCount2 = userAnswerService.CountAnswer(answer2, item.PollId);
+                string percent2 = string.Format("{0:00.0}", (answerCount2 / count * 100));
                 string answer3 = PollService.FindById(item.PollId).Answer3;
+                Double answerCount3 = userAnswerService.CountAnswer(answer3, item.PollId);
+                string percent3 = string.Format("{0:00.0}", (answerCount3 / count * 100));
                 string answer4 = PollService.FindById(item.PollId).Answer4;
+                Double answerCount4 = userAnswerService.CountAnswer(answer4, item.PollId);
+                string percent4 = string.Format("{0:00.0}", (answerCount4 / count * 100));
                 string answer5 = PollService.FindById(item.PollId).Answer5;
-                listEach.Add(listeach);
-               listCountAll.Add(listCountss);
+                Double answerCount5 = userAnswerService.CountAnswer(answer5, item.PollId);
+                string percent5 = string.Format("{0:00.0}", (answerCount5 / count * 100));
+
+                Double a1 = double.Parse(percent1);
+                Double a2 = double.Parse(percent2);
+                Double a3 = double.Parse(percent3);
+                Double a4 = double.Parse(percent4);
+                Double a5 = double.Parse(percent5);
+
+                listCountsss.Add(a1);
+                listCountsss.Add(a2);
+                listCountsss.Add(a3);
+                listCountsss.Add(a4);
+                listCountsss.Add(a5);
+                listCountAlls.Add(listCountsss);
+               listeach.Add(answerCount1);
+               listeach.Add(answerCount2);
+               listeach.Add(answerCount3);
+               listeach.Add(answerCount4);
+               listeach.Add(answerCount5);
+               listEach.Add(listeach);
+                //listAnswers.Add(answer5);
+                //listAnswers.Add(answer4);
+                //listAnswers.Add(answer3);
+                //listAnswers.Add(answer2);
+                //listAnswers.Add(answer1);
                 listAnswers.Add(answer1);
                 listAnswers.Add(answer2);
                 listAnswers.Add(answer3);
                 listAnswers.Add(answer4);
                 listAnswers.Add(answer5);
+
+                listCountss.Add(percent1);
+                listCountss.Add(percent2);
+                listCountss.Add(percent3);
+                listCountss.Add(percent4);
+                listCountss.Add(percent5);
+                listCountAll.Add(listCountss);
                 listAll.Add(listAnswers);
             }
             List<Poll> lists = new List<Poll>();
@@ -195,7 +236,7 @@ namespace AMS.Controllers
            ViewBag.Count = aa;
             ViewBag.Each = listEach;
             ViewBag.Answer = listAll;
-            ViewBag.ListCount = listCountAll;
+            ViewBag.ListCount = listCountAlls;
             ViewBag.List = listPolls;
             return View();
         }
