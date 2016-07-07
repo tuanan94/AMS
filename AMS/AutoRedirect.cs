@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
 using AMS.Service;
 using Microsoft.Owin.Security.Provider;
 using Microsoft.AspNet.Identity;
 namespace AMS
 {
-    public class AutoRedirect
+    public class AutoRedirect : ActionFilterAttribute
     {
         List<UserAnswerPoll> listUserAnswer = new List<UserAnswerPoll>();
 
@@ -110,6 +112,36 @@ namespace AMS
             }
             return alert;
         }
-    
+        public class MandatorySurveyRedirect : ActionFilterAttribute
+        {
+            public override void OnActionExecuting(ActionExecutingContext context)
+            {
+                base.OnActionExecuting(context);
+
+                /*Xử lý gì đó*/
+                UserServices userServices = new UserServices();
+                AutoRedirect autoRedirect = new AutoRedirect();
+                User user = userServices.FindById(Int32.Parse(context.HttpContext.User.Identity.GetUserId()));
+                string alert = autoRedirect.Auto(user);
+                //if ((user.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT || user.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER) && user.House.OwnerID == null)
+                //{
+                //    context.Result = new RedirectToRouteResult(new RouteValueDictionary(new
+                //    {
+                //        controller = "Home",
+                //        action = "Index"
+                //    }));
+                //}
+                if (!alert.Equals(""))
+                {
+                    context.Result = new RedirectToRouteResult(new RouteValueDictionary(new
+                    {
+                        controller = "Survey",
+                        action = "DoSurvey"
+                    }));
+                }
+
+                /*Xử lý gì đó*/
+            }
+        }
     }
 }

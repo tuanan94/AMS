@@ -117,6 +117,7 @@ namespace AMS.Controllers
 
         [Authorize]
         [HttpGet]
+        [AutoRedirect.MandatorySurveyRedirect]
         [Route("Home/HelpdeskRequest/ViewHistory")]
         public ActionResult ViewHistoryHdRequest()
         {
