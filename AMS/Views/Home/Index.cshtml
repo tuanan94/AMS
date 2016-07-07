@@ -395,12 +395,12 @@
 
     }
     function saveEmbedCode() {
-        alert("saveEmbedCode");
+       // alert("saveEmbedCode");
         var embedContent = $("#embedCode").val();
         $("#previewContent").html(embedContent);
     }
     function createNewPost() {
-        alert('createNewPost');
+        //alert('createNewPost');
         $.ajax({
             url: "/Post/Create",
             type: "POST",
@@ -522,6 +522,10 @@
         });
     }
     function addPostToTimeline(index, postObject) {
+        var reportDiv = "";
+        if (postObject['UserId'] != '@curUser.Id') {
+            reportDiv = '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>';
+        }
         $("#timeline").append('<li class="media">'
                        + '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile('+postObject['UserId']+',true)">'
                         
@@ -534,7 +538,7 @@
                         + '<div class="media-body">'
                             + '<div class="panel panel-default panel-feed">'
                                 + '<div class="panel-body" >'
-                                    + '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>'
+                                    + reportDiv
                                     + '<p>' + postObject['Body'] + '</p>'
                                     + '<div class="row" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
                                     + '</div>'

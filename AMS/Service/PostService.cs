@@ -94,7 +94,21 @@ namespace AMS.Service
             {
                 result.Add(allPostWithHouseID.ElementAt(i));
             }
-             
+            //Add manager's post to head
+            if (tokenId == -1)
+            {
+                Post managerFirstPost = allPostWithHouseID.Where(p => p.User.RoleId == SLIM_CONFIG.USER_ROLE_MANAGER).FirstOrDefault();
+                if (managerFirstPost != null)
+                {
+                    if (result.Contains(managerFirstPost))
+                    {
+
+                        result.Remove(managerFirstPost);
+                    }
+                    result.Insert(0, managerFirstPost);
+                }
+            }
+            //Convert to post Mapping
             List<PostMapping> postMappingResult = new List<PostMapping>();
             foreach(Post p in result)
             {
@@ -108,6 +122,8 @@ namespace AMS.Service
                 pMapping.userProfile = p.User == null || p.User.ProfileImage == null || p.User.ProfileImage.Equals("") ? "/Content/Images/defaultProfile.png" : p.User.ProfileImage;
                 postMappingResult.Add(pMapping);
             }
+            //Convert to post Mapping
+
             return postMappingResult;
         }
         public List<Post> getAllPostByRole(int roleId)
