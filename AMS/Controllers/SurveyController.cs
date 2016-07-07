@@ -12,6 +12,7 @@ namespace AMS.Controllers
 {
     public class SurveyController : Controller
     {
+        NotificationService notificationService = new NotificationService();
         BlockService blockService = new BlockService();
         HouseServices houseServices = new HouseServices();
         PollService PollService = new PollService();
@@ -907,10 +908,34 @@ namespace AMS.Controllers
 
 
                     }
+                    int p = 0;
+                    List<User> listuUsers = userService.GetAllResident();
+                    foreach (var u in listuUsers)
+                    {
+                        int kk = 0;
+                            if (list.ElementAt(p).Id == BlockPollService.FindBlockIdByHouseId(u.HouseId.Value).BlockId && p < list.Count)
+                            {
+                                kk++;
+                            }
+                            if (kk == 1)
+                            {
+                                Console.WriteLine(u);
+                                notificationService.addNotification("", u.Id, SLIM_CONFIG.NOTIC_VERB_POLL, 2, null);
+
+                            }
+                       
+                    }
+                   
+
+                 
                 }
 
               
             }
+
+
+
+
             ViewBag.Alert = "Tạo survey thành công!!";
             //  return View("Survey");
             return RedirectToAction("ListPoll", new { alerts = "Tạo survey thành công!!" });

@@ -282,13 +282,14 @@
                                 {
                                     continue;
                                 }
-                                <div style="margin-bottom:10px" id="@("notification"+nChange.ID)">
-                                <i class="fa fa-fw fa-info"></i>
-                                @nChange.User.Fullname <span>đã</span> @nChange.Verb <span>trên @nChange.NotificationObject.TargetObject @nChange.NotificationObject.TargetObjectID của bạn</span>
-                                    <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float:right"></i></a>
+                                <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
+                                    <i class="fa fa-fw fa-info"></i>
+                                    @nChange.User.Fullname <span>đã</span> @nChange.Verb <span>trên @nChange.NotificationObject.TargetObject @nChange.NotificationObject.TargetObjectID của bạn</span>
+                                    <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
 
-                                 <br />
-                            </div>
+                                    <br/>
+                                </div>
+                          
                             }
                         }
                    

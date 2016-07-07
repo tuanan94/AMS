@@ -116,10 +116,9 @@ namespace AMS
         //NotificationArea-START
         public static String NOTIC_TARGET_OBJECT_POST = "bài viết";
         public static String NOTIC_TARGET_OBJECT_ADD_MEMBER_REQUEST = "Yêu cầu thêm thành viên";
-        
         public static String NOTIC_VERB_COMMENT = "bình luận";
         public static String NOTIC_VERB_APPROVE = "duyệt";
-
+        public static String NOTIC_VERB_POLL = "tạo bình chọn mới";
         public static String NOTIC_DELETE_TYPE_CHANGEID = "delete_type_changeId";
         //NotificationArea-END
 
