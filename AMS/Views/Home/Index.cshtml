@@ -633,11 +633,11 @@
     function addCommentToCommentArea(postId, comment) {
         $("#commentsArea" + postId).append('<li>'
             + '<div class="media">'
-            + '<a href="" class="pull-left">'
+            + '<a href="javascript:void(0)" onclick ="LoadUserProfile(2,true)"  class="pull-left">'
             + '<img  src="' + comment['userProfile'] + '" class="media-object" style="width:50px">'
             + '</a>'
             + '<div class="media-body">'
-            + '<a href="/Profile/' + comment['userId'] + '" class="comment-author">' + comment['username'] + ': </a>'
+            + '<a href="javascript:void(0)" onclick ="LoadUserProfile(2,true)" class="comment-author">' + comment['username'] + ': </a>'
             + '<span>' + comment['detail'] + '</span>'
             + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
             +'</div>'
