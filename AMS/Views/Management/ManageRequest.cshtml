@@ -8,18 +8,18 @@
 
 <div class="col-md-12">
     <div class="panel panel-default">
-        <div class="panel-heading panel-heading-gray">Yêu cầu hổ trợ</div>
+        <div class="panel-heading panel-heading-gray">Yêu cầu hỗ trợ</div>
         <div class="panel-body">
 
             <ul class="nav nav-tabs" role="tablist">
                 <li class="active">
-                    <a href="#h_desk_req_list" role="tab" data-toggle="tab"><i class="fa fa-fw fa-calendar"></i> Danh sách yêu cầu hỗ từ dân cư</a>
+                    <a href="#h_desk_req_list" role="tab" data-toggle="tab"><i class="fa fa-fw fa-calendar"></i> Danh sách yêu cầu hỗ trợ từ dân cư</a>
                 </li>
                 <li class="" id="helpdeskServiceManage">
-                    <a onclick="loadTab(this, 'helpdeskServiceManage')" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Quản lý yêu cầu hổ trợ</a>
+                    <a onclick="loadTab(this, 'helpdeskServiceManage')" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Quản lý yêu cầu hỗ trợ</a>
                 </li>
                 <li class="">
-                    <a onclick="loadTab(this, 'hdSrvCategoryManage')" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Quản lý yêu cầu hổ trợ</a>
+                    <a onclick="loadTab(this, 'hdSrvCategoryManage')" role="tab" data-toggle="tab"><i class="fa fa-fw fa-th-list"></i> Quản lý yêu cầu hỗ trợ</a>
                 </li>
             </ul>
             <div class="tab-content">
@@ -201,18 +201,18 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 id="hdSrvModalTitle" class="modal-title">Thêm dịch vụ hổ trợ</h4>
+                    <h4 id="hdSrvModalTitle" class="modal-title">Thêm dịch vụ hỗ trợ</h4>
                 </div>
                 <div class="modal-body">
                     <div class="panel-body">
 
                         <div class="alert alert-info" id="successNotify" style="display: none">
                             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                            <span>Dịch vụ hổ trợ được khởi tạo thành công.</span>
+                            <span>Dịch vụ hỗ trợ khởi tạo thành công.</span>
                         </div>
                         <div class="alert alert-danger" id="failedNotify" style="display: none">
                             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                            <span>Dịch vụ hổ trợ được khởi tạo thất bại.</span>
+                            <span>Dịch vụ hỗ trợ được khởi tạo thất bại.</span>
                         </div>
 
                         <form id="addHelpdeskRequestForm" class="form-horizontal" role="form">
@@ -223,7 +223,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="hdSrvCat" class="col-sm-3 control-label">Nhóm dịch vụ hổ trợ</label>
+                                <label for="hdSrvCat" class="col-sm-3 control-label">Nhóm dịch vụ hỗ trợ</label>
                                 <div class="col-sm-9">
                                     <select id="hdSrvCat" name="hdSrvCat" class="form-control" data-size="3">
                                         @*                                        <option value="1">Điện công cộng</option>*@
@@ -242,10 +242,10 @@
                                 <label class="col-sm-3 control-label">Trạng thái</label>
                                 <div class="col-sm-9">
                                     <label class="radio-inline">
-                                        <input type="radio" name="hdSrvStatus" id="hdSrvStatusOn" checked value="1"> Hổ trợ
+                                        <input type="radio" name="hdSrvStatus" id="hdSrvStatusOn" checked value="1"> hỗ trợ
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="hdSrvStatus" id="hdSrvStatusOff" value="0"> Ngưng hổ trợ
+                                        <input type="radio" name="hdSrvStatus" id="hdSrvStatusOff" value="0"> Ngưng hỗ trợ
                                     </label>
                                 </div>
                             </div>
@@ -271,17 +271,17 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 id="hdSrvCateModalTitle" class="modal-title">Thêm loại dịch vụ hổ trợ</h4>
+                    <h4 id="hdSrvCateModalTitle" class="modal-title">Thêm loại dịch vụ hỗ trợ</h4>
                 </div>
                 <div class="modal-body">
                     <div class="panel-body">
                         <div class="alert alert-info" id="hdSrvCatSuccessNotify" style="display: none">
                             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                            <span>Nhóm dịch vụ hổ trợ được khởi tạo thành công.</span>
+                            <span>Nhóm Dịch vụ hỗ trợ khởi tạo thành công.</span>
                         </div>
                         <div class="alert alert-warning" id="hdSrvCatFailedNotify" style="display: none">
                             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                            <span>Nhóm dịch vụ hổ trợ được khởi tạo thất bại.</span>
+                            <span>Nhóm dịch vụ hỗ trợ khởi tạo thất bại.</span>
                         </div>
                         <form id="hdSrvCategoryForm" class="form-horizontal" role="form">
                             <div class="form-group">

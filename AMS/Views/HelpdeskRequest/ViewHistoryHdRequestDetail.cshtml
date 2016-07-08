@@ -41,7 +41,7 @@
                     if (roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT)
                     {
                         <li>
-                            <a href="/Home/HelpdeskRequest/Create"><i class="fa fa-send"></i> Gữi yêu cầu sửa chữa</a>
+                            <a href="/Home/HelpdeskRequest/Create"><i class="fa fa-send"></i> Gửi yêu cầu sửa chữa</a>
                         </li>
                     }
                 }
@@ -64,7 +64,7 @@
                     if (roleId == SLIM_CONFIG.USER_ROLE_MANAGER)
                     {
                         <li>
-                            <a href="/Management/ResidentApprovement/@User.Identity.GetUserId()"><i class="fa fa-group"></i> Xác nhận dân cư</a>
+                            <a href="/Management/ResidentApprovement/@User.Identity.GetUserId()"><i class="fa fa-group"></i> Xác nhận cư dân</a>
                         </li>
                     }
                 }
@@ -80,40 +80,40 @@
 
                     <div class="form-horizontal" id="searchHdSrv" role="form">
                         <div class="form-group">
-                            <div class="col-md-12">
-                                <div class="pull-right">
-                                    @{
-                                        if (hd.Status == (int)StatusEnum.Open && roleId == SLIM_CONFIG.USER_ROLE_MANAGER)
-                                        {
-                                            @*                                <span class="btn btn-info" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Processing), @User.Identity.GetUserId())">Bắt đầu công việc</span>*@
-                                        }
-                                        else if (hd.Status == (int)StatusEnum.Processing && (roleId == SLIM_CONFIG.USER_ROLE_SUPPORTER || roleId == SLIM_CONFIG.USER_ROLE_MANAGER) && hd.User1 != null)
-                                        {
+                        <div class="col-md-12">
+                            <div class="pull-right">
+                                @{
+                                    if (hd.Status == (int)StatusEnum.Open && roleId == SLIM_CONFIG.USER_ROLE_MANAGER)
+                                    {
+                                        @*                                <span class="btn btn-info" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Processing), @User.Identity.GetUserId())">Bắt đầu công việc</span>*@
+                                    }
+                                    else if (hd.Status == (int)StatusEnum.Processing && (roleId == SLIM_CONFIG.USER_ROLE_SUPPORTER || roleId == SLIM_CONFIG.USER_ROLE_MANAGER) && hd.User1 != null)
+                                    {
                                             <span  class="btn btn-success"  onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Done), @User.Identity.GetUserId())"> Hoàn thành</span>
-                                        }
-                                        else if (hd.Status == (int)StatusEnum.Done && (roleId == SLIM_CONFIG.USER_ROLE_RESIDENT || roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER))
-                                        {
-                                            <span class="btn btn-success" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Close ), @User.Identity.GetUserId())"> Đóng</span>
-                                        }
-                                        if (hd.Status == (int)StatusEnum.Open || hd.Status == (int)StatusEnum.Processing && (roleId == SLIM_CONFIG.USER_ROLE_SUPPORTER
-                                                                                                                               || roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT))
-                                        {
-                                            <span class="btn btn-danger" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Cancel ), @User.Identity.GetUserId())"> Hủy</span>
-                                            <span class="btn btn-default" onclick="showEditHdReqModal(@hd.Id)"><i class="fa fa-pencil-square-o"></i> Chỉnh sửa</span>
-                                        }
-                                        if ((hd.Status == (int)StatusEnum.Open || hd.Status == (int)StatusEnum.Processing) && roleId == (int)SLIM_CONFIG.USER_ROLE_MANAGER)
-                                        {
-                                            <span id="btnDuedate" class="btn btn-default" data-id="@hd.Id" data-userid="@User.Identity.GetUserId()"
+                                    }
+                                    else if (hd.Status == (int)StatusEnum.Done && (roleId == SLIM_CONFIG.USER_ROLE_RESIDENT || roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER))
+                                    {
+                                        <span class="btn btn-success" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Close ), @User.Identity.GetUserId())"> Đóng</span>
+                                    }
+                                    if (hd.Status == (int)StatusEnum.Open || hd.Status == (int)StatusEnum.Processing && (roleId == SLIM_CONFIG.USER_ROLE_SUPPORTER
+                                                                                                                           || roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT))
+                                    {
+                                        <span class="btn btn-danger" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Cancel ), @User.Identity.GetUserId())"> Hủy</span>
+                                        <span class="btn btn-default" onclick="showEditHdReqModal(@hd.Id)"><i class="fa fa-pencil-square-o"></i> Chỉnh sửa</span>
+                                    }
+                                    if ((hd.Status == (int)StatusEnum.Open || hd.Status == (int)StatusEnum.Processing) && roleId == (int)SLIM_CONFIG.USER_ROLE_MANAGER)
+                                    {
+                                        <span id="btnDuedate" class="btn btn-default" data-id="@hd.Id" data-userid="@User.Identity.GetUserId()"
                                                   onclick="openSetDeadline()">
                                                 <i class="fa fa-clock-o" aria-hidden="true"></i> Cài đặt ngày hoàn thành
                                             </span>
-                                            <span id="assignHdReqBtn" data-id="@hd.Id" data-fromuser="@User.Identity.GetUserId()" class="btn btn-default" onclick="openModalAssignHdReq(@hd.Id)">
-                                                <i class="fa fa-tasks" aria-hidden="true"></i> Giao việc
-                                            </span>
-                                        }
+                                        <span id="assignHdReqBtn" data-id="@hd.Id" data-fromuser="@User.Identity.GetUserId()" class="btn btn-default" onclick="openModalAssignHdReq(@hd.Id)">
+                                            <i class="fa fa-tasks" aria-hidden="true"></i> Giao việc
+                                        </span>
                                     }
-                                    @*                        <span class="btn btn-default" data-toggle="modal" data-target="#assignTaskModal" data-placement="center">Chia việc</span>*@
-                                </div>
+                                }
+                                @*                        <span class="btn btn-default" data-toggle="modal" data-target="#assignTaskModal" data-placement="center">Chia việc</span>*@
+                            </div>
                             </div>
 
                         </div>
@@ -244,30 +244,30 @@
                                         }
                                     }
                                     @{if (hd.DueDate != null)
-                                    {
-                                        strDateTime = hd.DueDate.Value.ToString(AmsConstants.DateTimeFormat);
+                                        {
+                                            strDateTime = hd.DueDate.Value.ToString(AmsConstants.DateTimeFormat);
                                     }
                                     else
                                     {
                                         strDateTime = "Chưa thiết lập";
                                     }
-                                    <div class="form-group">
+                                            <div class="form-group">
                                         <label for="HdReqUpdate" class="col-md-4 control-label">Hẹn</label>
                                         <div class="col-md-8">
-                                            <input type="text" class="form-control timepicker" readonly="readonly" data-date-format="dd/mm/yyyy" value="@strDateTime" />
-                                        </div>
-                                    </div>
-                                    }
+                                                    <input type="text" class="form-control timepicker" readonly="readonly" data-date-format="dd/mm/yyyy" value="@strDateTime" />
+                                                </div>
+                                            </div>
+                                        }
                                     @{if (hd.CloseDate != null)
-                                    {
-                                        strDateTime = hd.CloseDate.Value.ToString(AmsConstants.DateTimeFormat);
-                                        <div class="form-group">
+                                        {
+                                            strDateTime = hd.CloseDate.Value.ToString(AmsConstants.DateTimeFormat);
+                                            <div class="form-group">
                                             <label for="HdReqFinished" class="col-md-4 control-label">Hoàn thành</label>
                                             <div class="col-md-8">
-                                                <input type="text" class="form-control timepicker" readonly="readonly" data-date-format="dd/mm/yyyy" value="@strDateTime" />
+                                                    <input type="text" class="form-control timepicker" readonly="readonly" data-date-format="dd/mm/yyyy" value="@strDateTime" />
+                                                </div>
                                             </div>
-                                        </div>
-                                    }
+                                        }
                                     }
                                 </fieldset>
                             </div>
@@ -295,7 +295,7 @@
                                                         @{
                                                     if (log.StatusFrom == (int)StatusEnum.Open && log.StatusTo == (int)StatusEnum.Open)
                                                     {
-                                                        <td>Tạo mới yêu cầu hổ trợ</td>
+                                                        <td>Tạo mới yêu cầu hỗ trợ</td>
                                                     }
                                                     else if (log.StatusFrom == (int)StatusEnum.AssignTask)
                                                     {
@@ -307,12 +307,12 @@
                                                     {
                                                         <td>
                                                             Việc được giao cho: [<strong> @log.User1.Fullname </strong>]
-</td>
+                                                        </td>
                                                     }
                                                     else if (log.StatusFrom == (int)StatusEnum.ChangeDueDate)
                                                     {
                                                         <td>
-                                                            Chuyễn ngày hoàn thành: [<strong> @log.DeadLine.Value.ToString(AmsConstants.DateTimeFormat) </strong>]
+                                                            Chuyển ngày hoàn thành: [<strong> @log.DeadLine.Value.ToString(AmsConstants.DateTimeFormat) </strong>]
                                                         </td>
                                                     }
                                                     else
@@ -408,12 +408,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 id="hdSrvModalTitle" class="modal-title">Cập nhật yêu cầu hổ trợ</h4>
+                <h4 id="hdSrvModalTitle" class="modal-title">Cập nhật yêu cầu hỗ trợ</h4>
             </div>
             <form id="updateHelpdeskRequestForm" class="form-horizontal" action="/Home/HelpdeskRequest/UpdateHdRequest" method="POST" role="form">
 
-                <div class="modal-body">
-                    <div class="panel-body">
+            <div class="modal-body">
+                <div class="panel-body">
                         <div class="form-group">
                             <label for="hdReqTitle" class="col-md-3 control-label">Tiêu đề </label>
                             <div class="col-md-9">
@@ -424,7 +424,7 @@
                             <label for="hdSrvCatName" class="col-md-3 control-label">Loại dịch vụ</label>
                             <div class="col-md-9 full-width-select">
                                 <select id="hdSrvCatName" name="hdSrvCatName" class="selectpicker">
-                                    <option value="" selected="selected"> Hãy chọn nhóm dịch vụ hổ trợ</option>
+                                    <option value="" selected="selected"> Hãy chọn nhóm dịch vụ hỗ trợ</option>
                                 </select>
                             </div>
                         </div>
@@ -432,7 +432,7 @@
                             <label for="hdServiceId" class="col-md-3 control-label">Tên dịch vụ</label>
                             <div class="col-md-9 full-width-select">
                                 <select id="hdServiceId" name="HdServiceId" class="selectpicker">
-                                    <option value="" selected="selected"> Hãy chọn dịch vụ hổ trợ</option>
+                                    <option value="" selected="selected"> Hãy chọn dịch vụ hỗ trợ</option>
                                 </select>
                             </div>
                         </div>
@@ -445,12 +445,12 @@
 
                         <input type="hidden" name="HdReqId" value="@hd.Id" />
                         <input type="hidden" name="HdReqUserId" value="@User.Identity.GetUserId()" />
-                    </div>
                 </div>
-                <div class="modal-footer">
+            </div>
+            <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    <button id="updateHdRequest" name="HdReqUserDesc" type="submit" class="btn btn-info">Chấp nhận</button>
-                </div>
+                <button id="updateHdRequest" name="HdReqUserDesc" type="submit" class="btn btn-info">Chấp nhận</button>
+            </div>
             </form>
         </div>
     </div>
@@ -463,22 +463,22 @@
                 <h4 class="modal-title">Chia công việc</h4>
             </div>
             <form id="assignTaskForm" class="form-horizontal" method="POST" action="/Home/HelpdeskRequest/AssignTask" role="form">
-                <div class="modal-body">
-                    <div class="panel-body">
+            <div class="modal-body">
+                <div class="panel-body">
                         <div class="form-group">
-                            <label for="hdSrvCat" class="col-md-3 control-label">Nhân viên hổ trợ</label>
-                            <div class="col-md-9">
+                            <label for="hdSrvCat" class="col-sm-3 control-label">Nhân viên hỗ trợ</label>
+                            <div class="col-sm-9">
                                 <select id="lstSupporter" name="ToUserId" class="form-control" data-size="3"></select>
                             </div>
                         </div>
                         <input id="HdReqId" name="HdReqId" value="" type="hidden" />
                         <input id="FromUserId" name="FromUserId" value="" type="hidden" />
-                    </div>
                 </div>
-                <div class="modal-footer">
+            </div>
+            <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    <button id="assignTask" onclick="submitAssignTask()" name="assignTask" type="submit" class="btn btn-info">Chấp nhận</button>
-                </div>
+                <button id="assignTask" onclick="submitAssignTask()" name="assignTask" type="submit" class="btn btn-info">Chấp nhận</button>
+            </div>
             </form>
         </div>
     </div>
@@ -492,28 +492,28 @@
             </div>
             <div class="panel-body">
                 <form id="setDuedateForm" class="form-horizontal" method="POST" action="/Home/HelpdeskRequest/SetDueDate" role="form">
-                    <div class="modal-body">
+            <div class="modal-body">
 
-                        <div class="panel-body">
-                            <div class="form-group">
+                <div class="panel-body">
+                        <div class="form-group">
                                 <label for="hdSrvCat" class="col-md-3 control-label">Ngày</label>
                                 <div class="col-md-4">
                                     <input id="hdReqDueDateDate" type="text" class="form-control">
-                                </div>
+                        </div>
                                 <label for="hdSrvCat" class="col-md-1 control-label">:</label>
                                 <div class="col-md-3">
-                                    <input id="hdReqDueDateTime" type="text" class="form-control time">
-                                </div>
+                                <input id="hdReqDueDateTime" type="text" class="form-control time">
                             </div>
-                            <input id="HdReqId_2" name="HdReqId" value="" type="hidden" />
-                            <input id="FromUserId_2" name="FromUserId" value="" type="hidden" />
-                            <input id="DueDate" name="DueDate" value="" type="hidden" />
                         </div>
-                    </div>
-                    <div class="modal-footer">
+                        <input id="HdReqId_2" name="HdReqId" value="" type="hidden" />
+                        <input id="FromUserId_2" name="FromUserId" value="" type="hidden" />
+                        <input id="DueDate" name="DueDate" value="" type="hidden" />
+                </div>
+            </div>
+            <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                        <span onclick="setDueDate()" type="submit" class="btn btn-info">Chấp nhận</span>
-                    </div>
+                <span onclick="setDueDate()" type="submit" class="btn btn-info">Chấp nhận</span>
+            </div>
                 </form>
             </div>
         </div>

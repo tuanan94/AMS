@@ -207,7 +207,7 @@
                                             <img src="@(curUser.ProfileImage==null?"/Content/images/defaultProfile.png":curUser.ProfileImage)"  style="max-width:80px">
                                         </div>
                                         <div class="panel-body" id="postStatusArea">
-                                            <textarea id="postContent" name="status" class="form-control share-text" rows="8" placeholder="Chia sẽ những thông tin của bạn..."></textarea>
+                                            <textarea id="postContent" name="status" class="form-control share-text" rows="8" placeholder="Chia sẻ những thông tin của bạn..."></textarea>
                                             <div class="row" style="height:auto;" id="previewList">
 
                                                 <input type="file" id="uploadEditorImage" style="display:none" />
@@ -278,18 +278,32 @@
                         @{
                             foreach (NotificationChange nChange in notificationChanges)
                             {
-                                if(nChange.User.Id == curUser.Id)
+                                if (nChange.User.Id == curUser.Id)
                                 {
                                     continue;
                                 }
-                                <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
-                                    <i class="fa fa-fw fa-info"></i>
-                                    @nChange.User.Fullname <span>đã</span> @nChange.Verb <span>trên @nChange.NotificationObject.TargetObject @nChange.NotificationObject.TargetObjectID của bạn</span>
-                                    <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
+                                if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL.Equals(nChange.NotificationObject.TargetObject))
+                                {
+                                    <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
+                                        <i class="fa fa-fw fa-info"></i>
+                                        <a href="/Survey/doSurvey"> @nChange.User.Fullname <span>đã</span> @nChange.Verb một bình chọn mới </a>  
+                                        <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
 
-                                    <br/>
-                                </div>
-                          
+                                        <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
+                                        <i class="fa fa-fw fa-info"></i>
+                                        @nChange.User.Fullname <span>đã</span> @nChange.Verb <span>trên @nChange.NotificationObject.TargetObject @nChange.NotificationObject.TargetObjectID của bạn</span>
+                                        <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
+
+                                        <br />
+                                    </div>
+                                }
+
+
                             }
                         }
                    
@@ -341,7 +355,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="processSendReport()">Gửi đến quản lí</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="processSendReport()">Gửi đến quản lý</button>
             </div>
         </div>
 

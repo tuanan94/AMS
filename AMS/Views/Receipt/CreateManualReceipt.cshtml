@@ -71,9 +71,9 @@
                                             <div class="col-md-3 full-width-select">
                                                 <select id="houseBlock" name="select" class="form-control">
                                                     @{foreach (var b in block)
-                                                      {
-                                                          <option value="@b.Id">@b.BlockName</option>
-                                                      }
+                                                    {
+                                                        <option value="@b.Id">@b.BlockName</option>
+                                                    }
                                                     }
                                                 </select>
                                             </div>
@@ -81,9 +81,9 @@
                                             <div class="col-md-2">
                                                 <select id="houseFloor" name="select" class="form-control">
                                                     @{foreach (var f in firstBlockFloor)
-                                                      {
-                                                          <option value="@f.Floor">@f.Floor</option>
-                                                      }
+                                                    {
+                                                        <option value="@f.Floor">@f.Floor</option>
+                                                    }
                                                     }
                                                 </select>
                                             </div>
@@ -91,9 +91,9 @@
                                             <div class="col-md-3">
                                                 <select id="houseName" name="select" class="form-control">
                                                     @{foreach (var r in firstBlockFloor)
-                                                      {
-                                                          <option value="@r.HouseName">@r.HouseName</option>
-                                                      }
+                                                    {
+                                                        <option value="@r.HouseName">@r.HouseName</option>
+                                                    }
                                                     }
                                                 </select>
                                             </div>
@@ -104,7 +104,7 @@
                                                 <input type="text" id="forMonthView" value="@balanceSheet.StartDate.Value.ToString(AmsConstants.MonthYearFormat)" class="form-control" readonly="readonly"/>
                                                 <input type="hidden" id="blsId" value="@balanceSheet.Id" name="ForMonth" readonly="readonly"/>
                                             </div>
-                                            <label for="publishDate" class="col-md-2 control-label">Ngày phát hành</label>
+                                            <label for="receiptDesc" class="col-md-2 control-label">Ngày công bố</label>
                                             <div class="col-md-4">
                                                 @*Donot clean this code*@
                                                 <input type="text" id="publishDate" name="PublishDate" class="form-control datepicker" data-date-format="dd-mm-yyyy" data-date-language="vi"
@@ -150,23 +150,23 @@
                                             @{for (int i = 0; i < 3; i++)
                                               {
                                                   <div id="row_@(i + 1)" class="form-group">
-                                                      <div class="col-md-5">
+                                                <div class="col-md-5">
                                                           <input id="item_name_@(i + 1)" name="order-item-name" type="text" class="form-control order-item">
-                                                      </div>
-                                                      <div class="col-md-2">
+                                                </div>
+                                                <div class="col-md-2">
                                                           <input id="item_qty_@(i + 1)" name="order-item-qty" type="text" class="form-control order-item-qty">
-                                                      </div>
-                                                      <div class="col-md-2">
+                                                </div>
+                                                <div class="col-md-2">
                                                           <input id="item_unit_price_@(i + 1)" name="order-item-price" type="text" class="form-control order-item-price">
-                                                      </div>
-                                                      <div class="col-md-2">
+                                                </div>
+                                                <div class="col-md-2">
                                                           <input id="item_qty_price_@(i + 1)" readonly="readonly" name="total-order" type="text" class="form-control total-order">
-                                                      </div>
+                                                </div>
                                                       <span class="btn btn-danger btn-xs" onclick="deleteItem(@(i + 1))"><i class="fa fa-times"></i></span>
-                                                  </div>
+                                            </div>
                                               }
                                             }
-                                        </div>
+                                                </div>
 
                                         <div class="form-group">
                                             <div class="col-md-3">
@@ -205,7 +205,7 @@
 </div>
 
 <script>
-    //    document.getElementById("publishDate").dataset.dateEndDate = "+" + calculateDateFromTodayToEndOfMonth() + "d";
+//    document.getElementById("publishDate").dataset.dateEndDate = "+" + calculateDateFromTodayToEndOfMonth() + "d";
 
     $(document).ready(function () {
 

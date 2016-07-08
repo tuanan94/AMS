@@ -910,6 +910,7 @@ namespace AMS.Controllers
                     }
                     int p = 0;
                     List<User> listuUsers = userService.GetAllResident();
+                    User curUser = userService.FindById(int.Parse(User.Identity.GetUserId()));
                     foreach (var u in listuUsers)
                     {
                         int kk = 0;
@@ -920,7 +921,8 @@ namespace AMS.Controllers
                             if (kk == 1)
                             {
                                 Console.WriteLine(u);
-                                notificationService.addNotification("", u.Id, SLIM_CONFIG.NOTIC_VERB_POLL, 2, null);
+                                //notificationService.addNotification("", u.Id, SLIM_CONFIG.NOTIC_VERB_POLL, 2, null);
+                            notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL, u.Id, SLIM_CONFIG.NOTIC_VERB_CREATE, curUser.Id, null);
 
                             }
                        

@@ -1006,7 +1006,7 @@ namespace AMS.Controllers
                             cannotCreateReceipt.Add(houseRecord);
                             response.StatusCode = 3;
                             response.Data = house.HouseCategory.Name;
-                            response.Msg = new StringBuilder("Không tìm được khung giá nước cho loại nhà ").Append(house.HouseCategory.Name).ToString();
+                            response.Msg = new StringBuilder("Không tìm được khung giá nước cho dạng cư trú ").Append(house.HouseCategory.Name).ToString();
                         }
                         List<UtilServiceForHouseCat> fixCostForHouseCat =
                             house.HouseCategory.UtilServiceForHouseCats.Where(

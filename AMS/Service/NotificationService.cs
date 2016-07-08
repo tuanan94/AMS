@@ -97,7 +97,7 @@ namespace AMS.Service
                 if (p.CreateDate != null)
                 {
                     Notification n = new Notification();
-                    n.notification = "Ban quản lí vừa đăng một bài viết";
+                    n.notification = "Ban quản lý vừa đăng một bài viết";
                     n.type = SLIM_CONFIG.NOTIFICATION_TYPE_MANAGERPOST;
                     n.source = "/Post/" + p.Id;
                     n.date = p.CreateDate.GetValueOrDefault();
