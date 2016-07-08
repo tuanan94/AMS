@@ -486,6 +486,7 @@
                 idToken: idToken,
             },
             success: function (successData) {
+                console.log("GetPostData: "+successData)
                 var obj = JSON.parse(successData);
                 $.each(obj, function (index, jsonObject) {
                     addPostToTimeline(index, jsonObject);
@@ -545,7 +546,7 @@
                         
 
                             + '<img id="userImagePost' + postObject['Id'] + '" src="'+postObject['userProfile']+'" alt="people" class="img-circle" width="80" height="80">'
-                            + '<div id="userNamePost' + postObject['Id'] + '" class="date">'+postObject['username']+'</div>'
+                            + '<div id="userNamePost' + postObject['Id'] + '" class="date">' + postObject['userFullName'] + '</div>'
                      
                         + '</div>'
 
