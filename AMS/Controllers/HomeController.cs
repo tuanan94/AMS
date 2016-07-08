@@ -23,9 +23,11 @@ using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using AMS.ObjectMapping;
+using AMS.Filter;
 
 namespace AMS.Controllers
 {
+    [AuthorizationPrivilegeFilter_RequestHouse]
     public class HomeController : Controller
     {
         TestService testService = new TestService();
@@ -550,5 +552,6 @@ namespace AMS.Controllers
                 notificationService.deleteNoticByNchangeID(int.Parse(data));
             }
         }
+      
     }
 }

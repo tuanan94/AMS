@@ -278,18 +278,32 @@
                         @{
                             foreach (NotificationChange nChange in notificationChanges)
                             {
-                                if(nChange.User.Id == curUser.Id)
+                                if (nChange.User.Id == curUser.Id)
                                 {
                                     continue;
                                 }
-                                <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
-                                    <i class="fa fa-fw fa-info"></i>
-                                    @nChange.User.Fullname <span>đã</span> @nChange.Verb <span>trên @nChange.NotificationObject.TargetObject @nChange.NotificationObject.TargetObjectID của bạn</span>
-                                    <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
+                                if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL.Equals(nChange.NotificationObject.TargetObject))
+                                {
+                                    <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
+                                        <i class="fa fa-fw fa-info"></i>
+                                        <a href="/Survey/doSurvey"> @nChange.User.Fullname <span>đã</span> @nChange.Verb một bình chọn mới </a>  
+                                        <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
 
-                                    <br/>
-                                </div>
-                          
+                                        <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
+                                        <i class="fa fa-fw fa-info"></i>
+                                        @nChange.User.Fullname <span>đã</span> @nChange.Verb <span>trên @nChange.NotificationObject.TargetObject @nChange.NotificationObject.TargetObjectID của bạn</span>
+                                        <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
+
+                                        <br />
+                                    </div>
+                                }
+
+
                             }
                         }
                    

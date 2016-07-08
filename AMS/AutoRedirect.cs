@@ -95,7 +95,7 @@ namespace AMS
                             }
                             foreach (var obj in listBlockPolls)
                             {
-                                if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
+                                if (currentUser.HouseId!=null &&  obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
                                 {
                                     p++;
                                 }
