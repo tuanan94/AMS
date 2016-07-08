@@ -16,5 +16,12 @@ namespace AMS.ObjectMapping
         public int HouseId { get; set; }
         public String HouseName { get; set; }
         public String HouseProfile { get; set; }
+        public List<MoreInfo> moreInfos { get; set; }
+    }
+    public class MoreInfo
+    {
+        public String Id { get; set; }
+        public String createdDate { get; set; }
+        public int type { get; set; }
     }
 }

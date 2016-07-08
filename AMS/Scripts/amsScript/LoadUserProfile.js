@@ -13,7 +13,7 @@ function getUser(userid,loadMember) {
             UserId: userid,
         },
         success: function (successData) {
-            //alert(successData)
+            console.log("Get user: "+successData)
             var obj = JSON.parse(successData);
             addModal(obj,loadMember);
             showModal(obj);
@@ -47,7 +47,7 @@ function addModal(data, loadMember) {
     if (StringDateOfBirth == 'Invalid Date') {
         StringDateOfBirth = "Không xác định"
     } else {
-        StringDateOfBirth = DateOfBirth.getDay() + "/" + (DateOfBirth.getMonth() + 1) + "/" + DateOfBirth.getFullYear()
+        StringDateOfBirth = DateOfBirth.getDate() + "/" + (DateOfBirth.getMonth() + 1) + "/" + DateOfBirth.getFullYear()
 
     }
     var StringSex = "Male";
@@ -61,6 +61,19 @@ function addModal(data, loadMember) {
     if (data['ProfileImage'] != null && data['ProfileImage'] != '') {
         imgSrc = data['ProfileImage']
     }
+    var moreinfos = data['moreInfos'];
+    console.log("Moreinfo: " + moreinfos.length)
+    var moreInfoHtmlArea = "";
+    for (var i = 0; i < moreinfos.length; i++) {
+        moreinfo = moreinfos[i];
+        moreInfoHtmlArea+='<li>'
+                                        + '<div class="row">'
+                                        + '<a href="javascript:void(0)" onclick="displaySinglePost(' + moreinfo['Id'] + ')">'
+                                            + data['FullName'] + ' đã đăng bài viết mới'
+                                        + '</div>'
+                                    + '</li>'
+    }
+
     $("body").append('<!-- Modal -->'
 + '<div id="userprofile' + data['Id'] + '" class="modal fade" role="dialog" style="height:auto">'
     +'<div class="modal-dialog" style="width:60%">'
@@ -78,8 +91,7 @@ function addModal(data, loadMember) {
                     +'<div class="col-md-8">'
                         +'<div class="panel panel-default">'
                             +'<div class="panel-heading panel-heading-gray">'
-                                +'<a href="#" class="btn btn-white btn-xs pull-right"><i class="fa fa-pencil"></i></a>'
-                                +'<i class="fa fa-info-circle"></i> Thông tin'
+                                + '<i class="fa fa-info-circle"></i> Thông tin'
                             +'</div>'
                             +'<div class="panel-body">'
                                 +'<ul class="list-unstyled profile-about">'
@@ -101,17 +113,20 @@ function addModal(data, loadMember) {
                                         +'</div>'
                                     +'</li>'
                                  
-                                    +'<li>'
-                                        +'<div class="row">'
-                                            +'<div class="col-sm-4">'
-                                                +'<span class="text-muted">Ngày sinh</span>'
-                                            +'</div>'
-                                            +'<div class="col-sm-8">'+DateOfBirth.toDateString()+'</div>'
-                                        +'</div>'
-                                    +'</li>'
                                 +'</ul>'
                             +'</div>'
-                        +'</div>'
+                        + '</div>'
+                         + '<div class="panel panel-default">'
+                            + '<div class="panel-heading panel-heading-gray">'
+                                + '<i class="fa fa-info-circle"></i> Hoạt động gần đây'
+                            + '</div>'
+                            + '<div class="panel-body">'
+                                + '<ul class="list-unstyled profile-about" style="margin-left: 10%;">'
+                                    +moreInfoHtmlArea
+
+                                + '</ul>'
+                            + '</div>'
+                        + '</div>'
                     +'</div>'
                 + '</div>'
                   + '<div class="row" style="text-align:center" id="houseinfoRow">'
@@ -146,4 +161,9 @@ function addModal(data, loadMember) {
                            + ' </div>'
                             + '</div>');
     }
+}
+
+
+function displaySinglePost(postId) {
+    alert("Display single post "+postId+" Not implemented")
 }

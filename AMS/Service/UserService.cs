@@ -51,6 +51,16 @@ namespace AMS.Service
             userProfileMapping.HouseId = user.HouseId.GetValueOrDefault();
             userProfileMapping.HouseName = user.House == null ? "Không xác định" : user.House.HouseName;
             userProfileMapping.HouseProfile = user.House == null||user.House.ProfileImage==null||user.House.ProfileImage.Equals("") ? "/Content/Images/home_default.jpg" : user.House.ProfileImage;
+            List<Post> rawPost = user.Posts.ToList();
+            List<MoreInfo> moreInfos = new List<MoreInfo>();
+            foreach(Post p in rawPost)
+            {
+                MoreInfo pInfo = new MoreInfo();
+                pInfo.Id = p.Id +"";
+                pInfo.createdDate = p.CreateDate.ToString();
+                moreInfos.Add(pInfo);
+            }
+            userProfileMapping.moreInfos = moreInfos;
             return userProfileMapping;
         }
         public List<User> findByHouseId(int houseId)

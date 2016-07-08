@@ -189,7 +189,6 @@
 <div class="container-fluid">
     <div class="cover overlay">
         <img src="~/Content/images/banner-842.jpg" alt="cover">
-        <a href="#" class="btn btn-cover"><i class="fa fa-pencil fa-fw"></i></a>
     </div>
     <div class="row">
         <div class="col-md-9">
@@ -487,6 +486,7 @@
                 idToken: idToken,
             },
             success: function (successData) {
+                console.log("GetPostData: "+successData)
                 var obj = JSON.parse(successData);
                 $.each(obj, function (index, jsonObject) {
                     addPostToTimeline(index, jsonObject);
@@ -546,7 +546,7 @@
                         
 
                             + '<img id="userImagePost' + postObject['Id'] + '" src="'+postObject['userProfile']+'" alt="people" class="img-circle" width="80" height="80">'
-                            + '<div id="userNamePost' + postObject['Id'] + '" class="date">'+postObject['username']+'</div>'
+                            + '<div id="userNamePost' + postObject['Id'] + '" class="date">' + postObject['userFullName'] + '</div>'
                      
                         + '</div>'
 
@@ -633,11 +633,11 @@
     function addCommentToCommentArea(postId, comment) {
         $("#commentsArea" + postId).append('<li>'
             + '<div class="media">'
-            + '<a href="" class="pull-left">'
+            + '<a href="javascript:void(0)" onclick ="LoadUserProfile(2,true)"  class="pull-left">'
             + '<img  src="' + comment['userProfile'] + '" class="media-object" style="width:50px">'
             + '</a>'
             + '<div class="media-body">'
-            + '<a href="/Profile/' + comment['userId'] + '" class="comment-author">' + comment['username'] + ': </a>'
+            + '<a href="javascript:void(0)" onclick ="LoadUserProfile(2,true)" class="comment-author">' + comment['username'] + ': </a>'
             + '<span>' + comment['detail'] + '</span>'
             + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
             +'</div>'
@@ -761,4 +761,5 @@
 
         });
     }
+
 </script>

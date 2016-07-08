@@ -20,5 +20,6 @@ namespace AMS.ObjectMapping
         public Nullable<int> Disable { get; set; }
         public String username { get; set; }
         public String userProfile { get; set; }
+        public String userFullName { get; set; }
     }
 }
