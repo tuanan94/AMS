@@ -888,7 +888,7 @@ namespace AMS.Controllers
                // BlockPoll BlockPoll = new BlockPoll();
               
                 string[] listBlock = Request.Form.GetValues("block");
-               
+
                 if (listBlock != null)
                 {
                     List<string> listBlockrs = new List<string>(listBlock);
@@ -909,12 +909,16 @@ namespace AMS.Controllers
 
                     }
                     int p = 0;
-                    List<User> listuUsers = userService.GetAllResident();
+                    // List<User> listuUsers = userService.GetAllResident();
+                    List<User> listAllUsers = userService.GetAllUsers();
                     User curUser = userService.FindById(int.Parse(User.Identity.GetUserId()));
-                    foreach (var u in listuUsers)
+                    foreach (var u in listAllUsers)
                     {
-                        int kk = 0;
-                            if (list.ElementAt(p).Id == BlockPollService.FindBlockIdByHouseId(u.HouseId.Value).BlockId && p < list.Count)
+                        if (u.HouseId != null)
+                        {
+                            int kk = 0;
+                            if (list.ElementAt(p).Id == BlockPollService.FindBlockIdByHouseId(u.HouseId.Value).BlockId &&
+                                p < list.Count)
                             {
                                 kk++;
                             }
@@ -922,22 +926,71 @@ namespace AMS.Controllers
                             {
                                 Console.WriteLine(u);
                                 //notificationService.addNotification("", u.Id, SLIM_CONFIG.NOTIC_VERB_POLL, 2, null);
-                            notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL, u.Id, SLIM_CONFIG.NOTIC_VERB_CREATE, curUser.Id, null);
+                                notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL, u.Id,
+                                    SLIM_CONFIG.NOTIC_VERB_CREATE, curUser.Id, null);
 
                             }
-                       
+                        }
+                        else if (survey.Mode == 1)
+                        {
+                            int kk = 0;
+
+                            if (u.HouseId.HasValue)
+                            {
+                                if (list.ElementAt(p).Id ==
+                                    BlockPollService.FindBlockIdByHouseId(u.HouseId.Value).BlockId && p < list.Count)
+                                {
+                                    kk++;
+                                }
+                            }
+                            if (kk == 1 || kk == 0)
+                            {
+                                Console.WriteLine(u);
+                                //notificationService.addNotification("", u.Id, SLIM_CONFIG.NOTIC_VERB_POLL, 2, null);
+                                notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL, u.Id,
+                                    SLIM_CONFIG.NOTIC_VERB_CREATE, curUser.Id, null);
+
+                            }
+
+                        }
                     }
-                   
-
-                 
                 }
+                else if (listBlock == null)
+                {
+                    // List<User> listuUsers = userService.GetAllResident();
+                    List<User> listAllUsers = userService.GetAllUsers();
+                    User curUser = userService.FindById(int.Parse(User.Identity.GetUserId()));
+                    foreach (var u in listAllUsers)
+                    {
+                        if (u.HouseId != null)
+                        {
+                            int kk = 0;
+                          
+                            if (kk == 1)
+                            {
+                                Console.WriteLine(u);
+                                //notificationService.addNotification("", u.Id, SLIM_CONFIG.NOTIC_VERB_POLL, 2, null);
+                                notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL, u.Id, SLIM_CONFIG.NOTIC_VERB_CREATE, curUser.Id, null);
 
-              
+                            }
+                        }
+                        else if (survey.Mode == 1)
+                        {
+                            int kk = 0;
+
+                           
+                            if (kk == 0)
+                            {
+                                Console.WriteLine(u);
+                                //notificationService.addNotification("", u.Id, SLIM_CONFIG.NOTIC_VERB_POLL, 2, null);
+                                notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL, u.Id, SLIM_CONFIG.NOTIC_VERB_CREATE, curUser.Id, null);
+
+                            }
+
+                        }
+                    }
+                }
             }
-
-
-
-
             ViewBag.Alert = "Tạo survey thành công!!";
             //  return View("Survey");
             return RedirectToAction("ListPoll", new { alerts = "Tạo survey thành công!!" });

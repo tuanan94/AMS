@@ -16,6 +16,17 @@
         color: white;
         font-weight: bold;
     }
+    .deleteButton {
+        display: block;
+        width: 70px;
+        height: 35px;
+        background: red;
+        padding: 7px;
+        text-align: center;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+    }
 </style>
 
 <link href="~/Content/css/datatables.css" rel="stylesheet" />
@@ -125,7 +136,7 @@
                                             <td>
                                                 <div class="form-group">
                                                     <div class="col-sm-8">
-                                                        <a href="@Url.Action("DeleteSurvey", "Survey", new {PollId = @item.Id})" onclick="return myFunction()" class="button">Xóa</a>
+                                                        <a href="@Url.Action("DeleteSurvey", "Survey", new {PollId = @item.Id})" onclick="return myFunction()" class="deleteButton">Xóa</a>
 
                                                     </div>
                                                 </div>

@@ -136,7 +136,7 @@
                             </div><br/>
                            
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">Ngày đăng</label>
+                                <label class="col-sm-3 control-label">Ngày hiệu lực</label>
                                 <div class="col-sm-7">
 
                                     @Html.TextBoxFor(m => m.PublishDate, new {@class = "form-control binh", onchange = "bInfos()"})<br>
@@ -459,7 +459,7 @@
         if (d3 > d2) {
             alert('Ngày kết thúc không hợp lệ!'); return false;
         } else if (d3 < d1) {
-            alert('Ngày đăng không hợp lệ!'); return false;
+            alert('Ngày hiệu lực không hợp lệ!'); return false;
         } else if (d2 < d1) {
             alert('Ngày kết thúc không hợp lệ!'); return false;
         }

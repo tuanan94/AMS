@@ -28,7 +28,11 @@ namespace AMS.Service
                     u => u.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT
                     && u.Status != null && u.Status == SLIM_CONFIG.USER_APPROVE_WAITING).ToList();
         }
-
+        public List<User> GetAllUsers()
+        {
+            return userRepository.List.ToList();
+               
+        }
 
         public void Update(User u)
         {
