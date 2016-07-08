@@ -4,8 +4,9 @@
     UserService userService = new UserService();
     Layout = "~/Views/Shared/_Layout.cshtml";
     House curHouse = userService.findById(int.Parse(User.Identity.GetUserId())).House;
+    User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
     String url = HttpContext.Current.Request.Url.AbsolutePath;
-
+    bool isResidentOrHouseOwner = curUser.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT || curUser.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER;
 }
 <style>
        .style_prevu_kit
@@ -34,40 +35,45 @@
             transform: scale(1.5);
         }
 </style>
+@if (isResidentOrHouseOwner)
+{
 <div class="sidebar left hidden-xs">
     <div data-scrollable="" tabindex="0" style="overflow: hidden; outline: none;">
         <div class="sidebar-block" style="margin: auto;width: 100%;">
-            <a href="@(curHouse==null?"#":("/House/"+curHouse.Id))" class="style_prevu_kit" style="width:100%">
+            <a href="@(curHouse == null ? "#" : ("/House/" + curHouse.Id))" class="style_prevu_kit" style="width:100%">
                 <div class="profile">
-                    <img src="@(curHouse==null|| curHouse.ProfileImage == null||curHouse.ProfileImage.Equals("")?"/Content/images/home_default.jpg":curHouse.ProfileImage)" alt="HOUSE" class="img-circle" width="100px">
+                    <img src="@(curHouse == null || curHouse.ProfileImage == null || curHouse.ProfileImage.Equals("") ? "/Content/images/home_default.jpg" : curHouse.ProfileImage)" alt="HOUSE" class="img-circle" width="100px">
                     <h4>Nhà @(curHouse == null || curHouse.HouseName.Equals("") ? "chưa xác định" : curHouse.HouseName)</h4>
                 </div>
             </a>
         </div>
-        <div id="menu">
-            <ul id="slide-left" class="slide-left-active">
-                <li class="category">Tiện ích</li>
-                <li class="@(url.Contains("/Home/Setting")?"active":"")">
-                    <a href="/Home/Setting"><i class="fa fa-fw fa-cogs"></i> Thiết lập căn hộ</a>
-                </li>
-                
-               
+        
+            <div id="menu">
+                <ul id="slide-left" class="slide-left-active">
+                    <li class="category">Tiện ích</li>
+                    <li class="@(url.Contains("/Home/Setting") ? "active" : "")">
+                        <a href="/Home/Setting"><i class="fa fa-fw fa-cogs"></i> Thiết lập căn hộ</a>
+                    </li>
 
-            
-                <li class="@(url.Contains("/Home/ManageReceipt/View")?"active":"")">
-                    <a href="/Home/ManageReceipt/View"><i class="fa fa-fw fa-money"></i> Hóa đơn</a>
-                </li>
-                <li class="@(url.Contains("/Home")?"active":"")">
-                   
-                </li>
-                <li class="@(url.Contains("/Home/HelpdeskRequest/ViewHistory")?"active":"")">
-                    <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-fw fa-stumbleupon-circle"></i> Yêu cầu sửa chữa</a>
-                </li>
-            </ul>
-        </div>
+
+
+
+                    <li class="@(url.Contains("/Home/ManageReceipt/View") ? "active" : "")">
+                        <a href="/Home/ManageReceipt/View"><i class="fa fa-fw fa-money"></i> Hóa đơn</a>
+                    </li>
+                    <li class="@(url.Contains("/Home") ? "active" : "")">
+
+                    </li>
+                    <li class="@(url.Contains("/Home/HelpdeskRequest/ViewHistory") ? "active" : "")">
+                        <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-fw fa-stumbleupon-circle"></i> Yêu cầu sửa chữa</a>
+                    </li>
+                </ul>
+            </div>
+     
     </div>
     <div id="ascrail2000" class="nicescroll-rails" style="width: 5px; z-index: 1; cursor: default; position: absolute; top: 0px; left: 245px; height: 638px; opacity: 0;"><div style="position: relative; top: 0px; float: right; width: 5px; height: 490px; border: 0px; border-radius: 5px; background-color: rgb(37, 173, 159); background-clip: padding-box;"></div></div><div id="ascrail2000-hr" class="nicescroll-rails" style="height: 5px; z-index: 1; top: 633px; left: 0px; position: absolute; cursor: default; display: none; width: 245px; opacity: 0;"><div style="position: absolute; top: 0px; height: 5px; width: 250px; border: 0px; border-radius: 5px; background-color: rgb(37, 173, 159); background-clip: padding-box;"></div></div>
 </div>
+}
 <div class="sidebar right">
     <div class="chat-search">
         <input type="text" class="form-control" placeholder="Search">
@@ -141,37 +147,7 @@
         </li>
     </ul>
 </div>
-<div id="content">
-
-    @*<nav class="navbar navbar-subnav navbar-static-top" role="navigation">
-        <div class="container-fluid">*@
-
-            <!-- Brand and toggle get grouped for better mobile display -->
-            @*<div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subnav">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="fa fa-ellipsis-h"></span>
-                </button>
-            </div>*@
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            @*<div class="collapse navbar-collapse" id="subnav">
-                <ul class="nav navbar-nav">
-                    <li class="active">
-                        <a href="user-private-timeline.html"><i class="fa fa-fw icon-ship-wheel"></i> New feeds</a>
-                    </li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="login.html"> Logout<i class="fa fa-fw fa-sign-out"></i></a>
-                    </li>
-                </ul>
-            </div>*@
-
-            <!-- /.navbar-collapse -->
-    @*</div>
-    </nav>*@
-
+<div id="content" style="@(isResidentOrHouseOwner==true?"":"margin-left:initial")">
    
     @RenderBody()
      <!--Footer-->

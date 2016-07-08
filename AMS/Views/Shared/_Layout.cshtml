@@ -10,6 +10,8 @@
     {
         profile = curUser.ProfileImage;
     }
+    bool isResidentOrHouseOwner = curUser.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT || curUser.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER;
+    bool isManager = curUser.RoleId == SLIM_CONFIG.USER_ROLE_MANAGER;
 }
 
 <!DOCTYPE html>
@@ -61,12 +63,22 @@
                             <i class="fa fa-fw fa-users"></i> Mạng xã hội
                         </a>
                     </li>
-                    <li>
-                        <a href="/Home/ViewAroundProvider"><i class="fa fa-fw fa-stumbleupon-circle"></i> Dịch vụ xung quanh</a>
-                    </li>
-                    <li>
-                        <a href="/Survey/doSurvey"><i class="fa fa-fw fa-stumbleupon-circle"></i> Khảo sát</a>
-                    </li>
+                    @if (isResidentOrHouseOwner)
+                    {
+                        <li>
+                            <a href="/Home/ViewAroundProvider"><i class="fa fa-fw fa-stumbleupon-circle"></i> Dịch vụ xung quanh</a>
+                        </li>
+                        <li>
+                            <a href="/Survey/doSurvey"><i class="fa fa-fw fa-stumbleupon-circle"></i> Khảo sát</a>
+                        </li>
+                    }
+                    @if (isManager)
+                    {
+                        <li style="background-color:#428bca">
+                            <a href="/Management/HelpdeskRequest/ManageHdRequest"><i class="fa fa-fw fa-stumbleupon-circle"></i> Quản lí</a>
+                        </li>
+                    }
+
 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
