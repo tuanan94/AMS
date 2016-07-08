@@ -68,6 +68,7 @@ function addModal(data, loadMember) {
         moreinfo = moreinfos[i];
         moreInfoHtmlArea+='<li>'
                                         + '<div class="row">'
+                                        + '<a href="javascript:void(0)" onclick="displaySinglePost(' + moreinfo['Id'] + ')">'
                                             + data['FullName'] + ' đã đăng bài viết mới'
                                         + '</div>'
                                     + '</li>'
@@ -160,4 +161,9 @@ function addModal(data, loadMember) {
                            + ' </div>'
                             + '</div>');
     }
+}
+
+
+function displaySinglePost(postId) {
+    alert("Display single post "+postId+" Not implemented")
 }
