@@ -955,37 +955,22 @@ namespace AMS.Controllers
                         }
                     }
                 }
-                else if (listBlock == null)
+                else
                 {
                     // List<User> listuUsers = userService.GetAllResident();
                     List<User> listAllUsers = userService.GetAllUsers();
                     User curUser = userService.FindById(int.Parse(User.Identity.GetUserId()));
                     foreach (var u in listAllUsers)
                     {
-                        if (u.HouseId != null)
+                        if (survey.Mode == 1)
                         {
-                            int kk = 0;
+                            
                           
-                            if (kk == 1)
-                            {
                                 Console.WriteLine(u);
                                 //notificationService.addNotification("", u.Id, SLIM_CONFIG.NOTIC_VERB_POLL, 2, null);
                                 notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL, u.Id, SLIM_CONFIG.NOTIC_VERB_CREATE, curUser.Id, null);
-
-                            }
-                        }
-                        else if (survey.Mode == 1)
-                        {
-                            int kk = 0;
 
                            
-                            if (kk == 0)
-                            {
-                                Console.WriteLine(u);
-                                //notificationService.addNotification("", u.Id, SLIM_CONFIG.NOTIC_VERB_POLL, 2, null);
-                                notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL, u.Id, SLIM_CONFIG.NOTIC_VERB_CREATE, curUser.Id, null);
-
-                            }
 
                         }
                     }
