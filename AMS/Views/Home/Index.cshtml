@@ -10,19 +10,19 @@
     //QuestionService questionService = new QuestionService();
     //AnswerService answerService = new AnswerService();
     //BlockPollService BlockPollService = new BlockPollService();
-   
+
     //UserAnswerService userAnswerService = new UserAnswerService();
     UserServices userServices = new UserServices();
     PollService surveyService = new PollService();
     List<Poll> listSurveys = surveyService.GetListPolls();
     User currentUser = userServices.FindById(int.Parse(User.Identity.GetUserId()));
- AutoRedirect auto = new AutoRedirect();
-   
+    AutoRedirect auto = new AutoRedirect();
+
     weatherResult weather = ViewBag.weather;
     List<NotificationChange> notificationChanges = ViewBag.notifiations;
     string alert = "";
     alert = auto.Auto(currentUser);
-
+    HelpdeskRequestLogServices helpdeskRequestLogService = new HelpdeskRequestLogServices();//AnTT - 09/07/16
 
     //foreach (var item in listSurveys)
     //{
@@ -275,7 +275,7 @@
                 </div>
                 <div class="panel-body">
                         @{
-                            foreach (NotificationChange nChange in notificationChanges)
+                            foreach (NotificationChange nChange in notificationChanges.OrderByDescending(p=>p.CreatedDate))
                             {
                                 if (nChange.User.Id == curUser.Id)
                                 {
@@ -290,12 +290,45 @@
 
                                         <br />
                                     </div>
+                                            }
+                                            else if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_HELPDESK_REQUEST.Equals(nChange.NotificationObject.TargetObject) && nChange.NotificationObject.TargetObjectID != null && SLIM_CONFIG.NOTIC_VERB_ASSIGN_REQUEST.Equals(nChange.Verb))
+                                            {
+                                                HelpdeskRequestLog hdRequestLog = helpdeskRequestLogService.findById(nChange.NotificationObject.TargetObjectID.Value);
+
+                                                User changeToUser = userServices.FindById(hdRequestLog.ChangeToUserId.HasValue ? hdRequestLog.ChangeToUserId.Value : -1);
+                                                if (hdRequestLog != null && changeToUser!=null)
+                                                {
+                                                    <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
+                                                        <i class="fa fa-fw fa-info"></i>
+                                                        <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hổ trợ của bạn đã được chuyển cho nhân viên hỗ trợ @changeToUser.Fullname</a>
+                                                        <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
+
+                                                        <br />
+                                                    </div>
+                                    }
                                 }
+                                else if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_HELPDESK_REQUEST.Equals(nChange.NotificationObject.TargetObject) && nChange.NotificationObject.TargetObjectID != null && SLIM_CONFIG.NOTIC_VERB_FINISH_REQUEST.Equals(nChange.Verb))
+                                {
+                                    HelpdeskRequestLog hdRequestLog = helpdeskRequestLogService.findById(nChange.NotificationObject.TargetObjectID.Value);
+
+                                    User changeToUser = userServices.FindById(hdRequestLog.ChangeToUserId.HasValue ? hdRequestLog.ChangeToUserId.Value : -1);
+                                    if (hdRequestLog != null && nChange.User!=null)
+                                    {
+                                        <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
+                                            <i class="fa fa-fw fa-info"></i>
+                                            <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hổ trợ của bạn đã được xử lí xong bởi @nChange.User.Fullname</a>
+                                            <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
+
+                                            <br />
+                                        </div>
+                                    }
+                                }
+
                                 else
                                 {
                                     <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
                                         <i class="fa fa-fw fa-info"></i>
-                                        @nChange.User.Fullname <span>đã</span> @nChange.Verb <span>trên @nChange.NotificationObject.TargetObject @nChange.NotificationObject.TargetObjectID của bạn</span>
+                                        @nChange.User.Fullname <span>đã</span> @nChange.Verb <span> @nChange.NotificationObject.TargetObject của bạn</span>
                                         <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
 
                                         <br />
@@ -651,7 +684,8 @@
     function timeSince(dateString) {
         console.log("timeSince: "+dateString)
         
-        var date = new Date(dateString+"z");
+        var date = new Date(dateString + "z");
+        console.log("date: " + date);
         var seconds = Math.floor((new Date() - date) / 1000);
 
         var interval = Math.floor(seconds / 31536000);
