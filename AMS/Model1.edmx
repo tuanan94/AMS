@@ -35,6 +35,10 @@
           <Property Name="ClickCount" Type="bigint" />
           <Property Name="AroundProviderCategoryId" Type="int" />
           <Property Name="ImageUrl" Type="nvarchar(max)" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="LastModified" Type="datetime" />
+          <Property Name="Longitude" Type="varchar" MaxLength="255" />
+          <Property Name="Latitude" Type="varchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="AroundProviderCategory">
           <Key>
@@ -49,7 +53,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" />
-          <Property Name="Price" Type="nvarchar" MaxLength="255" />
+          <Property Name="Price" Type="float" />
           <Property Name="ViewIndex" Type="int" />
           <Property Name="ImgUrl" Type="varchar" MaxLength="255" />
           <Property Name="Description" Type="nvarchar(max)" />
@@ -1484,6 +1488,10 @@
           <Property Name="ClickCount" Type="Int64" />
           <Property Name="AroundProviderCategoryId" Type="Int32" />
           <Property Name="ImageUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="LastModified" Type="DateTime" Precision="3" />
+          <Property Name="Longitude" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Latitude" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="AroundProviderProducts" Relationship="AMSModel.FK_AroundServiceProduct_AroundProvider" FromRole="AroundProvider" ToRole="AroundProviderProduct" />
           <NavigationProperty Name="AroundProviderCategory" Relationship="AMSModel.FK_tbl_arround_srv_tbl_around_srv_cat" FromRole="AroundProvider" ToRole="AroundProviderCategory" />
           <NavigationProperty Name="UserRateAroundProviders" Relationship="AMSModel.FK_tbl_resident_rate_around_srv_tbl_arround_srv" FromRole="AroundProvider" ToRole="UserRateAroundProvider" />
@@ -1502,7 +1510,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Price" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Double" />
           <Property Name="ViewIndex" Type="Int32" />
           <Property Name="ImgUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -2550,6 +2558,10 @@
           <EntitySetMapping Name="AroundProviders">
             <EntityTypeMapping TypeName="AMSModel.AroundProvider">
               <MappingFragment StoreEntitySet="AroundProvider">
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
                 <ScalarProperty Name="AroundProviderCategoryId" ColumnName="AroundProviderCategoryId" />
                 <ScalarProperty Name="ClickCount" ColumnName="ClickCount" />

@@ -29,6 +29,10 @@ namespace AMS
         public Nullable<long> ClickCount { get; set; }
         public Nullable<int> AroundProviderCategoryId { get; set; }
         public string ImageUrl { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
+        public Nullable<System.DateTime> LastModified { get; set; }
+        public string Longitude { get; set; }
+        public string Latitude { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AroundProviderProduct> AroundProviderProducts { get; set; }

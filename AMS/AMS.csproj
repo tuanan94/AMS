@@ -282,6 +282,7 @@
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\ReceiptController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\AroundServiceController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -483,6 +484,7 @@
     <Content Include="Content\css\jquery.datetimepicker.css" />
     <Content Include="Content\css\jquery.timepicker.css" />
     <Content Include="Content\css\media-upload.css" />
+    <Content Include="Content\css\owl.theme.min.css" />
     <Content Include="Content\css\thumbnails.css" />
     <Content Include="Content\css\_vendor.bundle.css" />
     <Content Include="Content\css\_vendor.min.css" />
@@ -491,11 +493,13 @@
     <Content Include="Content\images\defaultPhoto.png" />
     <Content Include="Content\images\defaultProfile.png" />
     <Content Include="Content\images\familycover.jpg" />
+    <Content Include="Content\images\defaultPro.png" />
     <Content Include="Content\images\guy-5.jpg" />
     <Content Include="Content\images\delete.png" />
     <Content Include="Content\images\home_default.jpg" />
     <Content Include="Content\images\lock-1.jpg" />
     <Content Include="Content\images\logo.png" />
+    <Content Include="Content\images\defaultStore.png" />
     <Content Include="Content\images\WeatherIcon\Cloudy.gif" />
     <Content Include="Content\images\WeatherIcon\Lightning.gif" />
     <Content Include="Content\images\WeatherIcon\Partlycloudy.gif" />
@@ -769,9 +773,9 @@
     <Content Include="Views\Receipt\DownloadWaterConsumptionTemplate.cshtml" />
     <Content Include="Views\Config\ManageUtilityService.cshtml" />
     <Content Include="Views\Config\UpdateUtilityService.cshtml" />
-    <Content Include="Views\Home\ViewAroundProvider.cshtml" />
-    <Content Include="Views\Home\ViewAroundProviderDetail.cshtml" />
-    <Content Include="Views\Home\SingleProviderDetail.cshtml" />
+    <Content Include="Views\AroundService\ViewAroundProvider.cshtml" />
+    <Content Include="Views\AroundService\ViewAroundProviderDetail.cshtml" />
+    <Content Include="Views\AroundService\SingleProviderDetail.cshtml" />
     <Content Include="Views\Management\ManageAroundProvider.cshtml" />
     <Content Include="Views\Management\AddAroundProvider.cshtml" />
     <Content Include="Views\ManageUser\ManageSupporter.cshtml" />
@@ -783,6 +787,9 @@
     <Content Include="Views\Config\ManageHouseBlock.cshtml" />
     <Content Include="Views\HelpdeskRequest\ManageHdRequests.cshtml" />
     <Content Include="Views\Receipt\ViewWateBiiling.cshtml" />
+    <Content Include="Views\AroundService\ManageAroundService.cshtml" />
+    <Content Include="Views\AroundService\UpdateAroundServiceProvider.cshtml" />
+    <Content Include="Views\AroundService\ManageAroundServiceCategory.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

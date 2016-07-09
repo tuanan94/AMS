@@ -33,8 +33,6 @@ namespace AMS.Controllers
         UserService userService = new UserService();
         HouseServices houseService = new HouseServices();
         NotificationService notificationService = new NotificationService();
-        AroundProviderService _aroundProviderService = new AroundProviderService();
-        AroundProviderProductService _aroundProviderProductService = new AroundProviderProductService();
         readonly string parternTime = "dd-MM-yyyy HH:mm";
         private const int foodId = 1;
         private const int entertainId = 2;
@@ -53,8 +51,8 @@ namespace AMS.Controllers
         public ActionResult Index()
         {
             User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
-            
-            if(curUser == null)
+
+            if (curUser == null)
             {
                 return View("error");
             }
@@ -68,57 +66,57 @@ namespace AMS.Controllers
         [HttpPost]
         public void AddByAjax(string Title, int PostId)
         {
-//            postService.createPost(Title, PostId);
+            //            postService.createPost(Title, PostId);
 
         }
         [HttpPost]
         public ActionResult Index(string Title, int PostId)
         {
 
-//            postService.createPost(Title, PostId);
+            //            postService.createPost(Title, PostId);
             return RedirectToAction("TimeLine");
         }
         [HttpPost]
         public ActionResult Indexx(ListPostViewModel model, int postId)
         {
 
-//            postService.createPost(model.Title, model.Id);
+            //            postService.createPost(model.Title, model.Id);
             //return PartialView("TimeLine");
             return RedirectToAction("TimeLine");
         }
-        
-//        public ActionResult TimeLine()
-//        {
-//            // get all post
-////            IEnumerable<Post> allPost = postService.getAllPost();
-////            IEnumerable<Post> listComment = new List<Post>();
-////            ListPostViewModel listPostViewModel = new ListPostViewModel();
-////            listPostViewModel.listPost = new List<PostViewModel>();
-////            foreach (var item in allPost)
-////            {
-////                PostViewModel postViewModel = new PostViewModel();
-////                postViewModel.ImgUrl = item.ImgUrl;
-////                postViewModel.Id = item.Id;
-////                postViewModel.Title = item.Title;
-////                postViewModel.CountComment = postService.CountComment(postViewModel.Id);
-////                if (item.CreateDate.HasValue)
-////                {
-////                    postViewModel.CreateDate = item.CreateDate.Value;
-////                }
-////
-////                //get list comment belong post
-////                listComment = postService.getCommentBelongPost(postViewModel.Id);
-////                if (listComment != null)
-////                {
-////                    postViewModel.Post = listComment;
-////                }
-////                listPostViewModel.listPost.Add(postViewModel);
-////
-////            }
-//
-//
-////            return View(listPostViewModel);
-//        }
+
+        //        public ActionResult TimeLine()
+        //        {
+        //            // get all post
+        ////            IEnumerable<Post> allPost = postService.getAllPost();
+        ////            IEnumerable<Post> listComment = new List<Post>();
+        ////            ListPostViewModel listPostViewModel = new ListPostViewModel();
+        ////            listPostViewModel.listPost = new List<PostViewModel>();
+        ////            foreach (var item in allPost)
+        ////            {
+        ////                PostViewModel postViewModel = new PostViewModel();
+        ////                postViewModel.ImgUrl = item.ImgUrl;
+        ////                postViewModel.Id = item.Id;
+        ////                postViewModel.Title = item.Title;
+        ////                postViewModel.CountComment = postService.CountComment(postViewModel.Id);
+        ////                if (item.CreateDate.HasValue)
+        ////                {
+        ////                    postViewModel.CreateDate = item.CreateDate.Value;
+        ////                }
+        ////
+        ////                //get list comment belong post
+        ////                listComment = postService.getCommentBelongPost(postViewModel.Id);
+        ////                if (listComment != null)
+        ////                {
+        ////                    postViewModel.Post = listComment;
+        ////                }
+        ////                listPostViewModel.listPost.Add(postViewModel);
+        ////
+        ////            }
+        //
+        //
+        ////            return View(listPostViewModel);
+        //        }
 
         [HttpPost]
         public ActionResult TimeLine(PostViewModel post, string Title, HttpPostedFileBase Media)
@@ -172,7 +170,7 @@ namespace AMS.Controllers
             post.Title = Title;
             post.ImgUrl = mediaUrl;
             post.CreateDate = DateTime.Now;
-//            postService.createPost(post);
+            //            postService.createPost(post);
             //}
             return RedirectToAction("TimeLine");
         }
@@ -191,7 +189,7 @@ namespace AMS.Controllers
             p.Title = post.Title;
             p.ImgUrl = post.ImgUrl;
 
-//            postService.CreatePosts(p);
+            //            postService.CreatePosts(p);
             //}
             return RedirectToAction("TimeLine");
         }
@@ -222,11 +220,12 @@ namespace AMS.Controllers
         public String saveProfileImage(int userid, String url)
         {
             User user = userService.findById(userid);
-            if(user == null)
+            if (user == null)
             {
                 return "error";
             }
-            else{
+            else
+            {
                 user.ProfileImage = url;
             }
             userService.updateUser(user);
@@ -245,15 +244,15 @@ namespace AMS.Controllers
                 return View("error");
             }
             User user = userService.findById(userId);
-            List<User> members = userService.findByHouseId((user.HouseId.HasValue==true?user.HouseId.Value:-1));
+            List<User> members = userService.findByHouseId((user.HouseId.HasValue == true ? user.HouseId.Value : -1));
             ViewBag.currentHouse = user.House;
             ViewBag.members = members;
             return View();
         }
 
-        
 
-        
+
+
 
         [HttpPost]
         public ActionResult ManageMember(AddMemberViewModel member)
@@ -310,7 +309,7 @@ namespace AMS.Controllers
         public ActionResult Setting()
         {
             User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
-            if(curUser == null)
+            if (curUser == null)
             {
                 return View("error");
             }
@@ -427,13 +426,13 @@ namespace AMS.Controllers
         }
         [HttpGet]
         [Authorize]
-        public String getHintUsername(String fullname,int? startNumber)
+        public String getHintUsername(String fullname, int? startNumber)
         {
-            
+
             String hintResult;
             User testUser = null;
-            hintResult = StringUtil.RemoveSign4VietnameseString(fullname).ToLower().Replace(" ","");
-            testUser = userService.findByUsername(hintResult+(startNumber==null?"":(startNumber+"")));
+            hintResult = StringUtil.RemoveSign4VietnameseString(fullname).ToLower().Replace(" ", "");
+            testUser = userService.findByUsername(hintResult + (startNumber == null ? "" : (startNumber + "")));
             if (testUser == null)
             {
                 return hintResult + startNumber;
@@ -449,13 +448,13 @@ namespace AMS.Controllers
         public bool checkAvailableUsername(String username)
         {
 
-            return userService.findByUsername(username)==null;
+            return userService.findByUsername(username) == null;
 
         }
 
         [HttpPost]
         [Authorize]
-        public Object addMember(String fullname, String username, String profileImage,int gender, DateTime birthDate, String IDNumber, DateTime idDate, int relationShipLevel, String sendPasswordTo)
+        public Object addMember(String fullname, String username, String profileImage, int gender, DateTime birthDate, String IDNumber, DateTime idDate, int relationShipLevel, String sendPasswordTo)
         {
             User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
 
@@ -478,7 +477,7 @@ namespace AMS.Controllers
                 u.IDNumber = IDNumber;
                 u.IDCreatedDate = idDate;
             }
-            
+
             u.FamilyLevel = relationShipLevel;
             u.CreateDate = DateTime.Now;
             u.LastModified = DateTime.Now;
@@ -495,55 +494,17 @@ namespace AMS.Controllers
         {
             User u = userService.findById(id);
 
-            if(u==null || u.Status == 1)
+            if (u == null || u.Status == 1)
             {
                 return false;
             }
             userService.deleteUser(u);
             return true;
         }
-           [AutoRedirect.MandatorySurveyRedirect]
-            public ActionResult ViewAroundProvider(String cat)
-        {
 
-            ViewBag.AllProviders = _aroundProviderService.GetAllProviderWithCat(cat);
-            return View();
-        }
-           [AutoRedirect.MandatorySurveyRedirect]
-        public ActionResult ViewAroundProviderDetail(String cat)
-        {
-            ViewBag.AllProviders = _aroundProviderService.GetAllProviderWithCat(cat);
-            ViewBag.AllCategorys = _aroundProviderService.getAllCategory();
-            ViewBag.activeCat = cat;
-            return View();
-        }
-          [AutoRedirect.MandatorySurveyRedirect]
-        public ActionResult SingleProviderDetail(int id)
-        {
-            List<AroundProviderProduct> products = _aroundProviderProductService.GetAroundProviderProduct(id);
-            AroundProvider curProvider = _aroundProviderService.GetProvider(id);
-            string address = curProvider.Address;
-            var requestUri = string.Format("http://maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false", 
-                                                Uri.EscapeDataString(address));
-            var request = WebRequest.Create(requestUri);
-            var response = request.GetResponse();
-            var xdoc = XDocument.Load(response.GetResponseStream());
-
-            var result = xdoc.Element("GeocodeResponse").Element("result");
-            var locationElement = result.Element("geometry").Element("location");
-            var lat = locationElement.Element("lat");
-            var lng = locationElement.Element("lng");
-            //Double.Parse(lng.Value);
-            ViewBag.Products = products;
-            ViewBag.CurProvider = curProvider;
-            ViewBag.Lat = Double.Parse(lat.Value);
-            ViewBag.Lng = Double.Parse(lng.Value);
-
-            return View();
-        }
         [HttpPost]
         [Authorize]
-        public void deleteNotification(String data,String type)
+        public void deleteNotification(String data, String type)
         {
             if (SLIM_CONFIG.NOTIC_DELETE_TYPE_CHANGEID.Equals(type))
             {

@@ -1,0 +1,125 @@
+﻿@{
+    ViewBag.Title = "Dịch vụ xung quanh";
+    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+    List<AroundProvider> allProviders = ViewBag.AllProviders;
+}
+<link href="~/Content/aroundProvider/owl.carousel.css" rel="stylesheet" />
+<link href="~/Content/css/owl.theme.min.css" rel="stylesheet" />
+<link href="~/Content/aroundProvider/animate.min.css" rel="stylesheet" />
+<link href="~/Content/aroundProvider/main.css" rel="stylesheet" />
+<link href="~/Content/aroundProvider/responsive.css" rel="stylesheet" />
+<link href="~/Content/rating.css" rel="stylesheet" />
+
+@*<script src="~/Scripts/aroundProvider/main.min.js"></script>*@
+@*<script src="~/Scripts/aroundProvider/wow.min.js"></script>*@
+@*<script src="~/Scripts/rating.js"></script>*@
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <section id="blog">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="block">
+                            <h1 class="heading">
+                                <span>Dịch vụ</span> xung quanh
+                            </h1>
+                            <ul>
+                                @{
+                                    bool right = true;
+                                    int count = 0;
+                                    for (int i = 0; i < allProviders.Count; i++)
+                                    {
+                                        <li class="wow fadeInLeft">
+                                            <a href="/Home/AroundService/SingleProviderDetail?id=@allProviders[i].Id">
+                                                @if (count == 2)
+                                                {
+                                                    if (right)
+                                                    {
+                                                        right = false;
+                                                    }
+                                                    else
+                                                    {
+                                                        right = true;
+                                                    }
+                                                    count = 0;
+                                                }
+                                                @{count = count + 1; }
+                                                @if (right)
+                                                {
+                                                    <div class="blog-img">
+                                                        <img src="@allProviders[i].ImageUrl" />
+                                                    </div>
+                                                    <div class="content-right" style="max-height: 220px;overflow: hidden;">
+                                                        <h3>@allProviders[i].Name</h3>
+                                                        <p style="display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;  ">@allProviders[i].Address</p>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="content-left" style="max-height: 220px;overflow: hidden;">
+                                                        <h3>@allProviders[i].Name</h3>
+                                                        <p style="display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;  ">@allProviders[i].Address</p>
+                                                    </div>
+                                                    <div class="blog-img-2">
+                                                        <img src="@allProviders[i].ImageUrl" />
+                                                    </div>
+                                                }
+
+
+                                            </a>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                            <a class="btn btn-default btn-more-info wow bounceIn" data-wow-duration="500ms" data-wow-delay="1200ms" href="/Home/AroundService/All" role="button">Xem toàn bộ</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="slider">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="owl-example" class="owl-carousel owl-theme">
+                            @{
+                                foreach (var provider in allProviders)
+                                {
+                                    <div class="item"><img src="@provider.ImageUrl" alt="The Last of us"></div>
+                                }
+                            }
+                        </div>
+                    </div><!-- .col-md-12 close -->
+                </div><!-- .row close -->
+            </section>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/aroundProvider/main.js"></script>
+
+
+
+@*<script>
+        $(function () {
+            $('.rating').rating();
+        });
+
+        $(function () {
+            $('.rating').rating();
+
+            $('.ratingEvent').rating({ rateEnd: function (v) { $('#result').text(v); } });
+        });
+
+        $(window).scroll(function () {
+            $('.si').each(function () {
+                var imagePos = $(this).offset().top;
+
+                var topOfWindow = $(window).scrollTop();
+                if (imagePos < topOfWindow + 400) {
+                    $(this).addClass("slideUp");
+                }
+            });
+        });
+    </script>*@
+
