@@ -117,9 +117,12 @@ namespace AMS
         public static String NOTIC_TARGET_OBJECT_POST = "bài viết";
         public static String NOTIC_TARGET_OBJECT_ADD_MEMBER_REQUEST = "Yêu cầu thêm thành viên";
         public static String NOTIC_TARGET_OBJECT_POLL = "bình chọn";
+        public static String NOTIC_TARGET_OBJECT_HELPDESK_REQUEST = "yêu cầu sửa chữa";
         public static String NOTIC_VERB_COMMENT = "bình luận";
         public static String NOTIC_VERB_APPROVE = "duyệt";
         public static String NOTIC_VERB_CREATE = "tạo";
+        public static String NOTIC_VERB_ASSIGN_REQUEST = "chuyển";
+        public static String NOTIC_VERB_FINISH_REQUEST = "xữ lí xong";
         public static String NOTIC_DELETE_TYPE_CHANGEID = "delete_type_changeId";
         //NotificationArea-END
 

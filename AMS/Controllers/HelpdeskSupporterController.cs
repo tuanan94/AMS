@@ -8,7 +8,6 @@ using AMS.ViewModel;
 using System.Globalization;
 using Microsoft.AspNet.Identity;
 
-
 namespace AMS.Views.HelpdeskSupporter
 {
     public class HelpdeskSupporterController : Controller
@@ -79,6 +78,22 @@ namespace AMS.Views.HelpdeskSupporter
                 helpdeskRequestLog.StatusFrom = int.Parse(Request["hiddenStatusFrom"]);
                 helpdeskRequestLog.StatusTo = status;
                 _helpdeskRequestLogService.Add(helpdeskRequestLog);
+
+                if (status == 3)
+                {
+                    //Add notification - AnTT - 09/07/2016 - START
+                    NotificationService notificationService = new NotificationService();
+                    if (currHelpdeskRequest.House != null)
+                    {
+                        List<User> memberInHouse = currHelpdeskRequest.House.Users.ToList();
+                        foreach (User user in memberInHouse)
+                        {
+                            notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_HELPDESK_REQUEST, user.Id, SLIM_CONFIG.NOTIC_VERB_FINISH_REQUEST, currHelpdeskSupporterId, helpdeskRequestLog.Id);
+                        }
+                    }
+                    //Add notification - AnTT - 09/07/2016 - END
+                }
+
 
                 ViewBag.messageSuccess = "Đã xử lý thành công!";
                 return Redirect("~/HelpdeskSupporter/Index?id=" + currHelpdeskSupporterId);
