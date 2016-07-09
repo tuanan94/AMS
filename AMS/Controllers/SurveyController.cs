@@ -953,6 +953,51 @@ namespace AMS.Controllers
                             }
 
                         }
+                        else if (survey.Mode == 2 && SLIM_CONFIG.USER_ROLE_HOUSEHOLDER == u.RoleId)
+                        {
+                            int kk = 0;
+
+                            if (u.HouseId.HasValue)
+                            {
+                                if (list.ElementAt(p).Id ==
+                                    BlockPollService.FindBlockIdByHouseId(u.HouseId.Value).BlockId && p < list.Count)
+                                {
+                                    kk++;
+                                }
+                            }
+                            if (kk == 1 || kk == 0)
+                            {
+                                Console.WriteLine(u);
+                                //notificationService.addNotification("", u.Id, SLIM_CONFIG.NOTIC_VERB_POLL, 2, null);
+                                notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL, u.Id,
+                                    SLIM_CONFIG.NOTIC_VERB_CREATE, curUser.Id, null);
+
+                            }
+
+                        }
+                        else if ((survey.Mode == 3 && SLIM_CONFIG.USER_ROLE_HOUSEHOLDER == u.RoleId) ||
+                            (survey.Mode == 3 && SLIM_CONFIG.USER_ROLE_RESIDENT == u.RoleId))
+                        {
+                            int kk = 0;
+
+                            if (u.HouseId.HasValue)
+                            {
+                                if (list.ElementAt(p).Id ==
+                                    BlockPollService.FindBlockIdByHouseId(u.HouseId.Value).BlockId && p < list.Count)
+                                {
+                                    kk++;
+                                }
+                            }
+                            if (kk == 1 || kk == 0)
+                            {
+                                Console.WriteLine(u);
+                                //notificationService.addNotification("", u.Id, SLIM_CONFIG.NOTIC_VERB_POLL, 2, null);
+                                notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL, u.Id,
+                                    SLIM_CONFIG.NOTIC_VERB_CREATE, curUser.Id, null);
+
+                            }
+
+                        }
                     }
                 }
                 else
@@ -964,13 +1009,18 @@ namespace AMS.Controllers
                     {
                         if (survey.Mode == 1)
                         {
-                            
-                          
                                 Console.WriteLine(u);
                                 //notificationService.addNotification("", u.Id, SLIM_CONFIG.NOTIC_VERB_POLL, 2, null);
                                 notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL, u.Id, SLIM_CONFIG.NOTIC_VERB_CREATE, curUser.Id, null);
+                        }else if (survey.Mode == 2 && SLIM_CONFIG.USER_ROLE_HOUSEHOLDER == u.RoleId)
+                        {
+                            notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL, u.Id, SLIM_CONFIG.NOTIC_VERB_CREATE, curUser.Id, null);
 
-                           
+                        }
+                        else if ((survey.Mode == 3 && SLIM_CONFIG.USER_ROLE_HOUSEHOLDER == u.RoleId)||
+                            (survey.Mode == 3 && SLIM_CONFIG.USER_ROLE_RESIDENT == u.RoleId))
+                        {
+                            notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL, u.Id, SLIM_CONFIG.NOTIC_VERB_CREATE, curUser.Id, null);
 
                         }
                     }
