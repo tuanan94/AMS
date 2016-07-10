@@ -257,11 +257,11 @@ namespace AMS.Controllers
         public ActionResult AddNewResident(UserInfoViewModel user)
         {
             MessageViewModels response = new MessageViewModels();
-            if (null != user.HouseName)
+            if (null != user.HouseId)
             {
                 try
                 {
-                    House house = _houseServices.FindByHouseName(user.HouseName);
+                    House house = _houseServices.FindById(user.HouseId);
                     if (null != house)
                     {
                         User u = new User();
@@ -389,75 +389,68 @@ namespace AMS.Controllers
         public ActionResult UpdateResident(UserInfoViewModel user)
         {
             MessageViewModels response = new MessageViewModels();
-            if (null != user.HouseName)
+            try
             {
-                try
+                House house = _houseServices.FindById(user.HouseId);
+                if (null != house)
                 {
-                    House house = _houseServices.FindByHouseName(user.HouseName);
-                    if (null != house)
+                    User u = _userServices.FindById(user.Id);
+
+                    if (null != u)
                     {
-                        User u = _userServices.FindById(user.Id);
-
-                        if (null != u)
+                        if (house.Status == SLIM_CONFIG.HOUSE_STATUS_ENABLE && house.OwnerID == null && user.IsHouseOwner == SLIM_CONFIG.USER_ROLE_RESIDENT)
                         {
-                            if (house.Status == SLIM_CONFIG.HOUSE_STATUS_ENABLE && house.OwnerID == null && user.IsHouseOwner == SLIM_CONFIG.USER_ROLE_RESIDENT)
-                            {
-                                response.StatusCode = 2;
-                                response.Msg = "Nhà này vẫn chưa có chủ hộ !";
-                                return Json(response);
-                            }
-                            u.Fullname = user.Name;
-                            u.HouseId = house.Id;
-                            u.LastModified = DateTime.Now;
-                            u.IDNumber = user.Idenity;
-                            u.Gender = user.Gender;
-                            u.DateOfBirth = DateTime.ParseExact(user.Dob, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
-                            u.LastModified = DateTime.Now;
-                            u.FamilyLevel = user.RelationLevel;
-                            u.SendPasswordTo = user.CellNumb;
-                            if (user.IdCreateDate != null)
-                            {
-                                u.IDCreatedDate = DateTime.ParseExact(user.IdCreateDate, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
-                            }
-                            u.Status = SLIM_CONFIG.USER_STATUS_ENABLE;
-                            u.RoleId = user.IsHouseOwner;
-
-                            if (u.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)
-                            {
-                                house.OwnerID = u.Id;
-                                _houseServices.Update(house);
-                                foreach (
-                                    var userInHouse in
-                                        house.Users.Where(
-                                            usr => usr.Id != u.Id && u.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER))
-                                {
-                                    User usr = _userServices.FindById(userInHouse.Id);
-                                    usr.RoleId = SLIM_CONFIG.USER_ROLE_RESIDENT;
-                                    usr.LastModified = DateTime.Now;
-                                    _userServices.Update(usr);
-                                }
-                            }
-                            _userServices.Update(u);
+                            response.StatusCode = 2;
+                            response.Msg = "Nhà này vẫn chưa có chủ hộ !";
+                            return Json(response);
                         }
-                        else
+                        u.Fullname = user.Name;
+                        u.HouseId = house.Id;
+                        u.LastModified = DateTime.Now;
+                        u.IDNumber = user.Idenity;
+                        u.Gender = user.Gender;
+                        u.DateOfBirth = DateTime.ParseExact(user.Dob, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
+                        u.LastModified = DateTime.Now;
+                        u.FamilyLevel = user.RelationLevel;
+                        u.SendPasswordTo = user.CellNumb;
+                        if (user.IdCreateDate != null)
                         {
-                            response.StatusCode = -1;
+                            u.IDCreatedDate = DateTime.ParseExact(user.IdCreateDate, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
                         }
+                        u.Status = SLIM_CONFIG.USER_STATUS_ENABLE;
+                        u.RoleId = user.IsHouseOwner;
+
+                        if (u.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)
+                        {
+                            house.OwnerID = u.Id;
+                            _houseServices.Update(house);
+                            foreach (
+                                var userInHouse in
+                                    house.Users.Where(
+                                        usr => usr.Id != u.Id && u.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER))
+                            {
+                                User usr = _userServices.FindById(userInHouse.Id);
+                                usr.RoleId = SLIM_CONFIG.USER_ROLE_RESIDENT;
+                                usr.LastModified = DateTime.Now;
+                                _userServices.Update(usr);
+                            }
+                        }
+                        _userServices.Update(u);
                     }
                     else
                     {
                         response.StatusCode = -1;
                     }
                 }
-                catch (Exception)
+                else
                 {
                     response.StatusCode = -1;
-                    return Json(response);
                 }
             }
-            else
+            catch (Exception)
             {
                 response.StatusCode = -1;
+                return Json(response);
             }
 
             return Json(response);

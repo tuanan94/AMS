@@ -15,6 +15,7 @@ namespace AMS.Controllers
     public class ConfigController : Controller
     {
 
+        private UserServices _userServices = new UserServices();
         private UtilityServiceServices _utilityServiceServices = new UtilityServiceServices();
         private UtilityServiceRangePriceServices _rangePriceServices = new UtilityServiceRangePriceServices();
         private HouseCategoryServices _houseCategoryServices = new HouseCategoryServices();
@@ -812,6 +813,17 @@ namespace AMS.Controllers
                 if (houseInfo.Status != 0)
                 {
                     house.Status = houseInfo.Status;
+                    if (houseInfo.Status == SLIM_CONFIG.HOUSE_STATUS_DISABLE)
+                    {
+                        house.OwnerID = null;
+                        foreach (var usrInHouse in house.Users)
+                        {
+                            User u = _userServices.FindById(usrInHouse.Id);
+                            u.HouseId = null;
+                            u.LastModified = DateTime.Now;
+                            _userServices.Update(u);
+                        }
+                    }
                 }
                 house.Area = houseInfo.Area;
                 HouseCategory houseCat = _houseCategoryServices.FindById(houseInfo.Type);

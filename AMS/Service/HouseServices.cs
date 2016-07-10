@@ -39,7 +39,8 @@ namespace AMS.Service
         {
             IEnumerable<House> houses = _houseRepository.List.Where(h => h.Block.BlockName.ToLower().Contains(block.ToLower())
                                                             && h.Floor.ToLower().Contains(floor.ToLower())
-                                                            && h.HouseName.ToLower().Contains(houseName.ToLower()));
+                                                            && h.HouseName.ToLower().Contains(houseName.ToLower())
+                                                            && h.Status != SLIM_CONFIG.HOUSE_STATUS_DELETE);
             return houses.Count() == 0 ? null : houses.First();
         }
 
@@ -69,12 +70,12 @@ namespace AMS.Service
         }
         public List<House> GetAlllRoomsInFloor(int blockId, string floorName)
         {
-            return _houseRepository.List.Where(h => h.Floor.Contains(floorName) && h.Block.Id == blockId).
+            return _houseRepository.List.Where(h => h.Floor.Contains(floorName) && h.Block.Id == blockId && h.Status !=  SLIM_CONFIG.HOUSE_STATUS_DELETE).
                 OrderBy(h => h.HouseName).ToList();
         }
         public List<House> GetAllOwnedHousesThisMonth()
         {
-            return _houseRepository.List.Where(h => h.OwnerID != null).OrderBy(h => h.HouseName).ToList();
+            return _houseRepository.List.Where(h => h.OwnerID != null && h.Status == SLIM_CONFIG.HOUSE_STATUS_ENABLE).OrderBy(h => h.HouseName).ToList();
         }
         public void Update(House h)
         {
@@ -82,15 +83,15 @@ namespace AMS.Service
         }
         public bool CheckHouseNameIsExist(int houseId, string houseName)
         {
-            return _houseRepository.List.Where(house => house.HouseName.Equals(houseName) && house.Id != houseId).ToList().Count == 0 ? false : true;
+            return _houseRepository.List.Where(house => house.HouseName.Equals(houseName) && house.Id != houseId && house.Status != SLIM_CONFIG.HOUSE_STATUS_DELETE).ToList().Count == 0 ? false : true;
         }
         public bool CheckFloorIsExist(int blockId, string floorName)
         {
-            return _houseRepository.List.Where(house => house.BlockId == blockId && house.Floor.Equals(floorName.Trim())).ToList().Count == 0 ? false : true;
+            return _houseRepository.List.Where(house => house.BlockId == blockId && house.Floor.Equals(floorName.Trim()) && house.Status != SLIM_CONFIG.HOUSE_STATUS_DELETE).ToList().Count == 0 ? false : true;
         }
         public bool CheckHouseNameIsExistInFloor(int blockId, string floorName, string houseName)
         {
-            return _houseRepository.List.Where(house => house.BlockId == blockId && house.HouseName.Equals(houseName.Trim()) && house.Floor.Equals(floorName.Trim())).ToList().Count == 0 ? false : true;
+            return _houseRepository.List.Where(house => house.BlockId == blockId && house.HouseName.Equals(houseName.Trim()) && house.Floor.Equals(floorName.Trim()) && house.Status != SLIM_CONFIG.HOUSE_STATUS_DELETE).ToList().Count == 0 ? false : true;
         }
     }
 

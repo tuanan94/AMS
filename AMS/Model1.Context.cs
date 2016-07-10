@@ -41,7 +41,6 @@ namespace AMS
         public virtual DbSet<HelpdeskRequest> HelpdeskRequests { get; set; }
         public virtual DbSet<HelpdeskRequestHelpdeskSupporter> HelpdeskRequestHelpdeskSupporters { get; set; }
         public virtual DbSet<HelpdeskRequestLog> HelpdeskRequestLogs { get; set; }
-        public virtual DbSet<HelpdeskService> HelpdeskServices { get; set; }
         public virtual DbSet<HelpdeskServiceCategory> HelpdeskServiceCategories { get; set; }
         public virtual DbSet<House> Houses { get; set; }
         public virtual DbSet<HouseCategory> HouseCategories { get; set; }

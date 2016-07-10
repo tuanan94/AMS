@@ -1370,7 +1370,7 @@ namespace AMS.Controllers
             User u = _userServices.FindById(receipt.Creator);
             if (null != u)
             {
-                House house = _houseServices.FindByHouseName(receipt.ReceiptHouseName);
+                House house = _houseServices.FindById(receipt.ReceiptHouseId);
                 if (null != house)
                 {
                     try
@@ -1672,7 +1672,7 @@ namespace AMS.Controllers
                         }
                         if (!receiptIsDeleted)
                         {
-                            House updateHouse = _houseServices.FindByHouseName(receiptModel.ReceiptHouseName);
+                            House updateHouse = _houseServices.FindById(receiptModel.ReceiptHouseId);
                             if (receipt.HouseId != updateHouse.Id)
                             {
                                 receipt.HouseId = updateHouse.Id;
@@ -1919,14 +1919,14 @@ namespace AMS.Controllers
 
         [HttpGet]
         [Route("Management/ManageReceipt/DownloadRecordTemplate")]
-        public ActionResult DownloadTemplateFile(string forMonth)
+        public ActionResult DownloadTemplateFile(string title)
         {
-            if (forMonth != null)
+            if (title != null)
             {
 
                 List<MonthlyResidentExpenseOutput> lastMonthRecordList = new List<MonthlyResidentExpenseOutput>();
                 MonthlyResidentExpenseOutput record = new MonthlyResidentExpenseOutput();
-                record.ForMonth = forMonth;
+                record.Title = title;
                 lastMonthRecordList.Add(record);
 
                 List<House> houseThisMonth = _houseServices.GetAllOwnedHousesThisMonth();
@@ -1946,13 +1946,12 @@ namespace AMS.Controllers
                     FileCultureName = "fr-FR" // use formats used in The Netherlands
                 };
                 CsvContext cc = new CsvContext();
+                string fileName = (StringUtil.RemoveSpecialCharacters(StringUtil.RemoveSign4VietnameseString(title.Trim()).ToLower().Replace(" ", "_"))) + ".csv";
                 cc.Write(
                     lastMonthRecordList,
-                    Server.MapPath(new StringBuilder(AmsConstants.CsvFilePath).Append("products2.csv").ToString()),
+                    Server.MapPath(new StringBuilder(AmsConstants.CsvFilePath).Append(fileName).ToString()),
                     outputFileDescription);
-
-                byte[] fileBytes = System.IO.File.ReadAllBytes(Server.MapPath(new StringBuilder().Append(AmsConstants.CsvFilePath).Append("products2.csv").ToString()).ToString());
-                string fileName = "myfile.csv";
+                byte[] fileBytes = System.IO.File.ReadAllBytes(Server.MapPath(new StringBuilder().Append(AmsConstants.CsvFilePath).Append(fileName).ToString()));
                 return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
             }
             return View("DownloadWaterConsumptionTemplate");

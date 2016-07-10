@@ -17,14 +17,15 @@ namespace AMS
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public HelpdeskServiceCategory()
         {
-            this.HelpdeskServices = new HashSet<HelpdeskService>();
+            this.HelpdeskRequests = new HashSet<HelpdeskRequest>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
         public Nullable<System.DateTime> LastModified { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<HelpdeskService> HelpdeskServices { get; set; }
+        public virtual ICollection<HelpdeskRequest> HelpdeskRequests { get; set; }
     }
 }

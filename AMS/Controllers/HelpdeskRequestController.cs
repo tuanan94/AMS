@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using AMS.App_Start;
 using AMS.Constant;
 using AMS.Enum;
+using AMS.Filter;
 using AMS.Models;
 using AMS.Service;
 using Microsoft.Ajax.Utilities;
@@ -16,7 +17,6 @@ namespace AMS.Controllers
     public class HelpdeskRequestController : Controller
     {
         HelpdeskServiceCatService _helpdeskServiceCat = new HelpdeskServiceCatService();
-        HelpdeskServicesService _helpdeskServices = new HelpdeskServicesService();
         UserServices _userServices = new UserServices();
         HelpdeskRequestServices _hdReqServices = new HelpdeskRequestServices();
         HelpdeskRequestLogServices _helpdeskRequestLogServices = new HelpdeskRequestLogServices();
@@ -24,17 +24,12 @@ namespace AMS.Controllers
         [Authorize]
         [HttpGet]
         [Route("Home/HelpdeskRequest/Create")]
+        [AuthorizationPrivilegeFilter_RequestHouse]
         public ActionResult CreateNewHdRequest()
         {
 
             List<HelpdeskServiceCategory> hdSrvCats = _helpdeskServiceCat.GetAll();
             ViewBag.hdSrvCats = hdSrvCats;
-            User u = _userServices.FindById(int.Parse(User.Identity.GetUserId()));
-            if (u == null)
-            {
-                return View("error");
-            }
-            ViewBag.curUser = u;
             return View("CreateHdRequest");
         }
 
@@ -46,18 +41,16 @@ namespace AMS.Controllers
             try
             {
                 User u = _userServices.FindById(request.HdReqUserId);
-                HelpdeskService hdService = _helpdeskServices.FindById(request.HdServiceId);
-                if (u != null && hdService != null)
+                HelpdeskServiceCategory hdServiceCat = _helpdeskServiceCat.FindById(request.HdServiceCatId);
+                if (u != null && hdServiceCat != null)
                 {
                     HelpdeskRequest hdRequest = new HelpdeskRequest();
 
-                    hdRequest.HelpdeskServiceId = hdService.Id;
+                    hdRequest.HelpdeskServiceCatId = request.HdServiceCatId;
                     hdRequest.HouseId = u.HouseId;//AnTT them vao cho nay 27-5-2016
-                    hdRequest.Price = hdService.Price;
                     hdRequest.CreateDate = DateTime.Now;
                     hdRequest.Description = request.HdReqUserDesc;
                     hdRequest.ModifyDate = DateTime.Now;
-                    hdRequest.Priority = request.HdReqPrior;
                     hdRequest.Status = (int)StatusEnum.Open;
                     hdRequest.Title = request.HdReqTitle;
 
@@ -95,12 +88,8 @@ namespace AMS.Controllers
                 HelpdeskRequest hdRequest = _hdReqServices.FindById(request.HdReqId);
                 if (u != null && hdRequest != null)
                 {
-                    HelpdeskService hdService = _helpdeskServices.FindById(request.HdServiceId);
-                    if (hdService != null && hdRequest.HelpdeskServiceId != hdService.Id)
-                    {
-                        hdRequest.HelpdeskServiceId = hdService.Id;
-                        hdRequest.Price = hdService.Price;
-                    }
+                    HelpdeskServiceCategory hdServiceCat = _helpdeskServiceCat.FindById(request.HdServiceCatId);
+                    hdRequest.HelpdeskServiceCatId = hdServiceCat.Id;
                     hdRequest.Title = request.HdReqTitle;
                     hdRequest.Description = request.HdReqUserDesc;
                     hdRequest.ModifyDate = DateTime.Now;
@@ -111,19 +100,14 @@ namespace AMS.Controllers
             }
             catch (Exception e)
             {
-                return RedirectToAction("ViewHistoryHdRequest", new { userId = request.HdReqUserId });
+                return RedirectToAction("ViewHistoryHdRequest");
             }
-            return RedirectToAction("ViewHistoryHdRequest", new { userId = request.HdReqUserId });
+            return RedirectToAction("ViewHistoryHdRequest");
         }
 
         [HttpGet]
-
         [AutoRedirect.MandatorySurveyRedirect]
-
         [Authorize]
-        //        [AuthorizationPrivilegeFilter.MandatorySurveyRedirect]
-        //        [AuthorizationPrivilegeFilter.CheckHouseIsDeleted]
-
         [Route("Home/HelpdeskRequest/ViewHistory")]
         public ActionResult ViewHistoryHdRequest()
         {
@@ -158,57 +142,49 @@ namespace AMS.Controllers
         [Authorize]
         public ActionResult ViewHdRequestDetail(String hdReqId)
         {
-                try
+            try
+            {
+                User u = _userServices.FindById(int.Parse(User.Identity.GetUserId()));
+                if (u != null)
                 {
-                    User u = _userServices.FindById(int.Parse(User.Identity.GetUserId()));
-                    if (u != null)
+                    HelpdeskRequest hdRequest = _hdReqServices.FindById(Int32.Parse(hdReqId));
+                    bool allowViewDetail = false;
+                    if (u.RoleId == SLIM_CONFIG.USER_ROLE_MANAGER)
                     {
-                        HelpdeskRequest hdRequest = _hdReqServices.FindById(Int32.Parse(hdReqId));
-                        bool allowViewDetail = false;
-                        if (u.RoleId == SLIM_CONFIG.USER_ROLE_MANAGER)
+                        allowViewDetail = true;
+                    }
+                    else if (u.RoleId == SLIM_CONFIG.USER_ROLE_SUPPORTER)
+                    {
+                        if (hdRequest.SupporterId != null)
                         {
                             allowViewDetail = true;
                         }
-                        else if (u.RoleId == SLIM_CONFIG.USER_ROLE_SUPPORTER)
+                    }
+                    else if (u.RoleId == (int)SLIM_CONFIG.USER_ROLE_RESIDENT || u.RoleId == (int)SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)
+                    {
+                        if (u.HouseId == hdRequest.HouseId)
                         {
-                            if (hdRequest.SupporterId != null)
-                            {
-                                allowViewDetail = true;
-                            }
+                            allowViewDetail = true;
                         }
-                        else if (u.RoleId == (int)SLIM_CONFIG.USER_ROLE_RESIDENT || u.RoleId == (int)SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)
-                        {
-
-                            /**if (u.UserInHouses.First() != null &&
-                                hdRequest.HouseId == u.UserInHouses.First().HouseId.Value)
-                            {
-                                allowViewDetail = true;
-                            }*/
-                            //ANTT
-                            if (u.HouseId == hdRequest.HouseId)
-                            {
-                                allowViewDetail = true;
-                            }
-                        }
-                        if (allowViewDetail)
-                        {
-                            List<HelpdeskRequestLog> helpdeskRequestLogs =
-                                _helpdeskRequestLogServices.GetHelpdeskRequestLog(hdRequest.Id);
-
-                            ViewBag.hdRequest = hdRequest;
-                            ViewBag.roleId = u.RoleId;
-                            ViewBag.userId = u.Id;
-                            ViewBag.helpdeskRequestLogs = helpdeskRequestLogs;
-                            return View("ViewHistoryHdRequestDetail");
-                        }
-                        return RedirectToAction("ViewHistoryHdRequest");
-
-                    }/*Else return to main page*/
-                }
-                catch (Exception)
-                {
+                    }
+                    if (allowViewDetail)
+                    {
+                        List<HelpdeskRequestLog> helpdeskRequestLogs =
+                            _helpdeskRequestLogServices.GetHelpdeskRequestLog(hdRequest.Id);
+                        ViewBag.hdRequest = hdRequest;
+                        ViewBag.roleId = u.RoleId;
+                        ViewBag.userId = u.Id;
+                        ViewBag.helpdeskRequestLogs = helpdeskRequestLogs;
+                        return View("ViewHistoryHdRequestDetail");
+                    }
                     return RedirectToAction("ViewHistoryHdRequest");
-                }/*Return to main page*/
+
+                }/*Else return to main page*/
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("ViewHistoryHdRequest");
+            }/*Return to main page*/
 
             return RedirectToAction("ViewHistoryHdRequest");
         }
@@ -262,9 +238,8 @@ namespace AMS.Controllers
                                     row.HdReqDeadline = req.DueDate.Value.ToString(AmsConstants.DateTimeFormat);
                                     row.HdReqDeadlineLong = req.DueDate.Value.Ticks;
                                 }
-                                row.HdReqSrvName = req.HelpdeskService.Name;
+                                row.HdReqSrvCatName = req.HelpdeskServiceCategory.Name;
                                 row.HdReqHouse = req.House.HouseName;
-                                row.HdReqPrior = req.Priority.Value;
                                 row.HdReqStatus = req.Status.Value;
 
                                 if (req.User1 != null)
@@ -339,6 +314,7 @@ namespace AMS.Controllers
                         {
                             hdRequest.Status = (int)StatusEnum.Done;
                             hdRequest.ModifyDate = DateTime.Now;
+                            hdRequest.DoneDate = DateTime.Now;
                             //                            hdRequest.Price = hdReqChngStatus.Price;
                             //                            hdRequest.DueDate = DateTime.Parse(hdReqChngStatus.DueDate);
                             /*Add them giá vào đây*/
@@ -454,8 +430,6 @@ namespace AMS.Controllers
                     if (hdRequest.Status != (int)StatusEnum.Done && hdRequest.Status != (int)StatusEnum.Close)
                     {
                         HelpdeskRequestLog hdRequestLog = new HelpdeskRequestLog();
-                        hdRequestLog.StatusFrom = (int)StatusEnum.AssignTask;
-                        hdRequestLog.StatusTo = (int)StatusEnum.AssignTask;
 
                         if (hdRequest.Status == (int)StatusEnum.Open)
                         {
@@ -464,7 +438,17 @@ namespace AMS.Controllers
 
                             hdRequestLog.StatusFrom = (int)StatusEnum.Open;
                             hdRequestLog.StatusTo = (int)StatusEnum.Processing;
+
+                            hdRequestLog.ChangeFromUserId = fromUser.Id;
+                            hdRequestLog.HelpdeskRequestId = hdRequest.Id;
+                            hdRequestLog.ChangeToUserId = toUser.Id;
+
+                            hdRequestLog.CreateDate = DateTime.Now;
+                            _helpdeskRequestLogServices.Add(hdRequestLog);
                         }
+                        hdRequestLog.StatusFrom = (int)StatusEnum.AssignTask;
+                        hdRequestLog.StatusTo = (int)StatusEnum.AssignTask;
+
                         hdRequest.ModifyDate = DateTime.Now;
                         hdRequest.SupporterId = toUser.Id;
                         _hdReqServices.Update(hdRequest);
@@ -477,10 +461,10 @@ namespace AMS.Controllers
                         _helpdeskRequestLogServices.Add(hdRequestLog);
                         //Add notification - AnTT - 09/07/2016 - START
                         NotificationService notificationService = new NotificationService();
-                        if (hdRequest.House!=null)
+                        if (hdRequest.House != null)
                         {
                             List<User> memberInHouse = hdRequest.House.Users.ToList();
-                            foreach(User user in memberInHouse)
+                            foreach (User user in memberInHouse)
                             {
                                 notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_HELPDESK_REQUEST, user.Id, SLIM_CONFIG.NOTIC_VERB_ASSIGN_REQUEST, fromUser.Id, hdRequestLog.Id);
                             }
@@ -581,9 +565,7 @@ namespace AMS.Controllers
             if (null != hdRequest)
             {
                 HdReqDetailInfo hdReqDetailInfo = new HdReqDetailInfo();
-                hdReqDetailInfo.SelectedHdSrvCatId = hdRequest.HelpdeskService.HelpdeskServiceCategoryId.Value;
-                hdReqDetailInfo.SelectedHdSrvId = hdRequest.HelpdeskService.Id;
-                hdReqDetailInfo.SelectedHdSrvPrice = hdRequest.Price.Value;
+                hdReqDetailInfo.SelectedHdSrvCatId = hdRequest.HelpdeskServiceCatId.Value;
 
                 List<HelpdeskServiceCategory> hdSrvCats = _helpdeskServiceCat.GetAll();
 
@@ -597,7 +579,7 @@ namespace AMS.Controllers
                     hdSrvCatModels.Add(hdSrvCatModel);
                 }
 
-                List<HelpdeskService> hdServices = _helpdeskServices.FindByCategory(hdReqDetailInfo.SelectedHdSrvCatId);
+                List<HelpdeskServiceCategory> hdServices = _helpdeskServiceCat.GetAll();
                 List<HelpdeskServiceModel> hdReqModels = new List<HelpdeskServiceModel>();
                 HelpdeskServiceModel hdSrvModel = null;
                 foreach (var hdSrv in hdServices)
@@ -605,8 +587,6 @@ namespace AMS.Controllers
                     hdSrvModel = new HelpdeskServiceModel();
                     hdSrvModel.Id = hdSrv.Id;
                     hdSrvModel.Name = hdSrv.Name;
-                    hdSrvModel.Price = hdSrv.Price.Value;
-                    hdSrvModel.Description = hdSrv.Description;
                     hdReqModels.Add(hdSrvModel);
                 }
 
@@ -627,14 +607,6 @@ namespace AMS.Controllers
             }
 
             return Json(response, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpGet]
-        [Route("Home/HelpdeskRequest/AdminView")]
-        public ActionResult ViewRequestingHdRequestToManager()
-        {
-
-            return View("ViewRequestingHdRequestsOfManager");
         }
     }
 }

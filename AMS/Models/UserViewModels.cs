@@ -27,6 +27,7 @@ namespace AMS.Models
         public string Name { get; set; }
         public string Idenity { get; set; }
         public string HouseName { get; set; }
+        public int HouseId { get; set; }
         public string Block { get; set; }
         public int BlockId { get; set; }
         public string Floor { get; set; }

@@ -216,29 +216,29 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">Cập nhật số lượng sử dụng</h4>
             </div>
-            <div class="modal-body">
-                <div class="panel-body">
+            <form id="editHouseConsumptionForm" class="form-horizontal" role="form">
+                <div class="modal-body">
+                    <div class="panel-body">
 
-                    <div class="alert alert-info" id="successAddTransTypeNotify" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span>Cập nhật thành công.</span>
-                    </div>
-                    <div class="alert alert-danger" id="failedAddTransTypeNotify" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span>Cập nhật thất bại.</span>
-                    </div>
+                        <div class="alert alert-info" id="successAddTransTypeNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Cập nhật thành công.</span>
+                        </div>
+                        <div class="alert alert-danger" id="failedAddTransTypeNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Cập nhật thất bại.</span>
+                        </div>
 
-                    <form id="editHouseConsumptionForm" class="form-horizontal" role="form">
                         <div class="form-group">
                             <label for="houseConsumptHouseName" class="col-md-3 control-label">Căn hộ </label>
-                            <div class="col-md-2">
-                                <span id="houseConsumptBlock" class="btn btn-sm date-color btn-block"></span>
-                            </div>
-                            <div class="col-md-2">
-                                <span id="houseConsumptFloor" class="btn btn-sm time-color btn-block"></span>
-                            </div>
-                            <div class="col-md-2">
-                                <span id="houseConsumptHouseName" class="btn btn-sm house-color btn-block"></span>
+                            @*                            <div class="col-md-2">*@
+                            @*                                <span id="houseConsumptBlock" class="btn btn-sm date-color btn-block"></span>*@
+                            @*                            </div>*@
+                            @*                            <div class="col-md-2">*@
+                            @*                                <span id="houseConsumptFloor" class="btn btn-sm time-color btn-block"></span>*@
+                            @*                            </div>*@
+                            <div class="col-md-9">
+                                <span id="houseConsumptHouseName" class="btn house-color"></span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -252,46 +252,54 @@
                         </div>
                         <div class="form-group">
                             <label for="houseConsumptWater" class="col-md-3 control-label">Số nước </label>
-                            <div class="input-group col-md-7">
-                                <input id="fromNumber" readonly="readonly" type="text" class="form-control" value="">
-                                <span class="input-group-addon"><i class="fa fa-arrow-right"></i></span>
-                                <input id="toNumber" type="text" class="form-control" value="">
-                                <span class="input-group-addon">
-                                    <strong id="houseConsumptWater">20</strong> Khối
-                                </span>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <input id="fromNumber" name="FromNumber" readonly="readonly" type="text" class="form-control" value="">
+                                    <span class="input-group-addon"><i class="fa fa-arrow-right"></i></span>
+                                    <input id="toNumber" name="ToNumber" type="text" class="form-control" value="">
+                                    <span class="input-group-addon">
+                                        <strong id="houseConsumptWater">20</strong> Khối
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="waterCost" class="col-md-3 control-label">Tiền nước</label>
-                            <div class="input-group col-md-7">
-                                <input id="waterCost" readonly="readonly" type="text" class="form-control" value="">
-                                <span class="input-group-addon">đồng</span>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <input id="waterCost" readonly="readonly" type="text" class="form-control" value="">
+                                    <span class="input-group-addon">đồng</span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-3 control-label">Phí cố định </label>
-                            <div class="input-group col-md-7">
-                                <input id="monthlyFixedCost" type="text" class="form-control" value="">
-                                <span class="input-group-addon">đồng</span>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <input id="monthlyFixedCost" readonly="readonly" type="text" class="form-control" value="">
+                                    <span class="input-group-addon">đồng</span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-3 control-label">Tổng </label>
-                            <div class="input-group col-md-7">
-                                <input id="monthlyTotal" type="text" readonly="readonly" class="form-control" value="">
-                                <span class="input-group-addon">đồng</span>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <input id="monthlyTotal" type="text" readonly="readonly" class="form-control" value="">
+                                    <span class="input-group-addon">đồng</span>
+                                </div>
                             </div>
                         </div>
                         <input type="hidden" id="receiptId" />
                         <input type="hidden" id="rowId" />
-                    </form>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer" style="margin-top: 0">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                <span id="btnPurchaseReceipt" onclick="purchaseReceipt()" class="btn btn-info hide">Thanh toán</span>
-                <span id="btnEditUtilityServiceQuantity" onclick="updateHouseConsumption()" class="btn btn-info hide">Cập nhật</span>
-            </div>
+                <div class="modal-footer" style="margin-top: 0">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <span id="btnPurchaseReceipt" onclick="purchaseReceipt()" class="btn btn-info hide">Thanh toán</span>
+                    <button type="submit" id="btnEditUtilityServiceQuantity" class="btn btn-info hide">Cập nhật</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -551,7 +559,7 @@
             },
              {
                  "targets": 9,
-                 "width":"8%",
+                 "width": "8%",
                  "data": "ReceiptId",
                  "render": function (data, type, full) {
                      if (type === "display" || type === "filter") {
@@ -598,19 +606,13 @@
                 fromValue = replaceSpaceNumber(fromValue);
                 var toValue = $this.val();
                 toValue = replaceSpaceNumber(toValue);
-                if (!isNaN(toValue) && parseInt(toValue, 10) >= 0 && toValue >= fromValue) {
-                    var quantity = parseInt(toValue) - parseInt(fromValue);
-                    var waterCost = waterAggressiveCalculating(quantity, window.waterRangePrices);
-                    var fixedCost = parseInt(replaceCommaNumber($("#monthlyFixedCost").val()));
-                    $("#houseConsumptWater").text(numberWithCommas(quantity));
-                    $("#waterCost").val(numberWithCommas(waterCost));
-                    $("#monthlyTotal").val(numberWithCommas(waterCost + fixedCost));
-                } else {
-                    $this.val("");
-                    $("#houseConsumptWater").text("0");
-                    $("#waterCost").val(0);
-                    $("#houseConsumptWater").text("0");
-                }
+                var quantity = parseInt(toValue) - parseInt(fromValue);
+                var waterCost = waterAggressiveCalculating(quantity, window.waterRangePrices);
+                var fixedCost = parseInt(replaceCommaNumber($("#monthlyFixedCost").val()));
+                $("#houseConsumptWater").text(numberWithCommas(quantity));
+                $("#waterCost").val(numberWithCommas(waterCost));
+                $("#monthlyTotal").val(numberWithCommas(waterCost + fixedCost));
+
             } else {
                 var fixedCost = parseInt(replaceCommaNumber($("#monthlyFixedCost").val()));
                 $("#houseConsumptWater").text("0");
@@ -890,6 +892,13 @@
     }
 
     function validateUpdateReceiptHeader() {
+
+        $.validator.addMethod('compareValue', function (value, element, param) {
+            value = replaceCommaNumber(value);
+            var paramValue = replaceCommaNumber($(param).val());
+            return this.optional(element) || parseInt(value) >= paramValue;
+        }, 'Invalid value');
+
         $("#updateHouseConsumptionForm").validate({
             rules: {
                 Title: {
@@ -920,6 +929,47 @@
             },
             submitHandler: function () {
                 updateAutomationReceiptHeader(@receipt.CreateDate.Value.Ticks);
+            }
+        });
+
+        $("#editHouseConsumptionForm").validate({
+            rules: {
+                ToNumber: {
+                    required: true,
+                    number: true,
+                    compareValue: "#fromNumber",
+                },
+            },
+            messages: {
+                ToNumber: {
+                    required: "Trường bắt buộc",
+                    number: "Phỉa là ký số",
+                    compareValue: "Số nước tháng mới phải lớn hơn số tháng củ"
+                },
+            },
+            errorPlacement: function (error, element) {
+                if (element.parent('.input-group').length) {
+                    if (!element.parent().next().hasClass("error") || element.parent().next().css("display") == "none") {
+                        error.insertAfter(element.parent());
+                    }
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            showErrors: function (errorMap, errorList) {
+                for (var i = 0; errorList[i]; i++) {
+                    var element = this.errorList[i].element;
+                    //solves the problem with brute force
+                    //remove existing error label and thus force plugin to recreate it
+                    //recreation == call to errorplacement function
+                    this.errorsFor(element).remove();
+                }
+                this.defaultShowErrors();
+            },
+            submitHandler: function () {
+                if (!$("#btnEditUtilityServiceQuantity").hasClass("hide")) {
+                    updateHouseConsumption();
+                }
             }
         });
     }

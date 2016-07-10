@@ -67,7 +67,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="houseName" class="col-md-2 control-label">Tòa nhà</label>
+                                            <label for="houseBlock" class="col-md-2 control-label">Tòa nhà</label>
                                             <div class="col-md-3 full-width-select">
                                                 <select id="houseBlock" name="select" class="form-control">
                                                     @{foreach (var b in block)
@@ -77,7 +77,7 @@
                                                     }
                                                 </select>
                                             </div>
-                                            <label for="houseName" class="col-md-1 control-label">Tầng</label>
+                                            <label for="houseFloor" class="col-md-1 control-label">Tầng</label>
                                             <div class="col-md-2">
                                                 <select id="houseFloor" name="select" class="form-control">
                                                     @{foreach (var f in firstBlockFloor)
@@ -87,12 +87,12 @@
                                                     }
                                                 </select>
                                             </div>
-                                            <label for="houseName" class="col-md-1 control-label">Nhà</label>
+                                            <label for="houseId" class="col-md-1 control-label">Nhà</label>
                                             <div class="col-md-3">
-                                                <select id="houseName" name="select" class="form-control">
+                                                <select id="houseId" name="select" class="form-control">
                                                     @{foreach (var r in firstBlockFloor)
                                                     {
-                                                        <option value="@r.HouseName">@r.HouseName</option>
+                                                        <option value="@r.Id">@r.HouseName</option>
                                                     }
                                                     }
                                                 </select>
@@ -247,7 +247,7 @@
         var numberOfRow = contentObj.length;
         var receiptName = $("#receiptTitle").val();
         var receiptDesc = $("#receiptDesc").val();
-        var receiptHouseName = $("#houseName").val();
+        var houseId = $("#houseId").val();
         var receiptType = $("#receiptType").val();
         var balanceSheetId = $("#blsId").val();
         var publishDate = $("#publishDate").val();
@@ -274,7 +274,7 @@
             Creator: userId,
             ReceiptTitle: receiptName,
             ReceiptDesc: receiptDesc,
-            ReceiptHouseName: receiptHouseName,
+            ReceiptHouseId: houseId,
             ReceiptType: receiptType,
             PublishDate: publishDate,
             ListItem: listItem,

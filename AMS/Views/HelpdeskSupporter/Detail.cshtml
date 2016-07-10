@@ -5,10 +5,9 @@
     AMS.ViewModel.HelpdeskRequestViewModel hr = ViewBag.currRequest;
 
 }
-
 <div class="col-md-12">
     <div class="panel panel-default">
-        <div class="panel-heading panel-heading-gray">Chi tiết yêu cầu helpdesk</div>
+        <div class="panel-heading panel-heading-gray">Chi tiết yêu cầu sửa chữa</div>
         <div class="panel-body">
             <form class="form-horizontal" role="form" method="post">
                 <div class="table-responsive">
@@ -19,17 +18,18 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">Căn hộ</label>
-                        <div class="col-sm-9">
-                            <input type="email" readonly="readonly" class="form-control" id="houseName" value="@hr.HouseName">
+                        <label for="houseConsumptBlock" class="col-md-3 control-label">Căn hộ</label>
+                        <div class="col-md-3">
+                            <span id="houseConsumptBlock" class="btn room-color btn-block">@hr.HouseName</span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">Nội dung</label>
+                        <label class="col-sm-3 control-label">Nhóm dịch vụ</label>
                         <div class="col-sm-9">
-                            <input type="email" readonly="readonly" class="form-control" id="description" value="@hr.Description">
+                            <input type="email" readonly="readonly" class="form-control" id="serviceName" value="@hr.HelpdeskServiceCatName">
                         </div>
                     </div>
+
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Ngày tạo</label>
                         <div class="col-sm-9">
@@ -43,45 +43,34 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">Trạng thái</label>
-                        <div class="col-sm-9">
-                            @{
-                                string message = null;
-                                if (hr.Status == (int)StatusEnum.Open)
-                                {
-                                    message = "Mở";
-                                }
-                                else if (hr.Status == (int)StatusEnum.Processing)
-                                {
-                                    message = "Đang xử lý";
-                                }
-                                else if (hr.Status == (int)StatusEnum.Done)
-                                {
-                                    message = "Xong";
-                                }
-                                else if (hr.Status == (int)StatusEnum.Close)
-                                {
-                                    message = "Đóng";
-                                }
-                                else if (hr.Status == (int)StatusEnum.Cancel)
-                                {
-                                    message = "Hủy";
-                                }
+                        <label class="col-md-3 control-label">Trạng thái</label>
+                        <div class="col-md-3">
+                            @if (@hr.Status == (int)StatusEnum.Open)
+                            {
+                                <span class="btn btn-info btn-block margin-none status-label-size">Chưa giải quyết</span>
                             }
-                            <input type="email" readonly="readonly" class="form-control" id="status" value="@message">
-                            
+                            else if (@hr.Status == (int)StatusEnum.Processing)
+                            {
+                                <span class="btn btn-block margin-none status-label-size processing">Đang xử lý</span>
+                            }
+                            else if (@hr.Status == (int)StatusEnum.Done)
+                            {
+                                <span class="btn btn-block  btn-success status-label-size margin-none">Hoàn thành</span>
+                            }
+                            else if (@hr.Status == (int)StatusEnum.Close)
+                            {
+                                <span class="btn btn-block btn-danger status-label-size margin-none">Đóng</span>
+                            }
+                            else if (@hr.Status == (int)StatusEnum.Cancel)
+                            {
+                                <span class="btn btn-block btn-default status-label-size margin-none">Hủy</span>
+                            }
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">Giá dịch vụ (VND)</label>
-                        <div class="col-sm-9">
-                            <input type="email" readonly="readonly" class="form-control" id="price" value="@hr.Price">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Thuộc dịch vụ</label>
-                        <div class="col-sm-9">
-                            <input type="email" readonly="readonly" class="form-control" id="serviceName" value="@hr.HelpdeskServiceName">
+                        <label class="col-md-3 control-label">Nội dung</label>
+                        <div class="col-md-9">
+                            <textarea type="email" readonly="readonly" rows="3" class="form-control" id="description" value="">@hr.Description</textarea>
                         </div>
                     </div>
                 </div>
@@ -90,11 +79,18 @@
                 <input type="hidden" name="hiddenStatusFrom" value="@hr.Status" />
                 <input type="hidden" name="hiddenHelpdeskSupporterId" value="@hr.HelpdeskSupporterId" />
                 <div class="form-group">
-                    <a href="~/HelpdeskSupporter/Index" class="btn btn-danger">Trở Về</a>
-                    <button type="submit" class="btn btn-primary">Hoàn Thành!</button>
+                    <div class="col-md-12">
+                        <div class="pull-right">
+                            <a href="~/HelpdeskSupporter/Index" class="btn btn-danger">Trở Về</a>
+                            @if (@hr.Status == (int)StatusEnum.Processing)
+                            {
+                            <button type="submit" class="btn btn-primary">Hoàn thành</button>
+                            }
+                        </div>
+                    </div>
                 </div>
             </form>
-            
+
         </div>
     </div>
 </div>

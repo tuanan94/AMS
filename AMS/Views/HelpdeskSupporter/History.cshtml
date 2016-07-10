@@ -1,8 +1,9 @@
 ﻿@using AMS.Enum
+@using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "History";
     Layout = "~/Views/HelpdeskSupporter/__HelpdeskSupporterLayout.cshtml";
-    int count = 0;
+//    int count = 0;
     List<HelpdeskRequestLog> allLog = ViewBag.listLog;
 }
 
@@ -12,86 +13,19 @@
         <div class="panel-body">
             <form class="form-horizontal" role="form" method="post">
                 <div class="table-responsive">
-                    <table class="table table-striped" id="myTable">
+                    <table class="table table-striped" id="myTable" data-user-id="@User.Identity.GetUserId()">
                         <thead>
                             <tr>
-                                <th class="text-center">Thứ tự</th>
+                                <th>#</th>
                                 <th>Tiêu đề</th>
-                                <th>Username</th>
+                                <th>Căn hộ</th>
+                                <th>Loại dịch vụ</th>
                                 <th>Ngày tạo</th>
                                 <th>Từ trạng thái</th>
                                 <th>Sang trạng thái</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @{
-                                foreach (HelpdeskRequestLog logOfCurrRequest in allLog)
-                                {
-                                    <tr data-id="@(++count)">
-                                        <td class="text-center">
-                                            <span class="label label-gray">@count</span>
-                                        </td>
-                                        <td>
-                                            <span class="label label-gray">@logOfCurrRequest.HelpdeskRequest.Title</span>
-                                        </td>
-                                        <td>
-                                            @logOfCurrRequest.User.Username
-                                        </td>
-                                        <td>
-                                            <span class="label label-primary">@Convert.ToString(string.Format("{0:dd/MM/yyyy HH:mm}", @logOfCurrRequest.CreateDate))</span>
-                                        </td>
-                                        <td>
-                                            @{
-                                                if (logOfCurrRequest.StatusFrom == (int)StatusEnum.Open)
-                                                {
-                                                    @Html.Label("Mở")
-                                                }
-                                                if (logOfCurrRequest.StatusFrom == (int)StatusEnum.Processing)
-                                                {
-                                                    @Html.Label("Đang xử lý")
-                                                }
-                                                if (logOfCurrRequest.StatusFrom == (int)StatusEnum.Done)
-                                                {
-                                                    @Html.Label("Xong")
-                                                }
-                                                if (logOfCurrRequest.StatusFrom == (int)StatusEnum.Close)
-                                                {
-                                                    @Html.Label("Đóng")
-                                                }
-                                                if (logOfCurrRequest.StatusFrom == (int)StatusEnum.Cancel)
-                                                {
-                                                    @Html.Label("Hủy")
-                                                }
-                                            }
-                                        </td>
-                                        <td>
-                                            @{
-                                                if (logOfCurrRequest.StatusTo == (int)StatusEnum.Open)
-                                                {
-                                                    @Html.Label("Mở")
-                                                }
-                                                if (logOfCurrRequest.StatusTo == (int)StatusEnum.Processing)
-                                                {
-                                                    @Html.Label("Đang xử lý")
-                                                }
-                                                if (logOfCurrRequest.StatusTo == (int)StatusEnum.Done)
-                                                {
-                                                    @Html.Label("Xong")
-                                                }
-                                                if (logOfCurrRequest.StatusTo == (int)StatusEnum.Close)
-                                                {
-                                                    @Html.Label("Đóng")
-                                                }
-                                                if (logOfCurrRequest.StatusTo == (int)StatusEnum.Cancel)
-                                                {
-                                                    @Html.Label("Hủy")
-                                                }
-                                            }
-                                        </td>
-                                    </tr>
-                                }
-                            }
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </form>
@@ -101,6 +35,115 @@
 
 <script>
     $(document).ready(function () {
-        $('#myTable').DataTable();
+        var userId = document.getElementById("myTable").dataset.userId;
+        var historyTbl = $('#myTable').DataTable({
+            "ajax": {
+                url: "/HelpdeskSupporter/GetHistoryRequest?supporterId=" + userId,
+                dataSrc: ""
+            },
+            "bLengthChange": false,
+            "bInfo": false,
+            "columns": [
+                { data: "Title" },
+                { data: "Title" },
+                { data: "HouseName" },
+                { data: "SrvCatName" },
+                { data: "CreateDate" },
+                { data: "StatusFrom" },
+                { data: "StatusTo" }
+            ],
+            "columnDefs": [
+                {
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0
+                },
+                {
+                    "targets": 1,
+                    "width": "25%"
+                },
+                {
+                    "targets": 2,
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            return "<span class='label house-color label-warning'>" + data + "</span>";
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "targets": 4,
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            var dateTime = data.split(" ");
+                            return "<strong>" + dateTime[0] + "</strong> " + dateTime[1];
+                        }
+                        return full.CreateDateLong;
+                    },
+                    "width": "15%"
+                },
+                {
+                    "targets": 5,
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            var msg = "";
+                            if (data === window.StatusOpen) {
+                                msg = "Chưa giải quyết";
+                                return "<span class='label label-info'>" +
+                                    msg + "</div>";
+                            } else if (data === window.StatusProcessing) {
+                                msg = "Đang xử lý";
+                                return "<span class='label processing'>" +
+                                    msg + "</div>";
+                            } else if (data === window.StatusDone) {
+                                msg = "Hoàn thành";
+                                return "<span class='label label-success'>" +
+                                    msg + "</div>";
+                            } else if (data === window.StatusClose) {
+                                msg = "Đóng";
+                                return "<span class='label label-danger'>" +
+                                    msg + "</div>";
+                            } else if (data === window.StatusCancel) {
+                                msg = "Hủy";
+                                return "<span class='label label-gray'>" +
+                                    msg + "</div>";
+                            }
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "targets": 6,
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            var msg = "";
+                            if (data === window.StatusOpen) {
+                                msg = "Chưa giải quyết";
+                                return "<span class='label label-info'>" +
+                                    msg + "</div>";
+                            } else if (data === window.StatusProcessing) {
+                                msg = "Đang xử lý";
+                                return "<span class='label processing'>" +
+                                    msg + "</div>";
+                            } else if (data === window.StatusDone) {
+                                msg = "Hoàn thành";
+                                return "<span class='label label-success'>" +
+                                    msg + "</div>";
+                            } else if (data === window.StatusClose) {
+                                msg = "Đóng";
+                                return "<span class='label label-danger'>" +
+                                    msg + "</div>";
+                            } else if (data === window.StatusCancel) {
+                                msg = "Hủy";
+                                return "<span class='label label-gray'>" +
+                                    msg + "</div>";
+                            }
+                        }
+                        return data;
+                    }
+                },
+            ], "order": [[4, 'desc']]
+        });
+        generateTableIndex(historyTbl);
     });
 </script>

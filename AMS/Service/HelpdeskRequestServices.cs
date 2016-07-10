@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using AMS.Constant;
+using AMS.Enum;
 using AMS.Repository;
 
 namespace AMS.Service
@@ -39,7 +41,7 @@ namespace AMS.Service
 
         public List<HelpdeskRequest> GetAllHdRequestBySupporterId(int supporterId)
         {
-            return helpdeskReqRepository.List.Where(r => r.SupporterId == supporterId).OrderBy(r => r.CreateDate).ToList();
+            return helpdeskReqRepository.List.Where(r => r.SupporterId == supporterId && r.Status == (int) StatusEnum.Processing).OrderByDescending(r => r.CreateDate).ToList();
         }
         
     }
