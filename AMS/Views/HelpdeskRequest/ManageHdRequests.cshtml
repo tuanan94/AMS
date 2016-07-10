@@ -18,7 +18,7 @@
                 </li>
 
                 <li>
-                    <a href="/Management/ResidentApprovement/@User.Identity.GetUserId()"><i class="fa fa-group"></i> Xác nhận cư dân</a>
+                    <a href="/Management/ResidentApprovement/@User.Identity.GetUserId()"><i class="fa fa-group"></i> Yêu cầu thành viên</a>
                 </li>
 
             </ul>
@@ -37,7 +37,7 @@
                                         <th>Căn hộ</th>
                                         @*                                <th>DV hỗ trợ</th>*@
                                         <th>Trạng thái</th>
-                                        <th>Nhân viên hỗ trợ</th>
+                                        <th>Nhân viên được giao</th>
                                         <th>Ngày tạo</th>
                                         <th>Ngày hoàn thành</th>
                                         <th></th>
@@ -188,7 +188,7 @@
                                 var dateTime = data.split(" ");
                                 return "<strong>" + dateTime[0] + "</strong> " + dateTime[1];
                             }
-                            return "Đang xác nhận";
+                            return "Đang chờ xác nhận";
                         }
                         return full.HdReqDeadlineLong;
                     },

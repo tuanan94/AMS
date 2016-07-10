@@ -14,7 +14,7 @@
                     <a href="/Management/HelpdeskRequest/ManageHdRequest"><i class="fa fa-life-ring"></i> Yêu cầu sửa chữa</a>
                 </li>
                 <li class="active">
-                    <a href="/Management/ResidentApprovement/@User.Identity.GetUserId()"><i class="fa fa-group"></i> Xác nhận cư dân</a>
+                    <a href="/Management/ResidentApprovement/@User.Identity.GetUserId()"><i class="fa fa-group"></i> Yêu cầu thành viên</a>
                 </li>
             </ul>
         </div>
@@ -212,7 +212,7 @@
                                 /*return "<span class='label date-color label-warning'>" + dateTime[0] +
                                     "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";*/
                             }
-                            return "Đang xác nhận";
+                            return "Đang chờ xác nhận";
                         }
                         return data;
                     }
@@ -289,10 +289,10 @@
         var modeNum = 0;
         var msg = "";
         if (mode === "accept") {
-            msg = "<strong>Chấp nhận</strong> yêu cầu cư dân <strong>" + userName + "</strong> là thành viên của căn hộ <strong>" + houseName + "</strong>";
+            msg = "<strong>Chấp nhận</strong> yêu cầu thành viên <strong>" + userName + "</strong> là thành viên của căn hộ <strong>" + houseName + "</strong>";
             modeNum = 1;
         } else {
-            msg = "<strong>Từ chối</strong> yêu cầu cư dân <strong>" + userName + "</strong> là thành viên của căn hộ <strong>" + houseName + "</strong>";
+            msg = "<strong>Từ chối</strong> yêu cầu thành viên <strong>" + userName + "</strong> là thành viên của căn hộ <strong>" + houseName + "</strong>";
             modeNum = 2;
         }
         $("#mode").val(modeNum);
