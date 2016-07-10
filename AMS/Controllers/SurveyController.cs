@@ -953,39 +953,74 @@ namespace AMS.Controllers
                             }
 
                         }
+                        else if (survey.Mode == 2 && SLIM_CONFIG.USER_ROLE_HOUSEHOLDER == u.RoleId)
+                        {
+                            int kk = 0;
+
+                            if (u.HouseId.HasValue)
+                            {
+                                if (list.ElementAt(p).Id ==
+                                    BlockPollService.FindBlockIdByHouseId(u.HouseId.Value).BlockId && p < list.Count)
+                                {
+                                    kk++;
+                                }
+                            }
+                            if (kk == 1 || kk == 0)
+                            {
+                                Console.WriteLine(u);
+                                //notificationService.addNotification("", u.Id, SLIM_CONFIG.NOTIC_VERB_POLL, 2, null);
+                                notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL, u.Id,
+                                    SLIM_CONFIG.NOTIC_VERB_CREATE, curUser.Id, null);
+
+                            }
+
+                        }
+                        else if ((survey.Mode == 3 && SLIM_CONFIG.USER_ROLE_HOUSEHOLDER == u.RoleId) ||
+                            (survey.Mode == 3 && SLIM_CONFIG.USER_ROLE_RESIDENT == u.RoleId))
+                        {
+                            int kk = 0;
+
+                            if (u.HouseId.HasValue)
+                            {
+                                if (list.ElementAt(p).Id ==
+                                    BlockPollService.FindBlockIdByHouseId(u.HouseId.Value).BlockId && p < list.Count)
+                                {
+                                    kk++;
+                                }
+                            }
+                            if (kk == 1 || kk == 0)
+                            {
+                                Console.WriteLine(u);
+                                //notificationService.addNotification("", u.Id, SLIM_CONFIG.NOTIC_VERB_POLL, 2, null);
+                                notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL, u.Id,
+                                    SLIM_CONFIG.NOTIC_VERB_CREATE, curUser.Id, null);
+
+                            }
+
+                        }
                     }
                 }
-                else if (listBlock == null)
+                else
                 {
                     // List<User> listuUsers = userService.GetAllResident();
                     List<User> listAllUsers = userService.GetAllUsers();
                     User curUser = userService.FindById(int.Parse(User.Identity.GetUserId()));
                     foreach (var u in listAllUsers)
                     {
-                        if (u.HouseId != null)
+                        if (survey.Mode == 1)
                         {
-                            int kk = 0;
-                          
-                            if (kk == 1)
-                            {
                                 Console.WriteLine(u);
                                 //notificationService.addNotification("", u.Id, SLIM_CONFIG.NOTIC_VERB_POLL, 2, null);
                                 notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL, u.Id, SLIM_CONFIG.NOTIC_VERB_CREATE, curUser.Id, null);
+                        }else if (survey.Mode == 2 && SLIM_CONFIG.USER_ROLE_HOUSEHOLDER == u.RoleId)
+                        {
+                            notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL, u.Id, SLIM_CONFIG.NOTIC_VERB_CREATE, curUser.Id, null);
 
-                            }
                         }
-                        else if (survey.Mode == 1)
+                        else if ((survey.Mode == 3 && SLIM_CONFIG.USER_ROLE_HOUSEHOLDER == u.RoleId)||
+                            (survey.Mode == 3 && SLIM_CONFIG.USER_ROLE_RESIDENT == u.RoleId))
                         {
-                            int kk = 0;
-
-                           
-                            if (kk == 0)
-                            {
-                                Console.WriteLine(u);
-                                //notificationService.addNotification("", u.Id, SLIM_CONFIG.NOTIC_VERB_POLL, 2, null);
-                                notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL, u.Id, SLIM_CONFIG.NOTIC_VERB_CREATE, curUser.Id, null);
-
-                            }
+                            notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL, u.Id, SLIM_CONFIG.NOTIC_VERB_CREATE, curUser.Id, null);
 
                         }
                     }

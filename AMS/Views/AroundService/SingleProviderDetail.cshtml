@@ -1,0 +1,93 @@
+﻿@{
+    ViewBag.Title = "Chi tiết dịch vụ";
+    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+    List<AroundProviderProduct> products = ViewBag.Products;
+    AroundProvider curProvider = ViewBag.CurProvider;
+}
+
+<link href="~/Content/aroundProvider/main.css" rel="stylesheet" />
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-8 page-title" id="left">
+                    <h2 class="text-capitalize">@curProvider.Name</h2>
+                    <ul style="font-size: 16px">
+                        <li class="icon-home-1">
+                            Địa chỉ: @curProvider.Address
+                        </li>
+                        <li class="icon-phone">
+                            Điện thoại: @curProvider.Tel
+                        </li>
+                        <li class="icon-comment-1">
+                            Mô tả: @curProvider.Description
+                        </li>
+                        <li class="icon-visual-eye">
+                            Lượt xem: @curProvider.ClickCount
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-4" style="margin-top: 2%">
+                    <img style="width: 100%;" class="border-img" src="@curProvider.ImageUrl" />
+                </div>
+            </div>
+
+            <!--Divider heart-->
+            <div class="divider text-center">
+                <i class="fa fa-heart-o fa-lg"></i>
+            </div>
+            <!--End divider-->
+
+            <div class="col-md-12">
+                <div class="page-title">
+                    <h2>Các sản phẩm</h2>
+                </div>
+                <div class="col-md-12">
+                    <div class="section group">
+                        <ul>
+                            @{
+                                foreach (var product in products)
+                                {
+                                    <li class="provider-product">
+                                        <div class="col-md-12 border-img ar-product">
+                                            @*                                            <img style="width: 100%;padding: 10px" src="@product.ImgUrl" />*@
+                                            <img src="@product.ImgUrl" />
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="desc">
+                                                <div class="left-text">
+                                                    <h5>
+                                                        <a href="#">@product.Name</a>
+                                                    </h5>
+                                                </div>
+                                                <span class="price">@product.Price.Value.ToString("N0") <small>đ</small></span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                        @*<div class="clear"></div>*@
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="page-title">
+                    <h2>Bản đồ</h2>
+                </div>
+                <div style="height: 300px; width: 100%;" id="map"><!--map-canvas will be postioned here--></div>
+            </div>
+
+
+            <input type="hidden" id="lat" value="@curProvider.Latitude" />
+            <input type="hidden" id="lng" value="@curProvider.Longitude" />
+        </div>
+
+    </div>
+</div>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8T4uVRg-6S4KK39kPUldWKATbqgOm4VE&v=3.exp&amp;sensor=false"></script>
+<script src="~/Scripts/aroundProvider/map.js"></script>

@@ -10,6 +10,11 @@ namespace AMS.Service
     {
         GenericRepository<HelpdeskRequestLog> logRepository = new GenericRepository<HelpdeskRequestLog>();
 
+        public HelpdeskRequestLog findById(int id)
+        {
+            return logRepository.FindById(id);
+        }
+
         public void Add(HelpdeskRequestLog log)
         {
             logRepository.Add(log);

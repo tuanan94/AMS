@@ -22,5 +22,9 @@ namespace AMS.Constant
         public static string TransactionNameForFixedCostBill { get { return "Dịch vụ quản lý căn hộ"; } }
 
         public static string CsvFilePath { get { return "~/Upload/csv/"; } }
+        public static string ImageFilePath { get { return "~/Upload/img/"; } }
+        public static string ImageFilePathDownload { get { return "/Upload/img/"; } }
+
+        public static string DefaultStoreImg { get { return "/Content/images/defaultStore.png"; } }
     }
 }

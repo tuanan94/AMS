@@ -1,8 +1,13 @@
-﻿@{
+﻿@using AMS.Service
+@using Microsoft.AspNet.Identity;
+@{
+    
     ViewBag.Title = "Setting";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
     House curHouse = ViewBag.curHouse;
     var pendingMembers = curHouse.Users.Where(u => u.Status != 1).ToList();
+    UserService userService = new UserService();
+    User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
 }
 
 <link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css" />
@@ -16,7 +21,10 @@
 
                     <div class="panel panel-default">
                         <div class="panel-heading panel-heading-gray">
-                            <a href="#" class="btn btn-primary btn-xs pull-right" data-toggle="modal" data-target="#addMemberModal">Thêm thành viên <i class="fa fa-plus"></i></a>
+                            @if (curUser != null && curUser.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)
+                            {
+                                <a href="#" class="btn btn-primary btn-xs pull-right" data-toggle="modal" data-target="#addMemberModal">Thêm thành viên  <i class="fa fa-plus"></i></a>
+                            }
                             <i class="icon-user-1"></i> Thành viên
                         </div>
                         <div class="panel-body" id="memberPanelBody">

@@ -58,6 +58,9 @@ window.UserStatusDisable = 4;
 window.UserRoleResident = 3;
 window.UserRoleHouseHolder = 4;
 
+window.DefaultImage = "/Content/images/defaultPro.png";
+window.DefaultStoreImage = "/Content/images/defaultStore.png";
+
 
 
 function loadHelpdeskServiceType() {
@@ -639,6 +642,8 @@ function activeNavigationBar() {
         $("#reportNav").addClass("active");
     } else if (pathName.indexOf("/Survey/") > -1) {
         $("#surveyNav").addClass("active");
+    } else if (pathName.indexOf("/AroundService/") > -1) {
+        $("#serviceProviderNav").addClass("active");
     } else {
     }
 }
@@ -879,31 +884,7 @@ function parseJsonToSelectTags(listJson, selectedId, msg) {
 }
 
 
-function acceptApproveUser() {
-    var resId = $("#residentId").val();
-    var mode = $("#mode").val();
-    var action = "AcceptResidentApprovement";
-    var fromUserId = document.getElementById("residentApproveTbl").dataset.fromuserid;
-    $.ajax({
-        type: "post",
-        url: "/Management/ResidentApprovement/" + action,
-        data: {
-            resId: resId,
-            fromUserId: fromUserId,
-            mode: mode
-        },
-        success: function (data) {
-            console.log(data);
-            if (window.currentRow) {
-                window.dataTable2.row(window.currentRow).remove().draw();
-            }
-            $("#confirmModal").modal("hide");
-        },
-        error: function () {
 
-        }
-    });
-}
 function showOrderDetail(receiptId, userId) {
     location.href = "/Home/ManageReceipt/View/Detail?userId=" + userId + "&orderId=" + receiptId;
 }

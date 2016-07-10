@@ -155,13 +155,12 @@ namespace AMS.Controllers
 
         [HttpGet]
         [Route("Home/HelpdeskRequest/ViewDetail")]
-        public ActionResult ViewHdRequestDetail(String hdReqId, String userId)
+        [Authorize]
+        public ActionResult ViewHdRequestDetail(String hdReqId)
         {
-            if (!userId.IsNullOrWhiteSpace() && !hdReqId.IsNullOrWhiteSpace())
-            {
                 try
                 {
-                    User u = _userServices.FindById(Int32.Parse(userId));
+                    User u = _userServices.FindById(int.Parse(User.Identity.GetUserId()));
                     if (u != null)
                     {
                         HelpdeskRequest hdRequest = _hdReqServices.FindById(Int32.Parse(hdReqId));
@@ -202,17 +201,16 @@ namespace AMS.Controllers
                             ViewBag.helpdeskRequestLogs = helpdeskRequestLogs;
                             return View("ViewHistoryHdRequestDetail");
                         }
-                        return RedirectToAction("ViewHistoryHdRequest", new { userId = u.Id });
+                        return RedirectToAction("ViewHistoryHdRequest");
 
                     }/*Else return to main page*/
                 }
                 catch (Exception)
                 {
-                    return RedirectToAction("ViewHistoryHdRequest", new { userId = userId });
+                    return RedirectToAction("ViewHistoryHdRequest");
                 }/*Return to main page*/
 
-            }/*else return to main page*/
-            return RedirectToAction("ViewHistoryHdRequest", new { userId = userId });
+            return RedirectToAction("ViewHistoryHdRequest");
         }
 
         [HttpGet]
@@ -477,7 +475,18 @@ namespace AMS.Controllers
 
                         hdRequestLog.CreateDate = DateTime.Now;
                         _helpdeskRequestLogServices.Add(hdRequestLog);
+                        //Add notification - AnTT - 09/07/2016 - START
+                        NotificationService notificationService = new NotificationService();
+                        if (hdRequest.House!=null)
+                        {
+                            List<User> memberInHouse = hdRequest.House.Users.ToList();
+                            foreach(User user in memberInHouse)
+                            {
+                                notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_HELPDESK_REQUEST, user.Id, SLIM_CONFIG.NOTIC_VERB_ASSIGN_REQUEST, fromUser.Id, hdRequestLog.Id);
+                            }
+                        }
 
+                        //Add notification - AnTT - 09/07/2016 - END
                         return RedirectToAction("ViewHdRequestDetail", new { hdReqId = hdRequest.Id, userId = fromUser.Id });
                     }
                 }

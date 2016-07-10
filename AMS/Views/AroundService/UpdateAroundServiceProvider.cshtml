@@ -1,0 +1,816 @@
+﻿@using AMS.Constant
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Manage Balance Sheet Detail";
+    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+    AroundProvider provider = ViewBag.provider;
+}
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+
+        <div class="heading-tab">
+            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Chi tiết cửa hàng xung quanh</span>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li class="active">
+                    <a href="/Management/AroundService/Manage"><i class="fa fa-search-plus"></i> Dịch vụ xung quanh</a>
+                </li>
+                <li class="">
+                    <a href="/Management/AroundService/ManageCategory"><i class="fa fa-tags"></i> Nhóm dịch vụ xung quanh</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="panel-body">
+            <div class="tab-content">
+                <form class="form-horizontal" role="form">
+                    <div class="row">
+                        <div class="pull-right">
+                            <span class="btn btn-default" onclick="showEditServiceProviderModal()"><i class="fa fa-pencil-square-o"></i> Chỉnh sửa</span>
+                        </div>
+                    </div>
+                    <div class=" form-group">
+                        <fieldset class="scheduler-border less-padding">
+                            <legend class="scheduler-border bold-black">Thông tin cửa hàng</legend>
+                            <div class="form-group">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="title" class="col-md-3 control-label">Tên</label>
+                                        <div class="col-md-9">
+                                            <input id="title" class="form-control" value="@provider.Name" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">Loại dịch vụ</label>
+                                        <div class="col-md-9">
+                                            <input id="lastUpdate" class="form-control" value="@provider.AroundProviderCategory.Name" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">Địa chị</label>
+                                        <div class="col-md-9">
+                                            <input id="lastUpdate" class="form-control" value="@provider.Address" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">Số điện thoại</label>
+                                        <div class="col-md-9">
+                                            <input id="lastUpdate" class="form-control" value="@provider.Tel" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">Mô tả</label>
+                                        <div class="col-md-9">
+                                            <textarea rows="3" class="form-control">@provider.Description</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div id="editImageBtn" class="form-group" style="margin-bottom: 10px;margin-right: 0px">
+                                        <div class="pull-right">
+                                            <span class="btn btn-default btn-sm" onclick="changeAvatarClick()">
+                                                <i class="fa fa-edit"></i> Sửa ảnh đại diện
+                                            </span>
+                                            <input type="file" id="image" accept="image/x-png, image/gif, image/jpeg" style="display: none" />
+                                        </div>
+                                    </div>
+                                    <div id="acceptImageBtn" class="form-group hide" style="margin-bottom: 10px; margin-right: 0px">
+                                        <div class="pull-right">
+                                            <span class="btn btn-default btn-sm" onclick="cancelChangeImg()">
+                                                <i class="fa fa-times"></i> Hủy
+                                            </span>
+                                            <span class="btn btn-info btn-sm" onclick="acceptChangeImg()">
+                                                <i class="fa fa-check"></i> Chấp nhận
+                                            </span>
+                                        </div>
+                                        <input type="hidden" id="oldImgLink" />
+                                    </div>
+                                    <div class="form-group" style="margin-right: 0px">
+                                        @if (provider.ImageUrl == null)
+                                        {
+                                            <img id="avartarImg" class="border-img" style="width: 50%; float: right;" src="@AmsConstants.DefaultStoreImg" />
+                                        }
+                                        else
+                                        {
+                                            <img id="avartarImg" class="border-img" style="float: right;" src="@(provider.ImageUrl)" />
+
+                                        }
+                                    </div>
+
+                                    <div class="col-md-12" style="margin-top: 10px">
+                                        <div id="progressBar" class="progress" style="width: 200px" hidden="hidden">
+                                            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 200px">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="page-title">
+                                        <h2>Bản đồ</h2>
+                                    </div>
+                                    <div style="height: 300px;width: 100%;" id="map"><!--map-canvas will be postioned here--></div>
+                                </div>
+                                <input type="hidden" id="lat" value="@provider.Latitude" />
+                                <input type="hidden" id="lng" value="@provider.Longitude" />
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <div class="form-group">
+
+                        <div class="table-responsive">
+                            <table id="serviceProviderTbl" data-provider-id="@provider.Id" class="table v-middle table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tên</th>
+                                        <th>Giá</th>
+                                        <th>Ngày tạo</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tên</th>
+                                        <th>Giá</th>
+                                        <th>Ngày tạo</th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="editServiceProviderModal" class="modal fade ams-modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 id="incomeLineModalTitle" class="modal-title">Cập nhật thông tin</h4>
+            </div>
+            <form id="editServiceProviderForm" class="form-horizontal" role="form">
+                <div class="modal-body">
+                    <div class="panel-body">
+
+                        <div class="alert alert-info" id="successAddTransNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Cập nhật thông tin thành công.</span>
+                        </div>
+                        <div class="alert alert-danger" id="failedAddTransNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Cập nhật thông tin thất bại.</span>
+                        </div>
+                        <div class="alert alert-danger" id="failedAddTransWithMsgNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span id="addTransMsg"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="srvProvName" class="col-md-3 control-label">Tên </label>
+                            <div class="col-md-9">
+                                <input id="srvProvName" type="text" name="SrvProvName" class="form-control" value="">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="srvProvCatId" class="col-md-3 control-label">Nhóm </label>
+                            <div class="col-md-9">
+                                <select id="srvProvCatId" name="SrvProvCatId" class="form-control" data-size="3"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">SĐT</label>
+                            <div class="col-md-9">
+                                <input id="srvProvTel" name="SrvProvTel" class="form-control" value="" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Địa chỉ</label>
+                            <div class="col-md-9">
+                                <textarea id="srvProvAddress" name="SrvProvAddress" class="form-control" rows="2"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="srvProvDesc" class="col-md-3 control-label">Mô tả</label>
+                            <div class="col-md-9">
+                                <textarea id="srvProvDesc" name="SrvProvDesc" class="form-control" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" id="srvProvId" name="SrvProvId" />
+                    </div>
+                </div>
+                <div class="modal-footer" style="margin-top: 0">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button type="submit" id="updateIncomeTrans" class="btn btn-info">Chấp nhận</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="addProductModal" class="modal fade ams-modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 id="hdSrvModalTitle" class="modal-title">Tạo mới sản phẩm</h4>
+            </div>
+            <form id="addProductForm" class="form-horizontal" role="form">
+                <div class="modal-body">
+                    <div class="panel-body">
+
+                        <div class="alert alert-info" id="successAddTransTypeNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span id="successMsg">Thêm sản phẩm thành công.</span>
+                        </div>
+                        <div class="alert alert-danger" id="failedAddTransTypeNotify" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span id="failedMsg">Thêm sản phẩm thất bại.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="name" class="col-md-3 control-label">Tên </label>
+                                    <div class="col-md-9">
+                                        <input id="name" type="text" name="Name" class="form-control" value="">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="price" class="col-md-3 control-label">Giá </label>
+                                    <div class="col-md-9">
+                                        <input id="price" type="text" name="Price" class="form-control" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <img id="productImg" class="border-img" style="width: 100%" src="" />
+                                </div>
+                                <div id="editProductImageBtn" class="col-md-12" style="margin-top: 10px">
+                                    <div class="pull-right">
+                                        <span class="btn btn-default btn-sm" onclick="changeProduct()">
+                                            <i class="fa fa-edit"></i> Sửa ảnh
+                                        </span>
+                                        <input type="file" id="productImageSelector" accept="image/x-png, image/gif, image/jpeg" style="display: none" />
+                                    </div>
+                                </div>
+                                <div id="acceptProductImageBtn" class="col-md-12 hide" style="margin-top: 10px">
+                                    <div class="pull-right">
+                                        <span class="btn btn-default btn-sm" onclick="cancelChangeProductImg()">
+                                            <i class="fa fa-times"></i> Hủy
+                                        </span>
+                                    </div>
+                                    <input type="hidden" id="oldProductImgLink" />
+                                    <input type="hidden" id="imageUrl" name="ImageUrl" />
+                                    <input type="hidden" name="SrvProvId" value="@provider.Id" />
+                                    <input type="hidden" name="Id" id="productId" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="margin-top: 0">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button id="addProductBtn" class="btn btn-info">Chấp nhận</button>
+                    <button id="updateProductBtn" class="btn btn-info hide">Chấp nhận</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8T4uVRg-6S4KK39kPUldWKATbqgOm4VE&v=3.exp&amp;sensor=false"></script>
+<script src="~/Scripts/aroundProvider/map.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        window.deleteProduct = [];
+        var providerId = document.getElementById("serviceProviderTbl").dataset.providerId;
+        window.serviceProviderTbl = $("#serviceProviderTbl").DataTable({
+            "bLengthChange": false,
+            "bInfo": false,
+            "ajax": {
+                url: "/Management/AroundService/GetAllProductOfProvider?providerId=" + providerId,
+                dataSrc: function (data) {
+                    window.product = data;
+                    return data;
+                }
+            },
+            "order": [[1, "asc"]],
+            "drawCallback": function (settings) {
+                var addBtn = "<div class='col-md-1'>" +
+                                "<span class='btn btn-info' onclick='openAddNewProductModal()'>" +
+                                "<i class='fa fa-plus'></i>" +
+                                "</span>" +
+                            "</div>";
+                $("#serviceProviderTbl_wrapper > div:nth-child(1) > div:nth-child(1)").html(addBtn);
+
+                var deleteBtn =
+            "<div class='hide' id='delHdSrvBtnGroup'>" +
+                "<span class='btn btn-warning btn-stroke' onclick='cancelDeleteTrans()'>" +
+                    "Hủy" +
+                "</span>" +
+                "<span class='btn btn-primary' style='margin-left: 5px' onclick='commitDeleteTrans()'>" +
+                    "Chấp nhận" +
+                "</span>" +
+            "</div>";
+                $("#serviceProviderTbl_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(deleteBtn);
+            },
+            "columns": [
+                { data: "Name" },
+                { data: "Name" },
+                { data: "Price" },
+                { data: "CreateDate" },
+                { data: "Id" }
+            ],
+            "columnDefs": [
+                {
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0
+                },
+                {
+                    "targets": 2,
+                    "data": "Price",
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            return numberWithCommas(data);
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "targets": 3,
+                    "data": "CreateDate",
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            return "<strong>" + data + "</strong>";
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "targets": 4,
+                    "searchable": false,
+                    "orderable": false,
+                    "width": "7%",
+                    "data": "TransactionId",
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            return "<div class='text-right'>" +
+                                " <span onclick='viewProductDetail(\"" + data + "\")' class='btn btn-default btn-stroke btn-xs'> " +
+                                " <i class='fa fa-pencil'></i> " +
+                                " </span> " +
+                                "<span class='btn btn-danger btn-xs' onclick='deleteTrans(\"" + data + "\"" + ")'>" +
+                                       "<i class='fa fa-times'></i>" +
+                                   "</span>" +
+                                " </div>";
+                        }
+                        return data;
+                    }
+                },
+            ]
+        });
+        generateTableIndex(window.serviceProviderTbl);
+
+        $("#addIncomeLineModal").on("hidden.bs.modal", function () {
+            resetFormData("addIncomeLineForm");
+        });
+        $("#addTransactionTypeModal").on("hidden.bs.modal", function () {
+            resetFormData("addTransactionTypeForm");
+        });
+        $("#image").change(function () {
+            var data = new FormData();
+
+            var files = $('#image').prop("files");
+            if (files.length > 0) {
+                data.append("image", files[0]);
+                data.append("width", 293);
+                data.append("height", 220);
+            }
+            // progessBar(true);
+            $.ajax({
+                url: "/Management/Image/Upload",
+                type: "POST",
+                data: data,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.StatusCode === 0) {
+                        $("#avartarImg").addClass("hide");
+
+                        $("#oldImgLink").val($("#avartarImg").prop("src"));
+                        $("#avartarImg").prop("src", data.Data);
+                        $("#avartarImg").css("width", "");
+                        $("#avartarImg")
+                            .on("load",
+                                function () {
+                                    $("#avartarImg").removeClass("hide");
+                                });
+                        $("#editImageBtn").addClass("hide");
+                        $("#acceptImageBtn").removeClass("hide");
+
+                        progessBar(false);
+
+                    } else {
+
+                    }// Show error message
+                },
+                error: function (er) {
+                    alert(er);
+                    //progessBar(false);
+                }
+
+            });
+        });
+        $("#productImageSelector").change(function () {
+            var data = new FormData();
+            var files = $('#productImageSelector').prop("files");
+            if (files.length > 0) {
+                data.append("image", files[0]);
+                data.append("width", 250);
+                data.append("height", 132);
+            }
+            $.ajax({
+                url: "/Management/Image/Upload",
+                type: "POST",
+                data: data,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.StatusCode === 0) {
+                        $("#editProductImageBtn").addClass("hide");
+                        $("#acceptProductImageBtn").removeClass("hide");
+
+                        $("#oldProductImgLink").val($("#productImg").prop("src"));
+                        $("#productImg").prop("src", data.Data);
+                        progessBar(false);
+                    } else {
+
+                    }// Show error message
+                },
+                error: function (er) {
+                    alert(er);
+                    //progessBar(false);
+                }
+
+            });
+        });
+        bindingNumberWithComma("price");
+        validateUpdateServiceProviderInfo();
+    });
+
+    function deleteTrans(id) {
+        window.deleteProduct.push(parseInt(id));
+        window.serviceProviderTbl.row("#pro_" + id).remove().draw(false);
+        $("#delHdSrvBtnGroup").removeClass("hide").addClass("show");
+    }
+
+    function cancelDeleteTrans() {
+        for (var i = 0; i < window.product.length; i++) {
+            var originItem = window.product[i];
+            for (var z = 0; z < window.deleteProduct.length; z++) {
+                var deleteItem = window.deleteTransList[z];
+                if (originItem.Id === deleteItem) {
+                    window.serviceProviderTbl.row.add(originItem).draw();
+                }
+            }
+        }
+        window.deleteProduct = new Array();
+        $("#delHdSrvBtnGroup").removeClass("show").addClass("hide");;
+    }
+
+    function commitDeleteTrans() {
+        var postData = {
+            deleteItem: window.deleteProduct
+        }
+        $.ajax({
+            url: "/Management/AroundService/DeleteProducts",
+            type: "post",
+            data: postData,
+            dataType: "json",
+            traditional: true,
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    window.serviceProviderTbl.ajax.reload(null, false);
+                    window.deleteHdSrvList = new Array();
+                    $("#delHdSrvBtnGroup").removeClass("show");
+                    $("#delHdSrvBtnGroup").addClass("hide");
+                } else {
+                    $("#delHdSrvBtnGroup").removeClass("show");
+                    $("#delHdSrvBtnGroup").addClass("hide");
+                    $("#messageModal .msgContent").text("Xóa dịch vụ hổ trợ thất bại!");
+                }
+            },
+            error: function () {
+
+            }
+        });
+    }
+
+    function showEditServiceProviderModal() {
+        var providerId = document.getElementById("serviceProviderTbl").dataset.providerId;
+        $.ajax({
+            url: "/Management/AroundService/GetDetailServiceProvider",
+            type: "get",
+            data: {
+                providerId: providerId
+            },
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    var provider = data.Data.provider;
+                    var providerCat = data.Data.providerCat;
+
+                    $("#srvProvName").val(provider.SrvProvName);
+                    $("#srvProvId").val(providerId);
+                    $("#srvProvTel").val(provider.SrvProvTel);
+                    $("#srvProvAddress").text(provider.SrvProvAddress);
+                    $("#srvProvDesc").text(provider.SrvProvDesc);
+
+                    var providerCatHtml = parseJsonToSelectTags(providerCat, provider.providerCatId);
+                    $("#srvProvCatId").html(providerCatHtml);
+
+                    $("#editServiceProviderModal").modal("show");
+
+                }
+            }
+        });
+    }
+
+    function openAddNewProductModal() {
+        $("#updateProductBtn").addClass("hide");
+        $("#addProductBtn").removeClass("hide");
+        $("#productImg").prop("src", window.DefaultImage);
+        $("#addProductModal").modal("show");
+    }
+
+    function updateserviceProviderInfo() {
+
+        $.ajax({
+            url: "/Management/AroundService/UpdateServiceProviderInfo",
+            type: "POST",
+            data: $("#editServiceProviderForm").serialize(),
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    $("#successAddTransNotify").fadeIn("slow");
+                    setTimeout(function () {
+                        $("#successAddTransNotify").fadeOut("slow");
+                        resetFormData("editServiceProviderForm");
+                        $("#editServiceProviderModal").modal("hide");
+                        location.reload();
+                    }, 3000);
+                } else if (data.StatusCode === 2) {
+                    $("#failedAddTransWithMsgNotify").fadeIn("slow");
+                    $("#addTransMsg").text("Không tìm thấy địa chỉ trên google map");
+                    setTimeout(function () {
+                        $("#failedAddTransWithMsgNotify").fadeOut("slow");
+                    }, 3000);
+                }else {
+                    $("#failedAddTransNotify").fadeIn("slow");
+                    setTimeout(function () {
+                        $("#failedAddTransNotify").fadeOut("slow");
+                    }, 3000);
+                }
+                console.log(data);
+            }
+        });
+    }
+
+    function viewProductDetail(id) {
+        $.ajax({
+            url: "/Management/AroundService/GetProductDetail",
+            type: "get",
+            data: {
+                productId: id
+            },
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    var obj = data.Data;
+                    $("#name").val(obj.Name);
+                    $("#productId").val(obj.Id);
+                    $("#price").val(numberWithCommas(obj.Price));
+                    $("#productImg").prop("src", obj.ImageUrl);
+
+                    $("#updateProductBtn").removeClass("hide");
+                    $("#addProductBtn").addClass("hide");
+                    $("#addProductModal").modal("show");
+                }
+            }
+        });
+    }
+
+    function addNewProduct() {
+        $("#imageUrl").val($("#productImg").prop("src").replace(location.origin, ""));
+        $("#price").val(replaceCommaNumber($("#price").val()));
+        $.ajax({
+            url: "/Management/AroundService/AddNewProduct",
+            type: "POST",
+            data: $("#addProductForm").serialize(),
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    $("#hdSrvModalTitle").text("Tạo mới sản phẩm");
+                    $("#successMsg").text("Tạo mới sản phẩm thành công.");
+                    $("#successAddTransTypeNotify").fadeIn("slow");
+                    setTimeout(function () {
+                        $("#successAddTransTypeNotify").fadeOut("slow");
+                        resetFormData("addProductForm");
+                        window.serviceProviderTbl.ajax.reload(null, false);
+                        cancelChangeProductImg();
+                        $("#productImg").prop("src", window.DefaultImage);
+                    }, 3000);
+                } else {
+                    $("#failedMsg").text("Tạo mới sản phẩm thất bại.");
+                    $("#failedAddTransTypeNotify").fadeIn("slow");
+                    setTimeout(function () {
+                        $("#failedAddTransTypeNotify").fadeOut("slow");
+                    }, 3000);
+                }
+                console.log(data);
+            }
+        });
+    }
+
+    function updateProduct() {
+        $("#imageUrl").val($("#productImg").prop("src").replace(location.origin, ""));
+        $("#price").val(replaceCommaNumber($("#price").val()));
+        $.ajax({
+            url: "/Management/AroundService/UpdateProduct",
+            type: "POST",
+            data: $("#addProductForm").serialize(),
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    $("#hdSrvModalTitle").text("Cập nhật sản phẩm");
+                    $("#successMsg").text("Cập nhật sản phẩm thành công.");
+                    $("#successAddTransTypeNotify").fadeIn("slow");
+                    setTimeout(function () {
+                        $("#successAddTransTypeNotify").fadeOut("slow");
+                        $("#addProductModal").modal("hide");
+                        resetFormData("addProductForm");
+                        cancelChangeProductImg();
+                        $("#productImg").prop("src", window.DefaultImage);
+                    }, 3000);
+                    window.serviceProviderTbl.ajax.reload(null, false);
+                } else {
+                    $("#failedMsg").text("Cập nhật sản phẩm thất bại.");
+                    $("#failedAddTransTypeNotify").fadeIn("slow");
+                    setTimeout(function () {
+                        $("#failedAddTransTypeNotify").fadeOut("slow");
+                    }, 3000);
+                }
+                console.log(data);
+            }
+        });
+    }
+
+    function changeAvatarClick() {
+        $("#image").click();
+    }
+
+    function changeProduct() {
+        $("#productImageSelector").click();
+    }
+
+    function progessBar(isShow) {
+        if (isShow === true) {
+            $("#progressBar").removeAttr("hidden");
+        } else {
+            $("#progressBar").attr("hidden", "hidden");
+        }
+    }
+
+    function cancelChangeImg() {
+        $("#avartarImg").prop("src", $("#oldImgLink").val());
+        $("#acceptImageBtn").addClass("hide");
+        $("#editImageBtn").removeClass("hide");
+        $("#image").val("");
+        if ($("#avartarImg").prop("src").indexOf("defaultStore") > -1) {
+            $("#avartarImg")
+                .css({
+                    float: "right",
+                    //                    width: "50%"
+                });
+        } else {
+            $("#avartarImg")
+                .css({
+                    float: "right",
+                    //                    width: "100%"
+                });
+        }
+    }
+
+    function cancelChangeProductImg() {
+        $("#productImg").prop("src", $("#oldProductImgLink").val());
+        $("#acceptProductImageBtn").addClass("hide");
+        $("#editProductImageBtn").removeClass("hide");
+        $("#productImageSelector").val("");
+    }
+
+    function acceptChangeImg() {
+        var newImage = $("#avartarImg").prop("src").replace(location.origin, "");
+        var providerId = document.getElementById("serviceProviderTbl").dataset.providerId;
+        $.ajax({
+            url: "/Management/AroundService/ChangeServiceProviderAvatar",
+            type: "post",
+            data: {
+                providerId: providerId,
+                imgUrl: newImage
+            },
+            success: function (data) {
+                if (data.StatusCode == 0) {
+                    $("#acceptImageBtn").addClass("hide");
+                    $("#editImageBtn").removeClass("hide");
+                    $("#image").val("");
+                }
+            }
+        });
+    }
+
+    function validateUpdateServiceProviderInfo() {
+        $("#editServiceProviderForm").validate({
+            rules: {
+                SrvProvName: {
+                    required: true,
+                    maxlength: 255
+                },
+                SrvProvTel: {
+                    required: true,
+                    number: true,
+                    maxlength: 11
+                },
+                SrvProvAddress: {
+                    required: true,
+                    maxlength: 255
+                },
+                SrvProvDesc: {
+                    required: true,
+                    maxlength: 1000
+                }
+            },
+            messages: {
+                SrvProvName: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 255 ký tự."
+                },
+                SrvProvTel: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 11 ký số.",
+                    number: "Phải là ký số.",
+                },
+                SrvProvAddress: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 255 ký tự."
+                },
+                SrvProvDesc: {
+                    maxlength: "Tối đa 1000 ký tự."
+                }
+            },
+            submitHandler: function () {
+                updateserviceProviderInfo();
+            }
+        });
+        $.validator.methods.number = function (value, element) {
+            return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
+        }
+        $("#addProductForm").validate({
+            rules: {
+                Name: {
+                    required: true,
+                    maxlength: 255
+                },
+                Price: {
+                    required: true,
+                    number: true
+                }
+            },
+            messages: {
+                Name: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 255 ký tự."
+                },
+                Price: {
+                    required: "Trường bắt buộc",
+                    number: "Phải là ký số."
+                }
+            },
+            submitHandler: function () {
+                if ($("#updateProductBtn").hasClass("hide")) {
+                    addNewProduct();
+                } else {
+                    updateProduct()
+                }
+            }
+        });
+    }
+
+</script>

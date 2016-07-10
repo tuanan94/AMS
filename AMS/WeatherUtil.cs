@@ -58,6 +58,9 @@ public class weatherResult
             case "116":
                     result = "/Content/Images/WeatherIcon/Partlycloudy.gif";
                     break;
+            case "296":
+                result = "/Content/Images/WeatherIcon/Raining.gif";
+                break;
             default:
                 result = defaultIcon;
                 break;

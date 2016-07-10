@@ -21,7 +21,7 @@
 
         <div class="panel-body">
             <div class="tab-content">
-                <div class="tab-pane fade active in" id="">acceptApproveUser()
+                <div class="tab-pane fade active in" id="">
 
                     <div class="form-horizontal" id="searchHdSrv" role="form">
                         <!-- Data table -->
@@ -298,5 +298,30 @@
         $("#mode").val(modeNum);
         $("#msgConfirm").html(msg);
         $("#confirmModal").modal("show");
+    }
+    function acceptApproveUser() {
+        var resId = $("#residentId").val();
+        var mode = $("#mode").val();
+        var action = "AcceptResidentApprovement";
+        var fromUserId = document.getElementById("residentApproveTbl").dataset.fromuserid;
+        $.ajax({
+            type: "post",
+            url: "/Management/ResidentApprovement/" + action,
+            data: {
+                resId: resId,
+                fromUserId: fromUserId,
+                mode: mode
+            },
+            success: function (data) {
+                console.log(data);
+                if (window.currentRow) {
+                    window.dataTable2.row(window.currentRow).remove().draw();
+                }
+                $("#confirmModal").modal("hide");
+            },
+            error: function () {
+
+            }
+        });
     }
 </script>
