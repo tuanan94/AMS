@@ -1,14 +1,14 @@
-$(document).ready(function () {
+﻿$(document).ready(function () {
 
 
-    $("#owlexample").owlCarousel({
+    $("#owl-example").owlCarousel({
     // Most important owl features
-    items : 4,
+    items : 3,
     pagination : true,
     paginationSpeed : 1000,
     navigation : true,
-    navigationText : ["","<i class='fa fa-angle-right'></i>"],
-    slideSpeed : 800
+    navigationText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"],
+    slideSpeed: 800
  });
 
 	$("#navigation").sticky({

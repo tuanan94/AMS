@@ -47,29 +47,24 @@
                 </div>
             </a>
         </div>
-        
-            <div id="menu">
-                <ul id="slide-left" class="slide-left-active">
-                    <li class="category">Tiện ích</li>
-                    <li class="@(url.Contains("/Home/Setting") ? "active" : "")">
-                        <a href="/Home/Setting"><i class="fa fa-fw fa-cogs"></i> Thiết lập căn hộ</a>
-                    </li>
+        <div id="menu">
+            <ul id="slide-left" class="slide-left-active">
+                <li class="category">Tiện ích</li>
+                <li class="@(url.Contains("/Home/Setting")?"active":"")">
+                    <a href="/Home/Setting"><i class="fa fa-fw fa-cogs"></i> Thiết lập căn hộ</a>
+                </li>
+                <li class="@(url.Contains("/Home/ManageReceipt/View")?"active":"")">
+                    <a href="/Home/ManageReceipt/View"><i class="fa fa-fw fa-money"></i> Hóa đơn</a>
+                </li>
+                <li class="@(url.Contains("/Home")?"active":"")">
+                   
+                </li>
+                <li class="@(url.Contains("/Home/HelpdeskRequest/ViewHistory")?"active":"")">
+                    <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-fw fa-stumbleupon-circle"></i> Yêu cầu sửa chữa</a>
+                </li>
+            </ul>
+        </div>
 
-
-
-
-                    <li class="@(url.Contains("/Home/ManageReceipt/View") ? "active" : "")">
-                        <a href="/Home/ManageReceipt/View"><i class="fa fa-fw fa-money"></i> Hóa đơn</a>
-                    </li>
-                    <li class="@(url.Contains("/Home") ? "active" : "")">
-
-                    </li>
-                    <li class="@(url.Contains("/Home/HelpdeskRequest/ViewHistory") ? "active" : "")">
-                        <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-fw fa-stumbleupon-circle"></i> Yêu cầu sửa chữa</a>
-                    </li>
-                </ul>
-            </div>
-     
     </div>
     <div id="ascrail2000" class="nicescroll-rails" style="width: 5px; z-index: 1; cursor: default; position: absolute; top: 0px; left: 245px; height: 638px; opacity: 0;"><div style="position: relative; top: 0px; float: right; width: 5px; height: 490px; border: 0px; border-radius: 5px; background-color: rgb(37, 173, 159); background-clip: padding-box;"></div></div><div id="ascrail2000-hr" class="nicescroll-rails" style="height: 5px; z-index: 1; top: 633px; left: 0px; position: absolute; cursor: default; display: none; width: 245px; opacity: 0;"><div style="position: absolute; top: 0px; height: 5px; width: 250px; border: 0px; border-radius: 5px; background-color: rgb(37, 173, 159); background-clip: padding-box;"></div></div>
 </div>
@@ -89,63 +84,65 @@
             <a href="#" data-target=".offline">Offline</a>
         </li>
     </ul>
-    <ul class="chat-contacts">
-        <li class="online" data-user-id="1">
-            <a href="#">
-                <div class="media">
-                    <div class="pull-left">
-                        <span class="status"></span>
-                        <img src="images/people/110/guy-6.jpg" width="40" class="img-circle">
-                    </div>
-                    <div class="media-body">
-                        <div class="contact-name">Jonathan S.</div>
-                        <small>"Free Today"</small>
-                    </div>
-                </div>
-            </a>
-        </li>
-        <li class="online away" data-user-id="2">
-            <a href="#">
-                <div class="media">
-                    <div class="pull-left">
-                        <span class="status"></span>
-                        <img src="images/people/110/woman-5.jpg" width="40" class="img-circle">
-                    </div>
-                    <div class="media-body">
-                        <div class="contact-name">Mary A.</div>
-                        <small>"Feeling Groovy"</small>
-                    </div>
-                </div>
-            </a>
-        </li>
-        <li class="online" data-user-id="3">
-            <a href="#">
-                <div class="media">
-                    <div class="pull-left">
-                        <span class="status"></span>
-                        <img src="images/people/110/guy-3.jpg" width="40" class="img-circle">
-                    </div>
-                    <div class="media-body">
-                        <div class="contact-name">Adrian D.</div>
-                        <small>Busy</small>
-                    </div>
-                </div>
-            </a>
-        </li>
-        <li class="offline" data-user-id="4">
-            <a href="#">
-                <div class="media">
-                    <div class="pull-left">
-                        <img src="images/people/110/woman-6.jpg" width="40" class="img-circle">
-                    </div>
-                    <div class="media-body">
-                        <div class="contact-name">Michelle S.</div>
-                        <small>Offline</small>
-                    </div>
-                </div>
-            </a>
-        </li>
-    </ul>
+@**@
+@*    <ul class="chat-contacts">*@
+@*        <li class="online" data-user-id="1">*@
+@*            <a href="#">*@
+@*                <div class="media">*@
+@*                    <div class="pull-left">*@
+@*                        <span class="status"></span>*@
+@*                        <img src="images/people/110/guy-6.jpg" width="40" class="img-circle">*@
+@*                    </div>*@
+@*                    <div class="media-body">*@
+@*                        <div class="contact-name">Jonathan S.</div>*@
+@*                        <small>"Free Today"</small>*@
+@*                    </div>*@
+@*                </div>*@
+@*            </a>*@
+@*        </li>*@
+@*        <li class="online away" data-user-id="2">*@
+@*            <a href="#">*@
+@*                <div class="media">*@
+@*                    <div class="pull-left">*@
+@*                        <span class="status"></span>*@
+@*                        <img src="images/people/110/woman-5.jpg" width="40" class="img-circle">*@
+@*                    </div>*@
+@*                    <div class="media-body">*@
+@*                        <div class="contact-name">Mary A.</div>*@
+@*                        <small>"Feeling Groovy"</small>*@
+@*                    </div>*@
+@*                </div>*@
+@*            </a>*@
+@*        </li>*@
+@*        <li class="online" data-user-id="3">*@
+@*            <a href="#">*@
+@*                <div class="media">*@
+@*                    <div class="pull-left">*@
+@*                        <span class="status"></span>*@
+@*                        <img src="images/people/110/guy-3.jpg" width="40" class="img-circle">*@
+@*                    </div>*@
+@*                    <div class="media-body">*@
+@*                        <div class="contact-name">Adrian D.</div>*@
+@*                        <small>Busy</small>*@
+@*                    </div>*@
+@*                </div>*@
+@*            </a>*@
+@*        </li>*@
+@*        <li class="offline" data-user-id="4">*@
+@*            <a href="#">*@
+@*                <div class="media">*@
+@*                    <div class="pull-left">*@
+@*                        <img src="images/people/110/woman-6.jpg" width="40" class="img-circle">*@
+@*                    </div>*@
+@*                    <div class="media-body">*@
+@*                        <div class="contact-name">Michelle S.</div>*@
+@*                        <small>Offline</small>*@
+@*                    </div>*@
+@*                </div>*@
+@*            </a>*@
+@*        </li>*@
+@*    </ul>*@
+
 </div>
 <div id="content" style="@(isResidentOrHouseOwner==true?"":"margin-left:initial")">
    
