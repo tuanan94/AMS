@@ -15,23 +15,7 @@
     }
 }
 
-@*<nav class="navbar navbar-subnav navbar-static-top" role="navigation">*@
-@*    <div class="container-fluid">*@
-@**@
-@*        <!-- Collect the nav links, forms, and other content for toggling -->*@
-@*        <div class="collapse navbar-collapse" id="subnav">*@
-@*            <ul class="nav navbar-nav">*@
-@*                <li>*@
-@*                    <a href="/Home/HelpdeskRequest/Create"><i class="fa fa-send"></i> Tạo yêu cầu sửa chữa</a>*@
-@*                </li>*@
-@*                <li class="active">*@
-@*                    <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-history"></i> Lịch sử</a>*@
-@*                </li>*@
-@*            </ul>*@
-@*        </div>*@
-@*        <!-- /.navbar-collapse -->*@
-@*    </div>*@
-@*</nav>*@
+
 
 <div class="col-md-12">
     <div class="panel panel-default">
@@ -53,40 +37,38 @@
                 <div class="tab-pane fade active in" id="">
                     <div class="form-horizontal" id="searchHdSrv" role="form">
                         <div class="form-group">
-                        <div class="table-responsive">
-                            <!-- Data table -->
-                            <table id="hdRequestTbl" data-userid="@User.Identity.GetUserId()" class="table v-middle  table-hover table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Tiêu đề</th>
-                                        @*                                        <th>Căn hộ</th>*@
-                                        @*                                <th>DV hỗ trợ</th>*@
-                                        <th>Trạng thái</th>
-                                        <th>Nhân viên hỗ trợ</th>
-                                        <th>Ngày tạo</th>
-                                        <th>Ngày hoàn thành</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Tiêu đề</th>
-                                        @*                                        <th>Căn hộ</th>*@
-                                        @*                                <th>DV hỗ trợ</th>*@
-                                        <th>Trạng thái</th>
-                                        <th>Nhân viên hỗ trợ</th>
-                                        <th>Ngày tạo</th>
-                                        <th>Ngày hoàn thành</th>
-                                        <th></th>
-                                    </tr>
-                                </tfoot>
-                                <tbody></tbody>
-                            </table>
-                            <!-- // Data table -->
+                            <div class="table-responsive">
+                                <!-- Data table -->
+                                <table id="hdRequestTbl" data-userid="@User.Identity.GetUserId()" class="table v-middle  table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Tiêu đề</th>
+                                            <th>DV hỗ trợ</th>
+                                            <th>Trạng thái</th>
+@*                                            <th>Nhân viên hỗ trợ</th>*@
+                                            <th>Ngày tạo</th>
+                                            <th>Ngày hoàn thành</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Tiêu đề</th>
+                                            <th>DV hỗ trợ</th>
+                                            <th>Trạng thái</th>
+@*                                            <th>Nhân viên hỗ trợ</th>*@
+                                            <th>Ngày tạo</th>
+                                            <th>Ngày hoàn thành</th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody></tbody>
+                                </table>
+                                <!-- // Data table -->
+                            </div>
                         </div>
-                    </div>
                     </div>
                 </div>
             </div>
@@ -118,9 +100,9 @@
                 { data: "HdReqTitle" },
                 { data: "HdReqTitle" },
 //                { data: "HdReqHouse" },
-//                { data: "HdReqSrvName" },
+                { data: "HdReqSrvCatName" },
                 { data: "HdReqStatus" },
-                { data: "HdReqSupporter" },
+//                { data: "HdReqSupporter" },
                 { data: "HdReqCreateDate" },
                 { data: "HdReqDeadline" },
                 { data: "HdReqId" }
@@ -136,7 +118,7 @@
                     "width": "25%"
                 },
                 {
-                    "targets": 2,
+                    "targets": 3,
                     "data": "HdReqStatus",
                     "render": function (data, type, full) {
                         if (type === "display" || type === "filter") {
@@ -166,18 +148,18 @@
                         return data;
                     }
                 },
-                {
-                    "targets": 3,
-                    "data": "HdReqSupporter",
-                    "render": function (data, type, full) {
-                        if (type === "display" || type === "filter") {
-                            if (data === null || data === undefined) {
-                                return "Đang chờ xử lý";
-                            }
-                        }
-                        return data;
-                    }
-                },
+//                {
+//                    "targets": 4,
+//                    "data": "HdReqSupporter",
+//                    "render": function (data, type, full) {
+//                        if (type === "display" || type === "filter") {
+//                            if (data === null || data === undefined) {
+//                                return "Đang chờ xử lý";
+//                            }
+//                        }
+//                        return data;
+//                    }
+//                },
                 {
                     "targets": 4,
                     "data": "HdReqCreateDate",
@@ -185,11 +167,8 @@
                         if (type === "display" || type === "filter") {
                             var dateTime = data.split(" ");
                             return "<strong>" + dateTime[0] + "</strong> " + dateTime[1];
-
-                            //                            return "<span class='label date-color label-warning'>" + dateTime[0] +
-                            //                                "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";
                         }
-                        return data;
+                        return full.HdReqCreateDateLong;
                     },
                     "width": "15%"
                 },
@@ -199,9 +178,6 @@
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
                             if (data !== null && data !== undefined) {
-                                //                                var dateTime = data.split(" ");
-                                //                                return "<span class='label date-color label-warning'>" + dateTime[0] +
-                                //                                    "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";
                                 var dateTime = data.split(" ");
                                 return "<strong>" + dateTime[0] + "</strong> " + dateTime[1];
                             }
@@ -221,7 +197,7 @@
                         return data;
                     }
                 }
-            ], "order": [[5, 'desc']]
+            ], "order": [[4, 'desc']]
         });
         generateTableIndex(datatable);
 

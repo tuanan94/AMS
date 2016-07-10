@@ -39,6 +39,7 @@ namespace AMS.Models
     public class HelpdeskRequestModel
     {
         public int HdServiceId { get; set; }
+        public int HdServiceCatId { get; set; }
         public string HdReqTitle { get; set; }
         public int HdReqPrior { get; set; }
         public int HdReqUserId { get; set; }
@@ -53,7 +54,8 @@ namespace AMS.Models
         public int HdReqPrior { get; set; }
         public string HdReqHouse { get; set; }
         public int HdReqStatus { get; set; }
-        public string HdReqSrvName { get; set; }
+//        public string HdReqSrvName { get; set; }
+        public string HdReqSrvCatName { get; set; }
         public string HdReqCreateDate { get; set; }
         public long HdReqCreateDateLong { get; set; }
         public string HdReqDeadline { get; set; }
@@ -91,7 +93,7 @@ namespace AMS.Models
         public List<HelpdeskServiceCatModel> HdSrvCategories { get; set; }
         public int SelectedHdSrvCatId { get; set; }
         public List<HelpdeskServiceModel> ListHdSrvBySelectedCat { get; set; }
-        public int SelectedHdSrvId { get; set; }
+//        public int SelectedHdSrvId { get; set; }
         public double SelectedHdSrvPrice { get; set; }
         public HelpdeskRequestModel HdReqInfoDetail { get; set; }
     }

@@ -13,7 +13,8 @@ namespace AMS.Models
         public int BalanceSheetId { get; set; }
         public string ReceiptTitle { get; set; }
         public string ReceiptDesc { get; set; }
-        public string ReceiptHouseName { get; set; }
+//        public string ReceiptHouseName { get; set; }
+        public int ReceiptHouseId { get; set; }
         public int ReceiptType { get; set; }
         public string PublishDate { get; set; }
         public string ForMonth { get; set; }
@@ -127,8 +128,9 @@ namespace AMS.Models
 
     public class MonthlyResidentExpenseOutput
     {
-        [CsvColumn(Name = "Tháng", OutputFormat = "MM-yyyy", FieldIndex = 1)]
-        public string ForMonth { get; set; }
+//        [CsvColumn(Name = "Tiêu đề", OutputFormat = "MM-yyyy", FieldIndex = 1)]
+        [CsvColumn(Name = "Tiêu đề", FieldIndex = 1)]
+        public string Title { get; set; }
 
         [CsvColumn(Name = "Tòa nhà", FieldIndex = 2)]
         public string Block { get; set; }

@@ -50,7 +50,6 @@ namespace AMS
         public static int RECEIPT_STATUS_UNPAID = 2;
         public static int RECEIPT_STATUS_PAID = 3;
 
-
         public static int TRANSACTION_TYPE_INCOME = 1;
         public static int TRANSACTION_TYPE_EXPENSE = 2;
 
@@ -94,6 +93,7 @@ namespace AMS
 
         public static int HOUSE_STATUS_ENABLE = 1;
         public static int HOUSE_STATUS_DISABLE = 2;
+        public static int HOUSE_STATUS_DELETE = 3;
 
         public static int HOUSE_ADD_NEW_FLOOR = 0;
         public static int HOUSE_ADD_EXISTING_FLOOR = 1;
@@ -101,6 +101,8 @@ namespace AMS
         public static int GET_ALL = 1;
         public static int GET_ALL_ACTIVE= 2;
 
+        public static int TASK_DONE= 1;
+        public static int TASK_NOT_DONE = 2;
 
 
         public static double MAX_NUMBER = 999999999.0;

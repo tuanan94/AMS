@@ -47,20 +47,12 @@
                                     <div class="form-group">
                                         <label for="hdSrvCatName" class="col-md-3 control-label">Loại dịch vụ</label>
                                         <div class="col-md-9 full-width-select">
-                                            <select id="hdSrvCatName" title="Dịch vụ hỗ trợ" name="hdSrvCatName" class="selectpicker">
+                                            <select id="hdSrvCatName" title="Dịch vụ hỗ trợ" name="HdServiceCatId" class="form-control">
                                                 <option value="" selected="selected"> Hãy chọn loại dịch vụ</option>
                                                 @foreach (var cat in hdSrvCats)
                                                 {
                                                     <option value="@cat.Id"> @cat.Name</option>
                                                 }
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="hdServiceId" class="col-md-3 control-label">Tên dịch vụ</label>
-                                        <div class="col-md-9 full-width-select">
-                                            <select id="hdServiceId" name="HdServiceId" class="selectpicker">
-                                                <option value="" selected="selected"> Hãy chọn dịch vụ</option>
                                             </select>
                                         </div>
                                     </div>
@@ -90,5 +82,83 @@
     $(document).ready(function () {
         $("#slide-left").children().removeClass("active");
         $($("#slide-left li")[4]).addClass("active");
+
+        $("#addHdSrvCat").on("click", function () {
+            console.log($("#hdSrvCategoryForm").serialize());
+            $("#hdSrvCategoryForm").valid();
+        });
+        validateInfomation();
     });
+
+    function addNewHdRequest() {
+        var action = "AddHdRequest";
+        $.ajax({
+            url: "/Home/HelpdeskRequest/" + action,
+            type: "POST",
+            data: $("#createHdService").serialize(),
+            success: function (data) {
+                console.log(data);
+                if (data.StatusCode === 0) {
+                    document.getElementById("createHdService").reset();
+                    $("#createHdSrvSuccessNoti").removeClass("hide");
+                    $("#createHdSrvSuccessNoti").addClass("show");
+                    setTimeout(function () {
+                        $("#createHdSrvSuccessNoti").removeClass("show");
+                        $("#createHdSrvSuccessNoti").addClass("hide");
+                    }, 3000);
+                } else if (data.StatusCode === -1) {
+                    $("#createHdSrvFailedNoti").removeClass("hide");
+                    setTimeout(function () {
+                        $("#createHdSrvFailedNoti").removeClass("show");
+                        $("#createHdSrvFailedNoti").addClass("hide");
+                    },3000);
+                }
+            },
+            error: function () {
+
+            }
+        });
+    }
+
+    function validateInfomation() {
+        $("#createHdService").validate({
+            ignore: [],
+            rules: {
+                hdSrvCatName: {
+                    required: true
+                }, hdReqTitle: {
+                    required: true,
+                    maxlength: 255
+                }, hdReqUserDesc: {
+                    maxlength: 1000
+                }
+            },
+            messages: {
+                hdSrvCatName: {
+                    required: "Vui lòng chọn nhóm dịch vụ hỗ trợ."
+                }, hdReqTitle: {
+                    required: "Vui lòng nhập vắn tắt mô tả yêu cầu.",
+                    maxlength: "Tiêu đề không dài quá 255 ký tự."
+                }, hdReqUserDesc: {
+                    maxlength: "Mô tả không dài quá 1000 ký tự."
+                }
+            },
+            success: function (label, element) {
+                label.parent().removeClass("error");
+                label.remove();
+            },
+            errorPlacement: function (error, element) {
+                if (element.attr("name") === "hdServiceId") {
+                    error.insertAfter($("#hdServiceId").next());
+                } else if (element.attr("name") === "hdSrvCatName") {
+                    error.insertAfter($("#hdSrvCatName").next());
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            submitHandler: function () {
+                addNewHdRequest();
+            }
+        });
+    }
 </script>

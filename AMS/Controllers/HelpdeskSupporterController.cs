@@ -6,6 +6,9 @@ using System.Web.Mvc;
 using AMS.Service;
 using AMS.ViewModel;
 using System.Globalization;
+using AMS.Constant;
+using AMS.Enum;
+using AMS.Models;
 using Microsoft.AspNet.Identity;
 
 namespace AMS.Views.HelpdeskSupporter
@@ -21,6 +24,7 @@ namespace AMS.Views.HelpdeskSupporter
 
         [HttpGet]
         [ValidateInput(false)]
+        [Authorize]
         public ActionResult Index()
         {
             User currUser = _userService.findById(int.Parse(User.Identity.GetUserId()));//AnLTNM
@@ -31,7 +35,47 @@ namespace AMS.Views.HelpdeskSupporter
         }
 
         [HttpGet]
+        [Route("HelpdeskSupporter/GetListRequest")]
+        public ActionResult GetHeRequestBySupporterId(int supporterId)
+        {
+            List<HelpdeskRequestViewModel> listRequest = new List<HelpdeskRequestViewModel>();
+            HelpdeskRequestViewModel requestModel = null;
+            try
+            {
+                User currUser = _userService.findById(supporterId);//AnLTNM
+                if (null != currUser)
+                {
+                    List<HelpdeskRequest> hr = _helpdeskRequestServices.GetAllHdRequestBySupporterId(currUser.Id);//AnLTNM
+                    foreach (var rq in hr)
+                    {
+                        requestModel = new HelpdeskRequestViewModel();
+                        requestModel.Id = rq.Id;
+                        requestModel.Title = rq.Title;
+                        requestModel.HelpdeskServiceCatName = rq.HelpdeskServiceCategory.Name;
+                        requestModel.CreateDate = rq.CreateDate.Value.ToString(AmsConstants.DateTimeFormat);
+                        requestModel.CreateDateLong = rq.CreateDate.Value.Ticks;
+
+                        if (null != rq.DueDate)
+                        {
+                            requestModel.DueDate = rq.DueDate.Value.ToString(AmsConstants.DateTimeFormat);
+                            requestModel.DueDateLOng = rq.DueDate.Value.Ticks;
+                        }
+                        requestModel.Status = rq.Status.Value;
+                        requestModel.HouseName = rq.House.HouseName;
+                        listRequest.Add(requestModel);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return Json(listRequest, JsonRequestBehavior.AllowGet);
+            }
+            return Json(listRequest, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
         [ValidateInput(false)]
+        [Authorize]
         public ActionResult Detail(int currHelpdeskSupporterId, int requestId)
         {
             HelpdeskRequest hr = _helpdeskSupporterService.GetHelpdeskRequest(requestId);
@@ -49,9 +93,8 @@ namespace AMS.Views.HelpdeskSupporter
             }
 
             request.Status = hr.Status.Value;
-            request.Price = hr.Price.Value;
             request.HouseName = hr.House.HouseName;
-            request.HelpdeskServiceName = hr.HelpdeskService.Name;
+            request.HelpdeskServiceCatName = hr.HelpdeskServiceCategory.Name;
             request.Id = hr.Id;
             request.HelpdeskSupporterId = currHelpdeskSupporterId;
             ViewBag.currRequest = request;
@@ -93,14 +136,13 @@ namespace AMS.Views.HelpdeskSupporter
                     }
                     //Add notification - AnTT - 09/07/2016 - END
                 }
-
-
                 ViewBag.messageSuccess = "Đã xử lý thành công!";
-                return Redirect("~/HelpdeskSupporter/Index?id=" + currHelpdeskSupporterId);
+                return Redirect("~/HelpdeskSupporter/Detail?currHelpdeskSupporterId=" + currHelpdeskSupporterId + "&requestId=" + currRequestId);
             }
             return Redirect("~/View/Shared/Error");
         }
 
+        [Authorize]
         public ActionResult History()
         {
             User currUser = _userService.findById(int.Parse(User.Identity.GetUserId()));
@@ -108,6 +150,40 @@ namespace AMS.Views.HelpdeskSupporter
             List<HelpdeskRequestLog> logOfCurrRequest = _helpdeskRequestLogService.GetHelpdeskRequestLogByUser(currUserId);
             ViewBag.listLog = logOfCurrRequest;
             return View();
+        }
+
+        [HttpGet]
+        [Route("HelpdeskSupporter/GetHistoryRequest")]
+        public ActionResult GetHistoryRequest(int supporterId)
+        {
+            List<HelpdeskRequestLogViewModel> listLog = new List<HelpdeskRequestLogViewModel>();
+            HelpdeskRequestViewModel requestModel = null;
+            try
+            {
+                User currUser = _userService.findById(supporterId);//AnLTNM
+                if (null != currUser)
+                {
+                    List<HelpdeskRequestLog> logOfCurrRequest = _helpdeskRequestLogService.GetHelpdeskRequestLogByUser(currUser.Id);
+                    HelpdeskRequestLogViewModel log = null;
+                    foreach (var rq in logOfCurrRequest)
+                    {
+                        log = new HelpdeskRequestLogViewModel();
+                        log.Title = rq.HelpdeskRequest.Title;
+                        log.SrvCatName = rq.HelpdeskRequest.HelpdeskServiceCategory.Name;
+                        log.CreateDate = rq.CreateDate.Value.ToString(AmsConstants.DateTimeFormat);
+                        log.CreateDateLong = rq.CreateDate.Value.Ticks;
+                        log.StatusTo = rq.StatusTo.Value;
+                        log.StatusFrom = rq.StatusFrom.Value;
+                        log.HouseName = rq.HelpdeskRequest.House.HouseName;
+                        listLog.Add(log);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return Json(listLog, JsonRequestBehavior.AllowGet);
+            }
+            return Json(listLog, JsonRequestBehavior.AllowGet);
         }
     }
 }

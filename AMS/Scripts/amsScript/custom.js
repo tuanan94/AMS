@@ -453,54 +453,9 @@ $(document).ready(function () {
             });
         }
     });
-    $("#createHdService").validate({
-        ignore: [],
-        rules: {
-            hdSrvCatName: {
-                required: true
-            }, hdService: {
-                required: true
-            }, hdReqTitle: {
-                required: true,
-                maxlength: 255
-            }, hdReqUserDesc: {
-                maxlength: 500
-            }
-        },
-        messages: {
-            hdSrvCatName: {
-                required: "Vui lòng chọn nhóm dịch vụ hỗ trợ."
-            }, hdService: {
-                required: "Vui lòng chọn dịch vụ hỗ trợ."
-            }, hdReqTitle: {
-                required: "Vui lòng nhập vắn tắt mô tả yêu cầu.",
-                maxlength: "Tiêu đề không dài quá 255 ký tự."
-            }, hdReqUserDesc: {
-                maxlength: "Mô tả không dài quá 500 ký tự."
-            }
-        },
-        success: function (label, element) {
-            label.parent().removeClass("error");
-            label.remove();
-        },
-        errorPlacement: function (error, element) {
-            if (element.attr("name") === "hdServiceId") {
-                error.insertAfter($("#hdServiceId").next());
-            } else if (element.attr("name") === "hdSrvCatName") {
-                error.insertAfter($("#hdSrvCatName").next());
-            } else {
-                error.insertAfter(element);
-            }
-        },
-        submitHandler: function () {
-            addNewHdRequest();
-        }
-    });
+    
 
-    $("#addHdSrvCat").on("click", function () {
-        console.log($("#hdSrvCategoryForm").serialize());
-        $("#hdSrvCategoryForm").valid();
-    });
+    
 
     $("#addHelpdeskRequestModal").on("hidden.bs.modal", function () {
         document.getElementById("addHelpdeskRequestForm").reset();
@@ -525,42 +480,43 @@ $(document).ready(function () {
         }
     });
 
-    $(document).on("change", "#hdSrvCatName", function () {
+//    $(document).on("change", "#hdSrvCatName", function () {
+//
+//        $("#hdSrvPrice").val("");
+//        $("#hdSrvDesc").val("");
+//        if ($(this).find("option:selected").val()) {
+//            var selected = parseInt($(this).find("option:selected").val(), 10);
+//            $("#hdSrvCatName").prop("disable", true);
+//            $("#hdServiceId").prop("disabled", true);
+//            getHdSrvByCatId(selected, "hdServiceId", function () {
+//                $("#hdSrvCatName").prop("disable", false);
+//                $("#hdServiceId").prop("disabled", false);
+//                $("select[name=HdServiceId]").val(-1);
+//                $("#hdServiceId").selectpicker("refresh");
+//            });
+//        } else {
+//            var selectTag = "<option value='' selected='selected'> " + "Hãy chọn dịch vụ hỗ trợ" + " </option>";
+//            $("#hdServiceId").html(selectTag);
+//            $("#hdServiceId").selectpicker("refresh");
+//        }
+//    });
 
-        $("#hdSrvPrice").val("");
-        $("#hdSrvDesc").val("");
-        if ($(this).find("option:selected").val()) {
-            var selected = parseInt($(this).find("option:selected").val(), 10);
-            $("#hdSrvCatName").prop("disable", true);
-            $("#hdServiceId").prop("disabled", true);
-            getHdSrvByCatId(selected, "hdServiceId", function () {
-                $("#hdSrvCatName").prop("disable", false);
-                $("#hdServiceId").prop("disabled", false);
-                $("select[name=HdServiceId]").val(-1);
-                $("#hdServiceId").selectpicker("refresh");
-            });
-        } else {
-            var selectTag = "<option value='' selected='selected'> " + "Hãy chọn dịch vụ hỗ trợ" + " </option>";
-            $("#hdServiceId").html(selectTag);
-            $("#hdServiceId").selectpicker("refresh");
-        }
-    });
+//    $(document).on("change", "#hdServiceId", function () {
+//        $("#hdSrvPrice").val("");
+//        $("#hdSrvDesc").val("");
+//        if ($(this).find("option:selected").val()) {
+//            var selected = parseInt($(this).find("option:selected").val(), 10);
+//            if (window.hdSrvList !== undefined || window.hdSrvList.length !== 0) {
+//                for (var i = 0; i < window.hdSrvList.length; i++) {
+//                    if (window.hdSrvList[i].Id === selected) {
+//                        $("#hdSrvPrice").val(window.hdSrvList[i].Price);
+//                        $("#hdSrvDesc").val(window.hdSrvList[i].Description);
+//                    }
+//                }
+//            }
+//        }
+//    });
 
-    $(document).on("change", "#hdServiceId", function () {
-        $("#hdSrvPrice").val("");
-        $("#hdSrvDesc").val("");
-        if ($(this).find("option:selected").val()) {
-            var selected = parseInt($(this).find("option:selected").val(), 10);
-            if (window.hdSrvList !== undefined || window.hdSrvList.length !== 0) {
-                for (var i = 0; i < window.hdSrvList.length; i++) {
-                    if (window.hdSrvList[i].Id === selected) {
-                        $("#hdSrvPrice").val(window.hdSrvList[i].Price);
-                        $("#hdSrvDesc").val(window.hdSrvList[i].Description);
-                    }
-                }
-            }
-        }
-    });
     $("#addNewHdRequest").on("click", function () {
         console.log($("#createHdService").serialize());
         $("#createHdService").valid();
@@ -713,32 +669,7 @@ function getHdSrvByCatId(id, tagId, callback) {
         }
     });
 }
-function addNewHdRequest() {
-    var action = "AddHdRequest";
-    $.ajax({
-        url: "/Home/HelpdeskRequest/" + action,
-        type: "POST",
-        data: $("#createHdService").serialize(),
-        success: function (data) {
-            console.log(data);
-            if (data.StatusCode === 0) {
-                document.getElementById("createHdService").reset();
-                $("#createHdSrvSuccessNoti").removeClass("hide");
-                $("#createHdSrvSuccessNoti").addClass("show");
-                setTimeout(function () {
-                    $("#createHdSrvSuccessNoti").removeClass("show");
-                    $("#createHdSrvSuccessNoti").addClass("hide");
-                }, 3000);
-            } else if (data.StatusCode === -1) {
-                $("#createHdSrvFailedNoti").removeClass("hide");
-                $("#createHdSrvFailedNoti").addClass("show");
-            }
-        },
-        error: function () {
 
-        }
-    });
-}
 
 function getHelpdeskDetail(id) {
 
@@ -812,48 +743,6 @@ function openModalAssignHdReq(hdReqId) {
     });
 }
 
-
-function showEditHdReqModal(id) {
-    //    getHelpdeskServiceType("hdSrvCatName", function () {
-    //        $("#hdSrvCatName").selectpicker("refresh");
-    //        $("#updateHdRequestModal").modal("show");
-    //    });
-    getHdReqDetail(id);
-
-}
-
-function getHdReqDetail(id) {
-    $.ajax({
-        type: "get",
-        url: "/Home/HelpdeskRequest/GetHdReqInfoDetail/" + id,
-        success: function (data) {
-
-            //            console.log(data.Data.HdReqInfoDetail);
-            //            console.log(data.Data.HdSrvCategories);
-            //            console.log(data.Data.ListHdSrvBySelectedCat);
-            //            console.log(data.Data.SelectedHdSrvCatId);
-            //            console.log(data.Data.SelectedHdSrvId);
-
-            var objList = data.Data.HdSrvCategories;
-            var returnHtml = parseJsonToSelectTags(objList, data.Data.SelectedHdSrvCatId, "Hãy chọn loại dịch vụ hỗ trợ");
-            $("#hdSrvCatName").html(returnHtml);
-            $("#hdSrvCatName").selectpicker("refresh");
-
-
-            objList = data.Data.ListHdSrvBySelectedCat;
-            var returnHtml2 = parseJsonToSelectTags(objList, data.Data.SelectedHdSrvId, "Hãy chọn dịch vụ hỗ trợ");
-            $("#hdServiceId").html(returnHtml2);
-            $("#hdServiceId").selectpicker("refresh");
-
-            window.hdSrvList = objList;
-
-            $("#hdReqTitle").val(data.Data.HdReqInfoDetail.HdReqTitle);
-            $("#hdReqDesc").val(data.Data.HdReqInfoDetail.HdReqUserDesc);
-
-            $("#updateHdRequestModal").modal("show");
-        }
-    });
-}
 
 function generateTableIndex(datatable) {
     datatable.on('order.dt search.dt', function () {
@@ -936,11 +825,12 @@ function parseJsonToSelectTag(floor, room, roomId) {
 
     selectTagList = [];
     for (var j = 0; j < room.length; j++) {
-        var obj2 = room[j];
-        selectTag = "<option value=\"" + obj2 + "\">" + obj2 + "</option>";
+        var roomName = room[j];
+        var roomIdObj = roomId[j];
+        selectTag = "<option value=\"" + roomIdObj + "\">" + roomName + "</option>";
         selectTagList.push(selectTag);
     }
-    $("#houseName").html(selectTagList);
+    $("#houseId").html(selectTagList);
 }
 
 function getRoomAndFloor(blockId, floorName, mode, callback) {
@@ -960,9 +850,9 @@ function getRoomAndFloor(blockId, floorName, mode, callback) {
             var msg2 = "<option value=\"\">" + "Không có dữ liệu" + "</option>";
             if (floor === undefined || floor === null || floor.length === 0) {
                 $("#houseFloor").html(msg);
-                $("#houseName").html(msg2);
+                $("#houseId").html(msg2);
             } else if (room === undefined || room === null || room.length === 0) {
-                $("#houseName").html(msg2);
+                $("#houseId").html(msg2);
             } else {
                 parseJsonToSelectTag(floor, room, roomId, mode);
             }

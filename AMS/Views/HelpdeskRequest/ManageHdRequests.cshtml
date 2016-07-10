@@ -35,7 +35,7 @@
                                         <th>#</th>
                                         <th>Tiêu đề</th>
                                         <th>Căn hộ</th>
-                                        @*                                <th>DV hỗ trợ</th>*@
+                                        <th>DV hỗ trợ</th>
                                         <th>Trạng thái</th>
                                         <th>Nhân viên hỗ trợ</th>
                                         <th>Ngày tạo</th>
@@ -48,7 +48,7 @@
                                         <th>#</th>
                                         <th>Tiêu đề</th>
                                         <th>Căn hộ</th>
-                                        @*                                <th>DV hỗ trợ</th>*@
+                                        <th>DV hỗ trợ</th>
                                         <th>Trạng thái</th>
                                         <th>Nhân viên hỗ trợ</th>
                                         <th>Ngày tạo</th>
@@ -91,7 +91,7 @@
                 { data: "HdReqTitle" },
                 { data: "HdReqTitle" },
                 { data: "HdReqHouse" },
-//                { data: "HdReqSrvName" },
+                { data: "HdReqSrvCatName" },
                 { data: "HdReqStatus" },
                 { data: "HdReqSupporter" },
                 { data: "HdReqCreateDate" },
@@ -119,7 +119,7 @@
                     }
                 },
                 {
-                    "targets": 3,
+                    "targets": 4,
                     "data": "HdReqStatus",
                     "render": function (data, type, full) {
                         if (type === "display" || type === "filter") {
@@ -150,7 +150,7 @@
                     }
                 },
                 {
-                    "targets": 4,
+                    "targets": 5,
                     "data": "HdReqSupporter",
                     "render": function (data, type, full) {
                         if (type === "display" || type === "filter") {
@@ -162,7 +162,7 @@
                     }
                 },
                 {
-                    "targets": 5,
+                    "targets": 6,
                     "data": "HdReqCreateDate",
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
@@ -174,10 +174,10 @@
                         }
                         return full.HdReqCreateDateLong;
                     },
-                    "width": "15%"
+                    "width": "12%"
                 },
                 {
-                    "targets": 6,
+                    "targets": 7,
                     "data": "HdReqDeadline",
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
@@ -192,21 +192,21 @@
                         }
                         return full.HdReqDeadlineLong;
                     },
-                    "width": "15%"
+                    "width": "12%"
                 },
                 {
-                    "targets": 7,
+                    "targets": 8,
                     "data": "HdReqId",
                     "searchable": false,
                     "orderable": false,
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
-                            return "<span class='btn btn-default btn-xs' data-loading-text='Loading...' onclick='getHelpdeskDetail(" + data + ")'> <i class='fa fa-pencil'></i> </span>";
+                            return "<span class='btn btn-default btn-xs' onclick='getHelpdeskDetail(" + data + ")'> <i class='fa fa-pencil'></i> </span>";
                         }
                         return data;
                     }
                 }
-            ], "order": [[5, 'desc']]
+            ], "order": [[6, 'desc']]
         });
         generateTableIndex(datatable);
 
