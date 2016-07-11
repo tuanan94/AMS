@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Xml.Linq;
 using AMS.Constant;
+using AMS.Filter;
 using AMS.Models;
 using AMS.Service;
 using Microsoft.AspNet.Identity;
@@ -32,12 +33,15 @@ namespace AMS.Controllers
 
         [Route("Home/AroundService/ListView")]
         [AutoRedirect.MandatorySurveyRedirect]
+        [Authorize]
         public ActionResult ViewAroundProvider(String cat)
         {
             ViewBag.AllProviders = _aroundProviderService.GetTopTenproviderOrderByView();
             return View();
         }
+
         [AutoRedirect.MandatorySurveyRedirect]
+        [Authorize]
         [Route("Home/AroundService/All")]
         public ActionResult ViewGetAllAroundProvider(String cat)
         {
@@ -51,8 +55,10 @@ namespace AMS.Controllers
             ViewBag.activeCat = cat;
             return View("ViewAroundProviderDetail");
         }
+
         [AutoRedirect.MandatorySurveyRedirect]
         [Route("Home/AroundService/SingleProviderDetail")]
+        [Authorize]
         public ActionResult SingleProviderDetail(int id)
         {
             List<AroundProviderProduct> products = _aroundProviderProductService.GetAroundProviderProduct(id);
@@ -72,15 +78,15 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [ManagerAuthorize]
         [Route("Management/AroundService/Manage")]
         public ActionResult ViewListAroundService()
         {
-            return View("ManageAroundService");
+            return View("ManageAroundProvider");
         }
 
         [HttpGet]
-        [Authorize]
+        [ManagerAuthorize]
         [Route("Management/AroundService/Update")]
         public ActionResult UpdateAroundServiceProvider(int providerId)
         {
@@ -450,10 +456,11 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
+        [ManagerAuthorize]
         [Route("Management/AroundService/ManageCategory")]
         public ActionResult ManageAroundProviderCategory()
         {
-            return View("ManageAroundServiceCategory");
+            return View("ManageAroundProviderCategory");
         }
 
         [HttpGet]

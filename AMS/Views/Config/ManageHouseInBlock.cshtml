@@ -1,6 +1,6 @@
 ﻿@{
     ViewBag.Title = "CreateHouseInBlock";
-    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+    Layout = "~/Views/Admin/_AdminLayout.cshtml";
     Block block = ViewBag.block;
     bool canRemoveBlock = ViewBag.canRemoveBlock;
 }
@@ -153,16 +153,10 @@
                             </div>
                             <label style="text-align: left" class="col-md-3 control-label"></label>
                         </div>
-                        <div class="form-group">
-                            <label for="area" class="col-md-3 control-label">Diện tích</label>
-                            <div class="col-md-9">
-                                <input id="area" name="Area" type="text" class="form-control room-name">
-                            </div>
-                        </div>
                         <div class="form-group hide" id="houseHolderRow">
                             <label for="houseHolder" class="col-md-3 control-label">Chủ hộ</label>
                             <div class="col-md-9">
-                                <input id="houseHolder" name="HouseOwner" type="text" class="form-control room-name">
+                                <input id="houseHolder" readonly="readonly" name="HouseOwner" type="text" class="form-control room-name">
                             </div>
                         </div>
                         <div class="form-group" id="houseTypeRow">
@@ -171,15 +165,17 @@
                                 <select id="Type" name="Type" class="form-control"></select>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="area" class="col-md-3 control-label">Diện tích</label>
+                            <div class="col-md-9">
+                                <input id="area" name="Area" type="text" class="form-control room-name">
+                            </div>
+                        </div>
                         <div class="form-group res-info">
                             <label class="col-md-3 control-label">Trạng thái</label>
                             <div class="col-md-9">
-                                <label class="radio-inline">
-                                    <input type="radio" value="@SLIM_CONFIG.HOUSE_STATUS_ENABLE" name="Status" />Mở
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" value="@SLIM_CONFIG.HOUSE_STATUS_DISABLE" checked="checked" name="Status" />Đóng
-                                </label>
+                                <span id="hasRes" class="btn btn-success hide">Có người ở</span>
+                                <span id="hasNoRes" class="btn btn-danger hide">Không có người ở</span>
                             </div>
                         </div>
                         <input type="hidden" id="houseId" name="Id" />
@@ -195,13 +191,13 @@
 </div>
 
 <div id="addHouseModal" class="modal fade ams-modal" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg" >
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="addHouseTitle">Thêm căn hộ</h4>
             </div>
-            <form id="addHouseForm" class="form-horizontal" role="form">
+            <form id="addHouseForm" name="addHouseForm" class="form-horizontal" role="form">
                 <div class="modal-body">
                     <div class="panel-body">
                         <div class="alert alert-info" id="addHouseSuccessNoti" style="display: none">
@@ -261,17 +257,19 @@
                                 <input id="addArea" name="Area" type="text" class="form-control room-name">
                             </div>
                         </div>
-                        <div class="form-group res-info">
-                            <label class="col-md-3 control-label">Trạng thái</label>
-                            <div class="col-md-9">
-                                <label class="radio-inline">
-                                    <input type="radio" value="@SLIM_CONFIG.HOUSE_STATUS_ENABLE" name="AddStatus" />Mở
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" value="@SLIM_CONFIG.HOUSE_STATUS_DISABLE" checked="checked" name="AddStatus" />Đóng
-                                </label>
-                            </div>
-                        </div>
+@*                        <div class="form-group res-info">*@
+@*                            <label class="col-md-3 control-label">Trạng thái</label>*@
+@*                            <div class="col-md-9">*@
+@*$1$                                <label class="radio-inline">#1#*@
+@*$1$                                    <input type="radio" value="@SLIM_CONFIG.HOUSE_STATUS_ENABLE" name="AddStatus" />Mở#1#*@
+@*$1$                                </label>#1#*@
+@*$1$                                <label class="radio-inline">#1#*@
+@*$1$                                    <input type="radio" value="@SLIM_CONFIG.HOUSE_STATUS_DISABLE" checked="checked" name="AddStatus" />Đóng#1#*@
+@*                                $1$                                </label>#1#*@
+@*                                <span id="hasRes" class="btn btn-success hide">Có người ở</span>*@
+@*                                <span id="hasNoRes" class="btn btn-danger hide">Không có người ở</span>*@
+@*                            </div>*@
+@*                        </div>*@
                         <input type="hidden" name="BlockId" value="@block.Id" />
                     </div>
                 </div>
@@ -471,10 +469,10 @@
                 "targets": 3,
                 "render": function (data, type, full, meta) {
                     if (type === "display" || type === "filter") {
-                        if (data === window.Disable) {
-                            return "<span class='label label-danger'>Đóng</span>";
+                        if (data === window.HouseHasNoResident) {
+                            return "<span class='label label-danger'>Không người ở</span>";
                         } else {
-                            return "<span class='label label-success'>Mở</span>";
+                            return "<span class='label label-success'>Có người ở</span>";
                         }
                     }
                     return data;
@@ -484,22 +482,23 @@
                 "targets": 4,
                 "render": function (data, type, full, meta) {
                     if (type === "display" || type === "filter") {
-                        if (full.Status === window.Enable) {
+                        if (full.Status === window.HouseHasNoResident) {
                             return "<div class='text-right'>" +
-                            "<span onclick='viewHouseInfo(\"" +
-                            data +
-                            "\")' class='btn btn-default btn-xs'>" +
+                            "<span onclick='viewHouseInfo(\"" + data + "\")' class='btn btn-default btn-xs'>" +
                             " <i class='fa fa-pencil'></i>" +
                             "</span>" +
-                            " </div>";
+                             " <span onclick='deleteConsumptionRecord(\"" + data + "\")' class='btn btn-danger btn-xs' >"
+                            + "  <i class='fa fa-times'></i>"
+                            + " </span>"
+                            + " </div>";
                         } else {
                             return "<div class='text-right'>"
                             + "<span onclick='viewHouseInfo(\"" + data + "\")' class='btn btn-default btn-xs'>"
                             + " <i class='fa fa-pencil'></i>"
                             + "</span>"
-                            + " <span onclick='deleteConsumptionRecord(\"" + data + "\")' class='btn btn-danger btn-xs' >"
+/*                            + " <span onclick='showMessageConfirmDeleteHouse(\"" + data + "\",\"" + full.Name + "\")' class='btn btn-danger btn-xs' >"
                             + "  <i class='fa fa-times'></i>"
-                            + " </span>"
+                            + " </span>"*/
                             + " </div>";
                         }
                     }
@@ -569,6 +568,9 @@
             $("#addfloorName").val(selected);
         });
         validateManageHouseForm();
+        $("#manageHouseModal").on("hidden.bs.modal", function () {
+            $("#msgWarningNoti").hide();
+        });
     });
 
     function openAddNewHouseModal() {
@@ -613,17 +615,24 @@
                     $("#area").val(obj.Area);
                     $("#houseId").val(obj.Id);
 
-                    if (obj.Status === window.Enable) {
+                    if (obj.Status === window.HouseHasResident) {
                         $("#houseHolderRow").removeClass("hide");
                         $("#houseTypeRow").removeClass("hide");
+                        $("#houseHolder").val(obj.HouseOwner);
 
-                        if (obj.HouseOwner) {
-                            $("#houseHolder").val(obj.HouseOwner);
-                            $("input:radio[name=Status]").prop("disabled", "disabled");
-                        } else {
-                            $("#houseHolder").val("Chưa có chủ hộ");
-                            $("input:radio[name=Status]").prop("disabled", "");
-                        }
+                        $("#hasRes").removeClass("hide");
+                        $("#hasNoRes").addClass("hide");
+//                        $("input:radio[name=Status]").prop("disabled", "disabled");
+//                        $('input[type=radio][name=Status]').unbind();
+//                        $('input[type=radio][name=Status]').change(function () {
+//                            if (this.value == "@SLIM_CONFIG.HOUSE_STATUS_DISABLE") {
+//                                $("#warningMsg").text("Căn hộ vẫn còn cư dân. Bạn thật sự muốn đóng căn hộ ?");
+//                                $("#msgWarningNoti").show();
+//                            }
+//                            else {
+//                                $("#msgWarningNoti").hide();
+//                            }
+//                        });
 
                         if (listHouseType.length !== 0) {
                             var houseTypeSelects = {};
@@ -640,10 +649,12 @@
                     } else {
                         $("#houseHolderRow").addClass("hide");
                         $("#houseTypeRow").addClass("hide");
-                        $("input:radio[name=Status]").prop("disabled", "");
+                        $("#hasRes").addClass("hide");
+                        $("#hasNoRes").removeClass("hide");
+//                        $("input:radio[name=Status]").prop("disabled", "");
                     }
 
-                    $("input:radio[name=Status]").filter("[value=" + obj.Status + "]").prop("checked", "checked");
+//                    $("input:radio[name=Status]").filter("[value=" + obj.Status + "]").prop("checked", "checked");
 
                     $("#manageHouseModal").modal("show");
                 }
@@ -652,6 +663,7 @@
     }
 
     function updateHouseInfo() {
+        $("#msgWarningNoti").hide();
         $.ajax({
             "url": "/Management/Config/UtilityService/UpdateHouseInfo",
             data: $("#manageHouseForm").serialize(),
@@ -753,16 +765,14 @@
                 houseIdList: window.deletedHouseId
             },
             success: function (data) {
+                window.deletedHouseId = new Array();
+                window.houseInBlockTbl.ajax.reload(null, false);
                 if (data.StatusCode === 0) {
                     $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
-                    window.deletedHouseId = new Array();
-                    window.houseInBlockTbl.ajax.reload(null, false);
                 } else if (data.StatusCode === 2) {
-                    $("#messageNotify").html("Căn hộ <strong>" + data.Data + "</strong> đang có cư dân đang cư trú.");
+                    $("#messageNotify").html("Căn hộ <strong>" + data.Data + "</strong> vẫn đang có cư dân đang cư trú.");
                     $("#messageModal").modal("show");
                     $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
-                    window.deletedHouseId = new Array();
-                    window.houseInBlockTbl.ajax.reload(null, false);
                 }
             }
         });
@@ -888,7 +898,7 @@
         var houseName = $("#blockName").val();
         $("#msgConfirm").html("Bạn có chắc chắn muốn xóa tòa nhà <strong>" + houseName + "</strong>?");
 
-        $('#confirmModal').unbind("click", "#btnOK");
+        $('#confirmModal').unbind();
         $('#confirmModal').on('click', '#btnOk', function (e) {
             var $modalDiv = $(e.delegateTarget);
             $modalDiv.addClass('loading');
@@ -921,6 +931,18 @@
                     //                    }, 2000);
                 }
             });
+        });
+        $("#confirmModal").modal("show");
+    }
+
+    function showMessageConfirmDeleteHouse(houseId, houseName) {
+        $("#msgConfirm").html("Vẫn còn cư dân trong căn hộ. Bạn có chắc chắn muốn xóa căn hộ <strong>" + houseName + "</strong>?");
+        $("#confirmModal").data("houseId", houseId);
+
+        $('#confirmModal').unbind();
+        $('#confirmModal').on('click', '#btnOk', function (e) {
+            deleteConsumptionRecord($("#confirmModal").data("houseId"));
+            $('#confirmModal').modal("hide");
         });
         $("#confirmModal").modal("show");
     }

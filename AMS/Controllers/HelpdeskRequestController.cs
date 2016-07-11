@@ -21,7 +21,6 @@ namespace AMS.Controllers
         HelpdeskRequestServices _hdReqServices = new HelpdeskRequestServices();
         HelpdeskRequestLogServices _helpdeskRequestLogServices = new HelpdeskRequestLogServices();
 
-        [Authorize]
         [HttpGet]
         [Route("Home/HelpdeskRequest/Create")]
         [AuthorizationPrivilegeFilter_RequestHouse]
@@ -79,6 +78,7 @@ namespace AMS.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [Route("Home/HelpdeskRequest/UpdateHdRequest")]
         public ActionResult UpdateHdRequest(HelpdeskRequestModel request)
         {
@@ -123,8 +123,8 @@ namespace AMS.Controllers
 
         [Authorize]
         [HttpGet]
-        //[AuthorizationPrivilegeFilter.ManagerAdminAuthorize]
         [Route("Management/HelpdeskRequest/ManageHdRequest")]
+        [ManagerAuthorize]
         public ActionResult ManageHdRequest()
         {
             User u = _userServices.FindById(int.Parse(User.Identity.GetUserId()));
@@ -291,23 +291,6 @@ namespace AMS.Controllers
                             _hdReqServices.Update(hdRequest);
 
                         }
-                        //                        else if (hdRequest.Status == (int)StatusEnum.Open
-                        //                          && hdReqChngStatus.FromStatus == hdRequest.Status
-                        //                           && hdReqChngStatus.ToStatus == (int)StatusEnum.WaitingForQuotation)
-                        //                        {
-                        //                            hdRequest.Status = (int)StatusEnum.WaitingForQuotation;
-                        //                            hdRequest.AssignDate = DateTime.Now;
-                        //                            hdRequest.ModifyDate = DateTime.Now;
-                        //                            _hdReqServices.Update(hdRequest);
-                        //
-                        //
-                        //                            HelpdeskRequestHelpdeskSupporter hdReqHdSupporter = new HelpdeskRequestHelpdeskSupporter();
-                        //                            hdReqHdSupporter.HelpdeskRequestId = hdRequest.Id;
-                        //                            hdReqHdSupporter.HelpdeskSupporterId = hdReqChngStatus.ToUserId; // must check if user is disable
-                        //                            hdReqHdSupporter.CreateDate = DateTime.Now;
-                        //                            _hdReqHdSupporterServices.Add(hdReqHdSupporter);
-                        //
-                        //                        }
                         else if (hdRequest.Status == (int)StatusEnum.Processing
                          && hdReqChngStatus.FromStatus == hdRequest.Status
                           && hdReqChngStatus.ToStatus == (int)StatusEnum.Done)

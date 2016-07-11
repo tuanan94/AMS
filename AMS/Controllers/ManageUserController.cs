@@ -9,8 +9,10 @@ using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using AMS.Constant;
 using AMS.Enum;
+using AMS.Filter;
 using AMS.Models;
 using AMS.Service;
+using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 namespace AMS.Controllers
 {
@@ -21,6 +23,7 @@ namespace AMS.Controllers
         private HouseServices _houseServices = new HouseServices();
 
         [HttpGet]
+        [ManagerAuthorize]
         [Route("Management/ManageUser/ViewResidentList")]
         public ActionResult ViewResidentList()
         {
@@ -28,6 +31,7 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
+        [ManagerAuthorize]
         [Route("Management/ManageUser/ViewSupporterList")]
         public ActionResult ViewSupporterList()
         {
@@ -47,14 +51,31 @@ namespace AMS.Controllers
                 userModel.DT_RowId = new StringBuilder("resident_").Append(user.Id).ToString();
                 userModel.Name = user.Fullname;
                 userModel.Idenity = user.IDNumber;
-                userModel.Block = user.House.Block.BlockName;
-                userModel.Floor = user.House.Floor;
-                userModel.HouseName = user.House.HouseName;
+                userModel.Status = user.Status.Value;
+                if (userModel.Status != SLIM_CONFIG.USER_STATUS_DISABLE)
+                {
+                    userModel.Block = user.House.Block.BlockName;
+                    userModel.Floor = user.House.Floor;
+                    userModel.HouseName = user.House.HouseName;
+                }
+                else
+                {
+                    userModel.HouseName = "-1";
+
+                }
                 userModel.CreateDate = user.CreateDate.Value.ToString(AmsConstants.DateTimeFormat);
                 userModel.CreateDateLong = user.CreateDate.Value.Ticks;
                 userModel.RoldId = user.RoleId.Value;
                 userModel.RolName = user.Role.RoleName;
-                userModel.Status = user.Status.Value;
+
+                userModel.IsDeletable = 1;// can delete
+                if (userModel.Status != SLIM_CONFIG.USER_STATUS_DISABLE && userModel.RoldId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)
+                {
+                    if (user.House.Users.Count != 1)
+                    {
+                        userModel.IsDeletable = 2;// can not delete
+                    }
+                }
                 listModelUsers.Add(userModel);
             }
             return Json(listModelUsers, JsonRequestBehavior.AllowGet);
@@ -117,7 +138,7 @@ namespace AMS.Controllers
             }
             if (blocks.Count != 0)
             {
-                List<House> floors = _houseServices.GetFloorHasResidentInBlock(blocks[0].Id);
+                List<House> floors = _houseServices.GetAllFloorInBlock(blocks[0].Id);
                 foreach (var floor in floors)
                 {
                     item = new HouseCategoryModel();
@@ -126,7 +147,7 @@ namespace AMS.Controllers
                     floorList.Add(item);
                 }
 
-                List<House> rooms = _houseServices.GetActiveRoomsInFloor(blocks[0].Id, floors[0].Floor);
+                List<House> rooms = _houseServices.GetAllRoomsInFloor(blocks[0].Id, floors[0].Floor);
                 foreach (var room in rooms)
                 {
                     item = new HouseCategoryModel();
@@ -156,12 +177,9 @@ namespace AMS.Controllers
                 userModel.Id = resident.Id;
                 userModel.Name = resident.Fullname;
                 userModel.Idenity = resident.IDNumber;
-                userModel.Block = resident.House.Block.BlockName;
-                userModel.BlockId = resident.House.Block.Id;
-                userModel.Floor = resident.House.Floor;
+
                 userModel.Gender = resident.Gender.Value;
                 userModel.Dob = resident.DateOfBirth.Value.ToString(AmsConstants.DateFormat);
-                userModel.HouseName = resident.House.HouseName;
                 userModel.CreateDate = resident.CreateDate.Value.ToString(AmsConstants.DateTimeFormat);
                 userModel.IdCreateDate = resident.IDCreatedDate == null ? "" : resident.CreateDate.Value.ToString(AmsConstants.DateFormat);
                 userModel.RoldId = resident.RoleId.Value;
@@ -170,6 +188,21 @@ namespace AMS.Controllers
                 userModel.RelationLevel = resident.FamilyLevel.Value; ;
                 userModel.CellNumb = resident.SendPasswordTo; ;
                 userModel.UserAccountName = resident.Username;
+
+                if (userModel.Status != SLIM_CONFIG.USER_STATUS_DISABLE)
+                {
+                    userModel.Block = resident.House.Block.BlockName;
+                    userModel.BlockId = resident.House.Block.Id;
+                    userModel.Floor = resident.House.Floor;
+                    userModel.HouseId = resident.House.Id;
+                }
+                else
+                {
+                    userModel.Block = "";
+                    userModel.BlockId = 0;
+                    userModel.Floor = "";
+                    userModel.HouseId = 0;
+                }
 
                 List<Block> blocks = _blockServices.GetAllBlocks();
                 List<HouseLocationModel> blockList = new List<HouseLocationModel>();
@@ -186,7 +219,20 @@ namespace AMS.Controllers
                 }
                 if (blocks != null && blocks.Count != 0)
                 {
-                    List<House> floors = _houseServices.GetFloorHasResidentInBlock(resident.House.Block.Id);
+                    List<House> floors = null;
+                    List<House> rooms = null;
+
+                    if (userModel.Status != SLIM_CONFIG.USER_STATUS_DISABLE)
+                    {
+                        floors = _houseServices.GetAllFloorInBlock(resident.House.Block.Id);
+                        rooms = _houseServices.GetAllRoomsInFloor(resident.House.Block.Id, resident.House.Floor);
+                    }
+                    else
+                    {
+                        floors = _houseServices.GetAllFloorInBlock(Int32.Parse(blockList[0].Id));
+                        rooms = _houseServices.GetAllRoomsInFloor(Int32.Parse(blockList[0].Id), floors[0].Floor);
+                    }
+
                     foreach (var floor in floors)
                     {
                         item = new HouseLocationModel();
@@ -195,11 +241,10 @@ namespace AMS.Controllers
                         floorList.Add(item);
                     }
 
-                    List<House> rooms = _houseServices.GetActiveRoomsInFloor(resident.House.Block.Id, resident.House.Floor);
                     foreach (var room in rooms)
                     {
                         item = new HouseLocationModel();
-                        item.Id = room.HouseName;
+                        item.Id = room.Id.ToString();
                         item.Name = room.HouseName;
                         roomList.Add(item);
                     }
@@ -499,11 +544,11 @@ namespace AMS.Controllers
             MessageViewModels response = new MessageViewModels();
             if (null != listResId)
             {
-                foreach (var resId in listResId)
+                try
                 {
-                    User u = _userServices.FindById(resId);
-                    if (null != u)
+                    foreach (var resId in listResId)
                     {
+                        User u = _userServices.FindById(resId);
                         if (u.RoleId == SLIM_CONFIG.USER_ROLE_SUPPORTER)
                         {
                             if (u.HelpdeskRequests1.Any(r => r.Status == (int)StatusEnum.Processing))
@@ -513,18 +558,109 @@ namespace AMS.Controllers
                                 return Json(response);
                             }
                         }
-                        u.Status = SLIM_CONFIG.USER_STATUS_DELETE;
-                        u.LastModified = DateTime.Now;
-                        _userServices.Update(u);
+                        if (u.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)
+                        {
+                            if (u.House.Users.Count != 1)
+                            {
+                                response.StatusCode = 4;
+                                response.Data = new { houseName = u.House.HouseName, fullName = u.Fullname };
+                                return Json(response);
+                            }
+                        }
                     }
+                    foreach (var resId in listResId)
+                    {
+                        User u = _userServices.FindById(resId);
+                        if (null != u)
+                        {
+                            if (u.RoleId == SLIM_CONFIG.USER_ROLE_SUPPORTER)// double check
+                            {
+                                if (u.HelpdeskRequests1.Any(r => r.Status == (int)StatusEnum.Processing))
+                                {
+                                    response.StatusCode = 2;
+                                    response.Data = u.Fullname;
+                                    return Json(response);
+                                }
+                            }
+                            else if (u.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)// double check
+                            {
+                                if (u.House.Users.Count != 1)
+                                {
+                                    response.StatusCode = 4;
+                                    response.Data = u.Fullname;
+                                    response.Data = new { houseName = u.House.HouseName, fullName = u.Fullname };
+                                    return Json(response);
+                                }
+                                House house = _houseServices.FindById(u.HouseId.Value);
+                                house.OwnerID = null;
+                                _houseServices.Update(house);
+                            }
+                            u.Status = SLIM_CONFIG.USER_STATUS_DELETE;
+                            u.HouseId = null;
+                            u.LastModified = DateTime.Now;
+                            _userServices.Update(u);
+                        }
+                        else
+                        {
+                            response.StatusCode = -1;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    response.StatusCode = -1;
                 }
             }
             else
             {
                 response.StatusCode = -1;
             }
-
             return Json(response);
         }
+
+        [HttpGet]
+        [Route("Management/ManageUser/GetRoomAndFloor")]
+        public ActionResult GetRoomAndFloor(int blockId, string floorName)
+        {
+            MessageViewModels response = new MessageViewModels();
+            List<House> floor = _houseServices.GetAllFloorInBlock(blockId);
+            List<string> floorStr = new List<string>();
+            List<string> roomStr = new List<string>();
+            List<string> roomIdStr = new List<string>();
+
+            if (floor != null && floor.Count > 0)
+            {
+                foreach (var f in floor)
+                {
+                    floorStr.Add(f.Floor);
+                }
+
+                List<House> rooms = null;
+                if (floorName.IsNullOrWhiteSpace())
+                {
+                    rooms = _houseServices.GetAllRoomsInFloor(blockId, floor[0].Floor);
+                }
+                else
+                {
+                    rooms = _houseServices.GetAllRoomsInFloor(blockId, floorName);
+                }
+
+                if (rooms != null && rooms.Count > 0)
+                {
+                    foreach (var room in rooms)
+                    {
+                        roomStr.Add(room.HouseName);
+                        roomIdStr.Add(room.Id.ToString());
+                    }
+                }
+                response.Data = new { Floor = floorStr, Room = roomStr, RoomId = roomIdStr };
+            }
+            else
+            {
+                response.Data = new { Floor = floorStr, Room = roomStr, RoomId = roomIdStr };
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
     }
+
 }

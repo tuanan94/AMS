@@ -109,11 +109,11 @@
                                                     {
                                                         if (r.HouseName.Equals(receipt.House.HouseName))
                                                         {
-                                                            <option selected="selected" value="@r.HouseName">@r.HouseName</option>
+                                                            <option selected="selected" value="@r.Id">@r.HouseName</option>
                                                         }
                                                         else
                                                         {
-                                                            <option value="@r.HouseName">@r.HouseName</option>
+                                                            <option value="@r.Id">@r.HouseName</option>
                                                         }
                                                     }
                                                 }
@@ -171,7 +171,7 @@
                                     <fieldset class="scheduler-border less-padding">
                                         <legend class="scheduler-border bold-black">Thời gian</legend>
                                         <div class="form-group">
-                                            <label for="publishDate" class="col-md-4 control-label">Ngày xuất</label>
+                                            <label for="publishDate" class="col-md-4 control-label">Công bố</label>
                                             <div class="col-md-8">
                                                 @{
                                                     string date = receipt.PublishDate.Value.ToString(AmsConstants.DateFormat);
@@ -181,7 +181,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="paidDate" class="col-md-4 control-label">Ngày thanh toán</label>
+                                            <label for="paidDate" class="col-md-4 control-label">Thanh toán</label>
                                             <div class="col-md-8">
                                                 @{
                                                     string paidDateStr = "";
@@ -486,14 +486,31 @@
                     maxlength: 1000
                 },
                 "order-item-name": {
-                    required: true,
-                    maxlength: 255
+                    required: function (elem) {
+                        if ($(elem).val()&& $(elem).val().trim().length < 255) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
                 },
                 "order-item-qty": {
-                    required: true
+                    required: function (elem) {
+                        if ($(elem).val()) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
                 },
                 "order-item-price": {
-                    required: true
+                    required: function (elem) {
+                        if ($(elem).val()) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
                 },
 
             },
@@ -509,8 +526,8 @@
                     maxlength: "Tối đa 1000 ký tự."
                 },
                 "order-item-name": {
-                    required: "Trường bắt buộc",
-                    maxlength: "Tối đa 255 ký tự."
+                    required: "Trường bắt buộc và tối đa 255 ký tự",
+//                    maxlength: "Tối đa 255 ký tự."
                 },
                 "order-item-qty": {
                     required: "Trường bắt buộc",
