@@ -183,7 +183,7 @@ namespace AMS.Controllers
                 }
                 return PartialView(url);
             }
-            return View("ManageHelpdeskServiceCategory");
+            return View("~/Views/Config/ManageHelpdeskServiceCategory.cshtml");
         }
 
         [HttpGet]
@@ -192,7 +192,7 @@ namespace AMS.Controllers
         public ActionResult ViewHelpdeskServiceCategory()
         {
             ViewBag.helpdeskServiceCategories = _helpdeskServiceCatService.GetAll();
-            return View("ManageHelpdeskServiceCategory");
+            return View("~/Views/Config/ManageHelpdeskServiceCategory.cshtml");
         }
 
         public ActionResult ManageIncome()

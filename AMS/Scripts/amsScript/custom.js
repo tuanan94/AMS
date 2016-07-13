@@ -587,7 +587,7 @@ $(document).ready(function () {
 function activeNavigationBar() {
     $("#main-nav > ul > li").removeClass("active");
     var pathName = window.location.pathname;
-    if (pathName.indexOf("/HelpdeskRequest/") > -1 || pathName.indexOf("/ResidentApprovement/") > -1) {
+    if (pathName.indexOf("/HelpdeskRequest/") > -1 || pathName.indexOf("/ResidentApprovement") > -1) {
         $("#hdRequestNav").addClass("active");
     } else if (pathName.indexOf("/ManageReceipt/") > -1) {
         $("#receiptNav").addClass("active");
@@ -1103,11 +1103,12 @@ function onChangeFromNumber() {
         var nextFromValue = {};
         var fromValue = event.target.parentNode.previousElementSibling.querySelector(".order-item-qty");
 
-        if (nextElement == null) {
+        /*if (nextElement == null) {
             event.target.value = "*";
             return;
-            return;
-        } else {
+        } else {*/
+        if (nextElement != null) {
+
             nextFromValue = nextElement.querySelector(".order-item-qty");
             var nextToValue = nextElement.querySelector(".order-item-price");
             if (parseInt(event.target.value, 10) >= parseInt(nextToValue.value, 10)) {
@@ -1119,6 +1120,7 @@ function onChangeFromNumber() {
                 }
             }// if next node is greater than this node clean all next node
         }
+        /*}*/
         if (event.target.parentNode.parentNode.previousElementSibling) {
             var previousValue = event.target.parentNode.parentNode.previousElementSibling
                 .querySelector(".order-item-price");

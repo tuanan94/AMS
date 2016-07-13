@@ -76,7 +76,7 @@ namespace AMS.Controllers
         [Route("Management/BalanceSheet/ManageTransactionCatView")]
         public ActionResult ViewManageTransactionCat()
         {
-            return View("ManageTransactionCategory");
+            return View("~/Views/Config/ManageTransactionCategory.cshtml");
         }
 
         [HttpGet]
