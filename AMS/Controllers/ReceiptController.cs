@@ -7,6 +7,7 @@ using System.Text;
 using System.Web.Mvc;
 using System.Xml;
 using AMS.Constant;
+using AMS.Filter;
 using AMS.Models;
 using AMS.Service;
 using LINQtoCSV;
@@ -40,6 +41,7 @@ namespace AMS.Controllers
         [HttpGet]
         [AutoRedirect.MandatorySurveyRedirect]
         [Route("Home/ManageReceipt/View")]
+        [Authorize]
         public ActionResult GetUserReceipt()
         {
             //            User u = _userServices.FindById(Int32.Parse(User.Identity.GetUserId()));
@@ -273,6 +275,7 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [Route("Home/ManageReceipt/View/Detail")]
         public ActionResult GetOrderDetail(int userId, int orderId)
         {
@@ -292,7 +295,7 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [ManagerAuthorize]
         [Route("Management/ManageReceipt/View")]
         public ActionResult ViewManagerOrderList()
         {
@@ -301,6 +304,7 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [Route("Home/ManageReceipt/ViewElectricBill")]
         public ActionResult ViewElectricBill(int receiptDetailId)
         {
@@ -829,7 +833,6 @@ namespace AMS.Controllers
             {
                 response.StatusCode = -1;
                 return Json(response, JsonRequestBehavior.AllowGet);
-                throw;
             }
 
             return Json(response, JsonRequestBehavior.AllowGet);
@@ -837,6 +840,7 @@ namespace AMS.Controllers
 
 
         [HttpGet]
+        [ManagerAuthorize]
         [Route("Management/ManageReceipt/CreateAutomationReceiptView")]
         public ActionResult ManageAutomationReceipt()
         {
@@ -1048,6 +1052,7 @@ namespace AMS.Controllers
 
 
         [HttpGet]
+        [ManagerAuthorize]
         [Route("Management/ManageReceipt/ViewBatchReceipt")]
         public ActionResult ViewBatchReceipt(long receiptId)
         {
@@ -1337,6 +1342,7 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
+        [ManagerAuthorize]
         [Route("Management/ManageReceipt/CreateManualReceiptView")]
         public ActionResult ManageManualReceipt()
         {
@@ -1713,6 +1719,7 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
+        [ManagerAuthorize]
         [Route("Management/ManageReceipt/ReceiptDetailItemList")]
         public ActionResult GetReceiptDetailItemList(int receiptId)
         {
@@ -1909,6 +1916,7 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
+        [ManagerAuthorize]
         [Route("Management/ManageReceipt/ViewDownloadRecordTemplate")]
         public ActionResult ViewDownloadWaterRecordTemplate()
         {

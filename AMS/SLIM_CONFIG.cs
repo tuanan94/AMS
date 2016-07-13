@@ -93,7 +93,9 @@ namespace AMS
 
         public static int HOUSE_STATUS_ENABLE = 1;
         public static int HOUSE_STATUS_DISABLE = 2;
-        public static int HOUSE_STATUS_DELETE = 3;
+
+        public static int HOUSE_HAS_RESIDENT = 1;
+        public static int HOUSE_HAS_N0_RESIDENT = 2;
 
         public static int HOUSE_ADD_NEW_FLOOR = 0;
         public static int HOUSE_ADD_EXISTING_FLOOR = 1;

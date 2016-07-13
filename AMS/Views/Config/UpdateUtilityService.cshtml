@@ -1,8 +1,7 @@
 ﻿@using AMS.Constant
 @{
     ViewBag.Title = "UtilityService";
-    Layout = "~/Views/Management/__ManagementLayout.cshtml";
-
+    Layout = "~/Views/Admin/_AdminLayout.cshtml";
     UtilServiceForHouseCat utilSrvForHouseCat = ViewBag.utilServiceForHouseCat;
     List<HouseCategory> houseCat = ViewBag.houseCategories;
     int index = 1;
@@ -15,11 +14,11 @@
             <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Cập nhật phí sinh hoạt</span>
 
             <ul class="nav nav-tabs pull-right" role="tablist">
-                <li class="active">
-                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-usd"></i> Phí sinh họat</a>
-                </li>
                 <li class="">
                     <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-home"></i> Căn hộ</a>
+                </li>
+                <li class="active">
+                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-usd"></i> Phí sinh họat</a>
                 </li>
                 <li class="">
                     <a href="/Management/ManageRequestView"><i class="fa fa-wrench"></i> DV sửa chữa</a>
@@ -32,208 +31,211 @@
 
         <div class="panel-body">
             <div class="tab-content">
-                        <form id="addUtilServiceForm" class="form-horizontal" role="form">
-                            <div class="alert alert-info" id="createSuccessNoti" style="display: none">
-                                <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                <span>Cập nhật thành công</span>
-                            </div>
-                            <div class="alert alert-danger" id="createFailedNoti" style="display: none">
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                                <span>Cập nhật thất bại</span>
-                            </div>
-                            <div class="tab-content">
-                                <div class="tab-pane fade active in" id="">
-                                    @{
-                                        if (utilSrvForHouseCat.Status == SLIM_CONFIG.UTILITY_SERVICE_OF_HOUSE_CAT_DISABLE)
-                                        {
-                                            <div class="col-md-offset-1 col-md-10">
-                                                <div class="pull-right">
-                                                    <span id="activeBtn" class="btn btn-success" onclick="activateUtilService(@utilSrvForHouseCat.Id)"><i class="fa fa-unlock"></i> Mở</span>
-                                                </div>
-                                            </div>
-                                        }
-                                    }
-                                    <div class="form-group">
-                                        <div class="col-md-offset-1 col-md-10">
-                                            <fieldset class="scheduler-border less-padding">
-                                        <legend class="scheduler-border bold-black">Thông tin</legend>
-                                                <div class="form-group">
-                                                    <div class="col-md-2">
-                                                        <div class="form-group">
-                                                            <label for="serviceTypeName" class="col-md-12 control-label">Tên</label>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="serviceType" class="col-md-12 control-label">Loại dịch vụ</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-10">
-                                                        <div class="form-group">
-                                                            <div class="form-group">
-                                                                <div class="col-md-9">
-                                                                    <input id="serviceTypeName" name="ServiceTypeName" type="text" value="@utilSrvForHouseCat.UtilityService.Name" class="form-control">
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    @{
-                                                                        if (utilSrvForHouseCat.Status == SLIM_CONFIG.UTILITY_SERVICE_OF_HOUSE_CAT_DISABLE)
-                                                                        {
-                                                                            <span id="btnClose" class="btn btn-danger btn-block">Đóng</span>
-                                                                            <span id="btnOpen" class="btn btn-success btn-block hide">Mở</span>
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            <span id="btnClose" class="btn btn-danger btn-block hide">Đóng</span>
-                                                                            <span id="btnOpen" class="btn btn-success btn-block">Mở</span>
-                                                                        }
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                </div>
-                                                            <div class="form-group">
-                                                                <div class="col-md-6">
-                                                                    @{
-                                                                        if (utilSrvForHouseCat.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
-                                                                        {
-                                                                            <input id="serviceType" name="ServiceType" class="form-control" value="@AmsConstants.UtilityServiceWater" />
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            <input id="serviceType" name="ServiceType" class="form-control" value="@AmsConstants.UtilityServiceFixedCost" />
-                                                                        }
-                                                                    }
-                                                                </div>
-                                                                @{
-                                                                    if (utilSrvForHouseCat.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
-                                                                    {
-                                                                        <div class="col-md-6" id="houseCatRow">
-                                                                            <label for="houseCat" class="col-md-3 control-label">Dạng cư trú</label>
-                                                                            <div class="col-md-9">
-                                                                                @foreach (var cat in houseCat)
-                                                                                {
-                                                                                    if (cat.Id == utilSrvForHouseCat.HouseCatId)
-                                                                                    {
-                                                                                        <input id="houseCat" name="ServiceType" class="form-control" value="@cat.Name" />
-                                                                                    }
-                                                                                }
-                                                                            </div>
-                                                                        </div>
-                                                                    }
-                                                                }
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                            </fieldset>
+                <form id="addUtilServiceForm" class="form-horizontal" role="form">
+                    <div class="alert alert-info" id="createSuccessNoti" style="display: none">
+                        <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span>Cập nhật thành công</span>
+                    </div>
+                    <div class="alert alert-danger" id="createFailedNoti" style="display: none">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                        <span>Cập nhật thất bại</span>
+                    </div>
+                    <div class="tab-content">
+                        <div class="tab-pane fade active in" id="">
+                            @{
+                                if (utilSrvForHouseCat.Status == SLIM_CONFIG.UTILITY_SERVICE_OF_HOUSE_CAT_DISABLE)
+                                {
+                                    <div class="col-md-offset-1 col-md-10">
+                                        <div class="pull-right">
+                                            <span id="activeBtn" class="btn btn-success" onclick="activateUtilService(@utilSrvForHouseCat.Id)"><i class="fa fa-unlock"></i> Mở</span>
                                         </div>
                                     </div>
-                                    @{if (utilSrvForHouseCat.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
-                                    {
-                                        <div class="form-group" id="UtilityServiceWrapper">
-                                            <div class="col-md-offset-1 col-md-10">
-                                                <fieldset class="scheduler-border less-padding">
+                                }
+                            }
+                            <div class="form-group">
+                                <div class="col-md-offset-1 col-md-10">
+                                    <fieldset class="scheduler-border less-padding">
+                                        <legend class="scheduler-border bold-black">Thông tin</legend>
+                                        <div class="form-group">
+                                            <div class="col-md-2">
+                                                <div class="form-group" style="height: 34px;text-align: right;">
+                                                    <label for="serviceTypeName" class="control-label">Tên</label>
+                                                </div>
+                                                <div class="form-group" style="height: 34px;text-align: right;">
+                                                    <label for="serviceType" class="control-label">Loại dịch vụ</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <div class="form-group">
+                                                    <div class="col-md-9">
+                                                        <input id="serviceTypeName" name="ServiceTypeName" type="text" value="@utilSrvForHouseCat.UtilityService.Name" class="form-control">
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        @{
+                                                            if (utilSrvForHouseCat.Status == SLIM_CONFIG.UTILITY_SERVICE_OF_HOUSE_CAT_DISABLE)
+                                                            {
+                                                                <span id="btnClose" class="btn btn-danger btn-block">Đóng</span>
+                                                                <span id="btnOpen" class="btn btn-success btn-block hide">Mở</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span id="btnClose" class="btn btn-danger btn-block hide">Đóng</span>
+                                                                <span id="btnOpen" class="btn btn-success btn-block">Mở</span>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-md-5">
+                                                        @{
+                                                            if (utilSrvForHouseCat.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
+                                                            {
+                                                                <input id="serviceType" name="ServiceType" class="form-control" value="@AmsConstants.UtilityServiceWater" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <input id="serviceType" name="ServiceType" class="form-control" value="@AmsConstants.UtilityServiceFixedCost" />
+                                                            }
+                                                        }
+                                                    </div>
+                                                    @{
+                                                        if (utilSrvForHouseCat.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
+                                                        {
+                                                            <div class="col-md-7" id="houseCatRow">
+                                                                <div class="row">
+                                                                    <label for="houseCat" class="col-md-4 control-label">Dạng cư trú</label>
+                                                                    <div for class="col-md-8">
+
+                                                                        @foreach (var cat in houseCat)
+                                                                        {
+                                                                            if (cat.Id == utilSrvForHouseCat.HouseCatId)
+                                                                            {
+                                                                                <input id="houseCat" name="ServiceType" class="form-control" value="@cat.Name" />
+                                                                            }
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    }
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            @{if (utilSrvForHouseCat.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
+                            {
+                                <div class="form-group" id="UtilityServiceWrapper">
+                                    <div class="col-md-offset-1 col-md-10">
+                                        <fieldset class="scheduler-border less-padding">
                                             <legend class="scheduler-border bold-black">Cư dân trong hộ khẩu</legend>
 
-                                                    <div>
-                                                        <div class="form-group">
+                                            <div>
+                                                <div class="form-group">
+                                                    <div class="col-md-offset-1 col-md-4">
+                                                        <strong style="align-content: center">Tên mức</strong>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <strong style="align-content: center">Từ</strong>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <strong style="align-content: center">Đến <span style="font-size: 11px;font-weight: normal;">(*vô hạn)</span></strong>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <strong style="align-content: center">Giá</strong>
+                                                    </div>
+                                                </div>
+                                                <div id="waterRangeWrapperInline">
+
+                                                    @{foreach (var rangePrice in utilSrvForHouseCat.UtilityService.UtilityServiceRangePrices.ToList())
+                                                    {
+                                                        <div id="row_@index" class="form-group">
                                                             <div class="col-md-offset-1 col-md-4">
-                                                                <strong style="align-content: center">Tên mức</strong>
-                                                            </div>
-                                                            <div class="col-sm-2">
-                                                                <strong style="align-content: center">Từ</strong>
-                                                            </div>
-                                                            <div class="col-sm-2">
-                                                                <strong style="align-content: center">Đến</strong>
-                                                            </div>
-                                                            <div class="col-sm-2">
-                                                                <strong style="align-content: center">Giá</strong>
-                                                            </div>
-                                                        </div>
-                                                        <div id="waterRangeWrapperInline">
-                                                            @{foreach (var rangePrice in utilSrvForHouseCat.UtilityService.UtilityServiceRangePrices.ToList())
-                                                            {
-                                                                <div id="row_@index" class="form-group">
-                                                                    <div class="col-md-offset-1 col-md-4">
                                                                 <input id="range_name_@index" name="RangeName" type="text" class="form-control order-item" value="@rangePrice.Name">
-                                                                    </div>
-                                                                    <div class="col-md-2">
-                                                                <input id="from_amount_@index" name="RangeFrom" readonly="readonly" type="text" class="form-control order-item-qty" value="@rangePrice.FromAmount">
-                                                                    </div>
-                                                                    <div class="col-md-2">
-                                                                <input id="to_amount_@index" name="RangeTo" type="text" class="form-control order-item-price"
-                                                                               value="@(rangePrice.ToAmount.Value == (SLIM_CONFIG.MAX_NUMBER) ? "*" : rangePrice.ToAmount.Value.ToString())">
-                                                                    </div>
-                                                                    <div class="col-md-2">
-                                                                <input id="price_@index" name="RangePrice" type="text" class="form-control total-order"
-                                                                               value="@(rangePrice.Price.Value.ToString("N0"))">
-                                                                    </div>
-                                                                    <span class="btn btn-danger btn-xs on-delete"><i class="fa fa-times"></i></span>
-                                                                    <input type="hidden" id="range_price_id_@index" name="rangePriceId" value="@rangePrice.Id" />
-                                                                </div>
-                                                                {
-                                                                    index++;
-                                                                }
-                                                            }
-                                                            }
-                                                        </div>
-                                                        <input type="hidden" id="utilSrvForHouseCatId" value="@utilSrvForHouseCat.Id">
-                                                <input type="hidden" id="utilSrvCat" value="@utilSrvForHouseCat.UtilityService.Type" />
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="col-md-3">
-                                                            <span id="addRowWater" class="btn btn-stroke btn-primary"><i class="fa fa-plus"></i> Thêm</span>
-                                                        </div>
-                                                    </div>
-                                                </fieldset>
-                                            </div>
-                                        </div>
-                                    }
-                                    else if (utilSrvForHouseCat.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST)
-                                    {
-                                        <div class="form-group" id="UtilityServiceWrapper">
-                                            <div class="col-md-offset-1 col-md-10">
-                                                <fieldset class="scheduler-border less-padding">
-                                            <legend class="scheduler-border bold-black">Phí cố định</legend>
-                                                    <div class="form-group">
-                                                        <div class="col-md-offset-2 col-md-6">
-                                                            <strong style="align-content: center">Tên phí cố định</strong>
-                                                        </div>
-                                                        <div class="col-sm-2">
-                                                            <strong style="align-content: center">Giá</strong>
-                                                        </div>
-                                                    </div>
-                                                    <div id="fixedCostWrapper">
-                                                        <div id="row_1" class="form-group">
-                                                            <div class="col-md-offset-2 col-md-7">
-                                                        <input id="fixed_cost_name_1" name="FixCostName" value="@utilSrvForHouseCat.UtilityService.Name" type="text" class="form-control order-item">
                                                             </div>
                                                             <div class="col-md-2">
-                                                        <input id="fixed_cost_price_1" name="FixCosPrice" value="@utilSrvForHouseCat.UtilityService.UtilityServiceRangePrices.ToList().First().Price.Value.ToString("N0")"
-                                                                       type="text" class="form-control order-item-qty">
+                                                                <input id="from_amount_@index" name="RangeFrom" readonly="readonly" type="text" class="form-control order-item-qty" value="@rangePrice.FromAmount">
                                                             </div>
+                                                            <div class="col-md-2">
+                                                                <input id="to_amount_@index" name="RangeTo" type="text" class="form-control order-item-price"
+                                                                       value="@(rangePrice.ToAmount.Value == (SLIM_CONFIG.MAX_NUMBER) ? "*" : rangePrice.ToAmount.Value.ToString())">
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <input id="price_@index" name="RangePrice" type="text" class="form-control total-order"
+                                                                       value="@(rangePrice.Price.Value.ToString("N0"))">
+                                                            </div>
+                                                            <span class="btn btn-danger btn-xs on-delete"><i class="fa fa-times"></i></span>
+                                                            <input type="hidden" id="range_price_id_@index" name="rangePriceId" value="@rangePrice.Id" />
                                                         </div>
-                                                    </div>
-                                                    <input type="hidden" id="fixedCostUtilSrvId" value="@utilSrvForHouseCat.UtilityService.Id" />
-                                            <input type="hidden" id="utilSrvCat" value="@utilSrvForHouseCat.UtilityService.Type" />
-                                                </fieldset>
-                                            </div>
-                                        </div>
-                                    }
-                                    }
+                                                        {
+                                                            index++;
+                                                        }
+                                                    }
+                                                    }
 
-                                    <div class="form-horizontal">
-                                        <div class="form-group">
-                                            <div class="pull-right">
-                                        <button type="submit" class="btn btn-info" ><i class="fa fa-floppy-o"></i> Cập nhật</button>
+                                                </div>
+                                                <input type="hidden" id="utilSrvForHouseCatId" value="@utilSrvForHouseCat.Id">
+                                                <input type="hidden" id="utilSrvCat" value="@utilSrvForHouseCat.UtilityService.Type" />
                                             </div>
-                                        </div>
+                                            <div class="form-group">
+                                                <div class="col-md-3">
+                                                    <span id="addRowWater" class="btn btn-stroke btn-primary"><i class="fa fa-plus"></i> Thêm</span>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            }
+                            else if (utilSrvForHouseCat.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST)
+                            {
+                                <div class="form-group" id="UtilityServiceWrapper">
+                                    <div class="col-md-offset-1 col-md-10">
+                                        <fieldset class="scheduler-border less-padding">
+                                            <legend class="scheduler-border bold-black">Phí cố định</legend>
+                                            <div class="form-group">
+                                                <div class="col-md-offset-2 col-md-6">
+                                                    <strong style="align-content: center">Tên phí cố định</strong>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <strong style="align-content: center">Giá</strong>
+                                                </div>
+                                            </div>
+                                            <div id="fixedCostWrapper">
+                                                <div id="row_1" class="form-group">
+                                                    <div class="col-md-offset-2 col-md-7">
+                                                        <input id="fixed_cost_name_1" name="FixCostName" value="@utilSrvForHouseCat.UtilityService.Name" type="text" class="form-control order-item">
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <input id="fixed_cost_price_1" name="FixCosPrice" value="@utilSrvForHouseCat.UtilityService.UtilityServiceRangePrices.ToList().First().Price.Value.ToString("N0")"
+                                                               type="text" class="form-control order-item-qty">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <input type="hidden" id="fixedCostUtilSrvId" value="@utilSrvForHouseCat.UtilityService.Id" />
+                                            <input type="hidden" id="utilSrvCat" value="@utilSrvForHouseCat.UtilityService.Type" />
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            }
+                            }
+
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <div class="pull-right">
+                                        <button type="submit" id="btn-update" class="btn btn-info"><i class="fa fa-floppy-o"></i> Cập nhật</button>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
+    </div>
+</div>
 
 <div id="fixedCostFrame" class="hide">
 
@@ -474,65 +476,60 @@
         });
     }
     function validCreateUtilityService() {
+        $.validator.methods.number = function(value, element){
+            return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
+        };
+        jQuery.validator.addMethod("lastUnlimitedElement", function(value, element) {
+            var lastElement = $("#waterRangeWrapperInline >div.form-group:last-child input[name=RangeTo]");
+            var lastElemetnId = lastElement.prop("id");
+            var lastElemetnValue = lastElement.val();
+            if (lastElemetnId && lastElemetnValue !== "*" && lastElemetnId == element.id) {
+                return false;
+            }
+            return this.optional(element) || true;
+        }, "Giả trị cuối cùng là *(vô hạn)");
         $("#addUtilServiceForm").validate({
             rules: {
-                ServiceTypeName: {
-                    required: true,
-                    maxlength: 255
-                },
                 RangeName: {
-                    required: function (elem) {
-                        if ($(elem).val()) {
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    }
+                    required: true,
+                    maxlength:255
                 },
                 RangeTo: {
-                    required: function (elem) {
-                        if ($(elem).val()) {
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    }
+                    required: true,
+                    lastUnlimitedElement: true,
                 },
                 RangePrice: {
-                    required: function (elem) {
-                        if ($(elem).val()) {
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    }
+                    required: true,
+                    number: true,
                 },
                 FixCostName: {
                     required: true,
+                    maxlength:255
                 },
                 FixCosPrice: {
                     required: true,
+                    number: true,
                 }
             },
             messages: {
-                ServiceTypeName: {
+                RangeName: {
                     required: "Trường bắt buộc",
                     maxlength: "Tối đa 255 ký tự."
                 },
-                RangeName: {
-                    required: "Trường bắt buộc"
-                },
                 RangeTo: {
-                    required: "Trường bắt buộc"
+                    required: "Trường bắt buộc",
+                    number: "Phải là kí số"
                 },
                 RangePrice: {
-                    required: "Trường bắt buộc"
+                    required: "Trường bắt buộc",
+                    number: "Phải là kí số"
                 },
                 FixCostName: {
                     required: "Trường bắt buộc"
                 },
                 FixCosPrice: {
-                    required: "Trường bắt buộc"
+                    required: "Trường bắt buộc",
+                    number: "Phải là kí số"
                 }
             },
             submitHandler: function () {
@@ -540,5 +537,10 @@
                 updateUtilServicePrice(parseInt(utilSrvCat));
             }
         });
+
+        $.validator.messages.required = 'File name mandatory!';
+        $.validator.messages.number = 'File name mandatory!';
+        $.validator.messages.maxlength = 'File name mandatory!';
+
     }
 </script>

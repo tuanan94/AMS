@@ -1,6 +1,6 @@
 ﻿@{
     ViewBag.Title = "View";
-    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+    Layout = "~/Views/Admin/_AdminLayout.cshtml";
 }
 <div class="col-md-12">
     <div class="panel panel-default">
@@ -8,14 +8,14 @@
             <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Tạo mới tòa nhà</span>
 
             <ul class="nav nav-tabs pull-right" role="tablist">
-                <li>
-                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-usd"></i> Phí sinh họat</a>
-                </li>
                 <li class="active">
                     <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-home"></i> Căn hộ</a>
                 </li>
                 <li>
-                    <a href="/Management/ViewHelpdeskServiceCategory"><i class="fa fa fa-tags"></i> Nhóm DV sửa chữa</a>
+                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-usd"></i> Phí sinh họat</a>
+                </li>
+                <li>
+                    <a href="/Management/ViewHelpdeskServiceCategory"><i class="fa fa-wrench"></i> Nhóm DV sửa chữa</a>
                 </li>
                 <li class="">
                     <a href="/Management/BalanceSheet/ManageTransactionCatView"><i class="fa fa-tags"></i> Nhóm thu chi</a>

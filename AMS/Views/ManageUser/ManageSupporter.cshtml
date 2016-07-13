@@ -66,20 +66,20 @@
                 <h4 class="modal-title" id="title">Thêm cư dân</h4>
             </div>
             <form id="addResidentForm" class="form-horizontal" role="form">
-            <div class="modal-body">
-                <div class="panel-body">
-                    <div class="alert alert-info" id="addResSuccessNoti" style="display: none">
-                        <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span id="successMsg">Thêm nhân viên hỗ trợ thành công</span>
-                    </div>
-                    <div class="alert alert-danger" id="addResFailedNoti" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                        <span id="failedMsg">Thêm nhân viên hỗ trợ thất bại</span>
-                    </div>
-                    <div class="alert alert-danger" id="msgAddFailedNoty" style="display: none">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span id="addTransMsg"></span>
-                    </div>
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <div class="alert alert-info" id="addResSuccessNoti" style="display: none">
+                            <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span id="successMsg">Thêm nhân viên hỗ trợ thành công</span>
+                        </div>
+                        <div class="alert alert-danger" id="addResFailedNoti" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                            <span id="failedMsg">Thêm nhân viên hỗ trợ thất bại</span>
+                        </div>
+                        <div class="alert alert-danger" id="msgAddFailedNoty" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span id="addTransMsg"></span>
+                        </div>
 
                         <div class="form-group">
                             <label for="resName" class="col-md-3 control-label">Họ tên</label>
@@ -127,13 +127,13 @@
                         <input type="hidden" id="accountId" name="Id" />
                         <input type="hidden" id="roleId" value="@SLIM_CONFIG.USER_ROLE_SUPPORTER" name="RoldId" />
 
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                     <button id="btnAdd" type="submit" class="btn btn-info hide">Chấp nhận</button>
                     <button id="btnUpdate" type="submit" class="btn btn-info hide">Chấp nhận</button>
-            </div>
+                </div>
             </form>
         </div>
     </div>
@@ -474,49 +474,63 @@
         window.deleteRes.push(id);
         window.manageUserListTbl.row("#employee_" + id).remove().draw(false);
         $("#delConsumptionRecordBtnGroup").removeClass("hide").addClass("show");
-    } $("#addResidentForm").validate({
-        rules: {
-            Name: {
-                required: true,
-                maxlength: 255
-            },
-            UserAccountName: {
-                required: true,
-                maxlength: 255
-            },
-            CellNumb: {
-                required: true,
-                maxlength: 11
-            },
-            Dob: {
-                required: true
     }
-        },
-        messages: {
-            Name: {
-                required: "Vui lòng nhập họ tên.",
-                maxlength: "Họ tên không dài quá 255 ký tự."
-            },
-            UserAccountName: {
-                required: "Vui lòng nhập tên đăng nhập",
-                maxlength: "Tên đăng nhập không dài quá 255 ký tự."
-            },
-            CellNumb: {
-                required: "Vui lòng nhập số điện thoại.",
-                maxlength: "Số điện thoại không dài quá 11 ký số."
-            },
-            Dob: {
-                required: "Vui lòng nhập ngày sinh.",
-            }
-        },
-        submitHandler: function () {
-            if ($("#btnUpdate").hasClass("hide")) {
-                addNewResident();
-            } else {
-                updateResident();
-            }
-        }
-    });
+
+    /* $("#addResidentForm").validate({
+         rules: {
+             Name: {
+                 required: true,
+                 maxlength: 255
+             },
+             UserAccountName: {
+                 required: true,
+                 maxlength: 255
+             },
+             CellNumb: {
+                 required: true,
+                 maxlength: 11
+             },
+             Dob: {
+                 required: true
+             },
+             IdCreateDate: {
+                 required: true
+             },
+             Idenity: {
+                 required: true
+             }
+         },
+         messages: {
+             Name: {
+                 required: "Vui lòng nhập họ tên.",
+                 maxlength: "Họ tên không dài quá 255 ký tự."
+             },
+             UserAccountName: {
+                 required: "Vui lòng nhập tên đăng nhập",
+                 maxlength: "Tên đăng nhập không dài quá 255 ký tự."
+             },
+             CellNumb: {
+                 required: "Vui lòng nhập số điện thoại.",
+                 maxlength: "Số điện thoại không dài quá 11 ký số."
+             },
+             Dob: {
+                 required: "Vui lòng nhập CMND.",
+             },
+             IdCreateDate: {
+                 required: "Vui lòng nhập CMND.",
+             },
+             Idenity: {
+                 required: "Vui lòng nhập CMND.",
+             }
+         },
+         submitHandler: function () {
+             if ($("#btnUpdate").hasClass("hide")) {
+                 addNewResident();
+             } else {
+                 updateResident();
+             }
+         }
+     });*/
     function cancelDeleteConsumptionRecord() {
         for (var i = 0; i < window.residentList.length; i++) {
             var originItem = window.residentList[i];
@@ -568,14 +582,17 @@
                 },
                 CellNumb: {
                     required: true,
-                    maxlength: 11
+                    maxlength: 11,
+                    minlength: 10
                 },
                 Dob: {
                     required: true
                 },
                 Idenity: {
                     required: true,
-                    maxlength: 9
+                    number: "CMND phải là ký số",
+                    maxlength: 9,
+                    minlength: 9
                 },
                 IdCreateDate: {
                     required: true
@@ -592,17 +609,20 @@
                 },
                 CellNumb: {
                     required: "Trường bắt buộc",
-                    maxlength: "Tối đa 11 ký tự."
+                    maxlength: "Tối đa 11 ký số.",
+                    minlength: "Tối thiểu 10 ký số."
                 },
                 Dob: {
                     required: "Trường bắt buộc"
                 },
                 Idenity: {
                     required: "Trường bắt buộc",
-                    maxlength: "Tối đa 9 ký tự."
+                    number: "CMND phải là ký số",
+                    maxlength: "CMND phải 9 ký số.",
+                    minlength: "CMND phải 9 ký số."
                 },
                 IdCreateDate: {
-                    required: "Trường bắt buộc",
+                    required: "Trường bắt buộc"
                 },
             },
             submitHandler: function () {

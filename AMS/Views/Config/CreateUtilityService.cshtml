@@ -1,6 +1,6 @@
 ﻿@{
     ViewBag.Title = "UtilityService";
-    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+    Layout = "~/Views/Admin/_AdminLayout.cshtml";
     List<HouseCategory> houseCat = ViewBag.houseCat;
 }
 
@@ -11,14 +11,14 @@
             <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Tạo mới phí sinh hoạt</span>
 
             <ul class="nav nav-tabs pull-right" role="tablist">
-                <li class="active">
-                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-usd"></i> Phí sinh họat</a>
-                </li>
                 <li class="">
                     <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-home"></i> Căn hộ</a>
                 </li>
+                <li class="active">
+                    <a href="/Management/Config/UtilityService/View"><i class="fa fa-usd"></i> Phí sinh họat</a>
+                </li>
                 <li>
-                    <a href="/Management/ViewHelpdeskServiceCategory"><i class="fa fa fa-tags"></i> Nhóm DV sửa chữa</a>
+                    <a href="/Management/ViewHelpdeskServiceCategory"><i class="fa fa-wrench"></i> Nhóm DV sửa chữa</a>
                 </li>
                 <li class="">
                     <a href="/Management/BalanceSheet/ManageTransactionCatView"><i class="fa fa-tags"></i> Nhóm thu chi</a>
@@ -45,11 +45,11 @@
                                         <legend class="scheduler-border bold-black">Thông tin</legend>
                                         <div class="form-group">
                                             <div class="col-md-2">
-                                                <div class="form-group">
-                                                    <label for="serviceTypeName" class="col-md-12 control-label">Tên</label>
+                                                <div class="form-group" style="height: 34px;text-align: right;">
+                                                        <label for="serviceTypeName" class="control-label">Tên</label>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label for="serviceType" class="col-md-12 control-label">Loại dịch vụ</label>
+                                                <div class="form-group" style="height: 34px;text-align: right;" >
+                                                        <label for="serviceType" class="control-label">Loại dịch vụ</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-10">
@@ -66,7 +66,7 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-md-6" id="houseCatRow">
-                                                        <label for="houseCat" class="col-md-3 control-label">Loại nhà</label>
+                                                        <label for="houseCat" class="col-md-3 control-label" style="padding: 6px 0 0 0;">Loại nhà</label>
                                                         <div class="col-md-9">
                                                             <select id="houseCat" name="ServiceType" class="form-control">
                                                                 @foreach (var cat in houseCat)
@@ -92,13 +92,13 @@
                                                 <div class="col-md-offset-1 col-md-4">
                                                     <strong style="align-content: center">Tên mức</strong>
                                                 </div>
-                                                <div class="col-sm-2">
+                                                <div class="col-md-2">
                                                     <strong style="align-content: center">Từ</strong>
                                                 </div>
-                                                <div class="col-sm-2">
-                                                    <strong style="align-content: center">Đến (* vô hạn)</strong>
+                                                <div class="col-md-2">
+                                                    <strong style="align-content: center">Đến <span style="font-size: 11px;font-weight: normal;">(*vô hạn)</span></strong>
                                                 </div>
-                                                <div class="col-sm-2">
+                                                <div class="col-md-2">
                                                     <strong style="align-content: center">Giá</strong>
                                                 </div>
                                             </div>
@@ -157,7 +157,7 @@
                 <div class="col-md-offset-2 col-md-7">
                     <strong style="align-content: center">Tên phí cố định</strong>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-md-2">
                     <strong style="align-content: center">Giá</strong>
                 </div>
             </div>
@@ -166,7 +166,7 @@
                     <div class="col-md-offset-2 col-md-7">
                         <input id="fixed_cost_name_1" name="FixCostName" type="text" class="form-control order-item">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <input id="fixed_cost_price_1" name="FixCosPrice" type="text" class="form-control order-item-qty">
                     </div>
                 </div>
@@ -178,20 +178,20 @@
 <div id="waterFrame" class="hide">
     <div class="col-md-offset-1 col-md-10">
         <fieldset class="scheduler-border less-padding">
-            <legend class="scheduler-border">Cư dân trong hộ khẩu</legend>
+            <legend class="scheduler-border bold-black">Cư dân trong hộ khẩu</legend>
 
             <div>
                 <div class="form-group">
                     <div class="col-md-offset-1 col-md-4">
                         <strong style="align-content: center">Tên mức</strong>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-md-2">
                         <strong style="align-content: center">Từ</strong>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-md-2">
                         <strong style="align-content: center">Đến</strong>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-md-2">
                         <strong style="align-content: center">Giá</strong>
                     </div>
                 </div>
@@ -307,9 +307,9 @@
     function addRangePrice(index, parentTagId) {
         var tag = "<div id=\"row_" + index + "\" class='form-group'>" +
                 "<div class='col-md-offset-1 col-md-4'><input id=\"range_name_" + index + "\" type='text' name='RangeName' class='form-control order-item'></div>" +
-                "<div class='col-sm-2'><input type='text' id=\"from_amount_" + index + "\"   readonly='readonly' class='form-control order-item-qty'></div>" +
-                "<div class='col-sm-2'><input id=\"to_amount_" + index + "\"type='text' name='RangeTo' class='form-control order-item-price'></div>" +
-                "<div class='col-sm-2'><input id=\"price_" + index + "\" type='text'  name='RangePrice' class='form-control total-order'></div>" +
+                "<div class='col-md-2'><input type='text' id=\"from_amount_" + index + "\"   readonly='readonly' class='form-control order-item-qty'></div>" +
+                "<div class='col-md-2'><input id=\"to_amount_" + index + "\"type='text' name='RangeTo' class='form-control order-item-price'></div>" +
+                "<div class='col-md-2'><input id=\"price_" + index + "\" type='text'  name='RangePrice' class='form-control total-order'></div>" +
                 "<span class='btn btn-danger btn-xs on-delete'><i class='fa fa-times'></i></span>" +
                 "</div>";
         $("#" + parentTagId).append(tag);
@@ -452,63 +452,46 @@
     function validCreateUtilityService() {
         $("#addUtilServiceForm").validate({
             rules: {
-                ServiceTypeName: {
+                RangeName: {
                     required: true,
                     maxlength: 255
                 },
-                RangeName: {
-                    required: function (elem) {
-                        if ($(elem).val()) {
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    }
-                },
                 RangeTo: {
-                    required: function (elem) {
-                        if ($(elem).val()) {
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    }
+                    required: true,
+                    lastUnlimitedElement: true,
                 },
                 RangePrice: {
-                    required: function (elem) {
-                        if ($(elem).val()) {
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    }
+                    required: true,
+                    number: true,
                 },
                 FixCostName: {
                     required: true,
+                    maxlength: 255
                 },
                 FixCosPrice: {
                     required: true,
+                    number: true,
                 }
             },
             messages: {
-                ServiceTypeName: {
+                RangeName: {
                     required: "Trường bắt buộc",
                     maxlength: "Tối đa 255 ký tự."
                 },
-                RangeName: {
-                    required: "Trường bắt buộc"
-                },
                 RangeTo: {
-                    required: "Trường bắt buộc"
+                    required: "Trường bắt buộc",
+                    number: "Phải là kí số"
                 },
                 RangePrice: {
-                    required: "Trường bắt buộc"
+                    required: "Trường bắt buộc",
+                    number: "Phải là kí số"
                 },
                 FixCostName: {
                     required: "Trường bắt buộc"
                 },
                 FixCosPrice: {
-                    required: "Trường bắt buộc"
+                    required: "Trường bắt buộc",
+                    number: "Phải là kí số"
                 }
             },
             submitHandler: function () {

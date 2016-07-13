@@ -46,17 +46,22 @@ window.Disable = 2;
 window.IsNotExisted = 1;
 window.IsExisted = 2;
 
-
 window.Utility_Service_Water = 2;
 window.Utility_Service_Fixed_Cost = 5;
 
 window.UserStatusWaiting = 0;
 window.UserStatusEnable = 1;
 window.UserStatusReject = 2;
-window.UserStatusDisable = 4;
+window.UserStatusDisable = 3;
 
 window.UserRoleResident = 3;
 window.UserRoleHouseHolder = 4;
+
+window.IsDeletable = 1;
+window.IsNotDeletable = 2;
+
+window.HouseHasResident = 1;
+window.HouseHasNoResident = 2;
 
 window.DefaultImage = "/Content/images/defaultPro.png";
 window.DefaultStoreImage = "/Content/images/defaultStore.png";
@@ -582,7 +587,7 @@ $(document).ready(function () {
 function activeNavigationBar() {
     $("#main-nav > ul > li").removeClass("active");
     var pathName = window.location.pathname;
-    if (pathName.indexOf("/HelpdeskRequest/") > -1 || pathName.indexOf("/ResidentApprovement/") > -1) {
+    if (pathName.indexOf("/HelpdeskRequest/") > -1 || pathName.indexOf("/ResidentApprovement") > -1) {
         $("#hdRequestNav").addClass("active");
     } else if (pathName.indexOf("/ManageReceipt/") > -1) {
         $("#receiptNav").addClass("active");
@@ -1098,11 +1103,12 @@ function onChangeFromNumber() {
         var nextFromValue = {};
         var fromValue = event.target.parentNode.previousElementSibling.querySelector(".order-item-qty");
 
-        if (nextElement == null) {
+        /*if (nextElement == null) {
             event.target.value = "*";
             return;
-            return;
-        } else {
+        } else {*/
+        if (nextElement != null) {
+
             nextFromValue = nextElement.querySelector(".order-item-qty");
             var nextToValue = nextElement.querySelector(".order-item-price");
             if (parseInt(event.target.value, 10) >= parseInt(nextToValue.value, 10)) {
@@ -1114,6 +1120,7 @@ function onChangeFromNumber() {
                 }
             }// if next node is greater than this node clean all next node
         }
+        /*}*/
         if (event.target.parentNode.parentNode.previousElementSibling) {
             var previousValue = event.target.parentNode.parentNode.previousElementSibling
                 .querySelector(".order-item-price");
@@ -1162,7 +1169,7 @@ function onChangeFromNumber() {
 }
 
 function bindingCalculateSubTotal() {
-    $("#receiptWrapper").on("keyup", ".order-item-qty", function () {
+    $("#receiptWrapper").on("change", ".order-item-qty", function () {
         if (event.which >= 37 && event.which <= 40) {
             event.preventDefault();
             return;
@@ -1191,7 +1198,7 @@ function bindingCalculateSubTotal() {
 
         }
     });
-    $("#receiptWrapper").on("keyup", ".order-item-price", function () {
+    $("#receiptWrapper").on("change", ".order-item-price", function () {
         if (event.which >= 37 && event.which <= 40) {
             event.preventDefault();
             return;
