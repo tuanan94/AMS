@@ -64,5 +64,11 @@ namespace AMS.Service
                 OrderByDescending(userRepository => userRepository.CreateDate)
                     .ToList();
         }
+        public List<User> GetAllManager()
+        {
+            return userRepository.List.Where(u => u.Status != null && u.Status != SLIM_CONFIG.USER_STATUS_DELETE && u.RoleId == SLIM_CONFIG.USER_ROLE_MANAGER).
+                OrderByDescending(userRepository => userRepository.CreateDate)
+                    .ToList();
+        }
     }
 }

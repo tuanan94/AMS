@@ -163,6 +163,10 @@ td.highlight {
     background-color: #428bca;
 }
 
+    .navbar-primary-manager.admin {
+        background-color: #465665;
+    }
+
 .navbar-nav-manager .open .dropdown-menu > li > a {
     color: #428bca !important;
 }
@@ -209,6 +213,10 @@ td.highlight {
         color: #428bca;
     }
 
+    .heading-tab.admin ul li a, .heading-tab.admin ul li a i {
+        color: #465665;
+    }
+
     .heading-tab ul li.active a, .heading-tab ul li.active a:active, .heading-tab ul li.active a:hover {
         background-color: #fff;
         border: 1px solid #dddddd;
@@ -220,9 +228,17 @@ td.highlight {
         color: #000000 !important;
     }
 
+    .heading-tab.admin ul li a:active, .heading-tab.admin ul li a:hover, .heading-tab.admin ul li a:hover i {
+        color: #428bca !important;
+    }
+
     .heading-tab ul li.active a, .heading-tab ul li.active a i {
         /*color: #428bca;*/
         color: #152C40;
+    }
+
+    .heading-tab.admin ul li.active a, .heading-tab.admin ul li.active a i {
+        color: #428bca;
     }
 
 /*.table-striped.balance-sheet > tbody > tr:nth-child(odd) > td,
@@ -332,6 +348,10 @@ body {
     font-weight: bold;
     color: #777777;
 }
+
+.admin .tab-location {
+    color: #465665;
+}
 /*.panel-default {
     border-color: #ccc;
 }*/
@@ -389,3 +409,4 @@ body {
     float: left;
     padding: 5px;
 }
+

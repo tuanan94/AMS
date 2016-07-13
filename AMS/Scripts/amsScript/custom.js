@@ -548,7 +548,7 @@ $(document).ready(function () {
             $("#hdSrvCatTable_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(html);
 
             var addBtn = "<div class='col-md-1'>" +
-                            "<span class='btn btn-info' data-toggle='modal' data-target='#hdSrvCategoryModal' data-placement='top' onclick='openHdSrvCategoryModal()'>" +
+                            "<span class='btn btn-primary' data-toggle='modal' data-target='#hdSrvCategoryModal' data-placement='top' onclick='openHdSrvCategoryModal()'>" +
                         "<i class='fa fa-plus'></i>" +
                             "</span>" +
                         "</div>";

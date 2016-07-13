@@ -97,6 +97,11 @@ namespace AMS.Service
         {
             return _blockRepository.FindById(id);
         }
+        public Block FindByName(string name)
+        {
+            var block = _blockRepository.List.Where(b => b.BlockName.Equals("Employee")).ToList();
+            return block.Any() ? block.First() : null;
+        }
 
         public List<Block> GetAllBlocks()
         {

@@ -1,21 +1,17 @@
-﻿@using AMS.Constant
-@using AMS.Enum
-@using Microsoft.AspNet.Identity
+﻿@using Microsoft.AspNet.Identity
+
 @{
-    ViewBag.Title = "ManageMember";
-    Layout = "~/Views/Management/__ManagementLayout.cshtml";
+    ViewBag.Title = "ManageManager";
+    Layout = "~/Views/Admin/_AdminLayout.cshtml";
 }
 
 <div class="col-md-12">
     <div class="panel panel-default">
         <div class="heading-tab">
-            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Quản lý nhân viên hỗ trợ</span>
+            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Quản lý nhân viên quản lý</span>
             <ul class="nav nav-tabs pull-right" role="tablist">
-                <li>
-                    <a href="/Management/ManageUser/ViewResidentList"><i class="fa fa-users"></i> Cư dân</a>
-                </li>
                 <li class="active">
-                    <a href="/Management/ManageUser/ViewSupporterList"><i class="fa fa-user-md "></i> Nhân viên hỗ trợ</a>
+                    <a href="/Management/ManageUser/ViewManagerList"><i class="fa fa-user"></i> NV Quản lý</a>
                 </li>
             </ul>
         </div>
@@ -23,10 +19,9 @@
         <div class="panel-body">
             <div class="tab-content">
                 <div class="tab-pane fade active in" id="">
-
                     <div class="form-horizontal" id="searchHdSrv" role="form">
                         <!-- Data table -->
-                        <table id="manageUserListTbl" data-fromuserid="@User.Identity.GetUserId()" data-role-id="@SLIM_CONFIG.USER_ROLE_SUPPORTER" class="table table-hover table-bordered">
+                        <table id="manageManagerListTbl" data-fromuserid="@User.Identity.GetUserId()" data-role-id="@SLIM_CONFIG.USER_ROLE_MANAGER" class="table table-hover table-bordered">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -49,23 +44,20 @@
                         </table>
                         <!-- // Data table -->
                     </div>
-
                 </div>
             </div>
-
         </div>
-
     </div>
 </div>
 
-<div id="addResidentModal" class="modal fade ams-modal" role="dialog">
+<div id="addManagerModal" class="modal fade ams-modal" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="title">Thêm nhân viên hổ trợ</h4>
+                <h4 class="modal-title" id="title">Thêm cư dân</h4>
             </div>
-            <form id="addResidentForm" class="form-horizontal" role="form">
+            <form id="addManagerForm" class="form-horizontal" role="form">
                 <div class="modal-body">
                     <div class="panel-body">
                         <div class="alert alert-info" id="addResSuccessNoti" style="display: none">
@@ -125,14 +117,13 @@
                             </div>
                         </div>
                         <input type="hidden" id="accountId" name="Id" />
-                        <input type="hidden" id="roleId" value="@SLIM_CONFIG.USER_ROLE_SUPPORTER" name="RoldId" />
-
+                        <input type="hidden" id="roleId" value="@SLIM_CONFIG.USER_ROLE_MANAGER" name="RoldId" />
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    <button id="btnAdd" type="submit" class="btn btn-info hide">Chấp nhận</button>
-                    <button id="btnUpdate" type="submit" class="btn btn-info hide">Chấp nhận</button>
+                    <button id="btnAdd" type="submit" class="btn btn-primary hide">Chấp nhận</button>
+                    <button id="btnUpdate" type="submit" class="btn btn-primary hide">Chấp nhận</button>
                 </div>
             </form>
         </div>
@@ -182,28 +173,26 @@
 
 <script>
     $(document).ready(function () {
-        $("#slide-left").children().removeClass("active");
-        $($("#slide-left li")[4]).addClass("active");
 
         window.mode = window.INSERTMODE;
-        window.deleteRes = [];
+        window.deleteManager = [];
 
-        var roleId = document.getElementById("manageUserListTbl").dataset.roleId;
-        window.manageUserListTbl = $("#manageUserListTbl").DataTable({
+        var roleId = document.getElementById("manageManagerListTbl").dataset.roleId;
+        window.manageManagerListTbl = $("#manageManagerListTbl").DataTable({
             "ajax": {
-                url: "/Management/ManageUser/GetEmployeeList?roleId=" + roleId,
+                url: "/Management/ManageUser/GetManagerList",
                 dataSrc: function (data) {
-                    window.residentList = data;
+                    window.managerList = data;
                     return data;
                 }
             },
             "drawCallback": function (settings) {
                 var addBtn = "<div class='col-md-1'>" +
-                                "<span class='btn btn-info' onclick='openAddNewUserModal()'>" +
+                                "<span class='btn btn-primary' onclick='openAddNewUserModal()'>" +
                                 "<i class='fa fa-plus'></i>" +
                                 "</span>" +
                             "</div>";
-                $("#manageUserListTbl_wrapper > div:nth-child(1) > div:nth-child(1)").html(addBtn);
+                $("#manageManagerListTbl_wrapper > div:nth-child(1) > div:nth-child(1)").html(addBtn);
 
                 var deleteBtn =
             "<div class='hide' id='delConsumptionRecordBtnGroup'>" +
@@ -214,9 +203,8 @@
                     "Chấp nhận" +
                 "</span>" +
             "</div>";
-                $("#manageUserListTbl_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(deleteBtn);
+                $("#manageManagerListTbl_wrapper > div.row:nth-child(3) > div:nth-child(1) ").html(deleteBtn);
             },
-            "rowId": 'UserId',
             "bLengthChange": false,
             "bInfo": false,
             "columns": [
@@ -280,14 +268,6 @@
                     "data": "Id",
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
-                            if (full.RoldId === window.UserRoleHouseHolder) {
-                                return "<div class='text-right'> " +
-                                   "<td> " +
-                                  "<span onclick='getResidentInfor(" + data + ")' class='btn btn-default btn-xs'>" +
-                                   "<i class='fa fa-pencil'></i>" +
-                               "</td>" +
-                               "</div>";
-                            }
                             return "<div class='text-right'> " +
                                    "<td> " +
                                   "<span onclick='getResidentInfor(" + data + ")' class='btn btn-default btn-xs'>" +
@@ -306,10 +286,8 @@
             ], "order": [[3, "desc"]]
         });
 
-        generateTableIndex(window.manageUserListTbl);
-        $('#residentApproveTbl').on('click', 'tr', function () {
-            window.currentRow = $(this);
-        });
+        generateTableIndex(window.manageManagerListTbl);
+
         $("#resName").on("change", function (event) {
             if (window.mode === window.INSERTMODE) {
                 $.ajax({
@@ -355,15 +333,15 @@
 
         window.mode = window.INSERTMODE;
 
-        $("#successMsg").text("Thêm mới nhân viên hỗ trợ thành công.");
-        $("#failedMsg").text("Thêm mới nhân viên hỗ trợ thất bại.");
-        $("#title").text("Thêm mới nhân viên hỗ trợ");
+        $("#successMsg").text("Thêm mới nhân viên quản lý thành công.");
+        $("#failedMsg").text("Thêm mới nhân viên quản lý thất bại.");
+        $("#title").text("Thêm mới nhân viên quản lý");
 
         $("#btnUpdate").addClass("hide");
         $("#btnAdd").removeClass("hide");
 
         $("#userAccountName").prop("readonly", "");
-        $("#addResidentModal").modal("show");
+        $("#addManagerModal").modal("show");
     }
 
     function getResidentInfor(supporterId) {
@@ -386,7 +364,7 @@
                     $("#dob").val(obj.Dob);
                     $("#resId").val(obj.Idenity);
                     $("#accountId").val(obj.Id);
-                    $("#roleId").val(obj.RoldId);
+//                    $("#roleId").val(obj.RoldId);
                     $("#userAccountName").val(obj.UserAccountName);
                     $("#cellNumb").val(obj.CellNumb);
                     $("#idCreateDate").val(obj.IdCreateDate);
@@ -394,15 +372,15 @@
                     $("input:radio[name=Gender]").filter("[value=" + obj.Gender + "]").prop("checked", "checked");
 
                     window.mode = window.UPDATEMODE;
-                    $("#successMsg").text("Cập nhật nhân viên hỗ trợ thành công.");
-                    $("#failedMsg").text("Cập nhật nhân viên hỗ trợ thất bại.");
-                    $("#title").text("Cập nhật nhân viên hỗ trợ");
+                    $("#successMsg").text("Cập nhật nhân viên quản lý thành công.");
+                    $("#failedMsg").text("Cập nhật nhân viên quản lý thất bại.");
+                    $("#title").text("Cập nhật nhân viên quản lý");
 
                     $("#btnUpdate").removeClass("hide");
                     $("#btnAdd").addClass("hide");
 
                     $("#userAccountName").prop("readonly", "readonly");
-                    $("#addResidentModal").modal("show");
+                    $("#addManagerModal").modal("show");
                 }
             }
         });
@@ -410,8 +388,8 @@
 
     function addNewResident() {
         $.ajax({
-            "url": "/Management/ManageUser/AddEmployee",
-            data: $("#addResidentForm").serialize(),
+            "url": "/Management/ManageUser/AddManager",
+            data: $("#addManagerForm").serialize(),
             type: "POST",
             success: function (data) {
                 if (data.StatusCode === 0) {
@@ -420,7 +398,7 @@
                         $("#addResSuccessNoti").fadeOut("fast");
                         resetFormData("addResidentForm");
                     }, 3000);
-                    window.manageUserListTbl.ajax.reload(null, true);
+                    window.manageManagerListTbl.ajax.reload(null, true);
                 } else if (data.StatusCode === 2) {
                     $("#addTransMsg").text("Căn hộ này chưa có chủ nhà!");
                     $("#msgAddFailedNoty").fadeIn("fast");
@@ -440,8 +418,8 @@
 
     function updateResident() {
         $.ajax({
-            "url": "/Management/ManageUser/UpdateEmployee",
-            data: $("#addResidentForm").serialize(),
+            "url": "/Management/ManageUser/UpdateManager",
+            data: $("#addManagerForm").serialize(),
             type: "POST",
             success: function (data) {
                 if (data.StatusCode === 0) {
@@ -449,10 +427,10 @@
                     setTimeout(function () {
                         $("#addResSuccessNoti").fadeOut("fast");
                         resetFormData("addResidentForm");
-                        $("#addResidentModal").modal("hide");
+                        $("#addManagerModal").modal("hide");
                     }, 3000);
 
-                    window.manageUserListTbl.ajax.reload(null, true);
+                    window.manageManagerListTbl.ajax.reload(null, true);
                 } else if (data.StatusCode === 2) {
                     $("#addTransMsg").text("Căn hộ này chưa có chủ nhà!");
                     $("#msgAddFailedNoty").fadeIn("fast");
@@ -471,93 +449,38 @@
     }
     function deleteConsumptionRecord(id) {
         //        var element = $("#resident_" + id).addClass("hide");
-        window.deleteRes.push(id);
-        window.manageUserListTbl.row("#employee_" + id).remove().draw(false);
+        window.deleteManager.push(id);
+        window.manageManagerListTbl.row("#employee_" + id).remove().draw(false);
         $("#delConsumptionRecordBtnGroup").removeClass("hide").addClass("show");
     }
 
-    /* $("#addResidentForm").validate({
-         rules: {
-             Name: {
-                 required: true,
-                 maxlength: 255
-             },
-             UserAccountName: {
-                 required: true,
-                 maxlength: 255
-             },
-             CellNumb: {
-                 required: true,
-                 maxlength: 11
-             },
-             Dob: {
-                 required: true
-             },
-             IdCreateDate: {
-                 required: true
-             },
-             Idenity: {
-                 required: true
-             }
-         },
-         messages: {
-             Name: {
-                 required: "Vui lòng nhập họ tên.",
-                 maxlength: "Họ tên không dài quá 255 ký tự."
-             },
-             UserAccountName: {
-                 required: "Vui lòng nhập tên đăng nhập",
-                 maxlength: "Tên đăng nhập không dài quá 255 ký tự."
-             },
-             CellNumb: {
-                 required: "Vui lòng nhập số điện thoại.",
-                 maxlength: "Số điện thoại không dài quá 11 ký số."
-             },
-             Dob: {
-                 required: "Vui lòng nhập CMND.",
-             },
-             IdCreateDate: {
-                 required: "Vui lòng nhập CMND.",
-             },
-             Idenity: {
-                 required: "Vui lòng nhập CMND.",
-             }
-         },
-         submitHandler: function () {
-             if ($("#btnUpdate").hasClass("hide")) {
-                 addNewResident();
-             } else {
-                 updateResident();
-             }
-         }
-     });*/
     function cancelDeleteConsumptionRecord() {
-        for (var i = 0; i < window.residentList.length; i++) {
-            var originItem = window.residentList[i];
-            for (var z = 0; z < window.deleteRes.length; z++) {
-                var deleteItem = window.deleteRes[z];
+        for (var i = 0; i < window.managerList.length; i++) {
+            var originItem = window.managerList[i];
+            for (var z = 0; z < window.deleteManager.length; z++) {
+                var deleteItem = window.deleteManager[z];
                 if (originItem.Id.toString() === deleteItem) {
-                    window.manageUserListTbl.row.add(originItem).draw();
+                    window.manageManagerListTbl.row.add(originItem).draw();
                 }
             }
         }
-        window.deleteRes = new Array();
+        window.deleteManager = new Array();
         $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
     }
     function commitDeleteConsumptionRecord() {
         $.ajax({
-            url: "/Management/ManageUser/DeleteResident",
+            url: "/Management/ManageUser/DeleteManager",
             type: "POST",
             data: {
-                listResId: window.deleteRes
+                listResId: window.deleteManager
             },
             success: function (data) {
-                window.deleteRes = new Array();
-                window.manageUserListTbl.ajax.reload(null, false);
+                window.deleteManager = new Array();
+                window.manageManagerListTbl.ajax.reload(null, false);
                 $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
                 if (data.StatusCode === 0) {
-                    window.deleteRes = new Array();
-                    window.manageUserListTbl.ajax.reload(null, false);
+                    window.deleteManager = new Array();
+                    window.manageManagerListTbl.ajax.reload(null, false);
                 } else if (data.StatusCode === 2) {
                     $("#messageNotify").html("Xóa nhân viên [<strong>" + data.Data + "</strong>] không thành công. Chuyển hết công việc sang nhân viên khác trước khi xóa !");
                     $("#messageModal").modal("show");
@@ -570,7 +493,7 @@
     }
 
     function validateForm() {
-        $("#addResidentForm").validate({
+        $("#addManagerForm").validate({
             rules: {
                 Name: {
                     required: true,
@@ -635,3 +558,4 @@
         });
     }
 </script>
+

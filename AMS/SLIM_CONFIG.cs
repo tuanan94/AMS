@@ -46,6 +46,8 @@ namespace AMS
         public static String dirHouseProfileImage = "houseImage";
         public static String dirProfileImage = "profileImage";
 
+        public static String EMPLOYEE_BLOCK_HOUSE_NAME = "Employee";
+
         public static int RECEIPT_STATUS_UNPUBLISHED = 1;
         public static int RECEIPT_STATUS_UNPAID = 2;
         public static int RECEIPT_STATUS_PAID = 3;

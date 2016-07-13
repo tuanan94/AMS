@@ -383,7 +383,7 @@
             if (window.mode === window.INSERTMODE) {
 
                 $.ajax({
-                    url: "/Home/getHintUsername",
+                    url: "/Management/ManageUser/GetHintUsername",
                     type: "get",
                     data: {
                         fullName: event.target.value,
@@ -399,7 +399,7 @@
             if (window.mode === window.INSERTMODE) {
 
                 $.ajax({
-                    url: "/Home/checkAvailableUsername",
+                    url: "/Management/ManageUser/CheckAvailableUsername",
                     type: "get",
                     data: {
                         username: event.target.value,

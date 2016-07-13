@@ -35,13 +35,13 @@
 
 
         <div class="heading-tab">
-            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Chi tiết yêu cầu</span>
+            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Chi tiết yêu cầu sửa chữa</span>
             <ul class="nav nav-tabs pull-right" role="tablist">
                 @{
                     if (roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT)
                     {
                         <li>
-                            <a href="/Home/HelpdeskRequest/Create"><i class="fa fa-send"></i> Gửi yêu cầu sửa chữa</a>
+                            <a href="/Home/HelpdeskRequest/Create"><i class="fa fa-send"></i> Gửi yêu cầu</a>
                         </li>
                     }
                 }
@@ -49,13 +49,13 @@
                     if (roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT)
                     {
                         <li class="active">
-                            <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-life-ring"></i> Lịch sửa yêu cầu sửa chữa</a>
+                            <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-life-ring"></i> Lịch sử</a>
                         </li>
                     }
                     else
                     {
                         <li class="active">
-                            <a href="/Management/HelpdeskRequest/ManageHdRequest"><i class="fa fa-life-ring"></i> Yêu cầu</a>
+                            <a href="/Management/HelpdeskRequest/ManageHdRequest"><i class="fa fa-life-ring"></i> Yêu cầu sửa chữa</a>
                         </li>
                     }
                 }
@@ -64,7 +64,7 @@
                     if (roleId == SLIM_CONFIG.USER_ROLE_MANAGER)
                     {
                         <li>
-                            <a href="/Management/ResidentApprovement"><i class="fa fa-group"></i> Xác nhận cư dân</a>
+                            <a href="/Management/ResidentApprovement"><i class="fa fa-group"></i> Yêu cầu thành viên</a>
                         </li>
                     }
                 }

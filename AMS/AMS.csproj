@@ -464,6 +464,7 @@
     <Content Include="Content\aroundProvider\responsive.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\css\adminCustom.css" />
     <Content Include="Content\css\blue.css" />
     <Content Include="Content\css\blue.min.css" />
     <Content Include="Content\css\bootstrap-switch.css" />
@@ -786,6 +787,7 @@
     <Content Include="Views\AroundService\UpdateAroundServiceProvider.cshtml" />
     <Content Include="Views\AroundService\ManageAroundProviderCategory.cshtml" />
     <Content Include="Views\Admin\_AdminLayout.cshtml" />
+    <Content Include="Views\Config\ManageManager.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
