@@ -79,94 +79,94 @@
                     <li style="background-color:#428bca">
                         @if (isManager)
                         {
-                            <a href="/Management/HelpdeskRequest/ManageHdRequest"><i class="fa fa-fw fa-stumbleupon-circle"></i> Quản lý</a>
+                            <a href="/Management/HelpdeskRequest/ManageHdRequest"><i class="fa fa-black-tie"></i> Quản lý</a>
                         }
                         @if (isAdmin)
                         {
-                            <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-fw fa-stumbleupon-circle"></i> Quản lý</a>
+                            <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-black-tie"></i> Quản lý</a>
                         }
 
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
 
-                        @*<li class="hidden-xs">
-                                <a href="#" data-toggle="sidebar-chat">
-                                    <i class="fa fa-comments"></i>
-                                </a>
-
-                            </li>*@
-
-                        <!-- User -->
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle user" data-toggle="dropdown">
-                                <img src="@profile" alt="User name" class="img-circle" height="40">@(curUser == null ? "Chưa đăng nhập" : curUser.Fullname) <span class="caret"></span>
+                    @*<li class="hidden-xs">
+                            <a href="#" data-toggle="sidebar-chat">
+                                <i class="fa fa-comments"></i>
                             </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a href="/Home/ViewProfile">Thông tin cá nhân</a>
-                                </li>
-                                <li>
-                                    <a href="/Account/LogOff">Đăng xuất</a>
-                                </li>
 
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+                        </li>*@
 
-                <!-- /.navbar-collapse -->
+                    <!-- User -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle user truncate" data-toggle="dropdown">
+                            <img src="@profile" onerror="this.onerror = null; this.src = '/Content/images/defaultProfile.png'; " alt="User name" class="img-circle" height="40">@(curUser == null ? "Chưa đăng nhập" : curUser.Fullname) <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="/Home/ViewProfile">Thông tin cá nhân</a>
+                            </li>
+                            <li>
+                                <a href="/Account/LogOff">Đăng xuất</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- /.navbar-collapse -->
+        </div>
+    </div>
+    <!--
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                </ul>
+                @Html.Partial("_LoginPartial")
             </div>
         </div>
-        <!--
-
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                        <li>@Html.ActionLink("About", "About", "Home")</li>
-                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    </ul>
-                    @Html.Partial("_LoginPartial")
-                </div>
-            </div>
-        </div>
-        -->
-        @*AnLTNM change*@
-        @*     <div class="st-container body-content">*@
-        <div class="st-container">
-            @RenderBody()
-            <hr />
-            @*<footer>
-                    <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-                </footer>*@
-        </div>
+    </div>
+    -->
+    @*AnLTNM change*@
+    @*     <div class="st-container body-content">*@
+    <div class="st-container">
+        @RenderBody()
+        <hr />
+        @*<footer>
+                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            </footer>*@
+    </div>
 
 
-        @Scripts.Render("~/bundles/bootstrap")
-        <script src="~/Scripts/amsScript/vendor.js"></script>
-        <script src="~/Scripts/amsScript/scripts.js"></script>
-        <script src="~/Scripts/amsScript/custom.js"></script>
-        <script src="~/Scripts/amsScript/additional-methods.min.js"></script>
-        <script src="~/Scripts/amsScript/jquery.validate.min.js"></script>
-        <script src="~/Scripts/amsScript/jquery.timepicker.min.js"></script>
-        <script src="~/Scripts/jquery.datetimepicker.full.js"></script>
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/amsScript/vendor.js"></script>
+    <script src="~/Scripts/amsScript/scripts.js"></script>
+    <script src="~/Scripts/amsScript/custom.js"></script>
+    <script src="~/Scripts/amsScript/additional-methods.min.js"></script>
+    <script src="~/Scripts/amsScript/jquery.validate.min.js"></script>
+    <script src="~/Scripts/amsScript/jquery.timepicker.min.js"></script>
+    <script src="~/Scripts/jquery.datetimepicker.full.js"></script>
 
-        <script src="~/Scripts/aroundProvider/jquery.sticky.js"></script>
-        <script src="~/Scripts/aroundProvider/jquery.nav.js"></script>
-        <script src="~/Scripts/aroundProvider/plugins.js"></script>
-        <script src="~/Scripts/aroundProvider/wow.min.js"></script>
-        <script src="~/Scripts/aroundProvider/jquery.mixitup.js"></script>
+    <script src="~/Scripts/aroundProvider/jquery.sticky.js"></script>
+    <script src="~/Scripts/aroundProvider/jquery.nav.js"></script>
+    <script src="~/Scripts/aroundProvider/plugins.js"></script>
+    <script src="~/Scripts/aroundProvider/wow.min.js"></script>
+    <script src="~/Scripts/aroundProvider/jquery.mixitup.js"></script>
 
-        @RenderSection("scripts", required: false)
+    @RenderSection("scripts", required: false)
 
-    </body>
+</body>
 </html>

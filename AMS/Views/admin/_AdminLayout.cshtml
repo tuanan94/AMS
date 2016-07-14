@@ -1,7 +1,20 @@
-﻿@using Microsoft.AspNet.Identity;
+﻿@using AMS.Service
+@using Microsoft.AspNet.Identity;
 @{
     Layout = null;
     var currentUser = User.Identity;
+    
+    UserService userService = new UserService();
+    String profileImg = "/Content/images/defaultProfile.png";
+    string userId = User.Identity.GetUserId();
+    if (userId != null)
+    {
+        User curUser = userService.findById(Int32.Parse(userId));
+        if (curUser != null && curUser.ProfileImage != null && !curUser.ProfileImage.Equals(""))
+        {
+            profileImg = curUser.ProfileImage;
+        }
+    }
 }
 <!DOCTYPE html>
 <html>
@@ -28,8 +41,8 @@
             <div class="navbar-header ">
                 <ul class="nav navbar-nav navbar-nav-admin">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle user" data-toggle="dropdown">
-                            <img src="/images/people/110/guy-5.jpg" alt="Bill" class="img-circle" width="40"> @currentUser.GetUserName() <span class="caret"></span>
+                        <a href="#" class="dropdown-toggle user truncate" data-toggle="dropdown">
+                            <img onerror="this.onerror = null; this.src = '/Content/images/defaultProfile.png'; " src="@profileImg" class="img-circle" width="40"> @currentUser.GetUserName() <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li>

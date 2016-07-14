@@ -812,7 +812,7 @@ namespace AMS.Controllers
                                 {
                                     response.StatusCode = 5;
                                     response.Data = houseConsummption.HouseName;
-                                    response.Msg = "Số tháng trước không chính xác: " + houseConsummption.HouseName;
+                                    response.Msg = "Số ghi nước tháng trước không chính xác: " + houseConsummption.HouseName;
                                     return Json(response, JsonRequestBehavior.AllowGet);
                                 }
 
@@ -867,7 +867,7 @@ namespace AMS.Controllers
                 }
                 response.Data = monthlyResidentExpenseList;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 response.StatusCode = -1;
                 return Json(response, JsonRequestBehavior.AllowGet);
@@ -988,6 +988,55 @@ namespace AMS.Controllers
 
                 List<MonthlyResidentExpenseModel> cannotCreateReceipt = new List<MonthlyResidentExpenseModel>();
 
+
+                foreach (var houseRecord in automationReceipt.ResidentExpenseRecords)
+                {
+                    House house = _houseServices.FindById(houseRecord.HouseId);
+                    if (house != null && house.OwnerID != null && house.Status != SLIM_CONFIG.HOUSE_STATUS_DISABLE)
+                    {
+                        if (house.HouseCategory != null)
+                        {
+                            List<UtilServiceForHouseCat> waterUtilSrvForCat =
+                                house.HouseCategory.UtilServiceForHouseCats.Where(
+                                    utilForHouse =>
+                                        utilForHouse.Status == SLIM_CONFIG.UTILITY_SERVICE_OF_HOUSE_CAT_ENABLE &&
+                                        utilForHouse.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
+                                    .ToList();
+
+                            if (waterUtilSrvForCat.Count == 0)
+                            {
+                                response.StatusCode = 3;
+                                response.Data = houseRecord.HouseName;
+                                return Json(response);
+                            }
+                            List<UtilServiceForHouseCat> fixCostForHouseCat =
+                                house.HouseCategory.UtilServiceForHouseCats.Where(
+                                    utilForHouse =>
+                                        utilForHouse.Status == SLIM_CONFIG.UTILITY_SERVICE_OF_HOUSE_CAT_ENABLE &&
+                                        utilForHouse.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST)
+                                    .ToList();
+                            if (fixCostForHouseCat.Count == 0)
+                            {
+                                response.StatusCode = 6;
+                                response.Data = houseRecord.HouseName;
+                                return Json(response);
+                            }
+                        }
+                        else
+                        {
+                            response.StatusCode = 7;
+                            response.Data = houseRecord.HouseName;
+                            return Json(response);
+                        }
+                    }
+                    else
+                    {
+                        response.StatusCode = 5;
+                        response.Data = houseRecord.HouseName;
+                        return Json(response);
+                    }
+                }
+
                 foreach (var houseRecord in automationReceipt.ResidentExpenseRecords)
                 {
                     House house = _houseServices.FindById(houseRecord.HouseId);
@@ -1045,10 +1094,9 @@ namespace AMS.Controllers
                         }
                         else
                         {
-                            cannotCreateReceipt.Add(houseRecord);
                             response.StatusCode = 3;
-                            response.Data = house.HouseCategory.Name;
-                            response.Msg = new StringBuilder("Không tìm được khung giá nước cho dạng cư trú ").Append(house.HouseCategory.Name).ToString();
+                            response.Data = houseRecord.HouseName;
+                            return Json(response);
                         }
                         List<UtilServiceForHouseCat> fixCostForHouseCat =
                             house.HouseCategory.UtilServiceForHouseCats.Where(
@@ -1060,7 +1108,9 @@ namespace AMS.Controllers
                         {
                             // Fixed Cost
                             receiptDetail = new ReceiptDetail();
-                            fixedCost = fixCostForHouseCat.First().UtilityService.UtilityServiceRangePrices.First().Price.Value * house.Area.Value;
+                            fixedCost =
+                                fixCostForHouseCat.First().UtilityService.UtilityServiceRangePrices.First().Price.Value *
+                                house.Area.Value;
                             receiptDetail.UtilityServiceId = fixCostForHouseCat.First().UtilityService.Id;
                             receiptDetail.Total = fixedCost;
                             receiptDetail.ReceiptId = receipt.Id;
@@ -1077,6 +1127,12 @@ namespace AMS.Controllers
                             transaction.TotalAmount = fixedCost;
                             transaction.PaidAmount = 0;
                             _transactionService.Add(transaction);
+                        }
+                        else
+                        {
+                            response.StatusCode = 6;
+                            response.Data = houseRecord.HouseName;
+                            return Json(response);
                         }
                     }
                     else
@@ -1129,8 +1185,6 @@ namespace AMS.Controllers
                 {
                     fixedCost = utilSrv.UtilServiceForHouseCats.ToList().First();
                 }
-
-
                 ViewBag.waterService = waterSrv;
                 ViewBag.fixedCost = fixedCost;
                 return View("UpdateAutomationReceipt");
@@ -1325,7 +1379,7 @@ namespace AMS.Controllers
                                 r.ReceiptDetails = null;
                                 if (r.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
                                 {
-                                    int toNumber = 0;
+                                    int fromNumber = 0;
                                     int houseId = r.HouseId.Value;
                                     _receiptServices.Delete(r);
                                     foreach (var detail in temp3)
@@ -1337,9 +1391,9 @@ namespace AMS.Controllers
                                         _receiptDetailServices.DeleteById(detail.Id);
                                         if (detail.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
                                         {
-                                            toNumber = detail.ToNumber.Value;
+                                            fromNumber = detail.FromNumber.Value;
                                             House house = _houseServices.FindById(houseId);
-                                            house.WaterMeter = toNumber;
+                                            house.WaterMeter = fromNumber;
                                             _houseServices.Update(house);
                                         }
 
@@ -2001,6 +2055,52 @@ namespace AMS.Controllers
                 return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
             }
             return View("DownloadWaterConsumptionTemplate");
+        }
+
+        [HttpGet]
+        [Route("Management/ManageReceipt/GetUtilSrvDetail")]
+        public ActionResult GetUtilSrvDetail(int id)
+        {
+            MessageViewModels response = new MessageViewModels();
+            UtilServiceForHouseCat utilServiceForHouseCat = _utlSrvForHouseCatServices.FindById(id);
+            if (utilServiceForHouseCat != null)
+            {
+                UtilityServiceModel utlSrvModel = new UtilityServiceModel();
+                utlSrvModel.Name = utilServiceForHouseCat.UtilityService.Name;
+                utlSrvModel.TypeName = utilServiceForHouseCat.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER ? AmsConstants.UtilityServiceWater : AmsConstants.UtilityServiceFixedCost;
+                utlSrvModel.Type = utilServiceForHouseCat.UtilityService.Type.Value;
+                utlSrvModel.HouseCatName = utilServiceForHouseCat.HouseCategory.Name;
+
+                if (utilServiceForHouseCat.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
+                {
+                    List<UtilityServiceRangePriceModel> rangePrice = new List<UtilityServiceRangePriceModel>();
+                    UtilityServiceRangePriceModel rPrice = null;
+                    foreach (var range in utilServiceForHouseCat.UtilityService.UtilityServiceRangePrices)
+                    {
+                        rPrice = new UtilityServiceRangePriceModel();
+                        rPrice.Name = range.Name;
+                        rPrice.FromAmount = range.FromAmount.Value.ToString();
+                        rPrice.ToAmount = range.ToAmount.Value.ToString();
+                        rPrice.Price = range.Price.Value;
+                        rangePrice.Add(rPrice);
+                    }
+                    utlSrvModel.WaterUtilServiceRangePrices = rangePrice;
+                }
+                else
+                {
+                    FixedCostPriceModel fixCost = new FixedCostPriceModel();
+                    UtilityServiceRangePrice rPrice = utilServiceForHouseCat.UtilityService.UtilityServiceRangePrices.First();
+                    fixCost.Name = rPrice.Name;
+                    fixCost.Price = rPrice.Price.Value;
+                    utlSrvModel.FixedCostPrice = fixCost;
+                }
+                response.Data = utlSrvModel;
+            }
+            else
+            {
+
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
 
         private double calculateElectricUtiService(double consumption, List<UtilityServiceRangePrice> rangePrices)

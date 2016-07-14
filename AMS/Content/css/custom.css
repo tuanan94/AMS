@@ -414,3 +414,14 @@ body {
     text-align: center;
     padding-top: 30px;
 }
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.truncate {
+    max-width: 170px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}

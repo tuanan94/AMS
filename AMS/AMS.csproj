@@ -788,6 +788,7 @@
     <Content Include="Views\AroundService\ManageAroundProviderCategory.cshtml" />
     <Content Include="Views\Admin\_AdminLayout.cshtml" />
     <Content Include="Views\Config\ManageManager.cshtml" />
+    <Content Include="Views\Config\ViewUtilityServiceDetail.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

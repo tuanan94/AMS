@@ -49,7 +49,7 @@ namespace AMS.Models
 
     public class MonthlyResidentExpense
     {
-        [CsvColumn(Name = "Tháng", OutputFormat = "MM-yyyy", FieldIndex = 1)]
+        [CsvColumn(Name = "Tiêu đề", FieldIndex = 1)]
         public string ForMonth { get; set; }
 
         [CsvColumn(Name = "Tòa nhà", FieldIndex = 2)]
