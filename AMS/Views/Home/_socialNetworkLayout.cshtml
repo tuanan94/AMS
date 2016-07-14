@@ -59,8 +59,11 @@
                 <li class="@(url.Contains("/Home")?"active":"")">
                    
                 </li>
-                <li class="@(url.Contains("/Home/HelpdeskRequest/ViewHistory")?"active":"")">
+                <li class="@(url.Contains("/Home/HelpdeskRequest/ViewHistory") ? "active" : "")">
                     <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-fw fa-stumbleupon-circle"></i> Yêu cầu sửa chữa</a>
+                </li>
+                <li class="@(url.Contains("BalanceSheet") ? "active" : "")">
+                    <a href="/Management/BalanceSheet/View"><i class="fa fa-dollar"></i> Tài chính tòa nhà</a>
                 </li>
             </ul>
         </div>

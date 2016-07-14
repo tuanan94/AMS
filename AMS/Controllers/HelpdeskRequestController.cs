@@ -224,6 +224,16 @@ namespace AMS.Controllers
                         {
                             foreach (var req in hdReq)
                             {
+                                if (req.Status != null && req.Status == (int)StatusEnum.Done)
+                                {
+                                    if (DateTime.Now.AddHours(-48).Ticks >= req.DoneDate.Value.Ticks)
+                                    {
+                                        req.Status = (int)StatusEnum.Close;
+                                        req.CloseDate = DateTime.Now;
+                                        req.ModifyDate = DateTime.Now;
+                                        _hdReqServices.Update(req);
+                                    }
+                                }
                                 row = new HelpdeskRequestTableModel();
                                 row.HdReqId = req.Id;
                                 row.HdReqTitle = req.Title;
@@ -250,7 +260,6 @@ namespace AMS.Controllers
                                 {
                                     row.HdReqSupporter = null;
                                 }
-
                                 rows.Add(row);
                             }
                         }

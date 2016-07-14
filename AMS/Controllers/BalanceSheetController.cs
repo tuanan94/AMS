@@ -50,19 +50,8 @@ namespace AMS.Controllers
             var incomeTransactionsJson = new JavaScriptSerializer().Serialize(processedBls.IncomeList);
             var expenseTransactionsJson = new JavaScriptSerializer().Serialize(processedBls.ExpenseList);
 
-            ViewBag.thisMonth = thisMonthBS.StartDate.Value.Date.ToString(AmsConstants.MonthYearFormat);
-            ViewBag.fromDate = thisMonthBS.StartDate.Value.ToString(AmsConstants.DateFormat);
-            ViewBag.closingDate = null;
-            if (thisMonthBS.ClosingDate != null)
-            {
-                ViewBag.closingDate = thisMonthBS.ClosingDate.Value.ToString(AmsConstants.DateFormat);
-            }
-            ViewBag.lastUpdate = thisMonthBS.LastModified.Value.ToString(AmsConstants.DateTimeFormat);
-            ViewBag.description = thisMonthBS.Description;
-            ViewBag.balanceSheetId = thisMonthBS.Id;
-            ViewBag.status = thisMonthBS.Status;
-
             ViewBag.balanceSheet = processedBls;
+            ViewBag.balanceSheetInfo = thisMonthBS;
             ViewBag.incomeTransactionsJson = incomeTransactionsJson;
             ViewBag.expenseTransactionsJson = expenseTransactionsJson;
 

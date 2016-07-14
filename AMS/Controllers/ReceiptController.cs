@@ -111,7 +111,7 @@ namespace AMS.Controllers
 
         [HttpGet]
         [Route("Home/ManageReceipt/GetOrderList")]
-        public ActionResult GetOrderList(int userId, string from, string to)
+        public ActionResult GetOrderList(int userId, string from, string to, int mode)
         {
             MessageViewModels response = new MessageViewModels();
             User u = _userServices.FindById(userId);
@@ -119,10 +119,48 @@ namespace AMS.Controllers
             {
                 try
                 {
-                    DateTime fromDate = DateTime.ParseExact(from, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
-                    DateTime toDate = DateTime.ParseExact(to, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
+                    List<Receipt> receipts = null;
+                    if (mode == SLIM_CONFIG.RECEIPT_FILTER_MODE_UNPAID)
+                    {
+                        receipts = _receiptServices.GetAllUnpaidReceip(u.HouseId.Value);
+                    }
+                    else if (mode == SLIM_CONFIG.RECEIPT_FILTER_MODE_THIS_MONTH)
+                    {
+                        DateTime today = DateTime.Now;
+                        DateTime firstDateOfThisMounth = new DateTime(today.Year, today.Month, 1);
+                        DateTime endDateOfThisMounth = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
+                        receipts = _receiptServices.GetReceiptByHouseFromDateToDate(u.HouseId.Value, firstDateOfThisMounth, endDateOfThisMounth);
+                    }
+                    else if (mode == SLIM_CONFIG.RECEIPT_FILTER_MODE_LAST_MONTH)
+                    {
+                        DateTime todayLastMonth = DateTime.Today.AddMonths(-1);
+                        DateTime firstDateOfThisMounth = new DateTime(todayLastMonth.Year, todayLastMonth.Month, 1);
+                        DateTime endDateOfThisMounth = new DateTime(todayLastMonth.Year, todayLastMonth.Month, DateTime.DaysInMonth(todayLastMonth.Year, todayLastMonth.Month));
+                        receipts = _receiptServices.GetReceiptByHouseFromDateToDate(u.HouseId.Value, firstDateOfThisMounth, endDateOfThisMounth);
+                    }
+                    else if (mode == SLIM_CONFIG.RECEIPT_FILTER_MODE_LAST_3_MONTH)
+                    {
+                        DateTime todayLast3Month = DateTime.Today.AddMonths(-3);
+                        DateTime thisMonth = DateTime.Today;
+                        DateTime firstDateOfThisMounth = new DateTime(todayLast3Month.Year, todayLast3Month.Month, 1);
+                        DateTime endDateOfThisMounth = new DateTime(thisMonth.Year, thisMonth.Month, DateTime.DaysInMonth(thisMonth.Year, thisMonth.Month));
+                        receipts = _receiptServices.GetReceiptByHouseFromDateToDate(u.HouseId.Value, firstDateOfThisMounth, endDateOfThisMounth);
+                    }
+                    else if (mode == SLIM_CONFIG.RECEIPT_FILTER_MODE_RANGE_TIME)
+                    {
+                        DateTime fromMonth = DateTime.ParseExact(from, AmsConstants.MonthYearFormat, CultureInfo.CurrentCulture);
+                        DateTime toMonth = DateTime.ParseExact(to, AmsConstants.MonthYearFormat, CultureInfo.CurrentCulture);
 
-                    List<Receipt> receipts = _receiptServices.GetReceiptByHouseFromDateToDate(u.HouseId.Value, fromDate, toDate);
+                        DateTime firstDateOfThisMounth = new DateTime(fromMonth.Year, fromMonth.Month, 1);
+                        DateTime endDateOfThisMounth = new DateTime(toMonth.Year, toMonth.Month, DateTime.DaysInMonth(toMonth.Year, toMonth.Month));
+                        receipts = _receiptServices.GetReceiptByHouseFromDateToDate(u.HouseId.Value, firstDateOfThisMounth, endDateOfThisMounth);
+                    }
+                    else if (mode == SLIM_CONFIG.RECEIPT_FILTER_MODE_ALL)
+                    {
+                        receipts = _receiptServices.GetReceiptByHouseId(u.HouseId.Value);
+                    }
+
+                    //                    List<Receipt> receipts = _receiptServices.GetReceiptByHouseFromDateToDate(u.HouseId.Value, fromDate, toDate);
                     List<ReceiptInfoModel> receiptModel = new List<ReceiptInfoModel>();
                     double sum = 0;
                     double paidAmount = 0;
@@ -1692,10 +1730,10 @@ namespace AMS.Controllers
                             if (receipt.PublishDate.Value.Date == DateTime.Today)
                             {
                                 receipt.Status = SLIM_CONFIG.RECEIPT_STATUS_UNPAID;
-                                response.Data = new {publishDate = receipt.PublishDate.Value.ToString(AmsConstants.DateFormat)};
+                                response.Data = new { publishDate = receipt.PublishDate.Value.ToString(AmsConstants.DateFormat) };
                             }
                         }
-                        
+
                         else
                         {
                             response.StatusCode = 5;
