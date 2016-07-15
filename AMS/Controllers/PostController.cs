@@ -170,8 +170,6 @@ namespace AMS.Controllers
         [Authorize]
         public Object getImagesForPost(int? postId)
         {
-
-
             return JsonConvert.SerializeObject(imageService.findImagesByPostId(postId.Value), Formatting.Indented, new JsonSerializerSettings
             {
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects

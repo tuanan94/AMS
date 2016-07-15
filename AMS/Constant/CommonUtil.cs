@@ -51,9 +51,11 @@ namespace AMS.Constant
         /*http://stackoverflow.com/questions/6501797/resize-image-proportionally-with-maxheight-and-maxwidth-constraints*/
         public static System.Drawing.Image ScaleImage(System.Drawing.Image image, int maxWidth, int maxHeight)
         {
+            var ratioX = (double)maxWidth / image.Width;
             var ratioY = (double)maxHeight / image.Height;
-            var newWidth = (int)(image.Width * ratioY);
-            var newHeight = (int)(image.Height * ratioY);
+            var ratio = Math.Min(ratioX, ratioY);
+            var newWidth = (int)(image.Width * ratio);
+            var newHeight = (int)(image.Height * ratio);
             var newImage = new Bitmap(newWidth, newHeight);
             using (var graphics = Graphics.FromImage(newImage))
                 graphics.DrawImage(image, 0, 0, newWidth, newHeight);

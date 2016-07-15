@@ -114,7 +114,6 @@
 <script src="~/Scripts/amsScript/LoadFamilyTree.js"></script>
 <script src="~/Scripts/amsScript/LoadUserProfile.js"></script>
 <script src="~/Scripts/amsScript/ReportPost.js"></script>
-
 <style>
     .button {
         display: block;
@@ -174,17 +173,46 @@
         .close:hover {
             background: #00d9ff;
         }
-        .panel-feed{
-            width:90%
-        }
-        .comments{
-            margin-left:5%
-        }
-        
-     
-       ul.timeline-list li.mediawithoutBorder:before{
-           border-left:none
-       }
+
+    .panel-feed {
+        width: 90%;
+    }
+
+    .comments {
+        margin-left: 5%;
+    }
+
+    ul.timeline-list li.mediawithoutBorder:before {
+        border-left: none;
+    }
+    /*AnLTNM change*/
+    textarea {
+        width: 100% !important;
+        min-width: 0;
+    }
+
+    ul.timeline-list li.media > .media-body .panel {
+        min-width: 0px;
+        width: 100%;
+    }
+
+    .panel.panel-default ul.comments {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .panel-footer {
+        padding: 10px 15px !important;
+    }
+    .avatar-comment {
+        border-radius: 30px;
+        height: 34px;
+    }
+    .input-cmnt{
+    width: 100%;
+    padding-right: 35px;
+    }
+    /*AnLTNM change*/
 </style>
 <div class="container-fluid">
     <div class="cover overlay">
@@ -195,58 +223,58 @@
 
             <ul class="timeline-list">
                 <li class="media mediawithoutBorder">
-                 
+
                     <div class="media-body">
                         <div class="row">
+                            <div class="panel panel-default share">
+                                <div style="width:100%">
 
-                           
-                                <div class="panel panel-default share" style="width:90%">
-                                    <div class="col-md-10 col-lg-8" style="width:100%">
-                                        <div class="pull-left" onclick="LoadUserProfile(@curUser.Id)" style="margin:3px">
-                                            <img src="@(curUser.ProfileImage==null?"/Content/images/defaultProfile.png":curUser.ProfileImage)"  style="max-width:80px">
-                                        </div>
-                                        <div class="panel-body" id="postStatusArea">
-                                            <textarea id="postContent" name="status" class="form-control share-text" rows="8" placeholder="Chia sẻ những thông tin của bạn..."></textarea>
-                                            <div class="row" style="height:auto;" id="previewList">
-
-                                                <input type="file" id="uploadEditorImage" style="display:none" />
-                                                <div id="progressBar" class="progress" style="width:200px" hidden="hidden">
-                                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:200px">
-                                                    </div>
-                                                </div>
-
+                                    <div class="panel-body" id="postStatusArea" style="padding-right: 0">
+                                        <div class="col-md-2">
+                                            <div class="pull-left" onclick="LoadUserProfile(@curUser.Id)" style="margin: 3px">
+                                                <img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" style="max-width: 100%">
                                             </div>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <textarea id="postContent" name="status" class="form-control share-text" rows="8" placeholder="Chia sẻ những thông tin của bạn..."></textarea>
+                                        </div>
+                                        <div class="row" style="height: auto;" id="previewList">
                                             <input type="file" id="uploadEditorImage" style="display: none" />
                                             <div id="progressBar" class="progress" style="width: 200px" hidden="hidden">
                                                 <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 200px">
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="panel-footer share-buttons" id="postStatusArea">
-                                            <div id="previewEmbed" class="row" style="height: auto;">
-                                                <div id="previewContent">
-                                                </div>
+                                        <input type="file" id="uploadEditorImage" style="display: none" />
+                                        <div id="progressBar" class="progress" style="width: 200px" hidden="hidden">
+                                            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 200px">
                                             </div>
-                                            <a href="#postStatusArea" onclick="addImage()">
-                                                <i class="fa fa-fw fa-photo"></i>
-                                            </a>
-                                            <a href="#postStatusArea" data-toggle="modal" data-target="#addEmbedModal">
-                                                <i class="fa fa-fw fa-code"></i>
-                                            </a>
-                                            <a href="#postStatusArea" style="float:right">
-                                                <i class="fa fa-map-marker"></i>
-                                            </a>
-                                            <button type="submit" class="btn btn-primary btn-xs pull-right display-none" style="margin-top:-12px" href="#" onclick="createNewPost()">Post</button>
-
                                         </div>
                                     </div>
+                                    <div class="panel-footer share-buttons" id="postStatusArea">
+                                        <div id="previewEmbed" class="row" style="height: auto;">
+                                            <div id="previewContent">
+                                            </div>
+                                        </div>
+                                        <a href="#postStatusArea" onclick="addImage()">
+                                            <i class="fa fa-fw fa-photo"></i>
+                                        </a>
+                                        <a href="#postStatusArea" data-toggle="modal" data-target="#addEmbedModal">
+                                            <i class="fa fa-fw fa-code"></i>
+                                        </a>
+                                        <a href="#postStatusArea" style="float:right">
+                                            <i class="fa fa-map-marker"></i>
+                                        </a>
+                                        <button type="submit" class="btn btn-primary btn-xs pull-right display-none" style="margin-top:-12px" href="#" onclick="createNewPost()">Post</button>
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    </div>
                 </li>
             </ul>
-            <ul class="timeline-list" id="timeline">
-
-            </ul>
+            <ul class="timeline-list" id="timeline"></ul>
             <div style="margin:3em;text-align:center">
                 <button id="loadMoreBtn" type="button" class="btn btn-primary btn-lg" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Đang tải thêm...">Tải thêm tin khác</button>
             </div>
@@ -258,7 +286,7 @@
                 </div>
                 <div class="weather-svg">
                     <div class="today text-center">
-                 
+
                         <div class="clearfix"><img src="@weather.weatherIcon" /></div>
 
                         <div class="details">
@@ -274,71 +302,71 @@
                     Thông báo
                 </div>
                 <div class="panel-body">
-                        @{
-                            foreach (NotificationChange nChange in notificationChanges.OrderByDescending(p=>p.CreatedDate))
+                    @{
+                        foreach (NotificationChange nChange in notificationChanges.OrderByDescending(p => p.CreatedDate))
+                        {
+                            if (nChange.User.Id == curUser.Id)
                             {
-                                if (nChange.User.Id == curUser.Id)
-                                {
-                                    continue;
-                                }
-                                if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL.Equals(nChange.NotificationObject.TargetObject))
-                                {
-                                    <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
-                                        <i class="fa fa-fw fa-info"></i>
-                                        <a href="/Survey/doSurvey"> @nChange.User.Fullname <span>đã</span> @nChange.Verb một bình chọn mới </a>  
-                                        <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
-
-                                        <br />
-                                    </div>
-                                            }
-                                            else if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_HELPDESK_REQUEST.Equals(nChange.NotificationObject.TargetObject) && nChange.NotificationObject.TargetObjectID != null && SLIM_CONFIG.NOTIC_VERB_ASSIGN_REQUEST.Equals(nChange.Verb))
-                                            {
-                                                HelpdeskRequestLog hdRequestLog = helpdeskRequestLogService.findById(nChange.NotificationObject.TargetObjectID.Value);
-
-                                                User changeToUser = userServices.FindById(hdRequestLog.ChangeToUserId.HasValue ? hdRequestLog.ChangeToUserId.Value : -1);
-                                                if (hdRequestLog != null && changeToUser!=null)
-                                                {
-                                                    <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
-                                                        <i class="fa fa-fw fa-info"></i>
-                                                        <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hổ trợ của bạn đã được chuyển cho nhân viên hỗ trợ @changeToUser.Fullname</a>
-                                                        <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
-
-                                                        <br />
-                                                    </div>
-                                    }
-                                }
-                                else if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_HELPDESK_REQUEST.Equals(nChange.NotificationObject.TargetObject) && nChange.NotificationObject.TargetObjectID != null && SLIM_CONFIG.NOTIC_VERB_FINISH_REQUEST.Equals(nChange.Verb))
-                                {
-                                    HelpdeskRequestLog hdRequestLog = helpdeskRequestLogService.findById(nChange.NotificationObject.TargetObjectID.Value);
-
-//                                    User changeToUser = userServices.FindById(hdRequestLog.ChangeToUserId.HasValue ? hdRequestLog.ChangeToUserId.Value : -1);
-                                    if (hdRequestLog != null && nChange.User!=null)
-                                    {
-                                        <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
-                                            <i class="fa fa-fw fa-info"></i>
-                                            <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hổ trợ của bạn đã được xử lí xong bởi @nChange.User.Fullname</a>
-                                            <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
-
-                                            <br />
-                                        </div>
-                                    }
-                                }
-
-                                else
-                                {
-                                    <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
-                                        <i class="fa fa-fw fa-info"></i>
-                                        @nChange.User.Fullname <span>đã</span> @nChange.Verb <span> @nChange.NotificationObject.TargetObject của bạn</span>
-                                        <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
-
-                                        <br />
-                                    </div>
-                                }
-
-
+                                continue;
                             }
+                            if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL.Equals(nChange.NotificationObject.TargetObject))
+                            {
+                                <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
+                                    <i class="fa fa-fw fa-info"></i>
+                                    <a href="/Survey/doSurvey"> @nChange.User.Fullname <span>đã</span> @nChange.Verb một bình chọn mới </a>
+                                    <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
+
+                                    <br />
+                                </div>
+                            }
+                            else if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_HELPDESK_REQUEST.Equals(nChange.NotificationObject.TargetObject) && nChange.NotificationObject.TargetObjectID != null && SLIM_CONFIG.NOTIC_VERB_ASSIGN_REQUEST.Equals(nChange.Verb))
+                            {
+                                HelpdeskRequestLog hdRequestLog = helpdeskRequestLogService.findById(nChange.NotificationObject.TargetObjectID.Value);
+
+                                User changeToUser = userServices.FindById(hdRequestLog.ChangeToUserId.HasValue ? hdRequestLog.ChangeToUserId.Value : -1);
+                                if (hdRequestLog != null && changeToUser != null)
+                                {
+                                    <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
+                                        <i class="fa fa-fw fa-info"></i>
+                                        <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hổ trợ của bạn đã được chuyển cho nhân viên hỗ trợ @changeToUser.Fullname</a>
+                                        <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
+
+                                        <br />
+                                    </div>
+                                }
+                            }
+                            else if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_HELPDESK_REQUEST.Equals(nChange.NotificationObject.TargetObject) && nChange.NotificationObject.TargetObjectID != null && SLIM_CONFIG.NOTIC_VERB_FINISH_REQUEST.Equals(nChange.Verb))
+                            {
+                                HelpdeskRequestLog hdRequestLog = helpdeskRequestLogService.findById(nChange.NotificationObject.TargetObjectID.Value);
+
+                                //                                    User changeToUser = userServices.FindById(hdRequestLog.ChangeToUserId.HasValue ? hdRequestLog.ChangeToUserId.Value : -1);
+                                if (hdRequestLog != null && nChange.User != null)
+                                {
+                                    <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
+                                        <i class="fa fa-fw fa-info"></i>
+                                        <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hổ trợ của bạn đã được xử lí xong bởi @nChange.User.Fullname</a>
+                                        <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
+
+                                        <br />
+                                    </div>
+                                }
+                            }
+
+                            else
+                            {
+                                <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
+                                    <i class="fa fa-fw fa-info"></i>
+                                    @nChange.User.Fullname <span>đã</span> @nChange.Verb <span> @nChange.NotificationObject.TargetObject của bạn</span>
+                                    <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
+
+                                    <br />
+                                </div>
+                            }
+
+
                         }
-                   
+                    }
+
 
 
                 </div>
@@ -402,12 +430,12 @@
 @{
     if (!alert.Equals("") && SLIM_CONFIG.CURRENT_MODE == SLIM_CONFIG.PROGRAM_MODE_PRODUCT)
     {
-    <script>
-        setTimeout(function () {
-            window.location.href = "/Survey/DoSurvey";
-        }, 1000);
+        <script>
+            setTimeout(function () {
+                window.location.href = "/Survey/DoSurvey";
+            }, 1000);
         </script>
-       
+
     }
 }
 
@@ -423,6 +451,8 @@
             $('.modalDialog').fadeOut();
 
         });
+
+
     });
 
     $('#loadMoreBtn').on('click', function () {
@@ -442,7 +472,7 @@
 
     }
     function saveEmbedCode() {
-       // alert("saveEmbedCode");
+        // alert("saveEmbedCode");
         var embedContent = $("#embedCode").val();
         $("#previewContent").html(embedContent);
     }
@@ -519,14 +549,14 @@
                 idToken: idToken,
             },
             success: function (successData) {
-                console.log("GetPostData: "+successData)
+                console.log("GetPostData: " + successData)
                 var obj = JSON.parse(successData);
                 $.each(obj, function (index, jsonObject) {
                     addPostToTimeline(index, jsonObject);
                     getImagesForPost(index, jsonObject["Id"]);
                     getCommentsForPost(jsonObject["Id"]);
                     curTokenId = jsonObject["Id"];
-                  
+
                 });
                 $("#loadMoreBtn").button('reset');
 
@@ -559,8 +589,8 @@
                 }
                 $('#userNamePost' + id).html(obj["Username"])
                 $('#userHrefPost' + id).attr("href", "/Profile/" + obj["Id"])
-   
-                $('#userLoadProfilePost' + id).attr("onclick", "LoadUserProfile("+obj["Id"]+",true)")
+
+                $('#userLoadProfilePost' + id).attr("onclick", "LoadUserProfile(" + obj["Id"] + ",true)")
 
             },
             error: function (er) {
@@ -575,12 +605,12 @@
             reportDiv = '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>';
         }
         $("#timeline").append('<li class="media">'
-                       + '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile('+postObject['UserId']+',true)">'
-                        
+                       + '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)">'
 
-                            + '<img id="userImagePost' + postObject['Id'] + '" src="'+postObject['userProfile']+'" alt="people" class="img-circle" width="80" height="80">'
+
+                            + '<img id="userImagePost' + postObject['Id'] + '" src="' + postObject['userProfile'] + '" alt="people" class="img-circle" width="80" height="80">'
                             + '<div id="userNamePost' + postObject['Id'] + '" class="date">' + postObject['userFullName'] + '</div>'
-                     
+
                         + '</div>'
 
                         + '<div class="media-body">'
@@ -588,8 +618,8 @@
                                 + '<div class="panel-body" >'
                                     + reportDiv
                                     + '<p>' + postObject['Body'] + '</p>'
-                                    + '<div class="row" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
-                                    + '</div>'
+                                    + '<section class="form-group testetetet" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
+                                    + '</section>'
                                     + '<div class="row" style="height:auto;">'
                                     + postObject['EmbedCode']
                                     + '</div>'
@@ -601,10 +631,15 @@
                                 + '<ul class="comments">'
                                  + '<li class="comment-form">'
                                         + '<div class="input-group" style="width: 100%;">'
-                                            + '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control" style="width: 90%; placeholder="Viết bình luận của bạn..."">'
-                                          
+                                        + '<a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="pull-left"><img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" class="media-object avatar-comment"></a>'
+                                        + '<div class="media-body" style="padding-left: 10px;">' +
+                                            '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control input-cmnt" placeholder="Viết bình luận của bạn..."/>' +
+                                             '<i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(' + postObject['Id'] + ')" style="font-size: xx-large;color: #25AD9F;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:50000"></i>' +
+                                        '</div>'
 
-                 + '<i class="fa fa-fw fa-chevron-circle-right style_prevu_kit" onclick="addComment(' + postObject['Id'] + ')" style="width: 10%; font-size: xx-large;color: #25AD9F;"></i>'
+
+
+
             + '</div>'
             + '</li>'
             + '</ul>'
@@ -614,7 +649,7 @@
         )
 
     }
- 
+
     function addComment(postId) {
         $.ajax({
             url: "/Post/CreateComment",
@@ -652,7 +687,11 @@
             },
             success: function (successData) {
                 var obj = JSON.parse(successData);
-                $("#countComment" + postid).html(obj.length + " bình luận")
+                if (obj.length === 0) {
+                    $("#countComment" + postid).html("Chưa có bình luận nào");
+                } else {
+                    $("#countComment" + postid).html(obj.length + " bình luận");
+                }
                 $.each(obj, function (index, comment) {
                     addCommentToCommentArea(postid, comment)
                 });
@@ -673,8 +712,8 @@
             + '<a href="javascript:void(0)" onclick ="LoadUserProfile(2,true)" class="comment-author">' + comment['username'] + ': </a>'
             + '<span>' + comment['detail'] + '</span>'
             + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
-            +'</div>'
-            +'</div>'
+            + '</div>'
+            + '</div>'
 
             + '</li>')
 
@@ -682,8 +721,8 @@
 
 
     function timeSince(dateString) {
-        console.log("timeSince: "+dateString)
-        
+        console.log("timeSince: " + dateString)
+
         var date = new Date(dateString + "z");
         console.log("date: " + date);
         var seconds = Math.floor((new Date() - date) / 1000);
@@ -728,20 +767,51 @@
             },
             success: function (successData) {
                 var obj = JSON.parse(successData);
+                var currentElement = {};
+                var listElement = "";
+                var isFirst = true;
                 $.each(obj, function (index, image) {
-                    addImageToPost(image['url'], id, (90 / obj.length))
+                    if (isFirst) {
+                        $("#imagesPost" + image.postId).html("");
+                        currentElement = $("#imagesPost" + image.postId);
+                        isFirst = false;
+                        if (obj.length == 1) {
+                            $("#imagesPost" + image.postId).removeClass("testetetet").addClass("one-col");
+                            if (parseInt(image.width) >= parseInt(image.height)) {
+                                listElement = listElement +
+                                    '<div style="border:1px solid white"><img style="width:100%; height:auto" src="' +
+                                    image.url +
+                                    '" alt="The Last of us"></div>';
+                            } else {
+                                listElement = listElement +
+                                    '<div style="border:1px solid white" ><img style="height:100% !important; width:auto !important "src="' +
+                                    image.url +
+                                    '" alt="The Last of us"></div>';
+                            }
+                            return;
+                        } else {
+                            $("#imagesPost" + image.postId).removeClass("one-col").addClass("testetetet");
+                        }
+                    }
+                    if (parseInt(image.width) >= parseInt(image.height)) {
+                        listElement = listElement + '<div style="border:1px solid white"><img style="width:100% !important; height:auto !important" src="' + image.url + '" ></div>';
+                    } else {
+                        listElement = listElement + '<div style="border:1px solid white" ><img style="width:100% !important; height:auto !important" src="' + image.url + '"></div>';
+                    }
 
                 });
-
+                listElement = listElement + "</div>";
+                currentElement.append(listElement);
             },
             error: function (er) {
-                alert(er)
+                alert(er);
             }
 
         });
     }
     function addImageToPost(imageUrl, postId, width) {
-        $("#imagesPost" + postId).append('<img src="' + imageUrl + '" style="width:' + width + '%;height:auto;margin-right:5px">')
+        $("#imagesPost" + postId)
+            .append('<img src="' + imageUrl + '" style="width:' + width + '%;height:auto;margin-right:5px">');
 
     }
 
@@ -774,7 +844,7 @@
         var postId = $("#reportPostId").val()
         var reportContent = $("#reportContent").val()
         console.log("processSendReport: postid=" + postId + "reportContent=" + reportContent)
-        sendReport(postId,reportContent)
+        sendReport(postId, reportContent)
     }
     function deleteNotification(noticChangedId) {
         console.log('deleteNotification' + noticChangedId)
@@ -787,7 +857,7 @@
             },
             success: function (successData) {
                 //alert(successData);
-                $("#notification"+noticChangedId).hide('slow', function(){ $("#notification11").remove(); });
+                $("#notification" + noticChangedId).hide('slow', function () { $("#notification11").remove(); });
             },
             error: function (er) {
                 alert(er);

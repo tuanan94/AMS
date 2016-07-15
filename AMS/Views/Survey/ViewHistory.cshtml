@@ -12,27 +12,19 @@
 <style>
     #rcorners2 {
         border: 2px solid #73AD21;
-      
         height: 50px;
-        width: auto
+        width: auto;
     }
+
     #rcorners3 {
-      
         height: 50px;
-        
     }
+
     #rcorners1 {
-       
         height: 50px;
-       
     }
 </style>
-<script src="~/Scripts/jquery-1.10.2.js"></script>
-<script src="~/Scripts/highcharts.js"></script>
-<script src="~/Scripts/amsScript/canvasjs.min.js"></script>
-<link href="~/Content/css/datatables.css" rel="stylesheet" />
-<script src="~/Scripts/jquery-1.10.2.js"></script>
-<script src="~/Scripts/datatables.js"></script>
+
 <div class="col-md-12">
     <div class="panel panel-default">
         <div class="heading-tab">
@@ -57,56 +49,40 @@
                     <table id="myTables" class="table table-hover table-bordered">
                         <thead>
                             <tr>
-                                <th style="width: 100px; text-align: center" class="col-sm-1">
-                                </th>
-                                <th style="width: 100px; text-align: center" class="col-sm-1"></th>
-                                <th style="text-align: center" class="col-sm-4">Câu hỏi</th>
-                                <th style="text-align: center" class="col-sm-4">Lựa chọn</th>
-                                <th style="width: 100px; text-align: center" class="col-sm-1">Ngày trả lời</th>
+                                <th></th>
+                                <th></th>
+                                <th>Câu hỏi</th>
+                                <th>Lựa chọn</th>
+                                <th>Ngày trả lời</th>
                                 <th></th>
                             </tr>
                         </thead>
-
+                        <tfoot>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th>Câu hỏi</th>
+                                <th>Lựa chọn</th>
+                                <th>Ngày trả lời</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
                         <tbody>
                             @{
                                 int i = 0;
                                 foreach (var item in list)
                                 {
                                     <tr>
-                                        <td>
-                                            <div class="form-group">
-                                                <div class="col-sm-3">
-                                                    <span class="">@i</span>
-                                                </div>
-                                            </div>
-                                        </td>
+                                        <td></td>
                                         <td><img class="img-responsive" width="100px" src="@item.ImageUrl"></td>
                                         <td>
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    <span class="">@item.Question</span>
-                                                </div>
-                                            </div>
+                                            @item.Question
                                         </td>
                                         <td>
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    <span class="">@item.AnswerContent</span>
-                                                </div>
-                                            </div>
+                                            @item.AnswerContent
+
                                         </td>
-                                        <td>
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    <span class="date-color">
-                                                        @Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.AnswerDate))
-
-
-
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
+                                        <td><strong>@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.AnswerDate))</strong></td>
                                         <td>
                                             <span class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModall_@i"> <i class="fa fa-newspaper-o"><b>Thống Kê</b></i> </span>
 
@@ -128,129 +104,111 @@
                                     <div class="modal-content">
                                         <div class="modal-header login" style="text-align: center; font-size: 42px; background-color: #99ccff">
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                          
-                                                <label class="label label-success">Kết quả khảo sát</label>
-                                            
+
+                                            <label class="label label-success">Kết quả khảo sát</label>
+
                                         </div>
                                         <div class="modal-body">
-                                          
-
-
-
                                             <fieldset >
+                                                <div class="col-sm-5" style="margin-top: 20px">
 
+                                                    @{foreach (var obj in answers.ElementAt(k))
+                                                    {
+                                                        if (obj != null && !obj.Equals(""))
+                                                        {
+                                                            <div id="rcorners2">
+                                                                <label style="padding: 5px; text-align: center">@obj</label>
 
+                                                                <br />
+                                                            </div>
+                                                            <hr>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div id="rcorners2" style="visibility: hidden;">
+                                                                <label style="padding: 5px; text-align: center"></label>
 
-                                                <div  class="col-sm-5" style="margin-top: 20px">
-                                                
-                                                    @{
-                            foreach (var obj in answers.ElementAt(k))
-                            {
-                                if (obj != null && !obj.Equals(""))
-                                {
-                                    <div id="rcorners2" >
-                                        <label style="padding: 5px; text-align: center">@obj</label>
+                                                                <br />
+                                                            </div>
+                                                            <hr>
+                                                        }
 
-                                        <br />
-                                    </div>
-                                    <hr>
-                                }
-                                else
-                                {
-                                    <div id="rcorners2" style="visibility: hidden;">
-                                        <label style="padding: 5px; text-align: center"></label>
-
-                                        <br />
-                                    </div>
-                                    <hr>
-                                }
-                                                                                       
-                            }
+                                                    }
                                                     }
 
 
                                                 </div>
                                                 <div class="col-sm-4" style="margin-top: 20px">
-                                                   
-                                                                                                        @{
-                            foreach (var a in listAnswer.ElementAt(k))
-                            {
-                                if (a != 0)
-                                {
-                                    <div id="rcorners1">
-                                        <progress value="@a" max="100">
-                                        </progress> @a %
 
-                                    </div>
-                                    <hr>
+                                                    @{foreach (var a in listAnswer.ElementAt(k))
+                                                    {
+                                                        if (a != 0)
+                                                        {
+                                                            <div id="rcorners1">
+                                                                <progress value="@a" max="100">
+                                                                </progress> @a %
 
-                                    <input type="hidden" id="answer" name="countAnser" value="@a"/>
-                                }
-                                else
-                                {
-                                    <div id="rcorners1" style="visibility: hidden;">
-                                        <progress value="0" max="100">
-                                        </progress> 0 %
+                                                            </div>
+                                                            <hr>
 
-                                    </div>
-                                    <hr>
-
-                                    <input type="hidden" id="answer" name="countAnser" value="0"/> 
-                                }
+                                                            <input type="hidden" id="answer" name="countAnser" value="@a" />
                                                         }
+                                                        else
+                                                        {
+                                                            <div id="rcorners1" style="visibility: hidden;">
+                                                                <progress value="0" max="100">
+                                                                </progress> 0 %
+
+                                                            </div>
+                                                            <hr>
+
+                                                            <input type="hidden" id="answer" name="countAnser" value="0" />
+                                                        }
+                                                    }
                                                     }
                                                 </div>
                                                 <div class="col-sm-3" style="margin-top: 20px">
-                                                   
-                                                                                                        @{
-                            foreach (var a in each.ElementAt(k))
-                            {
-                                if (a != 0)
-                                {
-                                    <div id="rcorners3">
-                                        <label>@a Phiếu </label><br/>
-                                    </div>
-                                    <hr>
-                                }
-                                else
-                                {
-                                    <div id="rcorners3" style="visibility: hidden;">
-                                        <label>0 Phiếu </label><br />
-                                    </div>
-                                    <hr>  
-                                }
 
-
+                                                    @{foreach (var a in each.ElementAt(k))
+                                                    {
+                                                        if (a != 0)
+                                                        {
+                                                            <div id="rcorners3">
+                                                                <label>@a Phiếu </label><br />
+                                                            </div>
+                                                            <hr>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div id="rcorners3" style="visibility: hidden;">
+                                                                <label>0 Phiếu </label><br />
+                                                            </div>
+                                                            <hr>
                                                         }
                                                     }
+                                                    }
                                                 </div>
-                                                <div class="col-sm-12" style="text-align: center"><label>Tổng cộng</label>: @each.ElementAt(k).Sum() phiếu
+                                                <div class="col-sm-12" style="text-align: center">
+                                                    <label>Tổng cộng</label>: @each.ElementAt(k).Sum() phiếu
                                                 </div>
-
-
-
-
-
-                                              
                                             </fieldset>
                                         </div>
                                         <div class="modal-footer" style="background-color: #99ccff"></div>
                                     </div>
                                 </div>
                             </div>
-                            k++;
-                            i++;
+                                                    k++;
+                                                    i++;
                         }
 
 
                     }
-                    @{
-                        int abc = 1;
-                        foreach (var item in listAnswer)
-                        {
-                            <input type="hidden" id="answer_@abc" name="countAnser" value="@item" />
-                            abc++;
-                        }
+                    @{int abc = 1;
+                    foreach (var item in listAnswer)
+                    {
+                        <input type="hidden" id="answer_@abc" name="countAnser" value="@item" />
+                        abc++;
+                    }
                     }
                     @{
 
@@ -278,22 +236,28 @@
     </div>
 </div>
 <script>
-    var answer2 = parseFloat($("#answer_2").val()) || null
-    var answer1 = parseFloat($("#answer_1").val()) || null
-    var answer3 = parseFloat($("#answer_3").val()) || null
-    var answer4 = parseFloat($("#answer_4").val()) || null
-    var answer5 = parseFloat($("#answer_5").val()) || null
-    var answer2a = ($("#2").val()) || null
-    var answer1a = ($("#1").val()) || null
-    var answer3a = ($("#3").val()) || null
-    var answer4a = ($("#4").val()) || null
-    var answer5a = ($("#5").val()) || null
-    var a = "Lựa chọn 1"
-    var b = "Lựa chọn 2"
-    var c = "Lựa chọn 3"
-    var d = "Lựa chọn 4"
-    var e = "Lựa chọn 5"
+    var answer2 = parseFloat($("#answer_2").val()) || null;
+    var answer1 = parseFloat($("#answer_1").val()) || null;
+    var answer3 = parseFloat($("#answer_3").val()) || null;
+    var answer4 = parseFloat($("#answer_4").val()) || null;
+    var answer5 = parseFloat($("#answer_5").val()) || null;
+    var answer2a = ($("#2").val()) || null;
+    var answer1a = ($("#1").val()) || null;
+    var answer3a = ($("#3").val()) || null;
+    var answer4a = ($("#4").val()) || null;
+    var answer5a = ($("#5").val()) || null;
+    var a = "Lựa chọn 1";
+    var b = "Lựa chọn 2";
+    var c = "Lựa chọn 3";
+    var d = "Lựa chọn 4";
+    var e = "Lựa chọn 5";
     $(document).ready(function () {
+        window.myTables = $("#myTables").DataTable({
+            "bLengthChange": false,
+            "bInfo": false,
+        });
+        generateTableIndex(window.myTables);
+
         //var a = document.getElementById('#answerr_1').value;
         //var b = document.getElementById('#answerr_2').value;
         //var c = document.getElementById('#answerr_3').value;
@@ -305,50 +269,33 @@
             //[c, null]
 
             //]);
-            return '<h4>' + "Chưa có dữ liệu" + '</h4>'
+            return '<h4>' + "Chưa có dữ liệu" + '</h4>';
         } else if (answer3a == null) {
             RenderPieChart('container', [
             [answer1a, answer1],
             [answer2a, answer2],
-         
-               
-        
               [answer4a, answer4],
                 [answer5a, answer5]
-
             ]);
         } else if (answer4a == null) {
             RenderPieChart('container', [
            [answer1a, answer1],
            [answer2a, answer2],
-
                [answer3a, answer3],
-
-            
                [answer5a, answer5]
-
             ]);
         } else if (answer5a == null) {
             RenderPieChart('container', [
            [answer1a, answer1],
            [answer2a, answer2],
-
                [answer3a, answer3],
-
              [answer4a, answer4],
-              
-
             ]);
         } else if (answer4a === null && answer3a === null && answer5a === null) {
             RenderPieChart('container', [
            [answer1a, answer1],
            [answer2a, answer2],
-
                [answer3a, answer3],
-
-
-           
-
             ]);
         }
         esle
@@ -356,9 +303,7 @@
             RenderPieChart('container', [
            [answer1a, answer1],
            [answer2a, answer2],
-
                [answer3a, answer3],
-
              [answer4a, answer4],
                [answer5a, answer5]
 
@@ -466,55 +411,6 @@
             });
         };
     });
-    $("#myTables").DataTable({
-        "oLanguage": {
-            //    "sSearch": "Tìm Kiếm" //search,
-            "sProcessing": "Đang xử lý...",
-            "sLengthMenu": "Xem _MENU_ mục",
-            "sZeroRecords": "Không tìm thấy dòng nào phù hợp",
-            "sInfo": "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
-            "sInfoEmpty": "Đang xem 0 đến 0 trong tổng số 0 mục",
-            "sInfoFiltered": "(được lọc từ _MAX_ mục)",
-            "sInfoPostFix": "",
-            "sSearch": "Tìm:",
-            "sUrl": "",
-            "oPaginate": {
-                "sFirst": "Đầu",
-                "sPrevious": "Trước",
-                "sNext": "Tiếp",
-                "sLast": "Cuối"
-            }
-        }
-        //"language": {
-        //    "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Vietnamese.json"
-        //}
-
-
-    });
-    $("#myTabless").DataTable({
-        "oLanguage": {
-            //    "sSearch": "Tìm Kiếm" //search,
-            "sProcessing": "Đang xử lý...",
-            "sLengthMenu": "Xem _MENU_ mục",
-            "sZeroRecords": "Không tìm thấy dòng nào phù hợp",
-            "sInfo": "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
-            "sInfoEmpty": "Đang xem 0 đến 0 trong tổng số 0 mục",
-            "sInfoFiltered": "(được lọc từ _MAX_ mục)",
-            "sInfoPostFix": "",
-            "sSearch": "Tìm:",
-            "sUrl": "",
-            "oPaginate": {
-                "sFirst": "Đầu",
-                "sPrevious": "Trước",
-                "sNext": "Tiếp",
-                "sLast": "Cuối"
-            }
-        }
-        //"language": {
-        //    "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Vietnamese.json"
-        //}
-
-
-    });
 </script>
-<script src="~/Scripts/datatables.js"></script>
+<script src="~/Scripts/highcharts.js"></script>
+<script src="~/Scripts/amsScript/canvasjs.min.js"></script>

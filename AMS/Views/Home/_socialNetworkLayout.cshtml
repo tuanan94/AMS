@@ -37,8 +37,8 @@
 </style>
 @if (isResidentOrHouseOwner)
 {
-<div class="sidebar left hidden-xs">
-    <div data-scrollable="" tabindex="0" style="overflow: hidden; outline: none;">
+<div class="sidebar left hidden-xs" style="width: 200px">
+@*    <div data-scrollable="" tabindex="0" style="overflow: hidden; outline: none;">*@
         <div class="sidebar-block" style="margin: auto;width: 100%;">
             <a href="@(curHouse == null ? "#" : ("/House/" + curHouse.Id))" class="style_prevu_kit" style="width:100%">
                 <div class="profile">
@@ -69,8 +69,8 @@
         </div>
 
     </div>
-    <div id="ascrail2000" class="nicescroll-rails" style="width: 5px; z-index: 1; cursor: default; position: absolute; top: 0px; left: 245px; height: 638px; opacity: 0;"><div style="position: relative; top: 0px; float: right; width: 5px; height: 490px; border: 0px; border-radius: 5px; background-color: rgb(37, 173, 159); background-clip: padding-box;"></div></div><div id="ascrail2000-hr" class="nicescroll-rails" style="height: 5px; z-index: 1; top: 633px; left: 0px; position: absolute; cursor: default; display: none; width: 245px; opacity: 0;"><div style="position: absolute; top: 0px; height: 5px; width: 250px; border: 0px; border-radius: 5px; background-color: rgb(37, 173, 159); background-clip: padding-box;"></div></div>
-</div>
+@*    <div id="ascrail2000" class="nicescroll-rails" style="width: 5px; z-index: 1; cursor: default; position: absolute; top: 0px; left: 245px; height: 638px; opacity: 0;"><div style="position: relative; top: 0px; float: right; width: 5px; height: 490px; border: 0px; border-radius: 5px; background-color: rgb(37, 173, 159); background-clip: padding-box;"></div></div><div id="ascrail2000-hr" class="nicescroll-rails" style="height: 5px; z-index: 1; top: 633px; left: 0px; position: absolute; cursor: default; display: none; width: 245px; opacity: 0;"><div style="position: absolute; top: 0px; height: 5px; width: 250px; border: 0px; border-radius: 5px; background-color: rgb(37, 173, 159); background-clip: padding-box;"></div></div>*@
+//</div>
 }
 <div class="sidebar right">
     <div class="chat-search">
@@ -87,67 +87,8 @@
             <a href="#" data-target=".offline">Offline</a>
         </li>
     </ul>
-@**@
-@*    <ul class="chat-contacts">*@
-@*        <li class="online" data-user-id="1">*@
-@*            <a href="#">*@
-@*                <div class="media">*@
-@*                    <div class="pull-left">*@
-@*                        <span class="status"></span>*@
-@*                        <img src="images/people/110/guy-6.jpg" width="40" class="img-circle">*@
-@*                    </div>*@
-@*                    <div class="media-body">*@
-@*                        <div class="contact-name">Jonathan S.</div>*@
-@*                        <small>"Free Today"</small>*@
-@*                    </div>*@
-@*                </div>*@
-@*            </a>*@
-@*        </li>*@
-@*        <li class="online away" data-user-id="2">*@
-@*            <a href="#">*@
-@*                <div class="media">*@
-@*                    <div class="pull-left">*@
-@*                        <span class="status"></span>*@
-@*                        <img src="images/people/110/woman-5.jpg" width="40" class="img-circle">*@
-@*                    </div>*@
-@*                    <div class="media-body">*@
-@*                        <div class="contact-name">Mary A.</div>*@
-@*                        <small>"Feeling Groovy"</small>*@
-@*                    </div>*@
-@*                </div>*@
-@*            </a>*@
-@*        </li>*@
-@*        <li class="online" data-user-id="3">*@
-@*            <a href="#">*@
-@*                <div class="media">*@
-@*                    <div class="pull-left">*@
-@*                        <span class="status"></span>*@
-@*                        <img src="images/people/110/guy-3.jpg" width="40" class="img-circle">*@
-@*                    </div>*@
-@*                    <div class="media-body">*@
-@*                        <div class="contact-name">Adrian D.</div>*@
-@*                        <small>Busy</small>*@
-@*                    </div>*@
-@*                </div>*@
-@*            </a>*@
-@*        </li>*@
-@*        <li class="offline" data-user-id="4">*@
-@*            <a href="#">*@
-@*                <div class="media">*@
-@*                    <div class="pull-left">*@
-@*                        <img src="images/people/110/woman-6.jpg" width="40" class="img-circle">*@
-@*                    </div>*@
-@*                    <div class="media-body">*@
-@*                        <div class="contact-name">Michelle S.</div>*@
-@*                        <small>Offline</small>*@
-@*                    </div>*@
-@*                </div>*@
-@*            </a>*@
-@*        </li>*@
-@*    </ul>*@
-
 </div>
-<div id="content" style="@(isResidentOrHouseOwner==true?"":"margin-left:initial")">
+<div id="content" style="margin-left: 200px; @(isResidentOrHouseOwner==true?"":"margin-left:initial")">
    
     @RenderBody()
      <!--Footer-->
