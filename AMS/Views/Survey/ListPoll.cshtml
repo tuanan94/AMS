@@ -53,116 +53,122 @@
         <div class="panel-body">
             <div class="tab-content">
                 <div class="tab-pane fade active in" id="">
-                    <div class="table-responsive binh">
-                        <table class="table table-hover table-bordered binh" id="myTables">
-                            <thead>
-                                <tr>
-                                    <th>Số Thứ tự</th>
-                                    <th>Tiêu đề</th>
-
-                                    <th>Ngày đăng</th>
-                                    <th>Ngày đóng</th>
-                                    <th>Trạng thái </th>
-                                    <th> </th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-                                    foreach (var item in listSurveys)
-                                    {
+                    <div class="form-horizontal" id="searchHdSrv" role="form">
+                        <div class="form-group">
+                            <div class="table-responsive binh">
+                                <table class="table v-middle  table-hover table-bordered binh" id="myTables">
+                                    <thead>
                                         <tr>
-                                            <td>
-                                                <div class="form-group">
-                                                    <div class="col-sm-9" style="width: 100px">
-                                                        @*<input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.Id">*@
-                                                        @item.Id
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="form-group">
-                                                    <div class="col-sm-12">
-                                                        <input type="hidden" class="form-control" id="PollId" value="@item.Id">
-                                                        <span class="">@item.Question</span>
-                                                        @*<input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.Description">*@
-                                                    </div>
-                                                </div>
-                                            </td>
+                                            <th>Số Thứ tự</th>
+                                            <th>Tiêu đề</th>
 
-                                            <td>
-                                                <div class="form-group">
-                                                    <div class="col-sm-9">
-                                                        @*<span class="label date-color label-warning">@item.StartDate</span>*@
-                                                        @*<input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.StartDate">*@
-                                                        @Html.TextBoxFor(m => m.PublishDate, new { @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.PublishDate)), @class = "date-color", @style = "width:100px", @disabled = "disabled" })
-
-
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="form-group">
-                                                    <div class="col-sm-9">
-                                                        @*<span class="label date-color label-gray">@item.EndDate</span>*@
-                                                        @*@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.EndDate))*@
-                                                        @Html.TextBoxFor(m => m.EndDate, new { @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.EndDate)), @class = "date-color", @style = "width:100px", @disabled = "disabled" })
-                                                        @*<input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.EndDate">*@
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-
-                                                @{
-                                        if (@item.EndDate >= DateTime.Now || @item.Status == 1)
-                                        {
-                                            <span class="label" style="background-color: #3366ff; font-size: 14px; color: white">Đang mở</span>
-
-                                        }
-                                        else if (@item.Status == 0)
-                                        {
-                                            <span class="label" style="background-color: #ff9999; font-size: 14px; color: white;">Đã kết thúc</span>
-
-                                        }
-                                        else
-                                        {
-                                            <span class="label" style="background-color: #ff9999; font-size: 14px; color: white;">Đã kết thúc</span>
-
-                                        }
-                                                }
-
-                                            </td>
-
-                                            <td>
-                                                <div class="form-group">
-                                                    <div class="col-sm-8">
-                                                        <a href="@Url.Action("DeleteSurvey", "Survey", new {PollId = @item.Id})" onclick="return myFunction()" class="deleteButton">Xóa</a>
-
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="form-group">
-                                                    <div class="col-sm-9">
-
-                                                        <a href="@Url.Action("DetailSurvey", "Survey", new {PollId = @item.Id})" class="button">Chi Tiết</a>
-                                                    </div>
-                                                </div>
-                                            </td>
+                                            <th>Ngày đăng</th>
+                                            <th>Ngày đóng</th>
+                                            <th>Trạng thái </th>
+                                            <th> </th>
+                                            <th></th>
                                         </tr>
-                                    }
-                                }
+                                    </thead>
+                                    <tbody>
+                                    @{
+                                        int i = 1;
+                                            foreach (var item in listSurveys)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-9" style="width: 100px">
+                                                                @*<input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.Id">*@
+                                                                @*@item.Id*@
+                                                                @i
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-12">
+                                                                <input type="hidden" class="form-control" id="PollId" value="@item.Id">
+                                                                <span class="">@item.Question</span>
+                                                                @*<input type="text" disabled="disabled" class="form-control binh" id="fullname" value="@item.Description">*@
+                                                            </div>
+                                                        </div>
+                                                    </td>
+
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-9">
+                                                                @*<span class="label date-color label-warning">@item.StartDate</span>*@
+                                                                @*<input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.StartDate">*@
+                                                                @Html.TextBoxFor(m => m.PublishDate, new { @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.PublishDate)), @class = "date-color", @style = "width:100px", @disabled = "disabled" })
+
+
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-9">
+                                                                @*<span class="label date-color label-gray">@item.EndDate</span>*@
+                                                                @*@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.EndDate))*@
+                                                                @Html.TextBoxFor(m => m.EndDate, new { @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.EndDate)), @class = "date-color", @style = "width:100px", @disabled = "disabled" })
+                                                                @*<input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.EndDate">*@
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+
+                                                        @{
+                                                if (@item.EndDate >= DateTime.Now || @item.Status == 1)
+                                                {
+                                                    <span class="label" style="background-color: #3366ff; font-size: 14px; color: white">Đang mở</span>
+
+                                                }
+                                                else if (@item.Status == 0)
+                                                {
+                                                    <span class="label" style="background-color: #ff9999; font-size: 14px; color: white;">Đã kết thúc</span>
+
+                                                }
+                                                else
+                                                {
+                                                    <span class="label" style="background-color: #ff9999; font-size: 14px; color: white;">Đã kết thúc</span>
+
+                                                }
+                                                        }
+
+                                                    </td>
+
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-8">
+                                                                <a href="@Url.Action("DeleteSurvey", "Survey", new {PollId = @item.Id})" onclick="return myFunction()" class="deleteButton">Xóa</a>
+
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-9">
+
+                                                                <a href="@Url.Action("DetailSurvey", "Survey", new {PollId = @item.Id})" class="button">Chi Tiết</a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                i++;
+                                            }
+                                        }
 
 
 
-                            </tbody>
-                        </table>
+                                    </tbody>
+                                </table>
 
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
-
-
         </div>
     </div>
 </div>
