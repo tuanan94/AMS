@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using AMS.Constant;
+using AMS.Filter;
 using AMS.Models;
 using AMS.Service;
 using Microsoft.Ajax.Utilities;
@@ -42,6 +43,7 @@ namespace AMS.Controllers
             return View();
         }
 
+        [AdminAuthorize]
         public ActionResult ManageRequest()
         {
             String action = this.Request.QueryString["action"];
@@ -181,15 +183,16 @@ namespace AMS.Controllers
                 }
                 return PartialView(url);
             }
-            return View("ManageHelpdeskServiceCategory");
+            return View("~/Views/Config/ManageHelpdeskServiceCategory.cshtml");
         }
 
         [HttpGet]
+        [AdminAuthorize]
         [Route("Management/ViewHelpdeskServiceCategory")]
         public ActionResult ViewHelpdeskServiceCategory()
         {
             ViewBag.helpdeskServiceCategories = _helpdeskServiceCatService.GetAll();
-            return View("ManageHelpdeskServiceCategory");
+            return View("~/Views/Config/ManageHelpdeskServiceCategory.cshtml");
         }
 
         public ActionResult ManageIncome()
@@ -207,10 +210,10 @@ namespace AMS.Controllers
 
 
         [HttpGet]
-        [Route("Management/ResidentApprovement/{userId}")]
-        public ActionResult ViewResidentApprovement(int userId)
+        [ManagerAuthorize]
+        [Route("Management/ResidentApprovement")]
+        public ActionResult ViewResidentApprovement()
         {
-            ViewBag.userId = userId;
             return View("ResidentApprovement");
         }
 

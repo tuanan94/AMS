@@ -46,5 +46,6 @@ namespace AMS.Models
         public string UserAccountName { get; set; }
         public string CellNumb { get; set; }
         public int RelationLevel { get; set; }
+        public int IsDeletable { get; set; }
     }
 } 

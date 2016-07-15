@@ -19,15 +19,15 @@ namespace AMS.App_Start
          * http://talenttuner.com/Blogs/MVC5/understanding-asp-net-mvc-filters/
          * ...
          */
-        public class ManagerAdminAuthorize : FilterAttribute, IAuthenticationFilter
+        /*public class ManagerAdminAuthorize : FilterAttribute, IAuthenticationFilter
         {
-            string superAdminRole = "Manager"; // can be taken from resource file or config file
+            string managerRole = "Manager"; // can be taken from resource file or config file
             string adminRole = "Admin"; // can be taken from resource file or config file
 
             public void OnAuthentication(AuthenticationContext context)
             {
                 if (context.HttpContext.User.Identity.IsAuthenticated &&
-                    (context.HttpContext.User.IsInRole(superAdminRole)
+                    (context.HttpContext.User.IsInRole(managerRole)
                      || context.HttpContext.User.IsInRole(adminRole)))
                 {
                     // do nothing
@@ -51,7 +51,7 @@ namespace AMS.App_Start
                         });
                 }
             }
-        }
+        }*/
 
         public class CheckHouseIsDeleted : AuthorizeAttribute
         {

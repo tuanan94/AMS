@@ -24,9 +24,12 @@ namespace AMS.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int Type { get; set; }
+        public string TypeName { get; set; }
         public int HouseCatId { get; set; }
+        public string HouseCatName { get; set; }
         public int UtilServiceForHouseCatId { get; set; }
         public List<UtilityServiceRangePriceModel> WaterUtilServiceRangePrices { get; set; }
+        public FixedCostPriceModel FixedCostPrice { get; set; }
         public List<int> DeletedRangePrices { get; set; }
     }
 

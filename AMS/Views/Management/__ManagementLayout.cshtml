@@ -1,7 +1,19 @@
-﻿@using Microsoft.AspNet.Identity;
+﻿@using AMS.Service
+@using Microsoft.AspNet.Identity;
 @{
     Layout = null;
     var currentUser = User.Identity;
+    UserService userService = new UserService();
+    String profileImg = "/Content/images/defaultProfile.png";
+    string userId = User.Identity.GetUserId();
+    if (userId != null)
+    {
+        User curUser = userService.findById(Int32.Parse(userId));
+        if (curUser != null && curUser.ProfileImage != null && !curUser.ProfileImage.Equals(""))
+        {
+            profileImg = curUser.ProfileImage;
+        }
+    }
 }
 <!DOCTYPE html>
 <html>
@@ -28,18 +40,13 @@
             <div class="navbar-header">
                 <ul class="nav navbar-nav navbar-nav-manager">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle user" data-toggle="dropdown">
-                            <img src="/images/people/110/guy-5.jpg" alt="Bill" class="img-circle" width="40"> @currentUser.GetUserName() <span class="caret"></span>
+                        <a href="#" class="dropdown-toggle user truncate" data-toggle="dropdown">
+                            <img onerror="this.onerror = null; this.src = '/Content/images/defaultProfile.png'; " src="@profileImg" class="img-circle" width="40">
+                            <span class="caption">@currentUser.GetUserName() </span> <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li>
-                                <a href="~/Views/Shared/user-private-profile.html">Profile</a>
-                            </li>
-                            <li>
-                                <a href="~/Views/Shared/user-private-messages.html">Messages</a>
-                            </li>
-                            <li>
-                                <a href="/Account/LogOff">Logout</a>
+                                <a href="/Account/LogOff">Đăng xuất</a>
                             </li>
                         </ul>
                     </li>
@@ -49,7 +56,7 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="navbar-collapse collapse" id="main-nav" style="height: 1px;">
                 <ul class="nav navbar-nav manager-header">
-                    <li id="hdRequestNav" style="background-color:#25ad9f">
+                    <li style="background-color:#25ad9f">
                         <a href="/"><i class="fa fa-fw fa-users"></i>Mạng xã hội</a>
                     </li>
                     <li id="hdRequestNav">
@@ -73,9 +80,9 @@
                     <li id="serviceProviderNav">
                         <a href="/Management/AroundService/Manage"><i class="fa fa-search-plus"></i> Dịch vụ</a>
                     </li>
-                    <li id="configNav" class="">
+                    @*<li id="configNav" class="">
                         <a href="/Management/Config/UtilityService/View"><i class="fa fa-wrench"></i> Cấu Hình</a>
-                    </li>
+                    </li>*@
                 </ul>
             </div>
         </div>
@@ -100,7 +107,8 @@
     <script src="~/Scripts/amsScript/scripts.js"></script>
     <script src="~/Scripts/amsScript/custom.js"></script>
     <script src="~/Scripts/amsScript/additional-methods.min.js"></script>
-    <script src="~/Scripts/amsScript/jquery.validate.min.js"></script>
+@*    <script src="~/Scripts/amsScript/jquery.validate.min.js"></script>*@
+    <script src="~/Scripts/amsScript/jquery.validate.js"></script>
     <script src="~/Scripts/amsScript/jquery.timepicker.min.js"></script>
     <script src="~/Scripts/jquery.datetimepicker.full.js"></script>
 

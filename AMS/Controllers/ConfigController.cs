@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Compilation;
 using System.Web.Mvc;
 using AMS.Constant;
+using AMS.Filter;
 using AMS.Models;
 using AMS.Service;
 using Microsoft.Ajax.Utilities;
@@ -27,6 +28,7 @@ namespace AMS.Controllers
         private HouseServices _houseServices = new HouseServices();
 
         [HttpGet]
+        [AdminAuthorize]
         [Route("Management/Config/UtilityService/Create")]
         public ActionResult CreateUtilityServiceView()
         {
@@ -36,6 +38,7 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
+        [AdminAuthorize]
         [Route("Management/Config/UtilityService/View")]
         public ActionResult UtilityServiceView()
         {
@@ -147,6 +150,7 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
+        [AdminAuthorize]
         [Route("Management/Config/UtilityService/EditUtilServiceView")]
         public ActionResult EditUtilServiceView(int id)
         {
@@ -570,6 +574,7 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
+        [AdminAuthorize]
         [Route("Management/Config/UtilityService/ViewManageHouseBlock")]
         public ActionResult ViewManageHouseBlock()
         {
@@ -577,6 +582,7 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
+        [AdminAuthorize]
         [Route("Management/Config/UtilityService/ViewCreateHouseBlock")]
         public ActionResult ViewCreateHouseBlock()
         {
@@ -584,6 +590,7 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
+        [AdminAuthorize]
         [Route("Management/Config/UtilityService/ViewHousesInBlock")]
         public ActionResult ViewHousesInBlock(int blockId)
         {
@@ -592,7 +599,7 @@ namespace AMS.Controllers
             {
                 block.NoFloor = block.Houses.GroupBy(h => h.Floor).Count();
                 bool canRemoveBlock = true;
-                if (block.Houses.Any(house => house.Status == SLIM_CONFIG.HOUSE_STATUS_ENABLE && house.OwnerID != null ))
+                if (block.Houses.Any(house => house.Status == SLIM_CONFIG.HOUSE_STATUS_ENABLE && house.OwnerID != null))
                 {
                     canRemoveBlock = false;
                 }
@@ -641,7 +648,7 @@ namespace AMS.Controllers
                                             .Append(house.Name.Trim())
                                             .ToString();
                                     eHouse.BlockId = block.Id;
-                                    eHouse.Status = SLIM_CONFIG.HOUSE_STATUS_DISABLE;
+                                    eHouse.Status = SLIM_CONFIG.HOUSE_STATUS_ENABLE;
                                     _houseServices.Add(eHouse);
                                 }
                             }
@@ -681,7 +688,7 @@ namespace AMS.Controllers
             Block block = _blockServices.FindById(blockId);
             if (null != block)
             {
-                List<House> listHouse = block.Houses.ToList();
+                List<House> listHouse = block.Houses.Where(h => h.Status == SLIM_CONFIG.HOUSE_STATUS_ENABLE).ToList();
                 HouseViewModel house = null;
                 foreach (var h in listHouse)
                 {
@@ -690,7 +697,9 @@ namespace AMS.Controllers
                     house.Name = h.HouseName;
                     house.FloorName = h.Floor;
                     house.Area = h.Area.Value;
-                    house.Status = h.Status.Value;
+                    house.Status = h.OwnerID == null
+                        ? SLIM_CONFIG.HOUSE_HAS_N0_RESIDENT
+                        : SLIM_CONFIG.HOUSE_HAS_RESIDENT;
                     houses.Add(house);
                     house.DT_RowId = new StringBuilder("house_").Append(house.Id).ToString();
                 }
@@ -704,7 +713,7 @@ namespace AMS.Controllers
         {
             MessageViewModels response = new MessageViewModels();
             House house = _houseServices.FindById(houseId);
-            if (null != house)
+            if (null != house && house.Status != SLIM_CONFIG.HOUSE_STATUS_DISABLE)
             {
                 HouseViewModel houseModel = new HouseViewModel();
                 houseModel.Id = house.Id;
@@ -712,13 +721,17 @@ namespace AMS.Controllers
                 houseModel.FloorName = house.Floor;
                 houseModel.BlockName = house.Block.BlockName;
                 houseModel.Area = house.Area.Value;
-                houseModel.Status = house.Status.Value;
                 houseModel.TypeName = house.HouseCategory == null ? "Chưa thiết lập" : house.HouseCategory.Name;
                 houseModel.Type = house.TypeId == null ? -1 : house.TypeId.Value;
                 if (house.Status.Value == SLIM_CONFIG.HOUSE_STATUS_ENABLE && house.OwnerID != null)
                 {
                     houseModel.HouseOwner =
                         house.Users.Where(u => u.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER).ToList().First().Fullname;
+                    houseModel.Status = SLIM_CONFIG.HOUSE_HAS_RESIDENT;
+                }
+                else if (house.Status.Value == SLIM_CONFIG.HOUSE_STATUS_ENABLE && house.OwnerID == null)
+                {
+                    houseModel.Status = SLIM_CONFIG.HOUSE_HAS_N0_RESIDENT;
                 }
 
                 List<HouseCategoryModel> houseTypeList = new List<HouseCategoryModel>();
@@ -805,24 +818,26 @@ namespace AMS.Controllers
             House house = _houseServices.FindById(houseInfo.Id);
             if (null != house)
             {
-                if (houseInfo.Status == SLIM_CONFIG.HOUSE_STATUS_DISABLE && house.OwnerID != null)
-                {
-                    response.StatusCode = 5;
-                    return Json(response);
-                }
                 if (houseInfo.Status != 0)
                 {
                     house.Status = houseInfo.Status;
                     if (houseInfo.Status == SLIM_CONFIG.HOUSE_STATUS_DISABLE)
                     {
                         house.OwnerID = null;
-                        foreach (var usrInHouse in house.Users)
+                        if (house.Users.Count != 0)
                         {
-                            User u = _userServices.FindById(usrInHouse.Id);
-                            u.HouseId = null;
-                            u.LastModified = DateTime.Now;
-                            _userServices.Update(u);
+                            response.StatusCode = 5;
                         }
+
+                        //                        foreach (var usrInHouse in house.Users)
+                        //                        {
+                        //                            User u = _userServices.FindById(usrInHouse.Id);
+                        //                            u.HouseId = null;
+                        //                            u.Status = SLIM_CONFIG.USER_STATUS_DISABLE;
+                        //                            u.LastModified = DateTime.Now;
+                        //                            u.RoleId = SLIM_CONFIG.USER_ROLE_RESIDENT;
+                        //                            _userServices.Update(u);
+                        //                        }
                     }
                 }
                 house.Area = houseInfo.Area;
@@ -925,11 +940,26 @@ namespace AMS.Controllers
                 foreach (var houseId in houseIdList)
                 {
                     House house = _houseServices.FindById(houseId);
+                    if (house != null)
+                    {
+                        if (house.OwnerID != null || house.Users.Count != 0)
+                        {
+                            response.StatusCode = 2;
+                            response.Data = house.HouseName;
+                            return Json(response);
+                        }
+                    }
+                }
+                foreach (var houseId in houseIdList)
+                {
+                    House house = _houseServices.FindById(houseId);
                     if (null != house)
                     {
-                        if (house.Status == SLIM_CONFIG.HOUSE_STATUS_DISABLE && house.OwnerID == null)
+                        if (house.OwnerID == null || house.Users.Count == 0)
                         {
-                            _houseServices.Delete(house);
+                            house.OwnerID = null;
+                            house.Status = SLIM_CONFIG.HOUSE_STATUS_DISABLE;
+                            _houseServices.Update(house);
                         }
                         else
                         {
@@ -1087,7 +1117,7 @@ namespace AMS.Controllers
                 }
                 else
                 {
-                    List<House> getHouseInFloor = _houseServices.GetAlllRoomsInFloor(block.Id, oldFloorName);
+                    List<House> getHouseInFloor = _houseServices.GetActiveRoomsInFloor(block.Id, oldFloorName);
                     string name = "";
                     string houseName = "";
                     foreach (var h in getHouseInFloor)

@@ -41,61 +41,79 @@
             </ul>
         </div>
         <div class="panel-body">
-            <div class="form-horizontal" role="form">
+            <form id="filterReceiptForm" class="form-horizontal" role="form">
                 <div class="form-group">
-                    <div class="col-md-10 col-md-offset-1">
-                        <div class="alert alert-danger" id="noReceipt" style="display: none">
-                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                            <span>Không có hóa đơn trong thời gian từ [<strong id="fromMsg"></strong>] đến [<strong id="toMsg"></strong>]</span>
+                    <div class="form-group">
+                        <div class="col-md-10 col-md-offset-1">
+                            <div class="alert alert-danger" id="noReceipt" style="display: none">
+                                <a href="#" class="close" data-dismiss="alert" onclick="$('.alert').hide()" aria-label="close">&times;</a>
+                                <span id="msg">Không có hóa đơn trong thời gian từ [<strong id="fromMsg"></strong>] đến [<strong id="toMsg"></strong>]</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-10 col-md-offset-1">
-                        <fieldset class="scheduler-border less-padding">
-                            <legend class="scheduler-border bold-black">Thông tin hóa đơn</legend>
+                    <div class="form-group">
+                        <div class="col-md-10 col-md-offset-1">
                             <div class="form-group">
+                                <label for="from" class="col-md-3 control-label">Lọc</label>
+                                <div class="col-md-6">
+                                    <select id="filterMode" name="Mode" class="form-control">
+                                        <option selected="selected" value="@SLIM_CONFIG.RECEIPT_FILTER_MODE_UNPAID">Chưa thanh toán</option>
+                                        <option value="@SLIM_CONFIG.RECEIPT_FILTER_MODE_THIS_MONTH">Tháng này</option>
+                                        <option value="@SLIM_CONFIG.RECEIPT_FILTER_MODE_LAST_MONTH">Tháng trước</option>
+                                        <option value="@SLIM_CONFIG.RECEIPT_FILTER_MODE_LAST_3_MONTH">3 Tháng gần đây</option>
+                                        <option value="@SLIM_CONFIG.RECEIPT_FILTER_MODE_RANGE_TIME">Khoản thời gian</option>
+                                        <option value="@SLIM_CONFIG.RECEIPT_FILTER_MODE_ALL">Tất cả</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-block btn-stroke btn-info"><i class="fa fa-search"></i> Xem</button>
+                                </div>
+                            </div>
+                            <div class="form-group hide" id="filterRow">
                                 <label for="from" class="col-md-3 control-label">Từ</label>
                                 <div class=" col-md-8">
-                                    <div class="input-group">
-                                        <input id="from" class="form-control" value="" />
+                                    <div class="input-group input-daterange">
+                                        <input id="from" type="text" class="form-control" name="Start" />
                                         <span class="input-group-addon">Đến</span>
-                                        <input id="to" class="form-control  col-md-3" value="" />
-                                        <span class="input-group-addon btn btn-stroke btn-info btn-sm" onclick="GetReceiptListFromDateToDate()"><i class="fa fa-search"></i> Xem</span>
-
-                                    </div>
-                                </div>
-                                @*                                <div class="col-md-3">*@
-                                @*                                    <span class="btn btn-info" onclick="GetReceiptListFromDateToDate()"> Xem</span>*@
-                                @*                                </div>*@
-                            </div>
-
-                            <div class="form-group payment-info hide">
-                                <label for="title" class="col-md-3 control-label">Tổng</label>
-                                <div class="col-md-8">
-                                    <div class="input-group">
-                                        <input id="totalAmount" class="form-control" value="" />
-                                        <span class="input-group-addon">đồng</span>
+                                        <input id="to" class="form-control" name="End" />
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group payment-info hide">
-                                <label class="col-md-3 control-label">Đã thanh toán</label>
-                                <div class="col-md-8">
-                                    <div class="input-group">
-                                        <input id="paidAmount" class="form-control" value="" />
-                                        <span class="input-group-addon">đồng</span>
+                        </div>
+                    </div>
+                    <div class="form-group payment-info">
+                        <div class="col-md-10 col-md-offset-1">
+                            <fieldset class="scheduler-border less-padding">
+                                <legend class="scheduler-border bold-black">Thông tin hóa đơn</legend>
+                                <div class="form-group">
+                                    <label for="title" class="col-md-3 control-label">Tổng</label>
+                                    <div class="col-md-8">
+                                        <div class="input-group">
+                                            <input id="totalAmount" readonly="readonly" class="form-control" value="" />
+                                            <span class="input-group-addon">đồng</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group payment-info hide">
-                                <label class="col-md-3 control-label">Còn nợ</label>
-                                <div class="col-md-8">
-                                    <div class="input-group">
-                                        <input id="restAmount" class="form-control" value="" />
-                                        <span class="input-group-addon">đồng</span>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Đã thanh toán</label>
+                                    <div class="col-md-8">
+                                        <div class="input-group">
+                                            <input readonly="readonly" id="paidAmount" class="form-control" value="" />
+                                            <span class="input-group-addon">đồng</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </fieldset>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Còn nợ</label>
+                                    <div class="col-md-8">
+                                        <div class="input-group">
+                                            <input id="restAmount" readonly="readonly" class="form-control" value="" />
+                                            <span class="input-group-addon">đồng</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
                     </div>
                 </div>
                 <table id="houseOrderTbl" data-userid="@User.Identity.GetUserId()" class="table table-hover table-bordered hide">
@@ -121,59 +139,69 @@
                     </tfoot>
                     <tbody></tbody>
                 </table>
-            </div>
+            </form>
         </div>
     </div>
 </div>
 <script>
 
     $(document).ready(function () {
-        $.datetimepicker.setLocale('vi');
-        $("#from").datetimepicker({
-            format: 'd-m-Y',
-            onShow: function (ct) {
-                var value = "";
-                if ($('#to').val()) {
-                    var date = $('#to').val().split('-');
-                    value = date[2] + "-" + date[1] + "-" + date[0];
-                } else {
-                    value = false;
-                }
-                this.setOptions({
-                    maxDate: value
-                });
-            },
-            timepicker: false
+
+        $('.input-daterange').datepicker({
+            minViewMode: 1,
+            format: "mm-yyyy",
+            language: "vi"
         });
-        $("#to").datetimepicker({
-            format: 'd-m-Y',
-            onShow: function (ct) {
-                var value = "";
-                if ($('#from').val()) {
-                    var date = $('#from').val().split('-');
-                    value = date[2] + "-" + date[1] + "-" + date[0];
-                } else {
-                    value = false;
-                }
-                this.setOptions({
-                    minDate: value
-                });
-            },
-            timepicker: false
+        $("#filterMode").on("change", function () {
+            var selected = $(this).find("option:selected").val();
+            var rangeTime = "@SLIM_CONFIG.RECEIPT_FILTER_MODE_RANGE_TIME";
+            if (parseInt(selected) === parseInt(rangeTime)) {
+                $("#filterRow").removeClass("hide");
+            } else {
+                $("#filterRow").addClass("hide");
+            }
         });
         GetAllUnpaidReceiptByHouse();
+        $("#filterReceiptForm").validate({
+            rules: {
+                Start: {
+                    required: {
+                        depends: function () {
+                            return $("#filterMode option:selected").val() === "@SLIM_CONFIG.RECEIPT_FILTER_MODE_RANGE_TIME";
+                        }
+                    },
+                },
+                End: {
+                    required: {
+                        depends: function () {
+                            return $("#filterMode option:selected").val() === "@SLIM_CONFIG.RECEIPT_FILTER_MODE_RANGE_TIME";
+                        }
+                    }
+                }
+            },
+            messages: {
+                Start: {
+                    required: "Nhập tháng bắt đầu.",
+                },
+                End: {
+                    required: "Nhập tháng kết thúc.",
+                }
+            },
+            submitHandler: function () {
+                GetReceiptListFromDateToDate();
+            }
+        });
     });
     function GetReceiptListFromDateToDate() {
         var fromUserId = document.getElementById("houseOrderTbl").dataset.userid;
         var from = $("#from").val();
         var to = $("#to").val();
-        if (!from || !to) {
-            return;
-        }
+
         var data = {
             from: from,
             to: to,
-            userId: fromUserId
+            userId: fromUserId,
+            mode: $("#filterMode").val()
         }
         if (window.dataTable5) {
             window.dataTable5.destroy();
@@ -191,18 +219,40 @@
                         $("#paidAmount").val(numberWithCommas(obj.PaidAmount));
                         $(".payment-info").removeClass("hide");
 
+                        if (obj.Data && obj.Data.length === 0) {
+                            $(".payment-info").addClass("hide");
+                            $("#totalAmount").val("");
+                            $("#restAmount").val("");
+                            $("#paidAmount").val("");
+                            $("#msg").html("Không tìm thấy hóa đơn nào !");
+                            $("#noReceipt").fadeIn("fast");
+                            setTimeout(function () {
+                                $("#noReceipt").fadeOut("fast");
+                            }, 3000);
+                        }
+
                         return obj.Data;
                     } else {
                         $(".payment-info").addClass("hide");
                         $("#totalAmount").val("");
                         $("#restAmount").val("");
                         $("#paidAmount").val("");
-                        $("#fromMsg").text($("#from").val());
-                        $("#toMsg").text($("#to").val());
+
+                        var selected = $("#filterMode").val();
+                        var rangeTime = "@SLIM_CONFIG.RECEIPT_FILTER_MODE_RANGE_TIME";
+                        if (parseInt(selected) === parseInt(rangeTime)) {
+                            $("#msg")
+                                .html("Không có hóa đơn trong thời gian từ đầu tháng [<strong>" +
+                                    $("#from").val() +
+                                    "</strong>] đến hết tháng [<strong>" +
+                                    $("#to").val() +
+                                    "</strong>]");
+                        } else {
+                            $("#msg").html("Không tìm thấy hóa đơn nào !");
+                        }
                         $("#noReceipt").fadeIn("fast");
                         setTimeout(function () {
                             $("#noReceipt").fadeOut("fast");
-
                         }, 3000);
                         return [];
                     }
@@ -304,14 +354,25 @@
                         $("#paidAmount").val(numberWithCommas(obj.PaidAmount));
                         $(".payment-info").removeClass("hide");
 
+                        if (obj.Data && obj.Data.length === 0) {
+                            $(".payment-info").addClass("hide");
+                            $("#totalAmount").val("");
+                            $("#restAmount").val("");
+                            $("#paidAmount").val("");
+                            $("#msg").html("Không tìm thấy hóa đơn nào !");
+                            $("#noReceipt").fadeIn("fast");
+                            setTimeout(function () {
+                                $("#noReceipt").fadeOut("fast");
+                            }, 3000);
+                        }
+
                         return obj.Data;
                     } else {
                         $(".payment-info").addClass("hide");
                         $("#totalAmount").val("");
                         $("#restAmount").val("");
                         $("#paidAmount").val("");
-                        $("#fromMsg").text($("#from").val());
-                        $("#toMsg").text($("#to").val());
+                        $("#msg").html("Không tìm thấy hóa đơn nào !");
                         $("#noReceipt").fadeIn("fast");
                         setTimeout(function () {
                             $("#noReceipt").fadeOut("fast");

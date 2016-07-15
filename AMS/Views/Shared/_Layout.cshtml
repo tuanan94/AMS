@@ -11,7 +11,8 @@
         profile = curUser.ProfileImage;
     }
     bool isResidentOrHouseOwner = curUser.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT || curUser.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER;
-    bool isManager = curUser.RoleId == SLIM_CONFIG.USER_ROLE_MANAGER;
+    bool isManager = (curUser.RoleId == SLIM_CONFIG.USER_ROLE_MANAGER);
+    bool isAdmin = (curUser.RoleId == SLIM_CONFIG.USER_ROLE_ADMIN);
 }
 
 <!DOCTYPE html>
@@ -32,8 +33,8 @@
     <script src="~/Scripts/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="~/Content/css/jquery-ui.min.css">
     <link rel="stylesheet" href="~/Content/css/dataTables.bootstrap.min.css">
-    <link href="~/Content/css/jquery.datetimepicker.css" rel="stylesheet"/>
-    
+    <link href="~/Content/css/jquery.datetimepicker.css" rel="stylesheet" />
+
 
 </head>
 <body class="breakpoint-1024">
@@ -71,31 +72,34 @@
                             <a href="/Home/AroundService/ListView"><i class="fa fa-fw fa-stumbleupon-circle"></i> Dịch vụ xung quanh</a>
                         </li>
                         <li>
-                            <a href="/Survey/doSurvey"><i class="fa fa-fw fa-stumbleupon-circle"></i> Khảo sát</a>
-                        </li>
-                    }
-                    @if (isManager)
-                    {
-                        <li style="background-color:#428bca">
-                            <a href="/Management/HelpdeskRequest/ManageHdRequest"><i class="fa fa-fw fa-stumbleupon-circle"></i> Quản lí</a>
+                            <a href="/Survey/doSurvey"><i class="fa fa-check-square-o"></i> Khảo sát</a>
                         </li>
                     }
 
+                    <li style="background-color:#428bca">
+                        @if (isManager)
+                        {
+                            <a href="/Management/HelpdeskRequest/ManageHdRequest"><i class="fa fa-black-tie"></i> Quản lý</a>
+                        }
+                        @if (isAdmin)
+                        {
+                            <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-black-tie"></i> Quản lý</a>
+                        }
 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
 
                     @*<li class="hidden-xs">
-                        <a href="#" data-toggle="sidebar-chat">
-                            <i class="fa fa-comments"></i>
-                        </a>
+                            <a href="#" data-toggle="sidebar-chat">
+                                <i class="fa fa-comments"></i>
+                            </a>
 
-                    </li>*@
+                        </li>*@
 
                     <!-- User -->
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle user" data-toggle="dropdown">
-                            <img src="@profile" alt="User name" class="img-circle" height="40">@(curUser==null?"Chưa đăng nhập":curUser.Fullname) <span class="caret"></span>
+                        <a href="#" class="dropdown-toggle user truncate" data-toggle="dropdown">
+                            <img src="@profile" onerror="this.onerror = null; this.src = '/Content/images/defaultProfile.png'; " alt="User name" class="img-circle" height="40">@(curUser == null ? "Chưa đăng nhập" : curUser.Fullname) <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li>
@@ -154,7 +158,7 @@
     <script src="~/Scripts/amsScript/additional-methods.min.js"></script>
     <script src="~/Scripts/amsScript/jquery.validate.min.js"></script>
     <script src="~/Scripts/amsScript/jquery.timepicker.min.js"></script>
-<script src="~/Scripts/jquery.datetimepicker.full.js"></script>
+    <script src="~/Scripts/jquery.datetimepicker.full.js"></script>
 
     <script src="~/Scripts/aroundProvider/jquery.sticky.js"></script>
     <script src="~/Scripts/aroundProvider/jquery.nav.js"></script>

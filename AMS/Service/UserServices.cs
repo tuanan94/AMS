@@ -54,13 +54,19 @@ namespace AMS.Service
         public List<User> GetAllResident()
         {
             return userRepository.List.Where(u => u.Status != null && u.Status != SLIM_CONFIG.USER_APPROVE_WAITING && u.Status != SLIM_CONFIG.USER_STATUS_DELETE
-                && u.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT || u.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER).
+                && (u.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT || u.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)).
                 OrderByDescending(userRepository => userRepository.CreateDate)
                     .ToList();
         }
         public List<User> GetAllSupporter()
         {
             return userRepository.List.Where(u => u.Status != null && u.Status != SLIM_CONFIG.USER_STATUS_DELETE && u.RoleId == SLIM_CONFIG.USER_ROLE_SUPPORTER).
+                OrderByDescending(userRepository => userRepository.CreateDate)
+                    .ToList();
+        }
+        public List<User> GetAllManager()
+        {
+            return userRepository.List.Where(u => u.Status != null && u.Status != SLIM_CONFIG.USER_STATUS_DELETE && u.RoleId == SLIM_CONFIG.USER_ROLE_MANAGER).
                 OrderByDescending(userRepository => userRepository.CreateDate)
                     .ToList();
         }

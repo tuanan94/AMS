@@ -111,13 +111,13 @@
                                                        data-date-min-view-mode="0" data-date-today-highlight="true" data-date-start-date="0d"/>
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        @*<div class="form-group">
                                             <label for="receiptDesc" class="col-md-2 control-label">Loại hóa đơn</label>
                                             <div class="col-md-4">
                                                 <input class="form-control" id="receiptType" type="text" value="Dịch vụ sửa chữa"/>
                                                 <input type="hidden" value="@SLIM_CONFIG.UTILITY_SERVICE_TYPE_HD_REQUEST" name="ReceiptType"/>
                                             </div>
-                                        </div>
+                                        </div>*@
                                         <div class="form-group">
                                             <label for="receiptDesc" class="col-md-2 control-label">Mô tả</label>
                                             <div class="col-md-10">
@@ -336,14 +336,31 @@
                     maxlength: 1000
                 },
                 "order-item-name": {
-                    required: true,
-                    maxlength: 255
+                    required: function (elem) {
+                        if ($(elem).val()&& $(elem).val().trim().length < 255) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
                 },
                 "order-item-qty": {
-                    required: true
+                    required: function (elem) {
+                        if ($(elem).val()) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
                 },
                 "order-item-price": {
-                    required: true
+                    required: function (elem) {
+                        if ($(elem).val()) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
                 },
 
             },
@@ -359,8 +376,7 @@
                     maxlength: "Tối đa 1000 ký tự."
                 },
                 "order-item-name": {
-                    required: "Trường bắt buộc",
-                    maxlength: "Tối đa 255 ký tự."
+                    required: "Trường bắt buộc và tối đa 255 ký tự",
                 },
                 "order-item-qty": {
                     required: "Trường bắt buộc",

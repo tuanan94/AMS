@@ -1,0 +1,105 @@
+﻿@using AMS.Service
+@using Microsoft.AspNet.Identity;
+@{
+    Layout = null;
+    var currentUser = User.Identity;
+    
+    UserService userService = new UserService();
+    String profileImg = "/Content/images/defaultProfile.png";
+    string userId = User.Identity.GetUserId();
+    if (userId != null)
+    {
+        User curUser = userService.findById(Int32.Parse(userId));
+        if (curUser != null && curUser.ProfileImage != null && !curUser.ProfileImage.Equals(""))
+        {
+            profileImg = curUser.ProfileImage;
+        }
+    }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Scripts.Render("~/bundles/jquery")
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/css/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="~/Content/css/jquery-ui.min.css">
+    <link rel="stylesheet" href="~/Content/css/dataTables.bootstrap.min.css">
+    <link href="~/Content/css/jquery.datetimepicker.css" rel="stylesheet" />
+    <link href="~/Content/css/adminCustom.css" rel="stylesheet" />
+</head>
+<body class="breakpoint-1024">
+
+    <div class="navbar navbar-main navbar-primary navbar-fixed-top navbar-primary-manager admin" role="navigation">
+        <div class="container-fluid">
+            @*            <div class="navbar-header">*@
+            @*                <a class="navbar-brand" href="index.html">AMS</a>*@
+            @*            </div>*@
+            <div class="navbar-header ">
+                <ul class="nav navbar-nav navbar-nav-admin">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle user truncate" data-toggle="dropdown">
+                            <img onerror="this.onerror = null; this.src = '/Content/images/defaultProfile.png'; " src="@profileImg" class="img-circle" width="40"> @currentUser.GetUserName() <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="/Account/LogOff">Đăng xuất</a>
+                            </li>
+                        </ul>
+                </ul>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="navbar-collapse collapse" id="main-nav" style="height: 1px;">
+                <ul class="nav navbar-nav manager-header">
+                    <li id="hdRequestNav" style="background-color: #25ad9f">
+                        <a href="/"><i class="fa fa-fw fa-users"></i>Mạng xã hội</a>
+                    </li>
+                    <li id="configNav" class="">
+                        <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-wrench"></i> Cấu Hình</a>
+                    </li>
+                    <li id="userNav" class="">
+                        <a href="/Management/ManageUser/ViewManagerList"><i class="fa fa-user"></i> NV Quản lý</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="st-container">
+
+        <div id="content" style="margin-left: 0">
+            @RenderBody()
+            <!--Footer-->
+            <div class="footer" style="left: 0px">
+                Social Network Template © Copyright Notice
+            </div>
+        </div>
+
+        <hr />
+    </div>
+
+
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+    <script src="~/Scripts/amsScript/vendor.js"></script>
+    <script src="~/Scripts/amsScript/scripts.js"></script>
+    <script src="~/Scripts/amsScript/custom.js"></script>
+    <script src="~/Scripts/amsScript/additional-methods.min.js"></script>
+    @*    <script src="~/Scripts/amsScript/jquery.validate.min.js"></script>*@
+    <script src="~/Scripts/amsScript/jquery.validate.js"></script>
+    <script src="~/Scripts/amsScript/jquery.timepicker.min.js"></script>
+    <script src="~/Scripts/jquery.datetimepicker.full.js"></script>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>
+
+
+
+
+

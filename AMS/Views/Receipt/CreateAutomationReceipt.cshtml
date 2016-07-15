@@ -109,12 +109,13 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <fieldset class="scheduler-border less-padding border-top">
-                                            <legend class="scheduler-border bold-black">Giá nước</legend>
-                                            <div class="form-group">
-                                                <div class="table-responsive col-md-offset-1 col-md-11">
-                                                    <table class="table v-middle table-bordered table-striped table-condensed ">
+                                            <legend class="scheduler-border bold-black">Khung giá nước và phí cố định</legend>
+                                            <div class="row">
+                                                <div class="table-responsive col-md-12">
+                                                    <table class="table v-middle table-bordered table-condensed ">
                                                         <thead>
                                                             <tr>
+                                                                <th></th>
                                                                 <th style="width: 40%" class="text-capitalize">Dạng cư trú</th>
                                                                 <th style="width: 60%" class="text-capitalize text-center">
                                                                     Khung giá
@@ -122,29 +123,40 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
+                                                            <tr>
+                                                                <td style="white-space: nowrap;font-weight: bold;" rowspan="@(waterSevices.Count +1)">
+                                                                    Giá nước
+                                                                </td>
+                                                            </tr>
+
                                                             @{for (int i = 0; i < waterSevices.Count; i++)
                                                             {
                                                                 var water = waterSevices[i];
                                                                 <tr>
                                                                     <td>@water.HouseCategory.Name</td>
-                                                                    <td>@water.UtilityService.Name</td>
+                                                                    <td><a class="cursor-pointer" onclick="viewUtilServDetail(@water.Id)">@water.UtilityService.Name</a></td>
                                                                 </tr>
                                                             }
                                                             }
+                                                            <tr>
+                                                                <td style="white-space: nowrap; font-weight: bold;" rowspan="@(waterSevices.Count + 1)">
+                                                                    Phí cố định
+                                                                </td>
+                                                            <tr>
+                                                                <td>Tất cả</td>
+                                                                @{if (fixedCost.UtilityService == null)
+                                                                {
+                                                                    <td>"Chưa thiết lập"</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td><a class="cursor-pointer" onclick="viewUtilServDetail(@fixedCost.Id)">@fixedCost.UtilityService.Name</a></td>
+                                                                }
+                                                                }
+                                                            </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                            </div>
-                                        </fieldset>
-
-                                    </div>
-                                    <div class="form-group">
-                                        <fieldset class="scheduler-border less-padding border-top">
-                                            <legend class="scheduler-border bold-black">Phí cố định</legend>
-
-                                            <label class="col-md-2 control-label">Tên</label>
-                                            <div class="col-md-10">
-                                                <input class="form-control" value="@(fixedCost.UtilityService == null ? "Chưa thiết lập" : fixedCost.UtilityService.Name)" type="text" />
                                             </div>
                                         </fieldset>
                                     </div>
@@ -177,11 +189,12 @@
                                     </tfoot>
                                     <tbody></tbody>
                                 </table>
-
                             </div>
                             <div class="form-group">
-                                <div class="pull-right">
-                                    <button type="submit" id="btnAddAutomationReceipt" class="btn btn-info hide"> <i class="fa fa-save"></i> Lưu</button>
+                                <div class="col-md-12">
+                                    <div class="pull-right">
+                                        <button type="submit" id="btnAddAutomationReceipt" class="btn btn-info hide"> <i class="fa fa-save"></i> Lưu</button>
+                                    </div>
                                 </div>
                             </div>
                             }
@@ -253,7 +266,87 @@
         </div>
     </div>
 </div>
+<div id="viewUtilityServiceDetailModal" class="modal fade ams-modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 id="" class="modal-title">Chi tiết phí sinh hoạt</h4>
+            </div>
+            <form class="form-horizontal" role="form">
+                <div class="modal-body">
+                    <div class="panel-body">
 
+                        <div class="alert alert-info" id="" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Thêm loại giao dịch thành công.</span>
+                        </div>
+                        <div class="alert alert-danger" id="" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Thêm loại giao dịch thất bại.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="houseConsumptWater" class="col-md-3 control-label">Tên </label>
+                            <div class="input-group col-md-8">
+                                <input id="utilServName" type="text" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="houseConsumptWater" class="col-md-3 control-label">Loại dịch vụ </label>
+                            <div class="input-group col-md-8">
+                                <input id="utilServCatName" type="text" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="houseConsumptWater" class="col-md-3 control-label">Dạng cư trú </label>
+                            <div class="input-group col-md-8">
+                                <input id="utilServHouseCatName" type="text" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div id="waterCostRow" class="form-group">
+                            <fieldset class="scheduler-border less-padding" style="padding-bottom: 2em !important;">
+                                <legend class="scheduler-border bold-black">Khung giá nước</legend>
+                                <div class="col-md-12">
+                                    <table class="table v-middle table-bordered table-striped table-condensed " style="margin: 0; width: 100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Tên mức</th>
+                                                <th>Từ</th>
+                                                <th>Đến</th>
+                                                <th>Giá</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="utlSrvRangePriceTbl"></tbody>
+                                    </table>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div id="fixedCostRow" class="form-group hide">
+                            <fieldset class="scheduler-border less-padding" style="padding-bottom: 2em !important;">
+                                <legend class="scheduler-border bold-black">Phí cố định</legend>
+                                <div class="col-md-12">
+                                    <table class="table v-middle table-bordered table-striped table-condensed " style="margin: 0;width: 100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Tên</th>
+                                                <th>Giá</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="fixedCostPriceTbl"></tbody>
+                                    </table>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <script>
 
@@ -563,7 +656,7 @@
                         $("#msgAddFailedNoty").fadeOut("fast");
                     },5000);
                 }else if (data.StatusCode === 3) {
-                    var msg = "Không tìm được khung giá nước cho dạng cư trú <strong>" + data.Data + "</strong>.";
+                    var msg = "Không tìm được khung giá nước cho căn hộ <strong>" + data.Data + "</strong>.";
                     $("#notyMsg").html(msg);
                     $("#msgAddFailedNoty").fadeIn("fast");
                     setTimeout(function() {
@@ -571,6 +664,27 @@
                     },5000);
                 }else if (data.StatusCode === 4) {
                     var msg = "Bảng thu chi của tháng <strong>" + $("#forMonthView").val() + "</strong> đã đóng. Xin nhập lại tháng khác.";
+                    $("#notyMsg").html(msg);
+                    $("#msgAddFailedNoty").fadeIn("fast");
+                    setTimeout(function() {
+                        $("#msgAddFailedNoty").fadeOut("fast");
+                    },5000);
+                }else if (data.StatusCode === 5) {
+                    var msg = "Không tìm thấy căn hộ <strong>" + data.Data + "</strong>. Xin vui lòng kiểm tra lại";
+                    $("#notyMsg").html(msg);
+                    $("#msgAddFailedNoty").fadeIn("fast");
+                    setTimeout(function() {
+                        $("#msgAddFailedNoty").fadeOut("fast");
+                    },5000);
+                }else if (data.StatusCode === 6) {
+                    var msg = "Không tìm được giá chi phí cố định cho căn hộ <strong>" + data.Data + "</strong>.";
+                    $("#notyMsg").html(msg);
+                    $("#msgAddFailedNoty").fadeIn("fast");
+                    setTimeout(function() {
+                        $("#msgAddFailedNoty").fadeOut("fast");
+                    },5000);
+                } else if (data.StatusCode === 7) {
+                    var msg = "Không tìm được loại cư trú cho căn hộ <strong>" + data.Data + "</strong>.";
                     $("#notyMsg").html(msg);
                     $("#msgAddFailedNoty").fadeIn("fast");
                     setTimeout(function() {
@@ -634,6 +748,58 @@
             },
             submitHandler: function () {
                 saveAutomationReceipt();
+            }
+        });
+    }
+
+    function viewUtilServDetail(id) {
+        $.ajax({
+            url:"/Management/ManageReceipt/GetUtilSrvDetail",
+            type:"GET",
+            data: {
+                id:id
+            },
+            success:function(data) {
+                if (data.StatusCode === 0) {
+                    var obj = data.Data;
+                    $("#utilServName").val(obj.Name);
+                    $("#utilServCatName").val(obj.TypeName);
+                    $("#utilServHouseCatName").val(obj.HouseCatName);
+
+                    if (obj.Type === parseInt("@SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER")) {
+                        var rangePrices = obj.WaterUtilServiceRangePrices;
+                        var bodyElement = $("#utlSrvRangePriceTbl");
+                        bodyElement.html("");
+                        for (var i = 0; i < rangePrices.length; i++) {
+                            var price = rangePrices[i];
+                            var tag = "<tr>" +
+                                "<td>" +price.Name +"</td>" +
+                                "<td>" +price.FromAmount +"</td>";
+                            if (price.ToAmount === "@SLIM_CONFIG.MAX_NUMBER") {
+                                tag =  tag + "<td>*</td>";
+                            } else {
+                                tag=  tag + "<td>" + price.ToAmount + "</td>";
+                            }
+                            tag = tag+ "<td>" + numberWithCommas(price.Price) + "</td>" +
+                                "</tr>";
+                            bodyElement.append(tag);
+                        }
+                        $("#waterCostRow").removeClass("hide");
+                        $("#fixedCostRow").addClass("hide");
+                    } else {
+                        var price = obj.FixedCostPrice;
+                        var bodyElement = $("#fixedCostPriceTbl");
+                        bodyElement.html("");
+                        var tag = "<tr>" +
+                                "<td>" +price.Name +"</td>" +
+                                "<td>" + numberWithCommas(price.Price) +"</td>"+
+                            "</tr>";
+                        bodyElement.append(tag);
+                        $("#waterCostRow").addClass("hide");
+                        $("#fixedCostRow").removeClass("hide");
+                    }
+                    $("#viewUtilityServiceDetailModal").modal("show");
+                }
             }
         });
     }

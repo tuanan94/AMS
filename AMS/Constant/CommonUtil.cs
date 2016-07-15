@@ -34,15 +34,15 @@ namespace AMS.Constant
 
         public static void SentSms(string toNumber, string messContent)
         {
-            var accountSid = "AC10ae7ed64035004a9f1ed772747b94dc"; // Your Account SID from www.twilio.com/console
-            var authToken = "c867c6dadb271752b1fa0bb988f1c284";  // Your Auth Token from www.twilio.com/console
-            toNumber = new StringBuilder("+84").Append(toNumber.Substring(1, toNumber.Length - 1)).ToString();
-            var twilio = new TwilioRestClient(accountSid, authToken);
-            var message = twilio.SendMessage(
-                "+12057198424", // From (Replace with your Twilio number)
-                toNumber, // To (Replace with your phone number)
-                messContent
-                );
+            //            var accountSid = "AC10ae7ed64035004a9f1ed772747b94dc"; // Your Account SID from www.twilio.com/console
+            //            var authToken = "c867c6dadb271752b1fa0bb988f1c284";  // Your Auth Token from www.twilio.com/console
+            //            toNumber = new StringBuilder("+84").Append(toNumber.Substring(1, toNumber.Length - 1)).ToString();
+            //            var twilio = new TwilioRestClient(accountSid, authToken);
+            //            var message = twilio.SendMessage(
+            //                "+12057198424", // From (Replace with your Twilio number)
+            //                toNumber, // To (Replace with your phone number)
+            //                messContent
+            //                );
             //            Console.WriteLine(message.Sid);
             //            Console.Write("Press any key to continue.");
             //            Console.ReadKey();
@@ -51,34 +51,12 @@ namespace AMS.Constant
         /*http://stackoverflow.com/questions/6501797/resize-image-proportionally-with-maxheight-and-maxwidth-constraints*/
         public static System.Drawing.Image ScaleImage(System.Drawing.Image image, int maxWidth, int maxHeight)
         {
-            //            var ratioX = (double)maxWidth / image.Width;
-            //            var ratioY = (double)maxHeight / image.Height;
-            //            var ratio = Math.Min(ratioX, ratioY);
-            //
-            //            var newWidth = (int)(image.Width * ratio);
-            //            var newHeight = (int)(image.Height * ratio);
-            //
-            //            var newImage = new Bitmap(newWidth, newHeight);
-            //
-            //            using (var graphics = Graphics.FromImage(newImage))
-            //                graphics.DrawImage(image, 0, 0, newWidth, newHeight);
-            //
-            //            return newImage;
-
-
-//                        var ratioX = (double)maxWidth / image.Width;
-                        var ratioY = (double)maxHeight / image.Height;
-
-                        var newWidth = (int)(image.Width * ratioY);
-                        var newHeight = (int)(image.Height * ratioY);
-            
-                        var newImage = new Bitmap(newWidth, newHeight);
-            
-                        using (var graphics = Graphics.FromImage(newImage))
-                            graphics.DrawImage(image, 0, 0, newWidth, newHeight);
-            
-                        return newImage;
-           
+            var ratioY = (double)maxHeight / image.Height;
+            var newWidth = (int)(image.Width * ratioY);
+            var newHeight = (int)(image.Height * ratioY);
+            var newImage = new Bitmap(newWidth, newHeight);
+            using (var graphics = Graphics.FromImage(newImage))
+                graphics.DrawImage(image, 0, 0, newWidth, newHeight);
             return newImage;
         }
 

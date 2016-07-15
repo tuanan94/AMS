@@ -46,6 +46,8 @@ namespace AMS
         public static String dirHouseProfileImage = "houseImage";
         public static String dirProfileImage = "profileImage";
 
+        public static String EMPLOYEE_BLOCK_HOUSE_NAME = "Employee";
+
         public static int RECEIPT_STATUS_UNPUBLISHED = 1;
         public static int RECEIPT_STATUS_UNPAID = 2;
         public static int RECEIPT_STATUS_PAID = 3;
@@ -93,7 +95,9 @@ namespace AMS
 
         public static int HOUSE_STATUS_ENABLE = 1;
         public static int HOUSE_STATUS_DISABLE = 2;
-        public static int HOUSE_STATUS_DELETE = 3;
+
+        public static int HOUSE_HAS_RESIDENT = 1;
+        public static int HOUSE_HAS_N0_RESIDENT = 2;
 
         public static int HOUSE_ADD_NEW_FLOOR = 0;
         public static int HOUSE_ADD_EXISTING_FLOOR = 1;
@@ -106,6 +110,13 @@ namespace AMS
 
 
         public static double MAX_NUMBER = 999999999.0;
+
+        public static int RECEIPT_FILTER_MODE_UNPAID = 0;
+        public static int RECEIPT_FILTER_MODE_THIS_MONTH = 1;
+        public static int RECEIPT_FILTER_MODE_LAST_MONTH = 2;
+        public static int RECEIPT_FILTER_MODE_LAST_3_MONTH = 3;
+        public static int RECEIPT_FILTER_MODE_RANGE_TIME = 4;
+        public static int RECEIPT_FILTER_MODE_ALL = 5;
 
         /* Weather API. 507468bd4d6345f2aa372826162306. Service Provider: http://developer.worldweatheronline.com/default.aspx */
         public static String WeatherAPI_KEY = "507468bd4d6345f2aa372826162306";

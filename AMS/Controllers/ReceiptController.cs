@@ -7,6 +7,7 @@ using System.Text;
 using System.Web.Mvc;
 using System.Xml;
 using AMS.Constant;
+using AMS.Filter;
 using AMS.Models;
 using AMS.Service;
 using LINQtoCSV;
@@ -40,6 +41,7 @@ namespace AMS.Controllers
         [HttpGet]
         [AutoRedirect.MandatorySurveyRedirect]
         [Route("Home/ManageReceipt/View")]
+        [Authorize]
         public ActionResult GetUserReceipt()
         {
             //            User u = _userServices.FindById(Int32.Parse(User.Identity.GetUserId()));
@@ -109,7 +111,7 @@ namespace AMS.Controllers
 
         [HttpGet]
         [Route("Home/ManageReceipt/GetOrderList")]
-        public ActionResult GetOrderList(int userId, string from, string to)
+        public ActionResult GetOrderList(int userId, string from, string to, int mode)
         {
             MessageViewModels response = new MessageViewModels();
             User u = _userServices.FindById(userId);
@@ -117,10 +119,48 @@ namespace AMS.Controllers
             {
                 try
                 {
-                    DateTime fromDate = DateTime.ParseExact(from, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
-                    DateTime toDate = DateTime.ParseExact(to, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
+                    List<Receipt> receipts = null;
+                    if (mode == SLIM_CONFIG.RECEIPT_FILTER_MODE_UNPAID)
+                    {
+                        receipts = _receiptServices.GetAllUnpaidReceip(u.HouseId.Value);
+                    }
+                    else if (mode == SLIM_CONFIG.RECEIPT_FILTER_MODE_THIS_MONTH)
+                    {
+                        DateTime today = DateTime.Now;
+                        DateTime firstDateOfThisMounth = new DateTime(today.Year, today.Month, 1);
+                        DateTime endDateOfThisMounth = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
+                        receipts = _receiptServices.GetReceiptByHouseFromDateToDate(u.HouseId.Value, firstDateOfThisMounth, endDateOfThisMounth);
+                    }
+                    else if (mode == SLIM_CONFIG.RECEIPT_FILTER_MODE_LAST_MONTH)
+                    {
+                        DateTime todayLastMonth = DateTime.Today.AddMonths(-1);
+                        DateTime firstDateOfThisMounth = new DateTime(todayLastMonth.Year, todayLastMonth.Month, 1);
+                        DateTime endDateOfThisMounth = new DateTime(todayLastMonth.Year, todayLastMonth.Month, DateTime.DaysInMonth(todayLastMonth.Year, todayLastMonth.Month));
+                        receipts = _receiptServices.GetReceiptByHouseFromDateToDate(u.HouseId.Value, firstDateOfThisMounth, endDateOfThisMounth);
+                    }
+                    else if (mode == SLIM_CONFIG.RECEIPT_FILTER_MODE_LAST_3_MONTH)
+                    {
+                        DateTime todayLast3Month = DateTime.Today.AddMonths(-3);
+                        DateTime thisMonth = DateTime.Today;
+                        DateTime firstDateOfThisMounth = new DateTime(todayLast3Month.Year, todayLast3Month.Month, 1);
+                        DateTime endDateOfThisMounth = new DateTime(thisMonth.Year, thisMonth.Month, DateTime.DaysInMonth(thisMonth.Year, thisMonth.Month));
+                        receipts = _receiptServices.GetReceiptByHouseFromDateToDate(u.HouseId.Value, firstDateOfThisMounth, endDateOfThisMounth);
+                    }
+                    else if (mode == SLIM_CONFIG.RECEIPT_FILTER_MODE_RANGE_TIME)
+                    {
+                        DateTime fromMonth = DateTime.ParseExact(from, AmsConstants.MonthYearFormat, CultureInfo.CurrentCulture);
+                        DateTime toMonth = DateTime.ParseExact(to, AmsConstants.MonthYearFormat, CultureInfo.CurrentCulture);
 
-                    List<Receipt> receipts = _receiptServices.GetReceiptByHouseFromDateToDate(u.HouseId.Value, fromDate, toDate);
+                        DateTime firstDateOfThisMounth = new DateTime(fromMonth.Year, fromMonth.Month, 1);
+                        DateTime endDateOfThisMounth = new DateTime(toMonth.Year, toMonth.Month, DateTime.DaysInMonth(toMonth.Year, toMonth.Month));
+                        receipts = _receiptServices.GetReceiptByHouseFromDateToDate(u.HouseId.Value, firstDateOfThisMounth, endDateOfThisMounth);
+                    }
+                    else if (mode == SLIM_CONFIG.RECEIPT_FILTER_MODE_ALL)
+                    {
+                        receipts = _receiptServices.GetReceiptByHouseId(u.HouseId.Value);
+                    }
+
+                    //                    List<Receipt> receipts = _receiptServices.GetReceiptByHouseFromDateToDate(u.HouseId.Value, fromDate, toDate);
                     List<ReceiptInfoModel> receiptModel = new List<ReceiptInfoModel>();
                     double sum = 0;
                     double paidAmount = 0;
@@ -273,6 +313,7 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [Route("Home/ManageReceipt/View/Detail")]
         public ActionResult GetOrderDetail(int userId, int orderId)
         {
@@ -292,7 +333,7 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [ManagerAuthorize]
         [Route("Management/ManageReceipt/View")]
         public ActionResult ViewManagerOrderList()
         {
@@ -301,6 +342,7 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [Route("Home/ManageReceipt/ViewElectricBill")]
         public ActionResult ViewElectricBill(int receiptDetailId)
         {
@@ -770,7 +812,7 @@ namespace AMS.Controllers
                                 {
                                     response.StatusCode = 5;
                                     response.Data = houseConsummption.HouseName;
-                                    response.Msg = "Số tháng trước không chính xác: " + houseConsummption.HouseName;
+                                    response.Msg = "Số ghi nước tháng trước không chính xác: " + houseConsummption.HouseName;
                                     return Json(response, JsonRequestBehavior.AllowGet);
                                 }
 
@@ -825,11 +867,10 @@ namespace AMS.Controllers
                 }
                 response.Data = monthlyResidentExpenseList;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 response.StatusCode = -1;
                 return Json(response, JsonRequestBehavior.AllowGet);
-                throw;
             }
 
             return Json(response, JsonRequestBehavior.AllowGet);
@@ -837,6 +878,7 @@ namespace AMS.Controllers
 
 
         [HttpGet]
+        [ManagerAuthorize]
         [Route("Management/ManageReceipt/CreateAutomationReceiptView")]
         public ActionResult ManageAutomationReceipt()
         {
@@ -946,6 +988,55 @@ namespace AMS.Controllers
 
                 List<MonthlyResidentExpenseModel> cannotCreateReceipt = new List<MonthlyResidentExpenseModel>();
 
+
+                foreach (var houseRecord in automationReceipt.ResidentExpenseRecords)
+                {
+                    House house = _houseServices.FindById(houseRecord.HouseId);
+                    if (house != null && house.OwnerID != null && house.Status != SLIM_CONFIG.HOUSE_STATUS_DISABLE)
+                    {
+                        if (house.HouseCategory != null)
+                        {
+                            List<UtilServiceForHouseCat> waterUtilSrvForCat =
+                                house.HouseCategory.UtilServiceForHouseCats.Where(
+                                    utilForHouse =>
+                                        utilForHouse.Status == SLIM_CONFIG.UTILITY_SERVICE_OF_HOUSE_CAT_ENABLE &&
+                                        utilForHouse.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
+                                    .ToList();
+
+                            if (waterUtilSrvForCat.Count == 0)
+                            {
+                                response.StatusCode = 3;
+                                response.Data = houseRecord.HouseName;
+                                return Json(response);
+                            }
+                            List<UtilServiceForHouseCat> fixCostForHouseCat =
+                                house.HouseCategory.UtilServiceForHouseCats.Where(
+                                    utilForHouse =>
+                                        utilForHouse.Status == SLIM_CONFIG.UTILITY_SERVICE_OF_HOUSE_CAT_ENABLE &&
+                                        utilForHouse.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST)
+                                    .ToList();
+                            if (fixCostForHouseCat.Count == 0)
+                            {
+                                response.StatusCode = 6;
+                                response.Data = houseRecord.HouseName;
+                                return Json(response);
+                            }
+                        }
+                        else
+                        {
+                            response.StatusCode = 7;
+                            response.Data = houseRecord.HouseName;
+                            return Json(response);
+                        }
+                    }
+                    else
+                    {
+                        response.StatusCode = 5;
+                        response.Data = houseRecord.HouseName;
+                        return Json(response);
+                    }
+                }
+
                 foreach (var houseRecord in automationReceipt.ResidentExpenseRecords)
                 {
                     House house = _houseServices.FindById(houseRecord.HouseId);
@@ -1003,10 +1094,9 @@ namespace AMS.Controllers
                         }
                         else
                         {
-                            cannotCreateReceipt.Add(houseRecord);
                             response.StatusCode = 3;
-                            response.Data = house.HouseCategory.Name;
-                            response.Msg = new StringBuilder("Không tìm được khung giá nước cho dạng cư trú ").Append(house.HouseCategory.Name).ToString();
+                            response.Data = houseRecord.HouseName;
+                            return Json(response);
                         }
                         List<UtilServiceForHouseCat> fixCostForHouseCat =
                             house.HouseCategory.UtilServiceForHouseCats.Where(
@@ -1018,7 +1108,9 @@ namespace AMS.Controllers
                         {
                             // Fixed Cost
                             receiptDetail = new ReceiptDetail();
-                            fixedCost = fixCostForHouseCat.First().UtilityService.UtilityServiceRangePrices.First().Price.Value * house.Area.Value;
+                            fixedCost =
+                                fixCostForHouseCat.First().UtilityService.UtilityServiceRangePrices.First().Price.Value *
+                                house.Area.Value;
                             receiptDetail.UtilityServiceId = fixCostForHouseCat.First().UtilityService.Id;
                             receiptDetail.Total = fixedCost;
                             receiptDetail.ReceiptId = receipt.Id;
@@ -1036,6 +1128,12 @@ namespace AMS.Controllers
                             transaction.PaidAmount = 0;
                             _transactionService.Add(transaction);
                         }
+                        else
+                        {
+                            response.StatusCode = 6;
+                            response.Data = houseRecord.HouseName;
+                            return Json(response);
+                        }
                     }
                     else
                     {
@@ -1048,6 +1146,7 @@ namespace AMS.Controllers
 
 
         [HttpGet]
+        [ManagerAuthorize]
         [Route("Management/ManageReceipt/ViewBatchReceipt")]
         public ActionResult ViewBatchReceipt(long receiptId)
         {
@@ -1086,8 +1185,6 @@ namespace AMS.Controllers
                 {
                     fixedCost = utilSrv.UtilServiceForHouseCats.ToList().First();
                 }
-
-
                 ViewBag.waterService = waterSrv;
                 ViewBag.fixedCost = fixedCost;
                 return View("UpdateAutomationReceipt");
@@ -1282,7 +1379,7 @@ namespace AMS.Controllers
                                 r.ReceiptDetails = null;
                                 if (r.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
                                 {
-                                    int toNumber = 0;
+                                    int fromNumber = 0;
                                     int houseId = r.HouseId.Value;
                                     _receiptServices.Delete(r);
                                     foreach (var detail in temp3)
@@ -1294,9 +1391,9 @@ namespace AMS.Controllers
                                         _receiptDetailServices.DeleteById(detail.Id);
                                         if (detail.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
                                         {
-                                            toNumber = detail.ToNumber.Value;
+                                            fromNumber = detail.FromNumber.Value;
                                             House house = _houseServices.FindById(houseId);
-                                            house.WaterMeter = toNumber;
+                                            house.WaterMeter = fromNumber;
                                             _houseServices.Update(house);
                                         }
 
@@ -1337,6 +1434,7 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
+        [ManagerAuthorize]
         [Route("Management/ManageReceipt/CreateManualReceiptView")]
         public ActionResult ManageManualReceipt()
         {
@@ -1686,10 +1784,10 @@ namespace AMS.Controllers
                             if (receipt.PublishDate.Value.Date == DateTime.Today)
                             {
                                 receipt.Status = SLIM_CONFIG.RECEIPT_STATUS_UNPAID;
-                                response.Data = new {publishDate = receipt.PublishDate.Value.ToString(AmsConstants.DateFormat)};
+                                response.Data = new { publishDate = receipt.PublishDate.Value.ToString(AmsConstants.DateFormat) };
                             }
                         }
-                        
+
                         else
                         {
                             response.StatusCode = 5;
@@ -1713,6 +1811,7 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
+        [ManagerAuthorize]
         [Route("Management/ManageReceipt/ReceiptDetailItemList")]
         public ActionResult GetReceiptDetailItemList(int receiptId)
         {
@@ -1909,6 +2008,7 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
+        [ManagerAuthorize]
         [Route("Management/ManageReceipt/ViewDownloadRecordTemplate")]
         public ActionResult ViewDownloadWaterRecordTemplate()
         {
@@ -1955,6 +2055,52 @@ namespace AMS.Controllers
                 return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
             }
             return View("DownloadWaterConsumptionTemplate");
+        }
+
+        [HttpGet]
+        [Route("Management/ManageReceipt/GetUtilSrvDetail")]
+        public ActionResult GetUtilSrvDetail(int id)
+        {
+            MessageViewModels response = new MessageViewModels();
+            UtilServiceForHouseCat utilServiceForHouseCat = _utlSrvForHouseCatServices.FindById(id);
+            if (utilServiceForHouseCat != null)
+            {
+                UtilityServiceModel utlSrvModel = new UtilityServiceModel();
+                utlSrvModel.Name = utilServiceForHouseCat.UtilityService.Name;
+                utlSrvModel.TypeName = utilServiceForHouseCat.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER ? AmsConstants.UtilityServiceWater : AmsConstants.UtilityServiceFixedCost;
+                utlSrvModel.Type = utilServiceForHouseCat.UtilityService.Type.Value;
+                utlSrvModel.HouseCatName = utilServiceForHouseCat.HouseCategory.Name;
+
+                if (utilServiceForHouseCat.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
+                {
+                    List<UtilityServiceRangePriceModel> rangePrice = new List<UtilityServiceRangePriceModel>();
+                    UtilityServiceRangePriceModel rPrice = null;
+                    foreach (var range in utilServiceForHouseCat.UtilityService.UtilityServiceRangePrices)
+                    {
+                        rPrice = new UtilityServiceRangePriceModel();
+                        rPrice.Name = range.Name;
+                        rPrice.FromAmount = range.FromAmount.Value.ToString();
+                        rPrice.ToAmount = range.ToAmount.Value.ToString();
+                        rPrice.Price = range.Price.Value;
+                        rangePrice.Add(rPrice);
+                    }
+                    utlSrvModel.WaterUtilServiceRangePrices = rangePrice;
+                }
+                else
+                {
+                    FixedCostPriceModel fixCost = new FixedCostPriceModel();
+                    UtilityServiceRangePrice rPrice = utilServiceForHouseCat.UtilityService.UtilityServiceRangePrices.First();
+                    fixCost.Name = rPrice.Name;
+                    fixCost.Price = rPrice.Price.Value;
+                    utlSrvModel.FixedCostPrice = fixCost;
+                }
+                response.Data = utlSrvModel;
+            }
+            else
+            {
+
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
 
         private double calculateElectricUtiService(double consumption, List<UtilityServiceRangePrice> rangePrices)

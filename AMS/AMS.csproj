@@ -464,6 +464,7 @@
     <Content Include="Content\aroundProvider\responsive.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\css\adminCustom.css" />
     <Content Include="Content\css\blue.css" />
     <Content Include="Content\css\blue.min.css" />
     <Content Include="Content\css\bootstrap-switch.css" />
@@ -557,6 +558,7 @@
       <DependentUpon>Model1.edmx</DependentUpon>
       <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\amsScript\jquery.validate.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\amsScript\additional-methods.min.js" />
@@ -730,7 +732,7 @@
     <Content Include="Views\Management\ManageSurvey.cshtml" />
     <Content Include="Views\Home\Test.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
-    <Content Include="Views\Management\_helpdeskServiceCategoryTablePartial.cshtml" />
+    <Content Include="Views\Config\_helpdeskServiceCategoryTablePartial.cshtml" />
     <Content Include="Views\HelpdeskRequest\CreateHdRequest.cshtml" />
     <Content Include="Views\HelpdeskRequest\ViewHistoryHdRequests.cshtml" />
     <Content Include="Views\Home\TimeLine.cshtml" />
@@ -748,7 +750,7 @@
     <Content Include="Views\Home\Setting.cshtml" />
     <Content Include="Views\HelpdeskRequest\ViewHistoryHdRequestDetail.cshtml" />
     <Content Include="Views\BalanceSheet\BalanceSheet.cshtml" />
-    <Content Include="Views\BalanceSheet\ManageTransactionCategory.cshtml" />
+    <Content Include="Views\Config\ManageTransactionCategory.cshtml" />
     <Content Include="Views\Receipt\HouseExpenseStatus.cshtml" />
     <Content Include="Views\Survey\View1.cshtml" />
     <Content Include="Views\Survey\DoSurvey.cshtml" />
@@ -784,6 +786,9 @@
     <Content Include="Views\AroundService\ManageAroundProvider.cshtml" />
     <Content Include="Views\AroundService\UpdateAroundServiceProvider.cshtml" />
     <Content Include="Views\AroundService\ManageAroundProviderCategory.cshtml" />
+    <Content Include="Views\Admin\_AdminLayout.cshtml" />
+    <Content Include="Views\Config\ManageManager.cshtml" />
+    <Content Include="Views\Config\ViewUtilityServiceDetail.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -791,7 +796,7 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
     <Content Include="Views\Management\ResidentApprovement.cshtml" />
-    <Content Include="Views\Management\ManageHelpdeskServiceCategory.cshtml" />
+    <Content Include="Views\Config\ManageHelpdeskServiceCategory.cshtml" />
     <Content Include="Views\Receipt\ViewReceipt.cshtml" />
     <Content Include="Views\Receipt\ViewReceiptDetail.cshtml" />
     <Content Include="Views\HelpdeskSupporter\History.cshtml" />
