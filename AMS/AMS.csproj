@@ -340,6 +340,7 @@
     <Compile Include="Models\HelpdeskServiceModels.cs" />
     <Compile Include="Models\HouseModels.cs" />
     <Compile Include="Models\HouseViewModels.cs" />
+    <Compile Include="Models\ImageModels.cs" />
     <Compile Include="Models\ManageHouseViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -509,45 +510,45 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="images\HouseProfile\family.jpg" />
-    <Content Include="images\HouseProfile\nhatui.png" />
-    <Content Include="images\IconPoll\1244-f.png" />
-    <Content Include="images\IconPoll\a.png" />
-    <Content Include="images\IconPoll\Food-Dome-icon.png" />
-    <Content Include="images\IconPoll\girl.png" />
-    <Content Include="images\IconPoll\idea.png" />
-    <Content Include="images\IconPoll\images.png" />
-    <Content Include="images\IconPoll\paper_holder_pad-512.png" />
-    <Content Include="images\IconPoll\party.png" />
-    <Content Include="images\IconPoll\payment.png" />
-    <Content Include="images\IconPoll\people.png" />
-    <Content Include="images\IconPoll\service.png" />
-    <Content Include="images\IconPoll\survey-flat-icon-clipboard-report-form-checklist-business-plan-sheet-file-note-pad-paper-page-document-planning-check-list-survey-questionnaire-flat-design-icon-512.png" />
-    <Content Include="images\IconPoll\survey-icon.png" />
-    <Content Include="images\Post\default-profile.png" />
-    <Content Include="images\Post\question_button.png" />
-    <Content Include="images\Post\SEO_survey_reuslts-1024x768.jpg" />
-    <Content Include="images\Post\survey-icon.png" />
+    <Content Include="Images\HouseProfile\family.jpg" />
+    <Content Include="Images\HouseProfile\nhatui.png" />
+    <Content Include="Images\IconPoll\1244-f.png" />
+    <Content Include="Images\IconPoll\a.png" />
+    <Content Include="Images\IconPoll\Food-Dome-icon.png" />
+    <Content Include="Images\IconPoll\girl.png" />
+    <Content Include="Images\IconPoll\idea.png" />
+    <Content Include="Images\IconPoll\images.png" />
+    <Content Include="Images\IconPoll\paper_holder_pad-512.png" />
+    <Content Include="Images\IconPoll\party.png" />
+    <Content Include="Images\IconPoll\payment.png" />
+    <Content Include="Images\IconPoll\people.png" />
+    <Content Include="Images\IconPoll\service.png" />
+    <Content Include="Images\IconPoll\survey-flat-icon-clipboard-report-form-checklist-business-plan-sheet-file-note-pad-paper-page-document-planning-check-list-survey-questionnaire-flat-design-icon-512.png" />
+    <Content Include="Images\IconPoll\survey-icon.png" />
+    <Content Include="Images\Post\default-profile.png" />
+    <Content Include="Images\Post\question_button.png" />
+    <Content Include="Images\Post\SEO_survey_reuslts-1024x768.jpg" />
+    <Content Include="Images\Post\survey-icon.png" />
     <Content Include="Content\rating.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="images\aroundProvider\banh-canh-cua.jpg" />
-    <Content Include="images\aroundProvider\bida-123.jpg" />
-    <Content Include="images\aroundProvider\blog-bg.jpg" />
-    <Content Include="images\aroundProvider\bun-bo-cay-cot-dien.jpg" />
-    <Content Include="images\aroundProvider\bun-bo-gio.jpg" />
-    <Content Include="images\aroundProvider\bun-bo-thit-cha-1.jpg" />
-    <Content Include="images\aroundProvider\bun-bo-thit-cha.jpg" />
-    <Content Include="images\aroundProvider\hu-tieu-nam-vang.jpg" />
-    <Content Include="images\aroundProvider\karaoke-gia-dinh.jpg" />
-    <Content Include="images\aroundProvider\khu-vui-choi-tre-em.jpg" />
-    <Content Include="images\aroundProvider\marker.png" />
-    <Content Include="images\aroundProvider\img-2.jpg" />
-    <Content Include="images\aroundProvider\background.jpg" />
-    <Content Include="images\aroundProvider\nha-tre-hai-con-meo.jpg" />
-    <Content Include="images\aroundProvider\pho-bo.jpg" />
-    <Content Include="images\rating.png" />
+    <Content Include="Images\aroundProvider\banh-canh-cua.jpg" />
+    <Content Include="Images\aroundProvider\bida-123.jpg" />
+    <Content Include="Images\aroundProvider\blog-bg.jpg" />
+    <Content Include="Images\aroundProvider\bun-bo-cay-cot-dien.jpg" />
+    <Content Include="Images\aroundProvider\bun-bo-gio.jpg" />
+    <Content Include="Images\aroundProvider\bun-bo-thit-cha-1.jpg" />
+    <Content Include="Images\aroundProvider\bun-bo-thit-cha.jpg" />
+    <Content Include="Images\aroundProvider\hu-tieu-nam-vang.jpg" />
+    <Content Include="Images\aroundProvider\karaoke-gia-dinh.jpg" />
+    <Content Include="Images\aroundProvider\khu-vui-choi-tre-em.jpg" />
+    <Content Include="Images\aroundProvider\marker.png" />
+    <Content Include="Images\aroundProvider\img-2.jpg" />
+    <Content Include="Images\aroundProvider\background.jpg" />
+    <Content Include="Images\aroundProvider\nha-tre-hai-con-meo.jpg" />
+    <Content Include="Images\aroundProvider\pho-bo.jpg" />
+    <Content Include="Images\rating.png" />
     <Content Include="Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
@@ -650,6 +651,7 @@
     <Content Include="Content\fonts\picto-foundry-weather.ttf" />
     <Content Include="Content\fonts\picto-foundry-weather.woff" />
     <Content Include="ClassDiagram1.cd" />
+    <Content Include="Scripts\freewall.js" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -816,7 +818,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="images\Post\Binh\" />
+    <Folder Include="Images\Post\Binh\" />
     <Folder Include="Upload\csv\" />
     <Folder Include="Upload\img\" />
     <Folder Include="Views\Image\" />

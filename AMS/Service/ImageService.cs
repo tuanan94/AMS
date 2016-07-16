@@ -1,8 +1,11 @@
 ﻿using AMS.Repository;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
+using AMS.Constant;
+using AMS.Models;
 
 namespace AMS.Service
 {
@@ -46,15 +49,33 @@ namespace AMS.Service
         {
             return imageRepository.List.FirstOrDefault(t => t.postId == id);
         }
-        public List<Image> findImagesByPostId(int postId)
+        public List<PostImageModel> findImagesByPostId(int postId)
         {
-            List<Image> result = new List<Image>();
+            List<PostImageModel> result = new List<PostImageModel>();
             List<Image> allImage = allImages();
+            PostImageModel image = null;
             foreach(Image m in allImage)
             {
                 if(m.postId == postId)
                 {
-                    result.Add(m);
+                    image = new PostImageModel();
+                    image.id = m.id;
+                    image.url = m.url;
+                    image.createdDate = m.createdDate.Value.ToString(AmsConstants.DateTimeFormat);
+                    image.postId = m.postId.Value;
+                    try
+                    {
+                        System.Drawing.Image img = System.Drawing.Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + image.url);
+                        image.width = img.Width;
+                        image.height = img.Height;
+                    }
+                    catch (Exception)
+                    {
+                        image.width = 0;
+                        image.height = 0;
+                    }
+                    
+                    result.Add(image);
                 }
             }
             return result;    

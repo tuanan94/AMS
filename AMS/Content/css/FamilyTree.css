@@ -101,6 +101,7 @@ right connector from last child*/
 	transition: all 0.5s;
 	-webkit-transition: all 0.5s;
 	-moz-transition: all 0.5s;
+    margin: 5px
 }
 
 /*Time for some hover effects*/

@@ -16,6 +16,8 @@ namespace AMS
     {
         public int id { get; set; }
         public string url { get; set; }
+        public int width{ get; set; }
+        public int height{ get; set; }
         public Nullable<System.DateTime> createdDate { get; set; }
         public Nullable<int> postId { get; set; }
     }

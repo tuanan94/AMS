@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using AMS.Constant;
 
 namespace AMS.Controllers
 {
@@ -39,8 +41,10 @@ namespace AMS.Controllers
                     {
                         System.IO.Directory.CreateDirectory(newPath);
                     }
-                    pic.SaveAs(newPath + "/" + pic.FileName);
-                    filePath = "/Images/" + folderDir +"/" + pic.FileName;
+                    System.Drawing.Image target = CommonUtil.ScaleImage(System.Drawing.Image.FromStream(pic.InputStream), 480, 480);
+                    long currentTime = DateTime.Now.Ticks;
+                    target.Save(newPath + "/" + currentTime + "_"  +pic.FileName );
+                    filePath = "/Images/" + folderDir + "/" + currentTime + "_" +  pic.FileName ;
                 }
             }
             return filePath;
