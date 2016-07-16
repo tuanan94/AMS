@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using AMS.Filter;
 using AMS.Service;
 using AMS.ViewModel;
 using Microsoft.AspNet.Identity;
@@ -295,6 +296,8 @@ namespace AMS.Controllers
 
             return View();
         }
+
+        [AuthorizationPrivilegeFilter_RequestHouse]
         [Authorize]
         public ActionResult DoSurvey()
         {
