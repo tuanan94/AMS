@@ -28,7 +28,7 @@
                 <form id="addUtilServiceForm" class="form-horizontal" role="form">
                     <div class="alert alert-info" id="addBlockSuccessNoti" style="display: none">
                         <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span id="successMsg">Tạo mới tòa nhà thành công. Đang chuyển tới trang chi tiết.</span>
+                        <span id="successMsg">Tạo mới tòa nhà thành công. Đang chuyển tới trang quản lý toàn nhà.</span>
                     </div>
                     <div class="alert alert-danger" id="addBlockFailedNoti" style="display: none">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
@@ -68,7 +68,7 @@
 
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id ="houseConfigForm">
                         <div class="col-md-offset-1 col-md-10">
                             <fieldset class="scheduler-border less-padding">
                                 <legend class="scheduler-border bold-black">Tên căn hộ mỗi tầng</legend>
@@ -190,6 +190,28 @@
                 }
             }
         });
+        $("#numberOfFloor").on("keyup", function (event) {
+            if (event.which >= 37 && event.which <= 40) {
+                event.preventDefault();
+            }
+            if (parseInt(event.currentTarget.value) === 0) {
+                $("#numberOfRoom").parent().parent().addClass("hide");
+                $("#houseConfigForm").addClass("hide");
+            } else {
+                $("#numberOfRoom").parent().parent().removeClass("hide");
+                $("#houseConfigForm").removeClass("hide");
+            }
+        });
+        $("#numberOfRoom").on("keyup", function (event) {
+            if (event.which >= 37 && event.which <= 40) {
+                event.preventDefault();
+            }
+            if (parseInt(event.currentTarget.value) === 0) {
+                $("#houseConfigForm").addClass("hide");
+            } else {
+                $("#houseConfigForm").removeClass("hide");
+            }
+        });
         validateCreateHouseBlock();
     });
 
@@ -222,8 +244,8 @@
                 if (data.StatusCode === 0) {
                     $("#addBlockSuccessNoti").fadeIn("fast");
                     setTimeout(function () {
-                        location.href = "/Management/Config/UtilityService/ViewHousesInBlock?blockId=" + data.Data;
-                    },2000);
+                        location.href = "/Management/Config/UtilityService/ViewManageHouseBlock";
+                    }, 2000);
                 } else if (data.StatusCode === 2) {
                     $("#addTransMsg").text("Tên tòa nhà đã tồn tại");
                     $("#msgAddFailedNoty").fadeIn("fast");

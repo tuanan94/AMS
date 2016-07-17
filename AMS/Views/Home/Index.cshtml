@@ -704,7 +704,7 @@
                                         + '<a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="pull-left"><img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" class="media-object avatar-comment"></a>'
                                         + '<div class="media-body" style="padding-left: 10px;">' +
                                             '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control input-cmnt" placeholder="Viết bình luận của bạn..."/>' +
-                                             '<i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(' + postObject['Id'] + ')" style="font-size: xx-large;color: #25AD9F;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:100"></i>' +
+                                             '<i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(' + postObject['Id'] + ')" style="font-size: xx-large;color: #25AD9F;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2"></i>' +
                                         '</div>'
 
 
@@ -791,35 +791,46 @@
 
 
     function timeSince(dateString) {
-        console.log("timeSince: " + dateString)
+        console.log("timeSince: " + dateString);
 
-        var date = new Date(dateString + "z");
-        console.log("date: " + date);
-        var seconds = Math.floor((new Date() - date) / 1000);
+        var date = "";
+//        console.log("date: " + date);
 
-        var interval = Math.floor(seconds / 31536000);
+        if (typeof dateString !== 'object') {
+            date = new Date(dateString);
+            }
 
-        if (interval >= 1) {
-            return interval + " năm";
-        }
-        interval = Math.floor(seconds / 2592000);
-        if (interval >= 1) {
-            return interval + " tháng";
-        }
-        interval = Math.floor(seconds / 86400);
-        if (interval >= 1) {
-            return interval + " ngày";
-        }
-        interval = Math.floor(seconds / 3600);
-        if (interval >= 1) {
-            return interval + " giờ";
-        }
-        interval = Math.floor(seconds / 60);
-        if (interval >= 1) {
-            return interval + " phút";
-        }
-        return Math.floor(seconds) + " giây";
+            var seconds = Math.floor((new Date() - date) / 1000);
+            var intervalType;
 
+            var interval = Math.floor(seconds / 31536000);
+            if (interval >= 1) {
+                intervalType = ' năm';
+            } else {
+                interval = Math.floor(seconds / 2592000);
+                if (interval >= 1) {
+                    intervalType = ' tháng';
+                } else {
+                    interval = Math.floor(seconds / 86400);
+                    if (interval >= 1) {
+                        intervalType = ' ngày';
+                    } else {
+                        interval = Math.floor(seconds / 3600);
+                        if (interval >= 1) {
+                            intervalType = " giờ";
+                        } else {
+                            interval = Math.floor(seconds / 60);
+                            if (interval >= 1) {
+                                intervalType = " phút";
+                            } else {
+                                interval = seconds;
+                                intervalType = " giây";
+                            }
+                        }
+                    }
+                }
+            }
+            return interval + ' ' + intervalType;
     }
 
 
