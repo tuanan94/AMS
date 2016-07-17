@@ -24,91 +24,6 @@
     alert = auto.Auto(currentUser);
     HelpdeskRequestLogServices helpdeskRequestLogService = new HelpdeskRequestLogServices();//AnTT - 09/07/16
 
-    //foreach (var item in listSurveys)
-    //{
-    //    if (DateTime.Now >= item.PublishDate && item.Priority == 1)
-    //    {
-    //        User currentUser = userServices.FindById(int.Parse(User.Identity.GetUserId()));
-    //        listUserAnswer = (userAnswerService.GetListUserAnswerPollsByPollId(item.Id));
-    //        List<BlockPoll> listBlockPolls = BlockPollService.FindByPollId(item.Id);
-    //        int k = 0;
-    //        int p = 0;
-    //        if (listSurveys.Count != 0)
-    //        {
-    //            if (item.Mode == 1 && item.Status == 1)
-    //            {
-    //                foreach (var VARIABLE in listUserAnswer)
-    //                {
-    //                    if (VARIABLE.UserId == currentUser.Id)
-    //                    {
-    //                        k++;
-    //                    }
-    //                }
-    //                foreach (var obj in listBlockPolls)
-    //                {
-    //                    if (currentUser.HouseId != null)
-    //                    {
-    //                        if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
-    //                        {
-    //                            p++;
-    //                        }
-    //                    }
-
-    //                }
-    //                if ((k != 1 && p == 1 && item.Status == 1) || (k != 1 && p == 0 && item.Status == 1))
-    //                //if (k != 1)
-    //                {
-    //                    alert = "Bạn Có Một Survey Cần phải Làm!";
-    //                }
-    //            }
-    //            else if (item.Mode == 2 && currentUser.RoleId == 4 && item.Status == 1)
-    //            {
-    //                foreach (var VARIABLE in listUserAnswer)
-    //                {
-    //                    if (VARIABLE.UserId == currentUser.Id)
-    //                    {
-    //                        k++;
-    //                    }
-    //                }
-    //                foreach (var obj in listBlockPolls)
-    //                {
-    //                    if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
-    //                    {
-    //                        p++;
-    //                    }
-    //                }
-    //                if (k != 1 && p == 1 && item.Status == 1)
-    //                // if (k != 1)
-    //                {
-    //                    alert = "Bạn Có Một Survey Cần phải Làm!";
-    //                }
-    //            }
-    //            else if ((item.Mode == 3 && currentUser.RoleId == 4 && item.Status == 1) || (item.Mode == 3 && currentUser.RoleId == 3 && item.Status == 1))
-    //            {
-    //                foreach (var VARIABLE in listUserAnswer)
-    //                {
-    //                    if (VARIABLE.UserId == currentUser.Id)
-    //                    {
-    //                        k++;
-    //                    }
-    //                }
-    //                foreach (var obj in listBlockPolls)
-    //                {
-    //                    if (obj.BlockId == BlockPollService.FindBlockIdByHouseId(currentUser.HouseId.Value).BlockId)
-    //                    {
-    //                        p++;
-    //                    }
-    //                }
-    //                if (k != 1 && p == 1 && item.Status == 1)
-    //                // if (k != 1)
-    //                {
-    //                    alert = "Bạn Có Một Survey Cần phải Làm!";
-    //                }
-    //            }
-
-    //        }
-    //    }
-    //}
 }
 <link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css" />
 <script src="~/Scripts/amsScript/LoadFamilyTree.js"></script>
@@ -789,7 +704,7 @@
                                         + '<a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="pull-left"><img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" class="media-object avatar-comment"></a>'
                                         + '<div class="media-body" style="padding-left: 10px;">' +
                                             '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control input-cmnt" placeholder="Viết bình luận của bạn..."/>' +
-                                             '<i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(' + postObject['Id'] + ')" style="font-size: xx-large;color: #25AD9F;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:50000"></i>' +
+                                             '<i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(' + postObject['Id'] + ')" style="font-size: xx-large;color: #25AD9F;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:100"></i>' +
                                         '</div>'
 
 

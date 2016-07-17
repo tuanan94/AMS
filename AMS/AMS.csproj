@@ -431,9 +431,6 @@
     <Compile Include="UserAnswerPoll.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="UserRateAroundProvider.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="UtilityService.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -487,6 +484,7 @@
     <Content Include="Content\css\thumbnails.css" />
     <Content Include="Content\css\_vendor.bundle.css" />
     <Content Include="Content\css\_vendor.min.css" />
+    <Content Include="Content\images\58164.jpg" />
     <Content Include="Content\images\addimage.png" />
     <Content Include="Content\images\banner-842.jpg" />
     <Content Include="Content\images\defaultPhoto.png" />
@@ -791,6 +789,7 @@
     <Content Include="Views\Admin\_AdminLayout.cshtml" />
     <Content Include="Views\Config\ManageManager.cshtml" />
     <Content Include="Views\Config\ViewUtilityServiceDetail.cshtml" />
+    <Content Include="Views\House\NotDisplay.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

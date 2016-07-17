@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'F:\FPT\10- Summer 2016\CP_AMS\AMS\AMS\AMS\Model1.edmx'. 
+﻿// T4 code generation is enabled for model '\\Mac\Home\Desktop\AMS\AMS\Model1.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.
