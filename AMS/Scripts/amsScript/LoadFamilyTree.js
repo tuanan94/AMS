@@ -12,7 +12,11 @@ var colorLevel;
 
                 },
                 success: function (successData) {
-                  //alert(successData)
+                    if (successData == "NOT_PERMISSION") {
+                        $("#memberPanelBody").html('<div style="width:100%;text-align:center"><h3>Thông tin thành viên được ẩn</h3><div>')
+                        return
+                    }
+                  
                     USERS = JSON.parse(successData);
                     doneUser = [];
                     colorLevel = 0;

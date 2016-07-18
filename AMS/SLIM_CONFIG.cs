@@ -8,8 +8,6 @@ namespace AMS
 {
     public class SLIM_CONFIG
     {  
-
-
         public static int PROGRAM_MODE_PRODUCT = 1;
         public static int PROGRAM_MODE_DEBUG = 0;
 

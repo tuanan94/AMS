@@ -21,5 +21,6 @@ namespace AMS.ObjectMapping
         public String username { get; set; }
         public String userProfile { get; set; }
         public String userFullName { get; set; }
+        public string houseName { get; set; }
     }
 }

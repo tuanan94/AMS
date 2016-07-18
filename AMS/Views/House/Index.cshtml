@@ -9,13 +9,221 @@
 <link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css" />
 <script src="~/Scripts/amsScript/LoadFamilyTree.js"></script>
 <script src="~/Scripts/amsScript/LoadUserProfile.js"></script>
+<style>
+    .button {
+        display: block;
+        width: 100px;
+        height: 35px;
+        background: #4E9CAF;
+        padding: 7px;
+        text-align: center;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+    }
+
+    .modalDialog {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 99999;
+        display: none;
+        opacity: 1;
+        -webkit-transition: opacity 400ms ease-in;
+        -moz-transition: opacity 400ms ease-in;
+        transition: opacity 400ms ease-in;
+    }
+
+        .modalDialog > div {
+            width: 400px;
+            position: relative;
+            margin: 10% auto;
+            padding: 5px 20px 13px 20px;
+            border-radius: 10px;
+            background: #fff;
+            background: #339999;
+        }
+
+    .close {
+        background: #606061;
+        color: #FFFFFF;
+        line-height: 25px;
+        position: absolute;
+        right: -12px;
+        text-align: center;
+        top: -10px;
+        width: 24px;
+        text-decoration: none;
+        font-weight: bold;
+        -webkit-border-radius: 12px;
+        -moz-border-radius: 12px;
+        border-radius: 12px;
+        -moz-box-shadow: 1px 1px 3px #000;
+        -webkit-box-shadow: 1px 1px 3px #000;
+        box-shadow: 1px 1px 3px #000;
+    }
+
+        .close:hover {
+            background: #00d9ff;
+        }
+
+    .panel-feed {
+        width: 90%;
+    }
+
+    .comments {
+        margin-left: 5%;
+    }
+
+    ul.timeline-list li.mediawithoutBorder:before {
+        border-left: none;
+    }
+    /*AnLTNM change*/
+    textarea {
+        width: 100% !important;
+        min-width: 0;
+    }
+
+    ul.timeline-list li.media > .media-body .panel {
+        min-width: 0px;
+        width: 100%;
+        border: 1px solid;
+        border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+        border-radius: 3px;
+        box-shadow: none;
+    }
+
+        ul.timeline-list li.media > .media-body .panel.share {
+            z-index: 1031;
+        }
+
+    .panel.panel-default ul.comments {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .panel-footer {
+        padding: 10px 15px !important;
+    }
+
+    .avatar-comment {
+        border-radius: 30px;
+        height: 34px;
+    }
+
+    .input-cmnt {
+        width: 100%;
+        padding-right: 35px;
+    }
+
+    .new-post {
+        bottom: 0%;
+        transition: opacity .3s;
+        background: #000;
+        left: 0;
+        opacity: 0.63;
+        position: fixed;
+        transition: opacity 0.3s, bottom 0s .3s;
+        z-index: 1030;
+        width: 100%;
+        height: 100%;
+        display: none;
+    }
+
+    .avartar-img {
+        width: 50px;
+        height: 50px;
+        border: 1px solid rgba(0, 0, 0, .1);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .125);
+    }
+
+    .preview-img {
+        border: 1px solid #777777;
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .post-heading {
+        color: #1d2129;
+        font-size: 12px;
+        font-weight: bold;
+        line-height: 19px;
+        padding: 0 10px;
+    }
+
+        .post-heading:hover {
+            color: #25ad9f;
+            text-decoration: none;
+        }
+
+    .post-heading-icon {
+        color: #25ad9f;
+        font-size: 17px;
+    }
+
+    .house-name {
+        float: right;
+        border: solid 2px;
+        border-radius: 4px;
+        padding: 5px;
+        border-color: #ced0d4;
+        color: #333333;
+        background-color: #f6f7f9;
+        border-color: #ced0d4;
+        color: #4b4f56;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .125);
+        line-height: 12px;
+    }
+
+    .user-name {
+        font-size: 17px;
+        line-height: 1.38;
+        color: #555555;
+    }
+
+    .icon-house {
+        color: #25ad9f;
+        font-size: 15px;
+        margin-right: 5px;
+    }
+
+    p {
+        font-size: 17px;
+        font-weight: normal;
+        line-height: 1.38;
+    }
+
+    .post-time {
+        color: #999999;
+        font-size: 14px;
+        font-weight: normal;
+    }
+
+    ul.timeline-list li.media > .media-body {
+        margin: 19px 0 10px 0;
+    }
+
+    ul.timeline-list li.media:before {
+        position: static;
+        display: inline;
+        top: 0;
+        content: '';
+        height: initial;
+        margin-left: 0;
+        border-left: none;
+        z-index: 0;
+    }
+    /*AnLTNM change*/
+</style>
 <div class="container-fluid">
     <div class="cover overlay" style="position:relative">
         <img src="~/Content/images/familycover.jpg" alt="cover">
-      
+
     </div>
     <div style="height:120px;position:absolute;margin-top:-120px;text-align:center">
-        <img src="@(curHouse.ProfileImage==null||curHouse.ProfileImage.Equals("")?"/Content/images/home_default.jpg":curHouse.ProfileImage)" style="width:auto;height:100%;border-bottom-left-radius: 30px;border-top-right-radius: 30px;"/>
+        <img src="@(curHouse.ProfileImage==null||curHouse.ProfileImage.Equals("")?"/Content/images/home_default.jpg":curHouse.ProfileImage)" style="width:auto;height:100%;border-bottom-left-radius: 30px;border-top-right-radius: 30px;" />
         <h2 style="color: white;background-color: #25AD9F;border-radius: 30px;">@curHouse.HouseName</h2>
     </div>
 </div>
@@ -49,30 +257,60 @@
 
 <div class="container-fluid">
     <div class="row">
-        <h3 style="margin-left:60px">Bài viết</h3>
+        <h3 style="margin-left:15%">Bài viết</h3>
+        <div class="col-md-2"></div>
         <div class="col-md-9">
             <ul class="timeline-list" id="timeline"></ul>
         </div>
+        <div class="col-md-2"></div>
+
     </div>
 </div>
 
-
 <script>
-    $(document).ready(function() {
-        loadAllMember("tree","@curHouse.Id");
+    var curTokenId = -1;
+    $(document).ready(function () {
+        $('.modalDialog').fadeIn();
+
+        $('.close').on('click', function (event) {
+            event.preventDefault();
+            /* Act on the event */
+
+            $('.modalDialog').fadeOut();
+
+        });
+        $("#postStatusArea").on("click", function (e) {
+            onFocusPost();
+        });
+        $("#userAvatar").on("click", function (e) {
+            e.stopPropagation();
+            LoadUserProfile($(this).data("userId"));
+        });
     });
-  
+
+    $('#loadMoreBtn').on('click', function () {
+        var $this = $(this);
+        $this.button('loading');
+        loadMore();
+
+    });
+
+    var listUploadImage = [];
+    function loadMore() {
+        console.log("loadMore");
+        loadAllPost(curTokenId);
+    }
     function addImage() {
         $("#uploadEditorImage").click();
-
+        onFocusPost();
     }
     function saveEmbedCode() {
-        alert("saveEmbedCode");
+        // alert("saveEmbedCode");
         var embedContent = $("#embedCode").val();
         $("#previewContent").html(embedContent);
     }
     function createNewPost() {
-        alert('createNewPost');
+        //alert('createNewPost');
         $.ajax({
             url: "/Post/Create",
             type: "POST",
@@ -131,28 +369,30 @@
         });
     });
     $(document).ready(function () {
-        loadAllPost();
-
+        loadAllPost(-1);
+        loadAllMember("tree",'@curHouse.Id')
     });
 
-    function loadAllPost() {
+    function loadAllPost(idToken) {
         $.ajax({
             url: "/Post/getPost",
             type: "GET",
             datatype: 'json',
             data: {
-                idToken: -1,
-                houseId: @curHouse.Id,
+                idToken: idToken,
             },
             success: function (successData) {
+                console.log("GetPostData: " + successData);
                 var obj = JSON.parse(successData);
                 $.each(obj, function (index, jsonObject) {
                     addPostToTimeline(index, jsonObject);
                     getImagesForPost(index, jsonObject["Id"]);
-                    // getUserProfileForPost(index, jsonObject["Id"]);
                     getCommentsForPost(jsonObject["Id"]);
+                    curTokenId = jsonObject["Id"];
 
                 });
+                $("#loadMoreBtn").button('reset');
+
             },
             error: function (er) {
                 alert(er);
@@ -180,10 +420,10 @@
                     $('#userImagePost' + id).attr("src", obj["ProfileImage"]);
 
                 }
-                $('#userNamePost' + id).html(obj["Username"])
-                $('#userHrefPost' + id).attr("href", "/Profile/" + obj["Id"])
+                $('#userNamePost' + id).html(obj["Username"]);
+                $('#userHrefPost' + id).attr("href", "/Profile/" + obj["Id"]);
 
-                $('#userLoadProfilePost' + id).attr("onclick", "LoadUserProfile(" + obj["Id"] + ",true)")
+                $('#userLoadProfilePost' + id).attr("onclick", "LoadUserProfile(" + obj["Id"] + ",true)");
 
             },
             error: function (er) {
@@ -193,24 +433,54 @@
         });
     }
     function addPostToTimeline(index, postObject) {
+        var reportDiv = "";
+        if (postObject['UserId'] != '@curUser.Id') {
+            reportDiv = '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>';
+        }
+        var header = '<div class="panel-heading clearfix" style="background-color: transparent;">' +
+                '<div class="form-group" style="margin-bottom:0">' +
+                    '<div style="display: flex">' +
+                        '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)" style="margin-right: 10px">' +
+                            '<img id="userImagePost' + postObject['Id'] + '" src="' + postObject['userProfile'] + '" class="avartar-img">' +
+                        '</div>' +
+                        '<div style="flex: 1; width: 0">' +
+                            '<h3 class="" style="margin-top: 0;margin-bottom: 0;">' +
+                                '<strong>' +
+                                '   <a class="text-capitalize user-name" id="userNamePost' + postObject['Id'] + '">' + postObject['userFullName'] + '</a>' +
+                                '</strong>' +
+                                '<strong class="house-name"> ' +
+                                    '<span style="font-size: 17px;">' +
+                                        '<i class="fa fa-home icon-house"></i>' +
+                                            postObject['houseName'] +
+                                    '</span>' +
+                                '</strong>' +
+                            '</h3>' +
+                            '<h3 class="" style="margin-top: 0;margin-bottom: 0;">' +
+            '                   <strong>' +
+                                    '<span class="post-time">' +
+                                        '<i class="fa fa-globe icon-house"></i> ' +
+                                        timeSince(postObject['CreateDate']) +
+                                    '</span>' +
+                                '</strong>' +
+                            '</h3>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
         $("#timeline").append('<li class="media">'
-
-
-                       + '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)">'
-
-
+                       /*+ '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)">'
                             + '<img id="userImagePost' + postObject['Id'] + '" src="' + postObject['userProfile'] + '" alt="people" class="img-circle" width="80" height="80">'
-                            + '<div id="userNamePost' + postObject['Id'] + '" class="date">' + postObject['username'] + '</div>'
+                            + '<div id="userNamePost' + postObject['Id'] + '" class="date">' + postObject['userFullName'] + '</div>'
 
-                        + '</div>'
+                        + '</div>'*/
 
                         + '<div class="media-body">'
-                            + '<div class="panel panel-default">'
+                            + '<div class="panel panel-default panel-feed">' + header
                                 + '<div class="panel-body" >'
-                                    + '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>'
+                                    + reportDiv
                                     + '<p>' + postObject['Body'] + '</p>'
-                                    + '<div class="row" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
-                                    + '</div>'
+                                    + '<section class="form-group testetetet" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
+                                    + '</section>'
                                     + '<div class="row" style="height:auto;">'
                                     + postObject['EmbedCode']
                                     + '</div>'
@@ -221,19 +491,23 @@
                                 + '</ul>'
                                 + '<ul class="comments">'
                                  + '<li class="comment-form">'
-                                        + '<div class="input-group">'
-                                            + '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control" style="width: 95%;">'
-                                            + '<span class="input-group-addon" style="padding: 0;">'
+                                        + '<div class="input-group" style="width: 100%;">'
+                                        + '<a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="pull-left"><img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" class="media-object avatar-comment"></a>'
+                                        + '<div class="media-body" style="padding-left: 10px;">' +
+                                            '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control input-cmnt" placeholder="Viết bình luận của bạn..."/>' +
+                                             '<i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(' + postObject['Id'] + ')" style="font-size: xx-large;color: #25AD9F;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:100"></i>' +
+                                        '</div>'
 
-                                                + '<button class="btn btn-success" onclick="addComment(' + postObject['Id'] + ')">Bình luận</button>'
-                                            + '</span>'
-                                        + '</div>'
-                                    + '</li>'
-                                + '</ul>'
-                            + '</div>'
-                        + '</div>'
-                    + '</li>'
- )
+
+
+
+            + '</div>'
+            + '</li>'
+            + '</ul>'
+            + '</div>'
+            + '</div>'
+            + '</li>'
+        )
 
     }
 
@@ -248,14 +522,14 @@
             success: function (successData) {
                 if (successData === 'success') {
                     $("#commentsArea" + postId).html("");
-                    getCommentsForPost(postId)
-                    $("#contentDetail" + postId).val("")
+                    getCommentsForPost(postId);
+                    $("#contentDetail" + postId).val("");
                 } else {
-                    alert(successData)
+                    alert(successData);
                 }
             },
             error: function (er) {
-                alert(er)
+                alert(er);
             }
 
         });
@@ -274,7 +548,11 @@
             },
             success: function (successData) {
                 var obj = JSON.parse(successData);
-                $("#countComment" + postid).html(obj.length + " bình luận")
+                if (obj.length === 0) {
+                    $("#countComment" + postid).html("Chưa có bình luận nào");
+                } else {
+                    $("#countComment" + postid).html(obj.length + " bình luận");
+                }
                 $.each(obj, function (index, comment) {
                     addCommentToCommentArea(postid, comment)
                 });
@@ -287,25 +565,27 @@
     }
     function addCommentToCommentArea(postId, comment) {
         $("#commentsArea" + postId).append('<li>'
-                                        + '<div class="media">'
-                                            + '<a href="" class="pull-left">'
-                                                + '<img  src="' + comment['userProfile'] + '" class="media-object" style="width:50px">'
-                                            + '</a>'
-                                            + '<div class="media-body">'
-                                                + '<a href="/Profile/' + comment['userId'] + '" class="comment-author">' + comment['username'] + ': </a>'
-                                                + '<span>' + comment['detail'] + '</span>'
-                                                + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
-                                            + '</div>'
-                                        + '</div>'
+            + '<div class="media">'
+            + '<a href="javascript:void(0)" onclick ="LoadUserProfile(2,true)"  class="pull-left">'
+            + '<img  src="' + comment['userProfile'] + '" class="media-object avartar-img">'
+            + '</a>'
+            + '<div class="media-body">'
+            + '<a href="javascript:void(0)" onclick ="LoadUserProfile(2,true)" class="comment-author">' + comment['username'] + ': </a>'
+            + '<span>' + comment['detail'] + '</span>'
+            + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
+            + '</div>'
+            + '</div>'
 
-                                    + '</li>')
+            + '</li>')
 
     }
 
 
     function timeSince(dateString) {
+        console.log("timeSince: " + dateString)
 
-        var date = new Date(dateString);
+        var date = new Date(dateString + "z");
+        console.log("date: " + date);
         var seconds = Math.floor((new Date() - date) / 1000);
 
         var interval = Math.floor(seconds / 31536000);
@@ -348,25 +628,64 @@
             },
             success: function (successData) {
                 var obj = JSON.parse(successData);
+                var currentElement = {};
+                var listElement = "";
+                var isFirst = true;
                 $.each(obj, function (index, image) {
-                    addImageToPost(image['url'], id, (90 / obj.length))
+                    if (isFirst) {
+                        $("#imagesPost" + image.postId).html("");
+                        currentElement = $("#imagesPost" + image.postId);
+                        isFirst = false;
+                        if (obj.length == 1) {
+                            $("#imagesPost" + image.postId).removeClass("testetetet").addClass("one-col");
+                            if (parseInt(image.width) >= parseInt(image.height)) {
+                                listElement = listElement +
+                                    '<div style="border:1px solid white"><img style="width:100%; height:auto" src="' +
+                                    image.url +
+                                    '" alt="The Last of us"></div>';
+                            } else {
+                                listElement = listElement +
+                                    '<div style="border:1px solid white" ><img style="height:100% !important; width:auto !important "src="' +
+                                    image.url +
+                                    '" alt="The Last of us"></div>';
+                            }
+                            return;
+                        } else {
+                            $("#imagesPost" + image.postId).removeClass("one-col").addClass("testetetet");
+                        }
+                    }
+                    if (parseInt(image.width) >= parseInt(image.height)) {
+                        listElement = listElement + '<div style="border:1px solid white"><img style="width:100% !important; height:auto !important" src="' + image.url + '" ></div>';
+                    } else {
+                        listElement = listElement + '<div style="border:1px solid white" ><img style="width:100% !important; height:auto !important" src="' + image.url + '"></div>';
+                    }
 
                 });
-
+                listElement = listElement + "</div>";
+                currentElement.append(listElement);
             },
             error: function (er) {
-                alert(er)
+                alert(er);
             }
 
         });
     }
     function addImageToPost(imageUrl, postId, width) {
-        $("#imagesPost" + postId).append('<img src="' + imageUrl + '" style="width:' + width + '%;height:auto;margin-right:5px">')
+        $("#imagesPost" + postId)
+            .append('<img src="' + imageUrl + '" style="width:' + width + '%;height:auto;margin-right:5px">');
 
     }
 
     function addImageToPreviewList(dir, position) {
-        $("#previewList").prepend('<div id="previewImage' + position + '" style="height:100px;width:100px;float:left;position:relative"><img onclick="removePreview(' + position + ')" src="/Content/images/delete.png" style="position:absolute;top:0px;right:0px;width:20px;height:20px"/><img src="' + dir + '" style="max-width:100%;max-height:100%"/></div>')
+        //        $("#previewList").prepend('<div id="previewImage' + position + '" style="height:100px;width:100px;float:left;position:relative;margin: 0px 5px;"><img onclick="removePreview(' + position + ')" src="/Content/images/delete.png" style="position:absolute;top:0px;right:0px;width:20px;height:20px"/><img src="' + dir + '" style="max-width:100%;max-height:100%"/></div>')
+        $("#previewList")
+            .prepend('<div id="previewImage' +
+                position +
+                '" style="height:100px;width:auto;float:left;position:relative;margin:5px;border: 1px solid #e5e5e5;"><img onclick="removePreview(' +
+                position +
+                ')" src="/Content/images/delete.png" style="position:absolute;top:5px;right:5px;width:20px;height:20px"/><img src="' +
+                dir +
+                '" class="preview-img"/></div>');
     }
     function removePreview(position) {
         $('#previewImage' + position + '').hide();
@@ -386,6 +705,43 @@
         $("#postContent").val('');
     }
     function report(id) {
-        alert('Chức năng report (chưa xử lí)' + id);
+        $("#reportPostId").val(id)
+        $("#reportContent").val("")
+        $("#reportModal").modal()
+    }
+    function processSendReport() {
+        var postId = $("#reportPostId").val()
+        var reportContent = $("#reportContent").val()
+        console.log("processSendReport: postid=" + postId + "reportContent=" + reportContent)
+        sendReport(postId, reportContent)
+    }
+    function deleteNotification(noticChangedId) {
+        console.log('deleteNotification' + noticChangedId)
+        $.ajax({
+            url: "/Home/deleteNotification",
+            type: "POST",
+            data: {
+                data: noticChangedId,
+                type: "@SLIM_CONFIG.NOTIC_DELETE_TYPE_CHANGEID",
+            },
+            success: function (successData) {
+                //alert(successData);
+                $("#notification" + noticChangedId).hide('slow', function () { $("#notification11").remove(); });
+            },
+            error: function (er) {
+                alert(er);
+            }
+
+        });
+    }
+    function onFocusPost() {
+        $("#addNewPost").css("display", "block");
+    }
+    function onBlurPost() {
+        $("#addNewPost").css("display", "none");
+    }
+    function textAreaAdjust(o) {
+        o.style.height = "1px";
+        o.style.height = (25 + o.scrollHeight) + "px";
     }
 </script>

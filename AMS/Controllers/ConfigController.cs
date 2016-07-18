@@ -627,7 +627,7 @@ namespace AMS.Controllers
                         block.NoFloor = housesInBlock.NoRoomPerFloor;
                         _blockServices.Add(block);
 
-                        if (null != housesInBlock.Houses || housesInBlock.NoOfFloor == 0)
+                        if (null != housesInBlock.Houses)
                         {
                             House eHouse = null;
                             for (int i = 0; i < housesInBlock.NoOfFloor; i++)
@@ -653,11 +653,6 @@ namespace AMS.Controllers
                                 }
                             }
                             response.Data = block.Id;
-                        }
-                        else
-                        {
-                            response.StatusCode = -1;
-                            return Json(response);
                         }
                     }
                     else
@@ -788,11 +783,7 @@ namespace AMS.Controllers
                 House house = new House();
                 house.Floor = floorName;
                 house.BlockId = block.Id;
-                if (houseInfo.Status == 0)
-                {
-                    houseInfo.Status = SLIM_CONFIG.HOUSE_STATUS_DISABLE;
-                }
-                house.Status = houseInfo.Status;
+                house.Status = SLIM_CONFIG.HOUSE_STATUS_ENABLE;
                 house.Area = houseInfo.Area;
                 HouseCategory houseCat = _houseCategoryServices.FindById(houseInfo.Type);
                 if (null != houseCat)
@@ -828,16 +819,6 @@ namespace AMS.Controllers
                         {
                             response.StatusCode = 5;
                         }
-
-                        //                        foreach (var usrInHouse in house.Users)
-                        //                        {
-                        //                            User u = _userServices.FindById(usrInHouse.Id);
-                        //                            u.HouseId = null;
-                        //                            u.Status = SLIM_CONFIG.USER_STATUS_DISABLE;
-                        //                            u.LastModified = DateTime.Now;
-                        //                            u.RoleId = SLIM_CONFIG.USER_ROLE_RESIDENT;
-                        //                            _userServices.Update(u);
-                        //                        }
                     }
                 }
                 house.Area = houseInfo.Area;

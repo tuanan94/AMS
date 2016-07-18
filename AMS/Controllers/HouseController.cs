@@ -33,6 +33,10 @@ namespace AMS.Controllers
             {
                 return View("Error");
             }
+            if(curHouse.AllowOtherView == false && curUser.HouseId != curHouse.Id)
+            {
+                return View("NotDisplay");
+            }
             List<User> members = userService.findByHouseId(curHouse.Id);
       
             ViewBag.curUser = curUser;

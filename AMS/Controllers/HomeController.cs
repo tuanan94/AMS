@@ -315,6 +315,17 @@ namespace AMS.Controllers
             {
                 return null;
             }
+            House curHouse = houseService.FindById(houseId.Value);
+            if(curHouse==null)
+            {
+                return "error";
+            }
+            User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
+            
+            if(curHouse.DisplayMember == false && curUser.HouseId != curHouse.Id)
+            {
+                return "NOT_PERMISSION";
+            }
             List<User> result = userService.findByHouseId(houseId.Value);
             // Serializer settings
             JsonSerializerSettings settings = new JsonSerializerSettings();

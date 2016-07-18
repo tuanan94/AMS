@@ -552,6 +552,7 @@
                 });
             } else {
                 $("#addFloorNameInput").removeClass("hide");
+                $("#addFloorNameSelect-error").remove();
             }
         });
 
@@ -993,11 +994,18 @@
             }
         });
 
+        $.validator.addMethod("valueNotEquals", function (value, element, arg) {
+            return null !== value;
+        }, "Hãy tạo mới phòng");
+
         $("#addHouseForm").validate({
             rules: {
                 Name: {
                     required: true,
                     maxlength: 15
+                },
+                FloorName: {
+                    valueNotEquals: true,
                 },
                 FloorNameNew: {
                     required: true,

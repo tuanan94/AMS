@@ -5,15 +5,22 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="22444cd77b884bcba5683c1f7a843537" Name="Diagram1" ZoomLevel="74">
+
         <EntityTypeShape EntityType="AMSModel.C__MigrationHistory" Width="1.5" PointX="7.75" PointY="0.75" />
         <EntityTypeShape EntityType="AMSModel.Answer" Width="1.5" PointX="7.75" PointY="3.75" />
         <EntityTypeShape EntityType="AMSModel.AroundProvider" Width="1.5" PointX="3" PointY="7" />
         <EntityTypeShape EntityType="AMSModel.AroundProviderCategory" Width="1.5" PointX="0.75" PointY="8.125" />
         <EntityTypeShape EntityType="AMSModel.AroundProviderProduct" Width="1.5" PointX="5.25" PointY="7.375" />
+        
+        
+        
+        
+
         <EntityTypeShape EntityType="AMSModel.AspNetRole" Width="1.5" PointX="0.75" PointY="2.5" />
         <EntityTypeShape EntityType="AMSModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="1" />
         <EntityTypeShape EntityType="AMSModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="3.75" />
         <EntityTypeShape EntityType="AMSModel.AspNetUser" Width="1.5" PointX="3" PointY="1.375" />
+
         <EntityTypeShape EntityType="AMSModel.BalanceSheet" Width="1.5" PointX="16.5" PointY="30.375" />
         <EntityTypeShape EntityType="AMSModel.Block" Width="1.5" PointX="3.75" PointY="14.75" />
         <EntityTypeShape EntityType="AMSModel.BlockPoll" Width="1.5" PointX="19.5" PointY="11.375" />
@@ -42,6 +49,35 @@
         <EntityTypeShape EntityType="AMSModel.UtilityServiceRangePrice" Width="1.5" PointX="16.5" PointY="3.375" />
         <EntityTypeShape EntityType="AMSModel.UtilServiceCategory" Width="1.5" PointX="12" PointY="10.75" />
         <EntityTypeShape EntityType="AMSModel.UtilServiceForHouseCat" Width="1.5" PointX="3" PointY="18.625" />
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; 358d6ab3946fb65868ff763f60dd9d1913f304fe
         <AssociationConnector Association="AMSModel.FK_AroundServiceProduct_AroundProvider" />
         <AssociationConnector Association="AMSModel.FK_tbl_arround_srv_tbl_around_srv_cat" />
         <AssociationConnector Association="AMSModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />

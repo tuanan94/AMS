@@ -121,6 +121,7 @@ namespace AMS.Service
                 pMapping.username = p.User == null ? "Không xác định sở hữu" : p.User.Username;
                 pMapping.userProfile = p.User == null || p.User.ProfileImage == null || p.User.ProfileImage.Equals("") ? "/Content/Images/defaultProfile.png" : p.User.ProfileImage;
                 pMapping.userFullName = p.User == null ? "Không xác định" : p.User.Fullname;
+                pMapping.houseName = p.User.House == null ? "Không xác định" : p.User.House.HouseName;
                 postMappingResult.Add(pMapping);
             }
             //Convert to post Mapping
