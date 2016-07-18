@@ -24,13 +24,11 @@ namespace AMS
         public int Id { get; set; }
         public string Description { get; set; }
         public string ImageUrl { get; set; }
-        public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
         public Nullable<System.DateTime> PublishDate { get; set; }
         public Nullable<int> Status { get; set; }
         public string Question { get; set; }
         public Nullable<int> Mode { get; set; }
-        public Nullable<int> Privacy { get; set; }
         public Nullable<int> Priority { get; set; }
         public string Answer1 { get; set; }
         public string Answer2 { get; set; }
