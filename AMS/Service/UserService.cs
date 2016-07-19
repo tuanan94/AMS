@@ -60,7 +60,7 @@ namespace AMS.Service
             {
                 MoreInfo pInfo = new MoreInfo();
                 pInfo.Id = p.Id +"";
-                pInfo.createdDate = p.CreateDate.ToString();
+                pInfo.createdDate = p.CreateDate.Value.ToString("s");
                 pInfo.PostText = CommonUtil.TruncateLongString(p.Body, 100); 
                 moreInfos.Add(pInfo);
             }

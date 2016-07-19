@@ -568,6 +568,7 @@
     <Content Include="Scripts\amsScript\jquery.validate.min.js" />
     <Content Include="Scripts\amsScript\LoadFamilyTree.js" />
     <Content Include="Scripts\amsScript\LoadUserProfile.js" />
+    <Content Include="Scripts\amsScript\masonry.pkgd.min.js" />
     <Content Include="Scripts\amsScript\moment.min.js" />
     <Content Include="Scripts\amsScript\ReportPost.js" />
     <Content Include="Scripts\amsScript\scripts.js" />

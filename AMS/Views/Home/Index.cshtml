@@ -235,9 +235,51 @@
         border-left: none;
         z-index: 0;
     }
+
     #recentActivity > li:last-child {
-        border-bottom: none!important;
+        border-bottom: none !important;
     }
+
+    .grid {
+@*        background: #EEE;*@
+@*        max-width: 500px;*@
+@*        height: 476px;*@
+@*        column-count: 2;*@
+@*        column-gap: 1em;*@
+    }
+
+@*    .grid-item {*@
+@*        /*background-color: #eee;*@
+@*    display: inline-block;*/*@
+@*        width: 50%;*@
+@*    }*@
+
+    .grid-sizer,
+    .grid-item {
+        width: 50%;
+        margin: 0 0 1em;
+    }
+
+    .grid-item--width2 {
+        width: 40%;
+    }
+
+    .grid-item--width3 {
+        width: 60%;
+    }
+
+    .grid-item--height2 {
+        height: 200px;
+    }
+
+    .grid-item--height3 {
+        height: 260px;
+    }
+
+    .grid-item--height4 {
+        height: 360px;
+    }
+
     /*AnLTNM change*/
 </style>
 <div class="container-fluid">
@@ -536,9 +578,7 @@
                 images: listUploadImage,
                 content: $("#postContent").val(),
                 embeded: $("#embedCode").val(),
-
             },
-
             success: function (successData) {
                 if (successData == 'success') {
                     clearCreatePostForm();
@@ -561,20 +601,22 @@
 
         var files = $("#uploadEditorImage").get(0).files;
         if (files.length > 0) {
-            data.append("HelpSectionImages", files[0]);
+            data.append("image", files[0]);
+            data.append("width", 243);
+            data.append("height", 243);
         }
 
         // progessBar(true);
         $.ajax({
-            url: "/Image/Upload/",
+            url: "/Management/Image/Upload/",
             type: "POST",
             processData: false,
             contentType: false,
             data: data,
 
             success: function (successData) {
-                addImageToPreviewList(successData, listUploadImage.length);
-                listUploadImage[listUploadImage.length] = successData;
+                addImageToPreviewList(successData.Data, listUploadImage.length);
+                listUploadImage[listUploadImage.length] = successData.Data;
                 // progessBar(false);
 
             },
@@ -610,6 +652,8 @@
                 });
                 $("#loadMoreBtn").button('reset');
 
+
+                $('.grid').masonry("reload");
             },
             error: function (er) {
                 alert(er);
@@ -696,8 +740,15 @@
                                 + '<div class="panel-body" >'
                                     + reportDiv
                                     + '<p>' + postObject['Body'] + '</p>'
-                                    + '<section class="form-group testetetet" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
-                                    + '</section>'
+                                  /*  + '<section class="form-group testetetet" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
+                                    + '</section>'*/
+
+                                    + '<div class="form-group">'
+                                     + '<div class="grid" id="imagesPost' + postObject['Id'] + '">'
+                                    + '</div>'
+                                    + '</div>'
+
+
                                     + '<div class="row" style="height:auto;">'
                                     + postObject['EmbedCode']
                                     + '</div>'
@@ -709,7 +760,7 @@
                                 + '<ul class="comments">'
                                  + '<li class="comment-form">'
                                         + '<div class="input-group" style="width: 100%;">'
-                                        + '<a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="pull-left"><img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avatar-comment"></a>'
+                                        + '<a href="javascript:void(0)" onclick="LoadUserProfile(' + @(curUser.Id)+ ',true)" class="pull-left"><img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avatar-comment"></a>'
                                         + '<div class="media-body" style="padding-left: 10px;">' +
                                             '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control input-cmnt" placeholder="Viết bình luận của bạn..."/>' +
                                              '<i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(' + postObject['Id'] + ')" style="font-size: xx-large;color: #25AD9F;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2"></i>' +
@@ -783,11 +834,11 @@
     function addCommentToCommentArea(postId, comment) {
         $("#commentsArea" + postId).append('<li>'
             + '<div class="media">'
-            + '<a href="javascript:void(0)" onclick ="LoadUserProfile(2,true)"  class="pull-left">'
+            + '<a href="javascript:void(0)" onclick ="LoadUserProfile(' + comment["userId"] + ',true)"  class="pull-left">'
             + '<img  src="' + comment['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avartar-img">'
             + '</a>'
             + '<div class="media-body">'
-            + '<a href="javascript:void(0)" onclick ="LoadUserProfile(2,true)" class="comment-author">' + comment['username'] + ': </a>'
+            + '<a href="javascript:void(0)" onclick ="LoadUserProfile(' + comment["userId"] +  ',true)" class="comment-author">' + comment['username'] + ': </a>'
             + '<span>' + comment['detail'] + '</span>'
             + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
             + '</div>'
@@ -812,6 +863,7 @@
                 var obj = JSON.parse(successData);
                 var currentElement = {};
                 var listElement = "";
+                listElement = '<div class="grid-sizer"></div>';
                 var isFirst = true;
                 $.each(obj, function (index, image) {
                     if (isFirst) {
@@ -819,32 +871,40 @@
                         currentElement = $("#imagesPost" + image.postId);
                         isFirst = false;
                         if (obj.length == 1) {
-                            $("#imagesPost" + image.postId).removeClass("testetetet").addClass("one-col");
+                            //                            $("#imagesPost" + image.postId).removeClass("testetetet").addClass("one-col");
                             if (parseInt(image.width) >= parseInt(image.height)) {
                                 listElement = listElement +
-                                    '<div style="border:1px solid white"><img style="width:100%; height:auto" src="' +
+                                    '<div class="grid-item" style="border:1px solid white"><img src="' +
+//                                    '<div class="grid-item" style="border:1px solid white"><img style="width:100%; height:auto" src="' +
                                     image.url +
                                     '" alt="The Last of us"></div>';
                             } else {
                                 listElement = listElement +
-                                    '<div style="border:1px solid white" ><img style="height:100% !important; width:auto !important "src="' +
+//                                    '<div class="grid-item" style="border:1px solid white" ><img style="height:100% !important; width:auto !important "src="' +
                                     image.url +
                                     '" alt="The Last of us"></div>';
                             }
                             return;
                         } else {
-                            $("#imagesPost" + image.postId).removeClass("one-col").addClass("testetetet");
+                            //                            $("#imagesPost" + image.postId).removeClass("one-col").addClass("testetetet");
                         }
                     }
                     if (parseInt(image.width) >= parseInt(image.height)) {
-                        listElement = listElement + '<div style="border:1px solid white"><img style="width:100% !important; height:auto !important" src="' + image.url + '" ></div>';
+                        listElement = listElement + '<div class="grid-item" style="border:1px solid white"><img style="width:100% !important; height:auto !important" src="' + image.url + '" ></div>';
                     } else {
-                        listElement = listElement + '<div style="border:1px solid white" ><img style="width:100% !important; height:auto !important" src="' + image.url + '"></div>';
+                        listElement = listElement + '<div class="grid-item" style="border:1px solid white" ><img style="width:100% !important; height:auto !important" src="' + image.url + '"></div>';
                     }
 
                 });
                 listElement = listElement + "</div>";
                 currentElement.append(listElement);
+
+                currentElement.masonry({
+                    // options
+//                    percentPosition: true,
+                    columnWidth: '.grid-sizer',
+                    itemSelector: '.grid-item',
+                });
             },
             error: function (er) {
                 alert(er);
