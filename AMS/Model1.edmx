@@ -274,13 +274,11 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Description" Type="nvarchar" MaxLength="255" />
           <Property Name="ImageUrl" Type="nvarchar" MaxLength="250" />
-          <Property Name="CreateDate" Type="datetime" />
           <Property Name="EndDate" Type="datetime" />
           <Property Name="PublishDate" Type="datetime" />
           <Property Name="Status" Type="int" />
           <Property Name="Question" Type="nvarchar" MaxLength="255" />
           <Property Name="Mode" Type="int" />
-          <Property Name="Privacy" Type="int" />
           <Property Name="Priority" Type="int" />
           <Property Name="Answer1" Type="nvarchar" MaxLength="50" />
           <Property Name="Answer2" Type="nvarchar" MaxLength="50" />
@@ -1673,13 +1671,11 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="ImageUrl" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="EndDate" Type="DateTime" Precision="3" />
           <Property Name="PublishDate" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="Int32" />
           <Property Name="Question" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Mode" Type="Int32" />
-          <Property Name="Privacy" Type="Int32" />
           <Property Name="Priority" Type="Int32" />
           <Property Name="Answer1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Answer2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -2669,13 +2665,11 @@
                 <ScalarProperty Name="Answer2" ColumnName="Answer2" />
                 <ScalarProperty Name="Answer1" ColumnName="Answer1" />
                 <ScalarProperty Name="Priority" ColumnName="Priority" />
-                <ScalarProperty Name="Privacy" ColumnName="Privacy" />
                 <ScalarProperty Name="Mode" ColumnName="Mode" />
                 <ScalarProperty Name="Question" ColumnName="Question" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="PublishDate" ColumnName="PublishDate" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

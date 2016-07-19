@@ -1,106 +1,207 @@
-﻿@{
+﻿@using AMS.Constant
+@using Microsoft.AspNet.Identity
+@{
     ViewBag.Title = "ViewProfile";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
     User user = ViewBag.user;
 }
 
-<div class="col-md-6">
+<div class="col-md-12">
     <div class="panel panel-default">
-        <div class="panel-heading panel-heading-gray">Thay đổi thông tin cá nhân</div>
+        <div class="panel-heading panel-heading-gray"><i class="fa fa-info"></i> Thay đổi thông tin cá nhân</div>
         <div class="panel-body">
-            <form class="form-horizontal" role="form">
+            <form id="editProfileForm" class="form-horizontal" role="form" action="/Home/UpdateProfile/" method="post">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <img id="profilePreview" class="img-border popup-avar" src="@("".Equals(user.ProfileImage) ? "/Content/images/defaultProfile.png" : user.ProfileImage)" onerror="this.src = '/Content/Images/defaultProfile.png';" alt="Default Profile" style="width: 100%; height: auto" />
+                            <div id="progressBar" class="progress" style="width: 200px" hidden="hidden">
+                                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 200px">
+                                </div>
+                            </div>
+                            <input style="visibility: hidden" type="file" id="uploadEditorImage" />
+                        </div>
+                    </div>
+                    <div id="changeImgRow" class="form-group">
+                        <div class="pull-right">
+                            <span class="btn btn-primary btn-stroke" onclick="chooseProfile()"><i class="fa fa-edit"></i>Ảnh đại diện</span>
+                        </div>
+                    </div>
+                    <div id="confirmChangeImgRow" class="form-group hide">
+                        <div class="pull-right">
+                            <span class="btn btn-default" onclick="cancelChangeImg()">Hủy</span>
+                            <span class="btn btn-primary" onclick="saveProfileImage()">Chấp nhận</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="username" class="col-md-3 control-label">Tên đăng nhập</label>
+                        <div class="col-md-6">
+                            <input type="text" disabled="disabled" class="form-control" id="username" value="@user.Username">
+                        </div>
+                        <div class="col-md-3" style=" height: 34px;">
+                            <a onclick="showChangePassModal('@User.Identity.GetUserId()')" style="position: absolute;bottom: 0;left: 0;"> Đổi mật khẩu</a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="fullname" class="col-md-3 control-label">Tên đầy đủ</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" name="Name" id="fullname" value="@user.Fullname">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Giới tính</label>
+                        <div class="col-md-9">
+                            <select name="Gender" class="form-control" data-size="3">
+                                <option @(user.Gender == SLIM_CONFIG.USER_SEX_MALE ? "selected = \"selected\"" : "") value="@SLIM_CONFIG.USER_SEX_MALE">Nam</option>
+                                <option @(user.Gender == SLIM_CONFIG.USER_SEX_FEMALE ? "selected = \"selected\"" : "") value="@SLIM_CONFIG.USER_SEX_FEMALE">Nữ</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Ngày sinh</label>
+                        <div class="col-md-9">
+                            <input type="text" name="Dob" class="form-control datepicker" data-date-format="dd-mm-yyyy" data-date-language="vi"
+                                   data-date-min-view-mode="0" data-date-today-highlight="true" data-date-end-date="0m" value="@(user.DateOfBirth.HasValue ? user.DateOfBirth.Value.ToString(AmsConstants.DateFormat) : "")">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">SĐT</label>
+                        <div class="col-md-9">
+                            <input type="text" id="Cel" name="CellNumb" class="form-control" value="@user.SendPasswordTo">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Số CMND</label>
+                        <div class="col-md-9">
+                            <input type="text" id="resId" name="Idenity" class="form-control" value="@user.IDNumber">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Ngày cấp</label>
+                        <div class="col-md-9">
+                            <input type="text" id="resIdCreateDate" name="IdCreateDate" class="form-control datepicker" data-date-format="dd-mm-yyyy" data-date-language="vi"
+                                   data-date-min-view-mode="0" data-date-today-highlight="true" data-date-end-date="0m" value="@(user.IDCreatedDate == null ? " " : user.IDCreatedDate.Value.ToString(AmsConstants.DateFormat) )">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ownerRelationShip" class="col-md-3 control-label ">Mối quan hệ</label>
+                        <div class="col-md-9">
+                            <select class="form-control" id="ownerRelationShip" name="RelationLevel">
+                                @{if (user.FamilyLevel.Value == -2)
+                                {
+                                    <option selected="selected" value="-2">Ông, bà (Lớn hơn 2 bậc)</option>
+                                }
+                                else
+                                {
+                                    <option value="-2">Vợ, Chồng, Anh, Chị, Em, Bạn...</option>
+                                }
 
-                <div class="form-group">
-                    <label for="username" class="col-sm-3 control-label">Tên đăng nhập</label>
-                    <div class="col-sm-9">
-                        <input type="text" disabled="disabled" class="form-control" id="username" value="@user.Username">
-                    </div>
-                </div>
+                                if (user.FamilyLevel.Value == -1)
+                                {
+                                    <option selected="selected" value="-1">Bố, mẹ, cô, dì, chú, bác, cậu, mợ...(Lớn hơn 1 bậc)</option>
+                                }
+                                else
+                                {
+                                    <option value="1">Bố, mẹ, cô, dì, chú, bác, cậu, mợ...(Lớn hơn 1 bậc)</option>
+                                }
 
-                <div class="form-group">
-                    <label for="fullname" class="col-sm-3 control-label">Tên đầy đủ</label>
-                    <div class="col-sm-9">
-                        <input type="text"  disabled="disabled" class="form-control" id="fullname" value="@user.Fullname">
-                    </div>
-                </div>
+                                if (user.FamilyLevel.Value == 0)
+                                {
+                                    <option selected="selected" value="0">Vợ, Chồng, Anh, Chị, Em, Bạn...</option>
+                                }
+                                else
+                                {
+                                    <option value="0">Vợ, Chồng, Anh, Chị, Em, Bạn...</option>
+                                }
+                                if (user.FamilyLevel.Value == 1)
+                                {
+                                    <option selected="selected" value="1">Con, cháu (gọi bằng cô, dì, chú, bác).</option>
+                                }
+                                else
+                                {
+                                    <option value="1">Con, cháu (gọi bằng cô, dì, chú, bác)</option>
+                                }
 
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Giới tính</label>
-                    <div class="col-sm-9">
-                        <select name="select" class="selectpicker" data-size="3">
-                           <option @(user.Gender==SLIM_CONFIG.USER_SEX_MALE?"selected = \"selected\"":"") value="@SLIM_CONFIG.USER_SEX_MALE">Nam</option>
-                           <option @(user.Gender==SLIM_CONFIG.USER_SEX_FEMALE? "selected = \"selected\"" : "")value="@SLIM_CONFIG.USER_SEX_FEMALE">Nữ</option>
-                        </select>
+                                if (user.FamilyLevel.Value == 2)
+                                {
+                                    <option selected="selected" value="2">Cháu (gọi bằng ông, bà)</option>
+                                }
+                                else
+                                {
+                                    <option value="2">Cháu (gọi bằng ông, bà)</option>
+                                }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="pull-right">
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Lưu</button>
+                        </div>
                     </div>
                 </div>
+                <input type="hidden" id="accountId" name="Id" value="@user.Id" />
+            </form>
 
-               
-                <div class="form-group">
-                    <label class="col-sm-3 control-label" >Ngày sinh</label>
-                    <div class="col-sm-9">
-                        <input type="text" id="dateOfBirth" disabled="disabled"  class="form-control" value="@(user.DateOfBirth.HasValue?user.DateOfBirth.Value.ToString("dd-MM-yyyy"):"")">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-3 control-label">Số CMND</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" disabled="disabled" id="" value="@user.IDNumber">
-                    </div>
-                </div>
-                
-</form>
         </div>
     </div>
-
-    <div class="panel panel-default">
-        <div class="panel-heading panel-heading-gray">Thay đổi mật khẩu</div>
-        <div class="panel-body">
-            <form class="form-horizontal" role="form">
-                <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-3 control-label">Mật khẩu hiện tại</label>
-                    <div class="col-sm-9">
-                        <input type="email" class="form-control" id="inputEmail3" value="************">
+</div>
+<div id="changePassModal" class="modal fade ams-modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="title">Thay đổi mật khẩu</h4>
+            </div>
+            <form id="changePassForm" class="form-horizontal" role="form" data-user-id="@user.Id">
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <div class="alert alert-info" id="addResSuccessNoti" style="display: none">
+                            <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span id="successMsg">Thay đổi mật khẩu thành công</span>
+                        </div>
+                        <div class="alert alert-danger" id="addResFailedNoti" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                            <span id="failedMsg">Thay đổi mật khẩu thất bại</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmOldPass" class="col-md-3 control-label">Mật khẩu hiện tại</label>
+                            <div class="col-md-9">
+                                <input id="confirmOldPass" name="ConfirmOldPass" type="password" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPass" class="col-md-3 control-label">Mật khẩu mới</label>
+                            <div class="col-md-9">
+                                <input id="newPass" name="NewPass" type="password" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="form-group res-info">
+                            <label for="confirmNewPass" class="col-md-3 control-label">Xác nhận mật khẩu mới</label>
+                            <div class="col-md-9">
+                                <input id="confirmNewPass" name="ConfirmNewPass" type="password" class="form-control" value="">
+                            </div>
+                        </div>
+                        <input type="hidden" name="userId" value="@user.Id" />
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-3 control-label">Mật khẩu mới</label>
-                    <div class="col-sm-9">
-                        <input type="email" class="form-control" id="inputEmail3" value="************">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-3 control-label">Xác nhận</label>
-                    <div class="col-sm-9">
-                        <input type="email" class="form-control" id="inputEmail3" value="************">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-3 col-md-2">
-                        <button type="submit" class="btn btn-primary">Lưu</button>
-                    </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary">Xóa</button>
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button id="btnAdd" name="btnAdd" type="submit" class="btn btn-info">Chấp nhận</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-<div class="col-md-6">
-    <img id="profilePreview" src="@("".Equals(user.ProfileImage)?"/Content/images/defaultProfile.png":user.ProfileImage)" alt="Default Profile" onclick="chooseProfile()" style="width:200px;height:auto" />
-    <input style="visibility:hidden" type="file" id="uploadEditorImage" />
-    <div id="progressBar" class="progress" style="width:200px" hidden="hidden">
-        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:200px">
-        </div>
-    </div>
-    <button class="btn btn-primary" onclick="saveProfileImage()" style="width:200px">Lưu ảnh đại diện</button>
-</div>
 
 <script>
+    var oldProfileImage = "@user.ProfileImage";
     var profileImage = "@user.ProfileImage";
     function saveProfileImage() {
-        alert(profileImage)
-        updateProfile(profileImage)
+        alert(profileImage);
+        updateProfile(profileImage);
     }
 
     function chooseProfile() {
@@ -123,38 +224,192 @@
                 url: newUrl,
             },
             success: function (successData) {
-
-                location.reload()
-                alert('done')
+                location.reload();
             },
             error: function (er) {
                 alert(er);
             } });
     }
-    $("#uploadEditorImage").change(function () {
-        var data = new FormData();
-        var files = $("#uploadEditorImage").get(0).files;
-        if (files.length > 0) {
-            data.append("HelpSectionImages", files[0]);
-        }
-        progessBar(true);
-        $.ajax({
-            url: "/Image/Upload/",
-            type: "POST",
-            processData: false,
-            contentType: false,
-            data: data,
-            success: function (successData) {
-                profileImage = successData;
-                $("#profilePreview").attr("src",successData);
-                progessBar(false);
-
-            },
-            error: function (er) {
-                alert(er);
-                progessBar(false);
+    function cancelChangeImg() {
+        $("#profilePreview").prop("src", oldProfileImage);
+        $("#changeImgRow").removeClass("hide");
+        $("#confirmChangeImgRow").addClass("hide");
+    }
+    $(document).ready(function() {
+        $("#uploadEditorImage").change(function () {
+            var data = new FormData();
+            var files = $("#uploadEditorImage").get(0).files;
+            if (files.length > 0) {
+                data.append("image", files[0]);
+                data.append("height", 530);
+                data.append("width", 530);
             }
+            progessBar(true);
+            $.ajax({
+                url: "/Management/Image/Upload",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                data: data,
+                success: function (successData) {
+                    profileImage = successData.Data;
+                    $("#profilePreview").attr("src",successData.Data);
+                    $("#changeImgRow").addClass("hide");
+                    $("#confirmChangeImgRow").removeClass("hide");
+                    progessBar(false);
+                },
+                error: function (er) {
+                    alert(er);
+                    progessBar(false);
+                }
 
+            });
         });
+        validateAddNewResident();
     });
+    function updatePassword() {
+        $.ajax({
+            url: "/Home/UpdatePassword",
+            type: "POST",
+            data: $("#changePassForm").serialize(),
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    $("#addResSuccessNoti").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#addResSuccessNoti").fadeOut("fast");
+                        $("#changePassModal").modal("hide");
+                    }, 3000);
+                } else {
+                    $("#addResFailedNoti").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#addResFailedNoti").fadeOut("fast");
+                    }, 3000);
+                }
+            },
+        });
+    }
+    function validateAddNewResident() {
+        $("#editProfileForm").validate({
+            rules: {
+                Name: {
+                    required: true,
+                    maxlength: 255
+                },
+                CellNumb: {
+                    number: true,
+                    maxlength: 11,
+                    minlength: 10
+                },
+                Dob: {
+                    required: true
+                },
+                Idenity: {
+                    maxlength: 9,
+                    minlength: 9,
+                    number: true,
+                    required: function(element) {
+                        return $("#resIdCreateDate").is(':filled');
+                    },
+                },
+                IdCreateDate: {
+                    required: function(element) {
+                        return $("#resId").is(':filled');
+                    },
+                }
+            },
+            messages: {
+                Name: {
+                    required: "Vui lòng nhập họ tên.",
+                    maxlength: "Họ tên không dài quá 255 ký tự."
+                },
+                UserAccountName: {
+                    required: "Vui lòng nhập tên đăng nhập",
+                    maxlength: "Tên đăng nhập không dài quá 255 ký tự."
+                },
+                CellNumb: {
+                    required: "Vui lòng nhập số điện thoại.",
+                    number: "Số điện thoại phải là ký số",
+                    maxlength: "Số điện thoại tối đa 11 ký số.",
+                    minlength: "Số điện thoại tối thiểu 10 ký số."
+                },
+                Dob: {
+                    required: "Vui lòng nhập ngày sinh.",
+                },
+                Idenity: {
+                    number: "CMND phải là ký số",
+                    maxlength: "CMND 9 ký số.",
+                    minlength: "CMND 9 ký số.",
+                    required:"Vui lòng nhập số CMND."
+                },
+                IdCreateDate: {
+                    required:"Vui lòng nhập ngày cấp CMND."
+                }
+            },
+            submitHandler: function () {
+                $("#editProfileForm").submit();
+            }
+        });
+
+        $("#changePassForm").validate({
+            rules: {
+                ConfirmOldPass: {
+                    required: true,
+                    maxlength: 32,
+                    minlength: 8,
+                    remote: {
+                        url: "/Home/CheckPass",
+                        type: "post",
+                        data: {
+                            curPass: function() {
+                                return $( "#confirmOldPass" ).val();
+                            },
+                            userId: function() {
+                                return $("#changePassForm").data("userId");
+                            }
+                        },
+                        dataType: 'json'
+                    }
+                },
+                NewPass: {
+                    required: true,
+                    maxlength: 32,
+                    minlength: 8,
+                    alphanumeric: true
+                },
+                ConfirmNewPass: {
+                    required: true,
+                    maxlength: 32,
+                    minlength: 8,
+                    equalTo:"#newPass"
+                }
+            },
+            messages: {
+                ConfirmOldPass: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 32 kí tự",
+                    minlength: "Tối đa 8 kí tự",
+                    remote: "Mật khẩu hiện tại không chính xác"
+                },
+                NewPass: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 32 kí tự",
+                    alphanumeric: "Mật khẩu chỉ có chữ và số",
+                    minlength: "Tối đa 8 kí tự"
+                },
+                ConfirmNewPass: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 32 kí tự",
+                    minlength: "Tối đa 8 kí tự",
+                    equalTo:"Mật khẩu xác nhận chưa đúng"
+                }
+            },
+            submitHandler: function () {
+                updatePassword();
+                return false;
+            }
+        });
+    }
+    function showChangePassModal(id) {
+        $("#changePassModal").modal("show");
+    }
 </script>

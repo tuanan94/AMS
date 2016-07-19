@@ -434,6 +434,7 @@ namespace AMS.Controllers
             try
             {
                 User u = parseAddDataUser(user, SLIM_CONFIG.USER_ROLE_SUPPORTER);
+                u.FamilyLevel = SLIM_CONFIG.FAMILY_LEVEL_SUPPORTER;
                 _userServices.Add(u);
                 StringBuilder message = new StringBuilder();
                 message.Append("Chung cu AMS. Tai khoan duoc tao thanh cong! Ten đang nhap: ")
@@ -458,6 +459,7 @@ namespace AMS.Controllers
             try
             {
                 User u = parseAddDataUser(user, SLIM_CONFIG.USER_ROLE_MANAGER);
+                u.FamilyLevel =SLIM_CONFIG.FAMILY_LEVEL_ADMIN;
                 _userServices.Add(u);
                 StringBuilder message = new StringBuilder();
                 message.Append("Chung cu AMS. Tai khoan duoc tao thanh cong! Ten đang nhap: ")

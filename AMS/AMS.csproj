@@ -495,6 +495,7 @@
     <Content Include="Content\images\guy-5.jpg" />
     <Content Include="Content\images\delete.png" />
     <Content Include="Content\images\home_default.jpg" />
+    <Content Include="Content\images\loading.gif" />
     <Content Include="Content\images\lock-1.jpg" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\defaultStore.png" />
@@ -557,10 +558,10 @@
       <DependentUpon>Model1.edmx</DependentUpon>
       <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\amsScript\additional-methods.js" />
     <Content Include="Scripts\amsScript\jquery.validate.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
-    <Content Include="Scripts\amsScript\additional-methods.min.js" />
     <Content Include="Scripts\amsScript\canvasjs.min.js" />
     <Content Include="Scripts\amsScript\jquery.balanced-gallery.js" />
     <Content Include="Scripts\amsScript\jquery.timepicker.min.js" />

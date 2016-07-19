@@ -106,6 +106,9 @@ namespace AMS
         public static int TASK_DONE= 1;
         public static int TASK_NOT_DONE = 2;
 
+        public static int FAMILY_LEVEL_ADMIN = -2;
+        public static int FAMILY_LEVEL_SUPPORTER = -1;
+
 
         public static double MAX_NUMBER = 999999999.0;
 

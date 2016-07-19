@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNet.Identity
 @using AMS.Service
-@{ 
+@{
     UserService userService = new UserService();
     Layout = "~/Views/Shared/_Layout.cshtml";
     House curHouse = userService.findById(int.Parse(User.Identity.GetUserId())).House;
@@ -9,26 +9,24 @@
     bool isResidentOrHouseOwner = curUser.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT || curUser.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER;
 }
 <style>
-       .style_prevu_kit
-        {
-            display:inline-block;
-            border:0;
-            position: relative;
-            -webkit-transition: all 200ms ease-in;
-            -webkit-transform: scale(1); 
-            -ms-transform: scale(1); 
-            -moz-transition: all 200ms ease-in;
-            -moz-transform: scale(1);
-            transition: all 200ms ease-in;
-            transform: scale(1);   
+    .style_prevu_kit {
+        display: inline-block;
+        border: 0;
+        position: relative;
+        -webkit-transition: all 200ms ease-in;
+        -webkit-transform: scale(1);
+        -ms-transform: scale(1);
+        -moz-transition: all 200ms ease-in;
+        -moz-transform: scale(1);
+        transition: all 200ms ease-in;
+        transform: scale(1);
+    }
 
-        }
-        .style_prevu_kit:hover
-        {
+        .style_prevu_kit:hover {
             z-index: 2;
             -webkit-transition: all 200ms ease-in;
             -webkit-transform: scale(1.5);
-            -ms-transform: scale(1.5);   
+            -ms-transform: scale(1.5);
             -moz-transition: all 200ms ease-in;
             -moz-transform: scale(1.5);
             transition: all 200ms ease-in;
@@ -37,8 +35,8 @@
 </style>
 @if (isResidentOrHouseOwner)
 {
-<div class="sidebar left hidden-xs" style="width: 200px">
-@*    <div data-scrollable="" tabindex="0" style="overflow: hidden; outline: none;">*@
+    <div class="sidebar left hidden-xs" style="width: 200px">
+        @*    <div data-scrollable="" tabindex="0" style="overflow: hidden; outline: none;">*@
         <div class="sidebar-block" style="margin: auto;width: 100%;">
             <a href="@(curHouse == null ? "#" : ("/House/" + curHouse.Id))" class="style_prevu_kit" style="width:100%">
                 <div class="profile">
@@ -57,7 +55,7 @@
                     <a href="/Home/ManageReceipt/View"><i class="fa fa-fw fa-money"></i> Hóa đơn</a>
                 </li>
                 <li class="@(url.Contains("/Home")?"active":"")">
-                   
+
                 </li>
                 <li class="@(url.Contains("/Home/HelpdeskRequest/ViewHistory") ? "active" : "")">
                     <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-fw fa-stumbleupon-circle"></i> Yêu cầu sửa chữa</a>
@@ -69,8 +67,8 @@
         </div>
 
     </div>
-@*    <div id="ascrail2000" class="nicescroll-rails" style="width: 5px; z-index: 1; cursor: default; position: absolute; top: 0px; left: 245px; height: 638px; opacity: 0;"><div style="position: relative; top: 0px; float: right; width: 5px; height: 490px; border: 0px; border-radius: 5px; background-color: rgb(37, 173, 159); background-clip: padding-box;"></div></div><div id="ascrail2000-hr" class="nicescroll-rails" style="height: 5px; z-index: 1; top: 633px; left: 0px; position: absolute; cursor: default; display: none; width: 245px; opacity: 0;"><div style="position: absolute; top: 0px; height: 5px; width: 250px; border: 0px; border-radius: 5px; background-color: rgb(37, 173, 159); background-clip: padding-box;"></div></div>*@
-//</div>
+    @*    <div id="ascrail2000" class="nicescroll-rails" style="width: 5px; z-index: 1; cursor: default; position: absolute; top: 0px; left: 245px; height: 638px; opacity: 0;"><div style="position: relative; top: 0px; float: right; width: 5px; height: 490px; border: 0px; border-radius: 5px; background-color: rgb(37, 173, 159); background-clip: padding-box;"></div></div><div id="ascrail2000-hr" class="nicescroll-rails" style="height: 5px; z-index: 1; top: 633px; left: 0px; position: absolute; cursor: default; display: none; width: 245px; opacity: 0;"><div style="position: absolute; top: 0px; height: 5px; width: 250px; border: 0px; border-radius: 5px; background-color: rgb(37, 173, 159); background-clip: padding-box;"></div></div>*@
+    //</div>
 }
 <div class="sidebar right">
     <div class="chat-search">
@@ -88,10 +86,10 @@
         </li>
     </ul>
 </div>
-<div id="content" style="margin-left: 200px; @(isResidentOrHouseOwner==true?"":"margin-left:initial")">
-   
+<div id="content" style="margin-left: 200px; @(isResidentOrHouseOwner == true ? "" : "margin-left:initial")">
+
     @RenderBody()
-     <!--Footer-->
+    <!--Footer-->
     <div class="footer">
         Social Network Template © Copyright Notice
     </div>
@@ -111,6 +109,120 @@
             </div>
         </div>
     </div>
+
+    <div id="userInforModal" class="modal fade ams-modal" role="dialog">
+        <div class="modal-dialog modal-lg" style="width: 700px">
+            <div class="modal-content">
+                <div style="position: relative; padding: 0;">
+                    <div>
+                        <div class="heading-tab">
+                            <ul id="userInfoTabHeader" class="nav nav-tabs pull-right" role="tablist">
+                                <li class="active">
+                                    <a href="#userInfoTab" role="tab" data-toggle="tab" style="color: #21988c"><i style="color: #21988c" class="fa fa-life-ring"></i> Thông tin cá nhân</a>
+                                </li>
+                                <li>
+                                    <a href="#userRecentActivityTab" role="tab" data-toggle="tab" style="color: #21988c"><i style="color: #21988c" class="fa fa-group"></i> Thông tin gia đình</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-content">
+                            <div class="panel-body modal-body tab-pane fade active in" id="userInfoTab">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="avatar" style="text-align: center">
+                                            <img id="usrInfoAva" class="loading-img img-border popup-avar" onerror="this.src = '/Content/Images/defaultProfile.png';">
+                                            <h3 id="usrInfoFullname" style="background-color: #21988C; color: white; border-top-left-radius: 30px; border-bottom-left-radius: 30px; padding: 5px"> data['FullName'] </h3>
+                                            <strong class="house-name" style="float: none;"><span style="font-size: 17px;"><i class="fa fa-home icon-house"></i>Employee</span></strong>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="panel panel-default custom-panel">
+                                            <div class="panel-heading panel-heading-gray">
+                                                <i class="fa fa-info-circle"></i> Thông tin
+                                            </div>
+                                            <div class="panel-body">
+                                                <ul class="list-unstyled profile-about" style="font-size: 18px;">
+                                                    <li>
+                                                        <div class="row">
+                                                            <div class="col-sm-2">
+                                                                <i class="fa fa-calendar"></i>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <span class="text-muted">Ngày sinh</span>
+                                                            </div>
+                                                            <div id="usrInfoDob" class="col-sm-6"></div>
+                                                        </div>
+                                                    </li>
+
+                                                    <li>
+                                                        <div class="row">
+                                                            <div class="col-sm-2">
+                                                                <i class="fa fa-mars"></i>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <span class="text-muted">Giới tính</span>
+                                                            </div>
+                                                            <div id="usrInfoSex" class="col-sm-6"></div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="row">
+                                                            <div class="col-sm-2">
+                                                                <i class="fa fa fa-paw"></i>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <span class="text-muted">Định cư từ</span>
+                                                            </div>
+                                                            <div id="usrInfoCreateDate" class="col-sm-6"></div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="panel panel-default custom-panel">
+                                            <div class="panel-heading panel-heading-gray">
+                                                <i class="fa fa-info-circle"></i> Hoạt động gần đây
+                                            </div>
+                                            <div class="panel-body">
+                                                <ul id="recentActivity" class="list-unstyled profile-about"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*                            <div id="userRecentActivityTab" class="panel-body modal-body tab-pane fade">*@
+                            <div id="userRecentActivityTab" class="tab-pane fade" style="padding: 20px">
+                                <div class="row" style="text-align: center" id="houseinfoRow">
+                                    <div class="panel-body" id="memberPanelBody">
+                                        <div class="row" style="position: relative;">
+                                            <div class="house-roof">
+                                                <span style="line-height: 140px;">Nhà</span>@*Must be has text in this tag*@
+                                            </div>
+                                            <div class="abs-centering">
+                                                <a class="link-cursor">
+                                                    <img id="usrInfoHouseImg" class="img-border" onerror="this.src = '/Content/images/home_default.jpg';" src="/Content/images/home_default.jpg" style="height: 90px; border: 2px solid #bf360c;">
+                                                    <div>
+                                                        <span id="usrInfoHouseName" class="house-title"></span>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
 
 @RenderSection("masterjs", required: false)

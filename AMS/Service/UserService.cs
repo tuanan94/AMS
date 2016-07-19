@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using AMS.Repository;
 using System.Security.Claims;
+using AMS.Constant;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Host.SystemWeb;
 using Microsoft.Owin.Security;
@@ -50,14 +51,17 @@ namespace AMS.Service
             userProfileMapping.ProfileImage = user.ProfileImage;
             userProfileMapping.HouseId = user.HouseId.GetValueOrDefault();
             userProfileMapping.HouseName = user.House == null ? "Không xác định" : user.House.HouseName;
+            userProfileMapping.CreatedDate = user.CreateDate.Value.ToString(AmsConstants.DateFormat);
+            userProfileMapping.Age = CommonUtil.CalculateAge(user.DateOfBirth.Value);
             userProfileMapping.HouseProfile = user.House == null||user.House.ProfileImage==null||user.House.ProfileImage.Equals("") ? "/Content/Images/home_default.jpg" : user.House.ProfileImage;
-            List<Post> rawPost = user.Posts.ToList();
+            List<Post> rawPost = user.Posts.OrderByDescending(p => p.CreateDate).Take(10).ToList();
             List<MoreInfo> moreInfos = new List<MoreInfo>();
             foreach(Post p in rawPost)
             {
                 MoreInfo pInfo = new MoreInfo();
                 pInfo.Id = p.Id +"";
                 pInfo.createdDate = p.CreateDate.ToString();
+                pInfo.PostText = CommonUtil.TruncateLongString(p.Body, 100); 
                 moreInfos.Add(pInfo);
             }
             userProfileMapping.moreInfos = moreInfos;

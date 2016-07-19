@@ -106,7 +106,7 @@
         min-width: 0;
     }
 
-    ul.timeline-list li.media > .media-body .panel {
+    ul.timeline-list li.media > .media-body .panel, .custom-panel {
         min-width: 0px;
         width: 100%;
         border: 1px solid;
@@ -235,6 +235,9 @@
         border-left: none;
         z-index: 0;
     }
+    #recentActivity > li:last-child {
+        border-bottom: none!important;
+    }
     /*AnLTNM change*/
 </style>
 <div class="container-fluid">
@@ -265,7 +268,7 @@
                                     <div class="col-md-12">
                                         <div style="display: flex">
                                             <div class="pull-left" id="userAvatar" data-user-id="@curUser.Id" style="margin-right: 10px">
-                                                <img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" class="avartar-img">
+                                                <img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" onerror="this.src='/Content/Images/defaultProfile.png';" class="avartar-img">
                                             </div>
                                             <div style="flex: 1; width: 0">
                                                 <textarea onkeyup="textAreaAdjust(this)" style="overflow: hidden;height:45px" id="postContent" name="status" class="form-control share-text" rows="8" placeholder="Chia sẻ những thông tin của bạn..."></textarea>
@@ -365,7 +368,7 @@
                                 {
                                     <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
                                         <i class="fa fa-fw fa-info"></i>
-                                        <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hổ trợ của bạn đã được chuyển cho nhân viên hỗ trợ @changeToUser.Fullname</a>
+                                        <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hỗ trợ của bạn đã được chuyển cho nhân viên hỗ trợ @changeToUser.Fullname</a>
                                         <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
 
                                         <br />
@@ -381,7 +384,7 @@
                                 {
                                     <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
                                         <i class="fa fa-fw fa-info"></i>
-                                        <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hổ trợ của bạn đã được xử lí xong bởi @nChange.User.Fullname</a>
+                                        <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hỗ trợ của bạn đã được xử lí xong bởi @nChange.User.Fullname</a>
                                         <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
 
                                         <br />
@@ -494,6 +497,11 @@
         $("#userAvatar").on("click", function (e) {
             e.stopPropagation();
             LoadUserProfile($(this).data("userId"));
+        });
+        $("#userInforModal").on("hidden.bs.modal", function () {
+            $("#memberPanelBody").children().not("div.row:first").remove();
+            $("#recentActivity li").remove();
+            $("#userInfoTabHeader li:first a").click();
         });
     });
 
@@ -636,7 +644,7 @@
 
             },
             error: function (er) {
-                alert(er)
+                alert(er);
             }
 
         });
@@ -650,7 +658,7 @@
                 '<div class="form-group" style="margin-bottom:0">' +
                     '<div style="display: flex">' +
                         '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)" style="margin-right: 10px">' +
-                            '<img id="userImagePost' + postObject['Id'] + '" src="' + postObject['userProfile'] + '" class="avartar-img">' +
+                            '<img id="userImagePost' + postObject['Id'] + '" src="' + postObject['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="avartar-img">' +
                         '</div>' +
                         '<div style="flex: 1; width: 0">' +
                             '<h3 class="" style="margin-top: 0;margin-bottom: 0;">' +
@@ -701,7 +709,7 @@
                                 + '<ul class="comments">'
                                  + '<li class="comment-form">'
                                         + '<div class="input-group" style="width: 100%;">'
-                                        + '<a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="pull-left"><img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" class="media-object avatar-comment"></a>'
+                                        + '<a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="pull-left"><img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avatar-comment"></a>'
                                         + '<div class="media-body" style="padding-left: 10px;">' +
                                             '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control input-cmnt" placeholder="Viết bình luận của bạn..."/>' +
                                              '<i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(' + postObject['Id'] + ')" style="font-size: xx-large;color: #25AD9F;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2"></i>' +
@@ -763,7 +771,7 @@
                     $("#countComment" + postid).html(obj.length + " bình luận");
                 }
                 $.each(obj, function (index, comment) {
-                    addCommentToCommentArea(postid, comment)
+                    addCommentToCommentArea(postid, comment);
                 });
             },
             error: function (er) {
@@ -776,7 +784,7 @@
         $("#commentsArea" + postId).append('<li>'
             + '<div class="media">'
             + '<a href="javascript:void(0)" onclick ="LoadUserProfile(2,true)"  class="pull-left">'
-            + '<img  src="' + comment['userProfile'] + '" class="media-object avartar-img">'
+            + '<img  src="' + comment['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avartar-img">'
             + '</a>'
             + '<div class="media-body">'
             + '<a href="javascript:void(0)" onclick ="LoadUserProfile(2,true)" class="comment-author">' + comment['username'] + ': </a>'
@@ -785,55 +793,9 @@
             + '</div>'
             + '</div>'
 
-            + '</li>')
+            + '</li>');
 
     }
-
-
-    function timeSince(dateString) {
-        console.log("timeSince: " + dateString);
-
-        var date = "";
-//        console.log("date: " + date);
-
-        if (typeof dateString !== 'object') {
-            date = new Date(dateString);
-            }
-
-            var seconds = Math.floor((new Date() - date) / 1000);
-            var intervalType;
-
-            var interval = Math.floor(seconds / 31536000);
-            if (interval >= 1) {
-                intervalType = ' năm';
-            } else {
-                interval = Math.floor(seconds / 2592000);
-                if (interval >= 1) {
-                    intervalType = ' tháng';
-                } else {
-                    interval = Math.floor(seconds / 86400);
-                    if (interval >= 1) {
-                        intervalType = ' ngày';
-                    } else {
-                        interval = Math.floor(seconds / 3600);
-                        if (interval >= 1) {
-                            intervalType = " giờ";
-                        } else {
-                            interval = Math.floor(seconds / 60);
-                            if (interval >= 1) {
-                                intervalType = " phút";
-                            } else {
-                                interval = seconds;
-                                intervalType = " giây";
-                            }
-                        }
-                    }
-                }
-            }
-            return interval + ' ' + intervalType;
-    }
-
-
 
     function getImagesForPost(index, id) {
         if (id == null) {
@@ -925,18 +887,18 @@
         $("#postContent").val('');
     }
     function report(id) {
-        $("#reportPostId").val(id)
-        $("#reportContent").val("")
-        $("#reportModal").modal()
+        $("#reportPostId").val(id);
+        $("#reportContent").val("");
+        $("#reportModal").modal();
     }
     function processSendReport() {
-        var postId = $("#reportPostId").val()
-        var reportContent = $("#reportContent").val()
-        console.log("processSendReport: postid=" + postId + "reportContent=" + reportContent)
-        sendReport(postId, reportContent)
+        var postId = $("#reportPostId").val();
+        var reportContent = $("#reportContent").val();
+        console.log("processSendReport: postid=" + postId + "reportContent=" + reportContent);
+        sendReport(postId, reportContent);
     }
     function deleteNotification(noticChangedId) {
-        console.log('deleteNotification' + noticChangedId)
+        console.log('deleteNotification' + noticChangedId);
         $.ajax({
             url: "/Home/deleteNotification",
             type: "POST",

@@ -1,7 +1,9 @@
 ﻿using AMS.Service;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using AMS.Helper;
@@ -9,9 +11,12 @@ using AMS.ViewModel;
 using Microsoft.AspNet.Identity;
 using System.Net;
 using System.Xml.Linq;
+using AMS.Constant;
 using Newtonsoft.Json;
 using AMS.ObjectMapping;
 using AMS.Filter;
+using AMS.Models;
+using Microsoft.Ajax.Utilities;
 
 namespace AMS.Controllers
 {
@@ -198,12 +203,49 @@ namespace AMS.Controllers
         }
         //BinhHT
         [HttpGet]
+        [Authorize]
         public ActionResult ViewProfile()
         {
             User currentUser = userService.findById(int.Parse(User.Identity.GetUserId()));
             ViewBag.user = currentUser;
-
             return View();
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult UpdateProfile(UserInfoViewModel user)
+        {
+            try
+            {
+                User u = userService.findById(int.Parse(User.Identity.GetUserId()));
+                if (null != u)
+                {
+                    u.Fullname = user.Name;
+                    u.LastModified = DateTime.Now;
+                    u.IDNumber = user.Idenity;
+                    u.Gender = user.Gender;
+                    u.DateOfBirth = DateTime.ParseExact(user.Dob, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
+                    u.LastModified = DateTime.Now;
+                    u.FamilyLevel = user.RelationLevel;
+                    u.SendPasswordTo = user.CellNumb;
+                    if (user.IdCreateDate != null)
+                    {
+                        u.IDCreatedDate = DateTime.ParseExact(user.IdCreateDate, AmsConstants.DateFormat,
+                            CultureInfo.CurrentCulture);
+                    }
+                    else
+                    {
+                        u.IDCreatedDate = null;
+                    }
+
+                    userService.updateUser(u);
+                }
+            }
+            catch (Exception e)
+            {
+                RedirectToAction("ViewProfile");
+            }
+            return RedirectToAction("ViewProfile");
         }
         [HttpPost]
         [Authorize]
@@ -220,6 +262,67 @@ namespace AMS.Controllers
             }
             userService.updateUser(user);
             return "success";
+        }
+        
+        [HttpPost]
+        [Authorize]
+        public ActionResult GetCurrentPassword(int userId)
+        {
+            MessageViewModels response = new MessageViewModels();
+            User user = userService.findById(userId);
+            if (user != null)
+            {
+                response.Data = user.Password;
+            }
+            else
+            {
+                response.StatusCode = -1;
+            }
+            userService.updateUser(user);
+            return Json(response);
+        }
+        
+        [HttpPost]
+        public ActionResult CheckPass(int userId, string curPass)
+        {
+            User user = userService.findById(userId);
+            if (user != null && (!curPass.IsNullOrWhiteSpace()))
+            {
+                if (curPass.Equals(user.Password))
+                {
+                    return Json(true);
+                }
+            }
+            return Json(false);
+        }
+
+        [HttpPost]
+        public ActionResult UpdatePassword(int userId, string ConfirmOldPass, string NewPass)
+        {
+            MessageViewModels response = new MessageViewModels();
+            User user = userService.findById(userId);
+            if (user != null && (!ConfirmOldPass.IsNullOrWhiteSpace()) && (!NewPass.IsNullOrWhiteSpace()))
+            {
+                if (ConfirmOldPass.Equals(user.Password))
+                {
+                    try
+                    {
+                        user.Password = NewPass;
+                        user.LastModified = DateTime.Now;
+                        userService.updateUser(user);
+
+                        response.StatusCode = 0;
+                        return Json(response);
+                    }
+                    catch (Exception)
+                    {
+                        response.StatusCode = -1;
+                        return Json(response);
+                    }
+                }
+            }
+            response.StatusCode = -1;
+            return Json(response);
         }
 
         [HttpGet]
@@ -316,13 +419,13 @@ namespace AMS.Controllers
                 return null;
             }
             House curHouse = houseService.FindById(houseId.Value);
-            if(curHouse==null)
+            if (curHouse == null)
             {
                 return "error";
             }
             User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
-            
-            if(curHouse.DisplayMember == false && curUser.HouseId != curHouse.Id)
+
+            if (curHouse.DisplayMember == false && curUser.HouseId != curHouse.Id)
             {
                 return "NOT_PERMISSION";
             }
@@ -512,6 +615,6 @@ namespace AMS.Controllers
                 notificationService.deleteNoticByNchangeID(int.Parse(data));
             }
         }
-      
+
     }
 }
