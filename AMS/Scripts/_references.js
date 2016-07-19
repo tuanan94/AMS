@@ -40,6 +40,9 @@
 /// <reference path="respond.js" />
 /// <reference path="amsScript/additional-methods.js" />
 /// <reference path="amsscript/masonry.pkgd.min.js" />
+/// <reference path="amsscript/lg-fullscreen.js" />
+/// <reference path="amsscript/lg-thumbnail.js" />
+/// <reference path="amsscript/lightgallery.js" />
 
 
 

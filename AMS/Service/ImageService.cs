@@ -20,22 +20,27 @@ namespace AMS.Service
         {
             imageRepository.Add(image);
         }
-        public void saveListImage(List<String> imageURLs,int postId)
+        public void saveListImage(List<String> imageURLs,List<String> thumbImageURLs,int postId)
         {
-            foreach(String url in imageURLs)
+            string url = "";
+            string thumbUrl = "";
+            for (int i = 0; i < imageURLs.Count; i++)
             {
-                if(url!=null && !url.Equals(""))
+                url = imageURLs[i];
+                thumbUrl = thumbImageURLs[i];
+                if (url != null && !url.Equals(""))
                 {
-                    saveImage(url, postId);
+                    saveImage(url,thumbUrl, postId);
                 }
             }
         }
-        private int saveImage(String url,int postId)
+        private int saveImage(String url,string thumbUrl, int postId)
         {
             Image image = new Image();
             image.createdDate = DateTime.Now;
             image.postId = postId;
             image.url = url;
+            image.thumbnailUrl = thumbUrl;
             imageRepository.Add(image);
             return image.id;
 
@@ -61,6 +66,7 @@ namespace AMS.Service
                     image = new PostImageModel();
                     image.id = m.id;
                     image.url = m.url;
+                    image.thumbnailurl = m.thumbnailUrl;
                     image.createdDate = m.createdDate.Value.ToString(AmsConstants.DateTimeFormat);
                     image.postId = m.postId.Value;
                     try

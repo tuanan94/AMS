@@ -658,5 +658,73 @@ namespace AMS.Controllers
             return Json(response);
         }
 
+        [HttpPost]
+        [Route("Management/Image/UploadPostImage")]
+        public ActionResult UploadPostImage()
+        {
+            MessageViewModels response = new MessageViewModels();
+            string fileName = "";
+            string thumbFileName = "";
+            if (System.Web.HttpContext.Current.Request.Files.AllKeys.Any())
+            {
+                var pic = System.Web.HttpContext.Current.Request.Files["image"];
+                int width = Int32.Parse(Request.Form["width"]);
+                int height = Int32.Parse(Request.Form["height"]);
+
+                int thumbWidth = Int32.Parse(Request.Form["thumbWidth"]);
+                int thumbHeight = Int32.Parse(Request.Form["thumbHeight"]);
+                if (pic != null)
+                {
+                    fileName = SaveImage(pic, width, height,true);
+                    thumbFileName = SaveImage(pic, thumbWidth, thumbHeight,false);
+
+                    object obj = new
+                    {
+                        imageUrl = new StringBuilder(AmsConstants.ImageFilePathDownload).Append(fileName).ToString(),
+                        thumbnailUrl =
+                            new StringBuilder(AmsConstants.ImageFilePathDownload).Append(thumbFileName).ToString(),
+                    };
+                    response.Data = obj;
+                }
+                else
+                {
+                    response.StatusCode = -1;
+                    response.Msg = "Tải lên tập tin  thất bại";
+                }
+            }
+            else
+            {
+                response.StatusCode = -1;
+                response.Msg = "Tải lên tập tin  thất bại";
+            }
+            return Json(response);
+        }
+
+        private string SaveImage(HttpPostedFile pic, int width, int height,bool isScaled)
+        {
+            string newPath = Server.MapPath(AmsConstants.ImageFilePath);
+            if (!Directory.Exists(newPath))
+            {
+                Directory.CreateDirectory(newPath);
+            }
+            Rectangle cropRect = new Rectangle();
+            cropRect.Width = width;
+            cropRect.Height = height;
+            System.Drawing.Image target = null;
+            if (isScaled)
+            {
+                target = CommonUtil.ScaleImage(System.Drawing.Image.FromStream(pic.InputStream), cropRect.Width, cropRect.Height);
+            }
+            else
+            {
+               target = CommonUtil.FixedSize(System.Drawing.Image.FromStream(pic.InputStream), cropRect.Width, cropRect.Height, true);
+            }
+
+            string fileName =
+               new StringBuilder().Append("img_").Append(DateTime.Now.Ticks).Append(".").Append(pic.ContentType.Replace(@"image/", ""))
+                   .ToString();
+            target.Save(new StringBuilder(newPath).Append(fileName).ToString());
+            return fileName;
+        }
     }
 }

@@ -521,3 +521,7 @@ ul.timeline-list li.media > .media-body {
         max-height: 190px;
         max-width: 100%;
     }
+
+.lg-backdrop {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+}

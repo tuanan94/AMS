@@ -26,9 +26,11 @@
 
 }
 <link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css" />
+<link rel="stylesheet" href="~/Content/css/lightgallery.min.css" type="text/css" />
 <script src="~/Scripts/amsScript/LoadFamilyTree.js"></script>
 <script src="~/Scripts/amsScript/LoadUserProfile.js"></script>
 <script src="~/Scripts/amsScript/ReportPost.js"></script>
+
 <style>
     .button {
         display: block;
@@ -240,45 +242,6 @@
         border-bottom: none !important;
     }
 
-    .grid {
-@*        background: #EEE;*@
-@*        max-width: 500px;*@
-@*        height: 476px;*@
-@*        column-count: 2;*@
-@*        column-gap: 1em;*@
-    }
-
-@*    .grid-item {*@
-@*        /*background-color: #eee;*@
-@*    display: inline-block;*/*@
-@*        width: 50%;*@
-@*    }*@
-
-    .grid-sizer,
-    .grid-item {
-        width: 50%;
-        margin: 0 0 1em;
-    }
-
-    .grid-item--width2 {
-        width: 40%;
-    }
-
-    .grid-item--width3 {
-        width: 60%;
-    }
-
-    .grid-item--height2 {
-        height: 200px;
-    }
-
-    .grid-item--height3 {
-        height: 260px;
-    }
-
-    .grid-item--height4 {
-        height: 360px;
-    }
 
     /*AnLTNM change*/
 </style>
@@ -555,6 +518,7 @@
     });
 
     var listUploadImage = [];
+    var listUploadThumnailImage = [];
     function loadMore() {
         console.log("loadMore");
         loadAllPost(curTokenId);
@@ -575,9 +539,10 @@
             type: "POST",
             datatype: 'json',
             data: {
+                thumbnailImages: listUploadThumnailImage,
                 images: listUploadImage,
                 content: $("#postContent").val(),
-                embeded: $("#embedCode").val(),
+                embeded: $("#embedCode").val()
             },
             success: function (successData) {
                 if (successData == 'success') {
@@ -602,21 +567,28 @@
         var files = $("#uploadEditorImage").get(0).files;
         if (files.length > 0) {
             data.append("image", files[0]);
-            data.append("width", 243);
-            data.append("height", 243);
+            data.append("thumbWidth", 480);
+            data.append("thumbHeight", 480);
+
+            data.append("width", 1200);
+            data.append("height", 627);
         }
 
         // progessBar(true);
         $.ajax({
-            url: "/Management/Image/Upload/",
+            url: "/Management/Image/UploadPostImage/",
             type: "POST",
             processData: false,
             contentType: false,
             data: data,
 
             success: function (successData) {
-                addImageToPreviewList(successData.Data, listUploadImage.length);
-                listUploadImage[listUploadImage.length] = successData.Data;
+                var thumbnailData = successData.Data.thumbnailUrl;
+                var imageData = successData.Data.imageUrl;
+
+                addImageToPreviewList(thumbnailData, listUploadImage.length);
+                listUploadImage[listUploadImage.length] = imageData;
+                listUploadThumnailImage[listUploadThumnailImage.length] = thumbnailData;
                 // progessBar(false);
 
             },
@@ -653,7 +625,7 @@
                 $("#loadMoreBtn").button('reset');
 
 
-                $('.grid').masonry("reload");
+//                $('.grid').masonry("reload");
             },
             error: function (er) {
                 alert(er);
@@ -760,7 +732,7 @@
                                 + '<ul class="comments">'
                                  + '<li class="comment-form">'
                                         + '<div class="input-group" style="width: 100%;">'
-                                        + '<a href="javascript:void(0)" onclick="LoadUserProfile(' + @(curUser.Id)+ ',true)" class="pull-left"><img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avatar-comment"></a>'
+                                        + '<a href="javascript:void(0)" onclick="LoadUserProfile("' + @(curUser.Id)+ '",true)" class="pull-left"><img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avatar-comment"></a>'
                                         + '<div class="media-body" style="padding-left: 10px;">' +
                                             '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control input-cmnt" placeholder="Viết bình luận của bạn..."/>' +
                                              '<i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(' + postObject['Id'] + ')" style="font-size: xx-large;color: #25AD9F;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2"></i>' +
@@ -863,7 +835,6 @@
                 var obj = JSON.parse(successData);
                 var currentElement = {};
                 var listElement = "";
-                listElement = '<div class="grid-sizer"></div>';
                 var isFirst = true;
                 $.each(obj, function (index, image) {
                     if (isFirst) {
@@ -871,40 +842,33 @@
                         currentElement = $("#imagesPost" + image.postId);
                         isFirst = false;
                         if (obj.length == 1) {
-                            //                            $("#imagesPost" + image.postId).removeClass("testetetet").addClass("one-col");
+                            $("#imagesPost" + image.postId).removeClass("testetetet").addClass("one-col");
                             if (parseInt(image.width) >= parseInt(image.height)) {
                                 listElement = listElement +
-                                    '<div class="grid-item" style="border:1px solid white"><img src="' +
-//                                    '<div class="grid-item" style="border:1px solid white"><img style="width:100%; height:auto" src="' +
-                                    image.url +
+                                    '<div data-src="' + image.url + '" style="border:1px solid white"><img style="width:100%; height:auto" src="' +
+                                    image.thumbnailurl +
                                     '" alt="The Last of us"></div>';
                             } else {
                                 listElement = listElement +
-//                                    '<div class="grid-item" style="border:1px solid white" ><img style="height:100% !important; width:auto !important "src="' +
-                                    image.url +
+                                    '<div data-src="' + image.url + '" style="border:1px solid white" ><img style="height:100% !important; width:auto !important "src="' +
+                                    image.thumbnailurl +
                                     '" alt="The Last of us"></div>';
                             }
                             return;
                         } else {
-                            //                            $("#imagesPost" + image.postId).removeClass("one-col").addClass("testetetet");
+                            $("#imagesPost" + image.postId).removeClass("one-col").addClass("testetetet");
                         }
                     }
                     if (parseInt(image.width) >= parseInt(image.height)) {
-                        listElement = listElement + '<div class="grid-item" style="border:1px solid white"><img style="width:100% !important; height:auto !important" src="' + image.url + '" ></div>';
+                        listElement = listElement + '<div data-src="' + image.url + '" style="border:1px solid white"><img style="width:100% !important; height:auto !important" src="' + image.thumbnailurl + '" ></div>';
                     } else {
-                        listElement = listElement + '<div class="grid-item" style="border:1px solid white" ><img style="width:100% !important; height:auto !important" src="' + image.url + '"></div>';
+                        listElement = listElement + '<div data-src="' + image.url + '" style="border:1px solid white" ><img style="width:100% !important; height:auto !important" src="' + image.thumbnailurl + '"></div>';
                     }
 
                 });
                 listElement = listElement + "</div>";
                 currentElement.append(listElement);
-
-                currentElement.masonry({
-                    // options
-//                    percentPosition: true,
-                    columnWidth: '.grid-sizer',
-                    itemSelector: '.grid-item',
-                });
+                currentElement.lightGallery();
             },
             error: function (er) {
                 alert(er);
@@ -932,6 +896,7 @@
     function removePreview(position) {
         $('#previewImage' + position + '').hide();
         listUploadImage[position] = "";
+        listUploadThumnailImage[position] = "";
 
     }
     function reloadFeed() {
@@ -943,6 +908,7 @@
         var embedContent = "";
         $("#previewContent").html(embedContent);
         listUploadImage = [];
+        listUploadThumnailImage = [];
         $("#previewList").html('');
         $("#postContent").val('');
     }

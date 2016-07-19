@@ -13,6 +13,7 @@ namespace AMS.Models
     {
         public int id { get; set; }
         public string url { get; set; }
+        public string thumbnailurl { get; set; }
         public int width { get; set; }
         public int height { get; set; }
         public string createdDate { get; set; }

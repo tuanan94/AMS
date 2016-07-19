@@ -245,6 +245,7 @@
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="url" Type="nvarchar(max)" />
+          <Property Name="thumbnailUrl" Type="nvarchar(max)" />
           <Property Name="createdDate" Type="datetime" />
           <Property Name="postId" Type="int" />
         </EntityType>
@@ -1638,6 +1639,7 @@
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="thumbnailUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="createdDate" Type="DateTime" Precision="3" />
           <Property Name="postId" Type="Int32" />
         </EntityType>
@@ -2630,6 +2632,7 @@
               <MappingFragment StoreEntitySet="Image">
                 <ScalarProperty Name="postId" ColumnName="postId" />
                 <ScalarProperty Name="createdDate" ColumnName="createdDate" />
+                <ScalarProperty Name="thumbnailUrl" ColumnName="thumbnailUrl" />
                 <ScalarProperty Name="url" ColumnName="url" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
