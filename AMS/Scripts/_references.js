@@ -1,13 +1,19 @@
 ﻿/// <autosync enabled="true" />
 /// <reference path="ai.0.15.0-build58334.min.js" />
+/// <reference path="amsScript/additional-methods.js" />
 /// <reference path="amsScript/additional-methods.min.js" />
 /// <reference path="amsScript/canvasjs.min.js" />
 /// <reference path="amsScript/custom.js" />
+/// <reference path="amsscript/displaysinglepost.js" />
 /// <reference path="amsscript/jquery.balanced-gallery.js" />
 /// <reference path="amsScript/jquery.timepicker.min.js" />
 /// <reference path="amsScript/jquery.validate.min.js" />
+/// <reference path="amsscript/lg-fullscreen.js" />
+/// <reference path="amsscript/lg-thumbnail.js" />
+/// <reference path="amsscript/lightgallery.js" />
 /// <reference path="amsscript/loadfamilytree.js" />
 /// <reference path="amsscript/loaduserprofile.js" />
+/// <reference path="amsscript/masonry.pkgd.min.js" />
 /// <reference path="amsScript/moment.min.js" />
 /// <reference path="amsscript/reportpost.js" />
 /// <reference path="amsscript/scripts.js" />
@@ -38,7 +44,6 @@
 /// <reference path="modernizr-2.6.2.js" />
 /// <reference path="rating.js" />
 /// <reference path="respond.js" />
-/// <reference path="freewall.js" />
 
 
 

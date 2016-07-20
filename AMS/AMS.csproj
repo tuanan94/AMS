@@ -333,6 +333,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Model11.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model1.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BalanceSheetViewModels.cs" />
     <Compile Include="Models\ConfigViewModels.cs" />
@@ -479,11 +484,13 @@
     <Content Include="Content\css\jquery-ui.min.css" />
     <Content Include="Content\css\jquery.datetimepicker.css" />
     <Content Include="Content\css\jquery.timepicker.css" />
+    <Content Include="Content\css\lightgallery.min.css" />
     <Content Include="Content\css\media-upload.css" />
     <Content Include="Content\css\owl.theme.min.css" />
     <Content Include="Content\css\thumbnails.css" />
     <Content Include="Content\css\_vendor.bundle.css" />
     <Content Include="Content\css\_vendor.min.css" />
+    <Content Include="Content\fonts\lg.svg" />
     <Content Include="Content\images\58164.jpg" />
     <Content Include="Content\images\addimage.png" />
     <Content Include="Content\images\banner-842.jpg" />
@@ -495,6 +502,7 @@
     <Content Include="Content\images\guy-5.jpg" />
     <Content Include="Content\images\delete.png" />
     <Content Include="Content\images\home_default.jpg" />
+    <Content Include="Content\images\loading.gif" />
     <Content Include="Content\images\lock-1.jpg" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\defaultStore.png" />
@@ -557,16 +565,21 @@
       <DependentUpon>Model1.edmx</DependentUpon>
       <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\amsScript\additional-methods.js" />
+    <Content Include="Scripts\amsScript\DisplaySinglePost.js" />
     <Content Include="Scripts\amsScript\jquery.validate.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
-    <Content Include="Scripts\amsScript\additional-methods.min.js" />
     <Content Include="Scripts\amsScript\canvasjs.min.js" />
     <Content Include="Scripts\amsScript\jquery.balanced-gallery.js" />
     <Content Include="Scripts\amsScript\jquery.timepicker.min.js" />
     <Content Include="Scripts\amsScript\jquery.validate.min.js" />
+    <Content Include="Scripts\amsScript\lg-fullscreen.js" />
+    <Content Include="Scripts\amsScript\lg-thumbnail.js" />
+    <Content Include="Scripts\amsScript\lightgallery.js" />
     <Content Include="Scripts\amsScript\LoadFamilyTree.js" />
     <Content Include="Scripts\amsScript\LoadUserProfile.js" />
+    <Content Include="Scripts\amsScript\masonry.pkgd.min.js" />
     <Content Include="Scripts\amsScript\moment.min.js" />
     <Content Include="Scripts\amsScript\ReportPost.js" />
     <Content Include="Scripts\amsScript\scripts.js" />
@@ -649,17 +662,19 @@
     <Content Include="Content\fonts\picto-foundry-weather.ttf" />
     <Content Include="Content\fonts\picto-foundry-weather.woff" />
     <Content Include="ClassDiagram1.cd" />
-    <Content Include="Scripts\freewall.js" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
     <EntityDeploy Include="Model1.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
+      <LastGenOutput>Model11.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <Content Include="Model1.edmx.diagram">
       <DependentUpon>Model1.edmx</DependentUpon>
     </Content>
+    <Content Include="Content\fonts\lg.eot" />
+    <Content Include="Content\fonts\lg.ttf" />
+    <Content Include="Content\fonts\lg.woff" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
     <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\amsScript\custom.js" />

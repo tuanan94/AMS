@@ -840,13 +840,13 @@ namespace AMS.Controllers
                     {
                         survey.Description = model.Title;
                        
-                      //  survey.CreateDate = (DateTime.Now);
+                        //survey.CreateDate = (DateTime.Now);
                    
                         survey.EndDate = (model.EndDate);
                         survey.PublishDate = (model.PublishDate);
                        // int result = DateTime.Compare(survey.CreateDate.Value, survey.EndDate.Value);
                         int result1 = DateTime.Compare(survey.PublishDate.Value, survey.EndDate.Value);
-                       // int result2 = DateTime.Compare(survey.CreateDate.Value, survey.PublishDate.Value);
+                        //int result2 = DateTime.Compare(survey.CreateDate.Value, survey.PublishDate.Value);
                         //if (survey.CreateDate.ToString() == "")
                         //{
                         //    ModelState.AddModelError("StartDate", "Xin chon ngay hop ly.");
@@ -855,10 +855,10 @@ namespace AMS.Controllers
                         //{
                         //    ModelState.AddModelError("StartDate", "Xin chon ngay hop ly.");
                         //}
-                        if ((result1) < 0)
-                        {
-                            ModelState.AddModelError("StartDate", "Xin chon ngay hop ly.");
-                        }
+                        //else if ((result1) < 0)
+                        //{
+                        //    ModelState.AddModelError("StartDate", "Xin chon ngay hop ly.");
+                        //}
                         //else if ((result2) < 0)
                         //{
                         //    ModelState.AddModelError("EndDate", "Xin chon ngay hop ly.");

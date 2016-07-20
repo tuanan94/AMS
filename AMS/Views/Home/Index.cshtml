@@ -26,6 +26,8 @@
 
 }
 <link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css" />
+<link rel="stylesheet" href="~/Content/css/lightgallery.min.css" type="text/css" />
+<script src="~/Scripts/amsScript/DisplaySinglePost.js"></script>
 <script src="~/Scripts/amsScript/LoadFamilyTree.js"></script>
 <script src="~/Scripts/amsScript/LoadUserProfile.js"></script>
 <script src="~/Scripts/amsScript/ReportPost.js"></script>
@@ -106,7 +108,7 @@
         min-width: 0;
     }
 
-    ul.timeline-list li.media > .media-body .panel {
+    ul.timeline-list li.media > .media-body .panel, .custom-panel {
         min-width: 0px;
         width: 100%;
         border: 1px solid;
@@ -235,6 +237,12 @@
         border-left: none;
         z-index: 0;
     }
+
+    #recentActivity > li:last-child {
+        border-bottom: none !important;
+    }
+
+
     /*AnLTNM change*/
 </style>
 <div class="container-fluid">
@@ -265,7 +273,7 @@
                                     <div class="col-md-12">
                                         <div style="display: flex">
                                             <div class="pull-left" id="userAvatar" data-user-id="@curUser.Id" style="margin-right: 10px">
-                                                <img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" class="avartar-img">
+                                                <img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" onerror="this.src='/Content/Images/defaultProfile.png';" class="avartar-img">
                                             </div>
                                             <div style="flex: 1; width: 0">
                                                 <textarea onkeyup="textAreaAdjust(this)" style="overflow: hidden;height:45px" id="postContent" name="status" class="form-control share-text" rows="8" placeholder="Chia sẻ những thông tin của bạn..."></textarea>
@@ -365,7 +373,7 @@
                                 {
                                     <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
                                         <i class="fa fa-fw fa-info"></i>
-                                        <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hổ trợ của bạn đã được chuyển cho nhân viên hỗ trợ @changeToUser.Fullname</a>
+                                        <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hỗ trợ của bạn đã được chuyển cho nhân viên hỗ trợ @changeToUser.Fullname</a>
                                         <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
 
                                         <br />
@@ -381,7 +389,7 @@
                                 {
                                     <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
                                         <i class="fa fa-fw fa-info"></i>
-                                        <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hổ trợ của bạn đã được xử lí xong bởi @nChange.User.Fullname</a>
+                                        <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hỗ trợ của bạn đã được xử lí xong bởi @nChange.User.Fullname</a>
                                         <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
 
                                         <br />
@@ -459,31 +467,6 @@
     </div>
 </div>
 
-<!-- Display Single Post -->
-<div class="modal fade" id="displaySinglePost" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-
-            <div class="modal-body">
-                <div class="media-body">
-                <div class="panel panel-default panel-feed" style="width:100%">
-                    <div class="panel-heading clearfix" style="background-color: transparent;">
-                    <div class="form-group" style="margin-bottom:0"><div style="display: flex"><div class="pull-left" id="userLoadProfilePost163" onclick="LoadUserProfile(2,true)" style="margin-right: 10px"><img id="userImagePost163" src="/Images/ProfileImages/636043710986624149_manager.png" class="avartar-img"></div><div style="flex: 1; width: 0"><h3 class="" style="margin-top: 0;margin-bottom: 0;"><strong>   <a class="text-capitalize user-name" id="userNamePost163">Quản lý</a></strong><strong class="house-name"> <span style="font-size: 17px;"><i class="fa fa-home icon-house"></i>Employee</span></strong></h3><h3 class="" style="margin-top: 0;margin-bottom: 0;">                   <strong><span class="post-time"><i class="fa fa-globe icon-house"></i> 10  ngày</span></strong></h3></div></div></div></div><div class="panel-body"><div href="" class="btn btn-white btn-xs pull-right" onclick="report(163)"><i class="fa fa-fw fa-warning"></i></div><p>Hahaha</p><section class="form-group testetetet" id="imagesPost163" style="height:auto"></section><div class="row" style="height:auto;"></div></div><div class="view-all-comments" id="countComment163">8 bình luận</div><ul class="comments" id="commentsArea163"><li><div class="media"><a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="pull-left"><img src="/Images/ProfileImages/20160301-045514-IMG_0750.JPG" class="media-object avartar-img"></a><div class="media-body"><a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="comment-author">A101_tuanan: </a><span>:D</span><div class="comment-date">10  ngày trước </div></div></div></li><li><div class="media"><a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="pull-left"><img src="/Images/ProfileImages/20160301-045514-IMG_0750.JPG" class="media-object avartar-img"></a><div class="media-body"><a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="comment-author">A101_tuanan: </a><span>qwe</span><div class="comment-date">10  ngày trước </div></div></div></li><li><div class="media"><a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="pull-left"><img src="/Images/ProfileImages/IMG_0564.JPG" class="media-object avartar-img"></a><div class="media-body"><a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="comment-author">binhht: </a><span></span><div class="comment-date">10  ngày trước </div></div></div></li><li><div class="media"><a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="pull-left"><img src="/Images/ProfileImages/IMG_0564.JPG" class="media-object avartar-img"></a><div class="media-body"><a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="comment-author">binhht: </a><span></span><div class="comment-date">10  ngày trước </div></div></div></li><li><div class="media"><a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="pull-left"><img src="/Images/ProfileImages/IMG_0564.JPG" class="media-object avartar-img"></a><div class="media-body"><a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="comment-author">binhht: </a><span></span><div class="comment-date">10  ngày trước </div></div></div></li><li><div class="media"><a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="pull-left"><img src="null" class="media-object avartar-img"></a><div class="media-body"><a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="comment-author">binhthanh0: </a><span></span><div class="comment-date">1  ngày trước </div></div></div></li><li><div class="media"><a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="pull-left"><img src="null" class="media-object avartar-img"></a><div class="media-body"><a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="comment-author">binhthanh0: </a><span></span><div class="comment-date">1  ngày trước </div></div></div></li><li><div class="media"><a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="pull-left"><img src="/Images/ProfileImages/chu-tich-VNCB-7704-1467614233.jpg" class="media-object avartar-img"></a><div class="media-body"><a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="comment-author">B101_bNguyen: </a><span>asasd</span><div class="comment-date">-24338  giây trước </div></div></div></li></ul><ul class="comments"><li class="comment-form"><div class="input-group" style="width: 100%;"><a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="pull-left"><img src="/Images/ProfileImages/chu-tich-VNCB-7704-1467614233.jpg" class="media-object avatar-comment"></a><div class="media-body" style="padding-left: 10px;"><input id="contentDetail163" type="text" class="form-control input-cmnt" placeholder="Viết bình luận của bạn..."><i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(163)" style="font-size: xx-large;color: #25AD9F;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2"></i></div></div></li></ul></div></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-
-<a href="#" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#displaySinglePost">Test modal <i class="fa fa-plus"></i></a>
-
-
 
 
 
@@ -518,6 +501,11 @@
             e.stopPropagation();
             LoadUserProfile($(this).data("userId"));
         });
+        $("#userInforModal").on("hidden.bs.modal", function () {
+            $("#memberPanelBody").children().not("div.row:first").remove();
+            $("#recentActivity li").remove();
+            $("#userInfoTabHeader li:first a").click();
+        });
     });
 
     $('#loadMoreBtn').on('click', function () {
@@ -528,6 +516,7 @@
     });
 
     var listUploadImage = [];
+    var listUploadThumnailImage = [];
     function loadMore() {
         console.log("loadMore");
         loadAllPost(curTokenId);
@@ -548,12 +537,11 @@
             type: "POST",
             datatype: 'json',
             data: {
+                thumbnailImages: listUploadThumnailImage,
                 images: listUploadImage,
                 content: $("#postContent").val(),
-                embeded: $("#embedCode").val(),
-
+                embeded: $("#embedCode").val()
             },
-
             success: function (successData) {
                 if (successData == 'success') {
                     clearCreatePostForm();
@@ -576,20 +564,29 @@
 
         var files = $("#uploadEditorImage").get(0).files;
         if (files.length > 0) {
-            data.append("HelpSectionImages", files[0]);
+            data.append("image", files[0]);
+            data.append("thumbWidth", 480);
+            data.append("thumbHeight", 480);
+
+            data.append("width", 1200);
+            data.append("height", 627);
         }
 
         // progessBar(true);
         $.ajax({
-            url: "/Image/Upload/",
+            url: "/Management/Image/UploadPostImage/",
             type: "POST",
             processData: false,
             contentType: false,
             data: data,
 
             success: function (successData) {
-                addImageToPreviewList(successData, listUploadImage.length);
-                listUploadImage[listUploadImage.length] = successData;
+                var thumbnailData = successData.Data.thumbnailUrl;
+                var imageData = successData.Data.imageUrl;
+
+                addImageToPreviewList(thumbnailData, listUploadImage.length);
+                listUploadImage[listUploadImage.length] = imageData;
+                listUploadThumnailImage[listUploadThumnailImage.length] = thumbnailData;
                 // progessBar(false);
 
             },
@@ -625,6 +622,8 @@
                 });
                 $("#loadMoreBtn").button('reset');
 
+
+//                $('.grid').masonry("reload");
             },
             error: function (er) {
                 alert(er);
@@ -659,7 +658,7 @@
 
             },
             error: function (er) {
-                alert(er)
+                alert(er);
             }
 
         });
@@ -673,7 +672,7 @@
                 '<div class="form-group" style="margin-bottom:0">' +
                     '<div style="display: flex">' +
                         '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)" style="margin-right: 10px">' +
-                            '<img id="userImagePost' + postObject['Id'] + '" src="' + postObject['userProfile'] + '" class="avartar-img">' +
+                            '<img id="userImagePost' + postObject['Id'] + '" src="' + postObject['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="avartar-img">' +
                         '</div>' +
                         '<div style="flex: 1; width: 0">' +
                             '<h3 class="" style="margin-top: 0;margin-bottom: 0;">' +
@@ -711,8 +710,15 @@
                                 + '<div class="panel-body" >'
                                     + reportDiv
                                     + '<p>' + postObject['Body'] + '</p>'
-                                    + '<section class="form-group testetetet" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
-                                    + '</section>'
+                                  /*  + '<section class="form-group testetetet" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
+                                    + '</section>'*/
+
+                                    + '<div class="form-group">'
+                                     + '<div class="grid" id="imagesPost' + postObject['Id'] + '">'
+                                    + '</div>'
+                                    + '</div>'
+
+
                                     + '<div class="row" style="height:auto;">'
                                     + postObject['EmbedCode']
                                     + '</div>'
@@ -724,7 +730,7 @@
                                 + '<ul class="comments">'
                                  + '<li class="comment-form">'
                                         + '<div class="input-group" style="width: 100%;">'
-                                        + '<a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="pull-left"><img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" class="media-object avatar-comment"></a>'
+                                        + '<a href="javascript:void(0)" onclick="LoadUserProfile("' + @(curUser.Id)+ '",true)" class="pull-left"><img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avatar-comment"></a>'
                                         + '<div class="media-body" style="padding-left: 10px;">' +
                                             '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control input-cmnt" placeholder="Viết bình luận của bạn..."/>' +
                                              '<i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(' + postObject['Id'] + ')" style="font-size: xx-large;color: #25AD9F;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2"></i>' +
@@ -786,7 +792,7 @@
                     $("#countComment" + postid).html(obj.length + " bình luận");
                 }
                 $.each(obj, function (index, comment) {
-                    addCommentToCommentArea(postid, comment)
+                    addCommentToCommentArea(postid, comment);
                 });
             },
             error: function (er) {
@@ -798,65 +804,19 @@
     function addCommentToCommentArea(postId, comment) {
         $("#commentsArea" + postId).append('<li>'
             + '<div class="media">'
-            + '<a href="javascript:void(0)" onclick ="LoadUserProfile(2,true)"  class="pull-left">'
-            + '<img  src="' + comment['userProfile'] + '" class="media-object avartar-img">'
+            + '<a href="javascript:void(0)" onclick ="LoadUserProfile(' + comment["userId"] + ',true)"  class="pull-left">'
+            + '<img  src="' + comment['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avartar-img">'
             + '</a>'
             + '<div class="media-body">'
-            + '<a href="javascript:void(0)" onclick ="LoadUserProfile(2,true)" class="comment-author">' + comment['username'] + ': </a>'
+            + '<a href="javascript:void(0)" onclick ="LoadUserProfile(' + comment["userId"] +  ',true)" class="comment-author">' + comment['username'] + ': </a>'
             + '<span>' + comment['detail'] + '</span>'
             + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
             + '</div>'
             + '</div>'
 
-            + '</li>')
+            + '</li>');
 
     }
-
-
-    function timeSince(dateString) {
-        console.log("timeSince: " + dateString);
-
-        var date = "";
-//        console.log("date: " + date);
-
-        if (typeof dateString !== 'object') {
-            date = new Date(dateString);
-            }
-
-            var seconds = Math.floor((new Date() - date) / 1000);
-            var intervalType;
-
-            var interval = Math.floor(seconds / 31536000);
-            if (interval >= 1) {
-                intervalType = ' năm';
-            } else {
-                interval = Math.floor(seconds / 2592000);
-                if (interval >= 1) {
-                    intervalType = ' tháng';
-                } else {
-                    interval = Math.floor(seconds / 86400);
-                    if (interval >= 1) {
-                        intervalType = ' ngày';
-                    } else {
-                        interval = Math.floor(seconds / 3600);
-                        if (interval >= 1) {
-                            intervalType = " giờ";
-                        } else {
-                            interval = Math.floor(seconds / 60);
-                            if (interval >= 1) {
-                                intervalType = " phút";
-                            } else {
-                                interval = seconds;
-                                intervalType = " giây";
-                            }
-                        }
-                    }
-                }
-            }
-            return interval + ' ' + intervalType;
-    }
-
-
 
     function getImagesForPost(index, id) {
         if (id == null) {
@@ -883,13 +843,13 @@
                             $("#imagesPost" + image.postId).removeClass("testetetet").addClass("one-col");
                             if (parseInt(image.width) >= parseInt(image.height)) {
                                 listElement = listElement +
-                                    '<div style="border:1px solid white"><img style="width:100%; height:auto" src="' +
-                                    image.url +
+                                    '<div data-src="' + image.url + '" style="border:1px solid white"><img style="width:100%; height:auto" src="' +
+                                    image.thumbnailurl +
                                     '" alt="The Last of us"></div>';
                             } else {
                                 listElement = listElement +
-                                    '<div style="border:1px solid white" ><img style="height:100% !important; width:auto !important "src="' +
-                                    image.url +
+                                    '<div data-src="' + image.url + '" style="border:1px solid white" ><img style="height:100% !important; width:auto !important "src="' +
+                                    image.thumbnailurl +
                                     '" alt="The Last of us"></div>';
                             }
                             return;
@@ -898,14 +858,15 @@
                         }
                     }
                     if (parseInt(image.width) >= parseInt(image.height)) {
-                        listElement = listElement + '<div style="border:1px solid white"><img style="width:100% !important; height:auto !important" src="' + image.url + '" ></div>';
+                        listElement = listElement + '<div data-src="' + image.url + '" style="border:1px solid white"><img style="width:100% !important; height:auto !important" src="' + image.thumbnailurl + '" ></div>';
                     } else {
-                        listElement = listElement + '<div style="border:1px solid white" ><img style="width:100% !important; height:auto !important" src="' + image.url + '"></div>';
+                        listElement = listElement + '<div data-src="' + image.url + '" style="border:1px solid white" ><img style="width:100% !important; height:auto !important" src="' + image.thumbnailurl + '"></div>';
                     }
 
                 });
                 listElement = listElement + "</div>";
                 currentElement.append(listElement);
+                currentElement.lightGallery();
             },
             error: function (er) {
                 alert(er);
@@ -933,6 +894,7 @@
     function removePreview(position) {
         $('#previewImage' + position + '').hide();
         listUploadImage[position] = "";
+        listUploadThumnailImage[position] = "";
 
     }
     function reloadFeed() {
@@ -944,22 +906,23 @@
         var embedContent = "";
         $("#previewContent").html(embedContent);
         listUploadImage = [];
+        listUploadThumnailImage = [];
         $("#previewList").html('');
         $("#postContent").val('');
     }
     function report(id) {
-        $("#reportPostId").val(id)
-        $("#reportContent").val("")
-        $("#reportModal").modal()
+        $("#reportPostId").val(id);
+        $("#reportContent").val("");
+        $("#reportModal").modal();
     }
     function processSendReport() {
-        var postId = $("#reportPostId").val()
-        var reportContent = $("#reportContent").val()
-        console.log("processSendReport: postid=" + postId + "reportContent=" + reportContent)
-        sendReport(postId, reportContent)
+        var postId = $("#reportPostId").val();
+        var reportContent = $("#reportContent").val();
+        console.log("processSendReport: postid=" + postId + "reportContent=" + reportContent);
+        sendReport(postId, reportContent);
     }
     function deleteNotification(noticChangedId) {
-        console.log('deleteNotification' + noticChangedId)
+        console.log('deleteNotification' + noticChangedId);
         $.ajax({
             url: "/Home/deleteNotification",
             type: "POST",
@@ -988,35 +951,5 @@
         o.style.height = (25 + o.scrollHeight) + "px";
     }
 
-    //Display single post - START - ANTT
-
-    function displaySinglePost(postId) {
-        getSinglePostObject(postId)
-    }
-
-    function getSinglePostObject(postId) {
-        $.ajax({
-            url: "/Post/getSinglePost",
-            type: "GET",
-            datatype: 'json',
-            data: {
-                postId: postId,
-            },
-            success: function (successData) {
-                console.log("GetPostData: " + successData);
-                var obj = JSON.parse(successData);
-                addPostToTimeline(0, obj);
-                getImagesForPost(0, obj["Id"]);
-                getCommentsForPost(obj["Id"]);
-                curTokenId = obj["Id"];
-
-            },
-            error: function (er) {
-                alert(er);
-            }
-
-        });
-    }
-    //Dispaly single post - END - AnTT
-
+   
 </script>

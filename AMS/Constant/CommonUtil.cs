@@ -122,5 +122,22 @@ namespace AMS.Constant
                 return bmPhoto;
             }
         }
+        /*http://stackoverflow.com/questions/3566830/what-method-in-the-string-class-returns-only-the-first-n-characters*/
+        public static string TruncateLongString(string str, int maxLength)
+        {
+            return str.Substring(0, Math.Min(str.Length, maxLength));
+        }
+        /*http://stackoverflow.com/questions/3566830/what-method-in-the-string-class-returns-only-the-first-n-characters*/
+        public static int CalculateAge(DateTime dob)
+        {
+            DateTime today = DateTime.Today;
+            int age = today.Year - dob.Year;
+
+            if (dob > today.AddYears(-age))
+                age--;
+            return age;
+        }
+
+
     }
 }

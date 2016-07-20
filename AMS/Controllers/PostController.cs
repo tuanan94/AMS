@@ -20,7 +20,7 @@ namespace AMS.Controllers
         [HttpPost]
         [Authorize]
         [ValidateInput(false)]
-        public String Create(List<String> images, String content, string embeded)
+        public String Create(List<String> images, List<String> thumbnailImages, String content, string embeded)
         {
             User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
             if (curUser == null)
@@ -38,7 +38,7 @@ namespace AMS.Controllers
             {
                 images = new List<string>();
             }
-            imageService.saveListImage(images,postId);
+            imageService.saveListImage(images, thumbnailImages, postId);
             return "success";
         }
         [HttpPost]

@@ -902,7 +902,7 @@ $(document).ready(function () {
     });
 
     $(".ams-modal").on("hidden.bs.modal", function () {
-        $(this.querySelector("form")).find("input[type=text], textarea").val("");
+        $(this.querySelector("form")).find("input[type=text],input[type=password], textarea").val("");
         $(this.querySelector("form")).find("select option").prop("selected", function () {
             return this.defaultSelected;
         });
@@ -1300,4 +1300,47 @@ equalheight = function (container) {
     }
 }
 
+function timeSince(dateString) {
+    console.log("timeSince: " + dateString + "Z");
 
+    var date = "";
+    //        console.log("date: " + date);
+
+    if (typeof dateString !== 'object') {
+        //            date = new Date(dateString + "Z");
+        /*http://stackoverflow.com/questions/9062863/firefox-new-date-from-string-constructs-time-in-local-time-zone?rq=1*/
+        date = new Date(dateString + "+07:00");
+    }
+
+    var seconds = Math.floor((new Date() - date) / 1000);
+    var intervalType;
+
+    var interval = Math.floor(seconds / 31536000);
+    if (interval >= 1) {
+        intervalType = ' năm';
+    } else {
+        interval = Math.floor(seconds / 2592000);
+        if (interval >= 1) {
+            intervalType = ' tháng';
+        } else {
+            interval = Math.floor(seconds / 86400);
+            if (interval >= 1) {
+                intervalType = ' ngày';
+            } else {
+                interval = Math.floor(seconds / 3600);
+                if (interval >= 1) {
+                    intervalType = " giờ";
+                } else {
+                    interval = Math.floor(seconds / 60);
+                    if (interval >= 1) {
+                        intervalType = " phút";
+                    } else {
+                        interval = seconds;
+                        intervalType = " giây";
+                    }
+                }
+            }
+        }
+    }
+    return interval + ' ' + intervalType;
+}
