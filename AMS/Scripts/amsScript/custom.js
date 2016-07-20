@@ -597,6 +597,7 @@ function activeNavigationBar() {
         || pathName.indexOf("/ViewHelpdeskServiceCategory") > -1
         || pathName.indexOf("/BalanceSheet/ManageTransactionCatView") > -1) {
         $("#configNav").addClass("active");
+        $("#residentHouseNav").addClass("active");
     } else if (pathName.indexOf("/ManageUser/") > -1) {
         $("#userNav").addClass("active");
     } else if (pathName.indexOf("/Report/") > -1) {

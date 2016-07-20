@@ -507,7 +507,12 @@ namespace AMS.Controllers
                         u.SendPasswordTo = user.CellNumb;
                         if (user.IdCreateDate != null)
                         {
-                            u.IDCreatedDate = DateTime.ParseExact(user.IdCreateDate, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
+                            u.IDCreatedDate = DateTime.ParseExact(user.IdCreateDate, AmsConstants.DateFormat,
+                                CultureInfo.CurrentCulture);
+                        }
+                        else
+                        {
+                            u.IDCreatedDate = null;
                         }
                         u.Status = SLIM_CONFIG.USER_STATUS_ENABLE;
                         u.RoleId = user.IsHouseOwner;

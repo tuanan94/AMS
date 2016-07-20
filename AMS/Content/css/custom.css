@@ -137,7 +137,7 @@ td.highlight {
             display: block;
             height: 100%;
             text-align: center;
-            padding: 10px 10px;
+            padding: 11px 10px;
             font-weight: 400;
             -webkit-transition: all 0.3s;
             -moz-transition: all 0.3s;
@@ -151,9 +151,9 @@ td.highlight {
         }
 
         .manager-header > li > a > i {
-            font-size: 28px;
+            font-size: 26px;
             width: 28px;
-            height: 28px;
+            height: 26px;
             display: block;
             margin: 0 auto 2px;
         }

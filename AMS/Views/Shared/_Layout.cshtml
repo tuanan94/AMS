@@ -70,18 +70,22 @@
                             <a href="/Survey/doSurvey"><i class="fa fa-check-square-o"></i> Khảo sát</a>
                         </li>
                     }
-
-                    <li style="background-color:#428bca">
-                        @if (isManager)
-                        {
+                    
+                    @if (isManager)
+                    {
+                        <li style="background-color:#428bca">
                             <a href="/Management/HelpdeskRequest/ManageHdRequest"><i class="fa fa-black-tie"></i> Quản lý</a>
-                        }
-                        @if (isAdmin)
-                        {
+                        </li>
+                    }
+                    @if (isAdmin)
+                    {
+                        <li style="background-color:#465665">
                             <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-black-tie"></i> Quản lý</a>
-                        }
+                        </li>
 
+                    }
                 </ul>
+
                 <ul class="nav navbar-nav navbar-right">
                     <!-- User -->
                     <li class="dropdown">

@@ -253,8 +253,10 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="row">
-                                    <img id="productImg" class="border-img" style="width: 100%" src="" />
+                                <div class="row" >
+                                    <div class="border-img" style="text-align: center; padding: 5px;">
+                                        <img id="productImg" style="width: 100%" src="" />
+                                    </div>
                                 </div>
                                 <div id="editProductImageBtn" class="col-md-12" style="margin-top: 10px">
                                     <div class="pull-right">
@@ -535,8 +537,8 @@
                     $("#srvProvName").val(provider.SrvProvName);
                     $("#srvProvId").val(providerId);
                     $("#srvProvTel").val(provider.SrvProvTel);
-                    $("#srvProvAddress").text(provider.SrvProvAddress);
-                    $("#srvProvDesc").text(provider.SrvProvDesc);
+                    $("#srvProvAddress").val(provider.SrvProvAddress);
+                    $("#srvProvDesc").val(provider.SrvProvDesc);
 
                     var providerCatHtml = parseJsonToSelectTags(providerCat, provider.providerCatId);
                     $("#srvProvCatId").html(providerCatHtml);

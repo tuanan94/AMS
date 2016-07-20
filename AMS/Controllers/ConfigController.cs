@@ -574,7 +574,7 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
-        [AdminAuthorize]
+        [ManagerAdminAuthorize]
         [Route("Management/Config/UtilityService/ViewManageHouseBlock")]
         public ActionResult ViewManageHouseBlock()
         {
@@ -590,14 +590,14 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
-        [AdminAuthorize]
+        [ManagerAdminAuthorize]
         [Route("Management/Config/UtilityService/ViewHousesInBlock")]
         public ActionResult ViewHousesInBlock(int blockId)
         {
             Block block = _blockServices.FindById(blockId);
             if (null != block)
             {
-                block.NoFloor = block.Houses.GroupBy(h => h.Floor).Count();
+                block.NoFloor = block.Houses.Where(h => h.Status != null && h.Status == SLIM_CONFIG.HOUSE_STATUS_ENABLE).GroupBy(h => h.Floor).Count();
                 bool canRemoveBlock = true;
                 if (block.Houses.Any(house => house.Status == SLIM_CONFIG.HOUSE_STATUS_ENABLE && house.OwnerID != null))
                 {
@@ -692,9 +692,13 @@ namespace AMS.Controllers
                     house.Name = h.HouseName;
                     house.FloorName = h.Floor;
                     house.Area = h.Area.Value;
-                    house.Status = h.OwnerID == null
-                        ? SLIM_CONFIG.HOUSE_HAS_N0_RESIDENT
-                        : SLIM_CONFIG.HOUSE_HAS_RESIDENT;
+                    house.Status = (h.OwnerID == null || (h.OwnerID != null && h.Users.Count == 0)) ? SLIM_CONFIG.HOUSE_HAS_N0_RESIDENT : SLIM_CONFIG.HOUSE_HAS_RESIDENT;
+                    if (h.OwnerID != null && h.Users.Count == 0)
+                    {
+                        House uHouse = _houseServices.FindById(h.Id);
+                        uHouse.OwnerID = null;
+                        _houseServices.Update(uHouse);
+                    }
                     houses.Add(house);
                     house.DT_RowId = new StringBuilder("house_").Append(house.Id).ToString();
                 }
@@ -718,15 +722,20 @@ namespace AMS.Controllers
                 houseModel.Area = house.Area.Value;
                 houseModel.TypeName = house.HouseCategory == null ? "Chưa thiết lập" : house.HouseCategory.Name;
                 houseModel.Type = house.TypeId == null ? -1 : house.TypeId.Value;
-                if (house.Status.Value == SLIM_CONFIG.HOUSE_STATUS_ENABLE && house.OwnerID != null)
+                if (house.Status.Value == SLIM_CONFIG.HOUSE_STATUS_ENABLE && house.OwnerID != null && house.Users.Count != 0)
                 {
                     houseModel.HouseOwner =
                         house.Users.Where(u => u.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER).ToList().First().Fullname;
                     houseModel.Status = SLIM_CONFIG.HOUSE_HAS_RESIDENT;
                 }
-                else if (house.Status.Value == SLIM_CONFIG.HOUSE_STATUS_ENABLE && house.OwnerID == null)
+                else if (house.Status.Value == SLIM_CONFIG.HOUSE_STATUS_ENABLE && (house.OwnerID == null || (house.OwnerID != null && house.Users.Count == 0)))
                 {
                     houseModel.Status = SLIM_CONFIG.HOUSE_HAS_N0_RESIDENT;
+                    if (house.OwnerID == null || (house.OwnerID != null && house.Users.Count == 0))
+                    {
+                        house.OwnerID = null;
+                        _houseServices.Update(house);
+                    }
                 }
 
                 List<HouseCategoryModel> houseTypeList = new List<HouseCategoryModel>();
@@ -1057,9 +1066,10 @@ namespace AMS.Controllers
                 block = new BlockViewModel();
                 block.Name = b.BlockName;
                 block.Id = b.Id;
-                block.NoOfFloor = b.Houses.GroupBy(h => h.Floor).ToList().Count();
-                block.TotalRoom = b.Houses.ToList().Count;
-                block.TotalActiveRoom = b.Houses.Where(h => h.Status != null && h.Status == SLIM_CONFIG.HOUSE_STATUS_ENABLE).ToList().Count();
+                var enableHouseInBlock = b.Houses.Where(h => h.Status != null && h.Status == SLIM_CONFIG.HOUSE_STATUS_ENABLE);
+                block.NoOfFloor = enableHouseInBlock.GroupBy(h => h.Floor).ToList().Count();
+                block.TotalRoom = enableHouseInBlock.ToList().Count;
+                block.TotalActiveRoom = enableHouseInBlock.Where(h => (h.OwnerID != null && h.Users.Count != 0) ).ToList().Count();
                 blockList.Add(block);
             }
             return Json(blockList, JsonRequestBehavior.AllowGet);
@@ -1178,6 +1188,8 @@ namespace AMS.Controllers
                     rangePrice.Price = rp.Price;
                     rangePrice.ServiceId = utilServiceId;
                     rangePrice.Type = type;
+                    rangePrice.CreateDate = DateTime.Now;
+                    rangePrice.LastModified = DateTime.Now;
                     _rangePriceServices.Add(rangePrice);
                 }
                 catch (Exception)

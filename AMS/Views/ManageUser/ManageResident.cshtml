@@ -8,13 +8,13 @@
 <div class="col-md-12">
     <div class="panel panel-default">
         <div class="heading-tab">
-            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Danh sách yêu cầu</span>
+            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Quản lý nhân viên tài khoản cư dân</span>
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li class="active">
-                    <a href="/Management/ManageUser/ViewResidentList"><i class="fa fa-life-ring"></i> Tất cả cư dân</a>
+                    <a href="/Management/ManageUser/ViewResidentList"><i class="fa fa-users"></i> Cư dân</a>
                 </li>
                 <li>
-                    <a href="/Management/ManageUser/ViewSupporterList"><i class="fa fa-group"></i> Nhân viên hỗ trợ</a>
+                    <a href="/Management/ManageUser/ViewSupporterList"><i class="fa fa-user-md "></i> Nhân viên hỗ trợ</a>
                 </li>
             </ul>
         </div>
@@ -662,13 +662,14 @@
                 Idenity: {
                     maxlength: 9,
                     minlength: 9,
-                    number: true
+                    number: true,
+                    required: function (element) {
+                        return $("#idCreateDate").is(':filled');
+                    },
                 },
                 IdCreateDate: {
-                    required: {
-                        depends: function () {
-                            return $("#resId").is(":filled");
-                        }
+                    required: function (element) {
+                        return $("#resId").is(':filled');
                     },
                 }
             },
@@ -693,7 +694,8 @@
                 Idenity: {
                     number: "CMND phải là ký số",
                     maxlength: "CMND 9 ký số.",
-                    minlength: "CMND 9 ký số."
+                    minlength: "CMND 9 ký số.",
+                    required: "Vui lòng nhập số CMND."
                 },
                 IdCreateDate: {
                     required:"Vui lòng nhập ngày cấp CMND."

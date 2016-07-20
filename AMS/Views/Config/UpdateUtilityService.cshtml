@@ -487,9 +487,13 @@
                 return false;
             }
             return this.optional(element) || true;
-        }, "Giả trị cuối cùng là *(vô hạn)");
+        }, "Giá trị cuối cùng là *(vô hạn)");
         $("#addUtilServiceForm").validate({
             rules: {
+                ServiceTypeName: {
+                    required: true,
+                    maxlength:255
+                },
                 RangeName: {
                     required: true,
                     maxlength:255
@@ -512,6 +516,10 @@
                 }
             },
             messages: {
+                ServiceTypeName: {
+                    required: "Trường bắt buộc",
+                    maxlength: "Tối đa 255 ký tự."
+                },
                 RangeName: {
                     required: "Trường bắt buộc",
                     maxlength: "Tối đa 255 ký tự."
@@ -538,9 +546,9 @@
             }
         });
 
-        $.validator.messages.required = 'File name mandatory!';
-        $.validator.messages.number = 'File name mandatory!';
-        $.validator.messages.maxlength = 'File name mandatory!';
+        //        $.validator.messages.required = 'File name mandatory!';
+        //        $.validator.messages.number = 'File name mandatory!';
+        //        $.validator.messages.maxlength = 'File name mandatory!';
 
     }
 </script>
