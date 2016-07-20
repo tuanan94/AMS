@@ -86,6 +86,26 @@ namespace AMS.Controllers
             string json = JsonConvert.SerializeObject(all,settings);
             return json;
         }
+
+        [HttpGet]
+        [Authorize]
+        public Object getSinglePost(int postId)
+        {
+            PostMapping singlePost = postService.getSiglePost(postId);
+
+            // Serializer settings
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.ContractResolver = new CustomResolver(typeof(PostMapping));
+            settings.PreserveReferencesHandling = PreserveReferencesHandling.None;
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            settings.Formatting = Formatting.Indented;
+
+            // Do the serialization and output to the console
+            string json = JsonConvert.SerializeObject(singlePost, settings);
+            return json;
+
+
+        }
         [HttpGet]
         [Authorize]
         public String getUserProfileForPost(int? postId)
