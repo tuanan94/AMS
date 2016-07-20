@@ -566,6 +566,7 @@
       <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\amsScript\additional-methods.js" />
+    <Content Include="Scripts\amsScript\DisplaySinglePost.js" />
     <Content Include="Scripts\amsScript\jquery.validate.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />

@@ -128,6 +128,22 @@ namespace AMS.Service
 
             return postMappingResult;
         }
+        public PostMapping getSiglePost(int postId)
+        {
+            Post p = postRepository.FindById(postId);
+            PostMapping pMapping = new PostMapping();
+            pMapping.Id = p.Id;
+            pMapping.Body = p.Body;
+            pMapping.CreateDate = p.CreateDate.GetValueOrDefault();
+            pMapping.EmbedCode = p.EmbedCode;
+            pMapping.UserId = p.UserId;
+            pMapping.username = p.User == null ? "Không xác định sở hữu" : p.User.Username;
+            pMapping.userProfile = p.User == null || p.User.ProfileImage == null || p.User.ProfileImage.Equals("") ? "/Content/Images/defaultProfile.png" : p.User.ProfileImage;
+            pMapping.userFullName = p.User == null ? "Không xác định" : p.User.Fullname;
+            pMapping.houseName = p.User.House == null ? "Không xác định" : p.User.House.HouseName;
+            return pMapping;
+        }
+
         public List<Post> getAllPostByRole(int roleId)
         {
             var result = postRepository.List.Where(t => t.User.RoleId == roleId).OrderByDescending(t =>t.CreateDate).ToList();
