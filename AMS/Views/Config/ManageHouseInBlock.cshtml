@@ -113,7 +113,7 @@
                             </fieldset>
                         </div>
                     </div>
-                    <table id="houseInBlockTbl" class="table table-hover table-bordered" data-block-id="@block.Id">
+                    <table id="houseInBlockTbl" class="table table-hover table-bordered" data-block-id="@block.Id" data-user-is-role-mnger="@User.IsInRole("Manager")">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -657,6 +657,8 @@
                     $("#area").val(obj.Area);
                     $("#houseId").val(obj.Id);
 
+                    
+
                     if (obj.Status === window.HouseHasResident) {
                         $("#houseHolderRow").removeClass("hide");
                         $("#houseTypeRow").removeClass("hide");
@@ -664,29 +666,23 @@
 
                         $("#hasRes").removeClass("hide");
                         $("#hasNoRes").addClass("hide");
-//                        $("input:radio[name=Status]").prop("disabled", "disabled");
-//                        $('input[type=radio][name=Status]').unbind();
-//                        $('input[type=radio][name=Status]').change(function () {
-//                            if (this.value == "@SLIM_CONFIG.HOUSE_STATUS_DISABLE") {
-//                                $("#warningMsg").text("Căn hộ vẫn còn cư dân. Bạn thật sự muốn đóng căn hộ ?");
-//                                $("#msgWarningNoti").show();
-//                            }
-//                            else {
-//                                $("#msgWarningNoti").hide();
-//                            }
-//                        });
 
-                        if (listHouseType.length !== 0) {
-                            var houseTypeSelects = {};
-                            if (obj.Type && obj.Type !== -1) {
-                                houseTypeSelects = parseJsonToSelectTags(listHouseType, obj.Type);
+                        if ($("#houseInBlockTbl").data("userIsRoleMnger") === "True") {
+                            if (listHouseType.length !== 0) {
+                                var houseTypeSelects = {};
+                                if (obj.Type && obj.Type !== -1) {
+                                    houseTypeSelects = parseJsonToSelectTags(listHouseType, obj.Type);
+                                } else {
+                                    houseTypeSelects = parseJsonToSelectTags(listHouseType);
+                                }
+                                $("#Type").html(houseTypeSelects);
                             } else {
-                                houseTypeSelects = parseJsonToSelectTags(listHouseType);
+                                var noOption = "<option value='-1'>Chưa thiết lập<option>";
+                                $("#Type").html(noOption);
                             }
-                            $("#Type").html(houseTypeSelects);
                         } else {
-                            var noOption = "<option value='-1'>Chưa thiết lập<option>";
-                            $("#Type").html(noOption);
+                            $("#houseHolderRow").addClass("hide");
+                            $("#houseTypeRow").addClass("hide");
                         }
                     } else {
                         $("#houseHolderRow").addClass("hide");
@@ -1056,7 +1052,7 @@
                 },
                 Area: {
                     required: "Trường bắt buộc",
-                    number: "Phải là số"
+                    number: true
                 }
             },
             messages: {

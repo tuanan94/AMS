@@ -7,43 +7,53 @@
 }
 <div class="col-md-12">
     <div class="panel panel-default">
-        <div class="panel-heading panel-heading-gray">Chi tiết yêu cầu sửa chữa</div>
+        <div class="heading-tab supporter">
+            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Chi tiết yêu cầu sửa chữa</span>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li class="active">
+                    <a href="/HelpdeskSupporter"><i class="icon-newspaper"></i> Yêu cầu sửa chữa</a>
+                </li>
+                <li>
+                    <a href="/HelpdeskSupporter/History"><i class="icon-bookmark"></i> Lịch sử hoạt động</a>
+                </li>
+            </ul>
+        </div>
         <div class="panel-body">
             <form class="form-horizontal" role="form" method="post">
                 <div class="table-responsive">
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">Tiêu đề</label>
-                        <div class="col-sm-9">
+                        <label class="col-sm-offset-2 col-sm-2 control-label">Tiêu đề</label>
+                        <div class="col-sm-6">
                             <input type="email" readonly="readonly" class="form-control" id="title" value="@hr.Title">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="houseConsumptBlock" class="col-md-3 control-label">Căn hộ</label>
+                        <label for="houseConsumptBlock" class="col-sm-offset-2 col-sm-2  control-label">Căn hộ</label>
                         <div class="col-md-3">
                             <span id="houseConsumptBlock" class="btn room-color btn-block">@hr.HouseName</span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">Nhóm dịch vụ</label>
-                        <div class="col-sm-9">
+                        <label class="col-sm-offset-2 col-sm-2  control-label">Nhóm dịch vụ</label>
+                        <div class="col-sm-6">
                             <input type="email" readonly="readonly" class="form-control" id="serviceName" value="@hr.HelpdeskServiceCatName">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">Ngày tạo</label>
-                        <div class="col-sm-9">
+                        <label class="col-sm-offset-2 col-sm-2 control-label">Ngày tạo</label>
+                        <div class="col-sm-6">
                             <input type="email" readonly="readonly" class="form-control" id="createDate" value="@hr.CreateDate">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">Ngày hết hạn</label>
-                        <div class="col-sm-9">
+                        <label class="col-sm-offset-2 col-sm-2 control-label">Ngày hết hạn</label>
+                        <div class="col-sm-6">
                             <input type="email" readonly="readonly" class="form-control" id="assignDate" value="@hr.DueDate">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-3 control-label">Trạng thái</label>
+                        <label class="col-sm-offset-2 col-sm-2 control-label">Trạng thái</label>
                         <div class="col-md-3">
                             @if (@hr.Status == (int)StatusEnum.Open)
                             {
@@ -68,8 +78,8 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-3 control-label">Nội dung</label>
-                        <div class="col-md-9">
+                        <label class="col-sm-offset-2 col-sm-2 control-label">Nội dung</label>
+                        <div class="col-sm-6">
                             <textarea type="email" readonly="readonly" rows="3" class="form-control" id="description" value="">@hr.Description</textarea>
                         </div>
                     </div>

@@ -2,21 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Web;
-using System.Web.Compilation;
 using System.Web.Mvc;
 using AMS.Constant;
 using AMS.Filter;
 using AMS.Models;
 using AMS.Service;
-using Microsoft.Ajax.Utilities;
 
 namespace AMS.Controllers
 {
     public class ConfigController : Controller
     {
 
-        private UserServices _userServices = new UserServices();
         private UtilityServiceServices _utilityServiceServices = new UtilityServiceServices();
         private UtilityServiceRangePriceServices _rangePriceServices = new UtilityServiceRangePriceServices();
         private HouseCategoryServices _houseCategoryServices = new HouseCategoryServices();

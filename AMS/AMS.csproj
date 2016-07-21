@@ -487,6 +487,7 @@
     <Content Include="Content\css\lightgallery.min.css" />
     <Content Include="Content\css\media-upload.css" />
     <Content Include="Content\css\owl.theme.min.css" />
+    <Content Include="Content\css\supporterCustom.css" />
     <Content Include="Content\css\thumbnails.css" />
     <Content Include="Content\css\_vendor.bundle.css" />
     <Content Include="Content\css\_vendor.min.css" />

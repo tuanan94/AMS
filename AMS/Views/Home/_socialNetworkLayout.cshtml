@@ -38,7 +38,6 @@
 @if (isResidentOrHouseOwner)
 {
     <div class="sidebar left hidden-xs" style="width: 200px">
-        @*    <div data-scrollable="" tabindex="0" style="overflow: hidden; outline: none;">*@
         <div class="sidebar-block" style="margin: auto;width: 100%;">
             <a href="@(curHouse == null ? "#" : ("/House/" + curHouse.Id))" class="style_prevu_kit" style="width:100%">
                 <div class="profile">
@@ -69,8 +68,6 @@
         </div>
 
     </div>
-    @*    <div id="ascrail2000" class="nicescroll-rails" style="width: 5px; z-index: 1; cursor: default; position: absolute; top: 0px; left: 245px; height: 638px; opacity: 0;"><div style="position: relative; top: 0px; float: right; width: 5px; height: 490px; border: 0px; border-radius: 5px; background-color: rgb(37, 173, 159); background-clip: padding-box;"></div></div><div id="ascrail2000-hr" class="nicescroll-rails" style="height: 5px; z-index: 1; top: 633px; left: 0px; position: absolute; cursor: default; display: none; width: 245px; opacity: 0;"><div style="position: absolute; top: 0px; height: 5px; width: 250px; border: 0px; border-radius: 5px; background-color: rgb(37, 173, 159); background-clip: padding-box;"></div></div>*@
-    //</div>
 }
 <div class="sidebar right">
     <div class="chat-search">

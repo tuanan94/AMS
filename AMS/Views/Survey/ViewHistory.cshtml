@@ -84,7 +84,7 @@
                                         </td>
                                         <td><strong>@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.AnswerDate))</strong></td>
                                         <td>
-                                            <span class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModall_@i"> <i class="fa fa-newspaper-o"><b>Thống Kê</b></i> </span>
+                                            <span class="btn btn-default btn-xs" onclick="showReportModal(@i)"> <i class="fa fa-newspaper-o"><b>Thống Kê</b></i> </span>
 
                                         </td>
                                     </tr>
@@ -102,13 +102,11 @@
                             <div id="myModall_@i" class="modal fade">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <div class="modal-header login" style="text-align: center; font-size: 42px; background-color: #99ccff">
+                                        <div class="modal-header login">
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
-                                            <label class="label label-success">Kết quả khảo sát</label>
-
+                                            <h3 id="hdSrvCateModalTitle" class="modal-title"><i class="fa fa-info-circle"></i> Kết quả khảo sát</h3>
                                         </div>
-                                        <div class="modal-body">
+                                        <div class="modal-body" style="padding-bottom: 0;">
                                             <fieldset >
                                                 <div class="col-sm-5" style="margin-top: 20px">
 
@@ -188,12 +186,16 @@
                                                     }
                                                     }
                                                 </div>
-                                                <div class="col-sm-12" style="text-align: center">
-                                                    <label>Tổng cộng</label>: @each.ElementAt(k).Sum() phiếu
-                                                </div>
                                             </fieldset>
                                         </div>
-                                        <div class="modal-footer" style="background-color: #99ccff"></div>
+                                        <div class="modal-footer">
+                                            <div class="pull-left">
+                                                <label style="font-size: 19px;">Tổng lượt bình chọn</label>: <span style="font-size: 26px;font-weight: bolder;"> @each.ElementAt(k).Sum()</span>  <span style="font-size: 19px;"> (phiếu)</span>
+                                            </div>
+                                            <div class="pull-right">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -298,7 +300,7 @@
                [answer3a, answer3],
             ]);
         }
-        esle
+        else
         {
             RenderPieChart('container', [
            [answer1a, answer1],
@@ -411,6 +413,12 @@
             });
         };
     });
+    function showReportModal(index) {
+        $("#myModall_" + index + " > div > div > div.modal-body > fieldset > div.col-sm-5 > hr:nth-child(10)").remove();
+        $("#myModall_" + index + " > div > div > div.modal-body > fieldset > div.col-sm-4 > hr:nth-child(14)").remove();
+        $("#myModall_" + index + " > div > div > div.modal-body > fieldset > div.col-sm-3 > hr:nth-child(10)").remove();
+        $("#myModall_" + index).modal("show");
+    }
 </script>
 <script src="~/Scripts/highcharts.js"></script>
 <script src="~/Scripts/amsScript/canvasjs.min.js"></script>

@@ -8,6 +8,7 @@ using AMS.ViewModel;
 using System.Globalization;
 using AMS.Constant;
 using AMS.Enum;
+using AMS.Filter;
 using AMS.Models;
 using Microsoft.AspNet.Identity;
 
@@ -23,8 +24,7 @@ namespace AMS.Views.HelpdeskSupporter
         readonly string patternDate = "dd-MM-yyyy HH:mm";
 
         [HttpGet]
-        [ValidateInput(false)]
-        [Authorize]
+        [SupporterAuthorize]
         public ActionResult Index()
         {
             User currUser = _userService.findById(int.Parse(User.Identity.GetUserId()));//AnLTNM
@@ -74,8 +74,7 @@ namespace AMS.Views.HelpdeskSupporter
         }
 
         [HttpGet]
-        [ValidateInput(false)]
-        [Authorize]
+        [SupporterAuthorize]
         public ActionResult Detail(int currHelpdeskSupporterId, int requestId)
         {
             HelpdeskRequest hr = _helpdeskSupporterService.GetHelpdeskRequest(requestId);
@@ -102,7 +101,7 @@ namespace AMS.Views.HelpdeskSupporter
         }
 
         [HttpPost]
-        [ValidateInput(false)]
+        [SupporterAuthorize]
         public ActionResult Detail()
         {
             int currRequestId = int.Parse(Request["hiddenId"]);
@@ -143,6 +142,7 @@ namespace AMS.Views.HelpdeskSupporter
         }
 
         [Authorize]
+        [ValidateInput(false)]
         public ActionResult History()
         {
             User currUser = _userService.findById(int.Parse(User.Identity.GetUserId()));

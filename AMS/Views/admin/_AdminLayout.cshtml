@@ -40,9 +40,6 @@
 
     <div class="navbar navbar-main navbar-primary navbar-fixed-top navbar-primary-manager admin" role="navigation">
         <div class="container-fluid">
-            @*            <div class="navbar-header">*@
-            @*                <a class="navbar-brand" href="index.html">AMS</a>*@
-            @*            </div>*@
             <div class="navbar-header ">
                 <ul class="nav navbar-nav navbar-nav-admin">
                     <li class="dropdown">
@@ -50,6 +47,9 @@
                             <img onerror="this.onerror = null; this.src = '/Content/images/defaultProfile.png'; " src="@profileImg" class="img-circle" width="40"> @currentUser.GetUserName() <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="/Home/ViewProfile">Thông tin cá nhân</a>
+                            </li>
                             <li>
                                 <a href="/Account/LogOff">Đăng xuất</a>
                             </li>
@@ -64,7 +64,7 @@
                         <a href="/"><i class="fa fa-fw fa-users"></i>Mạng xã hội</a>
                     </li>
                     <li id="configNav" class="">
-                        <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-wrench"></i> Cấu Hình</a>
+                        <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-cog"></i> Cấu Hình</a>
                     </li>
                     <li id="userNav" class="">
                         <a href="/Management/ManageUser/ViewManagerList"><i class="fa fa-user"></i> NV Quản lý</a>
@@ -103,8 +103,3 @@
 
 </body>
 </html>
-
-
-
-
-

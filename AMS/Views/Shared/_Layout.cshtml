@@ -13,6 +13,7 @@
     bool isResidentOrHouseOwner = curUser.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT || curUser.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER;
     bool isManager = (curUser.RoleId == SLIM_CONFIG.USER_ROLE_MANAGER);
     bool isAdmin = (curUser.RoleId == SLIM_CONFIG.USER_ROLE_ADMIN);
+    bool isSupporter = (curUser.RoleId == SLIM_CONFIG.USER_ROLE_SUPPORTER);
 }
 
 <!DOCTYPE html>
@@ -48,7 +49,6 @@
                 <a class="navbar-brand" href="/">
                     <img src="~/Content/images/logo.png" style="height: 80px;margin-top: -37px;margin-bottom: -20px;" />
                     AMS
-
                 </a>
             </div>
 
@@ -61,16 +61,23 @@
                         </a>
                     </li>
 
-                    @if (isResidentOrHouseOwner)
-                    {
-                        <li style="@(url.Contains("/AroundService/") ? "background-color:#21988c" : "")">
-                            <a href="/Home/AroundService/ListView"><i class="fa fa-fw fa-stumbleupon-circle"></i> Dịch vụ xung quanh</a>
-                        </li>
-                        <li>
-                            <a href="/Survey/doSurvey"><i class="fa fa-check-square-o"></i> Khảo sát</a>
-                        </li>
-                    }
-                    
+                    @*                    @if (isResidentOrHouseOwner)*@
+                    @*                    {*@
+                    @*                        <li style="@(url.Contains("/AroundService/") ? "background-color:#21988c" : "")">*@
+                    @*                            <a href="/Home/AroundService/ListView"><i class="fa fa-fw fa-stumbleupon-circle"></i> Dịch vụ xung quanh</a>*@
+                    @*                        </li>*@
+                    @*                        <li>*@
+                    @*                            <a href="/Survey/doSurvey"><i class="fa fa-check-square-o"></i> Khảo sát</a>*@
+                    @*                        </li>*@
+                    @*                    }*@
+
+                    <li style="@(url.Contains("/AroundService/") ? "background-color:#21988c" : "")">
+                        <a href="/Home/AroundService/ListView"><i class="fa fa-fw fa-stumbleupon-circle"></i> Dịch vụ xung quanh</a>
+                    </li>
+                    <li style="@(url.Contains("/Survey/") ? "background-color:#21988c" : "")">
+                        <a href="/Survey/doSurvey"><i class="fa fa-check-square-o"></i> Khảo sát</a>
+                    </li>
+
                     @if (isManager)
                     {
                         <li style="background-color:#428bca">
@@ -82,7 +89,12 @@
                         <li style="background-color:#465665">
                             <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-black-tie"></i> Quản lý</a>
                         </li>
-
+                    }
+                    @if (isSupporter)
+                    {
+                        <li style="background-color:#388e3c">
+                            <a href="/HelpdeskSupporter"><i class="fa fa-wrench"></i> Sửa chữa</a>
+                        </li>
                     }
                 </ul>
 
