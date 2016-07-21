@@ -1,7 +1,7 @@
 ﻿@using AMS.Service
 @using Microsoft.AspNet.Identity;
 @{
-    
+
     ViewBag.Title = "Setting";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
     House curHouse = ViewBag.curHouse;
@@ -17,32 +17,35 @@
     <div class="media user-profile">
         <div class="media-body">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-8" style="text-align: center">
 
                     <div class="panel panel-default">
-                        <div class="panel-heading panel-heading-gray">
+                        <div style="text-align: left"  class="panel-heading panel-heading-gray">
                             @if (curUser != null && curUser.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)
                             {
-                                <a href="#" class="btn btn-primary btn-xs pull-right" data-toggle="modal" data-target="#addMemberModal">Thêm thành viên  <i class="fa fa-plus"></i></a>
+                                <a class="btn btn-primary btn-xs pull-right" data-toggle="modal" data-target="#addMemberModal">Thêm thành viên  <i class="fa fa-plus"></i></a>
                             }
                             <i class="icon-user-1"></i> Thành viên
                         </div>
-                        <div class="panel-body" id="memberPanelBody">
-                            <div class="row" style="text-align:center">
-                                <a href="javascript:void(0)" class="familymember">
-                                    <div style="width:100px;height:120px;float:left">
-                                        <img src="~/Content/images/home_default.jpg" style="width:100%;" />
-                                        <div style="margin-top: 5px; font-size: small;font-weight: 700;background-color: aliceblue;">
-                                            @curHouse.HouseName
+                        <div class="panel-body hide" id="memberPanelBody" data-cur-user-id="@curUser.Id" data-cur-user-role-id="@curUser.RoleId" data-cur-user-house-id="@curUser.HouseId">
+                            <div class="row" style="position: relative;">
+                                <div class="house-roof">
+                                    <span style="line-height: 140px;">Nhà</span>@*Must be has text in this tag*@
+                                </div>
+                                <div class="abs-centering">
+                                    <a id="usrInfoUrlToFamily" class="link-cursor">
+                                        <img id="usrInfoHouseImg" class="img-border" onerror="this.src = '/Content/images/home_default.jpg';" src="@curHouse.ProfileImage" style="height: 90px; border: 2px solid #bf360c;">
+                                        <div>
+                                            <span id="usrInfoHouseName" class="house-title">@curHouse.HouseName</span>
                                         </div>
-                                    </div>
-                                </a>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="panel panel-default">
-                        <div class="panel-heading panel-heading-gray">
+                        <div style="text-align: left" class="panel-heading panel-heading-gray">
                             <i class="icon-user-1"></i> Thành viên đang đợi duyệt
                         </div>
                         <div class="panel-body" id="pendingMember">
@@ -51,7 +54,7 @@
                                 @{
                                     foreach (User pendingU in pendingMembers)
                                     {   <div class="familymember">
-                                        <a href="javascript:void(0)" class="" onclick="LoadUserProfile(@pendingU.Id)">
+                                        <a class="" onclick="LoadUserProfile(@pendingU.Id)">
                                             <div style="height:120px;float:left">
                                                 <img src="@(pendingU.ProfileImage==null||pendingU.ProfileImage.Equals("")?"/Content/Images/defaultProfile.png":pendingU.ProfileImage)" style="height:80%" />
                                                 <div style="margin-top: 5px; font-size: small;font-weight: 700;background-color: aliceblue;">
@@ -106,7 +109,7 @@
                     </div>
                     <div class="panel panel-default">
                         <div class="panel-heading panel-heading-gray">
-                            <a href="#" class="btn btn-white btn-xs pull-right"><i class="fa fa-pencil"></i></a>
+                            <a class="btn btn-white btn-xs pull-right"><i class="fa fa-pencil"></i></a>
                             <i class="fa fa-info-circle"></i> Riêng tư
                         </div>
                         <div class="panel-body">
@@ -177,7 +180,7 @@
                         </div>
                     </div>
                     <div class="col-md-8">
-                       
+
 
                         <div class="form-group">
                             <label>Giới tính</label>
@@ -239,6 +242,7 @@
         $("#IDDate").datepicker();
     });
     $(document).ready(function() {
+        loadAllMemberForSettingPage("@curHouse.Id");
         $('#allowDisplayMember').change(function() {
             if($(this).is(":checked")) {
                 updateAllowDisplayMember(true);
@@ -255,7 +259,6 @@
                 updateAllowOtherView(false);
             }
         });
-        loadAllMember("tree","@curHouse.Id");
     });
 
     function updateAllowOtherView(isDisplay){
@@ -267,8 +270,8 @@
                 display: isDisplay,
 
             },
-            success: function(successData){
-                alert("Đã cập nhật thành công")
+            success: function(successData) {
+                alert("Đã cập nhật thành công");
             },
             error: function(er){
                 alert(er);
@@ -285,8 +288,8 @@
                 display: isDisplay,
 
             },
-            success: function(successData){
-                alert("Đã cập nhật thành công")
+            success: function(successData) {
+                alert("Đã cập nhật thành công");
             },
             error: function(er){
                 alert(er);
@@ -323,8 +326,6 @@
             success: function(successData){
                 document.getElementById("saveProfileBtn").style.display="none";
                 document.getElementById("unsaveProfileBtn").style.display="none";
-
-
             },
             error: function(er){
                 alert(er);
@@ -453,7 +454,7 @@
         $("#alertInfo").html("");
         var curDate = new Date();
         var isValid  = true;
-     
+
         var fullname  = $("#createMemberFullname").val();
         if (fullname == ""){
             isValid = false;
@@ -464,8 +465,8 @@
             isValid = false;
             $("#alertInfo").append('Tên đăng nhập không được để trống<br/>');
         }
-        var dateOfBirth = $('#DateOfBirth').datepicker( "getDate" )
-        var idDate = $('#IDDate').datepicker( "getDate" )
+        var dateOfBirth = $('#DateOfBirth').datepicker("getDate");
+        var idDate = $('#IDDate').datepicker("getDate");
         var idNumber = $('#IDNumber').val();
         if($("#DateOfBirth").val()==''){
             isValid = false;
@@ -513,12 +514,12 @@
                     sendPasswordTo: sendPasswordTo,
                 },
                 success: function (successData) {
-                    if(successData=='false'){
-                        $("#alertInfo").html('Có lỗi xảy ra. User này đã tổn tại trong hệ thống')
+                    if(successData=='false') {
+                        $("#alertInfo").html('Có lỗi xảy ra. User này đã tổn tại trong hệ thống');
                     }else{
                         $('#alertInfoSuccess').html('<h4 style="color:#0044cc"><i class="fa fa-fw fa-thumbs-o-up"></i>Yêu cầu thêm thành viên mới đã được gửi thành công. </br><h4> ')
-                        $("#sendrequestButton").attr('style','display:none')
-                        $("#createNewCloseBtn").attr('onclick','refreshPage()')
+                        $("#sendrequestButton").attr('style', 'display:none');
+                        $("#createNewCloseBtn").attr('onclick', 'refreshPage()');
                         disableAll()
                     }
 
@@ -562,6 +563,50 @@
             }
 
         });
-
     }
+
+    function openModalDeleteBlock(userId, userName) {
+        event.stopPropagation();
+        $("#amsMsgConfirm").html("Bạn có chắc chắn muốn cư dân <strong>" + userName + "</strong> ra khỏi căn hộ?");
+
+        $('#amsConfirmModal').unbind();
+        $('#amsConfirmModal').data("userId", userId);
+        $('#amsConfirmModal').on('click', '#btnOk', function (e) {
+            var $modalDiv = $(e.delegateTarget);
+            $modalDiv.addClass('loading');
+
+            var curUserId = $("#memberPanelBody").data("curUserId");
+            var curUserHouseId = $("#memberPanelBody").data("curUserHouseId");
+            $.ajax({
+                url: "/Home/HouseHolderDeleteUser",
+                type: "POST",
+                data: {
+                    deleteUserId: userId,
+                    houseHolderId: curUserId,
+                    houseId: curUserHouseId
+                },
+                success: function (data) {
+                    $("#amsConfirmModal").removeClass("loading");
+                    if (data.StatusCode === 0) {
+                        $("#amsMsgConfirm").text("Xóa thành viên thành công !.");
+                        setTimeout(function () {
+                            location.reload();
+                        }, 3000);
+                    } else if (data.StatusCode === 2) {
+                        $("#amsMsgConfirm").text("Tài khoản hiện tại không có quyền xóa thành viên trong căn hộ.");
+                        setTimeout(function () {
+                            location.reload();
+                        }, 3000);
+                    } else {
+                        $("#amsMsgConfirm").text("Xóa tài khoản thất bại");
+                        setTimeout(function () {
+                            location.reload();
+                        }, 3000);
+                    }
+                }
+            });
+        });
+        $("#amsConfirmModal").modal("show");
+    }
+      
 </script>

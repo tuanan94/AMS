@@ -12,13 +12,11 @@ namespace AMS.Filter
 {
     public class AuthorizationPrivilegeFilter_RequestHouse : ActionFilterAttribute
     {
-        UserService userService = new UserService();
-
+        private UserServices userService;
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-
-            User curUser = userService.findById(int.Parse(HttpContext.Current.User.Identity.GetUserId()));
-
+            userService = DependencyResolver.Current.GetService<UserServices>();
+            User curUser = userService.FindById(int.Parse(HttpContext.Current.User.Identity.GetUserId()));
 
             if (curUser.HouseId == null)
             {

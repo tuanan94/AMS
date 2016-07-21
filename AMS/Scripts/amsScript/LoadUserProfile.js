@@ -15,11 +15,19 @@ function getUser(userid, loadMember) {
         success: function (successData) {
             console.log("Get user: " + successData);
             var obj = JSON.parse(successData);
+            if (obj.HouseId == 0) {
+                $("#amsMsgText").text("");
+                $("#amsMsgText").append('<span style="width:100%;text-align:center">Cư dân <strong>' + obj.FullName + '</strong> không còn tồn tại trong hệ thống<span>');
+                $("#amsMessageModal").modal("show");
+                return;
+            }
             addModal(obj, loadMember);
             if (loadMember == true) {
                 //  alert('load')
+                $("#userInfoTabHeader li:last").removeClass("hide");
                 loadAllMember("treeModal", obj['HouseId']);
             } else {
+                $("#userInfoTabHeader li:last").addClass("hide");
                 showModal(obj);
             }
         },
@@ -94,6 +102,12 @@ function addModal(data, loadMember) {
     $("#usrInfoDob").html(StringDateOfBirth + '(<strong>' + data['Age'] + '</strong> tuổi)');
     $("#usrInfoSex").text(StringSex);
     $("#usrInfoCreateDate").text(data['CreatedDate']);
+    $("#_usrInfoHouseName").unbind();
+    $("#_usrInfoHouseName").get(0).lastChild.nodeValue = "";
+    $("#_usrInfoHouseName").append(data["HouseName"]);
+    $("#_usrInfoHouseName").data("houseId", data["HouseId"]).on("click", function () {
+        location.href = "/House/" + $(this).data("houseId");
+    });
     if (loadMember == true) {
         $("#usrInfoUrlToFamily").prop("href", "/House/" + data["HouseId"]);
         $("#usrInfoHouseImg").prop("src", data['HouseProfile']);

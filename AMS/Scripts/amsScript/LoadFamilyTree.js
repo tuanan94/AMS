@@ -5,7 +5,7 @@ var rangeNamesManager = ["Quản lý", "Nhân viên hỗ trợ", "Quản trị h
 var USERS = [];
 var doneUser = [];
 var colorLevel;
-function loadAllMember(rootTreee, houseid) {
+function loadAllMember(rootTreee, houseid, selectorStr, notShowModal) {
     //alert('loadAll Member' + houseid)
     $.ajax({
         url: "/Home/getUserByHouseId/",
@@ -15,10 +15,14 @@ function loadAllMember(rootTreee, houseid) {
         },
         success: function (successData) {
             if (successData == "NOT_PERMISSION") {
-                $("#memberPanelBody")
+                if (selectorStr) {
+
+                } else {
+                    $("#memberPanelBody")
                     .append('<span style="width:100%;text-align:center"><h3>Thông tin thành viên được ẩn</h3><span>');
-                $("#memberPanelBody div.row:first").addClass("hide");
-                showModal();
+                    $("#memberPanelBody div.row:first").addClass("hide");
+                    showModal();
+                }
                 return;
             } else {
                 $("#memberPanelBody div.row:first").removeClass("hide");
@@ -39,23 +43,136 @@ function loadAllMember(rootTreee, houseid) {
             }
             console.log(familyLevel.length);
             for (var i = 0; i < familyLevel.length; i++) {
-                console.log('addusertofamilyLevel' + familyLevel.length);
-                addUserToFamilyTree(familyLevel[i], USERS);
+                //                console.log('addusertofamilyLevel' + familyLevel.length);
+                addUserToFamilyTree(familyLevel[i], USERS, selectorStr);
             }
-            showModal();
+            if (!notShowModal) {
+                showModal();
+            }
         },
         error: function (er) {
             alert(er);
         }
     });
 }
-function addUserToFamilyTree(level, USERS) {
+
+function addUserToFamilyTree(level, USERS, selectorStr) {
     //alert('add user to family tree' + level)
-    var divLevel = $("#level" + level);
+    var divLevel = {}
+
+    if (selectorStr) {
+        divLevel = $("#" + selectorStr + " #level" + level);
+    } else {
+        divLevel = $("#memberPanelBody " + "#level" + level);
+    }
+
+    var element = {};
+    var elementLevel = {};
     if (divLevel.length) {
         //alert('yes')
     } else {
+
         //alert('no');
+        if (selectorStr) {
+            element = $("#" + selectorStr);
+        } else {
+            element = $("#memberPanelBody");
+        }
+
+        element.append('<div id="level_' + level + '"></div>');
+
+        if (selectorStr) {
+            elementLevel = $("#" + selectorStr + " #level_" + level);
+        } else {
+            elementLevel = $("#memberPanelBody " + " #level_" + level);
+        }
+        // Set range header
+        for (var i = 0; i < USERS.length; i++) {
+            var u = USERS[i];
+            var rangeName = "";
+            if (u['FamilyLevel'] == level && u['Status'] == '1') {
+                if (u.RoleId == 3 || u.RoleId == 4) {
+                    rangeName = rangeNames[colorLevel];
+                } else {
+                    rangeName = rangeNamesManager[colorLevel];
+                }
+                elementLevel.append('<div class="range-frame-header">' +
+                            '<span>' + rangeName + '</span>' +
+                            '</div>');
+                break;
+            }
+        }
+        elementLevel.append('<div id="level' + level + '" class="row range-frame" style="background-color: ' + colors[colorLevel] + '"></div>');
+        colorLevel++;
+    }
+    if (selectorStr) {
+        elementLevel = $("#" + selectorStr + " #level" + level);
+    } else {
+        elementLevel = $("#memberPanelBody " + "#level" + level);
+    }
+    for (var i = 0; i < USERS.length; i++) {
+        var u = USERS[i];
+        if (u['FamilyLevel'] == level && u['Status'] == '1') {
+            var userProfile = "";
+            if (u['ProfileImage'] == null || u['ProfileImage'] == '') {
+                userProfile = '/Content/Images/defaultProfile.png';
+            } else {
+                userProfile = u['ProfileImage'];
+            };
+
+            elementLevel.append('<a class="familymember link-cursor" onclick="LoadUserProfile(' + u["Id"] + ')" style="border:none;padding-right: 0;">'
+                                + '<div class="img-border in-house-avar" style="height: 120px;width: 120px">'
+                                    + '<img class="loading-img" onError="this.src=\'/Content/Images/defaultProfile.png\';" src="' + userProfile + '"style="width:120px; height:120px"/>'
+                                + '</div>'
+                                + '<div class="member-name-title">'
+                                        + u['Fullname']
+                                    + '</div>'
+                            + '</a>');
+        }
+    }
+}
+
+
+/*ANTLNM not change logic code for render range of member from AnLTT*/
+function loadAllMemberForSettingPage(houseid, selectorStr) {
+    //alert('loadAll Member' + houseid)
+    $.ajax({
+        url: "/Home/getUserByHouseId/",
+        type: "GET",
+        data: {
+            HouseId: houseid,
+        },
+        success: function (successData) {
+
+            USERS = JSON.parse(successData);
+            doneUser = [];
+            colorLevel = 0;
+            USERS.sort(function (a, b) {
+                return a['FamilyLevel'] - b['FamilyLevel'];
+            });
+            var familyLevel = [];
+            for (var i = 0; i < USERS.length; i++) {
+                if (familyLevel.indexOf(USERS[i]['FamilyLevel']) === -1) {
+                    familyLevel[familyLevel.length] = USERS[i]['FamilyLevel'];
+                }
+            }
+            console.log(familyLevel.length);
+            for (var i = 0; i < familyLevel.length; i++) {
+                addUserToFamilyTreeNew(familyLevel[i], USERS);
+            }
+            $("#memberPanelBody").removeClass("hide");
+        },
+        error: function (er) {
+            alert(er);
+        }
+    });
+}
+
+function addUserToFamilyTreeNew(level, USERS) {
+    //alert('add user to family tree' + level)
+    var divLevel = $("#level" + level);
+    if (divLevel.length) {
+    } else {
         $("#memberPanelBody").append('<div id="level_' + level + '"></div>');
         // Set range header
         for (var i = 0; i < USERS.length; i++) {
@@ -67,14 +184,16 @@ function addUserToFamilyTree(level, USERS) {
                 } else {
                     rangeName = rangeNamesManager[colorLevel];
                 }
-                $("#level_" + level).append('<div class="range-frame-header">' +
-                            '<span>' + rangeName + '</span>' +
-                            '</div>');
+                $("#level_" + level).append($("<div/>").addClass("range-frame-header").
+                                                    append($("<span/>").text(rangeName)));
                 break;
             }
         }
-        
-        $("#level_" + level).append('<div id="level' + level + '" class="row range-frame" style="background-color: ' + colors[colorLevel] + '"></div>');
+        $("#level_" + level).append(
+            $('<div/>')
+            .attr("id", "level" + level)
+            .addClass("row range-frame")
+            .css({ "background-color": colors[colorLevel] }));
         colorLevel++;
     }
     for (var i = 0; i < USERS.length; i++) {
@@ -86,16 +205,51 @@ function addUserToFamilyTree(level, USERS) {
             } else {
                 userProfile = u['ProfileImage'];
             };
-            $('#level' + level).append('<a href="#" class="familymember" onclick="LoadUserProfile(' + u["Id"] + ')" style="border:none">'
-                                + '<div style="height:120px;float:left">'
-                                    + '<img class="loading-img img-border" onError="this.src=\'/Content/Images/defaultProfile.png\';" src="' + userProfile + '"style="height:85%">'
-                                    + '<div class="member-name-title">'
-                                        + u['Fullname']
-                                    + '</div>'
-                                + '</div>'
-                            + '</a>');
+            var curUserId = $("#memberPanelBody").data("curUserId");
+            var curUserRoleId = $("#memberPanelBody").data("curUserRoleId");
+
+            if (curUserRoleId == window.UserRoleHouseHolder.toString()) {
+                if (curUserId == u["Id"].toString() && u["RoleId"].toString() == curUserRoleId) {
+                    $('#level' + level).append(imageFrame(u["Id"], userProfile, u["Fullname"], false));
+                }// if current user has role houseHolder of this house
+                else {
+                    $('#level' + level).append(imageFrame(u["Id"], userProfile, u["Fullname"], true));
+                }
+            }// if current user has role houseHolder 
+            else {
+                $('#level' + level).append(imageFrame(u["Id"], userProfile, u["Fullname"], false));
+            }
         }
     }
+}
+
+function imageFrame(userId, userProfileImg, fullName, hasDeleteBtn) {
+    if (hasDeleteBtn) {
+        return '<a class="familymember link-cursor" onclick="LoadUserProfile(\'' + userId + '\')" style="border:none;padding-right: 0;">'
+//        return '<a href="#" class="familymember" style="border:none;padding-right: 0;">'
+                                        + '<div class="img-border in-house-avar" style="height: 120px;width: 120px">'
+                                            + '<img class="loading-img" onError="this.src=\'/Content/Images/defaultProfile.png\';" src="' + userProfileImg + '"style="width:120px; height:120px"/>'
+                                                + "<div class='mem-remove' onclick='openModalDeleteBlock(\"" + userId + "\",\"" + fullName + "\")'>" +
+                                                    '<i class="del-time fa fa-times" >' + '</i>' +
+                                                '</div>'
+                                        + '<i class="del-time fa fa-times" >' + '</i>'
+                                        + '</div>'
+                                        + '<div class="member-name-title">'
+                                                + fullName
+                                            + '</div>'
+                                    + '</a>';
+    } else {
+        //        return '<a href="#" class="familymember" style="border:none;padding-right: 0;">'
+        return '<a  class="familymember link-cursor" onclick="LoadUserProfile(\'' + userId + '\')" style="border:none;padding-right: 0;">'
+                     + '<div class="img-border in-house-avar" style="height: 120px;width: 120px">'
+                         + '<img class="loading-img" onError="this.src=\'/Content/Images/defaultProfile.png\';" src="' + userProfileImg + '"style="width:120px; height:120px"/>'
+                     + '</div>'
+                     + '<div class="member-name-title">'
+                             + fullName
+                         + '</div>'
+                 + '</a>';
+    }
+
 }
 
 function addUserToMap(user, root) {

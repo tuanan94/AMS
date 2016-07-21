@@ -26,7 +26,6 @@
 
 }
 <link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css" />
-<link rel="stylesheet" href="~/Content/css/lightgallery.min.css" type="text/css" />
 <script src="~/Scripts/amsScript/DisplaySinglePost.js"></script>
 <script src="~/Scripts/amsScript/LoadFamilyTree.js"></script>
 <script src="~/Scripts/amsScript/LoadUserProfile.js"></script>
@@ -102,148 +101,6 @@
     ul.timeline-list li.mediawithoutBorder:before {
         border-left: none;
     }
-    /*AnLTNM change*/
-    textarea {
-        width: 100% !important;
-        min-width: 0;
-    }
-
-    ul.timeline-list li.media > .media-body .panel, .custom-panel {
-        min-width: 0px;
-        width: 100%;
-        border: 1px solid;
-        border-color: #e5e6e9 #dfe0e4 #d0d1d5;
-        border-radius: 3px;
-        box-shadow: none;
-    }
-
-        ul.timeline-list li.media > .media-body .panel.share {
-            z-index: 1031;
-        }
-
-    .panel.panel-default ul.comments {
-        width: 100%;
-        margin-left: 0;
-    }
-
-    .panel-footer {
-        padding: 10px 15px !important;
-    }
-
-    .avatar-comment {
-        border-radius: 30px;
-        height: 34px;
-    }
-
-    .input-cmnt {
-        width: 100%;
-        padding-right: 35px;
-    }
-
-    .new-post {
-        bottom: 0%;
-        transition: opacity .3s;
-        background: #000;
-        left: 0;
-        opacity: 0.63;
-        position: fixed;
-        transition: opacity 0.3s, bottom 0s .3s;
-        z-index: 1030;
-        width: 100%;
-        height: 100%;
-        display: none;
-    }
-
-    .avartar-img {
-        width: 50px;
-        height: 50px;
-        border: 1px solid rgba(0, 0, 0, .1);
-        box-shadow: 0 1px 2px rgba(0, 0, 0, .125);
-    }
-
-    .preview-img {
-        border: 1px solid #777777;
-        max-width: 100%;
-        max-height: 100%;
-    }
-
-    .post-heading {
-        color: #1d2129;
-        font-size: 12px;
-        font-weight: bold;
-        line-height: 19px;
-        padding: 0 10px;
-    }
-
-        .post-heading:hover {
-            color: #25ad9f;
-            text-decoration: none;
-        }
-
-    .post-heading-icon {
-        color: #25ad9f;
-        font-size: 17px;
-    }
-
-    .house-name {
-        float: right;
-        border: solid 2px;
-        border-radius: 4px;
-        padding: 5px;
-        border-color: #ced0d4;
-        color: #333333;
-        background-color: #f6f7f9;
-        border-color: #ced0d4;
-        color: #4b4f56;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, .125);
-        line-height: 12px;
-    }
-
-    .user-name {
-        font-size: 17px;
-        line-height: 1.38;
-        color: #555555;
-    }
-
-    .icon-house {
-        color: #25ad9f;
-        font-size: 15px;
-        margin-right: 5px;
-    }
-
-    p {
-        font-size: 17px;
-        font-weight: normal;
-        line-height: 1.38;
-    }
-
-    .post-time {
-        color: #999999;
-        font-size: 14px;
-        font-weight: normal;
-    }
-
-    ul.timeline-list li.media > .media-body {
-        margin: 19px 0 10px 0;
-    }
-
-    ul.timeline-list li.media:before {
-        position: static;
-        display: inline;
-        top: 0;
-        content: '';
-        height: initial;
-        margin-left: 0;
-        border-left: none;
-        z-index: 0;
-    }
-
-    #recentActivity > li:last-child {
-        border-bottom: none !important;
-    }
-
-
-    /*AnLTNM change*/
 </style>
 <div class="container-fluid">
     <div class="cover overlay">
@@ -359,7 +216,7 @@
                                 <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
                                     <i class="fa fa-fw fa-info"></i>
                                     <a href="/Survey/doSurvey"> @nChange.User.Fullname <span>đã</span> @nChange.Verb một bình chọn mới </a>
-                                    <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
+                                    <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
 
                                     <br />
                                 </div>
@@ -374,7 +231,7 @@
                                     <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
                                         <i class="fa fa-fw fa-info"></i>
                                         <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hỗ trợ của bạn đã được chuyển cho nhân viên hỗ trợ @changeToUser.Fullname</a>
-                                        <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
+                                        <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
 
                                         <br />
                                     </div>
@@ -390,7 +247,7 @@
                                     <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
                                         <i class="fa fa-fw fa-info"></i>
                                         <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hỗ trợ của bạn đã được xử lí xong bởi @nChange.User.Fullname</a>
-                                        <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
+                                        <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
 
                                         <br />
                                     </div>
@@ -402,7 +259,7 @@
                                 <div style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
                                     <i class="fa fa-fw fa-info"></i>
                                     @nChange.User.Fullname <span>đã</span> @nChange.Verb <span> @nChange.NotificationObject.TargetObject của bạn</span>
-                                    <a href="javascript:void(0)" onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
+                                    <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
 
                                     <br />
                                 </div>
@@ -672,18 +529,20 @@
                 '<div class="form-group" style="margin-bottom:0">' +
                     '<div style="display: flex">' +
                         '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)" style="margin-right: 10px">' +
-                            '<img id="userImagePost' + postObject['Id'] + '" src="' + postObject['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="avartar-img">' +
+                            '<img id="userImagePost' + postObject['Id'] + '" src="' + postObject['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="avartar-img  link-cursor">' +
                         '</div>' +
                         '<div style="flex: 1; width: 0">' +
                             '<h3 class="" style="margin-top: 0;margin-bottom: 0;">' +
                                 '<strong>' +
-                                '   <a class="text-capitalize user-name" id="userNamePost' + postObject['Id'] + '">' + postObject['userFullName'] + '</a>' +
+                                '   <a class="text-capitalize" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)" user-name link-cursor" id="userNamePost' + postObject['Id'] + '">' + postObject['userFullName'] + '</a>' +
                                 '</strong>' +
                                 '<strong class="house-name"> ' +
-                                    '<span style="font-size: 17px;">' +
-                                        '<i class="fa fa-home icon-house"></i>' +
-                                            postObject['houseName'] +
-                                    '</span>' +
+                                    '<a class="link-cursor" href="/House/' + postObject['houseId'] + '">' +
+                                        '<span style="font-size: 17px;">' +
+                                            '<i class="fa fa-home icon-house"></i>' +
+                                                postObject['houseName'] +
+                                        '</span>' +
+                                    '</a>' +
                                 '</strong>' +
                             '</h3>' +
                             '<h3 class="" style="margin-top: 0;margin-bottom: 0;">' +
@@ -730,7 +589,7 @@
                                 + '<ul class="comments">'
                                  + '<li class="comment-form">'
                                         + '<div class="input-group" style="width: 100%;">'
-                                        + '<a href="javascript:void(0)" onclick="LoadUserProfile("' + @(curUser.Id)+ '",true)" class="pull-left"><img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avatar-comment"></a>'
+                                        + '<a onclick="LoadUserProfile("' + @(curUser.Id)+ '")" class="pull-left"><img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avatar-comment"></a>'
                                         + '<div class="media-body" style="padding-left: 10px;">' +
                                             '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control input-cmnt" placeholder="Viết bình luận của bạn..."/>' +
                                              '<i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(' + postObject['Id'] + ')" style="font-size: xx-large;color: #25AD9F;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2"></i>' +
@@ -803,12 +662,12 @@
     }
     function addCommentToCommentArea(postId, comment) {
         $("#commentsArea" + postId).append('<li>'
-            + '<div class="media">'
-            + '<a href="javascript:void(0)" onclick ="LoadUserProfile(' + comment["userId"] + ',true)"  class="pull-left">'
-            + '<img  src="' + comment['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avartar-img">'
+            + '<div class="media ">'
+            + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)"  class="pull-left link-cursor">'
+            + '<img  src="' + comment['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avartar-img link-cursor">'
             + '</a>'
             + '<div class="media-body">'
-            + '<a href="javascript:void(0)" onclick ="LoadUserProfile(' + comment["userId"] +  ',true)" class="comment-author">' + comment['username'] + ': </a>'
+            + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)" class="comment-author link-cursor">' + comment['username'] + ': </a>'
             + '<span>' + comment['detail'] + '</span>'
             + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
             + '</div>'

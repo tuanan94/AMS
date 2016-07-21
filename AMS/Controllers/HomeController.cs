@@ -263,7 +263,7 @@ namespace AMS.Controllers
             userService.updateUser(user);
             return "success";
         }
-        
+
         [HttpPost]
         [Authorize]
         public ActionResult GetCurrentPassword(int userId)
@@ -281,7 +281,7 @@ namespace AMS.Controllers
             userService.updateUser(user);
             return Json(response);
         }
-        
+
         [HttpPost]
         public ActionResult CheckPass(int userId, string curPass)
         {
@@ -616,5 +616,33 @@ namespace AMS.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult HouseHolderDeleteUser(int houseId, int houseHolderId, int deleteUserId)
+        {
+            User user = userService.findById(houseHolderId);
+            User deleteUser = userService.findById(deleteUserId);
+            House house = houseService.FindById(houseId);
+            MessageViewModels response = new MessageViewModels();
+            if (house != null && null != user && deleteUser != null && house.OwnerID != null && user.HouseId != null)
+            {
+                if (user.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER && user.HouseId == house.Id && house.OwnerID == user.Id)
+                {
+                    deleteUser.Status = SLIM_CONFIG.USER_STATUS_DELETE;
+                    deleteUser.RoleId = SLIM_CONFIG.USER_ROLE_RESIDENT;
+                    deleteUser.LastModified = DateTime.Now;
+                    deleteUser.HouseId = null;
+                    userService.updateUser(deleteUser);
+                }
+                else
+                {
+                    response.StatusCode = 2;
+                }
+            }
+            else
+            {
+                response.StatusCode = -1;
+            }
+            return Json(response);
+        }
     }
 }

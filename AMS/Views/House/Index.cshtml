@@ -217,34 +217,87 @@
     }
     /*AnLTNM change*/
 </style>
-<div class="container-fluid">
-    <div class="cover overlay" style="position:relative">
+<div class="container-fluid" style="background: #00695C;">
+    <div class="cover overlay" style="position: relative">
         <img src="~/Content/images/familycover.jpg" alt="cover">
 
     </div>
-    <div style="height:120px;position:absolute;margin-top:-120px;text-align:center">
-        <img src="@(curHouse.ProfileImage==null||curHouse.ProfileImage.Equals("")?"/Content/images/home_default.jpg":curHouse.ProfileImage)" style="width:auto;height:100%;border-bottom-left-radius: 30px;border-top-right-radius: 30px;" />
-        <h2 style="color: white;background-color: #25AD9F;border-radius: 30px;">@curHouse.HouseName</h2>
+    @*    <div style="height: 120px; position: absolute; margin-top: -120px; text-align: center">*@
+    @*        <img src="@(curHouse.ProfileImage == null || curHouse.ProfileImage.Equals("") ? "/Content/images/home_default.jpg" : curHouse.ProfileImage)" style="width: auto; height: 100%; border-bottom-left-radius: 30px; border-top-right-radius: 30px;"/>*@
+    @*        <h2 style="color: white; background-color: #25AD9F; border-radius: 30px;">@curHouse.HouseName</h2>*@
+    @*    </div>*@
+    <div style="margin-top: -120px; text-align: center; position: relative; display: inline-block;">
+        <div class="border-img" style="width: 190px; height: 190px; background: #fff; float: left; border: 2px solid #fff;">
+            <img src="@(curHouse.ProfileImage == null || curHouse.ProfileImage.Equals("") ? "/Content/images/home_default.jpg" : curHouse.ProfileImage)" style="width: auto; height: 100%;">
+        </div>
+
+        <div style="font-size: 26px; /* added *//* added */float: left;">
+            <div style="position: absolute; bottom: 0; width: 100%;">
+                <h2 class="border-img" style="border-radius: 4px; border: none; background: #fff; padding: 10px; margin-left: 10px; margin-bottom: 0">
+                    <i class="fa fa-home" style="float: left; color: #009688;"></i>
+                    <span style="font-weight: bold;">A-1-01</span>
+                </h2>
+            </div>
+        </div>
     </div>
 </div>
 <div class="container-fluid">
     <div class="row">
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading panel-heading-gray">
+                    <h4>Bài viết</h4>
+                </div>
+            </div>
+            <ul class="timeline-list" id="timeline"></ul>
+        </div>
+        <div class="col-md-4" style="text-align: center">
+            <div class="panel panel-default">
+                <div class="panel-heading panel-heading-gray">
+                    <h4>Thành viên trong nhà</h4>
+                </div>
+                <div class="panel-body" id="memberPanelBodyHousePage">
+                    <div class="row" style="position: relative;">
+                        <div class="house-roof">
+                            <span style="line-height: 140px;">Nhà</span>@*Must be has text in this tag*@
+                        </div>
+                        <div class="abs-centering">
+                            <a id="usrInfoUrlToFamily" class="link-cursor" href="/House/@curHouse.Id">
+                                <img id="usrInfoHouseImg" class="img-border" onerror="this.src = '/Content/images/home_default.jpg';" src="@(curHouse.ProfileImage == null ? "/Content/images/home_default.jpg" : curHouse.ProfileImage)" style="height: 90px; border: 2px solid #bf360c;">
+                                <div>
+                                    <span id="usrInfoHouseName" class="house-title">@curHouse.HouseName</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@*<div class="container-fluid">
+    <div class="row">
         <div class="col-md-2">
 
         </div>
-        <div class="col-md-8">
-            <div class="panel panel-default" style="margin-top:60px">
+        <div class="col-md-8" style="text-align: center">
+            <div class="panel panel-default">
                 <div class="panel-heading panel-heading-gray"><h4>Thành viên trong nhà @curHouse.HouseName</h4></div>
                 <div class="panel-body" id="memberPanelBody">
-                    <div class="row" style="text-align:center">
-                        <a href="/House/@curHouse.Id" class="familymember">
-                            <div style="width:100px;height:120px;float:left">
-                                <img src="@(curHouse.ProfileImage==null||curHouse.ProfileImage.Equals("")?"/Content/Images/home_default.jpg":curHouse.ProfileImage)" style="width:100%;">
-                                <div style="margin-top: 5px; font-size: small;font-weight: 700;background-color: aliceblue;">
-                                    @curHouse.HouseName
+                    <div class="row" style="position: relative;">
+                        <div class="house-roof">
+                            <span style="line-height: 140px;">Nhà</span>$1$Must be has text in this tag#1#
+                        </div>
+                        <div class="abs-centering">
+                            <a id="usrInfoUrlToFamily" class="link-cursor" href="/House/@curHouse.Id">
+                                <img id="usrInfoHouseImg" class="img-border" onerror="this.src = '/Content/images/home_default.jpg';" src="@(curHouse.ProfileImage == null ? "/Content/images/home_default.jpg" : curHouse.ProfileImage)" style="height: 90px; border: 2px solid #bf360c;">
+                                <div>
+                                    <span id="usrInfoHouseName" class="house-title">@curHouse.HouseName</span>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -265,7 +318,7 @@
         <div class="col-md-2"></div>
 
     </div>
-</div>
+</div>*@
 
 <script>
     var curTokenId = -1;
@@ -370,7 +423,13 @@
     });
     $(document).ready(function () {
         loadAllPost(-1);
-        loadAllMember("tree",'@curHouse.Id')
+        loadAllMember("tree", '@curHouse.Id', "memberPanelBodyHousePage",true);
+
+        $("#userInforModal").on("hidden.bs.modal", function () {
+            $("#memberPanelBody").children().not("div.row:first").remove();
+            $("#recentActivity li").remove();
+            $("#userInfoTabHeader li:first a").click();
+        });
     });
 
     function loadAllPost(idToken) {
@@ -440,13 +499,13 @@
         var header = '<div class="panel-heading clearfix" style="background-color: transparent;">' +
                 '<div class="form-group" style="margin-bottom:0">' +
                     '<div style="display: flex">' +
-                        '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)" style="margin-right: 10px">' +
-                            '<img id="userImagePost' + postObject['Id'] + '" src="' + postObject['userProfile'] + '" class="avartar-img">' +
+                        '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile(' + postObject['UserId'] + ')" style="margin-right: 10px">' +
+                            '<img id="userImagePost' + postObject['Id'] + '" src="' + postObject['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="avartar-img link-cursor">' +
                         '</div>' +
                         '<div style="flex: 1; width: 0">' +
                             '<h3 class="" style="margin-top: 0;margin-bottom: 0;">' +
                                 '<strong>' +
-                                '   <a class="text-capitalize user-name" id="userNamePost' + postObject['Id'] + '">' + postObject['userFullName'] + '</a>' +
+                                '   <a class="text-capitalize" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)" user-name link-cursor" id="userNamePost' + postObject['Id'] + '">' + postObject['userFullName'] + '</a>' +
                                 '</strong>' +
                                 '<strong class="house-name"> ' +
                                     '<span style="font-size: 17px;">' +
@@ -492,22 +551,18 @@
                                 + '<ul class="comments">'
                                  + '<li class="comment-form">'
                                         + '<div class="input-group" style="width: 100%;">'
-                                        + '<a href="javascript:void(0)" onclick="LoadUserProfile(2,true)" class="pull-left"><img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" class="media-object avatar-comment"></a>'
+                                        + '<a onclick="LoadUserProfile(\'' + @(curUser.Id) + '\')" class="pull-left link-cursor"><img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" class="media-object avatar-comment link-cursor"></a>'
                                         + '<div class="media-body" style="padding-left: 10px;">' +
                                             '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control input-cmnt" placeholder="Viết bình luận của bạn..."/>' +
                                              '<i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(' + postObject['Id'] + ')" style="font-size: xx-large;color: #25AD9F;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:100"></i>' +
                                         '</div>'
-
-
-
-
             + '</div>'
             + '</li>'
             + '</ul>'
             + '</div>'
             + '</div>'
             + '</li>'
-        )
+        );
 
     }
 
@@ -554,7 +609,7 @@
                     $("#countComment" + postid).html(obj.length + " bình luận");
                 }
                 $.each(obj, function (index, comment) {
-                    addCommentToCommentArea(postid, comment)
+                    addCommentToCommentArea(postid, comment);
                 });
             },
             error: function (er) {
@@ -566,74 +621,21 @@
     function addCommentToCommentArea(postId, comment) {
         $("#commentsArea" + postId).append('<li>'
             + '<div class="media">'
-            + '<a href="javascript:void(0)" onclick ="LoadUserProfile(2,true)"  class="pull-left">'
-            + '<img  src="' + comment['userProfile'] + '" class="media-object avartar-img">'
-            + '</a>'
-            + '<div class="media-body">'
-            + '<a href="javascript:void(0)" onclick ="LoadUserProfile(2,true)" class="comment-author">' + comment['username'] + ': </a>'
-            + '<span>' + comment['detail'] + '</span>'
-            + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
+                + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)"  class="pull-left link-cursor">'
+                    + '<img  src="' + comment['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avartar-img link-cursor">'
+                + '</a>'
+                    + '<div class="media-body">'
+                        + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)" class="comment-author link-cursor">' + comment['username'] + ': </a>'
+                        + '<span>' + comment['detail'] + '</span>'
+                        + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
+                    +'</div>'
             + '</div>'
-            + '</div>'
-
-            + '</li>')
+        + '</li>');
 
     }
-    
+
     function getImagesForPost(index, id) {
-        if (id == null) {
-            alert("postid = nul");
-            return;
-        }
-        $.ajax({
-            url: "/Post/getImagesForPost",
-            type: "GET",
-            data: {
-                postId: id,
-            },
-            success: function (successData) {
-                var obj = JSON.parse(successData);
-                var currentElement = {};
-                var listElement = "";
-                var isFirst = true;
-                $.each(obj, function (index, image) {
-                    if (isFirst) {
-                        $("#imagesPost" + image.postId).html("");
-                        currentElement = $("#imagesPost" + image.postId);
-                        isFirst = false;
-                        if (obj.length == 1) {
-                            $("#imagesPost" + image.postId).removeClass("testetetet").addClass("one-col");
-                            if (parseInt(image.width) >= parseInt(image.height)) {
-                                listElement = listElement +
-                                    '<div style="border:1px solid white"><img style="width:100%; height:auto" src="' +
-                                    image.url +
-                                    '" alt="The Last of us"></div>';
-                            } else {
-                                listElement = listElement +
-                                    '<div style="border:1px solid white" ><img style="height:100% !important; width:auto !important "src="' +
-                                    image.url +
-                                    '" alt="The Last of us"></div>';
-                            }
-                            return;
-                        } else {
-                            $("#imagesPost" + image.postId).removeClass("one-col").addClass("testetetet");
-                        }
-                    }
-                    if (parseInt(image.width) >= parseInt(image.height)) {
-                        listElement = listElement + '<div style="border:1px solid white"><img style="width:100% !important; height:auto !important" src="' + image.url + '" ></div>';
-                    } else {
-                        listElement = listElement + '<div style="border:1px solid white" ><img style="width:100% !important; height:auto !important" src="' + image.url + '"></div>';
-                    }
-
-                });
-                listElement = listElement + "</div>";
-                currentElement.append(listElement);
-            },
-            error: function (er) {
-                alert(er);
-            }
-
-        });
+        appenImageToPost(index, id);
     }
     function addImageToPost(imageUrl, postId, width) {
         $("#imagesPost" + postId)

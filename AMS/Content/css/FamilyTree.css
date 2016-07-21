@@ -138,8 +138,11 @@ right connector from last child*/
         border-color: #94a0b4;
     }
 
+
+
+/*AnLTNM star change*/
 .range-frame {
-    display: table;
+    /*display: table;*/
     text-align: center;
     border: 2px solid rgba(0, 0, 0, 0.25);
     box-shadow: 0 1px 2px rgba(0, 0, 0, .125);
@@ -151,11 +154,9 @@ right connector from last child*/
 .range-frame-header {
     border: 2px solid rgba(0, 0, 0, 0.25);
     box-shadow: 0 0px 2px rgba(0, 0, 0, .125);
-    background-color: #555555;
+    background-color: #212121;
     border-bottom: none;
-    color: white;
-    border-right-width: 30px;
-    border-left-width: 30px;
+    color: #f9a825;
     line-height: 30px;
 }
 
@@ -194,7 +195,7 @@ right connector from last child*/
     right: 0;
     padding-top: 10px;
 }
-    
+
 
 .house-title {
     color: #fff;
@@ -212,4 +213,186 @@ right connector from last child*/
 .recent-activ-title {
     font-size: 14px;
     color: #757575;
+}
+
+/*AnLTNM change*/
+textarea {
+    width: 100% !important;
+    min-width: 0;
+}
+
+ul.timeline-list li.media > .media-body .panel, .custom-panel {
+    min-width: 0px;
+    width: 100%;
+    border: 1px solid;
+    border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+    border-radius: 3px;
+    box-shadow: none;
+}
+
+    ul.timeline-list li.media > .media-body .panel.share {
+        z-index: 1031;
+    }
+
+.panel.panel-default ul.comments {
+    width: 100%;
+    margin-left: 0;
+}
+
+.panel-footer {
+    padding: 10px 15px !important;
+}
+
+.avatar-comment {
+    border-radius: 30px;
+    height: 34px;
+}
+
+.input-cmnt {
+    width: 100%;
+    padding-right: 35px;
+}
+
+.new-post {
+    bottom: 0%;
+    transition: opacity .3s;
+    background: #000;
+    left: 0;
+    opacity: 0.63;
+    position: fixed;
+    transition: opacity 0.3s, bottom 0s .3s;
+    z-index: 1030;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.avartar-img {
+    width: 50px;
+    height: 50px;
+    border: 1px solid rgba(0, 0, 0, .1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .125);
+}
+
+.preview-img {
+    border: 1px solid #777777;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.post-heading {
+    color: #1d2129;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 19px;
+    padding: 0 10px;
+}
+
+    .post-heading:hover {
+        color: #25ad9f;
+        text-decoration: none;
+    }
+
+.post-heading-icon {
+    color: #25ad9f;
+    font-size: 17px;
+}
+
+.house-name {
+    float: right;
+    border: solid 2px;
+    border-radius: 4px;
+    padding: 5px;
+    border-color: #ced0d4;
+    color: #333333;
+    background-color: #f6f7f9;
+    border-color: #ced0d4;
+    color: #4b4f56;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .125);
+    line-height: 12px;
+}
+
+.user-name {
+    font-size: 17px;
+    line-height: 1.38;
+    color: #555555;
+}
+
+.icon-house {
+    color: #25ad9f;
+    font-size: 15px;
+    margin-right: 5px;
+}
+
+p {
+    font-size: 17px;
+    font-weight: normal;
+    line-height: 1.38;
+}
+
+.post-time {
+    color: #999999;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+ul.timeline-list li.media > .media-body {
+    margin: 19px 0 10px 0;
+}
+
+ul.timeline-list li.media:before {
+    position: static;
+    display: inline;
+    top: 0;
+    content: '';
+    height: initial;
+    margin-left: 0;
+    border-left: none;
+    z-index: 0;
+}
+
+#recentActivity > li:last-child {
+    border-bottom: none !important;
+}
+
+.in-house-avar {
+    overflow: hidden;
+    margin: 0 auto;
+    position: relative;
+}
+
+    .in-house-avar > .mem-remove {
+        background: rgba(0,0,0,.75);
+        position: absolute;
+        text-align: center;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        -webkit-transition: opacity .25s ease;
+        -moz-transition: opacity .25s ease;
+    }
+     .in-house-avar:hover .mem-remove {
+        opacity: 1;
+    } .in-house-avar:hover .del-time {
+        color: #E53935;
+    }
+    .del-time {
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-size: 30px;
+        color: #757575;
+    }
+/*End change*/
+a:active, a:hover {
+    text-decoration: none;
+    cursor: pointer;
+    color: #25ad9f
+}
+a, a {
+    color: #555555
+}
+.img:active, img:hover {
+    cursor: pointer
 }
