@@ -10,14 +10,12 @@
     List<Report> listReports = ViewBag.ListReport;
     List<Image> listImage = ViewBag.ListImage;
     List<ReportedPostItem> reportedPostItems = ViewBag.reportedPostItems;
-    
+
 }
 <script src="~/Scripts/jquery-1.10.2.js"></script>
 <script src="~/Scripts/highcharts.js"></script>
 <script src="~/Scripts/amsScript/canvasjs.min.js"></script>
 <link href="~/Content/css/datatables.css" rel="stylesheet" />
-<script src="~/Scripts/jquery-1.10.2.js"></script>
-<script src="~/Scripts/datatables.js"></script>
 <style>
     .button {
         display: block;
@@ -111,7 +109,7 @@
                     <table id="myTables" class="table table-hover table-bordered">
                         <thead>
                             <tr>
-                                <th  style="width: 20px;text-align: center" class="col-sm-1">
+                                <th style="width: 20px;text-align: center" class="col-sm-1">
                                     STT
                                 </th>
                                 <th style="text-align: center" class="col-sm-2">ID Bài viết</th>
@@ -139,7 +137,7 @@
                                             <div class="form-group">
                                                 <div class="col-sm-12">
                                                     <span class="" style="overflow: hidden !important;display: inherit;text-overflow: ellipsis;">
-                                                    @item.post.Body
+                                                        @item.post.Body
                                                     </span>
                                                 </div>
                                             </div>
@@ -151,19 +149,19 @@
                                                 </div>
                                             </div>
                                         </td>
-                                           
-                                        <td>
-                                                @{
-                                                    if (item.post.Status == SLIM_CONFIG.POST_STATUS_HIDE)
-                                                    {
-                                                        <button class="btn btn-warning">Đã xóa</button>
-                                                    }
-                                                    else
-                                                    {
-                                                        <button class="btn btn-danger" onclick="hiddenPost(@item.post.Id)">Xóa bài viết</button>
 
-                                                    }
-                                                }
+                                        <td>
+                                            @{
+                                    if (item.post.Status == SLIM_CONFIG.POST_STATUS_HIDE)
+                                    {
+                                        <button class="btn btn-warning">Đã xóa</button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-danger" onclick="hiddenPost(@item.post.Id)">Xóa bài viết</button>
+
+                                    }
+                                            }
                                         </td>
                                     </tr>
                                     i++;
@@ -191,7 +189,7 @@
                 postid: postId
             },
             success: function (successData) {
-               // alert(successData)
+                // alert(successData)
                 location.reload(false);
             },
             error: function (er) {
@@ -200,30 +198,29 @@
         });
     }
 
-    $("#myTables").DataTable({
-        "oLanguage": {
-            //    "sSearch": "Tìm Kiếm" //search,
-            "sProcessing": "Đang xử lý...",
-            "sLengthMenu": "Xem _MENU_ mục",
-            "sZeroRecords": "Không tìm thấy dòng nào phù hợp",
-            "sInfo": "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
-            "sInfoEmpty": "Đang xem 0 đến 0 trong tổng số 0 mục",
-            "sInfoFiltered": "(được lọc từ _MAX_ mục)",
-            "sInfoPostFix": "",
-            "sSearch": "Tìm:",
-            "sUrl": "",
-            "oPaginate": {
-                "sFirst": "Đầu",
-                "sPrevious": "Trước",
-                "sNext": "Tiếp",
-                "sLast": "Cuối"
-            }
-        }
-        //"language": {
-        //    "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Vietnamese.json"
-        //}
-
-
+    $(document).ready(function () {
+        var myTables = $("#myTables").DataTable({
+            "oLanguage": {
+                //    "sSearch": "Tìm Kiếm" //search,
+                "sProcessing": "Đang xử lý...",
+                "sLengthMenu": "Xem _MENU_ mục",
+                "sZeroRecords": "Không tìm thấy dòng nào phù hợp",
+                "sInfo": "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                "sInfoEmpty": "Đang xem 0 đến 0 trong tổng số 0 mục",
+                "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+                "sInfoPostFix": "",
+                "sSearch": "Tìm:",
+                "sUrl": "",
+                "oPaginate": {
+                    "sFirst": "Đầu",
+                    "sPrevious": "Trước",
+                    "sNext": "Tiếp",
+                    "sLast": "Cuối"
+                }
+            },
+            "bLengthChange": false,
+            "bInfo": false,
+        });
+        generateTableIndex(myTables);
     });
 </script>
-<script src="~/Scripts/datatables.js"></script>

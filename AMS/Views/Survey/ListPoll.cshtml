@@ -1,4 +1,5 @@
-﻿@model AMS.ViewModel.SurveyViewModel
+﻿@using AMS.Constant
+@model AMS.ViewModel.SurveyViewModel
 @{
     ViewBag.Title = "ListPoll";
     Layout = "~/Views/Management/__ManagementLayout.cshtml";
@@ -16,6 +17,7 @@
         color: white;
         font-weight: bold;
     }
+
     .deleteButton {
         display: block;
         width: 70px;
@@ -28,26 +30,17 @@
         font-weight: bold;
     }
 </style>
-
-<link href="~/Content/css/datatables.css" rel="stylesheet" />
-<script src="~/Scripts/jquery-1.10.2.js"></script>
-<script src="~/Scripts/datatables.js"></script>
 <div class="col-md-12">
     <div class="panel panel-default binh">
         <div class="heading-tab">
-            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Bình chọn</span>
+            <span class="tab-location"><i class="fa fa-sitemap" aria-hidden="true"></i> Danh sách bình chọn</span>
             <ul class="nav nav-tabs pull-right" role="tablist">
-
-                <li >
+                <li>
                     <a href="/Survey/Survey"><i class="fa fa-plus-square"></i> Tạo Bình Chọn</a>
                 </li>
-
                 <li class="active">
                     <a href="/Survey/ListPoll"><i class="fa fa-list-alt"></i> Danh Sách Các Bình Chọn</a>
                 </li>
-
-
-
             </ul>
         </div>
         <div class="panel-body">
@@ -61,7 +54,6 @@
                                         <tr>
                                             <th>Số Thứ tự</th>
                                             <th>Tiêu đề</th>
-
                                             <th>Ngày đăng</th>
                                             <th>Ngày đóng</th>
                                             <th>Trạng thái </th>
@@ -70,8 +62,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    @{
-                                        int i = 1;
+                                        @{
+                                            int i = 1;
                                             foreach (var item in listSurveys)
                                             {
                                                 <tr>
@@ -95,24 +87,27 @@
                                                     </td>
 
                                                     <td>
-                                                        <div class="form-group">
-                                                            <div class="col-sm-9">
-                                                                @*<span class="label date-color label-warning">@item.StartDate</span>*@
-                                                                @*<input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.StartDate">*@
-                                                                @Html.TextBoxFor(m => m.PublishDate, new { @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.PublishDate)), @class = "date-color", @style = "width:100px", @disabled = "disabled" })
-
-
-                                                            </div>
+                                                        @*<span class="label date-color label-warning">@item.StartDate</span>*@
+                                                        @*<input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.StartDate">*@
+                                                        @*                                                                @Html.TextBoxFor(m => m.PublishDate, new { @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.PublishDate)), @class = "date-color", @style = "width:100px", @disabled = "disabled" })*@
+                                                        @{string date = item.EndDate.Value.ToString(AmsConstants.DateTimeFormat);
+                                                        var dateTime = date.Split(' ');
+                                                        }
+                                                        <div style="white-space: nowrap">
+                                                            <strong>@dateTime[0]</strong> @dateTime[1]
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <div class="form-group">
-                                                            <div class="col-sm-9">
-                                                                @*<span class="label date-color label-gray">@item.EndDate</span>*@
-                                                                @*@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.EndDate))*@
-                                                                @Html.TextBoxFor(m => m.EndDate, new { @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.EndDate)), @class = "date-color", @style = "width:100px", @disabled = "disabled" })
-                                                                @*<input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.EndDate">*@
-                                                            </div>
+
+                                                        @*<span class="label date-color label-gray">@item.EndDate</span>*@
+                                                        @*@Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.EndDate))*@
+                                                        @*                                                                @Html.TextBoxFor(m => m.EndDate, new { @Value = Convert.ToString(string.Format("{0:MM/dd/yyyy}", item.EndDate)), @class = "date-color", @style = "width:100px", @disabled = "disabled" })*@
+                                                        @*<input type="text" disabled="disabled" class="form-control" id="fullname" value="@item.EndDate">*@
+                                                        @{  date = item.EndDate.Value.ToString(AmsConstants.DateTimeFormat);
+                                                          dateTime = date.Split(' ');
+                                                        }
+                                                        <div style="white-space: nowrap">
+                                                            <strong>@dateTime[0]</strong> @dateTime[1]
                                                         </div>
                                                     </td>
                                                     <td>
@@ -186,30 +181,6 @@
             "bLengthChange": false,
             "bInfo": false,
         });
-    //$("#myTables").DataTable({
-    //    "oLanguage": {
-    //        //    "sSearch": "Tìm Kiếm" //search,
-    //        "sProcessing": "Đang xử lý...",
-    //        "sLengthMenu": "Xem _MENU_ mục",
-    //        "sZeroRecords": "Không tìm thấy dòng nào phù hợp",
-    //        "sInfo": "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
-    //        "sInfoEmpty": "Đang xem 0 đến 0 trong tổng số 0 mục",
-    //        "sInfoFiltered": "(được lọc từ _MAX_ mục)",
-    //        "sInfoPostFix": "",
-    //        "sSearch": "Tìm:",
-    //        "sUrl": "",
-    //        "oPaginate": {
-    //            "sFirst": "Đầu",
-    //            "sPrevious": "Trước",
-    //            "sNext": "Tiếp",
-    //            "sLast": "Cuối"
-    //        }
-    //    }
-        //"language": {
-        //    "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Vietnamese.json"
-        //}
-
-
-
+        generateTableIndex(window.myTables);
     });
 </script>  
