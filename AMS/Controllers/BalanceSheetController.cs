@@ -29,6 +29,7 @@ namespace AMS.Controllers
         private UtilityServiceServices _utilityServiceServices = new UtilityServiceServices();
 
         [HttpGet]
+        [AutoRedirect.MandatorySurveyRedirect]
         [Route("Management/BalanceSheet/View")]
         public ActionResult ViewBalanceSheet(string month)
         {
