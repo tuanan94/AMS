@@ -29,6 +29,7 @@ namespace AMS.Controllers
         private UtilityServiceServices _utilityServiceServices = new UtilityServiceServices();
 
         [HttpGet]
+        [Authorize]
         [Route("Management/BalanceSheet/View")]
         public ActionResult ViewBalanceSheet(string month)
         {

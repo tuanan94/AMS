@@ -17,7 +17,7 @@ function getUser(userid, loadMember) {
             var obj = JSON.parse(successData);
             if (obj.HouseId == 0) {
                 $("#amsMsgText").text("");
-                $("#amsMsgText").append('<span style="width:100%;text-align:center">Cư dân <strong>' + obj.FullName + '</strong> không còn tồn tại trong hệ thống<span>');
+                $("#amsMsgText").append('<span style="width:100%;text-align:center">Rất tiếc! Cư dân <strong>' + obj.FullName + '</strong> không còn tồn tại trong hệ thống!<span>');
                 $("#amsMessageModal").modal("show");
                 return;
             }

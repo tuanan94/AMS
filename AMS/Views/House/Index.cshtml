@@ -625,7 +625,7 @@
                     + '<img  src="' + comment['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avartar-img link-cursor">'
                 + '</a>'
                     + '<div class="media-body">'
-                        + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)" class="comment-author link-cursor">' + comment['username'] + ': </a>'
+                        + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)" class="comment-author link-cursor">' + comment['fullName'] + ': </a>'
                         + '<span>' + comment['detail'] + '</span>'
                         + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
                     +'</div>'

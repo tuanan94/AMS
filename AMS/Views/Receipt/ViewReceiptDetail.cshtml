@@ -5,28 +5,6 @@
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
     Receipt receipt = ViewBag.receipt;
 }
-@*<nav class="navbar navbar-subnav navbar-static-top" role="navigation">
-        <div class="container-fluid">
-
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#subnav">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="fa fa-ellipsis-h"></span>
-                </button>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="subnav">
-                <ul class="nav navbar-nav">
-                    <li class="active">
-                        <a href="/Home/ManageReceipt/View/@User.Identity.GetUserId()"><i class="fa fa-file-text-o"></i> Hóa đơn</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-    </nav>*@
 
 <div class="col-md-12">
     <div class="panel panel-default">
@@ -126,10 +104,11 @@
                                         <tbody>
                                             @{
                                                 double total = 0;
+                                                int index = 1;
                                                 foreach (var detail in receipt.ReceiptDetails)
                                                 {
                                                     <tr>
-                                                        <td></td>
+                                                        <td>@(index++)</td>
                                                         <td>@detail.UtilityService.Name</td>
 
                                                         <td>

@@ -69,7 +69,6 @@
                                         <table class="table v-middle table-bordered table-striped" id="receiptDetailTable">
                                             <thead>
                                                 <tr>
-                                                    <th>#</th>
                                                     <th>Tên</th>
                                                     <th>SL</th>
                                                     <th>Giá</th>
@@ -81,7 +80,6 @@
                                                     foreach (var rangePrice in waterReceipt.WaterRangePrices)
                                                     {
                                                         <tr>
-                                                            <td></td>
                                                             <td>@rangePrice.Name</td>
                                                             <td>@rangePrice.Qty</td>
                                                             <td>@rangePrice.Price.ToString("N0")</td>
@@ -92,7 +90,7 @@
                                             </tbody>
                                             <tfoot>
                                                 <tr>
-                                                    <td colspan="4" style="text-align: right;"><strong>Tổng</strong></td>
+                                                    <td colspan="3" style="text-align: right;"><strong>Tổng</strong></td>
                                                     <td style="background: #f9f9f9;font-size: 18px;">@waterReceipt.Total.ToString("N0")</td>
                                                 </tr>
                                             </tfoot>

@@ -227,12 +227,14 @@ function imageFrame(userId, userProfileImg, fullName, hasDeleteBtn) {
     if (hasDeleteBtn) {
         return '<a class="familymember link-cursor" onclick="LoadUserProfile(\'' + userId + '\')" style="border:none;padding-right: 0;">'
 //        return '<a href="#" class="familymember" style="border:none;padding-right: 0;">'
-                                        + '<div class="img-border in-house-avar" style="height: 120px;width: 120px">'
-                                            + '<img class="loading-img" onError="this.src=\'/Content/Images/defaultProfile.png\';" src="' + userProfileImg + '"style="width:120px; height:120px"/>'
-                                                + "<div class='mem-remove' onclick='openModalDeleteBlock(\"" + userId + "\",\"" + fullName + "\")'>" +
-                                                    '<i class="del-time fa fa-times" >' + '</i>' +
-                                                '</div>'
-                                        + '<i class="del-time fa fa-times" >' + '</i>'
+                                        + "<div onclick='openModalDeleteBlock(\"" + userId + "\",\"" + fullName + "\")'>"
+                                            + '<div class="img-border in-house-avar" style="height: 120px;width: 120px">'
+                                                + '<img class="loading-img" onError="this.src=\'/Content/Images/defaultProfile.png\';" src="' + userProfileImg + '"style="width:120px; height:120px"/>'
+                                                    + "<div class='mem-remove'>" +
+                                                        '<i class="del-time fa fa-times" >' + '</i>' +
+                                                    '</div>'
+                                            + '<i class="del-time fa fa-times" >' + '</i>'
+                                            + '</div>'
                                         + '</div>'
                                         + '<div class="member-name-title">'
                                                 + fullName

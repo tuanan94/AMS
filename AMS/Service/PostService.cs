@@ -213,6 +213,7 @@ namespace AMS.Service
                     cMapping.detail = c.detail;
                     cMapping.createdDate = c.createdDate.GetValueOrDefault();
                     cMapping.username = c.User.Username;
+                    cMapping.fullName = c.User.Fullname;
                     cMapping.userProfile = c.User.ProfileImage;
                     cMapping.userId = c.userId.GetValueOrDefault();
                     result.Add(cMapping);

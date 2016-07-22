@@ -617,6 +617,27 @@ namespace AMS.Controllers
         }
 
         [HttpPost]
+        public ActionResult DeleteListNotification(List<int> notiIdList, string type)
+        {
+            MessageViewModels response = new  MessageViewModels();
+            try
+            {
+                if (SLIM_CONFIG.NOTIC_DELETE_TYPE_CHANGEID.Equals(type))
+                {
+                    foreach (var id in notiIdList)
+                    {
+                        notificationService.deleteNoticByNchangeID(id);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                response.StatusCode = -1;
+            }
+            return Json(response);
+        }
+
+        [HttpPost]
         public ActionResult HouseHolderDeleteUser(int houseId, int houseHolderId, int deleteUserId)
         {
             User user = userService.findById(houseHolderId);

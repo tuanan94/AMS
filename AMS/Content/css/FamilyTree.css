@@ -372,27 +372,45 @@ ul.timeline-list li.media:before {
         -webkit-transition: opacity .25s ease;
         -moz-transition: opacity .25s ease;
     }
-     .in-house-avar:hover .mem-remove {
+
+    .in-house-avar:hover .mem-remove {
         opacity: 1;
-    } .in-house-avar:hover .del-time {
+    }
+
+    .in-house-avar:hover .del-time {
         color: #E53935;
     }
-    .del-time {
-        position: absolute;
-        top: 0;
-        left: 0;
-        font-size: 30px;
-        color: #757575;
-    }
+
+.del-time {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 30px;
+    color: #757575;
+}
 /*End change*/
 a:active, a:hover {
     text-decoration: none;
     cursor: pointer;
-    color: #25ad9f
+    color: #25ad9f;
 }
+
 a, a {
-    color: #555555
+    color: #555555;
 }
+
 .img:active, img:hover {
-    cursor: pointer
+    cursor: pointer;
+}
+.noti-element {
+    padding: 5px 0;
+    border-bottom: 1px solid #e2e2e2;
+}
+.noti-element:last-child {
+    border-bottom: none;
+}
+#clean-noty {
+    font-weight: bold;
+    color: #212121;
+    cursor: pointer;
 }

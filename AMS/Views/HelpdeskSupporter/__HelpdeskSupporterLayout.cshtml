@@ -34,7 +34,7 @@
                 <ul class="nav navbar-nav navbar-nav-suppotter">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle user truncate" data-toggle="dropdown">
-                            <img onerror="this.onerror = null; this.src = '/Content/images/defaultProfile.png'; " src="@profileImg" class="img-circle" width="40"> @currentUser.GetUserName() <span class="caret"></span>
+                            <img onerror="this.onerror = null; this.src = '/Content/images/defaultProfile.png'; " src="@profileImg" class="img-circle" width="40"> @curUser.Fullname <span class="caret"></span>
                         </a>
                     <ul class="dropdown-menu" role="menu">
                         <li>
@@ -53,7 +53,7 @@
                         <a href="/"><i class="fa fa-fw fa-users"></i>Mạng xã hội</a>
                     </li>
                     <li id="configNav" class="active">
-                        <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-wrench"></i> Sửa chữa</a>
+                        <a href="/HelpdeskSupporter"><i class="fa fa-wrench"></i> Sửa chữa</a>
                     </li>
                 </ul>
             </div>
@@ -72,7 +72,7 @@
     <script src="~/Scripts/jquery-ui.min.js"></script>
     <script src="~/Scripts/amsScript/vendor.js"></script>
     <script src="~/Scripts/amsScript/scripts.js"></script>
-    @*    <script src="~/Scripts/amsScript/custom.js"></script>*@
+        <script src="~/Scripts/amsScript/custom.js"></script>
 
     @RenderSection("scripts", required: false)
 

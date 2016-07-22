@@ -45,6 +45,7 @@
 /// <reference path="rating.js" />
 /// <reference path="respond.js" />
 /// <reference path="amsscript/socialmediacustom.js" />
+/// <reference path="amsscript/jquery.mousewheel.min.js" />
 
 
 
