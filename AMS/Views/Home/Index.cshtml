@@ -4,9 +4,7 @@
     ViewBag.Title = "Home Page";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
     User curUser = ViewBag.curUser;
-    //List<useranswerpoll>
-    listUserAnswer = new List<useranswerpoll>
-        ();
+    List<UserAnswerPoll> listUserAnswer = new List<UserAnswerPoll>();
 
         //HouseServices houseServices = new HouseServices();
         //QuestionService questionService = new QuestionService();
@@ -16,13 +14,13 @@
         //UserAnswerService userAnswerService = new UserAnswerService();
         UserServices userServices = new UserServices();
         PollService surveyService = new PollService();
-        List<poll>
+        List<Poll>
             listSurveys = surveyService.GetListPolls();
             User currentUser = userServices.FindById(int.Parse(User.Identity.GetUserId()));
             AutoRedirect auto = new AutoRedirect();
 
             weatherResult weather = ViewBag.weather;
-            List<notificationchange>
+            List<NotificationChange>
                 notificationChanges = ViewBag.notifiations;
                 string alert = "";
                 alert = auto.Auto(currentUser);

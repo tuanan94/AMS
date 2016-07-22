@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity;
 
 namespace AMS.Controllers
 {
+    [Authorize]
     public class SurveyController : Controller
     {
         NotificationService notificationService = new NotificationService();

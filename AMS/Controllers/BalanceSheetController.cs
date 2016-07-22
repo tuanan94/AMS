@@ -30,6 +30,7 @@ namespace AMS.Controllers
 
         [HttpGet]
         [Authorize]
+        [AutoRedirect.MandatorySurveyRedirect]
         [Route("Management/BalanceSheet/View")]
         public ActionResult ViewBalanceSheet(string month)
         {
