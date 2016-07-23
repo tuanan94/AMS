@@ -37,13 +37,6 @@
                         $("#imagesPost" + image.postId).removeClass("one-col").addClass("testetetet");
                     }
                 }
-//                if (parseInt(image.width) >= parseInt(image.height)) {
-//                    listElement = listElement + '<div style="position:relative;display: inline-block;" data-src="' + image.url + '" style="border:1px solid white"><img style="position:absolute; width:100% !important; height:auto !important" src="' + image.thumbnailurl + '" ></div>';
-//                } else {
-////                    listElement = listElement + '<div style="position:relative" data-src="' + image.url + '" style="border:1px solid white" ><img style="height:100% !important; width:auto !important" src="' + image.thumbnailurl + '"></div>';
-//                    listElement = listElement + '<div style="position:relative;display: inline-block;" data-src="' + image.url + '" style="border:1px solid white" ><img style="position:absolute; width:100% !important; height:auto !important" src="' + image.thumbnailurl + '"></div>';
-//                }
-
                 if (obj.length % 2 == 0) {
                     listElement = listElement + '<div style="position:relative;" data-src="' + image.url + '" style="border:1px solid white"><img style="position:absolute; width:100% !important; height:auto !important" src="' + image.thumbnailurl + '" ></div>';
                 } else {

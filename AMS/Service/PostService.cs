@@ -5,6 +5,7 @@ using System.Web;
 using AMS.Repository;
 using AMS.ViewModel;
 using AMS.ObjectMapping;
+using AMS.Models;
 
 namespace AMS.Service
 {
@@ -12,6 +13,7 @@ namespace AMS.Service
     {
         GenericRepository<Post> postRepository = new GenericRepository<Post>();
         GenericRepository<Comment> commentRepository = new GenericRepository<Comment>();
+        ImageService imageService = new ImageService();
         public void createPost(PostViewModel post)
         {
            
@@ -112,11 +114,13 @@ namespace AMS.Service
             List<PostMapping> postMappingResult = new List<PostMapping>();
             foreach(Post p in result)
             {
+                List<PostImageModel> images = imageService.findImagesByPostId(p.Id);
                 PostMapping pMapping = new PostMapping();
                 pMapping.Id = p.Id;
                 pMapping.Body = p.Body;
                 pMapping.CreateDate = p.CreateDate.GetValueOrDefault();
                 pMapping.EmbedCode = p.EmbedCode;
+                pMapping.Images = images;
                 pMapping.UserId = p.UserId;
                 pMapping.username = p.User == null ? "Không xác định sở hữu" : p.User.Username;
                 pMapping.userProfile = p.User == null || p.User.ProfileImage == null || p.User.ProfileImage.Equals("") ? "/Content/Images/defaultProfile.png" : p.User.ProfileImage;

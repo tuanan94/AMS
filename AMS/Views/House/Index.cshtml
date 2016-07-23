@@ -422,7 +422,7 @@
         });
     });
     $(document).ready(function () {
-        loadAllPost(-1);
+        loadSocialNetwork(true,'@curUser.Id','@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)')
         loadAllMember("tree", '@curHouse.Id', "memberPanelBodyHousePage",true);
 
         $("#userInforModal").on("hidden.bs.modal", function () {
@@ -432,33 +432,33 @@
         });
     });
 
-    function loadAllPost(idToken) {
-        $.ajax({
-            url: "/Post/getPost",
-            type: "GET",
-            datatype: 'json',
-            data: {
-                idToken: idToken,
-            },
-            success: function (successData) {
-                console.log("GetPostData: " + successData);
-                var obj = JSON.parse(successData);
-                $.each(obj, function (index, jsonObject) {
-                    addPostToTimeline(index, jsonObject);
-                    getImagesForPost(index, jsonObject["Id"]);
-                    getCommentsForPost(jsonObject["Id"]);
-                    curTokenId = jsonObject["Id"];
+    //function loadAllPost(idToken) {
+    //    $.ajax({
+    //        url: "/Post/getPost",
+    //        type: "GET",
+    //        datatype: 'json',
+    //        data: {
+    //            idToken: idToken,
+    //        },
+    //        success: function (successData) {
+    //            console.log("GetPostData: " + successData);
+    //            var obj = JSON.parse(successData);
+    //            $.each(obj, function (index, jsonObject) {
+    //                addPostToTimeline(index, jsonObject);
+    //                getImagesForPost(index, jsonObject["Id"]);
+    //                getCommentsForPost(jsonObject["Id"]);
+    //                curTokenId = jsonObject["Id"];
 
-                });
-                $("#loadMoreBtn").button('reset');
+    //            });
+    //            $("#loadMoreBtn").button('reset');
 
-            },
-            error: function (er) {
-                alert(er);
-            }
+    //        },
+    //        error: function (er) {
+    //            alert(er);
+    //        }
 
-        });
-    }
+    //    });
+    //}
     function getUserProfileForPost(index, id) {
         if (id == null) {
             alert("postid = nul");

@@ -567,6 +567,7 @@
       <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\amsScript\additional-methods.js" />
+    <Content Include="Scripts\amsScript\AMSSocialNetwork.js" />
     <Content Include="Scripts\amsScript\DisplaySinglePost.js" />
     <Content Include="Scripts\amsScript\jquery.mousewheel.min.js" />
     <Content Include="Scripts\amsScript\jquery.validate.js" />

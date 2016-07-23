@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AMS.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +11,7 @@ namespace AMS.ObjectMapping
         public int Id { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
-        public string ImgUrl { get; set; }
+        public List<PostImageModel> Images { get; set; }
         public Nullable<int> PostStatus { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
