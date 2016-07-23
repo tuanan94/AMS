@@ -6,842 +6,846 @@
     User curUser = ViewBag.curUser;
     List<UserAnswerPoll> listUserAnswer = new List<UserAnswerPoll>();
 
-        //HouseServices houseServices = new HouseServices();
-        //QuestionService questionService = new QuestionService();
-        //AnswerService answerService = new AnswerService();
-        //BlockPollService BlockPollService = new BlockPollService();
+    //HouseServices houseServices = new HouseServices();
+    //QuestionService questionService = new QuestionService();
+    //AnswerService answerService = new AnswerService();
+    //BlockPollService BlockPollService = new BlockPollService();
 
-        //UserAnswerService userAnswerService = new UserAnswerService();
-        UserServices userServices = new UserServices();
-        PollService surveyService = new PollService();
-        List<Poll>
-            listSurveys = surveyService.GetListPolls();
-            User currentUser = userServices.FindById(int.Parse(User.Identity.GetUserId()));
-            AutoRedirect auto = new AutoRedirect();
+    //UserAnswerService userAnswerService = new UserAnswerService();
+    UserServices userServices = new UserServices();
+    PollService surveyService = new PollService();
+    List<Poll>
+        listSurveys = surveyService.GetListPolls();
+    User currentUser = userServices.FindById(int.Parse(User.Identity.GetUserId()));
+    AutoRedirect auto = new AutoRedirect();
 
-            weatherResult weather = ViewBag.weather;
-            List<NotificationChange>
-                notificationChanges = ViewBag.notifiations;
-                string alert = "";
-                alert = auto.Auto(currentUser);
-                HelpdeskRequestLogServices helpdeskRequestLogService = new HelpdeskRequestLogServices();//AnTT - 09/07/16
+    weatherResult weather = ViewBag.weather;
+    List<NotificationChange>
+        notificationChanges = ViewBag.notifiations;
+    string alert = "";
+    alert = auto.Auto(currentUser);
+    HelpdeskRequestLogServices helpdeskRequestLogService = new HelpdeskRequestLogServices();//AnTT - 09/07/16
 
-                }
-                <link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css" />
-                <script src="~/Scripts/amsScript/DisplaySinglePost.js"></script>
-                <script src="~/Scripts/amsScript/LoadFamilyTree.js"></script>
-                <script src="~/Scripts/amsScript/LoadUserProfile.js"></script>
-                <script src="~/Scripts/amsScript/ReportPost.js"></script>
-                <style>
-                    .button {
-                        display: block;
-                        width: 100px;
-                        height: 35px;
-                        background: #4E9CAF;
-                        padding: 7px;
-                        text-align: center;
-                        border-radius: 5px;
-                        color: white;
-                        font-weight: bold;
-                    }
+}
+<link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css" />
+<script src="~/Scripts/amsScript/DisplaySinglePost.js"></script>
+<script src="~/Scripts/amsScript/LoadFamilyTree.js"></script>
+<script src="~/Scripts/amsScript/LoadUserProfile.js"></script>
+<script src="~/Scripts/amsScript/ReportPost.js"></script>
+<style>
+    .button {
+        display: block;
+        width: 100px;
+        height: 35px;
+        background: #4E9CAF;
+        padding: 7px;
+        text-align: center;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+    }
 
-                    .modalDialog {
-                        position: fixed;
-                        top: 0;
-                        right: 0;
-                        bottom: 0;
-                        left: 0;
-                        z-index: 99999;
-                        display: none;
-                        opacity: 1;
-                        -webkit-transition: opacity 400ms ease-in;
-                        -moz-transition: opacity 400ms ease-in;
-                        transition: opacity 400ms ease-in;
-                    }
+    .modalDialog {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 99999;
+        display: none;
+        opacity: 1;
+        -webkit-transition: opacity 400ms ease-in;
+        -moz-transition: opacity 400ms ease-in;
+        transition: opacity 400ms ease-in;
+    }
 
-                        .modalDialog > div {
-                            width: 400px;
-                            position: relative;
-                            margin: 10% auto;
-                            padding: 5px 20px 13px 20px;
-                            border-radius: 10px;
-                            background: #fff;
-                            background: #339999;
-                        }
+        .modalDialog > div {
+            width: 400px;
+            position: relative;
+            margin: 10% auto;
+            padding: 5px 20px 13px 20px;
+            border-radius: 10px;
+            background: #fff;
+            background: #339999;
+        }
 
-                    .close {
-                        background: #606061;
-                        color: #FFFFFF;
-                        line-height: 25px;
-                        position: absolute;
-                        right: -12px;
-                        text-align: center;
-                        top: -10px;
-                        width: 24px;
-                        text-decoration: none;
-                        font-weight: bold;
-                        -webkit-border-radius: 12px;
-                        -moz-border-radius: 12px;
-                        border-radius: 12px;
-                        -moz-box-shadow: 1px 1px 3px #000;
-                        -webkit-box-shadow: 1px 1px 3px #000;
-                        box-shadow: 1px 1px 3px #000;
-                    }
+    .close {
+        background: #606061;
+        color: #FFFFFF;
+        line-height: 25px;
+        position: absolute;
+        right: -12px;
+        text-align: center;
+        top: -10px;
+        width: 24px;
+        text-decoration: none;
+        font-weight: bold;
+        -webkit-border-radius: 12px;
+        -moz-border-radius: 12px;
+        border-radius: 12px;
+        -moz-box-shadow: 1px 1px 3px #000;
+        -webkit-box-shadow: 1px 1px 3px #000;
+        box-shadow: 1px 1px 3px #000;
+    }
 
-                        .close:hover {
-                            background: #00d9ff;
-                        }
+        .close:hover {
+            background: #00d9ff;
+        }
 
-                    .panel-feed {
-                        width: 90%;
-                    }
+    .panel-feed {
+        width: 90%;
+    }
 
-                    .comments {
-                        margin-left: 5%;
-                    }
+    .comments {
+        margin-left: 5%;
+    }
 
-                    ul.timeline-list li.mediawithoutBorder:before {
-                        border-left: none;
-                    }
-                </style>
-                <div class="container-fluid">
-                    <div class="cover overlay">
-                        <img src="~/Content/images/banner-842.jpg" alt="cover">
-                    </div>
-                    <div class="row">
-                        <div class="col-md-offset-1 col-md-8">
-                            <div id="addNewPost" class="new-post" onclick="onBlurPost()"></div>
-                            <ul class="timeline-list">
-                                <li class="media mediawithoutBorder">
-                                    <div class="media-body">
-                                        <div class="panel panel-default share">
-                                            <div class="panel-heading" style="border-bottom: solid 1px #efefef;background-color: transparent;">
-                                                @*                                <div id="previewEmbed" class="row" style="height: auto;">
-                                                    *@
-                                                    @*                                    <div id="previewContent">
-                                                        *@
-                                                        @*
-                                                    </div>*@
-                                                    @*
-                                                </div>*@
-                                                <a class="post-heading" style="border-right: 1px solid #efefef;" href="#postStatusArea" onclick="addImage()">
-                                                    <i class="fa fa-fw fa-photo post-heading-icon"></i> Thêm hình ảnh
-                                                </a>
-                                                <a class="post-heading" href="#postStatusArea" data-toggle="modal" data-target="#addEmbedModal">
-                                                    <i class="fa fa-fw fa-code post-heading-icon"></i> Thêm mã nhúng
-                                                </a>
+    ul.timeline-list li.mediawithoutBorder:before {
+        border-left: none;
+    }
+</style>
+<div class="container-fluid">
+    <div class="cover overlay">
+        <img src="~/Content/images/banner-842.jpg" alt="cover">
+    </div>
+    <div class="row">
+        <div class="col-md-offset-1 col-md-8">
+            <div id="addNewPost" class="new-post" onclick="onBlurPost()"></div>
+            <ul class="timeline-list">
+                <li class="media mediawithoutBorder">
+                    <div class="media-body">
+                        <div class="panel panel-default share">
+                            <div class="panel-heading" style="border-bottom: solid 1px #efefef;background-color: transparent;">
+                                @*                                <div id="previewEmbed" class="row" style="height: auto;">
+                                *@
+                                @*                                    <div id="previewContent">
+                                *@
+                                @*
+                                    </div>*@
+                                @*
+                                    </div>*@
+                                <a class="post-heading" style="border-right: 1px solid #efefef;" href="#postStatusArea" onclick="addImage()">
+                                    <i class="fa fa-fw fa-photo post-heading-icon"></i> Thêm hình ảnh
+                                </a>
+                                <a class="post-heading" href="#postStatusArea" data-toggle="modal" data-target="#addEmbedModal">
+                                    <i class="fa fa-fw fa-code post-heading-icon"></i> Thêm mã nhúng
+                                </a>
+                            </div>
+                            <div class="panel-body" id="postStatusArea">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div style="display: flex">
+                                            <div class="pull-left" id="userAvatar" data-user-id="@curUser.Id" style="margin-right: 10px">
+                                                <img src="@(curUser.ProfileImage == null ? " />Content/images/defaultProfile.png" : curUser.ProfileImage)" onerror="this.src='/Content/Images/defaultProfile.png';" class="avartar-img">
                                             </div>
-                                            <div class="panel-body" id="postStatusArea">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div style="display: flex">
-                                                            <div class="pull-left" id="userAvatar" data-user-id="@curUser.Id" style="margin-right: 10px">
-                                                                <img src="@(curUser.ProfileImage == null ? " />Content/images/defaultProfile.png" : curUser.ProfileImage)" onerror="this.src='/Content/Images/defaultProfile.png';" class="avartar-img">
-                                                            </div>
-                                                            <div style="flex: 1; width: 0">
-                                                                <textarea onkeyup="textAreaAdjust(this)" style="overflow: hidden;height:45px" id="postContent" name="status" class="form-control share-text" rows="8" placeholder="Chia sẻ những thông tin của bạn..."></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row" style="margin-bottom: 10px">
-                                                    <div class="col-md-12" style="height: auto;" id="previewList">
-                                                        <input type="file" id="uploadEditorImage" style="display: none" />
-                                                        <div id="progressBar" class="progress" style="width: 200px" hidden="hidden">
-                                                            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 200px">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div id="previewEmbed" class="row" style="height: auto;">
-                                                    <div id="previewContent">
-                                                    </div>
-                                                </div>
-                                                @*                                <input type="file" id="uploadEditorImage" style="display: none" />*@
-                                                @*                                <div id="progressBar" class="progress" style="width: 200px" hidden="hidden">
-                                                    *@
-                                                    @*                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 200px">
-                                                        *@
-                                                        @*
-                                                    </div>*@
-                                                    @*
-                                                </div>*@
-                                            </div>
-                                            <div class="panel-footer share-buttons clearfix" @*id="postStatusArea" *@>
-                                                @*                                <a href="#postStatusArea" onclick="addImage()">
-                                                    *@
-                                                    @*                                    <i class="fa fa-fw fa-photo"></i>*@
-                                                    @*
-                                                </a>*@
-                                                @*                                <a href="#postStatusArea" data-toggle="modal" data-target="#addEmbedModal">
-                                                    *@
-                                                    @*                                    <i class="fa fa-fw fa-code"></i>*@
-                                                    @*
-                                                </a>*@
-                                                <a href="#postStatusArea" style="float: right">
-                                                    <i class="fa fa-map-marker"></i>
-                                                </a>
-                                                <div class="pull-right">
-                                                    <button type="submit" class="btn btn-primary btn-xs display-none" style="margin-top: -12px" href="#" onclick="createNewPost()">Chia sẻ</button>
-                                                </div>
+                                            <div style="flex: 1; width: 0">
+                                                <textarea onkeyup="textAreaAdjust(this)" style="overflow: hidden;height:45px" id="postContent" name="status" class="form-control share-text" rows="8" placeholder="Chia sẻ những thông tin của bạn..."></textarea>
                                             </div>
                                         </div>
                                     </div>
-                                    @*
-                        </div>*@
-                        </li>
-                        </ul>
-                        <ul class="timeline-list" id="timeline"></ul>
-                        <div style="margin:3em;text-align:center">
-                            <button id="loadMoreBtn" type="button" class="btn btn-primary btn-lg" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Đang tải thêm...">Tải thêm tin khác</button>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                Thời tiết hiện tại
-                            </div>
-                            <div class="weather-svg">
-                                <div class="today text-center">
-
-                                    <div class="clearfix"><img src="@weather.weatherIcon" /></div>
-
-                                    <div class="details">
-                                        Nhiệt độ:
-                                        <strong>@weather.tempC° C</strong>
+                                </div>
+                                <div class="row" style="margin-bottom: 10px">
+                                    <div class="col-md-12" style="height: auto;" id="previewList">
+                                        <input type="file" id="uploadEditorImage" style="display: none" />
+                                        <div id="progressBar" class="progress" style="width: 200px" hidden="hidden">
+                                            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 200px">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading panel-heading-gray" style="background-color:#25ad9f;color:white">
-                                Thông báo
-                                @{
-                                if (notificationChanges != null && notificationChanges.Where(p => p.User.Id != curUser.Id).ToList().Count != 0)
-                                {
-                                <span id="clean-noty" class="pull-right" onclick="clearAllNotify()"> Xóa tất cả</span>
-                                }
-                                }
-                            </div>
-                            <div class="panel-body">
-                                @{
-                                foreach (NotificationChange nChange in notificationChanges.OrderByDescending(p => p.CreatedDate))
-                                {
-                                if (nChange.User.Id == curUser.Id)
-                                {
-                                continue;
-                                }
-                                if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL.Equals(nChange.NotificationObject.TargetObject))
-                                {
-                                <div class="noti-element" style="margin-bottom: 10px" id="@(" notification" + nchange.id)">
-                                    <i class="fa fa-fw fa-info"></i>
-                                    <a href="/Survey/doSurvey"> <strong>@nChange.User.Fullname</strong> <span>đã</span> @nChange.Verb một bình chọn mới </a>
-                                    <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-close" style="float: right"></i></a>
-                                    <br />
+                                <div id="previewEmbed" class="row" style="height: auto;">
+                                    <div id="previewContent">
+                                    </div>
                                 </div>
-                                }
-                                else if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_HELPDESK_REQUEST.Equals(nChange.NotificationObject.TargetObject) && nChange.NotificationObject.TargetObjectID != null && SLIM_CONFIG.NOTIC_VERB_ASSIGN_REQUEST.Equals(nChange.Verb))
-                                {
-                                HelpdeskRequestLog hdRequestLog = helpdeskRequestLogService.findById(nChange.NotificationObject.TargetObjectID.Value);
+                                @*                                <input type="file" id="uploadEditorImage" style="display: none" />*@
+                                @*                                <div id="progressBar" class="progress" style="width: 200px" hidden="hidden">
+                                *@
+                                @*                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 200px">
+                                *@
+                                @*
+                                    </div>*@
+                                @*
+                                    </div>*@
+                            </div>
+                            <div class="panel-footer share-buttons clearfix" @*id="postStatusArea" *@>
+                                @*                                <a href="#postStatusArea" onclick="addImage()">
+                                *@
+                                @*                                    <i class="fa fa-fw fa-photo"></i>*@
+                                @*
+                                    </a>*@
+                                @*                                <a href="#postStatusArea" data-toggle="modal" data-target="#addEmbedModal">
+                                *@
+                                @*                                    <i class="fa fa-fw fa-code"></i>*@
+                                @*
+                                    </a>*@
+                                <a href="#postStatusArea" style="float: right">
+                                    <i class="fa fa-map-marker"></i>
+                                </a>
+                                <div class="pull-right">
+                                    <button type="submit" class="btn btn-primary btn-xs display-none" style="margin-top: -12px" href="#" onclick="createNewPost()">Chia sẻ</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*
+                        </div>*@
+                </li>
+            </ul>
+            <ul class="timeline-list" id="timeline"></ul>
+            <div style="margin:3em;text-align:center">
+                <button id="loadMoreBtn" type="button" class="btn btn-primary btn-lg" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Đang tải thêm...">Tải thêm tin khác</button>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Thời tiết hiện tại
+                </div>
+                <div class="weather-svg">
+                    <div class="today text-center">
 
-                                User changeToUser = userServices.FindById(hdRequestLog.ChangeToUserId.HasValue ? hdRequestLog.ChangeToUserId.Value : -1);
-                                if (hdRequestLog != null && changeToUser != null)
-                                {
-                                <div class="noti-element" style="margin-bottom: 10px" id="@(" notification" + nchange.id)">
+                        <div class="clearfix"><img src="@weather.weatherIcon" /></div>
+
+                        <div class="details">
+                            Nhiệt độ:
+                            <strong>@weather.tempC° C</strong>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading panel-heading-gray" style="background-color:#25ad9f;color:white">
+                    Thông báo
+                    @{if (notificationChanges != null && notificationChanges.Where(p => p.User.Id != curUser.Id).ToList().Count != 0)
+                    {
+                        <span id="clean-noty" class="pull-right" onclick="clearAllNotify()"> Xóa tất cả</span>
+                    }
+                    }
+
+                </div>
+
+                <div class="panel-body">
+
+                    @foreach (NotificationChange nChange in notificationChanges.OrderByDescending(p => p.CreatedDate))
+                    {
+                        if (nChange.User.Id == curUser.Id)
+                        {
+                            continue;
+                        }
+                        if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL.Equals(nChange.NotificationObject.TargetObject))
+                        {
+
+                            <div class="noti-element" style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
+                                <i class="fa fa-fw fa-info"></i>
+                                <a href="/Survey/doSurvey"> <strong>@nChange.User.Fullname</strong> <span>đã</span> @nChange.Verb một bình chọn mới </a>
+                                <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-close" style="float: right"></i></a>
+                                <br />
+                            </div>
+                        }
+                        else if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_HELPDESK_REQUEST.Equals(nChange.NotificationObject.TargetObject) && nChange.NotificationObject.TargetObjectID != null && SLIM_CONFIG.NOTIC_VERB_ASSIGN_REQUEST.Equals(nChange.Verb))
+                        {
+                            HelpdeskRequestLog hdRequestLog = helpdeskRequestLogService.findById(nChange.NotificationObject.TargetObjectID.Value);
+
+                            User changeToUser = userServices.FindById(hdRequestLog.ChangeToUserId.HasValue ? hdRequestLog.ChangeToUserId.Value : -1);
+                            if (hdRequestLog != null && changeToUser != null)
+                            {
+                                <div class="noti-element" style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
                                     <i class="fa fa-fw fa-info"></i>
                                     <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hỗ trợ của bạn đã được chuyển cho nhân viên hỗ trợ <strong>@changeToUser.Fullname</strong></a>
                                     <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
                                     <br />
                                 </div>
-                                }
-                                }
-                                else if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_HELPDESK_REQUEST.Equals(nChange.NotificationObject.TargetObject) && nChange.NotificationObject.TargetObjectID != null && SLIM_CONFIG.NOTIC_VERB_FINISH_REQUEST.Equals(nChange.Verb))
-                                {
-                                HelpdeskRequestLog hdRequestLog = helpdeskRequestLogService.findById(nChange.NotificationObject.TargetObjectID.Value);
+                            }
+                        }
+                        else if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_HELPDESK_REQUEST.Equals(nChange.NotificationObject.TargetObject) && nChange.NotificationObject.TargetObjectID != null && SLIM_CONFIG.NOTIC_VERB_FINISH_REQUEST.Equals(nChange.Verb))
+                        {
+                            HelpdeskRequestLog hdRequestLog = helpdeskRequestLogService.findById(nChange.NotificationObject.TargetObjectID.Value);
 
-                                //                                    User changeToUser = userServices.FindById(hdRequestLog.ChangeToUserId.HasValue ? hdRequestLog.ChangeToUserId.Value : -1);
-                                if (hdRequestLog != null && nChange.User != null)
-                                {
-                                <div class="noti-element" style="margin-bottom: 10px" id="@(" notification" + nchange.id)">
+                            //                                    User changeToUser = userServices.FindById(hdRequestLog.ChangeToUserId.HasValue ? hdRequestLog.ChangeToUserId.Value : -1);
+                            if (hdRequestLog != null && nChange.User != null)
+                            {
+                                <div class="noti-element" style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
                                     <i class="fa fa-fw fa-info"></i>
                                     <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hỗ trợ của bạn đã được xử lí xong bởi <strong>@nChange.User.Fullname</strong></a>
                                     <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
                                     <br />
                                 </div>
-                                }
-                                }
-                                else
-                                {
-                                <div class="noti-element" style="margin-bottom: 10px" id="@(" notification" + nchange.id)">
-                                    <i class="fa fa-fw fa-info"></i>
-                                    <strong>@nChange.User.Fullname</strong> <span>đã</span> @nChange.Verb <span> @nChange.NotificationObject.TargetObject của bạn</span>
-                                    <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
+                            }
+                        }
+                        else
+                        {
+                            <div class="noti-element" style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
+                                <i class="fa fa-fw fa-info"></i>
+                                <strong>@nChange.User.Fullname</strong> <span>đã</span> @nChange.Verb <span> @nChange.NotificationObject.TargetObject của bạn</span>
+                                <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
 
-                                    <br />
-                                </div>
-                                }
-                                }
-                                }
+                                <br />
                             </div>
-                        </div>
-                    </div>
-                </div>
+                        }
+                    }
                 </div>
 
-                <!-- Modal -->
-                <div class="modal fade" id="addEmbedModal" role="dialog">
-                    <div class="modal-dialog">
+            </div>
 
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">Thêm mã nhúng</h4>
-                            </div>
-                            <div class="modal-body">
-                                <input class="form-control" id="embedCode" placeholder="Copy và paste đoạn mã nhúng của bạn vào đây" />
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-                                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveEmbedCode()">Lưu lại</button>
-                            </div>
-                        </div>
+        </div>
+    </div>
+</div>
 
-                    </div>
-                </div>
+<!-- Modal -->
+<div class="modal fade" id="addEmbedModal" role="dialog">
+    <div class="modal-dialog">
 
-                <!-- Report modal -->
-                <div class="modal fade" id="reportModal" role="dialog">
-                    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thêm mã nhúng</h4>
+            </div>
+            <div class="modal-body">
+                <input class="form-control" id="embedCode" placeholder="Copy và paste đoạn mã nhúng của bạn vào đây" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveEmbedCode()">Lưu lại</button>
+            </div>
+        </div>
 
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">Báo cáo vi phạm</h4>
-                            </div>
+    </div>
+</div>
 
-                            <div class="modal-body">
-                                <input type="hidden" class="form-control" id="reportPostId" placeholder="PostId" />
+<!-- Report modal -->
+<div class="modal fade" id="reportModal" role="dialog">
+    <div class="modal-dialog">
 
-                                <input class="form-control" id="reportContent" placeholder="Bài viết này đã vi phạm....?" />
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-                                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="processSendReport()">Gửi đến quản lý</button>
-                            </div>
-                        </div>
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Báo cáo vi phạm</h4>
+            </div>
 
-                    </div>
-                </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="reportPostId" placeholder="PostId" />
+
+                <input class="form-control" id="reportContent" placeholder="Bài viết này đã vi phạm....?" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="processSendReport()">Gửi đến quản lý</button>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 
 
 
-                @{
-                if (!alert.Equals("") && SLIM_CONFIG.CURRENT_MODE == SLIM_CONFIG.PROGRAM_MODE_PRODUCT)
-                {
-                <script>
-                    setTimeout(function () {
-                        window.location.href = "/Survey/DoSurvey";
-                    }, 1000);
-                </script>
+@{
+    if (!alert.Equals("") && SLIM_CONFIG.CURRENT_MODE == SLIM_CONFIG.PROGRAM_MODE_PRODUCT)
+    {
+        <script>
+            setTimeout(function () {
+                window.location.href = "/Survey/DoSurvey";
+            }, 1000);
+        </script>
+
+    }
+}
+
+<script>
+    var curTokenId = -1;
+    $(document).ready(function () {
+        $('.modalDialog').fadeIn();
+
+        $('.close').on('click', function (event) {
+            event.preventDefault();
+            /* Act on the event */
+
+            $('.modalDialog').fadeOut();
+
+        });
+        $("#postStatusArea").on("click", function (e) {
+            onFocusPost();
+        });
+        $("#userAvatar").on("click", function (e) {
+            e.stopPropagation();
+            LoadUserProfile($(this).data("userId"));
+        });
+        $("#userInforModal").on("hidden.bs.modal", function () {
+            $("#memberPanelBody").children().not("div.row:first").remove();
+            $("#recentActivity li").remove();
+            $("#userInfoTabHeader li:first a").click();
+        });
+    });
+
+    $('#loadMoreBtn').on('click', function () {
+        var $this = $(this);
+        $this.button('loading');
+        loadMore();
+
+    });
+
+    var listUploadImage = [];
+    var listUploadThumnailImage = [];
+    function loadMore() {
+        console.log("loadMore");
+        loadAllPost(curTokenId);
+    }
+    function addImage() {
+        $("#uploadEditorImage").click();
+        onFocusPost();
+    }
+    function saveEmbedCode() {
+        // alert("saveEmbedCode");
+        var embedContent = $("#embedCode").val();
+        $("#previewContent").html(embedContent);
+    }
+    function createNewPost() {
+        //alert('createNewPost');
+        $.ajax({
+            url: "/Post/Create",
+            type: "POST",
+            datatype: 'json',
+            data: {
+                thumbnailImages: listUploadThumnailImage,
+                images: listUploadImage,
+                content: $("#postContent").val(),
+                embeded: $("#embedCode").val()
+            },
+            success: function (successData) {
+                if (successData == 'success') {
+                    clearCreatePostForm();
+                    reloadFeed();
+                }
+            },
+            error: function (er) {
+                alert(er);
+                //progessBar(false);
+            }
+
+        });
+
+    }
+
+    $("#uploadEditorImage").change(function () {
+        var data = new FormData();
+
+        data.append("dir", "@SLIM_CONFIG.dirPostImage");
+
+        var files = $("#uploadEditorImage").get(0).files;
+        if (files.length > 0) {
+            data.append("image", files[0]);
+            data.append("thumbWidth", 480);
+            data.append("thumbHeight", 480);
+
+            data.append("width", 1200);
+            data.append("height", 627);
+        }
+
+        // progessBar(true);
+        $.ajax({
+            url: "/Management/Image/UploadPostImage/",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: data,
+
+            success: function (successData) {
+                var thumbnailData = successData.Data.thumbnailUrl;
+                var imageData = successData.Data.imageUrl;
+
+                addImageToPreviewList(thumbnailData, listUploadImage.length);
+                listUploadImage[listUploadImage.length] = imageData;
+                listUploadThumnailImage[listUploadThumnailImage.length] = thumbnailData;
+                // progessBar(false);
+
+            },
+            error: function (er) {
+                alert(er);
+                //progessBar(false);
+            }
+
+        });
+    });
+    $(document).ready(function () {
+        loadAllPost(-1);
+
+    });
+
+    function loadAllPost(idToken) {
+        $.ajax({
+            url: "/Post/getPost",
+            type: "GET",
+            datatype: 'json',
+            data: {
+                idToken: idToken,
+            },
+            success: function (successData) {
+                console.log("GetPostData: " + successData);
+                var obj = JSON.parse(successData);
+                $.each(obj, function (index, jsonObject) {
+                    addPostToTimeline(index, jsonObject);
+                    getImagesForPost(index, jsonObject["Id"]);
+                    getCommentsForPost(jsonObject["Id"]);
+                    curTokenId = jsonObject["Id"];
+
+                });
+                $("#loadMoreBtn").button('reset');
+
+
+                //                $('.grid').masonry("reload");
+            },
+            error: function (er) {
+                alert(er);
+            }
+
+        });
+    }
+    function getUserProfileForPost(index, id) {
+        if (id == null) {
+            alert("postid = nul");
+            return;
+        }
+        $.ajax({
+            url: "/Post/getUserForPost",
+            type: "GET",
+            data: {
+                postId: id,
+            },
+            success: function (successData) {
+                // alert(successData)
+                var obj = JSON.parse(successData);
+                if (obj['ProfileImage'] === null) {
+                    $('#userImagePost' + id).attr("src", "/Content/images/defaultProfile.png");
+                } else {
+                    $('#userImagePost' + id).attr("src", obj["ProfileImage"]);
 
                 }
+                $('#userNamePost' + id).html(obj["Username"]);
+                $('#userHrefPost' + id).attr("href", "/Profile/" + obj["Id"]);
+
+                $('#userLoadProfilePost' + id).attr("onclick", "LoadUserProfile(" + obj["Id"] + ",true)");
+
+            },
+            error: function (er) {
+                alert(er);
+            }
+
+        });
+    }
+    function addPostToTimeline(index, postObject) {
+        var reportDiv = "";
+        if (postObject['UserId'] != '@curUser.Id') {
+            reportDiv = '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>';
+        }
+        var header = '<div class="panel-heading clearfix" style="background-color: transparent;">' +
+                '<div class="form-group" style="margin-bottom:0">' +
+                    '<div style="display: flex">' +
+                        '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)" style="margin-right: 10px">' +
+                            '<img id="userImagePost' + postObject['Id'] + '" src="' + postObject['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="avartar-img  link-cursor">' +
+                        '</div>' +
+                        '<div style="flex: 1; width: 0">' +
+                            '<h3 class="" style="margin-top: 0;margin-bottom: 0;">' +
+                                '<strong>' +
+                                '   <a class="text-capitalize" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)" user-name link-cursor" id="userNamePost' + postObject['Id'] + '">' + postObject['userFullName'] + '</a>' +
+                                '</strong>' +
+                                '<strong class="house-name"> ' +
+                                    '<a class="link-cursor" href="/House/' + postObject['houseId'] + '">' +
+                                        '<span style="font-size: 17px;">' +
+                                            '<i class="fa fa-home icon-house"></i>' +
+                                                postObject['houseName'] +
+                                        '</span>' +
+                                    '</a>' +
+                                '</strong>' +
+                            '</h3>' +
+                            '<h3 class="" style="margin-top: 0;margin-bottom: 0;">' +
+            '                   <strong>' +
+                                    '<span class="post-time">' +
+                                        '<i class="fa fa-globe icon-house"></i> ' +
+                                        timeSince(postObject['CreateDate']) +
+                                    '</span>' +
+                                '</strong>' +
+                            '</h3>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+        $("#timeline").append('<li class="media">'
+                       /*+ '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)">'
+                            + '<img id="userImagePost' + postObject['Id'] + '" src="' + postObject['userProfile'] + '" alt="people" class="img-circle" width="80" height="80">'
+                            + '<div id="userNamePost' + postObject['Id'] + '" class="date">' + postObject['userFullName'] + '</div>'
+
+                        + '</div>'*/
+
+                        + '<div class="media-body">'
+                            + '<div class="panel panel-default panel-feed">' + header
+                                + '<div class="panel-body" >'
+                                    + reportDiv
+                                    + '<p>' + postObject['Body'] + '</p>'
+                                  /*  + '<section class="form-group testetetet" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
+                                    + '</section>'*/
+
+                                    + '<div class="form-group">'
+                                     + '<div class="grid" id="imagesPost' + postObject['Id'] + '">'
+                                    + '</div>'
+                                    + '</div>'
+
+
+                                    + '<div class="row" style="height:auto;">'
+                                    + postObject['EmbedCode']
+                                    + '</div>'
+                                + '</div>'
+                                + '<div class="view-all-comments" id="countComment' + postObject['Id'] + '"><a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments</div>'
+                                + '<ul class="comments" id="commentsArea' + postObject['Id'] + '">'
+
+                                + '</ul>'
+                                + '<ul class="comments">'
+                                 + '<li class="comment-form">'
+                                        + '<div class="input-group" style="width: 100%;">'
+                                        + '<a onclick="LoadUserProfile("' + @(curUser.Id) + '")" class="pull-left"><img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avatar-comment"></a>'
+                                        + '<div class="media-body" style="padding-left: 10px;">' +
+                                            '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control input-cmnt" placeholder="Viết bình luận của bạn..."/>' +
+                                             '<i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(' + postObject['Id'] + ')" style="font-size: xx-large;color: #25AD9F;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2"></i>' +
+                                        '</div>'
+
+
+
+
+            + '</div>'
+            + '</li>'
+            + '</ul>'
+            + '</div>'
+            + '</div>'
+            + '</li>'
+        )
+
+    }
+
+    function addComment(postId) {
+        $.ajax({
+            url: "/Post/CreateComment",
+            type: "POST",
+            data: {
+                detail: $("#contentDetail" + postId).val(),
+                postId: postId,
+            },
+            success: function (successData) {
+                if (successData === 'success') {
+                    $("#commentsArea" + postId).html("");
+                    getCommentsForPost(postId);
+                    $("#contentDetail" + postId).val("");
+                } else {
+                    alert(successData);
                 }
+            },
+            error: function (er) {
+                alert(er);
+            }
 
-                <script>
-                    var curTokenId = -1;
-                    $(document).ready(function () {
-                        $('.modalDialog').fadeIn();
+        });
+    }
 
-                        $('.close').on('click', function (event) {
-                            event.preventDefault();
-                            /* Act on the event */
+    function getCommentsForPost(postid) {
+        if (postid == null) {
+            alert("postid == null");
+            return;
+        }
+        $.ajax({
+            url: "/Post/getCommentsForPost",
+            type: "GET",
+            data: {
+                postId: postid,
+            },
+            success: function (successData) {
+                var obj = JSON.parse(successData);
+                if (obj.length === 0) {
+                    $("#countComment" + postid).html("Chưa có bình luận nào");
+                } else {
+                    $("#countComment" + postid).html(obj.length + " bình luận");
+                }
+                $.each(obj, function (index, comment) {
+                    addCommentToCommentArea(postid, comment);
+                });
+            },
+            error: function (er) {
+                alert(er)
+            }
 
-                            $('.modalDialog').fadeOut();
+        });
+    }
+    function addCommentToCommentArea(postId, comment) {
+        $("#commentsArea" + postId).append('<li>'
+            + '<div class="media ">'
+            + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)"  class="pull-left link-cursor">'
+            + '<img  src="' + comment['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avartar-img link-cursor">'
+            + '</a>'
+            + '<div class="media-body">'
+            + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)" class="comment-author link-cursor">' + comment['fullName'] + ': </a>'
+            + '<span>' + comment['detail'] + '</span>'
+            + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
+            + '</div>'
+            + '</div>'
 
-                        });
-                        $("#postStatusArea").on("click", function (e) {
-                            onFocusPost();
-                        });
-                        $("#userAvatar").on("click", function (e) {
-                            e.stopPropagation();
-                            LoadUserProfile($(this).data("userId"));
-                        });
-                        $("#userInforModal").on("hidden.bs.modal", function () {
-                            $("#memberPanelBody").children().not("div.row:first").remove();
-                            $("#recentActivity li").remove();
-                            $("#userInfoTabHeader li:first a").click();
-                        });
-                    });
+            + '</li>');
 
-                    $('#loadMoreBtn').on('click', function () {
-                        var $this = $(this);
-                        $this.button('loading');
-                        loadMore();
+    }
 
-                    });
-
-                    var listUploadImage = [];
-                    var listUploadThumnailImage = [];
-                    function loadMore() {
-                        console.log("loadMore");
-                        loadAllPost(curTokenId);
-                    }
-                    function addImage() {
-                        $("#uploadEditorImage").click();
-                        onFocusPost();
-                    }
-                    function saveEmbedCode() {
-                        // alert("saveEmbedCode");
-                        var embedContent = $("#embedCode").val();
-                        $("#previewContent").html(embedContent);
-                    }
-                    function createNewPost() {
-                        //alert('createNewPost');
-                        $.ajax({
-                            url: "/Post/Create",
-                            type: "POST",
-                            datatype: 'json',
-                            data: {
-                                thumbnailImages: listUploadThumnailImage,
-                                images: listUploadImage,
-                                content: $("#postContent").val(),
-                                embeded: $("#embedCode").val()
-                            },
-                            success: function (successData) {
-                                if (successData == 'success') {
-                                    clearCreatePostForm();
-                                    reloadFeed();
-                                }
-                            },
-                            error: function (er) {
-                                alert(er);
-                                //progessBar(false);
+    function getImagesForPost(index, id) {
+        if (id == null) {
+            alert("postid = nul");
+            return;
+        }
+        $.ajax({
+            url: "/Post/getImagesForPost",
+            type: "GET",
+            data: {
+                postId: id,
+            },
+            success: function (successData) {
+                var obj = JSON.parse(successData);
+                var currentElement = {};
+                var listElement = "";
+                var isFirst = true;
+                $.each(obj, function (index, image) {
+                    if (isFirst) {
+                        $("#imagesPost" + image.postId).html("");
+                        currentElement = $("#imagesPost" + image.postId);
+                        isFirst = false;
+                        if (obj.length == 1) {
+                            $("#imagesPost" + image.postId).removeClass("testetetet").addClass("one-col");
+                            if (parseInt(image.width) >= parseInt(image.height)) {
+                                listElement = listElement +
+                                    '<div data-src="' + image.url + '" style="border:1px solid white"><img style="width:100%; height:auto" src="' +
+                                    image.thumbnailurl +
+                                    '" alt="The Last of us"></div>';
+                            } else {
+                                listElement = listElement +
+                                    '<div data-src="' + image.url + '" style="border:1px solid white" ><img style="height:100% !important; width:auto !important "src="' +
+                                    image.thumbnailurl +
+                                    '" alt="The Last of us"></div>';
                             }
-
-                        });
-
-                    }
-
-                    $("#uploadEditorImage").change(function () {
-                        var data = new FormData();
-
-                        data.append("dir", "@SLIM_CONFIG.dirPostImage");
-
-                        var files = $("#uploadEditorImage").get(0).files;
-                        if (files.length > 0) {
-                            data.append("image", files[0]);
-                            data.append("thumbWidth", 480);
-                            data.append("thumbHeight", 480);
-
-                            data.append("width", 1200);
-                            data.append("height", 627);
-                        }
-
-                        // progessBar(true);
-                        $.ajax({
-                            url: "/Management/Image/UploadPostImage/",
-                            type: "POST",
-                            processData: false,
-                            contentType: false,
-                            data: data,
-
-                            success: function (successData) {
-                                var thumbnailData = successData.Data.thumbnailUrl;
-                                var imageData = successData.Data.imageUrl;
-
-                                addImageToPreviewList(thumbnailData, listUploadImage.length);
-                                listUploadImage[listUploadImage.length] = imageData;
-                                listUploadThumnailImage[listUploadThumnailImage.length] = thumbnailData;
-                                // progessBar(false);
-
-                            },
-                            error: function (er) {
-                                alert(er);
-                                //progessBar(false);
-                            }
-
-                        });
-                    });
-                    $(document).ready(function () {
-                        loadAllPost(-1);
-
-                    });
-
-                    function loadAllPost(idToken) {
-                        $.ajax({
-                            url: "/Post/getPost",
-                            type: "GET",
-                            datatype: 'json',
-                            data: {
-                                idToken: idToken,
-                            },
-                            success: function (successData) {
-                                console.log("GetPostData: " + successData);
-                                var obj = JSON.parse(successData);
-                                $.each(obj, function (index, jsonObject) {
-                                    addPostToTimeline(index, jsonObject);
-                                    getImagesForPost(index, jsonObject["Id"]);
-                                    getCommentsForPost(jsonObject["Id"]);
-                                    curTokenId = jsonObject["Id"];
-
-                                });
-                                $("#loadMoreBtn").button('reset');
-
-
-                                //                $('.grid').masonry("reload");
-                            },
-                            error: function (er) {
-                                alert(er);
-                            }
-
-                        });
-                    }
-                    function getUserProfileForPost(index, id) {
-                        if (id == null) {
-                            alert("postid = nul");
                             return;
+                        } else {
+                            $("#imagesPost" + image.postId).removeClass("one-col").addClass("testetetet");
                         }
-                        $.ajax({
-                            url: "/Post/getUserForPost",
-                            type: "GET",
-                            data: {
-                                postId: id,
-                            },
-                            success: function (successData) {
-                                // alert(successData)
-                                var obj = JSON.parse(successData);
-                                if (obj['ProfileImage'] === null) {
-                                    $('#userImagePost' + id).attr("src", "/Content/images/defaultProfile.png");
-                                } else {
-                                    $('#userImagePost' + id).attr("src", obj["ProfileImage"]);
-
-                                }
-                                $('#userNamePost' + id).html(obj["Username"]);
-                                $('#userHrefPost' + id).attr("href", "/Profile/" + obj["Id"]);
-
-                                $('#userLoadProfilePost' + id).attr("onclick", "LoadUserProfile(" + obj["Id"] + ",true)");
-
-                            },
-                            error: function (er) {
-                                alert(er);
-                            }
-
-                        });
                     }
-                    function addPostToTimeline(index, postObject) {
-                        var reportDiv = "";
-                        if (postObject['UserId'] != '@curUser.Id') {
-                            reportDiv = '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>';
-                        }
-                        var header = '<div class="panel-heading clearfix" style="background-color: transparent;">' +
-                                '<div class="form-group" style="margin-bottom:0">' +
-                                    '<div style="display: flex">' +
-                                        '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)" style="margin-right: 10px">' +
-                                            '<img id="userImagePost' + postObject['Id'] + '" src="' + postObject['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="avartar-img  link-cursor">' +
-                                        '</div>' +
-                                        '<div style="flex: 1; width: 0">' +
-                                            '<h3 class="" style="margin-top: 0;margin-bottom: 0;">' +
-                                                '<strong>' +
-                                                '   <a class="text-capitalize" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)" user-name link-cursor" id="userNamePost' + postObject['Id'] + '">' + postObject['userFullName'] + '</a>' +
-                                                '</strong>' +
-                                                '<strong class="house-name"> ' +
-                                                    '<a class="link-cursor" href="/House/' + postObject['houseId'] + '">' +
-                                                        '<span style="font-size: 17px;">' +
-                                                            '<i class="fa fa-home icon-house"></i>' +
-                                                                postObject['houseName'] +
-                                                        '</span>' +
-                                                    '</a>' +
-                                                '</strong>' +
-                                            '</h3>' +
-                                            '<h3 class="" style="margin-top: 0;margin-bottom: 0;">' +
-                            '                   <strong>' +
-                                                    '<span class="post-time">' +
-                                                        '<i class="fa fa-globe icon-house"></i> ' +
-                                                        timeSince(postObject['CreateDate']) +
-                                                    '</span>' +
-                                                '</strong>' +
-                                            '</h3>' +
-                                        '</div>' +
-                                    '</div>' +
-                                '</div>' +
-                            '</div>';
-                        $("#timeline").append('<li class="media">'
-                                       /*+ '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)">'
-                                            + '<img id="userImagePost' + postObject['Id'] + '" src="' + postObject['userProfile'] + '" alt="people" class="img-circle" width="80" height="80">'
-                                            + '<div id="userNamePost' + postObject['Id'] + '" class="date">' + postObject['userFullName'] + '</div>'
-
-                                        + '</div>'*/
-
-                                        + '<div class="media-body">'
-                                            + '<div class="panel panel-default panel-feed">' + header
-                                                + '<div class="panel-body" >'
-                                                    + reportDiv
-                                                    + '<p>' + postObject['Body'] + '</p>'
-                                                  /*  + '<section class="form-group testetetet" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
-                                                    + '</section>'*/
-
-                                                    + '<div class="form-group">'
-                                                     + '<div class="grid" id="imagesPost' + postObject['Id'] + '">'
-                                                    + '</div>'
-                                                    + '</div>'
-
-
-                                                    + '<div class="row" style="height:auto;">'
-                                                    + postObject['EmbedCode']
-                                                    + '</div>'
-                                                + '</div>'
-                                                + '<div class="view-all-comments" id="countComment' + postObject['Id'] + '"><a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments</div>'
-                                                + '<ul class="comments" id="commentsArea' + postObject['Id'] + '">'
-
-                                                + '</ul>'
-                                                + '<ul class="comments">'
-                                                 + '<li class="comment-form">'
-                                                        + '<div class="input-group" style="width: 100%;">'
-                                                        + '<a onclick="LoadUserProfile("' + @(curUser.Id) + '")" class="pull-left"><img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avatar-comment"></a>'
-                                                        + '<div class="media-body" style="padding-left: 10px;">' +
-                                                            '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control input-cmnt" placeholder="Viết bình luận của bạn..."/>' +
-                                                             '<i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(' + postObject['Id'] + ')" style="font-size: xx-large;color: #25AD9F;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2"></i>' +
-                                                        '</div>'
-
-
-
-
-                            + '</div>'
-                            + '</li>'
-                            + '</ul>'
-                            + '</div>'
-                            + '</div>'
-                            + '</li>'
-                        )
-
+                    if (parseInt(image.width) >= parseInt(image.height)) {
+                        listElement = listElement + '<div data-src="' + image.url + '" style="border:1px solid white"><img style="width:100% !important; height:auto !important" src="' + image.thumbnailurl + '" ></div>';
+                    } else {
+                        listElement = listElement + '<div data-src="' + image.url + '" style="border:1px solid white" ><img style="width:100% !important; height:auto !important" src="' + image.thumbnailurl + '"></div>';
                     }
 
-                    function addComment(postId) {
-                        $.ajax({
-                            url: "/Post/CreateComment",
-                            type: "POST",
-                            data: {
-                                detail: $("#contentDetail" + postId).val(),
-                                postId: postId,
-                            },
-                            success: function (successData) {
-                                if (successData === 'success') {
-                                    $("#commentsArea" + postId).html("");
-                                    getCommentsForPost(postId);
-                                    $("#contentDetail" + postId).val("");
-                                } else {
-                                    alert(successData);
-                                }
-                            },
-                            error: function (er) {
-                                alert(er);
-                            }
+                });
+                listElement = listElement + "</div>";
+                currentElement.append(listElement);
+                currentElement.lightGallery();
+            },
+            error: function (er) {
+                alert(er);
+            }
 
-                        });
-                    }
+        });
+    }
+    function addImageToPost(imageUrl, postId, width) {
+        $("#imagesPost" + postId)
+            .append('<img src="' + imageUrl + '" style="width:' + width + '%;height:auto;margin-right:5px">');
 
-                    function getCommentsForPost(postid) {
-                        if (postid == null) {
-                            alert("postid == null");
-                            return;
-                        }
-                        $.ajax({
-                            url: "/Post/getCommentsForPost",
-                            type: "GET",
-                            data: {
-                                postId: postid,
-                            },
-                            success: function (successData) {
-                                var obj = JSON.parse(successData);
-                                if (obj.length === 0) {
-                                    $("#countComment" + postid).html("Chưa có bình luận nào");
-                                } else {
-                                    $("#countComment" + postid).html(obj.length + " bình luận");
-                                }
-                                $.each(obj, function (index, comment) {
-                                    addCommentToCommentArea(postid, comment);
-                                });
-                            },
-                            error: function (er) {
-                                alert(er)
-                            }
+    }
 
-                        });
-                    }
-                    function addCommentToCommentArea(postId, comment) {
-                        $("#commentsArea" + postId).append('<li>'
-                            + '<div class="media ">'
-                            + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)"  class="pull-left link-cursor">'
-                            + '<img  src="' + comment['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avartar-img link-cursor">'
-                            + '</a>'
-                            + '<div class="media-body">'
-                            + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)" class="comment-author link-cursor">' + comment['fullName'] + ': </a>'
-                            + '<span>' + comment['detail'] + '</span>'
-                            + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
-                            + '</div>'
-                            + '</div>'
+    function addImageToPreviewList(dir, position) {
+        //        $("#previewList").prepend('<div id="previewImage' + position + '" style="height:100px;width:100px;float:left;position:relative;margin: 0px 5px;"><img onclick="removePreview(' + position + ')" src="/Content/images/delete.png" style="position:absolute;top:0px;right:0px;width:20px;height:20px"/><img src="' + dir + '" style="max-width:100%;max-height:100%"/></div>')
+        $("#previewList")
+            .prepend('<div id="previewImage' +
+                position +
+                '" style="height:100px;width:auto;float:left;position:relative;margin:5px;border: 1px solid #e5e5e5;"><img onclick="removePreview(' +
+                position +
+                ')" src="/Content/images/delete.png" style="position:absolute;top:5px;right:5px;width:20px;height:20px"/><img src="' +
+                dir +
+                '" class="preview-img"/></div>');
+    }
+    function removePreview(position) {
+        $('#previewImage' + position + '').hide();
+        listUploadImage[position] = "";
+        listUploadThumnailImage[position] = "";
 
-                            + '</li>');
+    }
+    function reloadFeed() {
+        //clear all feed
+        $("#timeline").html("");
+        loadAllPost();
+    }
+    function clearCreatePostForm() {
+        var embedContent = "";
+        $("#previewContent").html(embedContent);
+        listUploadImage = [];
+        listUploadThumnailImage = [];
+        $("#previewList").html('');
+        $("#postContent").val('');
+    }
+    function report(id) {
+        $("#reportPostId").val(id);
+        $("#reportContent").val("");
+        $("#reportModal").modal();
+    }
+    function processSendReport() {
+        var postId = $("#reportPostId").val();
+        var reportContent = $("#reportContent").val();
+        console.log("processSendReport: postid=" + postId + "reportContent=" + reportContent);
+        sendReport(postId, reportContent);
+    }
+    function deleteNotification(noticChangedId) {
+        console.log('deleteNotification' + noticChangedId);
+        $.ajax({
+            url: "/Home/deleteNotification",
+            type: "POST",
+            data: {
+                data: noticChangedId,
+                type: "@SLIM_CONFIG.NOTIC_DELETE_TYPE_CHANGEID",
+            },
+            success: function (successData) {
+                //alert(successData);
+                $("#notification" + noticChangedId).hide('slow', function () { $("#notification11").remove(); });
+            },
+            error: function (er) {
+                alert(er);
+            }
 
-                    }
+        });
+    }
+    function onFocusPost() {
+        $("#addNewPost").css("display", "block");
+    }
+    function onBlurPost() {
+        $("#addNewPost").css("display", "none");
+    }
+    function textAreaAdjust(o) {
+        o.style.height = "1px";
+        o.style.height = (25 + o.scrollHeight) + "px";
+    }
+    function clearAllNotify() {
+        var listId = [];
+        $(".noti-element").each(function () {
+            var id = $(this).prop("id").split("notification");
+            listId.push(id[1]);
+            console.log(id[1]);
+        });
+        $.ajax({
+            url: "/Home/DeleteListNotification",
+            type: "post",
+            data: {
+                notiIdList: listId,
+                type: "@SLIM_CONFIG.NOTIC_DELETE_TYPE_CHANGEID",
+            },
+            success: function (data) {
+                $(".noti-element").each(function () {
+                    $(this).hide('slow', function () { $(this).remove(); });
+                });
+                $("#clean-noty").addClass("hide");
+            }
+        });
+    }
 
-                    function getImagesForPost(index, id) {
-                        if (id == null) {
-                            alert("postid = nul");
-                            return;
-                        }
-                        $.ajax({
-                            url: "/Post/getImagesForPost",
-                            type: "GET",
-                            data: {
-                                postId: id,
-                            },
-                            success: function (successData) {
-                                var obj = JSON.parse(successData);
-                                var currentElement = {};
-                                var listElement = "";
-                                var isFirst = true;
-                                $.each(obj, function (index, image) {
-                                    if (isFirst) {
-                                        $("#imagesPost" + image.postId).html("");
-                                        currentElement = $("#imagesPost" + image.postId);
-                                        isFirst = false;
-                                        if (obj.length == 1) {
-                                            $("#imagesPost" + image.postId).removeClass("testetetet").addClass("one-col");
-                                            if (parseInt(image.width) >= parseInt(image.height)) {
-                                                listElement = listElement +
-                                                    '<div data-src="' + image.url + '" style="border:1px solid white"><img style="width:100%; height:auto" src="' +
-                                                    image.thumbnailurl +
-                                                    '" alt="The Last of us"></div>';
-                                            } else {
-                                                listElement = listElement +
-                                                    '<div data-src="' + image.url + '" style="border:1px solid white" ><img style="height:100% !important; width:auto !important "src="' +
-                                                    image.thumbnailurl +
-                                                    '" alt="The Last of us"></div>';
-                                            }
-                                            return;
-                                        } else {
-                                            $("#imagesPost" + image.postId).removeClass("one-col").addClass("testetetet");
-                                        }
-                                    }
-                                    if (parseInt(image.width) >= parseInt(image.height)) {
-                                        listElement = listElement + '<div data-src="' + image.url + '" style="border:1px solid white"><img style="width:100% !important; height:auto !important" src="' + image.thumbnailurl + '" ></div>';
-                                    } else {
-                                        listElement = listElement + '<div data-src="' + image.url + '" style="border:1px solid white" ><img style="width:100% !important; height:auto !important" src="' + image.thumbnailurl + '"></div>';
-                                    }
-
-                                });
-                                listElement = listElement + "</div>";
-                                currentElement.append(listElement);
-                                currentElement.lightGallery();
-                            },
-                            error: function (er) {
-                                alert(er);
-                            }
-
-                        });
-                    }
-                    function addImageToPost(imageUrl, postId, width) {
-                        $("#imagesPost" + postId)
-                            .append('<img src="' + imageUrl + '" style="width:' + width + '%;height:auto;margin-right:5px">');
-
-                    }
-
-                    function addImageToPreviewList(dir, position) {
-                        //        $("#previewList").prepend('<div id="previewImage' + position + '" style="height:100px;width:100px;float:left;position:relative;margin: 0px 5px;"><img onclick="removePreview(' + position + ')" src="/Content/images/delete.png" style="position:absolute;top:0px;right:0px;width:20px;height:20px"/><img src="' + dir + '" style="max-width:100%;max-height:100%"/></div>')
-                        $("#previewList")
-                            .prepend('<div id="previewImage' +
-                                position +
-                                '" style="height:100px;width:auto;float:left;position:relative;margin:5px;border: 1px solid #e5e5e5;"><img onclick="removePreview(' +
-                                position +
-                                ')" src="/Content/images/delete.png" style="position:absolute;top:5px;right:5px;width:20px;height:20px"/><img src="' +
-                                dir +
-                                '" class="preview-img"/></div>');
-                    }
-                    function removePreview(position) {
-                        $('#previewImage' + position + '').hide();
-                        listUploadImage[position] = "";
-                        listUploadThumnailImage[position] = "";
-
-                    }
-                    function reloadFeed() {
-                        //clear all feed
-                        $("#timeline").html("");
-                        loadAllPost();
-                    }
-                    function clearCreatePostForm() {
-                        var embedContent = "";
-                        $("#previewContent").html(embedContent);
-                        listUploadImage = [];
-                        listUploadThumnailImage = [];
-                        $("#previewList").html('');
-                        $("#postContent").val('');
-                    }
-                    function report(id) {
-                        $("#reportPostId").val(id);
-                        $("#reportContent").val("");
-                        $("#reportModal").modal();
-                    }
-                    function processSendReport() {
-                        var postId = $("#reportPostId").val();
-                        var reportContent = $("#reportContent").val();
-                        console.log("processSendReport: postid=" + postId + "reportContent=" + reportContent);
-                        sendReport(postId, reportContent);
-                    }
-                    function deleteNotification(noticChangedId) {
-                        console.log('deleteNotification' + noticChangedId);
-                        $.ajax({
-                            url: "/Home/deleteNotification",
-                            type: "POST",
-                            data: {
-                                data: noticChangedId,
-                                type: "@SLIM_CONFIG.NOTIC_DELETE_TYPE_CHANGEID",
-                            },
-                            success: function (successData) {
-                                //alert(successData);
-                                $("#notification" + noticChangedId).hide('slow', function () { $("#notification11").remove(); });
-                            },
-                            error: function (er) {
-                                alert(er);
-                            }
-
-                        });
-                    }
-                    function onFocusPost() {
-                        $("#addNewPost").css("display", "block");
-                    }
-                    function onBlurPost() {
-                        $("#addNewPost").css("display", "none");
-                    }
-                    function textAreaAdjust(o) {
-                        o.style.height = "1px";
-                        o.style.height = (25 + o.scrollHeight) + "px";
-                    }
-                    function clearAllNotify() {
-                        var listId = [];
-                        $(".noti-element").each(function () {
-                            var id = $(this).prop("id").split("notification");
-                            listId.push(id[1]);
-                            console.log(id[1]);
-                        });
-                        $.ajax({
-                            url: "/Home/DeleteListNotification",
-                            type: "post",
-                            data: {
-                                notiIdList: listId,
-                                type: "@SLIM_CONFIG.NOTIC_DELETE_TYPE_CHANGEID",
-                            },
-                            success: function (data) {
-                                $(".noti-element").each(function () {
-                                    $(this).hide('slow', function () { $(this).remove();});
-                                });
-                                $("#clean-noty").addClass("hide");
-                            }
-                        });
-                    }
-
-                </script>
+</script>
