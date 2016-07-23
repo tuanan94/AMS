@@ -20,12 +20,22 @@ namespace AMS.Controllers
         [HttpPost]
         [Authorize]
         [ValidateInput(false)]
-        public String Create(List<String> images, List<String> thumbnailImages, String content, string embeded)
+        public String Create(List<String> images, List<String> thumbnailImages, String content, string embeded, int? oldPostId)
         {
             User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
             if (curUser == null)
             {
                 return "error";
+            }
+            if (oldPostId != null)
+            {
+                Post oldPost = postService.findPostById(oldPostId.Value);
+                if (oldPost != null)
+                {
+                    oldPost.Body = content;
+                    postService.UpdatePost(oldPost);
+                }
+                return "success";
             }
             Post p = new Post();
             p.CreateDate = DateTime.Now;
@@ -201,6 +211,17 @@ namespace AMS.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+        [HttpPost]
+        [Authorize]
+        public void deletePost(int postId)
+        {
+            Post p = postService.findPostById(postId);
+            if (p != null)
+            {
+                p.Status = SLIM_CONFIG.POST_STATUS_HIDE;
+            }
+            postService.UpdatePost(p);
         }
     }
 }

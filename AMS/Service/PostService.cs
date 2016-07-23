@@ -56,7 +56,7 @@ namespace AMS.Service
         }
         public List<Post> getAllPost()
         {
-            var result =  postRepository.List.OrderByDescending(t=>t.Id).ToList();
+            var result =  postRepository.List.Where(t=>t.Status!=SLIM_CONFIG.POST_STATUS_HIDE).OrderByDescending(t=>t.Id).ToList();
             return result;
         }
         public List<PostMapping> getAllPostMapping(int? tokenId, int? houseId)
