@@ -17,7 +17,7 @@ using Microsoft.SqlServer.Server;
 
 namespace AMS.Controllers
 {
-    public class AroundServiceController : Controller
+    public class AroundProviderController : Controller
     {
         AroundProviderService _aroundProviderService = new AroundProviderService();
         AroundProviderProductService _aroundProviderProductService = new AroundProviderProductService();

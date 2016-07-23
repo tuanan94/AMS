@@ -414,3 +414,30 @@ a, a {
     color: #212121;
     cursor: pointer;
 }
+
+.user-post {
+    
+}
+
+.user-post::before,
+.user-post::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-color: transparent;
+    border-style: solid;
+}
+
+.user-post::before {
+    border-width: 2.1em;
+    border-right-color: #e5e6e9;
+    border-top-color: #e5e6e9;
+}
+
+.user-post::after {
+    /*border-radius: 0.4em;*/
+    border-width: 1.7em;
+    border-right-color: #009688;
+    border-top-color: #009688;
+}

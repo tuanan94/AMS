@@ -233,10 +233,10 @@
 
         <div style="font-size: 26px; /* added *//* added */float: left;">
             <div style="position: absolute; bottom: 0; width: 100%;">
-                <h2 class="border-img" style="border-radius: 4px; border: none; background: #fff; padding: 10px; margin-left: 10px; margin-bottom: 0">
-                    <i class="fa fa-home" style="float: left; color: #009688;"></i>
-                    <span style="font-weight: bold;">A-1-01</span>
-                </h2>
+                <div class="border-img" style="border-radius: 4px; border: none; background: #fff; padding: 10px; margin-left: 10px; margin-bottom: 0;white-space: nowrap;">
+                    <i class="fa fa-home" style="color: #009688;"></i>
+                    <strong >@curHouse.HouseName</strong>
+                </div>
             </div>
         </div>
     </div>
@@ -494,15 +494,19 @@
     function addPostToTimeline(index, postObject) {
         var reportDiv = "";
         if (postObject['UserId'] != '@curUser.Id') {
-            reportDiv = '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>';
+            reportDiv = '<div style="position: absolute;right: 0;width: 30px;">' +
+              '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
+              '<div style="color:#f9a825" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>' +
+                       '</div>' +
+                       '</div>';
         }
-        var header = '<div class="panel-heading clearfix" style="background-color: transparent;">' +
+        var header = '<div class="panel-heading clearfix user-post" style="background-color: transparent;">' +
                 '<div class="form-group" style="margin-bottom:0">' +
                     '<div style="display: flex">' +
                         '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile(' + postObject['UserId'] + ')" style="margin-right: 10px">' +
                             '<img id="userImagePost' + postObject['Id'] + '" src="' + postObject['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="avartar-img link-cursor">' +
                         '</div>' +
-                        '<div style="flex: 1; width: 0">' +
+                        '<div style="flex: 1; width: 0;padding-right: 40px;">' +
                             '<h3 class="" style="margin-top: 0;margin-bottom: 0;">' +
                                 '<strong>' +
                                 '   <a class="text-capitalize" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)" user-name link-cursor" id="userNamePost' + postObject['Id'] + '">' + postObject['userFullName'] + '</a>' +
@@ -536,7 +540,6 @@
                         + '<div class="media-body">'
                             + '<div class="panel panel-default panel-feed">' + header
                                 + '<div class="panel-body" >'
-                                    + reportDiv
                                     + '<p>' + postObject['Body'] + '</p>'
                                     + '<section class="form-group testetetet" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
                                     + '</section>'
@@ -560,6 +563,7 @@
             + '</li>'
             + '</ul>'
             + '</div>'
+             + reportDiv
             + '</div>'
             + '</li>'
         );

@@ -467,11 +467,18 @@ ul.timeline-list li.media > .media-body {
     column-gap: 0px;
 }
 
-    .testetetet > div > img {
-        /* Just in case there are inline attributes */
-        width: 100% !important;
-        height: auto !important;
+    .testetetet > div {
+        width: 237px !important;
+        height: 237px !important;
+        overflow: hidden;
+        border: 2px solid #fff;
     }
+
+        .testetetet > div > img {
+            /* Just in case there are inline attributes */
+            width: 100% !important;
+            height: auto !important;
+        }
 
 @media (max-width: 1200px) {
     .testetetet {

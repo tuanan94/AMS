@@ -29,9 +29,6 @@ namespace AMS.Controllers
         HouseServices houseService = new HouseServices();
         NotificationService notificationService = new NotificationService();
         readonly string parternTime = "dd-MM-yyyy HH:mm";
-        private const int foodId = 1;
-        private const int entertainId = 2;
-        private const int kidCornerId = 3;
 
 
         public ActionResult Test()

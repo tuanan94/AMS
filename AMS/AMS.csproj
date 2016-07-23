@@ -282,7 +282,7 @@
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\ReceiptController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
-    <Compile Include="Controllers\AroundServiceController.cs" />
+    <Compile Include="Controllers\AroundProviderController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -786,9 +786,9 @@
     <Content Include="Views\Receipt\DownloadWaterConsumptionTemplate.cshtml" />
     <Content Include="Views\Config\ManageUtilityService.cshtml" />
     <Content Include="Views\Config\UpdateUtilityService.cshtml" />
-    <Content Include="Views\AroundService\ViewAroundProvider.cshtml" />
-    <Content Include="Views\AroundService\ViewAroundProviderDetail.cshtml" />
-    <Content Include="Views\AroundService\SingleProviderDetail.cshtml" />
+    <Content Include="Views\AroundProvider\ViewAroundProvider.cshtml" />
+    <Content Include="Views\AroundProvider\ViewAroundProviderDetail.cshtml" />
+    <Content Include="Views\AroundProvider\SingleProviderDetail.cshtml" />
     <Content Include="Views\Management\ManageAroundProvider.cshtml" />
     <Content Include="Views\Management\AddAroundProvider.cshtml" />
     <Content Include="Views\ManageUser\ManageSupporter.cshtml" />
@@ -801,9 +801,9 @@
     <Content Include="Views\HelpdeskRequest\ManageHdRequests.cshtml" />
     <Content Include="Views\Receipt\ViewWateBiiling.cshtml" />
     <Content Include="Views\Error\error_no_house.cshtml" />
-    <Content Include="Views\AroundService\ManageAroundProvider.cshtml" />
-    <Content Include="Views\AroundService\UpdateAroundServiceProvider.cshtml" />
-    <Content Include="Views\AroundService\ManageAroundProviderCategory.cshtml" />
+    <Content Include="Views\AroundProvider\ManageAroundProvider.cshtml" />
+    <Content Include="Views\AroundProvider\UpdateAroundServiceProvider.cshtml" />
+    <Content Include="Views\AroundProvider\ManageAroundProviderCategory.cshtml" />
     <Content Include="Views\Admin\_AdminLayout.cshtml" />
     <Content Include="Views\Config\ManageManager.cshtml" />
     <Content Include="Views\Config\ViewUtilityServiceDetail.cshtml" />

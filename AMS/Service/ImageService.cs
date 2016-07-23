@@ -71,7 +71,7 @@ namespace AMS.Service
                     image.postId = m.postId.Value;
                     try
                     {
-                        System.Drawing.Image img = System.Drawing.Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + image.url);
+                        System.Drawing.Image img = System.Drawing.Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + image.thumbnailurl);
                         image.width = img.Width;
                         image.height = img.Height;
                     }

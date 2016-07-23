@@ -138,10 +138,10 @@
                                             <div class="pull-left" id="userAvatar" data-user-id="@curUser.Id" style="margin-right: 10px">
                                                 <img src="@(curUser.ProfileImage == null ? " />Content/images/defaultProfile.png" : curUser.ProfileImage)" onerror="this.src='/Content/Images/defaultProfile.png';" class="avartar-img">
                                             </div>
-                                            <input id="postId" value="" style="display:none"/>
+                                            <input id="postId" value="" style="display:none" />
                                             <div style="flex: 1; width: 0">
                                                 <textarea onkeyup="textAreaAdjust(this)" style="overflow: hidden;height:45px" id="postContent" name="status" class="form-control share-text" rows="8" placeholder="Chia sẻ những thông tin của bạn..."></textarea>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
@@ -343,9 +343,8 @@
 </div>
 
 <!-- Delete modal -->
-<div class="modal fade" id="deletePostModal" role="dialog">
-    <div class="modal-dialog">
-
+<div class="modal fade ams-modal" id="deletePostModal" role="dialog">
+    <div class="modal-dialog modal-lg">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
@@ -356,17 +355,16 @@
                 <div>
                     <h3 style="text-align:center">
                         Bạn có thật sự muốn xóa bài viết này?
-                     </h3>
+                    </h3>
                 </div>
-                <input id="confirmDeletePostId" hidden="hidden" value=""/>
-               
+                <input id="confirmDeletePostId" hidden="hidden" value="" />
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="sendDeleteRequest()">Xóa bài viết</button>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -568,21 +566,35 @@
     function addPostToTimeline(index, postObject) {
         var reportDiv = "";
         if (postObject['UserId'] != '@curUser.Id') {
-            reportDiv = '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>';
+            //            reportDiv = '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>';
+            reportDiv = '<div style="position: absolute;right: 0;width: 30px;">' +
+              '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
+              '<div style="color:#f9a825" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>' +
+                       '</div>' +
+                       '</div>';
         }
         else if (postObject['UserId'] == '@curUser.Id') {
-            reportDiv = '<div href="" class="btn btn-white btn-xs pull-right" onclick="deletePost(' + postObject['Id'] + ')"><i class="fa fa-fw fa-times"></i></div>';
-            reportDiv += '<div href="#postContent" class="btn btn-white btn-xs pull-right" onclick="editPost(' + postObject['Id'] + ')"><i class="fa fa-fw fa-edit"></i></div>';
-
+            reportDiv = '<div style="position: absolute;right: 0;width: 30px;">' +
+              '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
+              '<div class="dropdown">' +
+                            '<a class="dropdown-toggle" data-toggle="dropdown" style="color: #ffffff;"> <i class="fa fa-angle-down"></i>' +
+                           '</a>' +
+                           '<ul class="dropdown-menu" role="menu" style="min-width: 0px;min-height: 0px;padding: 0;">' +
+                               '<li><a style="color:##" class="btn btn-white btn-xs pull-right" onclick="deletePost(' + postObject['Id'] + ')"><i class="fa fa-fw fa-times"></i></a></li>' +
+                               '<li><a href="#postContent" class="btn btn-white btn-xs pull-right" onclick="editPost(' + postObject['Id'] + ')"><i class="fa fa-fw fa-edit"></i></a></li>' +
+                           '</ul>' +
+                       '</div>' +
+                       '</div>' +
+                       '</div>';
         }
-        var header = '<div class="panel-heading clearfix" style="background-color: transparent;">' +
+        var header = '<div class="panel-heading clearfix user-post" style="background-color: transparent;">' +
                 '<div class="form-group" style="margin-bottom:0">' +
                     '<div style="display: flex">' +
                         '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)" style="margin-right: 10px">' +
                             '<img id="userImagePost' + postObject['Id'] + '" src="' + postObject['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="avartar-img  link-cursor">' +
                         '</div>' +
-                        '<div style="flex: 1; width: 0">' +
-                            '<h3 class="" style="margin-top: 0;margin-bottom: 0;">' +
+                        '<div style="flex: 1; width: 0;padding-right: 40px;">' +
+                            '<div class="" style="margin-top: 0;margin-bottom: 0;">' +
                                 '<strong>' +
                                 '   <a class="text-capitalize" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)" user-name link-cursor" id="userNamePost' + postObject['Id'] + '">' + postObject['userFullName'] + '</a>' +
                                 '</strong>' +
@@ -594,30 +606,23 @@
                                         '</span>' +
                                     '</a>' +
                                 '</strong>' +
-                            '</h3>' +
-                            '<h3 class="" style="margin-top: 0;margin-bottom: 0;">' +
+                            '</div>' +
+                            '<div class="" style="margin-top: 0px;margin-bottom: 0;">' +
             '                   <strong>' +
                                     '<span class="post-time">' +
                                         '<i class="fa fa-globe icon-house"></i> ' +
                                         timeSince(postObject['CreateDate']) +
                                     '</span>' +
                                 '</strong>' +
-                            '</h3>' +
+                            '</div>' +
                         '</div>' +
                     '</div>' +
                 '</div>' +
             '</div>';
         $("#timeline").append('<li class="media">'
-                       /*+ '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)">'
-                            + '<img id="userImagePost' + postObject['Id'] + '" src="' + postObject['userProfile'] + '" alt="people" class="img-circle" width="80" height="80">'
-                            + '<div id="userNamePost' + postObject['Id'] + '" class="date">' + postObject['userFullName'] + '</div>'
-
-                        + '</div>'*/
-
                         + '<div class="media-body">'
                             + '<div class="panel panel-default panel-feed">' + header
                                 + '<div class="panel-body" >'
-                                    + reportDiv
                                     + '<p>' + postObject['Body'] + '</p>'
                                   /*  + '<section class="form-group testetetet" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
                                     + '</section>'*/
@@ -626,15 +631,12 @@
                                      + '<div class="grid" id="imagesPost' + postObject['Id'] + '">'
                                     + '</div>'
                                     + '</div>'
-
-
                                     + '<div class="row" style="height:auto;">'
                                     + postObject['EmbedCode']
                                     + '</div>'
                                 + '</div>'
                                 + '<div class="view-all-comments" id="countComment' + postObject['Id'] + '"><a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments</div>'
                                 + '<ul class="comments" id="commentsArea' + postObject['Id'] + '">'
-
                                 + '</ul>'
                                 + '<ul class="comments">'
                                  + '<li class="comment-form">'
@@ -644,21 +646,19 @@
                                             '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control input-cmnt" placeholder="Viết bình luận của bạn..."/>' +
                                              '<i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(' + postObject['Id'] + ')" style="font-size: xx-large;color: #25AD9F;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2"></i>' +
                                         '</div>'
-
-
-
-
             + '</div>'
             + '</li>'
             + '</ul>'
             + '</div>'
+             + reportDiv
             + '</div>'
             + '</li>'
-        )
 
+        );
+        $(".dropdown-toggle").dropdown();
     }
     function editPost(postId) {
-        alert("editPost" + postId)
+        alert("editPost" + postId);
         $.ajax({
             url: "/Post/getSinglePost",
             type: "GET",
@@ -669,8 +669,8 @@
             success: function (successData) {
                 var obj = JSON.parse(successData);
                 $("#postContent").val(obj['Body']);
-                $("#postId").val(obj['Id'])
-                $("#shareButton").html("Cập nhật bài viết")
+                $("#postId").val(obj['Id']);
+                $("#shareButton").html("Cập nhật bài viết");
             },
             error: function (er) {
                 alert(er);
@@ -680,15 +680,15 @@
         //Get post
     }
 
-  
+
     function deletePost(postId) { //this function just display Confirm message
         //alert("deletePost" + postId)
-        $("#deletePostModal").modal("show")
-        $("#confirmDeletePostId").val(postId)
+        $("#deletePostModal").modal("show");
+        $("#confirmDeletePostId").val(postId);
     }
 
     function sendDeleteRequest() {
-        var id = $("#confirmDeletePostId").val()
+        var id = $("#confirmDeletePostId").val();
         $.ajax({
             url: "/Post/deletePost",
             type: "POST",
@@ -750,7 +750,7 @@
                 });
             },
             error: function (er) {
-                alert(er)
+                alert(er);
             }
 
         });
@@ -773,60 +773,7 @@
     }
 
     function getImagesForPost(index, id) {
-        if (id == null) {
-            alert("postid = nul");
-            return;
-        }
-        $.ajax({
-            url: "/Post/getImagesForPost",
-            type: "GET",
-            data: {
-                postId: id,
-            },
-            success: function (successData) {
-                var obj = JSON.parse(successData);
-                var currentElement = {};
-                var listElement = "";
-                var isFirst = true;
-                $.each(obj, function (index, image) {
-                    if (isFirst) {
-                        $("#imagesPost" + image.postId).html("");
-                        currentElement = $("#imagesPost" + image.postId);
-                        isFirst = false;
-                        if (obj.length == 1) {
-                            $("#imagesPost" + image.postId).removeClass("testetetet").addClass("one-col");
-                            if (parseInt(image.width) >= parseInt(image.height)) {
-                                listElement = listElement +
-                                    '<div data-src="' + image.url + '" style="border:1px solid white"><img style="width:100%; height:auto" src="' +
-                                    image.thumbnailurl +
-                                    '" alt="The Last of us"></div>';
-                            } else {
-                                listElement = listElement +
-                                    '<div data-src="' + image.url + '" style="border:1px solid white" ><img style="height:100% !important; width:auto !important "src="' +
-                                    image.thumbnailurl +
-                                    '" alt="The Last of us"></div>';
-                            }
-                            return;
-                        } else {
-                            $("#imagesPost" + image.postId).removeClass("one-col").addClass("testetetet");
-                        }
-                    }
-                    if (parseInt(image.width) >= parseInt(image.height)) {
-                        listElement = listElement + '<div data-src="' + image.url + '" style="border:1px solid white"><img style="width:100% !important; height:auto !important" src="' + image.thumbnailurl + '" ></div>';
-                    } else {
-                        listElement = listElement + '<div data-src="' + image.url + '" style="border:1px solid white" ><img style="width:100% !important; height:auto !important" src="' + image.thumbnailurl + '"></div>';
-                    }
-
-                });
-                listElement = listElement + "</div>";
-                currentElement.append(listElement);
-                currentElement.lightGallery();
-            },
-            error: function (er) {
-                alert(er);
-            }
-
-        });
+        appenImageToPost(index, id);
     }
     function addImageToPost(imageUrl, postId, width) {
         $("#imagesPost" + postId)
@@ -863,8 +810,8 @@
         listUploadThumnailImage = [];
         $("#previewList").html('');
         $("#postContent").val('');
-        $("#postId").val('')
-        $("#shareButton").html("Chia sẻ")
+        $("#postId").val('');
+        $("#shareButton").html("Chia sẻ");
 
     }
     function report(id) {
