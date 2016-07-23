@@ -138,8 +138,10 @@
                                             <div class="pull-left" id="userAvatar" data-user-id="@curUser.Id" style="margin-right: 10px">
                                                 <img src="@(curUser.ProfileImage == null ? " />Content/images/defaultProfile.png" : curUser.ProfileImage)" onerror="this.src='/Content/Images/defaultProfile.png';" class="avartar-img">
                                             </div>
+                                            <input id="postId" value="" style="display:none"/>
                                             <div style="flex: 1; width: 0">
                                                 <textarea onkeyup="textAreaAdjust(this)" style="overflow: hidden;height:45px" id="postContent" name="status" class="form-control share-text" rows="8" placeholder="Chia sẻ những thông tin của bạn..."></textarea>
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -182,7 +184,7 @@
                                     <i class="fa fa-map-marker"></i>
                                 </a>
                                 <div class="pull-right">
-                                    <button type="submit" class="btn btn-primary btn-xs display-none" style="margin-top: -12px" href="#" onclick="createNewPost()">Chia sẻ</button>
+                                    <button id="shareButton" type="submit" class="btn btn-primary btn-xs" style="margin-top: -12px" href="#" onclick="createNewPost()">Chia sẻ</button>
                                 </div>
                             </div>
                         </div>
@@ -340,7 +342,33 @@
     </div>
 </div>
 
+<!-- Delete modal -->
+<div class="modal fade" id="deletePostModal" role="dialog">
+    <div class="modal-dialog">
 
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div>
+                    <h3 style="text-align:center">
+                        Bạn có thật sự muốn xóa bài viết này?
+                     </h3>
+                </div>
+                <input id="confirmDeletePostId" hidden="hidden" value=""/>
+               
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="sendDeleteRequest()">Xóa bài viết</button>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 
 @{
@@ -404,12 +432,13 @@
         $("#previewContent").html(embedContent);
     }
     function createNewPost() {
-        //alert('createNewPost');
+        var postId = $("#postId").val();
         $.ajax({
             url: "/Post/Create",
             type: "POST",
             datatype: 'json',
             data: {
+                oldPostId: postId,
                 thumbnailImages: listUploadThumnailImage,
                 images: listUploadImage,
                 content: $("#postContent").val(),
@@ -541,6 +570,11 @@
         if (postObject['UserId'] != '@curUser.Id') {
             reportDiv = '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>';
         }
+        else if (postObject['UserId'] == '@curUser.Id') {
+            reportDiv = '<div href="" class="btn btn-white btn-xs pull-right" onclick="deletePost(' + postObject['Id'] + ')"><i class="fa fa-fw fa-times"></i></div>';
+            reportDiv += '<div href="#postContent" class="btn btn-white btn-xs pull-right" onclick="editPost(' + postObject['Id'] + ')"><i class="fa fa-fw fa-edit"></i></div>';
+
+        }
         var header = '<div class="panel-heading clearfix" style="background-color: transparent;">' +
                 '<div class="form-group" style="margin-bottom:0">' +
                     '<div style="display: flex">' +
@@ -622,6 +656,51 @@
             + '</li>'
         )
 
+    }
+    function editPost(postId) {
+        alert("editPost" + postId)
+        $.ajax({
+            url: "/Post/getSinglePost",
+            type: "GET",
+            datatype: 'json',
+            data: {
+                postId: postId,
+            },
+            success: function (successData) {
+                var obj = JSON.parse(successData);
+                $("#postContent").val(obj['Body']);
+                $("#postId").val(obj['Id'])
+                $("#shareButton").html("Cập nhật bài viết")
+            },
+            error: function (er) {
+                alert(er);
+            }
+
+        });
+        //Get post
+    }
+
+  
+    function deletePost(postId) { //this function just display Confirm message
+        //alert("deletePost" + postId)
+        $("#deletePostModal").modal("show")
+        $("#confirmDeletePostId").val(postId)
+    }
+
+    function sendDeleteRequest() {
+        var id = $("#confirmDeletePostId").val()
+        $.ajax({
+            url: "/Post/deletePost",
+            type: "POST",
+            data: {
+                postId: id,
+            }, success: function (successData) {
+                location.reload();
+            },
+            error: function (er) {
+                alert(er);
+            }
+        });
     }
 
     function addComment(postId) {
@@ -784,6 +863,9 @@
         listUploadThumnailImage = [];
         $("#previewList").html('');
         $("#postContent").val('');
+        $("#postId").val('')
+        $("#shareButton").html("Chia sẻ")
+
     }
     function report(id) {
         $("#reportPostId").val(id);
