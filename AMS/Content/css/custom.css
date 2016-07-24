@@ -408,6 +408,7 @@ body {
     width: 33.3333333%;
     float: left;
     padding: 5px;
+    text-align: center
 }
 
 .canvas-bls {
@@ -434,11 +435,11 @@ ul.timeline-list li.media > .media-body {
 .one-col {
     /* Prevent vertical gaps */
     line-height: 0;
-    -webkit-column-count: 5;
+    -webkit-column-count: 1;
     -webkit-column-gap: 0px;
-    -moz-column-count: 5;
+    -moz-column-count: 1;
     -moz-column-gap: 0px;
-    column-count: 5;
+    column-count: 1;
     column-gap: 0px;
 }
 
@@ -459,11 +460,11 @@ ul.timeline-list li.media > .media-body {
 .testetetet {
     /* Prevent vertical gaps */
     line-height: 0;
-    -webkit-column-count: 5;
+    -webkit-column-count: 2;
     -webkit-column-gap: 0px;
-    -moz-column-count: 5;
+    -moz-column-count: 2;
     -moz-column-gap: 0px;
-    column-count: 5;
+    column-count: 2;
     column-gap: 0px;
 }
 
@@ -490,9 +491,12 @@ ul.timeline-list li.media > .media-body {
 
 @media (max-width: 1000px) {
     .testetetet {
-        -moz-column-count: 3;
+        /*-moz-column-count: 3;
         -webkit-column-count: 3;
-        column-count: 3;
+        column-count: 3;*/
+        -moz-column-count: 2;
+        -webkit-column-count: 2;
+        column-count: 2;
     }
 }
 
@@ -531,4 +535,71 @@ ul.timeline-list li.media > .media-body {
 
 .lg-backdrop {
     background-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+
+/* Large desktop */
+@media (min-width: 1200px) {
+    /*body {
+        margin-left: 25%;
+        margin-right: 25%
+    }
+    .sidebar.left {
+        margin-left: 25%
+    }
+    .navbar.navbar-main.navbar-primary.navbar-fixed-top {
+        margin-left: 25%;
+        margin-right: 25%
+    }*/
+    .st-container,
+    .navbar-static-top .container-fluid,
+    .navbar-fixed-top .container-fluid,
+    .navbar-fixed-bottom .st-container, header {
+        width: 1170px;
+    }
+
+    header {
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {
+    .st-container,
+    .navbar-static-top .container-fluid,
+    .navbar-fixed-top .container-fluid,
+    .navbar-fixed-bottom .st-container, header {
+        width: 940px;
+    }
+
+    header {
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+}
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+}
+
+/* Landscape phones and down */
+@media (max-width: 480px) {
+}
+
+.affix {
+    top: 56px !important;
+    position: fixed !important;
+}
+
+.affix-top {
+    top: inherit !important;
+}
+
+#slide-left li a{
+    padding: 0 10px !important;
+    padding-left: 10px !important;
+}
+#menu ul li a [class*="fa fa-"] {
+    text-align: right;
 }

@@ -29,6 +29,7 @@ namespace AMS
             this.Receipts = new HashSet<Receipt>();
             this.Reports = new HashSet<Report>();
             this.UserAnswerPolls = new HashSet<UserAnswerPoll>();
+            this.UserRateAroundProviders = new HashSet<UserRateAroundProvider>();
         }
     
         public int Id { get; set; }
@@ -77,5 +78,7 @@ namespace AMS
         public virtual Role Role { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserAnswerPoll> UserAnswerPolls { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserRateAroundProvider> UserRateAroundProviders { get; set; }
     }
 }

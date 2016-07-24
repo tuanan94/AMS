@@ -436,6 +436,9 @@
     <Compile Include="UserAnswerPoll.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="UserRateAroundProvider.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="UtilityService.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

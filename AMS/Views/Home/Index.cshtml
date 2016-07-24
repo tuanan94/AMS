@@ -104,101 +104,101 @@
         border-left: none;
     }
 </style>
-<div class="container-fluid">
-    <div class="cover overlay">
-        <img src="~/Content/images/banner-842.jpg" alt="cover">
-    </div>
-    <div class="row">
-        <div class="col-md-offset-1 col-md-8">
-            <div id="addNewPost" class="new-post" onclick="onBlurPost()"></div>
-            <ul class="timeline-list">
-                <li class="media mediawithoutBorder">
-                    <div class="media-body">
-                        <div class="panel panel-default share">
-                            <div class="panel-heading" style="border-bottom: solid 1px #efefef;background-color: transparent;">
-                                @*                                <div id="previewEmbed" class="row" style="height: auto;">
-                                *@
-                                @*                                    <div id="previewContent">
-                                *@
-                                @*
-                                    </div>*@
-                                @*
-                                    </div>*@
-                                <a class="post-heading" style="border-right: 1px solid #efefef;" href="#postStatusArea" onclick="addImage()">
-                                    <i class="fa fa-fw fa-photo post-heading-icon"></i> Thêm hình ảnh
-                                </a>
-                                <a class="post-heading" href="#postStatusArea" data-toggle="modal" data-target="#addEmbedModal">
-                                    <i class="fa fa-fw fa-code post-heading-icon"></i> Thêm mã nhúng
-                                </a>
-                            </div>
-                            <div class="panel-body" id="postStatusArea">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div style="display: flex">
-                                            <div class="pull-left" id="userAvatar" data-user-id="@curUser.Id" style="margin-right: 10px">
-                                                <img src="@(curUser.ProfileImage == null ? " />Content/images/defaultProfile.png" : curUser.ProfileImage)" onerror="this.src='/Content/Images/defaultProfile.png';" class="avartar-img">
-                                            </div>
-                                            <input id="postId" value="" style="display:none" />
-                                            <div style="flex: 1; width: 0">
-                                                <textarea onkeyup="textAreaAdjust(this)" style="overflow: hidden;height:45px" id="postContent" name="status" class="form-control share-text" rows="8" placeholder="Chia sẻ những thông tin của bạn..."></textarea>
+@*    <div class="cover overlay">*@
+@*        <img src="~/Content/images/banner-842.jpg" alt="cover">*@
+@*    </div>*@
+<div class="row">
+    <div class="col-md-8">
+        <div id="addNewPost" class="new-post" onclick="onBlurPost()"></div>
+        <ul class="timeline-list">
+            <li class="media mediawithoutBorder">
+                <div class="media-body">
+                    <div class="panel panel-default share">
+                        <div class="panel-heading" style="border-bottom: solid 1px #efefef;background-color: transparent;">
+                            @*                                <div id="previewEmbed" class="row" style="height: auto;">
+                            *@
+                            @*                                    <div id="previewContent">
+                            *@
+                            @*
+                                </div>*@
+                            @*
+                                </div>*@
+                            <a class="post-heading" style="border-right: 1px solid #efefef;" href="#postStatusArea" onclick="addImage()">
+                                <i class="fa fa-fw fa-photo post-heading-icon"></i> Thêm hình ảnh
+                            </a>
+                            <a class="post-heading" href="#postStatusArea" data-toggle="modal" data-target="#addEmbedModal">
+                                <i class="fa fa-fw fa-code post-heading-icon"></i> Thêm mã nhúng
+                            </a>
+                        </div>
+                        <div class="panel-body" id="postStatusArea">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div style="display: flex">
+                                        <div class="pull-left" id="userAvatar" data-user-id="@curUser.Id" style="margin-right: 10px">
+                                            <img src="@(curUser.ProfileImage == null ? " />Content/images/defaultProfile.png" : curUser.ProfileImage)" onerror="this.src='/Content/Images/defaultProfile.png';" class="avartar-img">
+                                        </div>
+                                        <input id="postId" value="" style="display:none" />
+                                        <div style="flex: 1; width: 0">
+                                            <textarea onkeyup="textAreaAdjust(this)" style="overflow: hidden;height:45px" id="postContent" name="status" class="form-control share-text" rows="8" placeholder="Chia sẻ những thông tin của bạn..."></textarea>
 
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row" style="margin-bottom: 10px">
-                                    <div class="col-md-12" style="height: auto;" id="previewList">
-                                        <input type="file" id="uploadEditorImage" style="display: none" />
-                                        <div id="progressBar" class="progress" style="width: 200px" hidden="hidden">
-                                            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 200px">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="previewEmbed" class="row" style="height: auto;">
-                                    <div id="previewContent">
-                                    </div>
-                                </div>
-                                @*                                <input type="file" id="uploadEditorImage" style="display: none" />*@
-                                @*                                <div id="progressBar" class="progress" style="width: 200px" hidden="hidden">
-                                *@
-                                @*                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 200px">
-                                *@
-                                @*
-                                    </div>*@
-                                @*
-                                    </div>*@
                             </div>
-                            <div class="panel-footer share-buttons clearfix" @*id="postStatusArea" *@>
-                                @*                                <a href="#postStatusArea" onclick="addImage()">
-                                *@
-                                @*                                    <i class="fa fa-fw fa-photo"></i>*@
-                                @*
-                                    </a>*@
-                                @*                                <a href="#postStatusArea" data-toggle="modal" data-target="#addEmbedModal">
-                                *@
-                                @*                                    <i class="fa fa-fw fa-code"></i>*@
-                                @*
-                                    </a>*@
-                                <a href="#postStatusArea" style="float: right">
-                                    <i class="fa fa-map-marker"></i>
-                                </a>
-                                <div class="pull-right">
-                                    <button id="shareButton" type="submit" class="btn btn-primary btn-xs" style="margin-top: -12px" href="#" onclick="createNewPost()">Chia sẻ</button>
+                            <div class="row" style="margin-bottom: 10px">
+                                <div class="col-md-12" style="height: auto;" id="previewList">
+                                    <input type="file" id="uploadEditorImage" style="display: none" />
+                                    <div id="progressBar" class="progress" style="width: 200px" hidden="hidden">
+                                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 200px">
+                                        </div>
+                                    </div>
                                 </div>
+                            </div>
+                            <div id="previewEmbed" class="row" style="height: auto;">
+                                <div id="previewContent">
+                                </div>
+                            </div>
+                            @*                                <input type="file" id="uploadEditorImage" style="display: none" />*@
+                            @*                                <div id="progressBar" class="progress" style="width: 200px" hidden="hidden">
+                            *@
+                            @*                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 200px">
+                            *@
+                            @*
+                                </div>*@
+                            @*
+                                </div>*@
+                        </div>
+                        <div class="panel-footer share-buttons clearfix" @*id="postStatusArea" *@>
+                            @*                                <a href="#postStatusArea" onclick="addImage()">
+                            *@
+                            @*                                    <i class="fa fa-fw fa-photo"></i>*@
+                            @*
+                                </a>*@
+                            @*                                <a href="#postStatusArea" data-toggle="modal" data-target="#addEmbedModal">
+                            *@
+                            @*                                    <i class="fa fa-fw fa-code"></i>*@
+                            @*
+                                </a>*@
+                            <a href="#postStatusArea" style="float: right">
+                                <i class="fa fa-map-marker"></i>
+                            </a>
+                            <div class="pull-right">
+                                <button id="shareButton" type="submit" class="btn btn-primary btn-xs" style="margin-top: -12px" href="#" onclick="createNewPost()">Chia sẻ</button>
                             </div>
                         </div>
                     </div>
-                    @*
-                        </div>*@
-                </li>
-            </ul>
-            <ul class="timeline-list" id="timeline"></ul>
-            <div style="margin:3em;text-align:center">
-                <button id="loadMoreBtn" type="button" class="btn btn-primary btn-lg" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Đang tải thêm...">Tải thêm tin khác</button>
-            </div>
+                </div>
+                @*
+                    </div>*@
+            </li>
+        </ul>
+        <ul class="timeline-list" id="timeline"></ul>
+        <div style="margin:3em;text-align:center">
+            <button id="loadMoreBtn" type="button" class="btn btn-primary btn-lg" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Đang tải thêm...">Tải thêm tin khác</button>
         </div>
-        <div class="col-md-3">
+    </div>
+    <div class="col-md-4">
+        <div class="left-nav" style="width: 250px;">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Thời tiết hiện tại
@@ -206,7 +206,9 @@
                 <div class="weather-svg">
                     <div class="today text-center">
 
-                        <div class="clearfix"><img src="@weather.weatherIcon" /></div>
+                        <div class="clearfix">
+                            <img src="@weather.weatherIcon" />
+                        </div>
 
                         <div class="details">
                             Nhiệt độ:
@@ -214,83 +216,79 @@
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <div class="panel panel-default">
-                <div class="panel-heading panel-heading-gray" style="background-color:#25ad9f;color:white">
+                <div class="panel-heading panel-heading-gray" style="background-color: #25ad9f; color: white">
                     Thông báo
                     @{if (notificationChanges != null && notificationChanges.Where(p => p.User.Id != curUser.Id).ToList().Count != 0)
-                    {
+                        {
                         <span id="clean-noty" class="pull-right" onclick="clearAllNotify()"> Xóa tất cả</span>
+                        }
                     }
-                    }
-
                 </div>
 
                 <div class="panel-body">
 
                     @foreach (NotificationChange nChange in notificationChanges.OrderByDescending(p => p.CreatedDate))
-                    {
-                        if (nChange.User.Id == curUser.Id)
                         {
-                            continue;
-                        }
-                        if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL.Equals(nChange.NotificationObject.TargetObject))
-                        {
-
-                            <div class="noti-element" style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
-                                <i class="fa fa-fw fa-info"></i>
-                                <a href="/Survey/doSurvey"> <strong>@nChange.User.Fullname</strong> <span>đã</span> @nChange.Verb một bình chọn mới </a>
-                                <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-close" style="float: right"></i></a>
-                                <br />
-                            </div>
-                        }
-                        else if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_HELPDESK_REQUEST.Equals(nChange.NotificationObject.TargetObject) && nChange.NotificationObject.TargetObjectID != null && SLIM_CONFIG.NOTIC_VERB_ASSIGN_REQUEST.Equals(nChange.Verb))
-                        {
-                            HelpdeskRequestLog hdRequestLog = helpdeskRequestLogService.findById(nChange.NotificationObject.TargetObjectID.Value);
-
-                            User changeToUser = userServices.FindById(hdRequestLog.ChangeToUserId.HasValue ? hdRequestLog.ChangeToUserId.Value : -1);
-                            if (hdRequestLog != null && changeToUser != null)
+                            if (nChange.User.Id == curUser.Id)
                             {
-                                <div class="noti-element" style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
-                                    <i class="fa fa-fw fa-info"></i>
-                                    <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hỗ trợ của bạn đã được chuyển cho nhân viên hỗ trợ <strong>@changeToUser.Fullname</strong></a>
-                                    <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
-                                    <br />
-                                </div>
+                                continue;
+                            }
+                            if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_POLL.Equals(nChange.NotificationObject.TargetObject))
+                            {
+
+                        <div class="noti-element" style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
+                            <i class="fa fa-fw fa-info"></i>
+                            <a href="/Survey/doSurvey"> <strong>@nChange.User.Fullname</strong> <span>đã</span> @nChange.Verb một bình chọn mới </a>
+                            <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-close" style="float: right"></i></a>
+                            <br />
+                        </div>
+                            }
+                            else if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_HELPDESK_REQUEST.Equals(nChange.NotificationObject.TargetObject) && nChange.NotificationObject.TargetObjectID != null && SLIM_CONFIG.NOTIC_VERB_ASSIGN_REQUEST.Equals(nChange.Verb))
+                            {
+                                HelpdeskRequestLog hdRequestLog = helpdeskRequestLogService.findById(nChange.NotificationObject.TargetObjectID.Value);
+
+                                User changeToUser = userServices.FindById(hdRequestLog.ChangeToUserId.HasValue ? hdRequestLog.ChangeToUserId.Value : -1);
+                                if (hdRequestLog != null && changeToUser != null)
+                                {
+                        <div class="noti-element" style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
+                            <i class="fa fa-fw fa-info"></i>
+                            <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hỗ trợ của bạn đã được chuyển cho nhân viên hỗ trợ <strong>@changeToUser.Fullname</strong></a>
+                            <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
+                            <br />
+                        </div>
+                                }
+                            }
+                            else if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_HELPDESK_REQUEST.Equals(nChange.NotificationObject.TargetObject) && nChange.NotificationObject.TargetObjectID != null && SLIM_CONFIG.NOTIC_VERB_FINISH_REQUEST.Equals(nChange.Verb))
+                            {
+                                HelpdeskRequestLog hdRequestLog = helpdeskRequestLogService.findById(nChange.NotificationObject.TargetObjectID.Value);
+
+                                //                                    User changeToUser = userServices.FindById(hdRequestLog.ChangeToUserId.HasValue ? hdRequestLog.ChangeToUserId.Value : -1);
+                                if (hdRequestLog != null && nChange.User != null)
+                                {
+                        <div class="noti-element" style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
+                            <i class="fa fa-fw fa-info"></i>
+                            <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hỗ trợ của bạn đã được xử lí xong bởi <strong>@nChange.User.Fullname</strong></a>
+                            <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
+                            <br />
+                        </div>
+                                }
+                            }
+                            else
+                            {
+                        <div class="noti-element" style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
+                            <i class="fa fa-fw fa-info"></i>
+                            <strong>@nChange.User.Fullname</strong> <span>đã</span> @nChange.Verb <span> @nChange.NotificationObject.TargetObject của bạn</span>
+                            <a onclick="deletenotification(@nChange.ID)"><i class="fa fa-fw fa-close" style="float: right"></i></a>
+
+                            <br />
+                        </div>
                             }
                         }
-                        else if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_HELPDESK_REQUEST.Equals(nChange.NotificationObject.TargetObject) && nChange.NotificationObject.TargetObjectID != null && SLIM_CONFIG.NOTIC_VERB_FINISH_REQUEST.Equals(nChange.Verb))
-                        {
-                            HelpdeskRequestLog hdRequestLog = helpdeskRequestLogService.findById(nChange.NotificationObject.TargetObjectID.Value);
-
-                            //                                    User changeToUser = userServices.FindById(hdRequestLog.ChangeToUserId.HasValue ? hdRequestLog.ChangeToUserId.Value : -1);
-                            if (hdRequestLog != null && nChange.User != null)
-                            {
-                                <div class="noti-element" style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
-                                    <i class="fa fa-fw fa-info"></i>
-                                    <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hỗ trợ của bạn đã được xử lí xong bởi <strong>@nChange.User.Fullname</strong></a>
-                                    <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
-                                    <br />
-                                </div>
-                            }
-                        }
-                        else
-                        {
-                            <div class="noti-element" style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
-                                <i class="fa fa-fw fa-info"></i>
-                                <strong>@nChange.User.Fullname</strong> <span>đã</span> @nChange.Verb <span> @nChange.NotificationObject.TargetObject của bạn</span>
-                                <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
-
-                                <br />
-                            </div>
-                        }
-                    }
                 </div>
-
             </div>
-
         </div>
     </div>
 </div>
@@ -384,6 +382,16 @@
 <script>
     var curTokenId = -1;
     $(document).ready(function () {
+        setTimeout(function () {
+            $('.left-nav')
+               .affix({
+                   offset: {
+                       top: function () { return 370 },
+                       bottom: 10
+                   }
+               });
+        }, 100);
+
         $('.modalDialog').fadeIn();
 
         $('.close').on('click', function (event) {
@@ -671,6 +679,7 @@
                 $("#postContent").val(obj['Body']);
                 $("#postId").val(obj['Id']);
                 $("#shareButton").html("Cập nhật bài viết");
+                smoothScrollToTop()
             },
             error: function (er) {
                 alert(er);

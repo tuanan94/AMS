@@ -336,6 +336,7 @@ $.extend(true, $.fn.dataTable.defaults, {
     }
 });
 $(document).ready(function () {
+
     $("#addHelpdeskRequestForm").validate({
         rules: {
             hdSrvName: {
@@ -458,9 +459,9 @@ $(document).ready(function () {
             });
         }
     });
-    
 
-    
+
+
 
     $("#addHelpdeskRequestModal").on("hidden.bs.modal", function () {
         document.getElementById("addHelpdeskRequestForm").reset();
@@ -485,42 +486,42 @@ $(document).ready(function () {
         }
     });
 
-//    $(document).on("change", "#hdSrvCatName", function () {
-//
-//        $("#hdSrvPrice").val("");
-//        $("#hdSrvDesc").val("");
-//        if ($(this).find("option:selected").val()) {
-//            var selected = parseInt($(this).find("option:selected").val(), 10);
-//            $("#hdSrvCatName").prop("disable", true);
-//            $("#hdServiceId").prop("disabled", true);
-//            getHdSrvByCatId(selected, "hdServiceId", function () {
-//                $("#hdSrvCatName").prop("disable", false);
-//                $("#hdServiceId").prop("disabled", false);
-//                $("select[name=HdServiceId]").val(-1);
-//                $("#hdServiceId").selectpicker("refresh");
-//            });
-//        } else {
-//            var selectTag = "<option value='' selected='selected'> " + "Hãy chọn dịch vụ hỗ trợ" + " </option>";
-//            $("#hdServiceId").html(selectTag);
-//            $("#hdServiceId").selectpicker("refresh");
-//        }
-//    });
+    //    $(document).on("change", "#hdSrvCatName", function () {
+    //
+    //        $("#hdSrvPrice").val("");
+    //        $("#hdSrvDesc").val("");
+    //        if ($(this).find("option:selected").val()) {
+    //            var selected = parseInt($(this).find("option:selected").val(), 10);
+    //            $("#hdSrvCatName").prop("disable", true);
+    //            $("#hdServiceId").prop("disabled", true);
+    //            getHdSrvByCatId(selected, "hdServiceId", function () {
+    //                $("#hdSrvCatName").prop("disable", false);
+    //                $("#hdServiceId").prop("disabled", false);
+    //                $("select[name=HdServiceId]").val(-1);
+    //                $("#hdServiceId").selectpicker("refresh");
+    //            });
+    //        } else {
+    //            var selectTag = "<option value='' selected='selected'> " + "Hãy chọn dịch vụ hỗ trợ" + " </option>";
+    //            $("#hdServiceId").html(selectTag);
+    //            $("#hdServiceId").selectpicker("refresh");
+    //        }
+    //    });
 
-//    $(document).on("change", "#hdServiceId", function () {
-//        $("#hdSrvPrice").val("");
-//        $("#hdSrvDesc").val("");
-//        if ($(this).find("option:selected").val()) {
-//            var selected = parseInt($(this).find("option:selected").val(), 10);
-//            if (window.hdSrvList !== undefined || window.hdSrvList.length !== 0) {
-//                for (var i = 0; i < window.hdSrvList.length; i++) {
-//                    if (window.hdSrvList[i].Id === selected) {
-//                        $("#hdSrvPrice").val(window.hdSrvList[i].Price);
-//                        $("#hdSrvDesc").val(window.hdSrvList[i].Description);
-//                    }
-//                }
-//            }
-//        }
-//    });
+    //    $(document).on("change", "#hdServiceId", function () {
+    //        $("#hdSrvPrice").val("");
+    //        $("#hdSrvDesc").val("");
+    //        if ($(this).find("option:selected").val()) {
+    //            var selected = parseInt($(this).find("option:selected").val(), 10);
+    //            if (window.hdSrvList !== undefined || window.hdSrvList.length !== 0) {
+    //                for (var i = 0; i < window.hdSrvList.length; i++) {
+    //                    if (window.hdSrvList[i].Id === selected) {
+    //                        $("#hdSrvPrice").val(window.hdSrvList[i].Price);
+    //                        $("#hdSrvDesc").val(window.hdSrvList[i].Description);
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    });
 
     $("#addNewHdRequest").on("click", function () {
         console.log($("#createHdService").serialize());
@@ -579,7 +580,7 @@ $(document).ready(function () {
         }
     });
 
-    
+
 
     activeNavigationBar();
 });

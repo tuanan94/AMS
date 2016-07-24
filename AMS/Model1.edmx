@@ -417,6 +417,15 @@
           <Property Name="Answer" Type="nvarchar" MaxLength="50" />
           <Property Name="AnswerDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="UserRateAroundProvider">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="AroundProviderId" />
+          </Key>
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="AroundProviderId" Type="int" Nullable="false" />
+          <Property Name="Point" Type="int" />
+        </EntityType>
         <EntityType Name="UtilityService">
           <Key>
             <PropertyRef Name="Id" />
@@ -917,6 +926,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UserRateAroundProvider_AroundProvider">
+          <End Role="AroundProvider" Type="Self.AroundProvider" Multiplicity="1" />
+          <End Role="UserRateAroundProvider" Type="Self.UserRateAroundProvider" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AroundProvider">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserRateAroundProvider">
+              <PropertyRef Name="AroundProviderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserRateAroundProvider_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserRateAroundProvider" Type="Self.UserRateAroundProvider" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserRateAroundProvider">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_UtilityService_UtilServiceCategory">
           <End Role="UtilServiceCategory" Type="Self.UtilServiceCategory" Multiplicity="0..1" />
           <End Role="UtilityService" Type="Self.UtilityService" Multiplicity="*" />
@@ -1000,6 +1033,7 @@
           <EntitySet Name="Transaction" EntityType="Self.Transaction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserAnswerPoll" EntityType="Self.UserAnswerPoll" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserRateAroundProvider" EntityType="Self.UserRateAroundProvider" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UtilityService" EntityType="Self.UtilityService" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UtilityServiceRangePrices" EntityType="Self.UtilityServiceRangePrices" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UtilServiceCategory" EntityType="Self.UtilServiceCategory" Schema="dbo" store:Type="Tables" />
@@ -1152,6 +1186,14 @@
             <End Role="User" EntitySet="User" />
             <End Role="UserAnswerPoll" EntitySet="UserAnswerPoll" />
           </AssociationSet>
+          <AssociationSet Name="FK_UserRateAroundProvider_AroundProvider" Association="Self.FK_UserRateAroundProvider_AroundProvider">
+            <End Role="AroundProvider" EntitySet="AroundProvider" />
+            <End Role="UserRateAroundProvider" EntitySet="UserRateAroundProvider" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserRateAroundProvider_User" Association="Self.FK_UserRateAroundProvider_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserRateAroundProvider" EntitySet="UserRateAroundProvider" />
+          </AssociationSet>
           <AssociationSet Name="FK_UtilityService_UtilServiceCategory" Association="Self.FK_UtilityService_UtilServiceCategory">
             <End Role="UtilServiceCategory" EntitySet="UtilServiceCategory" />
             <End Role="UtilityService" EntitySet="UtilityService" />
@@ -1207,6 +1249,7 @@
           <EntitySet Name="Transactions" EntityType="AMSModel.Transaction" />
           <EntitySet Name="Users" EntityType="AMSModel.User" />
           <EntitySet Name="UserAnswerPolls" EntityType="AMSModel.UserAnswerPoll" />
+          <EntitySet Name="UserRateAroundProviders" EntityType="AMSModel.UserRateAroundProvider" />
           <EntitySet Name="UtilityServices" EntityType="AMSModel.UtilityService" />
           <EntitySet Name="UtilityServiceRangePrices" EntityType="AMSModel.UtilityServiceRangePrice" />
           <EntitySet Name="UtilServiceCategories" EntityType="AMSModel.UtilServiceCategory" />
@@ -1218,6 +1261,10 @@
           <AssociationSet Name="FK_tbl_arround_srv_tbl_around_srv_cat" Association="AMSModel.FK_tbl_arround_srv_tbl_around_srv_cat">
             <End Role="AroundProviderCategory" EntitySet="AroundProviderCategories" />
             <End Role="AroundProvider" EntitySet="AroundProviders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserRateAroundProvider_AroundProvider" Association="AMSModel.FK_UserRateAroundProvider_AroundProvider">
+            <End Role="AroundProvider" EntitySet="AroundProviders" />
+            <End Role="UserRateAroundProvider" EntitySet="UserRateAroundProviders" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="AMSModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
@@ -1355,6 +1402,10 @@
             <End Role="User" EntitySet="Users" />
             <End Role="UserAnswerPoll" EntitySet="UserAnswerPolls" />
           </AssociationSet>
+          <AssociationSet Name="FK_UserRateAroundProvider_User" Association="AMSModel.FK_UserRateAroundProvider_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserRateAroundProvider" EntitySet="UserRateAroundProviders" />
+          </AssociationSet>
           <AssociationSet Name="FK_UtilityService_UtilServiceCategory" Association="AMSModel.FK_UtilityService_UtilServiceCategory">
             <End Role="UtilServiceCategory" EntitySet="UtilServiceCategories" />
             <End Role="UtilityService" EntitySet="UtilityServices" />
@@ -1408,6 +1459,7 @@
           <Property Name="Latitude" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="AroundProviderProducts" Relationship="AMSModel.FK_AroundServiceProduct_AroundProvider" FromRole="AroundProvider" ToRole="AroundProviderProduct" />
           <NavigationProperty Name="AroundProviderCategory" Relationship="AMSModel.FK_tbl_arround_srv_tbl_around_srv_cat" FromRole="AroundProvider" ToRole="AroundProviderCategory" />
+          <NavigationProperty Name="UserRateAroundProviders" Relationship="AMSModel.FK_UserRateAroundProvider_AroundProvider" FromRole="AroundProvider" ToRole="UserRateAroundProvider" />
         </EntityType>
         <EntityType Name="AroundProviderCategory">
           <Key>
@@ -1835,6 +1887,7 @@
           <NavigationProperty Name="Reports" Relationship="AMSModel.FK_Report_User" FromRole="User" ToRole="Report" />
           <NavigationProperty Name="Role" Relationship="AMSModel.FK_tbl_user_tbl_role" FromRole="User" ToRole="Role" />
           <NavigationProperty Name="UserAnswerPolls" Relationship="AMSModel.FK_UserDoServey_User" FromRole="User" ToRole="UserAnswerPoll" />
+          <NavigationProperty Name="UserRateAroundProviders" Relationship="AMSModel.FK_UserRateAroundProvider_User" FromRole="User" ToRole="UserRateAroundProvider" />
         </EntityType>
         <EntityType Name="UserAnswerPoll">
           <Key>
@@ -1847,6 +1900,17 @@
           <Property Name="AnswerDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Poll" Relationship="AMSModel.FK_UserDoServey_Survey" FromRole="UserAnswerPoll" ToRole="Poll" />
           <NavigationProperty Name="User" Relationship="AMSModel.FK_UserDoServey_User" FromRole="UserAnswerPoll" ToRole="User" />
+        </EntityType>
+        <EntityType Name="UserRateAroundProvider">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="AroundProviderId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="AroundProviderId" Type="Int32" Nullable="false" />
+          <Property Name="Point" Type="Int32" />
+          <NavigationProperty Name="AroundProvider" Relationship="AMSModel.FK_UserRateAroundProvider_AroundProvider" FromRole="UserRateAroundProvider" ToRole="AroundProvider" />
+          <NavigationProperty Name="User" Relationship="AMSModel.FK_UserRateAroundProvider_User" FromRole="UserRateAroundProvider" ToRole="User" />
         </EntityType>
         <EntityType Name="UtilityService">
           <Key>
@@ -1923,6 +1987,18 @@
             </Principal>
             <Dependent Role="AroundProvider">
               <PropertyRef Name="AroundProviderCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserRateAroundProvider_AroundProvider">
+          <End Type="AMSModel.AroundProvider" Role="AroundProvider" Multiplicity="1" />
+          <End Type="AMSModel.UserRateAroundProvider" Role="UserRateAroundProvider" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AroundProvider">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserRateAroundProvider">
+              <PropertyRef Name="AroundProviderId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2336,6 +2412,18 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="UserAnswerPoll">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserRateAroundProvider_User">
+          <End Type="AMSModel.User" Role="User" Multiplicity="1" />
+          <End Type="AMSModel.UserRateAroundProvider" Role="UserRateAroundProvider" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserRateAroundProvider">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
@@ -2815,6 +2903,15 @@
                 <ScalarProperty Name="Answer" ColumnName="Answer" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="PollId" ColumnName="PollId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRateAroundProviders">
+            <EntityTypeMapping TypeName="AMSModel.UserRateAroundProvider">
+              <MappingFragment StoreEntitySet="UserRateAroundProvider">
+                <ScalarProperty Name="Point" ColumnName="Point" />
+                <ScalarProperty Name="AroundProviderId" ColumnName="AroundProviderId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

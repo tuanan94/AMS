@@ -7,7 +7,7 @@
 
 <link href="~/Content/aroundProvider/main.css" rel="stylesheet" />
 
-<div class="col-md-12">
+<div class="row">
     <div class="panel panel-default">
         <div class="row">
             <div class="col-md-12">
@@ -50,9 +50,9 @@
                                 foreach (var product in products)
                                 {
                                     <li class="provider-product">
-                                        <div class="col-md-12 border-img ar-product">
+                                        <div class="col-md-12 ar-product">
                                             @*                                            <img style="width: 100%;padding: 10px" src="@product.ImgUrl" />*@
-                                            <img src="@product.ImgUrl" />
+                                            <img class="img-border" style="border-color:#78909C " src="@product.ImgUrl" />
                                         </div>
                                         <div class="col-md-12">
                                             <div class="desc">

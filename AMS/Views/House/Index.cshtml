@@ -218,10 +218,11 @@
     /*AnLTNM change*/
 </style>
 <div class="container-fluid" style="background: #00695C;">
-    <div class="cover overlay" style="position: relative">
-        <img src="~/Content/images/familycover.jpg" alt="cover">
 
-    </div>
+    @*    <div class="cover overlay" style="position: relative">*@
+    @*        <img src="~/Content/images/familycover.jpg" alt="cover">*@
+    @*    </div>*@
+
     @*    <div style="height: 120px; position: absolute; margin-top: -120px; text-align: center">*@
     @*        <img src="@(curHouse.ProfileImage == null || curHouse.ProfileImage.Equals("") ? "/Content/images/home_default.jpg" : curHouse.ProfileImage)" style="width: auto; height: 100%; border-bottom-left-radius: 30px; border-top-right-radius: 30px;"/>*@
     @*        <h2 style="color: white; background-color: #25AD9F; border-radius: 30px;">@curHouse.HouseName</h2>*@
@@ -233,96 +234,104 @@
 
         <div style="font-size: 26px; /* added *//* added */float: left;">
             <div style="position: absolute; bottom: 0; width: 100%;">
-                <div class="border-img" style="border-radius: 4px; border: none; background: #fff; padding: 10px; margin-left: 10px; margin-bottom: 0;white-space: nowrap;">
+                <div class="border-img" style="border-radius: 4px; border: none; background: #fff; padding: 10px; margin-left: 10px; margin-bottom: 0; white-space: nowrap;">
                     <i class="fa fa-home" style="color: #009688;"></i>
-                    <strong >@curHouse.HouseName</strong>
+                    <strong>@curHouse.HouseName</strong>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="panel panel-default">
-                <div class="panel-heading panel-heading-gray">
-                    <h4>Bài viết</h4>
-                </div>
+<div class="row">
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading panel-heading-gray">
+                <h4>Bài viết</h4>
             </div>
-            <ul class="timeline-list" id="timeline"></ul>
         </div>
-        <div class="col-md-4" style="text-align: center">
-            <div class="panel panel-default">
-                <div class="panel-heading panel-heading-gray">
-                    <h4>Thành viên trong nhà</h4>
-                </div>
-                <div class="panel-body" id="memberPanelBodyHousePage">
-                    <div class="row" style="position: relative;">
-                        <div class="house-roof">
-                            <span style="line-height: 140px;">Nhà</span>@*Must be has text in this tag*@
-                        </div>
-                        <div class="abs-centering">
-                            <a id="usrInfoUrlToFamily" class="link-cursor" href="/House/@curHouse.Id">
-                                <img id="usrInfoHouseImg" class="img-border" onerror="this.src = '/Content/images/home_default.jpg';" src="@(curHouse.ProfileImage == null ? "/Content/images/home_default.jpg" : curHouse.ProfileImage)" style="height: 90px; border: 2px solid #bf360c;">
-                                <div>
-                                    <span id="usrInfoHouseName" class="house-title">@curHouse.HouseName</span>
-                                </div>
-                            </a>
-                        </div>
+        <ul class="timeline-list" id="timeline"></ul>
+    </div>
+    <div class="col-md-4" style="text-align: center">
+        <div class="panel panel-default">
+            <div class="panel-heading panel-heading-gray">
+                <h4>Thành viên trong nhà</h4>
+            </div>
+            <div class="panel-body" id="memberPanelBodyHousePage">
+                <div class="row" style="position: relative;">
+                    <div class="house-roof">
+                        <span style="line-height: 140px;">Nhà</span>@*Must be has text in this tag*@
+                    </div>
+                    <div class="abs-centering">
+                        <a id="usrInfoUrlToFamily" class="link-cursor" href="/House/@curHouse.Id">
+                            <img id="usrInfoHouseImg" class="img-border" onerror="this.src = '/Content/images/home_default.jpg';" src="@(curHouse.ProfileImage == null ? "/Content/images/home_default.jpg" : curHouse.ProfileImage)" style="height: 90px; border: 2px solid #bf360c;">
+                            <div>
+                                <span id="usrInfoHouseName" class="house-title">@curHouse.HouseName</span>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
 @*<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-2">
+        <div class="row">
+            <div class="col-md-2">
 
-        </div>
-        <div class="col-md-8" style="text-align: center">
-            <div class="panel panel-default">
-                <div class="panel-heading panel-heading-gray"><h4>Thành viên trong nhà @curHouse.HouseName</h4></div>
-                <div class="panel-body" id="memberPanelBody">
-                    <div class="row" style="position: relative;">
-                        <div class="house-roof">
-                            <span style="line-height: 140px;">Nhà</span>$1$Must be has text in this tag#1#
-                        </div>
-                        <div class="abs-centering">
-                            <a id="usrInfoUrlToFamily" class="link-cursor" href="/House/@curHouse.Id">
-                                <img id="usrInfoHouseImg" class="img-border" onerror="this.src = '/Content/images/home_default.jpg';" src="@(curHouse.ProfileImage == null ? "/Content/images/home_default.jpg" : curHouse.ProfileImage)" style="height: 90px; border: 2px solid #bf360c;">
-                                <div>
-                                    <span id="usrInfoHouseName" class="house-title">@curHouse.HouseName</span>
-                                </div>
-                            </a>
+            </div>
+            <div class="col-md-8" style="text-align: center">
+                <div class="panel panel-default">
+                    <div class="panel-heading panel-heading-gray"><h4>Thành viên trong nhà @curHouse.HouseName</h4></div>
+                    <div class="panel-body" id="memberPanelBody">
+                        <div class="row" style="position: relative;">
+                            <div class="house-roof">
+                                <span style="line-height: 140px;">Nhà</span>$1$Must be has text in this tag#1#
+                            </div>
+                            <div class="abs-centering">
+                                <a id="usrInfoUrlToFamily" class="link-cursor" href="/House/@curHouse.Id">
+                                    <img id="usrInfoHouseImg" class="img-border" onerror="this.src = '/Content/images/home_default.jpg';" src="@(curHouse.ProfileImage == null ? "/Content/images/home_default.jpg" : curHouse.ProfileImage)" style="height: 90px; border: 2px solid #bf360c;">
+                                    <div>
+                                        <span id="usrInfoHouseName" class="house-title">@curHouse.HouseName</span>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-2">
+            <div class="col-md-2">
 
+            </div>
         </div>
     </div>
-</div>
 
-<div class="container-fluid">
-    <div class="row">
-        <h3 style="margin-left:15%">Bài viết</h3>
-        <div class="col-md-2"></div>
-        <div class="col-md-9">
-            <ul class="timeline-list" id="timeline"></ul>
+    <div class="container-fluid">
+        <div class="row">
+            <h3 style="margin-left:15%">Bài viết</h3>
+            <div class="col-md-2"></div>
+            <div class="col-md-9">
+                <ul class="timeline-list" id="timeline"></ul>
+            </div>
+            <div class="col-md-2"></div>
+
         </div>
-        <div class="col-md-2"></div>
-
-    </div>
-</div>*@
+    </div>*@
 
 <script>
     var curTokenId = -1;
     $(document).ready(function () {
+        $('.left-nav').css({ position: relative });
+        setTimeout(function () {
+            $('.left-nav')
+               .affix({
+                   offset: {
+                       top: function () { return 370 },
+                       bottom: 10
+                   }
+               });
+        }, 100);
+
         $('.modalDialog').fadeIn();
 
         $('.close').on('click', function (event) {
@@ -423,7 +432,7 @@
     });
     $(document).ready(function () {
         loadAllPost(-1);
-        loadAllMember("tree", '@curHouse.Id', "memberPanelBodyHousePage",true);
+        loadAllMember("tree", '@curHouse.Id', "memberPanelBodyHousePage", true);
 
         $("#userInforModal").on("hidden.bs.modal", function () {
             $("#memberPanelBody").children().not("div.row:first").remove();
@@ -632,7 +641,7 @@
                         + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)" class="comment-author link-cursor">' + comment['fullName'] + ': </a>'
                         + '<span>' + comment['detail'] + '</span>'
                         + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
-                    +'</div>'
+                    + '</div>'
             + '</div>'
         + '</li>');
 
