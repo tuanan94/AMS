@@ -198,7 +198,7 @@
         </div>
     </div>
     <div class="col-md-4">
-        <div class="left-nav" style="width: 250px;">
+        <div class="left-nav">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Thời tiết hiện tại
@@ -382,15 +382,26 @@
 <script>
     var curTokenId = -1;
     $(document).ready(function () {
-        setTimeout(function () {
+        setTimeout(function() {
             $('.left-nav')
-               .affix({
-                   offset: {
-                       top: function () { return 370 },
-                       bottom: 10
-                   }
-               });
+                .affix({
+                    offset: {
+                        top: function() {
+                            console.log("call this funtion");
+                            return 370;
+                        },
+                        bottom: 10
+                    }
+                });
+            $('.left-nav')
+            .on("affix.bs.affix",function() {
+                    $(this).css("width", $(this).parent().width() + "px");
+                });
         }, 100);
+
+        $(document).on("resize", function () {
+            $('.left-nav').css("width", $('.left-nav').parent().width() + "px");
+        });
 
         $('.modalDialog').fadeIn();
 
@@ -577,7 +588,7 @@
             //            reportDiv = '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>';
             reportDiv = '<div style="position: absolute;right: 0;width: 30px;">' +
               '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
-              '<div style="color:#f9a825" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>' +
+              '<div class="link-cursor" style="color:#000000" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>' +
                        '</div>' +
                        '</div>';
         }
@@ -588,8 +599,8 @@
                             '<a class="dropdown-toggle" data-toggle="dropdown" style="color: #ffffff;"> <i class="fa fa-angle-down"></i>' +
                            '</a>' +
                            '<ul class="dropdown-menu" role="menu" style="min-width: 0px;min-height: 0px;padding: 0;">' +
-                               '<li><a style="color:##" class="btn btn-white btn-xs pull-right" onclick="deletePost(' + postObject['Id'] + ')"><i class="fa fa-fw fa-times"></i></a></li>' +
-                               '<li><a href="#postContent" class="btn btn-white btn-xs pull-right" onclick="editPost(' + postObject['Id'] + ')"><i class="fa fa-fw fa-edit"></i></a></li>' +
+                               '<li><a style="font-weight: bold;" onclick="deletePost(' + postObject['Id'] + ')"><i style="color: #BF360C;" class="fa fa-fw fa-times"></i> Xóa</a></li>' +
+                               '<li><a style="font-weight: bold;" href="#postContent" onclick="editPost(' + postObject['Id'] + ')"><i style="color: #004D40;" class="fa fa-fw fa-edit"></i> Chỉnh sửa</a></li>' +
                            '</ul>' +
                        '</div>' +
                        '</div>' +

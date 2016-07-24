@@ -600,6 +600,3 @@ ul.timeline-list li.media > .media-body {
     padding: 0 10px !important;
     padding-left: 10px !important;
 }
-#menu ul li a [class*="fa fa-"] {
-    text-align: right;
-}

@@ -321,16 +321,25 @@
 <script>
     var curTokenId = -1;
     $(document).ready(function () {
-        $('.left-nav').css({ position: relative });
         setTimeout(function () {
             $('.left-nav')
-               .affix({
-                   offset: {
-                       top: function () { return 370 },
-                       bottom: 10
-                   }
-               });
+                .affix({
+                    offset: {
+                        top: function () {
+                            console.log("call this funtion");
+                            return 370;
+                        },
+                        bottom: 10
+                    }
+                });
+            $('.left-nav')
+            .on("affix.bs.affix", function () {
+                $(this).css("width", $(this).parent().width() + "px");
+            });
         }, 100);
+        $(document).on("resize", function () {
+            $('.left-nav').css("width", $('.left-nav').parent().width() + "px");
+        });
 
         $('.modalDialog').fadeIn();
 
@@ -505,7 +514,7 @@
         if (postObject['UserId'] != '@curUser.Id') {
             reportDiv = '<div style="position: absolute;right: 0;width: 30px;">' +
               '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
-              '<div style="color:#f9a825" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>' +
+              '<div class="link-cursor" style="color:#000000" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>' +
                        '</div>' +
                        '</div>';
         }

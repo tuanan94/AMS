@@ -17,7 +17,7 @@ namespace AMS
         public static weatherResult getWeatherResult() // return weatherCode
         {
             weatherResult weatherResult = new weatherResult();
-            /*String requestContent = "";
+            String requestContent = "";
             requestContent += "https://api.worldweatheronline.com/premium/v1/weather.ashx?num_of_days=3&q=";
             requestContent += "Ho+Chi+Minh+City"; //location
             requestContent += "&key=";
@@ -39,7 +39,7 @@ namespace AMS
             weatherResult.code = weatherCode;
             weatherResult.desc = weatherDes;
             weatherResult.weatherIcon = weatherResult.getWeatherIcon(weatherCode, weatherIconUrl);
-            weatherResult.tempC = temp_C;*/
+            weatherResult.tempC = temp_C;
             return weatherResult;
         }
     }

@@ -337,7 +337,7 @@ p {
 }
 
 ul.timeline-list li.media > .media-body {
-    margin: 19px 0 10px 0;
+    margin: 0 0 10px 0;
 }
 
 ul.timeline-list li.media:before {

@@ -335,7 +335,33 @@ $.extend(true, $.fn.dataTable.defaults, {
         }
     }
 });
+function setNavPosition() {
+    var path = location.pathname;
+    if (path === "/" || path.indexOf("/House/") > -1) {
+        $('.left-nav')
+            .css(
+            {
+                "width": $('.left-nav').parent().width() + "px",
+                "position": "relative"
+            });
+    } else {
+        $('.left-nav')
+            .css(
+            {
+                "width": $('.left-nav').parent().width() + "px",
+                "position": "fixed"
+            });
+    }
+}
 $(document).ready(function () {
+    setNavPosition();
+
+//    setTimeout(function() {
+        $(document).on("resize", function () {
+            $('.left-nav').css("width", $('.left-nav').parent().width() + "px");
+        });
+//    }, 100);
+    
 
     $("#addHelpdeskRequestForm").validate({
         rules: {

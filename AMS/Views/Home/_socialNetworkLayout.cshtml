@@ -40,19 +40,11 @@
 
 @if (isResidentOrHouseOwner)
 {
-    string position = "";
-    <div class="col-md-2">
-        @if (Request.Url.PathAndQuery == "/" || url.Contains("/House/"))
-        {
-            position = "relative";
-        }
-        else
-        {
-            position = "fixed";
-        }
-        <div class="row sidebar left hidden-xs left-nav" style="width: 183px;bottom: inherit; left: inherit; position: @position;top: inherit;">
+
+    <div class="col-md-3">
+        <div class="row sidebar left hidden-xs left-nav" style="width: 100%; bottom: inherit; left: inherit; position: relative;top: inherit;">
             <div class="sidebar-block" style="margin: auto; width: 100%;">
-                <a href="@(curHouse == null ? "#" : ("/House/" + curHouse.Id))" class="style_prevu_kit" style="width: 100%">
+                <a href="@(curHouse == null ? "#" : ("/House/" + curHouse.Id))" style="width: 100%">
                     <div class="profile">
                         <img src="@(curHouse == null || curHouse.ProfileImage == null || curHouse.ProfileImage.Equals("") ? "/Content/images/home_default.jpg" : curHouse.ProfileImage)" alt="HOUSE" class="img-circle" width="100px">
                         <h4>Nhà @(curHouse == null || curHouse.HouseName.Equals("") ? "chưa xác định" : curHouse.HouseName)</h4>
@@ -75,7 +67,7 @@
                         <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-fw fa-stumbleupon-circle"></i> Yêu cầu sửa chữa</a>
                     </li>
                     <li class="@(url.Contains("BalanceSheet") ? "active" : "")">
-                        <a href="/Management/BalanceSheet/View"><i class="fa fa-dollar"></i> Tài chính tòa nhà</a>
+                        <a href="/Management/BalanceSheet/View"><i class="fa fa-fw fa-dollar"></i> Tài chính tòa nhà</a>
                     </li>
                 </ul>
             </div>
@@ -83,7 +75,7 @@
         </div>
     </div>
 }
-<div id="content" class="content col-md-10 " style="margin-left:0; @(isResidentOrHouseOwner == true ? "" : "margin-left:initial")">
+<div id="content" class="content col-md-9" style="margin-left:0; @(isResidentOrHouseOwner == true ? "" : "margin-left: 16.66666667%;")">
 
     @RenderBody()
     <!--Footer-->
