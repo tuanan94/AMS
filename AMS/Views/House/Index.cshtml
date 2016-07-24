@@ -86,18 +86,11 @@
         min-width: 0;
     }
 
-    ul.timeline-list li.media > .media-body .panel {
-        min-width: 0px;
-        width: 100%;
-        border: 1px solid;
-        border-color: #e5e6e9 #dfe0e4 #d0d1d5;
-        border-radius: 3px;
-        box-shadow: none;
-    }
 
-        ul.timeline-list li.media > .media-body .panel.share {
-            z-index: 1031;
-        }
+
+    ul.timeline-list li.media > .media-body .panel.share {
+        z-index: 1031;
+    }
 
     .panel.panel-default ul.comments {
         width: 100%;
@@ -201,9 +194,6 @@
         font-weight: normal;
     }
 
-    ul.timeline-list li.media > .media-body {
-        margin: 19px 0 10px 0;
-    }
 
     ul.timeline-list li.media:before {
         position: static;
@@ -217,7 +207,7 @@
     }
     /*AnLTNM change*/
 </style>
-<div class="container-fluid" style="background: #00695C;">
+<div class="row" style="background: #00695C;margin-bottom: 30px;">
 
     @*    <div class="cover overlay" style="position: relative">*@
     @*        <img src="~/Content/images/familycover.jpg" alt="cover">*@
@@ -227,7 +217,7 @@
     @*        <img src="@(curHouse.ProfileImage == null || curHouse.ProfileImage.Equals("") ? "/Content/images/home_default.jpg" : curHouse.ProfileImage)" style="width: auto; height: 100%; border-bottom-left-radius: 30px; border-top-right-radius: 30px;"/>*@
     @*        <h2 style="color: white; background-color: #25AD9F; border-radius: 30px;">@curHouse.HouseName</h2>*@
     @*    </div>*@
-    <div style="margin-top: -120px; text-align: center; position: relative; display: inline-block;">
+    <div style="margin-top: -120px; text-align: center; position: relative; display: inline-block;margin-left: 25px;">
         <div class="border-img" style="width: 190px; height: 190px; background: #fff; float: left; border: 2px solid #fff;">
             <img src="@(curHouse.ProfileImage == null || curHouse.ProfileImage.Equals("") ? "/Content/images/home_default.jpg" : curHouse.ProfileImage)" style="width: auto; height: 100%;">
         </div>
@@ -243,7 +233,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-8" style="padding-left: 0">
         <div class="panel panel-default">
             <div class="panel-heading panel-heading-gray">
                 <h4>Bài viết</h4>
@@ -332,14 +322,7 @@
                         bottom: 10
                     }
                 });
-            $('.left-nav')
-            .on("affix.bs.affix", function () {
-                $(this).css("width", $(this).parent().width() + "px");
-            });
         }, 100);
-        $(document).on("resize", function () {
-            $('.left-nav').css("width", $('.left-nav').parent().width() + "px");
-        });
 
         $('.modalDialog').fadeIn();
 

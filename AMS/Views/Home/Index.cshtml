@@ -108,7 +108,7 @@
 @*        <img src="~/Content/images/banner-842.jpg" alt="cover">*@
 @*    </div>*@
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-8" style="padding-left: 0">
         <div id="addNewPost" class="new-post" onclick="onBlurPost()"></div>
         <ul class="timeline-list">
             <li class="media mediawithoutBorder">
@@ -386,22 +386,11 @@
             $('.left-nav')
                 .affix({
                     offset: {
-                        top: function() {
-                            console.log("call this funtion");
-                            return 370;
-                        },
+                        top: function() {return 370;},
                         bottom: 10
                     }
                 });
-            $('.left-nav')
-            .on("affix.bs.affix",function() {
-                    $(this).css("width", $(this).parent().width() + "px");
-                });
         }, 100);
-
-        $(document).on("resize", function () {
-            $('.left-nav').css("width", $('.left-nav').parent().width() + "px");
-        });
 
         $('.modalDialog').fadeIn();
 

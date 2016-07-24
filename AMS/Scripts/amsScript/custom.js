@@ -356,12 +356,14 @@ function setNavPosition() {
 $(document).ready(function () {
     setNavPosition();
 
-//    setTimeout(function() {
-        $(document).on("resize", function () {
-            $('.left-nav').css("width", $('.left-nav').parent().width() + "px");
+    //    setTimeout(function() {
+    window.addEventListener("resize", function () {
+        $('.left-nav').each(function () {
+            $(this).css("width", $('.left-nav').parent().width() + "px");
         });
-//    }, 100);
-    
+    });
+    //    }, 100);
+
 
     $("#addHelpdeskRequestForm").validate({
         rules: {
