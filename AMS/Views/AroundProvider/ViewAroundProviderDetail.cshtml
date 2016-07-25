@@ -1,12 +1,14 @@
-﻿@{
+﻿@using AMS.Models
+@{
     ViewBag.Title = "Tất cả dịch vụ";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
-    List<AroundProvider> allProviders = ViewBag.AllProviders;
+    List<AroundProviderDetailModel> allProviders = ViewBag.AllProviders;
     List<AroundProviderCategory> allCategories = ViewBag.AllCategorys;
     AroundProviderCategory highestProCat = ViewBag.highestProCat;
     String activeCat = ViewBag.activeCat;
 }
 <link href="~/Content/aroundProvider/main.css" rel="stylesheet" />
+<link href="~/Content/css/jquery.raty.css" rel="stylesheet" />
 
 <div class="col-md-12">
     <div class="panel panel-default">
@@ -30,7 +32,7 @@
                                         AroundProviderCategory c = allCategories.ElementAt(i);
                                         if (c != null)
                                         {
-                                            <li><a href="javascript:void(0)" data-filter=".category-@c.Id" class="filter">@c.Name</a></li>
+                                            <li><a  href="javascript:void(0)" data-filter=".category-@c.Id" class="filter">@c.Name</a></li>
                                         }
                                     }
                                 }
@@ -41,19 +43,19 @@
                 </div>
 
                 @*        <div class="row" >*@
-                <div class="form-group" id="Container">
+                <div class="form-group" id="Container" style="">
                     @{
                         foreach (var provider in allProviders)
                         {
-                            <div class="col-md-4 mix work-item category-@provider.AroundProviderCategoryId" style="float: left; height: 330px; overflow: hidden">
-                                <div class="single-project @provider.AroundProviderCategory.Id">
-                                    <div class="project-preview">
+                            <div class="col-md-4 mix work-item category-@provider.ProviderCatId" style="float: left; overflow: hidden">
+                                <div class="single-project @provider.ProviderCatId">
+                                    <div class="project-preview" style="overflow: hidden">
                                         <a href="/Home/AroundService/SingleProviderDetail?id=@provider.Id">
                                             <img src="@provider.ImageUrl" class="img-responsive" alt="">
                                         </a>
                                         <div class="project-meta">
                                             <div class="project-date">
-                                                <p class="icon-phone"> @provider.Tel</p>
+                                                <div class="user-rate" data-score="@provider.RatePoint"></div>
                                             </div>
 
                                             <div class="project-count">
@@ -83,21 +85,25 @@
 
 <script>
     $(document).ready(function () {
-        setTimeout(function () {
-
-            var heighest = $("#highest").val();
-            if (heighest !== "null") {
-                $('#Container')
-                    .mixItUp({
-                        load: {
-                            filter: ".category-" + heighest
-                        }
-                    });
-            } else {
-                $('#Container')
-                   .mixItUp();
-            }
-        },
-            500);
+        $.fn.raty.defaults.path = '/Content/images';
+        $(".user-rate").raty({
+            score: function () {
+                return $(this).attr('data-score');
+            },
+            number: 5,
+            readOnly: true
+        });
+        var heighest = $("#highest").val();
+        if (heighest !== "null") {
+            $('#Container')
+                .mixItUp({
+                    load: {
+                        filter: ".category-" + heighest
+                    },
+                });
+        } else {
+            $('#Container')
+               .mixItUp({});
+        }
     });
 </script>

@@ -73,7 +73,7 @@
                     @*                    }*@
 
                     <li style="@(url.Contains("/AroundService/") ? "background-color:#21988c" : "")">
-                        <a href="/Home/AroundService/All"><i class="fa fa-fw fa-stumbleupon-circle"></i> Dịch vụ xung quanh</a>
+                        <a href="/Home/AroundService/All"><i class="fa fa-fw fa-street-view"></i> Dịch vụ xung quanh</a>
                     </li>
                     <li style="@(url.Contains("/Survey/") ? "background-color:#21988c" : "")">
                         <a href="/Survey/doSurvey"><i class="fa fa-check-square-o"></i> Khảo sát</a>
@@ -82,19 +82,19 @@
                     @if (isManager)
                     {
                         <li style="background-color: #428bca">
-                            <a href="/Management/HelpdeskRequest/ManageHdRequest"><i class="fa fa-black-tie"></i> Quản lý</a>
+                            <a href="/Management/HelpdeskRequest/ManageHdRequest"><i class="fa fa-fw fa-black-tie"></i> Quản lý</a>
                         </li>
                     }
                     @if (isAdmin)
                     {
                         <li style="background-color: #465665">
-                            <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-black-tie"></i> Quản lý</a>
+                            <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-fw fa-black-tie"></i> Quản lý</a>
                         </li>
                     }
                     @if (isSupporter)
                     {
                         <li style="background-color: #388e3c">
-                            <a href="/HelpdeskSupporter"><i class="fa fa-wrench"></i> Sửa chữa</a>
+                            <a href="/HelpdeskSupporter"><i class="fa fa-fw fa-wrench"></i> Sửa chữa</a>
                         </li>
                     }
                 </ul>
@@ -154,6 +154,8 @@
     <script src="~/Scripts/amsScript/lg-thumbnail.js"></script>
     <script src="~/Scripts/amsScript/lg-fullscreen.js"></script>
     <script src="~/Scripts/amsScript/SocialMediaCustom.js"></script>
+
+    <script src="~/Scripts/amsScript/jquery.raty.js"></script>
 
     @RenderSection("scripts", required: false)
 

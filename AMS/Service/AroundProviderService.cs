@@ -70,5 +70,9 @@ namespace AMS.Service
         {
             _arroundProviderRepository.Add(e);
         }
+        public AroundProvider FindByIdAfterAdd(AroundProvider e)
+        {
+            return _arroundProviderRepository.FindByIdAfterAdd(e, e.Id);
+        }
     }
 }

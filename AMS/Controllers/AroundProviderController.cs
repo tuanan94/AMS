@@ -22,6 +22,8 @@ namespace AMS.Controllers
         AroundProviderService _aroundProviderService = new AroundProviderService();
         AroundProviderProductService _aroundProviderProductService = new AroundProviderProductService();
         AroundProviderCategoryService _aroundProviderCategoryService = new AroundProviderCategoryService();
+        UserRateAroundProviderServices _rateAroundProviderServices = new UserRateAroundProviderServices();
+        UserServices _userServices = new UserServices();
 
         //        // GET: ServiceAround
         //        public ActionResult Index()
@@ -45,13 +47,29 @@ namespace AMS.Controllers
         [Route("Home/AroundService/All")]
         public ActionResult ViewGetAllAroundProvider(String cat)
         {
-            ViewBag.AllProviders = _aroundProviderService.GetAllProviderWithCat(cat);
+            List<AroundProvider> providers = _aroundProviderService.GetAllProviderWithCat(cat);
             List<AroundProviderCategory> allCat = _aroundProviderCategoryService.GetAllOrderByProviderClickCount();
+            AroundProviderDetailModel providerDetail = null;
+            List<AroundProviderDetailModel> providerDetailList = new List<AroundProviderDetailModel>();
+            foreach (var provider in providers)
+            {
+                providerDetail = new AroundProviderDetailModel();
+                providerDetail.Id = provider.Id;
+                providerDetail.Name = provider.Name;
+                providerDetail.ProviderCatId = provider.AroundProviderCategoryId.Value;
+                providerDetail.Address = provider.Address;
+                providerDetail.ClickCount = provider.ClickCount.Value;
+                providerDetail.ImageUrl = provider.ImageUrl;
+
+                providerDetail.RatePoint = provider.UserRateAroundProviders.ToList().Count == 0 ? 0.0 : provider.UserRateAroundProviders.Average(r => r.Point).Value;
+                providerDetailList.Add(providerDetail);
+            }
             ViewBag.AllCategorys = allCat;
             if (allCat.Count != 0)
             {
                 ViewBag.highestProCat = allCat.First();
             }
+            ViewBag.AllProviders = providerDetailList;
             ViewBag.activeCat = cat;
             return View("ViewAroundProviderDetail");
         }
@@ -64,18 +82,72 @@ namespace AMS.Controllers
             List<AroundProviderProduct> products = _aroundProviderProductService.GetAroundProviderProduct(id);
 
             AroundProvider curProvider = _aroundProviderService.GetProvider(id);
+            int rateCount = 0;
+            double ratePoint = 0.0;
+            int curUserRate = -1;
             if (curProvider != null)
             {
                 curProvider.ClickCount++;
                 curProvider.LastModified = DateTime.Now;
                 _aroundProviderService.Update(curProvider);
+                rateCount = curProvider.UserRateAroundProviders.Count;
+                if (rateCount != 0)
+                {
+                    ratePoint = curProvider.UserRateAroundProviders.Average(r => r.Point).Value;
+                    var currentUserRate = curProvider.UserRateAroundProviders.Where(r => r.UserId == Int32.Parse(User.Identity.GetUserId())).ToList();
+                    if (currentUserRate.Count != 0)
+                    {
+                        curUserRate = currentUserRate.First().Point.Value;
+                    }   
+                }
             }
 
+            ViewBag.RateCount = rateCount;
+            ViewBag.RatePoint = ratePoint;
+            ViewBag.CurUserRate = curUserRate;
             ViewBag.Products = products;
             ViewBag.CurProvider = curProvider;
-
             return View();
         }
+
+        [HttpPost]
+        [Route("Home/AroundService/UserRate")]
+        public ActionResult UserRate(int userId, int providerId, int point)
+        {
+            MessageViewModels response = new MessageViewModels();
+            User u = _userServices.FindById(userId);
+            AroundProvider provider = _aroundProviderService.FindById(providerId);
+            if (null != u && provider != null)
+            {
+                if (provider.UserRateAroundProviders.Any(r => r.UserId == u.Id))
+                {
+                    response.StatusCode = 2;
+                    response.Data = provider.UserRateAroundProviders.First(r => r.UserId == u.Id).Point;
+                    return Json(response);
+                }
+                UserRateAroundProvider userRate = new UserRateAroundProvider();
+                userRate.AroundProviderId = providerId;
+                userRate.UserId = userId;
+                userRate.Point = point;
+                _rateAroundProviderServices.Add(userRate);
+                _rateAroundProviderServices.Reload(userRate);
+                provider = _aroundProviderService.FindByIdAfterAdd(provider);
+                object obj =
+                    new
+                    {
+                        count = provider.UserRateAroundProviders.Count,
+                        point = provider.UserRateAroundProviders.Average(r => r.Point)
+                    };
+                response.Data = obj;
+            }
+            else
+            {
+                response.StatusCode = -1;
+            }
+            return Json(response);
+        }
+
+
 
         [HttpGet]
         [ManagerAuthorize]
@@ -368,7 +440,7 @@ namespace AMS.Controllers
                     //Double.Parse(lng.Value);
                     provider.Address = serviceProvider.SrvProvAddress;
                     provider.Latitude = Double.Parse(lat.Value).ToString();
-                    provider.Longitude = Double.Parse(lng.Value).ToString();  
+                    provider.Longitude = Double.Parse(lng.Value).ToString();
                 }
                 catch (Exception)
                 {
@@ -581,7 +653,7 @@ namespace AMS.Controllers
                             {
                                 _aroundProviderProductService.DeleteById(pro.Id);
                             }
-                            
+
                         }
                     }
                 }
@@ -612,6 +684,7 @@ namespace AMS.Controllers
             }
             return Json(response);
         }
+
 
         [HttpPost]
         [Route("Management/Image/Upload")]
@@ -675,8 +748,8 @@ namespace AMS.Controllers
                 int thumbHeight = Int32.Parse(Request.Form["thumbHeight"]);
                 if (pic != null)
                 {
-                    fileName = SaveImage(pic, width, height,true);
-                    thumbFileName = SaveImage(pic, thumbWidth, thumbHeight,false);
+                    fileName = SaveImage(pic, width, height, true);
+                    thumbFileName = SaveImage(pic, thumbWidth, thumbHeight, false);
 
                     object obj = new
                     {
@@ -700,7 +773,7 @@ namespace AMS.Controllers
             return Json(response);
         }
 
-        private string SaveImage(HttpPostedFile pic, int width, int height,bool isScaled)
+        private string SaveImage(HttpPostedFile pic, int width, int height, bool isScaled)
         {
             string newPath = Server.MapPath(AmsConstants.ImageFilePath);
             if (!Directory.Exists(newPath))
@@ -717,7 +790,7 @@ namespace AMS.Controllers
             }
             else
             {
-               target = CommonUtil.FixedSize(System.Drawing.Image.FromStream(pic.InputStream), cropRect.Width, cropRect.Height, true);
+                target = CommonUtil.FixedSize(System.Drawing.Image.FromStream(pic.InputStream), cropRect.Width, cropRect.Height, true);
             }
 
             string fileName =

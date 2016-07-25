@@ -417,6 +417,7 @@
     <Compile Include="Service\AdminService.cs" />
     <Compile Include="Service\PendingMemberService.cs" />
     <Compile Include="Service\TestService.cs" />
+    <Compile Include="Service\UserRateAroundProviderServices.cs" />
     <Compile Include="Service\UserReportService.cs" />
     <Compile Include="Service\UserService.cs" />
     <Compile Include="Service\UserServices.cs" />
@@ -486,6 +487,7 @@
     <Content Include="Content\css\FamilyTree.css" />
     <Content Include="Content\css\jquery-ui.min.css" />
     <Content Include="Content\css\jquery.datetimepicker.css" />
+    <Content Include="Content\css\jquery.raty.css" />
     <Content Include="Content\css\jquery.timepicker.css" />
     <Content Include="Content\css\lightgallery.min.css" />
     <Content Include="Content\css\media-upload.css" />
@@ -499,6 +501,8 @@
     <Content Include="Content\images\58164.jpg" />
     <Content Include="Content\images\addimage.png" />
     <Content Include="Content\images\banner-842.jpg" />
+    <Content Include="Content\images\cancel-off.png" />
+    <Content Include="Content\images\cancel-on.png" />
     <Content Include="Content\images\defaultPhoto.png" />
     <Content Include="Content\images\defaultProfile.png" />
     <Content Include="Content\images\error_no_house.png" />
@@ -511,6 +515,9 @@
     <Content Include="Content\images\lock-1.jpg" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\defaultStore.png" />
+    <Content Include="Content\images\star-half.png" />
+    <Content Include="Content\images\star-off.png" />
+    <Content Include="Content\images\star-on.png" />
     <Content Include="Content\images\WeatherIcon\Cloudy.gif" />
     <Content Include="Content\images\WeatherIcon\Lightning.gif" />
     <Content Include="Content\images\WeatherIcon\Partlycloudy.gif" />
@@ -573,6 +580,7 @@
     <Content Include="Scripts\amsScript\additional-methods.js" />
     <Content Include="Scripts\amsScript\DisplaySinglePost.js" />
     <Content Include="Scripts\amsScript\jquery.mousewheel.min.js" />
+    <Content Include="Scripts\amsScript\jquery.raty.js" />
     <Content Include="Scripts\amsScript\jquery.validate.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />

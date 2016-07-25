@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web;
 
@@ -77,6 +78,20 @@ namespace AMS.Repository
         {
             table.RemoveRange(entities);
             db.SaveChanges();
+        }
+
+        public void Reload(T entity)
+        {
+            db.Entry(entity).Reload();
+        }
+
+        public T FindByIdAfterAdd(T entity, int id)
+        {
+            // Detach the object from the context
+            ((IObjectContextAdapter)db).ObjectContext.Detach(entity);
+
+            // Now find the product by primary key (detached entities are not cached)
+            return table.Find(id);
         }
     }
 }

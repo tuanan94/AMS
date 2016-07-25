@@ -408,7 +408,7 @@ body {
     width: 33.3333333%;
     float: left;
     padding: 5px;
-    text-align: center
+    text-align: center;
 }
 
 .canvas-bls {
@@ -548,7 +548,36 @@ ul.timeline-list li.media > .media-body {
     top: inherit !important;
 }
 
-#slide-left li a{
+#slide-left li a {
     padding: 0 10px !important;
     padding-left: 10px !important;
 }
+
+.provider-info > li:before {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.provider-info > li {
+    line-height: 30px;
+}
+
+    .provider-info > li i {
+        line-height: 30px;
+        width: 18px;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .provider-info > li > strong {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .provider-info > li > span {
+        font-size: 15px;
+        font-style: italic;
+        font-weight: 100;
+        line-height: 16px !important;
+        color: #212121;
+    }
