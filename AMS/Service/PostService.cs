@@ -14,8 +14,8 @@ namespace AMS.Service
         GenericRepository<Comment> commentRepository = new GenericRepository<Comment>();
         public void createPost(PostViewModel post)
         {
-           
-          Post h = new Post();
+
+            Post h = new Post();
             h.ImgUrl = post.ImgUrl;
             h.Title = post.Title;
             h.CreateDate = post.CreateDate;
@@ -34,10 +34,10 @@ namespace AMS.Service
             postRepository.Add(p);
             return p.Id;
         }
-        
+
         public void CreatePosts(Post post)
         {
-            
+
 
             postRepository.Add(post);
         }
@@ -45,7 +45,7 @@ namespace AMS.Service
         {
             Post h = new Post();
             h.Title = Title;
-          //  h.PostId = PostId;
+            //  h.PostId = PostId;
 
             postRepository.Add(h);
         }
@@ -56,7 +56,7 @@ namespace AMS.Service
         }
         public List<Post> getAllPost()
         {
-            var result =  postRepository.List.Where(t=>t.Status!=SLIM_CONFIG.POST_STATUS_HIDE).OrderByDescending(t=>t.Id).ToList();
+            var result = postRepository.List.Where(t => t.Status != SLIM_CONFIG.POST_STATUS_HIDE).OrderByDescending(t => t.Id).ToList();
             return result;
         }
         public List<PostMapping> getAllPostMapping(int? tokenId, int? houseId)
@@ -64,7 +64,7 @@ namespace AMS.Service
             List<Post> allPostWithHouseID = new List<Post>();
             List<Post> allRaw = getAllPost();
             List<Post> result = new List<Post>();
-            
+
             if (houseId != null)
             {
                 foreach (Post p in allRaw)
@@ -90,7 +90,7 @@ namespace AMS.Service
             {
                 position = allPostWithHouseID.FindIndex(p => p.Id == tokenId);
             }
-            for(int i = position + 1; i < allPostWithHouseID.Count && result.Count < SLIM_CONFIG.POST_NUMBER_SOCIAL_FEED;i++)
+            for (int i = position + 1; i < allPostWithHouseID.Count && result.Count < SLIM_CONFIG.POST_NUMBER_SOCIAL_FEED; i++)
             {
                 result.Add(allPostWithHouseID.ElementAt(i));
             }
@@ -110,7 +110,7 @@ namespace AMS.Service
             }
             //Convert to post Mapping
             List<PostMapping> postMappingResult = new List<PostMapping>();
-            foreach(Post p in result)
+            foreach (Post p in result)
             {
                 PostMapping pMapping = new PostMapping();
                 pMapping.Id = p.Id;
@@ -147,13 +147,13 @@ namespace AMS.Service
 
         public List<Post> getAllPostByRole(int roleId)
         {
-            var result = postRepository.List.Where(t => t.User.RoleId == roleId).OrderByDescending(t =>t.CreateDate).ToList();
+            var result = postRepository.List.Where(t => t.User.RoleId == roleId).OrderByDescending(t => t.CreateDate).ToList();
             return result;
         }
 
         public List<Post> getAllPostById(int id)
         {
-            var result = postRepository.List.Where(t => t.Id==id).ToList();
+            var result = postRepository.List.Where(t => t.Id == id).ToList();
             return result;
         }
         public List<Post> getAllPost(int? tokenId, int? houseId)
@@ -169,7 +169,8 @@ namespace AMS.Service
                         result.Add(p);
                     }
                 }
-            }else
+            }
+            else
             {
                 result = allPost;
             }
@@ -180,7 +181,7 @@ namespace AMS.Service
         {
             return postRepository.List.ToList();
         }
-      
+
         public IEnumerable<Post> getCommentBelongPost(int id)
         {
             //   return postRepository.List.ToList().Where(t => t.PostId == id);
@@ -200,27 +201,36 @@ namespace AMS.Service
         {
             return -1;
         }
-        public List<CommentMapping> comments(int postid)
+
+        public List<Comment> GetCommentByPostId(int postid)
         {
-            List<Comment> allComment = commentRepository.List.ToList();
-            List<CommentMapping> result = new List<CommentMapping>();
-            foreach(Comment c in allComment)
+            return commentRepository.List.Where(c => c.postId == postid).ToList();
+        }
+        public List<Comment> GetCommentByPostIdHasSmallerId(int postid, int lastId)
+        {
+            return commentRepository.List.Where(c => c.postId == postid && c.id < lastId).ToList();
+        }
+        public List<CommentMapping> GetNewComment(int postId, int lastCommentId)
+        {
+            List<Comment> allComment = null;
+            if (lastCommentId == 0)
             {
-                if(postid == c.postId)
-                {
-                    CommentMapping cMapping = new CommentMapping();
-                    cMapping.id = c.id;
-                    cMapping.detail = c.detail;
-                    cMapping.createdDate = c.createdDate.GetValueOrDefault();
-                    cMapping.username = c.User.Username;
-                    cMapping.fullName = c.User.Fullname;
-                    cMapping.userProfile = c.User.ProfileImage;
-                    cMapping.userId = c.userId.GetValueOrDefault();
-                    result.Add(cMapping);
-                }
+                allComment = commentRepository.List.Where(p => postId == p.postId).ToList();
+            }
+            else
+            {
+                allComment = commentRepository.List.Where(p => postId == p.postId && p.id > lastCommentId).ToList();
+            }
+
+            List<CommentMapping> result = new List<CommentMapping>();
+            foreach (Comment c in allComment)
+            {
+                CommentMapping cMapping = parseCommentToModel(c);
+                result.Add(cMapping);
             }
             return result;
         }
+
         public Comment findCommentById(int commentId)
         {
             return commentRepository.FindById(commentId);
@@ -234,6 +244,19 @@ namespace AMS.Service
             //Survey survey = new Survey();
             //survey.Title = obj.Title;
             postRepository.Update(obj);
+        }
+
+        private CommentMapping parseCommentToModel(Comment c)
+        {
+            CommentMapping cMapping = new CommentMapping();
+            cMapping.id = c.id;
+            cMapping.detail = c.detail;
+            cMapping.createdDate = c.createdDate.GetValueOrDefault().ToString("s");
+            cMapping.username = c.User.Username;
+            cMapping.fullName = c.User.Fullname;
+            cMapping.userProfile = c.User.ProfileImage;
+            cMapping.userId = c.userId.GetValueOrDefault();
+            return cMapping;
         }
     }
 

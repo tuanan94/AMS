@@ -29,8 +29,14 @@
         Layout = "~/Views/Management/__ManagementLayout.cshtml";
     }
 }
-
-<div class="col-md-12">
+@{
+    var classWrapper = "col-md-12";
+    if (roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT)
+    {
+        classWrapper = "row";
+    }
+}
+<div class="@classWrapper">
     <div class="panel panel-default">
 
 
@@ -41,7 +47,7 @@
                     if (roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT)
                     {
                         <li>
-                            <a style="color: #25ad9f;" href="/Home/HelpdeskRequest/Create"><i class="fa fa-send"></i> Gửi yêu cầu</a>
+                            <a style="color: #25ad9f;" href="/Home/HelpdeskRequest/Create"><i style="color: #25ad9f;"  class="fa fa-send"></i> Gửi yêu cầu</a>
                         </li>
                     }
                 }

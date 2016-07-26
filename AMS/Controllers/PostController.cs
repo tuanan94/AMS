@@ -1,12 +1,14 @@
 ﻿using AMS.Service;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Reflection;
 using AMS;
+using AMS.Models;
 using AMS.ObjectMapping;
 
 namespace AMS.Controllers
@@ -43,8 +45,8 @@ namespace AMS.Controllers
             p.Body = content;
             p.PostStatus = SLIM_CONFIG.POST_STATUS_PUBLIC;
             p.EmbedCode = embeded;
-            int postId =  postService.addPost(p);
-            if(images == null)
+            int postId = postService.addPost(p);
+            if (images == null)
             {
                 images = new List<string>();
             }
@@ -58,7 +60,7 @@ namespace AMS.Controllers
         {
             User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
             Post targetPost = postService.findPostById(postId);
-            if (targetPost == null||targetPost.UserId==null)
+            if (targetPost == null || targetPost.UserId == null)
             {
                 return "error";
             }
@@ -72,7 +74,7 @@ namespace AMS.Controllers
             c.detail = detail;
             c.createdDate = DateTime.Now;
             postService.addComment(c);
-            notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POST, targetPost.UserId.Value, SLIM_CONFIG.NOTIC_VERB_COMMENT, curUser.Id,targetPost.Id);
+            notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POST, targetPost.UserId.Value, SLIM_CONFIG.NOTIC_VERB_COMMENT, curUser.Id, targetPost.Id);
             return "success";
 
         }
@@ -82,9 +84,9 @@ namespace AMS.Controllers
         [Authorize]
         public Object getPost(int? idToken, int? houseId)
         {
-            
-            List<PostMapping> all = postService.getAllPostMapping(idToken,houseId);
-            
+
+            List<PostMapping> all = postService.getAllPostMapping(idToken, houseId);
+
             // Serializer settings
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.ContractResolver = new CustomResolver(typeof(PostMapping));
@@ -93,7 +95,7 @@ namespace AMS.Controllers
             settings.Formatting = Formatting.Indented;
 
             // Do the serialization and output to the console
-            string json = JsonConvert.SerializeObject(all,settings);
+            string json = JsonConvert.SerializeObject(all, settings);
             return json;
         }
 
@@ -121,7 +123,7 @@ namespace AMS.Controllers
         public String getUserProfileForPost(int? postId)
         {
             String profileImage = "";
-            if(postId!=null && postId.HasValue == true)
+            if (postId != null && postId.HasValue == true)
             {
                 Post p = postService.findPostById(postId.Value);
                 profileImage = p.User.ProfileImage;
@@ -182,18 +184,69 @@ namespace AMS.Controllers
         }
         [HttpGet]
         [Authorize]
-        public Object getCommentsForPost(int? postId)
+        public ActionResult getCommentsForPost(int postId, int lastId)
         {
             // Serializer settings
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.ContractResolver = new CustomResolver(typeof(CommentMapping));
-            settings.PreserveReferencesHandling = PreserveReferencesHandling.None;
-            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            settings.Formatting = Formatting.Indented;
 
             // Do the serialization and output to the console
-            string json = JsonConvert.SerializeObject(postService.comments(postId.Value), settings);
-            return json;
+            object data = null;
+
+            List<Comment> allComment = null;
+            List<Comment> lastFiveComment = null;
+            if (lastId == 0)
+            {
+                allComment = postService.GetCommentByPostId(postId);
+                lastFiveComment = allComment.Skip(allComment.Count - 5).ToList();
+            }
+            else
+            {
+                allComment = postService.GetCommentByPostIdHasSmallerId(postId, lastId);
+                lastFiveComment = allComment.Skip(allComment.Count - 5).Reverse().ToList();
+            }
+            List<CommentMapping> result = new List<CommentMapping>();
+            long lastGetComment = DateTime.Now.Ticks;
+            foreach (Comment c in lastFiveComment)
+            {
+                CommentMapping cMapping = parseCommentToModel(c);
+                cMapping.lastGetComment = lastGetComment;
+                result.Add(cMapping);
+            }
+            if (result.Count == 0)
+            {
+                data = new { lastGetComment = DateTime.Now.Ticks };
+            }
+            else
+            {
+                int totalComment = 0;
+                if (lastId == 0)
+                {
+                    totalComment = allComment.Count;
+                }
+                data = new { data = result, lastGetComment = DateTime.Now.Ticks, totalComment = totalComment };
+            }
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult GetNewCommentsForPost(int postId, int newestCommentId)
+        {
+            MessageViewModels reponse = new MessageViewModels();
+            // Do the serialization and output to the console
+            var listComment = postService.GetNewComment(postId, newestCommentId);
+            int newestCommentIdUpdate = newestCommentId;
+            if (listComment.Count != 0)
+            {
+                newestCommentIdUpdate = listComment[listComment.Count - 1].id;
+            }
+            object obj = new
+            {
+                listComment = listComment,
+                lastGetComment = DateTime.Now.Ticks,
+                newestCommentId = newestCommentIdUpdate
+            };
+            reponse.Data = obj;
+            return Json(reponse, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -206,7 +259,7 @@ namespace AMS.Controllers
             });
         }
 
-        
+
         // GET: Post
         public ActionResult Index()
         {
@@ -223,12 +276,26 @@ namespace AMS.Controllers
             }
             postService.UpdatePost(p);
         }
+
+        private CommentMapping parseCommentToModel(Comment c)
+        {
+            CommentMapping cMapping = new CommentMapping();
+            cMapping.id = c.id;
+            cMapping.detail = c.detail;
+            cMapping.createdDate = c.createdDate.GetValueOrDefault().ToString("s");
+            cMapping.username = c.User.Username;
+            cMapping.fullName = c.User.Fullname;
+            cMapping.userProfile = c.User.ProfileImage;
+            cMapping.userId = c.userId.GetValueOrDefault();
+            return cMapping;
+        }
     }
 }
 public class CustomResolver : DefaultContractResolver
 {
     Type c;
-    public CustomResolver(Type c){
+    public CustomResolver(Type c)
+    {
         this.c = c;
     }
     protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)

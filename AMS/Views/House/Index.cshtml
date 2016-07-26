@@ -233,7 +233,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-8" style="padding-left: 0">
+    <div class="col-md-8" style="padding-left: 0;padding-right: 0">
         <div class="panel panel-default">
             <div class="panel-heading panel-heading-gray">
                 <h4>Bài viết</h4>
@@ -478,16 +478,13 @@
                     $('#userImagePost' + id).attr("src", "/Content/images/defaultProfile.png");
                 } else {
                     $('#userImagePost' + id).attr("src", obj["ProfileImage"]);
-
                 }
                 $('#userNamePost' + id).html(obj["Username"]);
                 $('#userHrefPost' + id).attr("href", "/Profile/" + obj["Id"]);
-
                 $('#userLoadProfilePost' + id).attr("onclick", "LoadUserProfile(" + obj["Id"] + ",true)");
-
             },
             error: function (er) {
-                alert(er)
+                alert(er);
             }
 
         });
@@ -548,10 +545,18 @@
                                     + postObject['EmbedCode']
                                     + '</div>'
                                 + '</div>'
-                                + '<div class="view-all-comments" id="countComment' + postObject['Id'] + '"><a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments</div>'
-                                + '<ul class="comments" id="commentsArea' + postObject['Id'] + '">'
+                                + '<div class="view-all-comments" style="height: 25px;">' +
+                                    '<div id="countComment' + postObject['Id'] + '" style="float: left;"><i style="color: #546E7A;"class="fa fa-comments-o"></i><i class="hide"> Chưa có bình luận</i> <span></span><strong> / </strong><span></span> <span> bình luận</span></div>' +
+                                    '<div class="hide" id="loadMoreComment' + postObject['Id'] + '" style="float: right;"><a onclick="loadMorePost(' + postObject['Id'] + ')"><i class="fa fa-refresh"></i> Tải bình luận trước đó </a></div>' +
+                                '</div>'
 
+                                + '<ul class="comments" id="commentsArea' + postObject['Id'] + '">'
                                 + '</ul>'
+
+                                + '<div class="view-all-comments" style="height: 25px; text-align:center">' +
+                                    '<div class=""><a onclick="getNewCommentsForPost(' + postObject['Id'] + ')"><i class="fa fa-refresh"></i> Tải mới </a></div>' +
+                                '</div>'
+
                                 + '<ul class="comments">'
                                  + '<li class="comment-form">'
                                         + '<div class="input-group" style="width: 100%;">'
@@ -571,73 +576,21 @@
 
     }
 
-    function addComment(postId) {
-        $.ajax({
-            url: "/Post/CreateComment",
-            type: "POST",
-            data: {
-                detail: $("#contentDetail" + postId).val(),
-                postId: postId,
-            },
-            success: function (successData) {
-                if (successData === 'success') {
-                    $("#commentsArea" + postId).html("");
-                    getCommentsForPost(postId);
-                    $("#contentDetail" + postId).val("");
-                } else {
-                    alert(successData);
-                }
-            },
-            error: function (er) {
-                alert(er);
-            }
-
-        });
-    }
-
-    function getCommentsForPost(postid) {
-        if (postid == null) {
-            alert("postid == null");
-            return;
-        }
-        $.ajax({
-            url: "/Post/getCommentsForPost",
-            type: "GET",
-            data: {
-                postId: postid,
-            },
-            success: function (successData) {
-                var obj = JSON.parse(successData);
-                if (obj.length === 0) {
-                    $("#countComment" + postid).html("Chưa có bình luận nào");
-                } else {
-                    $("#countComment" + postid).html(obj.length + " bình luận");
-                }
-                $.each(obj, function (index, comment) {
-                    addCommentToCommentArea(postid, comment);
-                });
-            },
-            error: function (er) {
-                alert(er)
-            }
-
-        });
-    }
-    function addCommentToCommentArea(postId, comment) {
-        $("#commentsArea" + postId).append('<li>'
-            + '<div class="media">'
-                + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)"  class="pull-left link-cursor">'
-                    + '<img  src="' + comment['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avartar-img link-cursor">'
-                + '</a>'
-                    + '<div class="media-body">'
-                        + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)" class="comment-author link-cursor">' + comment['fullName'] + ': </a>'
-                        + '<span>' + comment['detail'] + '</span>'
-                        + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
-                    + '</div>'
-            + '</div>'
-        + '</li>');
-
-    }
+    //    function addCommentToCommentArea(postId, comment) {
+    //        $("#commentsArea" + postId).append('<li>'
+    //            + '<div class="media">'
+    //                + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)"  class="pull-left link-cursor">'
+    //                    + '<img  src="' + comment['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avartar-img link-cursor">'
+    //                + '</a>'
+    //                    + '<div class="media-body">'
+    //                        + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)" class="comment-author link-cursor">' + comment['fullName'] + ': </a>'
+    //                        + '<span>' + comment['detail'] + '</span>'
+    //                        + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
+    //                    + '</div>'
+    //            + '</div>'
+    //        + '</li>');
+    //
+    //    }
 
     function getImagesForPost(index, id) {
         appenImageToPost(index, id);
@@ -677,18 +630,18 @@
         $("#postContent").val('');
     }
     function report(id) {
-        $("#reportPostId").val(id)
-        $("#reportContent").val("")
-        $("#reportModal").modal()
+        $("#reportPostId").val(id);
+        $("#reportContent").val("");
+        $("#reportModal").modal();
     }
-    function processSendReport() {
-        var postId = $("#reportPostId").val()
-        var reportContent = $("#reportContent").val()
-        console.log("processSendReport: postid=" + postId + "reportContent=" + reportContent)
-        sendReport(postId, reportContent)
+    function processSendReport() {;
+        var postId = $("#reportPostId").val();
+        var reportContent = $("#reportContent").val();
+        console.log("processSendReport: postid=" + postId + "reportContent=" + reportContent);
+        sendReport(postId, reportContent);
     }
     function deleteNotification(noticChangedId) {
-        console.log('deleteNotification' + noticChangedId)
+        console.log('deleteNotification' + noticChangedId);
         $.ajax({
             url: "/Home/deleteNotification",
             type: "POST",

@@ -7,42 +7,42 @@
       <Diagram DiagramId="22444cd77b884bcba5683c1f7a843537" Name="Diagram1" ZoomLevel="74">
         <EntityTypeShape EntityType="AMSModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="6.75" />
         <EntityTypeShape EntityType="AMSModel.Answer" Width="1.5" PointX="2.75" PointY="6.75" />
-        <EntityTypeShape EntityType="AMSModel.AroundProvider" Width="1.5" PointX="8.25" PointY="26.375" />
-        <EntityTypeShape EntityType="AMSModel.AroundProviderCategory" Width="1.5" PointX="6" PointY="27.5" />
-        <EntityTypeShape EntityType="AMSModel.AroundProviderProduct" Width="1.5" PointX="10.5" PointY="40.875" />
+        <EntityTypeShape EntityType="AMSModel.AroundProvider" Width="1.5" PointX="17.25" PointY="5.375" />
+        <EntityTypeShape EntityType="AMSModel.AroundProviderCategory" Width="1.5" PointX="15" PointY="6.5" />
+        <EntityTypeShape EntityType="AMSModel.AroundProviderProduct" Width="1.5" PointX="19.5" PointY="5.875" />
         <EntityTypeShape EntityType="AMSModel.AspNetRole" Width="1.5" PointX="0.75" PointY="2.5" />
         <EntityTypeShape EntityType="AMSModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="1" />
         <EntityTypeShape EntityType="AMSModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="3.75" />
         <EntityTypeShape EntityType="AMSModel.AspNetUser" Width="1.5" PointX="3" PointY="1.375" />
-        <EntityTypeShape EntityType="AMSModel.BalanceSheet" Width="1.5" PointX="10.5" PointY="30.125" />
-        <EntityTypeShape EntityType="AMSModel.Block" Width="1.5" PointX="0.75" PointY="17.25" />
-        <EntityTypeShape EntityType="AMSModel.BlockPoll" Width="1.5" PointX="13.5" PointY="8.875" />
-        <EntityTypeShape EntityType="AMSModel.Comment" Width="1.5" PointX="12.75" PointY="27.25" />
-        <EntityTypeShape EntityType="AMSModel.HelpdeskRequest" Width="1.5" PointX="10.5" PointY="19.125" />
+        <EntityTypeShape EntityType="AMSModel.BalanceSheet" Width="1.5" PointX="16.5" PointY="24.125" />
+        <EntityTypeShape EntityType="AMSModel.Block" Width="1.5" PointX="3.75" PointY="16.25" />
+        <EntityTypeShape EntityType="AMSModel.BlockPoll" Width="1.5" PointX="19.5" PointY="30.375" />
+        <EntityTypeShape EntityType="AMSModel.Comment" Width="1.5" PointX="18.75" PointY="27.25" />
+        <EntityTypeShape EntityType="AMSModel.HelpdeskRequest" Width="1.5" PointX="8.25" PointY="19.125" />
         <EntityTypeShape EntityType="AMSModel.HelpdeskRequestHelpdeskSupporter" Width="1.5" PointX="4.75" PointY="6.75" />
-        <EntityTypeShape EntityType="AMSModel.HelpdeskRequestLog" Width="1.5" PointX="15.75" PointY="19.75" />
-        <EntityTypeShape EntityType="AMSModel.HelpdeskServiceCategory" Width="1.5" PointX="8.25" PointY="14.25" />
-        <EntityTypeShape EntityType="AMSModel.House" Width="1.5" PointX="3" PointY="19" />
+        <EntityTypeShape EntityType="AMSModel.HelpdeskRequestLog" Width="1.5" PointX="16.5" PointY="19.75" />
+        <EntityTypeShape EntityType="AMSModel.HelpdeskServiceCategory" Width="1.5" PointX="6" PointY="16.25" />
+        <EntityTypeShape EntityType="AMSModel.House" Width="1.5" PointX="6" PointY="19" />
         <EntityTypeShape EntityType="AMSModel.HouseCategory" Width="1.5" PointX="0.75" PointY="20.25" />
         <EntityTypeShape EntityType="AMSModel.Image" Width="1.5" PointX="6.75" PointY="6.75" />
-        <EntityTypeShape EntityType="AMSModel.NotificationChange" Width="1.5" PointX="15.75" PointY="16" />
-        <EntityTypeShape EntityType="AMSModel.NotificationObject" Width="1.5" PointX="10.5" PointY="15.25" />
-        <EntityTypeShape EntityType="AMSModel.Poll" Width="1.5" PointX="11.25" PointY="10.25" />
-        <EntityTypeShape EntityType="AMSModel.Post" Width="1.5" PointX="10.5" PointY="35.5" />
+        <EntityTypeShape EntityType="AMSModel.NotificationChange" Width="1.5" PointX="21.75" PointY="18" />
+        <EntityTypeShape EntityType="AMSModel.NotificationObject" Width="1.5" PointX="16.5" PointY="15.375" />
+        <EntityTypeShape EntityType="AMSModel.Poll" Width="1.5" PointX="17.25" PointY="40.25" />
+        <EntityTypeShape EntityType="AMSModel.Post" Width="1.5" PointX="16.5" PointY="35.5" />
         <EntityTypeShape EntityType="AMSModel.Question" Width="1.5" PointX="7.75" PointY="0.75" />
-        <EntityTypeShape EntityType="AMSModel.Receipt" Width="1.5" PointX="13.5" PointY="19.25" />
-        <EntityTypeShape EntityType="AMSModel.ReceiptDetail" Width="1.5" PointX="18.75" PointY="19.625" />
-        <EntityTypeShape EntityType="AMSModel.Report" Width="1.5" PointX="15.75" PointY="27.25" />
-        <EntityTypeShape EntityType="AMSModel.Role" Width="1.5" PointX="6" PointY="17.5" />
+        <EntityTypeShape EntityType="AMSModel.Receipt" Width="1.5" PointX="11.25" PointY="19.25" />
+        <EntityTypeShape EntityType="AMSModel.ReceiptDetail" Width="1.5" PointX="19.5" PointY="19.625" />
+        <EntityTypeShape EntityType="AMSModel.Report" Width="1.5" PointX="21.75" PointY="27.25" />
+        <EntityTypeShape EntityType="AMSModel.Role" Width="1.5" PointX="12" PointY="16.5" />
         <EntityTypeShape EntityType="AMSModel.sysdiagram" Width="1.5" PointX="7.75" PointY="3.75" />
-        <EntityTypeShape EntityType="AMSModel.Transaction" Width="1.5" PointX="21" PointY="25.875" />
-        <EntityTypeShape EntityType="AMSModel.User" Width="1.5" PointX="8.25" PointY="17.625" />
-        <EntityTypeShape EntityType="AMSModel.UserAnswerPoll" Width="1.5" PointX="13.5" PointY="16.25" />
-        <EntityTypeShape EntityType="AMSModel.UserRateAroundProvider" Width="1.5" PointX="10.5" PointY="24.375" />
-        <EntityTypeShape EntityType="AMSModel.UtilityService" Width="1.5" PointX="16.5" PointY="11.75" />
-        <EntityTypeShape EntityType="AMSModel.UtilityServiceRangePrice" Width="1.5" PointX="18.75" PointY="11.875" />
-        <EntityTypeShape EntityType="AMSModel.UtilServiceCategory" Width="1.5" PointX="14.25" PointY="12.25" />
-        <EntityTypeShape EntityType="AMSModel.UtilServiceForHouseCat" Width="1.5" PointX="6" PointY="20.125" />
+        <EntityTypeShape EntityType="AMSModel.Transaction" Width="1.5" PointX="21.75" PointY="22.75" />
+        <EntityTypeShape EntityType="AMSModel.User" Width="1.5" PointX="14.25" PointY="17.625" />
+        <EntityTypeShape EntityType="AMSModel.UserAnswerPoll" Width="1.5" PointX="19.5" PointY="24.25" />
+        <EntityTypeShape EntityType="AMSModel.UserRateAroundProvider" Width="1.5" PointX="19.5" PointY="16.375" />
+        <EntityTypeShape EntityType="AMSModel.UtilityService" Width="1.5" PointX="17.25" PointY="10.75" />
+        <EntityTypeShape EntityType="AMSModel.UtilityServiceRangePrice" Width="1.5" PointX="19.5" PointY="10.875" />
+        <EntityTypeShape EntityType="AMSModel.UtilServiceCategory" Width="1.5" PointX="15" PointY="11.25" />
+        <EntityTypeShape EntityType="AMSModel.UtilServiceForHouseCat" Width="1.5" PointX="3" PointY="20.125" />
         <AssociationConnector Association="AMSModel.FK_AroundServiceProduct_AroundProvider" />
         <AssociationConnector Association="AMSModel.FK_tbl_arround_srv_tbl_around_srv_cat" />
         <AssociationConnector Association="AMSModel.FK_UserRateAroundProvider_AroundProvider" />

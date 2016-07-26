@@ -524,7 +524,7 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
  * ======================================================================== */
 
 
-+function ($) { "use strict";
+/*+function ($) { "use strict";
 
   // COLLAPSE PUBLIC CLASS DEFINITION
   // ================================
@@ -682,7 +682,7 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
     $target.collapse(option)
   })
 
-}(window.jQuery);
+}(window.jQuery);*/
 
 /* ========================================================================
  * Bootstrap: dropdown.js v3.0.0

@@ -335,7 +335,7 @@ $.extend(true, $.fn.dataTable.defaults, {
         }
     }
 });
-function setNavPosition() {
+/*function setNavPosition() {
     var path = location.pathname;
     if (path === "/" || path.indexOf("/House/") > -1) {
         $('.left-nav')
@@ -352,14 +352,36 @@ function setNavPosition() {
                 "position": "fixed"
             });
     }
+}*/
+
+function setNavPosition() {
+    var path = location.pathname;
+    if (path === "/" || path.indexOf("/House/") > -1) {
+        $('.left-nav').each(function () {
+            $(this).css(
+            {
+                "width": $(this).parent().width() + "px",
+                "position": "relative"
+            });
+        });
+    } else {
+        $('.left-nav').each(function () {
+            $(this).css(
+            {
+                "width": $(this).parent().width() + "px",
+                "position": "fixed"
+            });
+        });
+    }
 }
+
 $(document).ready(function () {
     setNavPosition();
 
     //    setTimeout(function() {
     window.addEventListener("resize", function () {
         $('.left-nav').each(function () {
-            $(this).css("width", $('.left-nav').parent().width() + "px");
+            $(this).css("width", $(this).parent().width() + "px");
         });
     });
     //    }, 100);
@@ -1372,5 +1394,5 @@ function timeSince(dateString) {
             }
         }
     }
-    return interval + ' ' + intervalType;
+    return interval + ' ' + intervalType ;
 }

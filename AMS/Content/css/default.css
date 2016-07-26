@@ -17523,7 +17523,7 @@ fieldset[disabled] .cover.overlay .btn-cover.active {
 }
 @media (min-width: 768px) {
   .footer {
-    left: 250px;
+    /*left: 250px;*/
     right: 0;
   }
 }
@@ -17551,7 +17551,7 @@ fieldset[disabled] .cover.overlay .btn-cover.active {
   display: block !important;
 }
 .show-sidebar .footer {
-  left: 250px;
+  /*left: 250px;*/
   right: 0;
 }
 @media (max-width: 768px) {
@@ -33924,7 +33924,7 @@ fieldset[disabled] .cover.overlay .btn-cover.active {
   display: block !important;
 }
 .show-sidebar .footer {
-  left: 250px;
+  /*left: 250px;*/
   right: 0;
 }
 @media (max-width: 768px) {
