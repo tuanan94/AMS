@@ -54,7 +54,7 @@ namespace AMS.Service
             userProfileMapping.CreatedDate = user.CreateDate.Value.ToString(AmsConstants.DateFormat);
             userProfileMapping.Age = CommonUtil.CalculateAge(user.DateOfBirth.Value);
             userProfileMapping.HouseProfile = user.House == null||user.House.ProfileImage==null||user.House.ProfileImage.Equals("") ? "/Content/Images/home_default.jpg" : user.House.ProfileImage;
-            List<Post> rawPost = user.Posts.OrderByDescending(p => p.CreateDate).Take(10).ToList();
+            List<Post> rawPost = user.Posts.OrderByDescending(p => p.CreateDate).Take(5).ToList();
             List<MoreInfo> moreInfos = new List<MoreInfo>();
             foreach(Post p in rawPost)
             {

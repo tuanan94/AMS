@@ -215,6 +215,12 @@ right connector from last child*/
     color: #757575;
 }
 
+    .recent-activ-title > strong {
+        color: #009688;
+        font-size: 16px;
+        font-weight: normal;
+    }
+
 /*AnLTNM change*/
 textarea {
     width: 100% !important;
@@ -229,6 +235,14 @@ ul.timeline-list li.media > .media-body .panel {
     border-radius: 3px;
     box-shadow: none;
     margin-bottom: 0;
+}
+.custom-panel {
+    min-width: 0px;
+    width: 100%;
+    border: 1px solid;
+    border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+    border-radius: 3px;
+    box-shadow: none;
 }
 
     ul.timeline-list li.media > .media-body .panel.share {
@@ -444,3 +458,4 @@ a, a {
         border-right-color: #009688;
         border-top-color: #009688;
     }
+

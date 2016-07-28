@@ -202,9 +202,9 @@
     </div>
     <div class="col-md-4">
         <div class="left-nav">
-            <div id="weather" class="panel panel-default">
-                <div class="panel-heading">
-                    Thời tiết hiện tại
+            <div id="weather" class="panel panel-default custom-panel">
+                <div class="panel-heading panel-heading-gray">
+                    <i class="fa fa-sun-o"></i> Thời tiết hiện tại
                 </div>
                 <div class="weather-svg">
                     <div class="today text-center">
@@ -221,9 +221,9 @@
                 </div>
             </div>
 
-            <div id="notify" class="panel panel-default">
-                <div class="panel-heading panel-heading-gray" style="background-color: #25ad9f; color: white">
-                    Thông báo
+            <div id="notify" class="panel panel-default custom-panel">
+                <div class="panel-heading panel-heading-gray">
+                    <i class="fa fa-info-circle"></i> Thông báo
                     @{if (notificationChanges != null && notificationChanges.Where(p => p.User.Id != curUser.Id).ToList().Count != 0)
                     {
                         <span id="clean-noty" class="pull-right" onclick="clearAllNotify()"> Xóa tất cả</span>
@@ -351,23 +351,22 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Xác nhận thông tin</h4>
+                <h4 class="modal-title">Xác nhận xóa bài viết</h4>
             </div>
-
             <div class="modal-body">
                 <div>
-                    <h3 style="text-align:center">
+                    <h4 style="text-align:center">
                         Bạn có thật sự muốn xóa bài viết này?
-                    </h3>
+                    </h4>
                 </div>
                 <input id="confirmDeletePostId" hidden="hidden" value="" />
 
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="sendDeleteRequest()">Xóa bài viết</button>
+            <div class="modal-footer" style="margin-top: 0;">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="sendDeleteRequest()">Xóa bài viết</button>
+                </div>
             </div>
-        </div>
     </div>
 </div>
 
@@ -556,9 +555,6 @@
 
                 });
                 $("#loadMoreBtn").button('reset');
-
-
-                //                $('.grid').masonry("reload");
             },
             error: function (er) {
                 alert(er);
@@ -616,7 +612,7 @@
                            '</a>' +
                            '<ul class="dropdown-menu" role="menu" style="min-width: 0px;min-height: 0px;padding: 0;">' +
                                '<li><a style="font-weight: bold;" onclick="deletePost(' + postObject['Id'] + ')"><i style="color: #BF360C;" class="fa fa-fw fa-times"></i> Xóa</a></li>' +
-                               '<li><a style="font-weight: bold;" href="/Post/Detail?postId=' + postObject['Id'] + '"><i style="color: #004D40;" class="fa fa-fw fa-edit"></i> Chỉnh sửa</a></li>' +
+                               '<li><a style="font-weight: bold;" href="/Post/Detail?postId=' + postObject['Id'] + '"><i style="color: #004D40;" class="fa fa-fw fa-edit"></i> Chi tiết</a></li>' +
                            '</ul>' +
                        '</div>' +
                        '</div>' +
@@ -654,7 +650,7 @@
                     '</div>' +
                 '</div>' +
             '</div>';
-        $("#timeline").append('<li class="media">'
+        $("#timeline").append('<li class="media" id="userPostItem' + postObject['Id'] + '">'
                         + '<div class="media-body">'
                             + '<div class="panel panel-default panel-feed">' + header
                                 + '<div class="panel-body" >'
@@ -697,7 +693,7 @@
             + '</li>'
 
         );
-        $(".dropdown-toggle").dropdown();
+
         loadMoreText(postObject['Id']);
     }
     function editPost(postId) {
@@ -719,33 +715,12 @@
             error: function (er) {
                 alert(er);
             }
-
         });
         //Get post
     }
 
 
-    function deletePost(postId) { //this function just display Confirm message
-        //alert("deletePost" + postId)
-        $("#deletePostModal").modal("show");
-        $("#confirmDeletePostId").val(postId);
-    }
-
-    function sendDeleteRequest() {
-        var id = $("#confirmDeletePostId").val();
-        $.ajax({
-            url: "/Post/deletePost",
-            type: "POST",
-            data: {
-                postId: id,
-            }, success: function (successData) {
-                location.reload();
-            },
-            error: function (er) {
-                alert(er);
-            }
-        });
-    }
+    
 
     //    function addComment(postId) {
     //        $.ajax({

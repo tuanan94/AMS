@@ -3,7 +3,6 @@
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
     User curUser = ViewBag.curUser;
     House curHouse = ViewBag.curHouse;
-    List<User> members = ViewBag.members;
 }
 
 <link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css" />
@@ -182,12 +181,6 @@
         margin-right: 5px;
     }
 
-    p {
-        font-size: 17px;
-        font-weight: normal;
-        line-height: 1.38;
-    }
-
     .post-time {
         color: #999999;
         font-size: 14px;
@@ -233,20 +226,23 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-8" style="padding-left: 0;padding-right: 0">
+    <div class="col-md-8" style="padding-left: 0; padding-right: 0">
         <div class="panel panel-default">
             <div class="panel-heading panel-heading-gray">
                 <h4>Bài viết</h4>
             </div>
         </div>
         <ul class="timeline-list" id="timeline"></ul>
+        <div style="margin: 3em; text-align: center">
+            <button id="loadMoreBtn" type="button" class="btn btn-primary btn-lg" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Đang tải thêm...">Tải thêm tin khác</button>
+        </div>
     </div>
     <div class="col-md-4" style="text-align: center">
         <div class="panel panel-default">
             <div class="panel-heading panel-heading-gray">
                 <h4>Thành viên trong nhà</h4>
             </div>
-            <div class="panel-body" id="memberPanelBodyHousePage">
+            <div class="panel-body" id="memberPanelBodyHousePage" data-house-id="@curHouse.Id">
                 <div class="row" style="position: relative;">
                     <div class="house-roof">
                         <span style="line-height: 140px;">Nhà</span>@*Must be has text in this tag*@
@@ -265,48 +261,32 @@
     </div>
 </div>
 
-@*<div class="container-fluid">
-        <div class="row">
-            <div class="col-md-2">
-
+<!-- Delete modal -->
+<div class="modal fade ams-modal" id="deletePostModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Xác nhận xóa bài viết</h4>
             </div>
-            <div class="col-md-8" style="text-align: center">
-                <div class="panel panel-default">
-                    <div class="panel-heading panel-heading-gray"><h4>Thành viên trong nhà @curHouse.HouseName</h4></div>
-                    <div class="panel-body" id="memberPanelBody">
-                        <div class="row" style="position: relative;">
-                            <div class="house-roof">
-                                <span style="line-height: 140px;">Nhà</span>$1$Must be has text in this tag#1#
-                            </div>
-                            <div class="abs-centering">
-                                <a id="usrInfoUrlToFamily" class="link-cursor" href="/House/@curHouse.Id">
-                                    <img id="usrInfoHouseImg" class="img-border" onerror="this.src = '/Content/images/home_default.jpg';" src="@(curHouse.ProfileImage == null ? "/Content/images/home_default.jpg" : curHouse.ProfileImage)" style="height: 90px; border: 2px solid #bf360c;">
-                                    <div>
-                                        <span id="usrInfoHouseName" class="house-title">@curHouse.HouseName</span>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+            <div class="modal-body">
+                <div>
+                    <h4 style="text-align: center">
+                        Bạn có thật sự muốn xóa bài viết này?
+                    </h4>
                 </div>
-            </div>
-            <div class="col-md-2">
+                <input id="confirmDeletePostId" hidden="hidden" value=""/>
 
+            </div>
+            <div class="modal-footer" style="margin-top: 0;">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="sendDeleteRequest()">Xóa bài viết</button>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="container-fluid">
-        <div class="row">
-            <h3 style="margin-left:15%">Bài viết</h3>
-            <div class="col-md-2"></div>
-            <div class="col-md-9">
-                <ul class="timeline-list" id="timeline"></ul>
-            </div>
-            <div class="col-md-2"></div>
-
-        </div>
-    </div>*@
 
 <script>
     var curTokenId = -1;
@@ -329,9 +309,7 @@
         $('.close').on('click', function (event) {
             event.preventDefault();
             /* Act on the event */
-
             $('.modalDialog').fadeOut();
-
         });
         $("#postStatusArea").on("click", function (e) {
             onFocusPost();
@@ -345,14 +323,15 @@
     $('#loadMoreBtn').on('click', function () {
         var $this = $(this);
         $this.button('loading');
-        loadMore();
+        var houseId = $("#memberPanelBodyHousePage").data("houseId");
+        loadMore(curTokenId, houseId);
 
     });
 
     var listUploadImage = [];
-    function loadMore() {
+    function loadMore(curTokenId, houseId) {
         console.log("loadMore");
-        loadAllPost(curTokenId);
+        loadAllPost(curTokenId, houseId);
     }
     function addImage() {
         $("#uploadEditorImage").click();
@@ -423,7 +402,7 @@
         });
     });
     $(document).ready(function () {
-        loadAllPost(-1);
+        loadAllPost(-1, "@curHouse.Id");
         loadAllMember("tree", '@curHouse.Id', "memberPanelBodyHousePage", true);
 
         $("#userInforModal").on("hidden.bs.modal", function () {
@@ -433,13 +412,14 @@
         });
     });
 
-    function loadAllPost(idToken) {
+    function loadAllPost(idToken,houseId) {
         $.ajax({
             url: "/Post/getPost",
             type: "GET",
             datatype: 'json',
             data: {
                 idToken: idToken,
+                houseId: houseId,
             },
             success: function (successData) {
                 console.log("GetPostData: " + successData);
@@ -452,14 +432,13 @@
 
                 });
                 $("#loadMoreBtn").button('reset');
-
             },
             error: function (er) {
                 alert(er);
             }
-
         });
     }
+
     function getUserProfileForPost(index, id) {
         if (id == null) {
             alert("postid = nul");
@@ -497,6 +476,19 @@
               '<div class="link-cursor" style="color:#000000" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>' +
                        '</div>' +
                        '</div>';
+        } else if (postObject['UserId'] == '@curUser.Id') {
+            reportDiv = '<div style="position: absolute;right: 0;width: 30px;">' +
+              '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
+              '<div class="dropdown">' +
+                            '<a class="dropdown-toggle" data-toggle="dropdown" style="color: #ffffff;"> <i class="fa fa-angle-down"></i>' +
+                           '</a>' +
+                           '<ul class="dropdown-menu" role="menu" style="min-width: 0px;min-height: 0px;padding: 0;">' +
+                               '<li><a style="font-weight: bold;" onclick="deletePost(' + postObject['Id'] + ')"><i style="color: #BF360C;" class="fa fa-fw fa-times"></i> Xóa</a></li>' +
+                               '<li><a style="font-weight: bold;" href="/Post/Detail?postId=' + postObject['Id'] + '"><i style="color: #004D40;" class="fa fa-fw fa-edit"></i> Chi tiết</a></li>' +
+                           '</ul>' +
+                       '</div>' +
+                       '</div>' +
+                       '</div>';
         }
         var header = '<div class="panel-heading clearfix user-post" style="background-color: transparent;">' +
                 '<div class="form-group" style="margin-bottom:0">' +
@@ -528,7 +520,7 @@
                     '</div>' +
                 '</div>' +
             '</div>';
-        $("#timeline").append('<li class="media">'
+        $("#timeline").append('<li class="media" id="userPostItem' + postObject['Id'] + '">'
                        /*+ '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)">'
                             + '<img id="userImagePost' + postObject['Id'] + '" src="' + postObject['userProfile'] + '" alt="people" class="img-circle" width="80" height="80">'
                             + '<div id="userNamePost' + postObject['Id'] + '" class="date">' + postObject['userFullName'] + '</div>'
@@ -538,7 +530,7 @@
                         + '<div class="media-body">'
                             + '<div class="panel panel-default panel-feed">' + header
                                 + '<div class="panel-body" >'
-                                    + '<pid="postBody' + postObject['Id'] + '">' + postObject['Body'] + '</p>'
+                                    + '<p style="" id="postBody' + postObject['Id'] + '">' + postObject['Body'] + '</p>'
                                     + '<section class="form-group testetetet" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
                                     + '</section>'
                                     + '<div class="row embed-row" style="height:auto;">'
@@ -561,112 +553,113 @@
                                  + '<li class="comment-form">'
                                         + '<div class="input-group" style="width: 100%;">'
                                         + '<a onclick="LoadUserProfile(\'' + @(curUser.Id) + '\')" class="pull-left link-cursor"><img src="@(curUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : curUser.ProfileImage)" class="media-object avatar-comment link-cursor"></a>'
-                                        + '<div class="media-body" style="padding-left: 10px;">' +
-                                            '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control input-cmnt" placeholder="Viết bình luận của bạn..."/>' +
-                                             '<i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(' + postObject['Id'] + ')" style="font-size: xx-large;color: #25AD9F;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:100"></i>' +
-                                        '</div>'
-            + '</div>'
-            + '</li>'
-            + '</ul>'
-            + '</div>'
-             + reportDiv
-            + '</div>'
-            + '</li>'
-        );
+                                            + '<div class="media-body" style="padding-left: 10px;">' +
+                                                '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control input-cmnt" placeholder="Viết bình luận của bạn..."/>' +
+                                                 '<i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(' + postObject['Id'] + ')" style="font-size: xx-large;color: #25AD9F;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:100"></i>' +
+                                            '</div>'
+                + '</div>'
+                + '</li>'
+                + '</ul>'
+                + '</div>'
+                 + reportDiv
+                + '</div>'
+                + '</li>'
+            );
+            loadMoreText(postObject['Id']);
+        }
 
-    }
+        //    function addCommentToCommentArea(postId, comment) {
+        //        $("#commentsArea" + postId).append('<li>'
+        //            + '<div class="media">'
+        //                + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)"  class="pull-left link-cursor">'
+        //                    + '<img  src="' + comment['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avartar-img link-cursor">'
+        //                + '</a>'
+        //                    + '<div class="media-body">'
+        //                        + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)" class="comment-author link-cursor">' + comment['fullName'] + ': </a>'
+        //                        + '<span>' + comment['detail'] + '</span>'
+        //                        + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
+        //                    + '</div>'
+        //            + '</div>'
+        //        + '</li>');
+        //
+        //    }
 
-    //    function addCommentToCommentArea(postId, comment) {
-    //        $("#commentsArea" + postId).append('<li>'
-    //            + '<div class="media">'
-    //                + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)"  class="pull-left link-cursor">'
-    //                    + '<img  src="' + comment['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avartar-img link-cursor">'
-    //                + '</a>'
-    //                    + '<div class="media-body">'
-    //                        + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)" class="comment-author link-cursor">' + comment['fullName'] + ': </a>'
-    //                        + '<span>' + comment['detail'] + '</span>'
-    //                        + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
-    //                    + '</div>'
-    //            + '</div>'
-    //        + '</li>');
-    //
-    //    }
+        function getImagesForPost(index, id) {
+            appenImageToPost(index, id);
+        }
+        function addImageToPost(imageUrl, postId, width) {
+            $("#imagesPost" + postId)
+                .append('<img src="' + imageUrl + '" style="width:' + width + '%;height:auto;margin-right:5px">');
 
-    function getImagesForPost(index, id) {
-        appenImageToPost(index, id);
-    }
-    function addImageToPost(imageUrl, postId, width) {
-        $("#imagesPost" + postId)
-            .append('<img src="' + imageUrl + '" style="width:' + width + '%;height:auto;margin-right:5px">');
+        }
 
-    }
+        function addImageToPreviewList(dir, position) {
+            //        $("#previewList").prepend('<div id="previewImage' + position + '" style="height:100px;width:100px;float:left;position:relative;margin: 0px 5px;"><img onclick="removePreview(' + position + ')" src="/Content/images/delete.png" style="position:absolute;top:0px;right:0px;width:20px;height:20px"/><img src="' + dir + '" style="max-width:100%;max-height:100%"/></div>')
+            $("#previewList")
+                .prepend('<div id="previewImage' +
+                    position +
+                    '" style="height:100px;width:auto;float:left;position:relative;margin:5px;border: 1px solid #e5e5e5;"><img onclick="removePreview(' +
+                    position +
+                    ')" src="/Content/images/delete.png" style="position:absolute;top:5px;right:5px;width:20px;height:20px"/><img src="' +
+                    dir +
+                    '" class="preview-img"/></div>');
+        }
+        function removePreview(position) {
+            $('#previewImage' + position + '').hide();
+            listUploadImage[position] = "";
 
-    function addImageToPreviewList(dir, position) {
-        //        $("#previewList").prepend('<div id="previewImage' + position + '" style="height:100px;width:100px;float:left;position:relative;margin: 0px 5px;"><img onclick="removePreview(' + position + ')" src="/Content/images/delete.png" style="position:absolute;top:0px;right:0px;width:20px;height:20px"/><img src="' + dir + '" style="max-width:100%;max-height:100%"/></div>')
-        $("#previewList")
-            .prepend('<div id="previewImage' +
-                position +
-                '" style="height:100px;width:auto;float:left;position:relative;margin:5px;border: 1px solid #e5e5e5;"><img onclick="removePreview(' +
-                position +
-                ')" src="/Content/images/delete.png" style="position:absolute;top:5px;right:5px;width:20px;height:20px"/><img src="' +
-                dir +
-                '" class="preview-img"/></div>');
-    }
-    function removePreview(position) {
-        $('#previewImage' + position + '').hide();
-        listUploadImage[position] = "";
+        }
+        function reloadFeed() {
+            //clear all feed
+            $("#timeline").html("");
+            var houseId = $("#memberPanelBodyHousePage").data("houseId");
+            loadAllPost(null,houseId);
+        }
+        function clearCreatePostForm() {
+            var embedContent = "";
+            $("#previewContent").html(embedContent);
+            listUploadImage = [];
+            $("#previewList").html('');
+            $("#postContent").val('');
+        }
+        function report(id) {
+            $("#reportPostId").val(id);
+            $("#reportContent").val("");
+            $("#reportModal").modal();
+        }
+        function processSendReport() {;
+            var postId = $("#reportPostId").val();
+            var reportContent = $("#reportContent").val();
+            console.log("processSendReport: postid=" + postId + "reportContent=" + reportContent);
+            sendReport(postId, reportContent);
+        }
+        function deleteNotification(noticChangedId) {
+            console.log('deleteNotification' + noticChangedId);
+            $.ajax({
+                url: "/Home/deleteNotification",
+                type: "POST",
+                data: {
+                    data: noticChangedId,
+                    type: "@SLIM_CONFIG.NOTIC_DELETE_TYPE_CHANGEID",
+                },
+                success: function (successData) {
+                    //alert(successData);
+                    $("#notification" + noticChangedId).hide('slow', function () { $("#notification11").remove(); });
+                },
+                error: function (er) {
+                    alert(er);
+                }
 
-    }
-    function reloadFeed() {
-        //clear all feed
-        $("#timeline").html("");
-        loadAllPost();
-    }
-    function clearCreatePostForm() {
-        var embedContent = "";
-        $("#previewContent").html(embedContent);
-        listUploadImage = [];
-        $("#previewList").html('');
-        $("#postContent").val('');
-    }
-    function report(id) {
-        $("#reportPostId").val(id);
-        $("#reportContent").val("");
-        $("#reportModal").modal();
-    }
-    function processSendReport() {;
-        var postId = $("#reportPostId").val();
-        var reportContent = $("#reportContent").val();
-        console.log("processSendReport: postid=" + postId + "reportContent=" + reportContent);
-        sendReport(postId, reportContent);
-    }
-    function deleteNotification(noticChangedId) {
-        console.log('deleteNotification' + noticChangedId);
-        $.ajax({
-            url: "/Home/deleteNotification",
-            type: "POST",
-            data: {
-                data: noticChangedId,
-                type: "@SLIM_CONFIG.NOTIC_DELETE_TYPE_CHANGEID",
-            },
-            success: function (successData) {
-                //alert(successData);
-                $("#notification" + noticChangedId).hide('slow', function () { $("#notification11").remove(); });
-            },
-            error: function (er) {
-                alert(er);
-            }
-
-        });
-    }
-    function onFocusPost() {
-        $("#addNewPost").css("display", "block");
-    }
-    function onBlurPost() {
-        $("#addNewPost").css("display", "none");
-    }
-    function textAreaAdjust(o) {
-        o.style.height = "1px";
-        o.style.height = (25 + o.scrollHeight) + "px";
-    }
+            });
+        }
+        function onFocusPost() {
+            $("#addNewPost").css("display", "block");
+        }
+        function onBlurPost() {
+            $("#addNewPost").css("display", "none");
+        }
+        function textAreaAdjust(o) {
+            o.style.height = "1px";
+            o.style.height = (25 + o.scrollHeight) + "px";
+        }
 </script>

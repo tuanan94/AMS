@@ -275,6 +275,7 @@ namespace AMS.Controllers
             if (p != null)
             {
                 pMapping.Id = p.Id;
+                pMapping.Status = p.Status;
                 pMapping.Body = p.Body.Replace("\n", "<br/>");
                 pMapping.CreateDate = p.CreateDate.GetValueOrDefault();
                 pMapping.EmbedCode = p.EmbedCode;
@@ -297,6 +298,11 @@ namespace AMS.Controllers
                 //                {
                 //                    frameImageHeight = ((int)listImages.Count / 2) * 237;
                 //                }
+            }
+            else
+            {
+                ViewBag.ErrorMsg = "Rất tiếc! Bài viết này đã không còn tồn tại trong hệ thống.";
+                return View("ErrorMsg");
             }
             ViewBag.Post = pMapping;
             ViewBag.ImageCount = imageCount;
@@ -409,14 +415,24 @@ namespace AMS.Controllers
         }
         [HttpPost]
         [Authorize]
-        public void deletePost(int postId)
+        public ActionResult deletePost(int postId)
         {
-            Post p = postService.findPostById(postId);
-            if (p != null)
+            MessageViewModels response = new MessageViewModels();
+            try
             {
-                p.Status = SLIM_CONFIG.POST_STATUS_HIDE;
+                Post p = postService.findPostById(postId);
+                if (p != null)
+                {
+                    p.Status = SLIM_CONFIG.POST_STATUS_HIDE;
+                    postService.UpdatePost(p);
+                    response.Data = p.Id;
+                }
             }
-            postService.UpdatePost(p);
+            catch (Exception e)
+            {
+                response.StatusCode = -1;
+            }
+            return Json(response);
         }
 
         private CommentMapping parseCommentToModel(Comment c)

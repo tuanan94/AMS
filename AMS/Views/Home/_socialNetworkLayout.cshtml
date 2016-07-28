@@ -24,16 +24,16 @@
         transform: scale(1);
     }
 
-    .style_prevu_kit:hover {
-        z-index: 2;
-        -webkit-transition: all 200ms ease-in;
-        -webkit-transform: scale(1.5);
-        -ms-transform: scale(1.5);
-        -moz-transition: all 200ms ease-in;
-        -moz-transform: scale(1.5);
-        transition: all 200ms ease-in;
-        transform: scale(1.5);
-    }
+        .style_prevu_kit:hover {
+            z-index: 2;
+            -webkit-transition: all 200ms ease-in;
+            -webkit-transform: scale(1.5);
+            -ms-transform: scale(1.5);
+            -moz-transition: all 200ms ease-in;
+            -moz-transform: scale(1.5);
+            transition: all 200ms ease-in;
+            transform: scale(1.5);
+        }
 </style>
 
 
@@ -42,7 +42,8 @@
 {
 
     <div class="col-md-3">
-        <div class="row sidebar left hidden-xs left-nav" style="width: 100%; bottom: inherit; left: inherit; position: relative;top: inherit;">
+
+        <div class="row sidebar left hidden-xs left-nav" style="width: 100%; bottom: inherit; left: inherit; position: relative; top: inherit;">
             <div class="sidebar-block" style="margin: auto; width: 100%;">
                 <a href="@(curHouse == null ? "#" : ("/House/" + curHouse.Id))" style="width: 100%">
                     <div class="profile">
@@ -51,6 +52,18 @@
                     </div>
                 </a>
             </div>
+
+            <div class="profile-icons text-center house-info">
+                <div class="text-center house-block">
+                    <i class=" fa fa-fw fa-database"></i> Tòa nhà
+                    <div style="text-align: center;">@(curHouse == null || curHouse.BlockId == null ? "" : curHouse.Block.BlockName)</div>
+                </div>
+                <div class="text-center house-floor">
+                    <i class=" fa fa-fw fa-table"></i> Tầng
+                    <div>@(curHouse == null || curHouse.Floor == null ? "" : curHouse.Floor)</div>
+                </div>
+            </div>
+
             <div id="menu">
                 <ul id="slide-left" class="slide-left-active">
                     <li class="category">Tiện ích</li>
@@ -99,7 +112,7 @@
     </div>
 
     <div id="userInforModal" class="modal fade ams-modal" role="dialog">
-        <div class="modal-dialog modal-lg" style="width: 700px">
+        <div class="modal-dialog modal-lg" style="width: 600px">
             <div class="modal-content">
                 <div style="position: relative; padding: 0;">
                     <div>
@@ -114,7 +127,8 @@
                             </ul>
                         </div>
                         <div class="tab-content">
-                            <div class="panel-body modal-body tab-pane fade active in" id="userInfoTab">
+                            @*                            <div class="panel-body modal-body tab-pane fade active in" id="userInfoTab">*@
+                            <div class="tab-pane fade active in" id="userInfoTab">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="avatar" style="text-align: center">
@@ -201,10 +215,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                 </div>
             </div>
         </div>

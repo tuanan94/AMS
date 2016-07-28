@@ -2,16 +2,17 @@
 @using Microsoft.AspNet.Identity;
 @{
     Layout = null;
-    var currentUser = User.Identity;
     UserService userService = new UserService();
     String profileImg = "/Content/images/defaultProfile.png";
     string userId = User.Identity.GetUserId();
+    string userFullName = "";
     if (userId != null)
     {
         User curUser = userService.findById(Int32.Parse(userId));
         if (curUser != null && curUser.ProfileImage != null && !curUser.ProfileImage.Equals(""))
         {
             profileImg = curUser.ProfileImage;
+            userFullName = curUser.Fullname;
         }
     }
 }
@@ -42,7 +43,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle user truncate" data-toggle="dropdown">
                             <img onerror="this.onerror = null; this.src = '/Content/images/defaultProfile.png'; " src="@profileImg" class="img-circle" width="40">
-                            <span class="caption">@currentUser.GetUserName() </span> <span class="caret"></span>
+                            <span class="caption">@userFullName </span> <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li>

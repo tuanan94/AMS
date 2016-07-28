@@ -92,108 +92,127 @@
     }
 </style>
 <div class="row" style="min-height: 800px">
-    <div class="col-md-8" style="padding-left: 0; padding-right: 0">
-        <ul class="timeline-list">
-            <li class="media mediawithoutBorder" id="thisPostId" data-post-id="@(post.Id)" data-embed-code="@(post.EmbedCode)" data-image-count="@(imageCount)" data-post-date="@(post.CreateDate.Value.ToString("s"))">
-                <div class="media-body">
-                    <div class="panel panel-default panel-feed">
-                        <div class="panel-heading clearfix user-post" style="background-color: transparent;">
-                            <div class="form-group" style="margin-bottom: 0">
-                                <div style="display: flex">
-                                    <div class="pull-left" id="userLoadProfilePost@(post.Id)" onclick="LoadUserProfile(@(post.UserId), true)" style="margin-right: 10px">
-                                        <img id="userImagePost@(post.Id)" src="@(post.userProfile)" onerror="this.src = '/Content/Images/defaultProfile.png';" class="avartar-img  link-cursor">
-                                    </div>
-                                    <div style="flex: 1; width: 0; padding-right: 40px;">
-                                        <div class="" style="margin-top: 0; margin-bottom: 0;">
-                                            <strong>
-                                                <a class="text-capitalize" onclick="userLoadProfilePost(@(post.UserId), true)" id="userNamePost@(post.Id)">@(post.userFullName)</a>
-                                            </strong>
-                                            <strong class="house-name">
-                                                <a class="link-cursor" href="/House/@(post.houseId)">
-                                                    <span style="font-size: 17px;"><i class="fa fa-home icon-house"></i>@(post.houseName)</span>
-                                                </a>
-                                            </strong>
-                                        </div>
-                                        <div class="" style="margin-top: 0px; margin-bottom: 0;">
-                                            <strong><span class="post-time"><i class="fa fa-globe icon-house"></i> <span id="postDate@(post.Id)"></span></span></strong>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="panel-body">
-                            <p id="postBody@(post.Id)">@Html.Raw(post.Body)</p>
-                            <div class="form-group">
-                                @*<div style="position: relative; height: @(frameHeight + "px;")">
-                            <div id="loadingImages@(post.Id)" class="loading-image-post" style="position: absolute; width: 100%; height: 100%; z-index: 15">
-                            </div>*@
-                                @*                                    <div class="grid testetetet" style="position: absolute;" id="imagesPost@(post.Id)">*@
-                                <div class="grid testetetet" id="imagesPost@(post.Id)">
-                                    @*<div style="position: relative;" data-src="/Upload/img/img_636049071417255866.jpeg">
-                                    <img style="position: absolute; width: 100% !important; height: auto !important" src="/Upload/img/img_636049071418745951.jpeg">
-                                </div>
-                                <div style="position: relative;" data-src="/Upload/img/img_636049071591185814.jpeg">
-                                    <img style="position: absolute; width: 100% !important; height: auto !important" src="/Upload/img/img_636049071591775848.jpeg">
-                                </div>*@
-                                </div>
-                                @*</div>*@
-                            </div>
-                            <div id="embedYoutubeFrame" class="row embed-row" style="height: auto;">
-                            </div>
-                        </div>
-
-
-                        <div class="view-all-comments" style="height: 25px;">
-                            <div id="countComment@(post.Id)" style="float: left;"><i style="color: #546E7A;" class="fa fa-comments-o"></i><i class="hide"> Chưa có bình luận</i> <span></span><strong> / </strong><span></span> <span> bình luận</span></div>
-                            <div class="hide" id="loadMoreComment@(post.Id)" style="float: right;">
-                                <a onclick="loadMorePost(@(post.Id))"><i class="fa fa-refresh"></i>Tải bình luận trước đó</a>
-                            </div>
-                        </div><ul class="comments" id="commentsArea@(post.Id)"></ul>
-                        <div class="view-all-comments" style="height: 25px; text-align: center">
-                            <div class="">
-                                <a onclick="getNewCommentsForPost(@(post.Id))"><i class="fa fa-refresh"></i> Tải mới </a>
-                            </div>
-                        </div><ul class="comments">
-                            <li class="comment-form">
-                                <div class="input-group" style="width: 100%;">
-                                    <a onclick="loaduserprofile('@currentUser.Id')" class="pull-left"><img src="@(currentUser.ProfileImage == null ? "/Content/Images/defaultProfile.png" : currentUser.ProfileImage)" onerror=" this.src = '/Content/Images/defaultProfile.png';" class="media-object avatar-comment"></a>
-                                    <div class="media-body" style="padding-left: 10px;">
-                                        <input id="contentDetail@(post.Id)" type="text" class="form-control input-cmnt" placeholder="Viết bình luận của bạn..."><i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(@(post.Id))" style="font-size: xx-large; color: #25AD9F; position: absolute; top: 2px; right: 0px; transition: right 0.2s; z-index: 2"></i>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
+    @{
+        if (post.Status != null && post.Status == SLIM_CONFIG.POST_STATUS_HIDE)
+        {
+            <div class="col-md-offset-2 col-md-8" style="padding-left: 0; padding-right: 0">
+                <div class="panel panel-default custom-panel">
+                    <div class="panel-heading panel-heading-gray">
+                        <i class="fa fa-info-circle"></i> Thông báo
                     </div>
-                    @if (post.UserId != currentUser.Id)
-                    {
-                        <div style="position: absolute; right: 0; width: 30px;">
-                            <div style="position: relative; width: 100%; text-align: center; margin-top: 5px;">
-                                <div class="link-cursor" style="color: #000000" onclick="report(@(post.Id))">
-                                    <i class="fa fa-fw fa-warning"></i>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <div style="position: absolute; right: 0; width: 30px;">
-                            <div style="position: relative; width: 100%; text-align: center; margin-top: 5px;">
-                                <div class="dropdown">
-                                    <a class="dropdown-toggle" data-toggle="dropdown" style="color: #ffffff;"> <i class="fa fa-angle-down"></i></a>
-                                    <ul class="dropdown-menu" role="menu" style="min-width: 0px; min-height: 0px; padding: 0;">
-                                        <li><a style="font-weight: bold;" onclick="deletePost(@(post.Id))"><i style="color: #BF360C;" class="fa fa-fw fa-times"></i> Xóa</a></li>
-                                        <li><a style="font-weight: bold;" onclick="getPostDetail(@(post.Id))"><i style="color: #004D40;" class="fa fa-fw fa-edit"></i> Chỉnh sửa</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    }
+                    <div class="panel-body">
+                        <h4>Rất tiếc! Bài viết này đã không còn tồn tại trong hệ thống.</h4>
+                    </div>
                 </div>
-</ul>
-    </div>
-    <div class="col-md-4">
-    </div>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-8" style="padding-left: 0; padding-right: 0">
+                <ul class="timeline-list">
+                    <li class="media mediawithoutBorder" id="thisPostId" data-post-id="@(post.Id)" data-embed-code="@(post.EmbedCode)" data-image-count="@(imageCount)" data-post-date="@(post.CreateDate.Value.ToString("s"))">
+                        <div class="media-body">
+                            <div class="panel panel-default panel-feed">
+                                <div class="panel-heading clearfix user-post" style="background-color: transparent;">
+                                    <div class="form-group" style="margin-bottom: 0">
+                                        <div style="display: flex">
+                                            <div class="pull-left" id="userLoadProfilePost@(post.Id)" onclick="LoadUserProfile(@(post.UserId), true)" style="margin-right: 10px">
+                                                <img id="userImagePost@(post.Id)" src="@(post.userProfile)" onerror="this.src = '/Content/Images/defaultProfile.png';" class="avartar-img  link-cursor">
+                                            </div>
+                                            <div style="flex: 1; width: 0; padding-right: 40px;">
+                                                <div class="" style="margin-top: 0; margin-bottom: 0;">
+                                                    <strong>
+                                                        <a class="text-capitalize" onclick="userLoadProfilePost(@(post.UserId), true)" id="userNamePost@(post.Id)">@(post.userFullName)</a>
+                                                    </strong>
+                                                    <strong class="house-name">
+                                                        <a class="link-cursor" href="/House/@(post.houseId)">
+                                                            <span style="font-size: 17px;"><i class="fa fa-home icon-house"></i>@(post.houseName)</span>
+                                                        </a>
+                                                    </strong>
+                                                </div>
+                                                <div class="" style="margin-top: 0px; margin-bottom: 0;">
+                                                    <strong><span class="post-time"><i class="fa fa-globe icon-house"></i> <span id="postDate@(post.Id)"></span></span></strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel-body">
+                                    <p id="postBody@(post.Id)">@Html.Raw(post.Body)</p>
+                                    <div class="form-group">
+                                        @*<div style="position: relative; height: @(frameHeight + "px;")">
+                                            <div id="loadingImages@(post.Id)" class="loading-image-post" style="position: absolute; width: 100%; height: 100%; z-index: 15">
+                                            </div>*@
+                                        @*                                    <div class="grid testetetet" style="position: absolute;" id="imagesPost@(post.Id)">*@
+                                        <div class="grid testetetet" id="imagesPost@(post.Id)">
+                                            @*<div style="position: relative;" data-src="/Upload/img/img_636049071417255866.jpeg">
+                                                    <img style="position: absolute; width: 100% !important; height: auto !important" src="/Upload/img/img_636049071418745951.jpeg">
+                                                </div>
+                                                <div style="position: relative;" data-src="/Upload/img/img_636049071591185814.jpeg">
+                                                    <img style="position: absolute; width: 100% !important; height: auto !important" src="/Upload/img/img_636049071591775848.jpeg">
+                                                </div>*@
+                                        </div>
+                                        @*</div>*@
+                                    </div>
+                                    <div id="embedYoutubeFrame" class="row embed-row" style="height: auto;">
+                                    </div>
+                                </div>
+
+
+                                <div class="view-all-comments" style="height: 25px;">
+                                    <div id="countComment@(post.Id)" style="float: left;"><i style="color: #546E7A;" class="fa fa-comments-o"></i><i class="hide"> Chưa có bình luận</i> <span></span><strong> / </strong><span></span> <span> bình luận</span></div>
+                                    <div class="hide" id="loadMoreComment@(post.Id)" style="float: right;">
+                                        <a onclick="loadMorePost(@(post.Id))"><i class="fa fa-refresh"></i>Tải bình luận trước đó</a>
+                                    </div>
+                                </div><ul class="comments" id="commentsArea@(post.Id)"></ul>
+                                <div class="view-all-comments" style="height: 25px; text-align: center">
+                                    <div class="">
+                                        <a onclick="getNewCommentsForPost(@(post.Id))"><i class="fa fa-refresh"></i> Tải mới </a>
+                                    </div>
+                                </div><ul class="comments">
+                                    <li class="comment-form">
+                                        <div class="input-group" style="width: 100%;">
+                                            <a onclick="LoadUserProfile('@currentUser.Id')" class="pull-left"><img src="@(currentUser.ProfileImage == null ? "/Content/Images/defaultProfile.png" : currentUser.ProfileImage)" onerror=" this.src = '/Content/Images/defaultProfile.png';" class="media-object avatar-comment"></a>
+                                            <div class="media-body" style="padding-left: 10px;">
+                                                <input id="contentDetail@(post.Id)" type="text" class="form-control input-cmnt" placeholder="Viết bình luận của bạn..."><i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(@(post.Id))" style="font-size: xx-large; color: #25AD9F; position: absolute; top: 2px; right: 0px; transition: right 0.2s; z-index: 2"></i>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            @if (post.UserId != currentUser.Id)
+                            {
+                                <div style="position: absolute; right: 0; width: 30px;">
+                                    <div style="position: relative; width: 100%; text-align: center; margin-top: 5px;">
+                                        <div class="link-cursor" style="color: #000000" onclick="report(@(post.Id))">
+                                            <i class="fa fa-fw fa-warning"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div style="position: absolute; right: 0; width: 30px;">
+                                    <div style="position: relative; width: 100%; text-align: center; margin-top: 5px;">
+                                        <div class="dropdown">
+                                            <a class="dropdown-toggle" data-toggle="dropdown" style="color: #ffffff;"> <i class="fa fa-angle-down"></i></a>
+                                            <ul class="dropdown-menu" role="menu" style="min-width: 0px; min-height: 0px; padding: 0;">
+                                                <li><a style="font-weight: bold;" onclick="deletePost(@(post.Id))"><i style="color: #BF360C;" class="fa fa-fw fa-times"></i> Xóa</a></li>
+                                                <li><a style="font-weight: bold;" onclick="getPostDetail(@(post.Id))"><i style="color: #004D40;" class="fa fa-fw fa-edit"></i> Chỉnh sửa</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                </ul>
+            </div>
+            <div class="col-md-4">
+            </div>
+        }
+    }
 </div>
 
 <!-- Modal -->
@@ -236,7 +255,7 @@
                         <div class="col-md-12">
                             <div style="display: flex">
                                 <div class="pull-left" id="userAvatarModal" data-user-id="3" style="margin-right: 10px">
-                                    <img onerror="this.src = '/Content/Images/defaultProfile.png';" class="avartar-img" /> 
+                                    <img onerror="this.src = '/Content/Images/defaultProfile.png';" class="avartar-img" />
                                 </div>
                                 <input id="postId" value="" style="display: none">
                                 <div style="flex: 1; width: 0">
@@ -297,18 +316,19 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Xác nhận xóa bài viết</h4>
             </div>
 
             <div class="modal-body">
                 <div>
-                    <h3 style="text-align:center">
+                    <h4 style="text-align:center">
                         Bạn có thật sự muốn xóa bài viết này?
-                    </h3>
+                    </h4>
                 </div>
                 <input id="confirmDeletePostId" hidden="hidden" value="" />
 
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" style="margin-top: 0;">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="sendDeleteRequest()">Xóa bài viết</button>
             </div>
@@ -646,7 +666,7 @@
             data: {
                 postId: id,
             }, success: function (successData) {
-                location.reload();
+                document.location.href = "/";
             },
             error: function (er) {
                 alert(er);

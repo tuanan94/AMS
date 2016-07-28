@@ -16,29 +16,63 @@ function loadMoreText(id) {
 
     var content = $("#postBody" + id).html();
 
-    if (content.length > showChar) {
+    if (content) {
+        if (content.length > showChar) {
 
-        var c = content.substr(0, showChar);
-        var h = content.substr(showChar, content.length - showChar);
+            var c = content.substr(0, showChar);
+            var h = content.substr(showChar, content.length - showChar);
 
-        var html = c + '<span class="moreellipses">' + ellipsestext + '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
+            var html = c + '<span class="moreellipses">' + ellipsestext + '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
 
-        $("#postBody" + id).html(html);
-    }
-
-    $("#postBody" + id + " .morelink").click(function () {
-        if ($(this).hasClass("less")) {
-            $(this).removeClass("less");
-            $(this).html(moretext);
-        } else {
-            $(this).addClass("less");
-            $(this).html(lesstext);
+            $("#postBody" + id).html(html);
         }
-        $(this).parent().prev().toggle();
-        $(this).prev().toggle();
-        return false;
+
+        $("#postBody" + id + " .morelink").click(function () {
+            if ($(this).hasClass("less")) {
+                $(this).removeClass("less");
+                $(this).html(moretext);
+            } else {
+                $(this).addClass("less");
+                $(this).html(lesstext);
+            }
+            $(this).parent().prev().toggle();
+            $(this).prev().toggle();
+            return false;
+        });
+    }
+}
+
+function deletePost(postId) { //this function just display Confirm message
+    //alert("deletePost" + postId)
+    $("#deletePostModal").modal("show");
+    $("#confirmDeletePostId").val(postId);
+}
+
+function sendDeleteRequest() {
+    var id = $("#confirmDeletePostId").val();
+    $.ajax({
+        url: "/Post/deletePost",
+        type: "POST",
+        data: {
+            postId: id,
+        }, success: function (data) {
+            if (data.StatusCode === 0) {
+                $("#userPostItem" + data.Data).hide("300", function () {
+                    $(this).remove();
+                });
+                $("#confirmDeletePostId").val("");
+                $("#deletePostModal").modal("hide");
+
+            } else {
+                location.reload();
+            }
+        },
+        error: function (er) {
+            alert(er);
+        }
     });
 }
+
 
 function appenImageToPost(index, id) {
     if (id == null) {
@@ -95,6 +129,9 @@ function appenImageToPost(index, id) {
             });
             listElement = listElement + "</div>";
             currentElement.append(listElement);
+            if(currentElement.data("lightGallery")) {
+                currentElement.data("lightGallery").destroy(true);
+            }
             currentElement.lightGallery({
                 thumbnail: true,
                 animateThumb: false,
@@ -156,6 +193,7 @@ function getCommentsForPost(postid) {
 
     });
 }
+
 
 function addComment(postId) {
     var content = $("#contentDetail" + postId).val();

@@ -65,6 +65,8 @@ namespace AMS.Service
             List<Post> allRaw = getAllPost();
             List<Post> result = new List<Post>();
 
+
+
             if (houseId != null)
             {
                 foreach (Post p in allRaw)
@@ -88,7 +90,19 @@ namespace AMS.Service
             }
             else
             {
+                var lastTokenPost = postRepository.FindById(tokenId);
                 position = allPostWithHouseID.FindIndex(p => p.Id == tokenId);
+
+                if (allPostWithHouseID.Count > 0 && (lastTokenPost != null && lastTokenPost.Status != null && lastTokenPost.Status == SLIM_CONFIG.POST_STATUS_HIDE))
+                {
+                    var listPostNewer = allPostWithHouseID.Where(p => p.CreateDate < lastTokenPost.CreateDate).ToList();
+                    if (listPostNewer.Count() != 0)
+                    {
+                        tokenId = listPostNewer.First().Id;
+                        position = allPostWithHouseID.FindIndex(p => p.Id == tokenId) - 1;
+                    }
+                }
+
             }
             for (int i = position + 1; i < allPostWithHouseID.Count && result.Count < SLIM_CONFIG.POST_NUMBER_SOCIAL_FEED; i++)
             {

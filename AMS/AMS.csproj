@@ -821,6 +821,7 @@
     <Content Include="Views\Config\ViewUtilityServiceDetail.cshtml" />
     <Content Include="Views\House\NotDisplay.cshtml" />
     <Content Include="Views\Post\ViewSinglePost.cshtml" />
+    <Content Include="Views\Post\ErrorMsg.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
