@@ -20,7 +20,19 @@ namespace AMS.Service
         {
             imageRepository.Add(image);
         }
-        public void saveListImage(List<String> imageURLs,List<String> thumbImageURLs,int postId)
+        public Image FindById(int id)
+        {
+            return imageRepository.FindById(id);
+        }
+        public void RemoveById(int id)
+        {
+            var img = imageRepository.FindById(id);
+            if (null != img)
+            {
+                imageRepository.Delete(img);
+            }
+        }
+        public void saveListImage(List<String> imageURLs, List<String> thumbImageURLs, int postId)
         {
             string url = "";
             string thumbUrl = "";
@@ -30,11 +42,11 @@ namespace AMS.Service
                 thumbUrl = thumbImageURLs[i];
                 if (url != null && !url.Equals(""))
                 {
-                    saveImage(url,thumbUrl, postId);
+                    saveImage(url, thumbUrl, postId);
                 }
             }
         }
-        private int saveImage(String url,string thumbUrl, int postId)
+        private int saveImage(String url, string thumbUrl, int postId)
         {
             Image image = new Image();
             image.createdDate = DateTime.Now;
@@ -49,7 +61,10 @@ namespace AMS.Service
         {
             return imageRepository.List.ToList();
         }
-
+        public List<Image> GetImagesByPostId(int postId)
+        {
+            return imageRepository.List.Where(i => i.postId == postId).ToList();
+        }
         public Image getImageByPostId(int id)
         {
             return imageRepository.List.FirstOrDefault(t => t.postId == id);
@@ -57,34 +72,31 @@ namespace AMS.Service
         public List<PostImageModel> findImagesByPostId(int postId)
         {
             List<PostImageModel> result = new List<PostImageModel>();
-            List<Image> allImage = allImages();
+            List<Image> allImage = GetImagesByPostId(postId);
             PostImageModel image = null;
-            foreach(Image m in allImage)
+            foreach (Image m in allImage)
             {
-                if(m.postId == postId)
+                image = new PostImageModel();
+                image.id = m.id;
+                image.url = m.url;
+                image.thumbnailurl = m.thumbnailUrl;
+                image.createdDate = m.createdDate.Value.ToString(AmsConstants.DateTimeFormat);
+                image.postId = m.postId.Value;
+                try
                 {
-                    image = new PostImageModel();
-                    image.id = m.id;
-                    image.url = m.url;
-                    image.thumbnailurl = m.thumbnailUrl;
-                    image.createdDate = m.createdDate.Value.ToString(AmsConstants.DateTimeFormat);
-                    image.postId = m.postId.Value;
-                    try
-                    {
-                        System.Drawing.Image img = System.Drawing.Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + image.thumbnailurl);
-                        image.width = img.Width;
-                        image.height = img.Height;
-                    }
-                    catch (Exception)
-                    {
-                        image.width = 0;
-                        image.height = 0;
-                    }
-                    
-                    result.Add(image);
+                    System.Drawing.Image img = System.Drawing.Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + image.thumbnailurl);
+                    image.width = img.Width;
+                    image.height = img.Height;
                 }
+                catch (Exception)
+                {
+                    image.width = 0;
+                    image.height = 0;
+                }
+
+                result.Add(image);
             }
-            return result;    
+            return result;
         }
 
     }

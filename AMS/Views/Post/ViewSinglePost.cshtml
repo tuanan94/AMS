@@ -1,0 +1,723 @@
+﻿@using AMS.ObjectMapping
+@using AMS.Service
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "ViewSinglePost";
+    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+    PostMapping post = ViewBag.Post;
+    int imageCount = ViewBag.ImageCount;
+
+    User currentUser = ViewBag.CurrentUser;
+    AutoRedirect auto = new AutoRedirect();
+
+    string alert = "";
+    alert = auto.Auto(currentUser);
+
+}
+<link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css" />
+<script src="~/Scripts/amsScript/DisplaySinglePost.js"></script>
+<script src="~/Scripts/amsScript/LoadFamilyTree.js"></script>
+<script src="~/Scripts/amsScript/LoadUserProfile.js"></script>
+<script src="~/Scripts/amsScript/ReportPost.js"></script>
+<style>
+    .button {
+        display: block;
+        width: 100px;
+        height: 35px;
+        background: #4E9CAF;
+        padding: 7px;
+        text-align: center;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+    }
+
+    .modalDialog {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 99999;
+        display: none;
+        opacity: 1;
+        -webkit-transition: opacity 400ms ease-in;
+        -moz-transition: opacity 400ms ease-in;
+        transition: opacity 400ms ease-in;
+    }
+
+        .modalDialog > div {
+            width: 400px;
+            position: relative;
+            margin: 10% auto;
+            padding: 5px 20px 13px 20px;
+            border-radius: 10px;
+            background: #fff;
+            background: #339999;
+        }
+
+    .close {
+        background: #606061;
+        color: #FFFFFF;
+        line-height: 25px;
+        position: absolute;
+        right: -12px;
+        text-align: center;
+        top: -10px;
+        width: 24px;
+        text-decoration: none;
+        font-weight: bold;
+        -webkit-border-radius: 12px;
+        -moz-border-radius: 12px;
+        border-radius: 12px;
+        -moz-box-shadow: 1px 1px 3px #000;
+        -webkit-box-shadow: 1px 1px 3px #000;
+        box-shadow: 1px 1px 3px #000;
+    }
+
+        .close:hover {
+            background: #00d9ff;
+        }
+
+    .panel-feed {
+        width: 90%;
+    }
+
+    .comments {
+        margin-left: 5%;
+    }
+
+    ul.timeline-list li.mediawithoutBorder:before {
+        border-left: none;
+    }
+</style>
+<div class="row" style="min-height: 800px">
+    <div class="col-md-8" style="padding-left: 0; padding-right: 0">
+        <ul class="timeline-list">
+            <li class="media mediawithoutBorder" id="thisPostId" data-post-id="@(post.Id)" data-embed-code="@(post.EmbedCode)" data-image-count="@(imageCount)" data-post-date="@(post.CreateDate.Value.ToString("s"))">
+                <div class="media-body">
+                    <div class="panel panel-default panel-feed">
+                        <div class="panel-heading clearfix user-post" style="background-color: transparent;">
+                            <div class="form-group" style="margin-bottom: 0">
+                                <div style="display: flex">
+                                    <div class="pull-left" id="userLoadProfilePost@(post.Id)" onclick="LoadUserProfile(@(post.UserId), true)" style="margin-right: 10px">
+                                        <img id="userImagePost@(post.Id)" src="@(post.userProfile)" onerror="this.src = '/Content/Images/defaultProfile.png';" class="avartar-img  link-cursor">
+                                    </div>
+                                    <div style="flex: 1; width: 0; padding-right: 40px;">
+                                        <div class="" style="margin-top: 0; margin-bottom: 0;">
+                                            <strong>
+                                                <a class="text-capitalize" onclick="userLoadProfilePost(@(post.UserId), true)" id="userNamePost@(post.Id)">@(post.userFullName)</a>
+                                            </strong>
+                                            <strong class="house-name">
+                                                <a class="link-cursor" href="/House/@(post.houseId)">
+                                                    <span style="font-size: 17px;"><i class="fa fa-home icon-house"></i>@(post.houseName)</span>
+                                                </a>
+                                            </strong>
+                                        </div>
+                                        <div class="" style="margin-top: 0px; margin-bottom: 0;">
+                                            <strong><span class="post-time"><i class="fa fa-globe icon-house"></i> <span id="postDate@(post.Id)"></span></span></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+                            <p id="postBody@(post.Id)">@Html.Raw(post.Body)</p>
+                            <div class="form-group">
+                                @*<div style="position: relative; height: @(frameHeight + "px;")">
+                            <div id="loadingImages@(post.Id)" class="loading-image-post" style="position: absolute; width: 100%; height: 100%; z-index: 15">
+                            </div>*@
+                                @*                                    <div class="grid testetetet" style="position: absolute;" id="imagesPost@(post.Id)">*@
+                                <div class="grid testetetet" id="imagesPost@(post.Id)">
+                                    @*<div style="position: relative;" data-src="/Upload/img/img_636049071417255866.jpeg">
+                                    <img style="position: absolute; width: 100% !important; height: auto !important" src="/Upload/img/img_636049071418745951.jpeg">
+                                </div>
+                                <div style="position: relative;" data-src="/Upload/img/img_636049071591185814.jpeg">
+                                    <img style="position: absolute; width: 100% !important; height: auto !important" src="/Upload/img/img_636049071591775848.jpeg">
+                                </div>*@
+                                </div>
+                                @*</div>*@
+                            </div>
+                            <div id="embedYoutubeFrame" class="row embed-row" style="height: auto;">
+                            </div>
+                        </div>
+
+
+                        <div class="view-all-comments" style="height: 25px;">
+                            <div id="countComment@(post.Id)" style="float: left;"><i style="color: #546E7A;" class="fa fa-comments-o"></i><i class="hide"> Chưa có bình luận</i> <span></span><strong> / </strong><span></span> <span> bình luận</span></div>
+                            <div class="hide" id="loadMoreComment@(post.Id)" style="float: right;">
+                                <a onclick="loadMorePost(@(post.Id))"><i class="fa fa-refresh"></i>Tải bình luận trước đó</a>
+                            </div>
+                        </div><ul class="comments" id="commentsArea@(post.Id)"></ul>
+                        <div class="view-all-comments" style="height: 25px; text-align: center">
+                            <div class="">
+                                <a onclick="getNewCommentsForPost(@(post.Id))"><i class="fa fa-refresh"></i> Tải mới </a>
+                            </div>
+                        </div><ul class="comments">
+                            <li class="comment-form">
+                                <div class="input-group" style="width: 100%;">
+                                    <a onclick="loaduserprofile('@currentUser.Id')" class="pull-left"><img src="@(currentUser.ProfileImage == null ? "/Content/Images/defaultProfile.png" : currentUser.ProfileImage)" onerror=" this.src = '/Content/Images/defaultProfile.png';" class="media-object avatar-comment"></a>
+                                    <div class="media-body" style="padding-left: 10px;">
+                                        <input id="contentDetail@(post.Id)" type="text" class="form-control input-cmnt" placeholder="Viết bình luận của bạn..."><i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(@(post.Id))" style="font-size: xx-large; color: #25AD9F; position: absolute; top: 2px; right: 0px; transition: right 0.2s; z-index: 2"></i>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    @if (post.UserId != currentUser.Id)
+                    {
+                        <div style="position: absolute; right: 0; width: 30px;">
+                            <div style="position: relative; width: 100%; text-align: center; margin-top: 5px;">
+                                <div class="link-cursor" style="color: #000000" onclick="report(@(post.Id))">
+                                    <i class="fa fa-fw fa-warning"></i>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div style="position: absolute; right: 0; width: 30px;">
+                            <div style="position: relative; width: 100%; text-align: center; margin-top: 5px;">
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" style="color: #ffffff;"> <i class="fa fa-angle-down"></i></a>
+                                    <ul class="dropdown-menu" role="menu" style="min-width: 0px; min-height: 0px; padding: 0;">
+                                        <li><a style="font-weight: bold;" onclick="deletePost(@(post.Id))"><i style="color: #BF360C;" class="fa fa-fw fa-times"></i> Xóa</a></li>
+                                        <li><a style="font-weight: bold;" onclick="getPostDetail(@(post.Id))"><i style="color: #004D40;" class="fa fa-fw fa-edit"></i> Chỉnh sửa</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+</ul>
+    </div>
+    <div class="col-md-4">
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addEmbedModal" role="dialog" style="z-index: 2000">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thêm mã nhúng</h4>
+            </div>
+            <div class="modal-body">
+                <input class="form-control" id="embedCodeEditModal" placeholder="Copy và paste đoạn mã nhúng của bạn vào đây" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button id="btnOkSaveEnbedCode" type="button" class="btn btn-primary" data-dismiss="modal">Lưu lại</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="editPostModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content" style="overflow: hidden;">
+            <div class="panel panel-default share" style="box-shadow: none;border-bottom: none;margin-bottom: 0;">
+                <div class="panel-heading" style="border-bottom: solid 1px #efefef;background-color: #f5f5f5;">
+                    <a id="addPostImageModal" class="post-heading" style="border-right: 1px solid #BDBDBD;" onclick="addImageModal()">
+                        <i class="fa fa-fw fa-photo post-heading-icon"></i> Thêm hình ảnh
+                    </a>
+                    <a id="embedCodeModal" class="post-heading" onclick="showEditEmbedCode()">
+                        <i class="fa fa-fw fa-code post-heading-icon"></i> Sửa mã nhúng
+                    </a>
+                    <input type="file" id="uploadPostImageModal" style="display: none">
+                </div>
+                <div class="panel-body" id="postStatusArea" style="padding-bottom: 0;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div style="display: flex">
+                                <div class="pull-left" id="userAvatarModal" data-user-id="3" style="margin-right: 10px">
+                                    <img onerror="this.src = '/Content/Images/defaultProfile.png';" class="avartar-img" /> 
+                                </div>
+                                <input id="postId" value="" style="display: none">
+                                <div style="flex: 1; width: 0">
+                                    <textarea style="overflow: hidden; font-size: 16px;font-weight: normal;line-height: 1.38;"
+                                              id="postContentModal" name="status" class="form-control share-text" rows="8"
+                                              placeholder="Chia sẻ những thông tin của bạn..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px; margin-top: 15px">
+                        <div class="col-md-12" style="height: auto;" id="previewListModal">
+                        </div>
+                    </div>
+                    <div id="previewEmbedModal" class="row hide" style="height: auto; margin-bottom: 10px; margin-top: 15px">
+                        <div id="previewContentModal" class="embed-row ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 0">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button id="btnUpdatePost" type="submit" class="btn btn-primary">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Report modal -->
+<div class="modal fade" id="reportModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Báo cáo vi phạm</h4>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="reportPostId" placeholder="PostId" />
+
+                <input class="form-control" id="reportContent" placeholder="Bài viết này đã vi phạm....?" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="processSendReport()">Gửi đến quản lý</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Delete modal -->
+<div class="modal fade ams-modal" id="deletePostModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div>
+                    <h3 style="text-align:center">
+                        Bạn có thật sự muốn xóa bài viết này?
+                    </h3>
+                </div>
+                <input id="confirmDeletePostId" hidden="hidden" value="" />
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="sendDeleteRequest()">Xóa bài viết</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@{
+    if (!alert.Equals("") && SLIM_CONFIG.CURRENT_MODE == SLIM_CONFIG.PROGRAM_MODE_PRODUCT)
+    {
+        <script>
+            setTimeout(function () {
+                window.location.href = "/Survey/DoSurvey";
+            }, 1000);
+        </script>
+    }
+}
+
+<script>
+    var curTokenId = -1;
+    $(document).ready(function () {
+        var elementData = $("#thisPostId");
+        var postId = elementData.data("postId");
+        var embededCode = elementData.data("embedCode");
+        var postDate = elementData.data("postDate");
+        if (postId) {
+            $("#postDate" + postId).text(timeSince(postDate));
+            getCommentsForPost(postId);
+            if (embededCode) {
+                var youtubeFrame = getYoutubeFrameFromText(embededCode);
+                if (youtubeFrame !== "") {
+                    $("#embedYoutubeFrame").html(youtubeFrame);
+                }
+            }
+            getImagesForPost(0, postId);
+        }
+
+        setTimeout(function () {
+            $('.left-nav')
+                .affix({
+                    offset: {
+                        top: function () { return 370; },
+                        bottom: 0
+                    }
+                });
+        }, 100);
+        setTimeout(function () {
+            $("#content > div.row").css("min-height", $("#content > div.row > div.col-md-8").height() + 200 + "px");
+        }, 500);
+
+
+        $('.modalDialog').fadeIn();
+
+        $('.close').on('click', function (event) {
+            event.preventDefault();
+            /* Act on the event */
+
+            $('.modalDialog').fadeOut();
+
+        });
+        $("#postStatusArea").on("click", function (e) {
+            onFocusPost();
+        });
+        $("#userAvatar").on("click", function (e) {
+            e.stopPropagation();
+            LoadUserProfile($(this).data("userId"));
+        });
+        $("#userInforModal").on("hidden.bs.modal", function () {
+            $("#memberPanelBody").children().not("div.row:first").remove();
+            $("#recentActivity li").remove();
+            $("#userInfoTabHeader li:first a").click();
+        });
+    });
+
+    $('#loadMoreBtn').on('click', function () {
+        var $this = $(this);
+        $this.button('loading');
+        loadMore();
+
+    });
+
+    var listUploadImage = [];
+    var listUploadThumnailImage = [];
+    function loadMore() {
+        console.log("loadMore");
+        loadAllPost(curTokenId);
+    }
+    function addImage() {
+        $("#uploadEditorImage").click();
+        onFocusPost();
+    }
+
+    $("#uploadEditorImage").change(function () {
+        var data = new FormData();
+
+        data.append("dir", "@SLIM_CONFIG.dirPostImage");
+
+        var files = $("#uploadEditorImage").get(0).files;
+        if (files.length > 0) {
+            data.append("image", files[0]);
+            data.append("thumbWidth", 480);
+            data.append("thumbHeight", 480);
+
+            data.append("width", 1200);
+            data.append("height", 627);
+        }
+
+        // progessBar(true);
+        $.ajax({
+            url: "/Management/Image/UploadPostImage/",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: data,
+
+            success: function (successData) {
+                var thumbnailData = successData.Data.thumbnailUrl;
+                var imageData = successData.Data.imageUrl;
+
+                addImageToPreviewList(thumbnailData, listUploadImage.length);
+                listUploadImage[listUploadImage.length] = imageData;
+                listUploadThumnailImage[listUploadThumnailImage.length] = thumbnailData;
+                // progessBar(false);
+
+            },
+            error: function (er) {
+                alert(er);
+                //progessBar(false);
+            }
+
+        });
+    });
+
+    function loadAllPost(idToken) {
+        $.ajax({
+            url: "/Post/getPost",
+            type: "GET",
+            datatype: 'json',
+            data: {
+                idToken: idToken,
+            },
+            success: function (successData) {
+                console.log("GetPostData: " + successData);
+                var obj = JSON.parse(successData);
+                $.each(obj, function (index, jsonObject) {
+                    addPostToTimeline(index, jsonObject);
+                    getImagesForPost(index, jsonObject["Id"]);
+                    getCommentsForPost(jsonObject["Id"]);
+                    curTokenId = jsonObject["Id"];
+
+                });
+                $("#loadMoreBtn").button('reset');
+
+
+                //                $('.grid').masonry("reload");
+            },
+            error: function (er) {
+                alert(er);
+            }
+
+        });
+    }
+    function getUserProfileForPost(index, id) {
+        if (id == null) {
+            alert("postid = nul");
+            return;
+        }
+        $.ajax({
+            url: "/Post/getUserForPost",
+            type: "GET",
+            data: {
+                postId: id,
+            },
+            success: function (successData) {
+                // alert(successData)
+                var obj = JSON.parse(successData);
+                if (obj['ProfileImage'] === null) {
+                    $('#userImagePost' + id).attr("src", "/Content/images/defaultProfile.png");
+                } else {
+                    $('#userImagePost' + id).attr("src", obj["ProfileImage"]);
+
+                }
+                $('#userNamePost' + id).html(obj["Username"]);
+                $('#userHrefPost' + id).attr("href", "/Profile/" + obj["Id"]);
+
+                $('#userLoadProfilePost' + id).attr("onclick", "LoadUserProfile(" + obj["Id"] + ",true)");
+
+            },
+            error: function (er) {
+                alert(er);
+            }
+
+        });
+    }
+    function addPostToTimeline(index, postObject) {
+        var reportDiv = "";
+        if (postObject['UserId'] != '@currentUser.Id') {
+            //            reportDiv = '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>';
+            reportDiv = '<div style="position: absolute;right: 0;width: 30px;">' +
+              '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
+              '<div class="link-cursor" style="color:#000000" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>' +
+                       '</div>' +
+                       '</div>';
+        }
+        else if (postObject['UserId'] == '@currentUser.Id') {
+            reportDiv = '<div style="position: absolute;right: 0;width: 30px;">' +
+              '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
+              '<div class="dropdown">' +
+                            '<a class="dropdown-toggle" data-toggle="dropdown" style="color: #ffffff;"> <i class="fa fa-angle-down"></i>' +
+                           '</a>' +
+                           '<ul class="dropdown-menu" role="menu" style="min-width: 0px;min-height: 0px;padding: 0;">' +
+                               '<li><a style="font-weight: bold;" onclick="deletePost(' + postObject['Id'] + ')"><i style="color: #BF360C;" class="fa fa-fw fa-times"></i> Xóa</a></li>' +
+                               '<li><a style="font-weight: bold;" href="#postContent" onclick="editPost(' + postObject['Id'] + ')"><i style="color: #004D40;" class="fa fa-fw fa-edit"></i> Chỉnh sửa</a></li>' +
+                           '</ul>' +
+                       '</div>' +
+                       '</div>' +
+                       '</div>';
+        }
+        var header = '<div class="panel-heading clearfix user-post" style="background-color: transparent;">' +
+                '<div class="form-group" style="margin-bottom:0">' +
+                    '<div style="display: flex">' +
+                        '<div class="pull-left" id="userLoadProfilePost' + postObject['Id'] + '" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)" style="margin-right: 10px">' +
+                            '<img id="userImagePost' + postObject['Id'] + '" src="' + postObject['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="avartar-img  link-cursor">' +
+                        '</div>' +
+                        '<div style="flex: 1; width: 0;padding-right: 40px;">' +
+                            '<div class="" style="margin-top: 0;margin-bottom: 0;">' +
+                                '<strong>' +
+                                '   <a class="text-capitalize" onclick="LoadUserProfile(' + postObject['UserId'] + ',true)" user-name link-cursor" id="userNamePost' + postObject['Id'] + '">' + postObject['userFullName'] + '</a>' +
+                                '</strong>' +
+                                '<strong class="house-name"> ' +
+                                    '<a class="link-cursor" href="/House/' + postObject['houseId'] + '">' +
+                                        '<span style="font-size: 17px;">' +
+                                            '<i class="fa fa-home icon-house"></i>' +
+                                                postObject['houseName'] +
+                                        '</span>' +
+                                    '</a>' +
+                                '</strong>' +
+                            '</div>' +
+                            '<div class="" style="margin-top: 0px;margin-bottom: 0;">' +
+            '                   <strong>' +
+                                    '<span class="post-time">' +
+                                        '<i class="fa fa-globe icon-house"></i> ' +
+                                        timeSince(postObject['CreateDate']) +
+                                    '</span>' +
+                                '</strong>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+        $("#timeline").append('<li class="media">'
+                        + '<div class="media-body">'
+                            + '<div class="panel panel-default panel-feed">' + header
+                                + '<div class="panel-body" >'
+                                    + '<p>' + postObject['Body'] + '</p>'
+
+                                    + '<div class="form-group">'
+                                     + '<div class="grid" id="imagesPost' + postObject['Id'] + '">'
+                                    + '</div>'
+                                    + '</div>'
+                                    + '<div class="row" style="height:auto;">'
+                                    + postObject['EmbedCode']
+                                    + '</div>'
+                                + '</div>'
+
+                                + '<div class="view-all-comments" style="height: 25px;">' +
+                                    '<div id="countComment' + postObject['Id'] + '" style="float: left;"><i style="color: #546E7A;"class="fa fa-comments-o"></i><i class="hide"> Chưa có bình luận</i> <span></span><strong> / </strong><span></span> <span> bình luận</span></div>' +
+                                    '<div class="hide" id="loadMoreComment' + postObject['Id'] + '" style="float: right;"><a onclick="loadMorePost(' + postObject['Id'] + ')"><i class="fa fa-refresh"></i> Tải bình luận trước đó </a></div>' +
+                                '</div>'
+
+                                + '<ul class="comments" id="commentsArea' + postObject['Id'] + '">'
+                                + '</ul>'
+
+                                 + '<div class="view-all-comments" style="height: 25px; text-align:center">' +
+                                    '<div class=""><a onclick="getNewCommentsForPost(' + postObject['Id'] + ')"><i class="fa fa-refresh"></i> Tải mới </a></div>' +
+                                '</div>'
+
+                                + '<ul class="comments">'
+                                 + '<li class="comment-form">'
+                                        + '<div class="input-group" style="width: 100%;">'
+                                        + '<a onclick="LoadUserProfile("' + @(currentUser.Id) + '")" class="pull-left"><img src="@(currentUser.ProfileImage == null ? "/Content/images/defaultProfile.png" : currentUser.ProfileImage)" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avatar-comment"></a>'
+                                        + '<div class="media-body" style="padding-left: 10px;">' +
+                                            '<input id="contentDetail' + postObject['Id'] + '" type="text" class="form-control input-cmnt" placeholder="Viết bình luận của bạn..."/>' +
+                                             '<i class="fa fa-fw fa-chevron-circle-right " onclick="addComment(' + postObject['Id'] + ')" style="font-size: xx-large;color: #25AD9F;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2"></i>' +
+                                        '</div>'
+            + '</div>'
+            + '</li>'
+            + '</ul>'
+            + '</div>'
+             + reportDiv
+            + '</div>'
+            + '</li>'
+
+        );
+        $(".dropdown-toggle").dropdown();
+    }
+    function editPost(postId) {
+        alert("editPost" + postId);
+        $.ajax({
+            url: "/Post/getSinglePost",
+            type: "GET",
+            datatype: 'json',
+            data: {
+                postId: postId,
+            },
+            success: function (successData) {
+                var obj = JSON.parse(successData);
+                $("#postContent").val(obj['Body']);
+                $("#postId").val(obj['Id']);
+                $("#shareButton").html("Cập nhật bài viết");
+
+
+            },
+            error: function (er) {
+                alert(er);
+            }
+
+        });
+        //Get post
+    }
+
+
+    function deletePost(postId) { //this function just display Confirm message
+        //alert("deletePost" + postId)
+        $("#deletePostModal").modal("show");
+        $("#confirmDeletePostId").val(postId);
+    }
+
+    function sendDeleteRequest() {
+        var id = $("#confirmDeletePostId").val();
+        $.ajax({
+            url: "/Post/deletePost",
+            type: "POST",
+            data: {
+                postId: id,
+            }, success: function (successData) {
+                location.reload();
+            },
+            error: function (er) {
+                alert(er);
+            }
+        });
+    }
+
+    function getImagesForPost(index, id) {
+        appenImageToPost(index, id);
+    }
+    function addImageToPost(imageUrl, postId, width) {
+        $("#imagesPost" + postId)
+            .append('<img src="' + imageUrl + '" style="width:' + width + '%;height:auto;margin-right:5px">');
+
+    }
+
+    function addImageToPreviewList(dir, position) {
+        //        $("#previewList").prepend('<div id="previewImage' + position + '" style="height:100px;width:100px;float:left;position:relative;margin: 0px 5px;"><img onclick="removePreview(' + position + ')" src="/Content/images/delete.png" style="position:absolute;top:0px;right:0px;width:20px;height:20px"/><img src="' + dir + '" style="max-width:100%;max-height:100%"/></div>')
+        $("#previewList")
+            .prepend('<div id="previewImage' +
+                position +
+                '" style="height:100px;width:auto;float:left;position:relative;margin:5px;border: 1px solid #e5e5e5;"><img onclick="removePreview(' +
+                position +
+                ')" src="/Content/images/delete.png" style="position:absolute;top:5px;right:5px;width:20px;height:20px"/><img src="' +
+                dir +
+                '" class="preview-img"/></div>');
+    }
+    function removePreview(position) {
+        $('#previewImage' + position + '').hide();
+        listUploadImage[position] = "";
+        listUploadThumnailImage[position] = "";
+
+    }
+    function reloadFeed() {
+        //clear all feed
+        $("#timeline").html("");
+        /*loadAllPost();*/
+    }
+    function clearCreatePostForm() {
+        var embedContent = "";
+        $("#previewContent").html(embedContent);
+        listUploadImage = [];
+        listUploadThumnailImage = [];
+        $("#previewList").html('');
+        $("#postContent").val('');
+        $("#postId").val('');
+        $("#shareButton").html("Chia sẻ");
+
+    }
+    function report(id) {
+        $("#reportPostId").val(id);
+        $("#reportContent").val("");
+        $("#reportModal").modal();
+    }
+    function processSendReport() {
+        var postId = $("#reportPostId").val();
+        var reportContent = $("#reportContent").val();
+        console.log("processSendReport: postid=" + postId + "reportContent=" + reportContent);
+        sendReport(postId, reportContent);
+    }
+
+    function onFocusPost() {
+        $("#addNewPost").css("display", "block");
+    }
+    function onBlurPost() {
+        $("#addNewPost").css("display", "none");
+    }
+    function textAreaAdjust(o) {
+        o.style.height = "1px";
+        o.style.height = (25 + o.scrollHeight) + "px";
+    }
+</script>
+
+

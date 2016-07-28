@@ -351,6 +351,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Xác nhận thông tin</h4>
             </div>
 
             <div class="modal-body">
@@ -452,6 +453,14 @@
     }
     function createNewPost() {
         var postId = $("#postId").val();
+
+        if (!$("#embedCode").val()) {
+            var getEmbedCode = getYoutubeFrameFromText($("#postContent").val());
+            if (getEmbedCode !== "") {
+                $("#embedCode").val(getEmbedCode);
+            }
+        }
+
         $.ajax({
             url: "/Post/Create",
             type: "POST",
@@ -518,6 +527,7 @@
 
         });
     });
+
     $(document).ready(function () {
         loadAllPost(-1);
     });
@@ -606,7 +616,7 @@
                            '</a>' +
                            '<ul class="dropdown-menu" role="menu" style="min-width: 0px;min-height: 0px;padding: 0;">' +
                                '<li><a style="font-weight: bold;" onclick="deletePost(' + postObject['Id'] + ')"><i style="color: #BF360C;" class="fa fa-fw fa-times"></i> Xóa</a></li>' +
-                               '<li><a style="font-weight: bold;" href="#postContent" onclick="editPost(' + postObject['Id'] + ')"><i style="color: #004D40;" class="fa fa-fw fa-edit"></i> Chỉnh sửa</a></li>' +
+                               '<li><a style="font-weight: bold;" href="/Post/Detail?postId=' + postObject['Id'] + '"><i style="color: #004D40;" class="fa fa-fw fa-edit"></i> Chỉnh sửa</a></li>' +
                            '</ul>' +
                        '</div>' +
                        '</div>' +
@@ -648,14 +658,13 @@
                         + '<div class="media-body">'
                             + '<div class="panel panel-default panel-feed">' + header
                                 + '<div class="panel-body" >'
-                                    + '<p>' + postObject['Body'] + '</p>'
-
+                                    + '<p id="postBody' + postObject['Id'] + '">' + replaceNewLineWithBrTag(postObject['Body']) + '</p>'
                                     + '<div class="form-group">'
                                      + '<div class="grid" id="imagesPost' + postObject['Id'] + '">'
                                     + '</div>'
                                     + '</div>'
-                                    + '<div class="row" style="height:auto;">'
-                                    + postObject['EmbedCode']
+                                    + '<div class="row embed-row" style="height:auto;">'
+                                    + getYoutubeFrameFromText(postObject['EmbedCode'])
                                     + '</div>'
                                 + '</div>'
 
@@ -689,6 +698,7 @@
 
         );
         $(".dropdown-toggle").dropdown();
+        loadMoreText(postObject['Id']);
     }
     function editPost(postId) {
         alert("editPost" + postId);
@@ -737,65 +747,65 @@
         });
     }
 
-//    function addComment(postId) {
-//        $.ajax({
-//            url: "/Post/CreateComment",
-//            type: "POST",
-//            data: {
-//                detail: $("#contentDetail" + postId).val(),
-//                postId: postId,
-//            },
-//            success: function (successData) {
-//                if (successData === 'success') {
-//                    //                    $("#commentsArea" + postId).html("");
-//                    getNewCommentsForPost(postId);
-//                    $("#contentDetail" + postId).val("");
-//                } else {
-//                    alert(successData);
-//                }
-//            },
-//            error: function (er) {
-//                alert(er);
-//            }
-//
-//        });
-//    }
+    //    function addComment(postId) {
+    //        $.ajax({
+    //            url: "/Post/CreateComment",
+    //            type: "POST",
+    //            data: {
+    //                detail: $("#contentDetail" + postId).val(),
+    //                postId: postId,
+    //            },
+    //            success: function (successData) {
+    //                if (successData === 'success') {
+    //                    //                    $("#commentsArea" + postId).html("");
+    //                    getNewCommentsForPost(postId);
+    //                    $("#contentDetail" + postId).val("");
+    //                } else {
+    //                    alert(successData);
+    //                }
+    //            },
+    //            error: function (er) {
+    //                alert(er);
+    //            }
+    //
+    //        });
+    //    }
 
-//    function getCommentsForPost(postid) {
-//        if (postid == null) {
-//            alert("postid == null");
-//            return;
-//        }
-//        $.ajax({
-//            url: "/Post/getCommentsForPost",
-//            type: "GET",
-//            data: {
-//                postId: postid,
-//            },
-//            success: function (successData) {
-//                var obj = successData;
-//                if (Array.isArray(obj)) {
-//                    if (obj.length === 0) {
-//                        $("#countComment" + postid).html("Chưa có bình luận nào");
-//                    } else {
-//                        $("#countComment" + postid).html(obj.length + " bình luận");
-//                    }
-//                    $.each(obj, function (index, comment) {
-//                        addCommentToCommentArea(postid, comment);
-//                        if (obj.length == (index + 1)) {
-//                            $("#commentsArea" + postid).data("lastGetComment", comment.lastGetComment);
-//                        }
-//                    });
-//                } else {
-//                    $("#commentsArea" + postid).data("lastGetComment", obj.lastGetComment);
-//                }
-//            },
-//            error: function (er) {
-//                alert(er);
-//            }
-//
-//        });
-//    }
+    //    function getCommentsForPost(postid) {
+    //        if (postid == null) {
+    //            alert("postid == null");
+    //            return;
+    //        }
+    //        $.ajax({
+    //            url: "/Post/getCommentsForPost",
+    //            type: "GET",
+    //            data: {
+    //                postId: postid,
+    //            },
+    //            success: function (successData) {
+    //                var obj = successData;
+    //                if (Array.isArray(obj)) {
+    //                    if (obj.length === 0) {
+    //                        $("#countComment" + postid).html("Chưa có bình luận nào");
+    //                    } else {
+    //                        $("#countComment" + postid).html(obj.length + " bình luận");
+    //                    }
+    //                    $.each(obj, function (index, comment) {
+    //                        addCommentToCommentArea(postid, comment);
+    //                        if (obj.length == (index + 1)) {
+    //                            $("#commentsArea" + postid).data("lastGetComment", comment.lastGetComment);
+    //                        }
+    //                    });
+    //                } else {
+    //                    $("#commentsArea" + postid).data("lastGetComment", obj.lastGetComment);
+    //                }
+    //            },
+    //            error: function (er) {
+    //                alert(er);
+    //            }
+    //
+    //        });
+    //    }
 
 
 
@@ -839,7 +849,9 @@
         $("#postContent").val('');
         $("#postId").val('');
         $("#shareButton").html("Chia sẻ");
-
+        $("#embedCode").val("");
+        $("#addNewPost").click();
+        textAreaAdjust(document.getElementById("postContent"));
     }
     function report(id) {
         $("#reportPostId").val(id);
@@ -854,24 +866,22 @@
     }
     function deleteNotification(noticChangedId) {
         console.log('deleteNotification' + noticChangedId);
-        $("#notification" + noticChangedId).hide('slow', function () { $("#notification" + noticChangedId).remove(); });
+        $.ajax({
+            url: "/Home/deleteNotification",
+            type: "POST",
+            data: {
+                data: noticChangedId,
+                type: "@SLIM_CONFIG.NOTIC_DELETE_TYPE_CHANGEID",
+            },
+            success: function (successData) {
+                //alert(successData);
+                $("#notification" + noticChangedId).hide('slow', function () { $("#notification" + noticChangedId).remove(); });
+            },
+            error: function (er) {
+                alert(er);
+            }
 
-        //        $.ajax({
-        //            url: "/Home/deleteNotification",
-        //            type: "POST",
-        //            data: {
-        //                data: noticChangedId,
-        //                type: "@SLIM_CONFIG.NOTIC_DELETE_TYPE_CHANGEID",
-        //            },
-        //            success: function (successData) {
-        //                //alert(successData);
-        //                $("#notification" + noticChangedId).hide('slow', function () { $("#notification11").remove(); });
-        //            },
-        //            error: function (er) {
-        //                alert(er);
-        //            }
-        //
-        //        });
+        });
     }
     function onFocusPost() {
         $("#addNewPost").css("display", "block");

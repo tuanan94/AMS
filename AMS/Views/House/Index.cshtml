@@ -538,11 +538,11 @@
                         + '<div class="media-body">'
                             + '<div class="panel panel-default panel-feed">' + header
                                 + '<div class="panel-body" >'
-                                    + '<p>' + postObject['Body'] + '</p>'
+                                    + '<pid="postBody' + postObject['Id'] + '">' + postObject['Body'] + '</p>'
                                     + '<section class="form-group testetetet" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
                                     + '</section>'
-                                    + '<div class="row" style="height:auto;">'
-                                    + postObject['EmbedCode']
+                                    + '<div class="row embed-row" style="height:auto;">'
+                                    + getYoutubeFrameFromText(postObject['EmbedCode'])
                                     + '</div>'
                                 + '</div>'
                                 + '<div class="view-all-comments" style="height: 25px;">' +

@@ -8,8 +8,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Reflection;
 using AMS;
+using AMS.Filter;
 using AMS.Models;
 using AMS.ObjectMapping;
+using Microsoft.Ajax.Utilities;
 
 namespace AMS.Controllers
 {
@@ -115,8 +117,6 @@ namespace AMS.Controllers
             // Do the serialization and output to the console
             string json = JsonConvert.SerializeObject(singlePost, settings);
             return json;
-
-
         }
         [HttpGet]
         [Authorize]
@@ -257,6 +257,148 @@ namespace AMS.Controllers
             {
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects
             });
+        }
+
+        [HttpGet]
+        [Authorize]
+        [AuthorizationPrivilegeFilter_RequestHouse]
+        [AutoRedirect.MandatorySurveyRedirect]
+        public ActionResult Detail(int postId)
+        {
+            //Convert to post Mapping
+            Post p = postService.findPostById(postId);
+            List<string> imgUrl = new List<string>();
+
+            PostMapping pMapping = new PostMapping();
+            int imageCount = 0;
+
+            if (p != null)
+            {
+                pMapping.Id = p.Id;
+                pMapping.Body = p.Body.Replace("\n", "<br/>");
+                pMapping.CreateDate = p.CreateDate.GetValueOrDefault();
+                pMapping.EmbedCode = p.EmbedCode;
+                pMapping.UserId = p.UserId;
+                pMapping.username = p.User == null ? "Không xác định sở hữu" : p.User.Username;
+                pMapping.userProfile = p.User == null || p.User.ProfileImage == null || p.User.ProfileImage.Equals("") ? "/Content/Images/defaultProfile.png" : p.User.ProfileImage;
+                pMapping.userFullName = p.User == null ? "Không xác định" : p.User.Fullname;
+                pMapping.houseName = p.User.House == null ? "Không xác định" : p.User.House.HouseName;
+                pMapping.houseId = p.User.HouseId == null ? 0 : p.User.HouseId.Value;
+
+                List<Image> listImages = imageService.GetImagesByPostId(p.Id);
+                imageCount = listImages.Count;
+                //                if (listImages.Count == 1)
+                //                {
+                //                    frameImageHeight = 476;
+                //                    System.Drawing.Image img = System.Drawing.Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + listImages[0].thumbnailUrl);
+                //                    imageCount = img.Height;
+                //                }
+                //                else if (listImages.Count > 1)
+                //                {
+                //                    frameImageHeight = ((int)listImages.Count / 2) * 237;
+                //                }
+            }
+            ViewBag.Post = pMapping;
+            ViewBag.ImageCount = imageCount;
+            ViewBag.CurrentUser = userService.findById(int.Parse(User.Identity.GetUserId()));
+            return View("ViewSinglePost");
+        }
+
+
+
+        [HttpGet]
+        public ActionResult GetPostDetail(int postId)
+        {
+            //Convert to post Mapping
+            Post p = postService.findPostById(postId);
+            MessageViewModels response = new MessageViewModels();
+            PostMapping pMapping = new PostMapping();
+            List<PostImageModel> listImage = new List<PostImageModel>();
+            if (p != null)
+            {
+                pMapping.Id = p.Id;
+                pMapping.Body = p.Body.Replace("\n", "<br/>");
+                pMapping.CreateDate = p.CreateDate.GetValueOrDefault();
+                pMapping.EmbedCode = p.EmbedCode;
+                pMapping.UserId = p.UserId;
+                pMapping.username = p.User == null ? "Không xác định sở hữu" : p.User.Username;
+                pMapping.userProfile = p.User == null || p.User.ProfileImage == null || p.User.ProfileImage.Equals("") ? "/Content/Images/defaultProfile.png" : p.User.ProfileImage;
+                pMapping.userFullName = p.User == null ? "Không xác định" : p.User.Fullname;
+                pMapping.houseName = p.User.House == null ? "Không xác định" : p.User.House.HouseName;
+                pMapping.houseId = p.User.HouseId == null ? 0 : p.User.HouseId.Value;
+                List<Image> listImages = imageService.GetImagesByPostId(p.Id);
+                PostImageModel imgModel = null;
+                foreach (var img in listImages)
+                {
+                    imgModel = new PostImageModel();
+                    imgModel.id = img.id;
+                    imgModel.postId = img.postId.Value;
+                    imgModel.thumbnailurl = img.thumbnailUrl;
+                    imgModel.url = img.url;
+                    listImage.Add(imgModel);
+                }
+                pMapping.ListImages = listImage;
+                response.Data = pMapping;
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult Update(PostMapping post)
+        {
+            //Convert to post Mapping
+            Post p = postService.findPostById(post.Id);
+            MessageViewModels response = new MessageViewModels();
+            if (p != null)
+            {
+                p.Body = post.Body;
+                p.UpdateDate = DateTime.Now;
+                if (!post.EmbedCode.IsNullOrWhiteSpace())
+                {
+                    p.EmbedCode = post.EmbedCode;
+                }
+                else
+                {
+                    p.EmbedCode = null;
+                }
+                if (null != post.ListImages)
+                {
+                    foreach (var img in post.ListImages)
+                    {
+                        if (img.id == 0)
+                        {
+                            Image eImg = new Image();
+                            eImg.thumbnailUrl = img.thumbnailurl;
+                            eImg.url = img.url;
+                            eImg.createdDate = DateTime.Now;
+                            eImg.postId = p.Id;
+                            imageService.saveImage(eImg);
+                        }
+                    }
+                }
+
+                postService.UpdatePost(p);
+
+                if (null != post.ListImgRemoved)
+                {
+                    foreach (var imgId in post.ListImgRemoved)
+                    {
+                        imageService.RemoveById(imgId);
+                    }
+                }
+                PostMapping newData = new PostMapping();
+                newData.Id = p.Id;
+                newData.Body = p.Body;
+                newData.EmbedCode = p.EmbedCode;
+                List<Image> listImages = imageService.GetImagesByPostId(p.Id);
+                newData.ImageCount = listImages.Count;
+                response.Data = newData;
+            }
+            else
+            {
+                response.StatusCode = -1;
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
 
 

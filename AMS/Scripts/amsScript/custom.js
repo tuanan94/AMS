@@ -1346,12 +1346,12 @@ equalheight = function (container) {
             rowDivs[currentDiv].height(currentTallest);
         }
     });
-    function textAreaAdjust(o) {
-        o.style.height = "1px";
-        o.style.height = (25 + o.scrollHeight) + "px";
-    }
+    
 }
-
+function textAreaAdjust(o) {
+    o.style.height = "1px";
+    o.style.height = (25 + o.scrollHeight) + "px";
+}
 function timeSince(dateString) {
     console.log("timeSince: " + dateString + "Z");
 

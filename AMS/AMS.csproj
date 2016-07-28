@@ -820,6 +820,7 @@
     <Content Include="Views\Config\ManageManager.cshtml" />
     <Content Include="Views\Config\ViewUtilityServiceDetail.cshtml" />
     <Content Include="Views\House\NotDisplay.cshtml" />
+    <Content Include="Views\Post\ViewSinglePost.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -851,7 +852,6 @@
     <Folder Include="Upload\csv\" />
     <Folder Include="Upload\img\" />
     <Folder Include="Views\Image\" />
-    <Folder Include="Views\Post\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controllers\fonts\glyphicons-halflings-regular.woff" />

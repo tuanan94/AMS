@@ -1,4 +1,46 @@
-﻿function appenImageToPost(index, id) {
+﻿$(document).ready(function () {
+
+
+
+});
+
+function loadMoreText(id) {
+    /*https://codepen.io/maxds/pen/jgeoA/*/
+    // Configure/customize these variables.
+
+    var showChar = 300;  // How many characters are shown by default
+    var ellipsestext = "...";
+    var moretext = "tất cả";
+    var lesstext = "thu lại ";
+
+
+    var content = $("#postBody" + id).html();
+
+    if (content.length > showChar) {
+
+        var c = content.substr(0, showChar);
+        var h = content.substr(showChar, content.length - showChar);
+
+        var html = c + '<span class="moreellipses">' + ellipsestext + '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
+
+        $("#postBody" + id).html(html);
+    }
+
+    $("#postBody" + id + " .morelink").click(function () {
+        if ($(this).hasClass("less")) {
+            $(this).removeClass("less");
+            $(this).html(moretext);
+        } else {
+            $(this).addClass("less");
+            $(this).html(lesstext);
+        }
+        $(this).parent().prev().toggle();
+        $(this).prev().toggle();
+        return false;
+    });
+}
+
+function appenImageToPost(index, id) {
     if (id == null) {
         alert("postid = nul");
         return;
@@ -58,6 +100,7 @@
                 animateThumb: false,
                 showThumbByDefault: false
             });
+            $("#loadingImages" + id).fadeOut("400");
         },
         error: function (er) {
             alert(er);
@@ -89,7 +132,7 @@ function getCommentsForPost(postid) {
 
                 if (obj.data.length < obj.totalComment) {
                     $("#loadMoreComment" + postid).removeClass("hide");
-                } 
+                }
                 $.each(obj.data, function (index, comment) {
                     addCommentToCommentArea(postid, comment);
                     if (index === 0) {
@@ -162,9 +205,9 @@ function getNewCommentsForPost(postid) {
             var objectData = data.Data;
             $.each(objectData.listComment, function (index, comment) {
                 addCommentToCommentArea(postid, comment, false);
-//                if (data.Data.listComment.length == (index + 1)) {
-//                    $("#commentsArea" + postid).data("lastGetComment", data.Data.lastGetComment);
-//                }
+                //                if (data.Data.listComment.length == (index + 1)) {
+                //                    $("#commentsArea" + postid).data("lastGetComment", data.Data.lastGetComment);
+                //                }
             });
 
             if (objectData.listComment.length !== 0) {
@@ -193,7 +236,7 @@ function getNewCommentsForPost(postid) {
 
             $("#commentsArea" + postid + " .comment-date").each(function () {
                 var thisElement = $(this);
-                thisElement.text(timeSince(thisElement.data("commentDate")) +" trước");
+                thisElement.text(timeSince(thisElement.data("commentDate")) + " trước");
             });
         },
         error: function (er) {
@@ -266,4 +309,293 @@ function addCommentToCommentArea(postId, comment, isPrepend) {
     } else {
         $("#commentsArea" + postId).append(elementStr);
     }
+}
+
+function getPostDetail(postId) {
+    $.ajax({
+        url: "/Post/GetPostDetail",
+        type: "get",
+        data: {
+            postId: postId
+        },
+        success: function (data) {
+            if (data.StatusCode === 0) {
+                var obj = data.Data;
+                $("#userAvatarModal img").prop("src", obj.userProfile);
+                $("#postContentModal").val(obj.Body.replace(/<br *\/?>/gi, '\n'));
+
+                var imagePreviewRow = $("#previewListModal");
+                if (obj.ListImages.length !== 0) {
+                    for (var i = 0; i < obj.ListImages.length; i++) {
+                        var img = obj.ListImages[i];
+                        imagePreviewRow.append(parseJsonToImgReview(img));
+                    }
+                }
+                if (obj.EmbedCode) {
+                    $("#previewContentModal").append(getYoutubeFrameFromText(obj.EmbedCode));
+                    $("#previewContentModal").data("embedCode", getYoutubeFrameFromText(obj.EmbedCode));
+                    $("#previewEmbedModal").removeClass("hide");
+                }
+
+                $("#editPostModal").unbind();
+                $("#editPostModal").modal("show");
+                $("#editPostModal").on("shown.bs.modal", function () {
+                    textAreaAdjust(document.getElementById("postContentModal"));
+                    var textAreaElement = $("#postContentModal");
+                    textAreaElement.unbind();
+                    textAreaElement.on("keyup", function () {
+                        textAreaAdjust(this);
+                    });
+                });
+
+                $("#editPostModal").data("postId", obj.Id);
+                $("#editPostModal").on("hidden.bs.modal", function () {
+                    $("#previewListModal").html("");
+                    $("#previewContentModal").removeData("embedCode");
+                    $("#postContentModal").val("");
+                    $("#previewContentModal").html("");
+                    textAreaAdjust(document.getElementById("postContentModal"));
+                    window.removeReviewImage = [];
+                    $("#userAvatarModal img").prop("src", "");
+                    $(this).removeData("postId");
+                });
+
+                $("#btnUpdatePost").unbind();
+                $("#btnUpdatePost").on("click", function () {
+                    $("#editPostModal").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+
+                    var listImageElement = $("#previewListModal").children();
+                    var imgList = [];
+                    var imgObj = {};
+                    listImageElement.each(function () {
+                        var thisEle = $(this);
+                        var imgId = thisEle.data("imgId");
+                        if (!imgId) {
+                            imgId = 0;
+                        }
+                        var thumbnailUrl = thisEle.data("imgThumbUrl");
+                        var url = thisEle.data("imgUrl");
+                        imgObj = {
+                            id: imgId,
+                            thumbnailurl: thumbnailUrl,
+                            url: url
+                        }
+                        imgList.push(imgObj);
+                    });
+
+                    var bodyContent = $("#postContentModal").val();
+                    var postId = $("#editPostModal").data("postId");
+                    var embedEdCode = $("#previewContentModal").data("embedCode");
+
+                    if (embedEdCode) {
+                        var youTubeLink = getYoutubeLinkFromText(embedEdCode);
+                        if (youTubeLink !== -1) {
+                            embedEdCode = "https://youtu.be/" + youTubeLink;
+                        } else {
+                            embedEdCode = null;
+                        }
+                    } else if (imgList.length === 0) {
+                        var youTubeLinkBodyText = getYoutubeLinkFromText(bodyContent);
+                        if (youTubeLinkBodyText !== -1) {
+                            embedEdCode = "https://youtu.be/" + youTubeLinkBodyText;
+                        } else {
+                            embedEdCode = null;
+                        }
+                    }
+
+                    var newPostData = {}
+                    if (!window.removeReviewImage) {
+                        window.removeReviewImage = [];
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: "/Post/Update",
+                        data: {
+                            Id: postId,
+                            Body: bodyContent,
+                            EmbedCode: embedEdCode,
+                            ListImages: imgList,
+                            ListImgRemoved: window.removeReviewImage
+                        },
+                        success: function (data) {
+                            if (data.StatusCode === 0) {
+                                var obj = data.Data;
+                                if (obj.ImageCount !== 0) {
+                                    appenImageToPost(0, obj.Id);
+                                } else {
+                                    $("#imagesPost" + obj.Id).html("");
+                                }
+                                $("#postBody" + obj.Id).html(replaceNewLineWithBrTag(obj.Body));
+                                if (obj.EmbedCode) {
+                                    var youtubeFrame = getYoutubeFrameFromText(obj.EmbedCode);
+                                    if (youtubeFrame !== "") {
+                                        $("#embedYoutubeFrame").html(youtubeFrame);
+                                    }
+                                } else {
+                                    $("#embedYoutubeFrame").html("");
+                                }
+                                $("#editPostModal").modal({
+                                    backdrop: 'true',
+                                    keyboard: true
+                                });
+                                $("#editPostModal").modal("hide");
+                            }
+                        }
+                    });
+
+                });
+            }
+        }
+    });
+}
+
+function parseJsonToImgReview(img) {
+    if (img.id) {
+        return '<div id="previewImageModal' + img.id + '" data-img-id="' + img.id + '" data-img-thumb-url="' + img.thumbnailurl + '" ' + ' data-img-url="' + img.url + '" class="img-review">' +
+                            '<img onclick="removeImgPreview(\'' + img.id + '\')" src="/Content/images/delete.png" class="img-review-del-btn" />' +
+                            '<img src="' + img.thumbnailurl + '" class="preview-img"/>' +
+                            '</div>';
+    } else {
+        var tempId = new Date().getTime();
+        return '<div id="previewImageModal' + tempId + '" data-img-thumb-url="' + img.thumbnailUrl + '" ' + ' data-img-url="' + img.imageUrl + '" class="img-review">' +
+                            '<img onclick="removeImgPreview(\'' + tempId + '\')" src="/Content/images/delete.png" class="img-review-del-btn" />' +
+                            '<img src="' + img.thumbnailUrl + '" class="preview-img"/>' +
+                            '</div>';
+    }
+}
+
+function removeImgPreview(id) {
+    var removeElement = $("#previewImageModal" + id);
+    if (removeElement.data("imgId")) {
+        if (window.removeReviewImage) {
+            window.removeReviewImage.push(id);
+        } else {
+            window.removeReviewImage = [];
+            window.removeReviewImage.push(id);
+        }
+    }
+    removeElement.remove();
+}
+
+function showEditEmbedCode(id) {
+    var imageListTag = $("#previewListModal").children();
+    if (imageListTag.length === 0) {
+        $("#embedCodeEditModal").val($("#previewContentModal").data("embedCode"));
+        $("#btnOkSaveEnbedCode").unbind();
+        $("#btnOkSaveEnbedCode")
+            .on("click",
+                function () {
+                    $("#previewContentModal").data("embedCode", $("#embedCodeEditModal").val());
+                    $("#addEmbedModal").modal("hide");
+                    $("#previewContentModal").html("");
+                    $("#previewEmbedModal").removeClass("hide");
+                    $("#previewContentModal")
+                        .append(getYoutubeFrameFromText($("#previewContentModal").data("embedCode")));
+                });
+        $("#addEmbedModal").modal("show");
+
+    } else {
+    }
+}
+function addImageModal() {
+
+    var embedData = $("#previewContentModal").data("embedCode");
+    if (!embedData) {
+
+        $("#uploadPostImageModal").click();
+
+        $("#uploadPostImageModal").unbind();
+        $("#uploadPostImageModal").change(function () {
+            var data = new FormData();
+
+            //        data.append("dir", "@SLIM_CONFIG.dirPostImage");
+
+            var files = $("#uploadPostImageModal").get(0).files;
+            if (files.length > 0) {
+                data.append("image", files[0]);
+                data.append("thumbWidth", 480);
+                data.append("thumbHeight", 480);
+
+                data.append("width", 1200);
+                data.append("height", 627);
+
+                // progessBar(true);
+                $.ajax({
+                    url: "/Management/Image/UploadPostImage/",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    data: data,
+                    success: function (successData) {
+                        $("#previewListModal").prepend(parseJsonToImgReview(successData.Data));
+                        // progessBar(false);
+                        $("#uploadPostImageModal").val("");
+                    },
+                    error: function (er) {
+                        alert(er);
+                        //progessBar(false);
+                    }
+                });
+            }
+        });
+
+    }
+}
+
+function getId(url) {
+    var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    var match = url.match(regExp);
+
+    if (match && match[2].length == 11) {
+        return match[2];
+    } else {
+        return 'error';
+    }
+}
+function getYoutubeFrame(youtubeUrl) {
+    var myId = getId(youtubeUrl);
+    if (myId !== "error") {
+        return '<iframe width="560" height="315" src="//www.youtube.com/embed/' +
+            myId +
+            '" frameborder="0" allowfullscreen></iframe>';
+    } else {
+        return -1;
+    }
+}
+
+function getYoutubeFrameFromText(commentText) {
+    if (commentText) {
+        var text = commentText.replace(/["'\n]/g, "").split(' ');
+        for (i = 0; i < text.length; i++) {
+            var test = getYoutubeFrame(text[i]);
+            if (test !== -1) {
+                return test;
+            }
+        }
+    }
+
+    return "";
+}
+
+function getYoutubeLinkFromText(commentText) {
+    if (commentText) {
+        var text = commentText.replace(/["'\n]/g, "").split(' ');
+        for (i = 0; i < text.length; i++) {
+            var test = getId(text[i]);
+            if (test !== "error") {
+                return test;
+            }
+        }
+    }
+    return "";
+}
+
+function replaceNewLineWithBrTag(commentText) {
+    if (commentText) {
+        return commentText.replace(/[\n]/g, "<br/>");
+    }
+
 }
