@@ -45,7 +45,6 @@ namespace AMS.Controllers
             p.CreateDate = DateTime.Now;
             p.UserId = curUser.Id;
             p.Body = content;
-            p.PostStatus = SLIM_CONFIG.POST_STATUS_PUBLIC;
             p.EmbedCode = embeded;
             int postId = postService.addPost(p);
             if (images == null)
@@ -57,18 +56,26 @@ namespace AMS.Controllers
         }
         [HttpPost]
         [Authorize]
-        [ValidateInput(false)]
-        public String CreateComment(String detail, int postId)
+        public ActionResult CreateComment(String detail, int postId)
         {
             User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
             Post targetPost = postService.findPostById(postId);
+            MessageViewModels response = new MessageViewModels();
             if (targetPost == null || targetPost.UserId == null)
             {
-                return "error";
+                response.StatusCode = -1;
+                return Json(response);
             }
-            if (curUser == null)
+            if (curUser == null || curUser.Status != SLIM_CONFIG.USER_STATUS_ENABLE)
             {
-                return "error";
+                response.StatusCode = -1;
+                return Json(response);
+            } 
+            if (targetPost.Status == SLIM_CONFIG.POST_STATUS_HIDE)
+            {
+                response.StatusCode = 2;
+                response.Data = postId;
+                return Json(response);
             }
             Comment c = new Comment();
             c.postId = postId;
@@ -77,8 +84,7 @@ namespace AMS.Controllers
             c.createdDate = DateTime.Now;
             postService.addComment(c);
             notificationService.addNotification(SLIM_CONFIG.NOTIC_TARGET_OBJECT_POST, targetPost.UserId.Value, SLIM_CONFIG.NOTIC_VERB_COMMENT, curUser.Id, targetPost.Id);
-            return "success";
-
+            return Json(response);
         }
 
 
@@ -186,13 +192,17 @@ namespace AMS.Controllers
         [Authorize]
         public ActionResult getCommentsForPost(int postId, int lastId)
         {
-            // Serializer settings
-
-            // Do the serialization and output to the console
+            MessageViewModels response = new MessageViewModels();
             object data = null;
-
             List<Comment> allComment = null;
             List<Comment> lastFiveComment = null;
+            Post post = postService.findPostById(postId);
+            if (null == post || post.Status == SLIM_CONFIG.POST_STATUS_HIDE)
+            {
+                response.StatusCode = 2;
+                response.Data = postId;
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
             if (lastId == 0)
             {
                 allComment = postService.GetCommentByPostId(postId);
@@ -222,16 +232,25 @@ namespace AMS.Controllers
                 {
                     totalComment = allComment.Count;
                 }
-                data = new { data = result, lastGetComment = DateTime.Now.Ticks, totalComment = totalComment };
+                data = new { listComment = result, lastGetComment = DateTime.Now.Ticks, totalComment = totalComment };
             }
-            return Json(data, JsonRequestBehavior.AllowGet);
+            response.Data = data;
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
         [Authorize]
         public ActionResult GetNewCommentsForPost(int postId, int newestCommentId)
         {
-            MessageViewModels reponse = new MessageViewModels();
+            MessageViewModels response = new MessageViewModels();
+            Post post = postService.findPostById(postId);
+            if (null == post || post.Status == SLIM_CONFIG.POST_STATUS_HIDE)
+            {
+                response.StatusCode = 2;
+                response.Data = postId;
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+
             // Do the serialization and output to the console
             var listComment = postService.GetNewComment(postId, newestCommentId);
             int newestCommentIdUpdate = newestCommentId;
@@ -245,8 +264,8 @@ namespace AMS.Controllers
                 lastGetComment = DateTime.Now.Ticks,
                 newestCommentId = newestCommentIdUpdate
             };
-            reponse.Data = obj;
-            return Json(reponse, JsonRequestBehavior.AllowGet);
+            response.Data = obj;
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

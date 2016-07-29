@@ -192,13 +192,10 @@
                     </div>*@
             </li>
         </ul>
-
         <ul class="timeline-list" id="timeline"></ul>
         <div style="margin: 3em; text-align: center">
             <button id="loadMoreBtn" type="button" class="btn btn-primary btn-lg" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Đang tải thêm...">Tải thêm tin khác</button>
         </div>
-
-
     </div>
     <div class="col-md-4">
         <div class="left-nav">
@@ -252,16 +249,18 @@
                         else if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_HELPDESK_REQUEST.Equals(nChange.NotificationObject.TargetObject) && nChange.NotificationObject.TargetObjectID != null && SLIM_CONFIG.NOTIC_VERB_ASSIGN_REQUEST.Equals(nChange.Verb))
                         {
                             HelpdeskRequestLog hdRequestLog = helpdeskRequestLogService.findById(nChange.NotificationObject.TargetObjectID.Value);
-
-                            User changeToUser = userServices.FindById(hdRequestLog.ChangeToUserId.HasValue ? hdRequestLog.ChangeToUserId.Value : -1);
-                            if (hdRequestLog != null && changeToUser != null)
+                            if (null != hdRequestLog)
                             {
-                                <div class="noti-element" style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
-                                    <i class="fa fa-fw fa-info"></i>
-                                    <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hỗ trợ của bạn đã được chuyển cho nhân viên hỗ trợ <strong>@changeToUser.Fullname</strong></a>
-                                    <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
-                                    <br />
-                                </div>
+                                User changeToUser = userServices.FindById(hdRequestLog.ChangeToUserId.HasValue ? hdRequestLog.ChangeToUserId.Value : -1);
+                                if (hdRequestLog != null && changeToUser != null)
+                                {
+                                    <div class="noti-element" style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
+                                        <i class="fa fa-fw fa-info"></i>
+                                        <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hỗ trợ của bạn đã được chuyển cho nhân viên hỗ trợ <strong>@changeToUser.Fullname</strong></a>
+                                        <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
+                                        <br />
+                                    </div>
+                                }
                             }
                         }
                         else if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_HELPDESK_REQUEST.Equals(nChange.NotificationObject.TargetObject) && nChange.NotificationObject.TargetObjectID != null && SLIM_CONFIG.NOTIC_VERB_FINISH_REQUEST.Equals(nChange.Verb))

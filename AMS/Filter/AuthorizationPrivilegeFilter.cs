@@ -15,10 +15,19 @@ namespace AMS.Filter
         private UserServices userService;
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            
+            int userId = 0;
+            try
+            {
+              userId =   int.Parse(HttpContext.Current.User.Identity.GetUserId());
+            }
+            catch (Exception)
+            {
+                
+            }
             userService = DependencyResolver.Current.GetService<UserServices>();
-            User curUser = userService.FindById(int.Parse(HttpContext.Current.User.Identity.GetUserId()));
-
-            if (curUser.HouseId == null)
+            User curUser = userService.FindById(userId);
+            if (curUser == null || curUser.HouseId == null)
             {
                 filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary
                 {

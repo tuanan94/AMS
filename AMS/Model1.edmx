@@ -292,10 +292,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Title" Type="nvarchar" MaxLength="250" />
           <Property Name="Body" Type="nvarchar(max)" />
-          <Property Name="ImgUrl" Type="varchar" MaxLength="255" />
-          <Property Name="PostStatus" Type="int" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="Status" Type="int" />
@@ -393,7 +390,6 @@
           <Property Name="Password" Type="varchar" MaxLength="255" />
           <Property Name="RoleId" Type="int" />
           <Property Name="HouseId" Type="int" />
-          <Property Name="ResidentType" Type="int" />
           <Property Name="Creator" Type="int" />
           <Property Name="ProfileImage" Type="nvarchar" MaxLength="200" />
           <Property Name="DateOfBirth" Type="date" />
@@ -1239,7 +1235,6 @@
           <EntitySet Name="NotificationChanges" EntityType="AMSModel.NotificationChange" />
           <EntitySet Name="NotificationObjects" EntityType="AMSModel.NotificationObject" />
           <EntitySet Name="Polls" EntityType="AMSModel.Poll" />
-          <EntitySet Name="Posts" EntityType="AMSModel.Post" />
           <EntitySet Name="Questions" EntityType="AMSModel.Question" />
           <EntitySet Name="Receipts" EntityType="AMSModel.Receipt" />
           <EntitySet Name="ReceiptDetails" EntityType="AMSModel.ReceiptDetail" />
@@ -1297,10 +1292,6 @@
           <AssociationSet Name="FK_BlockSurvey_Survey" Association="AMSModel.FK_BlockSurvey_Survey">
             <End Role="Poll" EntitySet="Polls" />
             <End Role="BlockPoll" EntitySet="BlockPolls" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Comment_Post" Association="AMSModel.FK_Comment_Post">
-            <End Role="Post" EntitySet="Posts" />
-            <End Role="Comment" EntitySet="Comments" />
           </AssociationSet>
           <AssociationSet Name="FK_Comment_User1" Association="AMSModel.FK_Comment_User1">
             <End Role="User" EntitySet="Users" />
@@ -1366,14 +1357,6 @@
             <End Role="Poll" EntitySet="Polls" />
             <End Role="UserAnswerPoll" EntitySet="UserAnswerPolls" />
           </AssociationSet>
-          <AssociationSet Name="FK_Report_Post" Association="AMSModel.FK_Report_Post">
-            <End Role="Post" EntitySet="Posts" />
-            <End Role="Report" EntitySet="Reports" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tbl_post_tbl_user" Association="AMSModel.FK_tbl_post_tbl_user">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Post" EntitySet="Posts" />
-          </AssociationSet>
           <AssociationSet Name="FK_Receipt_User" Association="AMSModel.FK_Receipt_User">
             <End Role="User" EntitySet="Users" />
             <End Role="Receipt" EntitySet="Receipts" />
@@ -1421,6 +1404,19 @@
           <AssociationSet Name="AspNetUserRoles" Association="AMSModel.AspNetUserRoles">
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
+          </AssociationSet>
+          <EntitySet Name="Posts" EntityType="AMSModel.Post" />
+          <AssociationSet Name="FK_Comment_Post" Association="AMSModel.FK_Comment_Post">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Report_Post" Association="AMSModel.FK_Report_Post">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_post_tbl_user" Association="AMSModel.FK_tbl_post_tbl_user">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Post" EntitySet="Posts" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="C__MigrationHistory">
@@ -1588,8 +1584,8 @@
           <Property Name="userId" Type="Int32" />
           <Property Name="detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="createdDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Post" Relationship="AMSModel.FK_Comment_Post" FromRole="Comment" ToRole="Post" />
           <NavigationProperty Name="User" Relationship="AMSModel.FK_Comment_User1" FromRole="Comment" ToRole="User" />
+          <NavigationProperty Name="Post" Relationship="AMSModel.FK_Comment_Post" FromRole="Comment" ToRole="Post" />
         </EntityType>
         <EntityType Name="HelpdeskRequest">
           <Key>
@@ -1739,25 +1735,6 @@
           <NavigationProperty Name="BlockPolls" Relationship="AMSModel.FK_BlockSurvey_Survey" FromRole="Poll" ToRole="BlockPoll" />
           <NavigationProperty Name="UserAnswerPolls" Relationship="AMSModel.FK_UserDoServey_Survey" FromRole="Poll" ToRole="UserAnswerPoll" />
         </EntityType>
-        <EntityType Name="Post">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Title" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImgUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="PostStatus" Type="Int32" />
-          <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
-          <Property Name="Status" Type="Int32" />
-          <Property Name="UserId" Type="Int32" />
-          <Property Name="EmbedCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Disable" Type="Int32" />
-          <NavigationProperty Name="Comments" Relationship="AMSModel.FK_Comment_Post" FromRole="Post" ToRole="Comment" />
-          <NavigationProperty Name="Reports" Relationship="AMSModel.FK_Report_Post" FromRole="Post" ToRole="Report" />
-          <NavigationProperty Name="User" Relationship="AMSModel.FK_tbl_post_tbl_user" FromRole="Post" ToRole="User" />
-        </EntityType>
         <EntityType Name="Question">
           <Key>
             <PropertyRef Name="Id" />
@@ -1815,8 +1792,8 @@
           <Property Name="PostId" Type="Int32" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="ReportContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Post" Relationship="AMSModel.FK_Report_Post" FromRole="Report" ToRole="Post" />
           <NavigationProperty Name="User" Relationship="AMSModel.FK_Report_User" FromRole="Report" ToRole="User" />
+          <NavigationProperty Name="Post" Relationship="AMSModel.FK_Report_Post" FromRole="Report" ToRole="Post" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -1860,7 +1837,6 @@
           <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="RoleId" Type="Int32" />
           <Property Name="HouseId" Type="Int32" />
-          <Property Name="ResidentType" Type="Int32" />
           <Property Name="Creator" Type="Int32" />
           <Property Name="ProfileImage" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="DateOfBirth" Type="DateTime" Precision="0" />
@@ -1882,12 +1858,12 @@
           <NavigationProperty Name="House" Relationship="AMSModel.FK_User_House" FromRole="User" ToRole="House" />
           <NavigationProperty Name="NotificationChanges" Relationship="AMSModel.FK_NotificationChange_User1" FromRole="User" ToRole="NotificationChange" />
           <NavigationProperty Name="NotificationObjects" Relationship="AMSModel.FK_NotificationObject_User" FromRole="User" ToRole="NotificationObject" />
-          <NavigationProperty Name="Posts" Relationship="AMSModel.FK_tbl_post_tbl_user" FromRole="User" ToRole="Post" />
           <NavigationProperty Name="Receipts" Relationship="AMSModel.FK_Receipt_User" FromRole="User" ToRole="Receipt" />
           <NavigationProperty Name="Reports" Relationship="AMSModel.FK_Report_User" FromRole="User" ToRole="Report" />
           <NavigationProperty Name="Role" Relationship="AMSModel.FK_tbl_user_tbl_role" FromRole="User" ToRole="Role" />
           <NavigationProperty Name="UserAnswerPolls" Relationship="AMSModel.FK_UserDoServey_User" FromRole="User" ToRole="UserAnswerPoll" />
           <NavigationProperty Name="UserRateAroundProviders" Relationship="AMSModel.FK_UserRateAroundProvider_User" FromRole="User" ToRole="UserRateAroundProvider" />
+          <NavigationProperty Name="Posts" Relationship="AMSModel.FK_tbl_post_tbl_user" FromRole="User" ToRole="Post" />
         </EntityType>
         <EntityType Name="UserAnswerPoll">
           <Key>
@@ -2102,18 +2078,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Comment_Post">
-          <End Type="AMSModel.Post" Role="Post" Multiplicity="0..1" />
-          <End Type="AMSModel.Comment" Role="Comment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Post">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Comment">
-              <PropertyRef Name="postId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Comment_User1">
           <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
           <End Type="AMSModel.Comment" Role="Comment" Multiplicity="*" />
@@ -2306,30 +2270,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Report_Post">
-          <End Type="AMSModel.Post" Role="Post" Multiplicity="0..1" />
-          <End Type="AMSModel.Report" Role="Report" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Post">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Report">
-              <PropertyRef Name="PostId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tbl_post_tbl_user">
-          <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
-          <End Type="AMSModel.Post" Role="Post" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Post">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Receipt_User">
           <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
           <End Type="AMSModel.Receipt" Role="Receipt" Multiplicity="*" />
@@ -2467,6 +2407,58 @@
         <Association Name="AspNetUserRoles">
           <End Type="AMSModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="AMSModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Post">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="EmbedCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Disable" Type="Int32" />
+          <NavigationProperty Name="Comments" Relationship="AMSModel.FK_Comment_Post" FromRole="Post" ToRole="Comment" />
+          <NavigationProperty Name="Reports" Relationship="AMSModel.FK_Report_Post" FromRole="Post" ToRole="Report" />
+          <NavigationProperty Name="User" Relationship="AMSModel.FK_tbl_post_tbl_user" FromRole="Post" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Comment_Post">
+          <End Type="AMSModel.Post" Role="Post" Multiplicity="0..1" />
+          <End Type="AMSModel.Comment" Role="Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="postId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Report_Post">
+          <End Type="AMSModel.Post" Role="Post" Multiplicity="0..1" />
+          <End Type="AMSModel.Report" Role="Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_post_tbl_user">
+          <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="AMSModel.Post" Role="Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         </Schema>
     </edmx:ConceptualModels>
@@ -2767,23 +2759,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Posts">
-            <EntityTypeMapping TypeName="AMSModel.Post">
-              <MappingFragment StoreEntitySet="Post">
-                <ScalarProperty Name="Disable" ColumnName="Disable" />
-                <ScalarProperty Name="EmbedCode" ColumnName="EmbedCode" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="PostStatus" ColumnName="PostStatus" />
-                <ScalarProperty Name="ImgUrl" ColumnName="ImgUrl" />
-                <ScalarProperty Name="Body" ColumnName="Body" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Questions">
             <EntityTypeMapping TypeName="AMSModel.Question">
               <MappingFragment StoreEntitySet="Question">
@@ -2886,7 +2861,6 @@
                 <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
                 <ScalarProperty Name="ProfileImage" ColumnName="ProfileImage" />
                 <ScalarProperty Name="Creator" ColumnName="Creator" />
-                <ScalarProperty Name="ResidentType" ColumnName="ResidentType" />
                 <ScalarProperty Name="HouseId" ColumnName="HouseId" />
                 <ScalarProperty Name="RoleId" ColumnName="RoleId" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
@@ -2973,6 +2947,20 @@
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="Posts">
+            <EntityTypeMapping TypeName="AMSModel.Post">
+              <MappingFragment StoreEntitySet="Post">
+                <ScalarProperty Name="Disable" ColumnName="Disable" />
+                <ScalarProperty Name="EmbedCode" ColumnName="EmbedCode" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

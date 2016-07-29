@@ -44,29 +44,22 @@ namespace AMS.Service
             userRepository.Add(u);
         }
 
-        public List<User> GetKindOfUserInHouse(int houseId)
-        {
-            return userRepository.List.Where(u => u.HouseId == houseId)
-                    .GroupBy(u => u.ResidentType)
-                    .Select(r => r.First())
-                    .ToList();
-        }
         public List<User> GetAllResident()
         {
-            return userRepository.List.Where(u => u.Status != null && u.Status != SLIM_CONFIG.USER_APPROVE_WAITING && u.Status != SLIM_CONFIG.USER_STATUS_DELETE
+            return userRepository.List.Where(u => u.Status != null && u.Status == SLIM_CONFIG.USER_STATUS_ENABLE
                 && (u.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT || u.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)).
                 OrderByDescending(userRepository => userRepository.CreateDate)
                     .ToList();
         }
         public List<User> GetAllSupporter()
         {
-            return userRepository.List.Where(u => u.Status != null && u.Status != SLIM_CONFIG.USER_STATUS_DELETE && u.RoleId == SLIM_CONFIG.USER_ROLE_SUPPORTER).
+            return userRepository.List.Where(u => u.Status != null && u.Status == SLIM_CONFIG.USER_STATUS_ENABLE && u.RoleId == SLIM_CONFIG.USER_ROLE_SUPPORTER).
                 OrderByDescending(userRepository => userRepository.CreateDate)
                     .ToList();
         }
         public List<User> GetAllManager()
         {
-            return userRepository.List.Where(u => u.Status != null && u.Status != SLIM_CONFIG.USER_STATUS_DELETE && u.RoleId == SLIM_CONFIG.USER_ROLE_MANAGER).
+            return userRepository.List.Where(u => u.Status != null && u.Status == SLIM_CONFIG.USER_STATUS_ENABLE && u.RoleId == SLIM_CONFIG.USER_ROLE_MANAGER).
                 OrderByDescending(userRepository => userRepository.CreateDate)
                     .ToList();
         }

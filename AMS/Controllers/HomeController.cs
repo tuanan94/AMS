@@ -27,6 +27,9 @@ namespace AMS.Controllers
         PostService postService = new PostService();
         UserService userService = new UserService();
         HouseServices houseService = new HouseServices();
+        HelpdeskRequestLogServices hdRequestLogServices = new HelpdeskRequestLogServices();
+        HelpdeskRequestServices helpdeskRequestServices = new HelpdeskRequestServices();
+        UserAnswerService userAnswerPollService = new UserAnswerService();
         NotificationService notificationService = new NotificationService();
         readonly string parternTime = "dd-MM-yyyy HH:mm";
 
@@ -167,24 +170,6 @@ namespace AMS.Controllers
             return RedirectToAction("TimeLine");
         }
 
-        [HttpPost]
-        public ActionResult TimeLinex(ListPostViewModel post)
-        {
-            string mediaUrl = null;
-
-
-            //if (ModelState.IsValid)
-            //{
-
-            Post p = new Post();
-            // post.Body = p.Body;
-            p.Title = post.Title;
-            p.ImgUrl = post.ImgUrl;
-
-            //            postService.CreatePosts(p);
-            //}
-            return RedirectToAction("TimeLine");
-        }
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -555,13 +540,13 @@ namespace AMS.Controllers
 
         [HttpPost]
         [Authorize]
-        public Object addMember(String fullname, String username, String profileImage, int gender, DateTime birthDate, String IDNumber, DateTime idDate, int relationShipLevel, String sendPasswordTo)
+        public Object addMember(String fullname, String username, String profileImage, int gender, DateTime birthDate, String IDNumber, DateTime idDate, int relationShipLevel, String sendPasswordTo, int creatorId)
         {
             User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
-
             //DateTime bdate = DateTime.Parse(birthDate);
             User u = userService.findByUsername(username);
-            if (u != null)
+            User creator = userService.findById(creatorId);
+            if (u != null || creator == null || (creator != null && (creator.RoleId != SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || creator.Status == SLIM_CONFIG.USER_STATUS_DELETE)))
             {
                 return false;
             }
@@ -570,15 +555,15 @@ namespace AMS.Controllers
             u.Username = username;
             u.DateOfBirth = birthDate;
             u.RoleId = SLIM_CONFIG.USER_ROLE_RESIDENT;
-            u.Status = 0;
+            u.Status = SLIM_CONFIG.USER_APPROVE_WAITING;
             u.HouseId = curUser.HouseId;
+            u.Creator = creatorId;
             u.Gender = gender;
             if (!IDNumber.Equals(""))
             {
                 u.IDNumber = IDNumber;
                 u.IDCreatedDate = idDate;
             }
-
             u.FamilyLevel = relationShipLevel;
             u.CreateDate = DateTime.Now;
             u.LastModified = DateTime.Now;
@@ -589,18 +574,82 @@ namespace AMS.Controllers
             userService.addUser(u);
             return JsonConvert.SerializeObject(u);
         }
-        [HttpPost]
-        [Authorize]
-        public bool deleteRequest(int id)
-        {
-            User u = userService.findById(id);
 
+        [HttpPost]
+        public ActionResult deleteRequest(int id)
+        {
+            MessageViewModels response = new MessageViewModels();
+            User u = userService.findById(id);
             if (u == null || u.Status == 1)
             {
-                return false;
+                response.StatusCode = 2;
             }
-            userService.deleteUser(u);
-            return true;
+            var poll = u.UserAnswerPolls.ToList();
+            var notiObject = u.NotificationObjects.ToList();
+            foreach (var ntObj in notiObject)
+            {
+                var notiChange = ntObj.NotificationChanges.ToList();
+                ntObj.NotificationChanges = null;
+                foreach (var ntChange in notiChange)
+                {
+                    notificationService.DeleteNotiChangeById(ntChange.ID);
+                }
+                ntObj.User = null;
+                var notiObj = notificationService.FindNotiObjectById(ntObj.ID);
+                notificationService.DeleteNotiObject(notiObj);
+                notiChange = null;
+                notiObj = null;
+            }
+            try
+            {
+                foreach (var p in poll)
+                {
+                    var answer = userAnswerPollService.FindById(u.Id, p.PollId);
+                    answer.User = null;
+                    answer.Poll = null;
+                    answer.Answer = null;
+                    if (null != answer)
+                    {
+                        userAnswerPollService.DeleteUserAnswer(answer);
+                    }
+                }
+                poll = null;
+                notiObject = null;
+
+                u.HouseId = null;
+                u.RoleId = SLIM_CONFIG.USER_ROLE_RESIDENT;
+                u.Status = SLIM_CONFIG.USER_STATUS_DELETE;
+                userService.updateUser(u);
+                response.Data = u.Id;
+            }
+            catch (Exception e1)
+            {
+                response.Data = u.Id;
+                return Json(response);
+            }
+            return Json(response);
+        }
+
+        [HttpPost]
+        public ActionResult deleteUser(int id)
+        {
+            User u = userService.findById(id);
+            MessageViewModels response = new MessageViewModels();
+            
+            if (u == null || u.Status == 1)
+            {
+                response.StatusCode = -1;
+                return Json(response);
+            }
+            try
+            {
+                userService.deleteUser(u);
+            }
+            catch (Exception e1)
+            {
+                return Json(response);
+            }
+            return Json(response);
         }
 
         [HttpPost]
@@ -616,7 +665,7 @@ namespace AMS.Controllers
         [HttpPost]
         public ActionResult DeleteListNotification(List<int> notiIdList, string type)
         {
-            MessageViewModels response = new  MessageViewModels();
+            MessageViewModels response = new MessageViewModels();
             try
             {
                 if (SLIM_CONFIG.NOTIC_DELETE_TYPE_CHANGEID.Equals(type))

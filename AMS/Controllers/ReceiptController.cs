@@ -2150,38 +2150,7 @@ namespace AMS.Controllers
         //            }
         //            return totalWaterPrice;
         //        }
-
-        private ReceiptRangePriceByHouseModel GetThisReceiptInRangePrice(List<UtilityServiceRangePrice> rangePrices, House house)
-        {
-
-            // Orderby in this case for the user in registration book will be ordered to the top
-            List<ResidentGroupByTypeViewModel> kindOdUserInHouse = house.Users.Where(r => r.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || r.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT)
-                .OrderBy(r => r.ResidentType).GroupBy(u => u.ResidentType).Select(u => new ResidentGroupByTypeViewModel(u.First(), u.Count())).ToList();
-            ReceiptRangePriceByHouseModel rangePriceModel = new ReceiptRangePriceByHouseModel();
-            if (kindOdUserInHouse.Count != 0)
-            {
-                if (kindOdUserInHouse.First().User.ResidentType == SLIM_CONFIG.RESIDENT_IN_REGISTRATION_BOOK)
-                {
-                    rangePriceModel.RangePrices =
-                        rangePrices.Where(rp => rp.Type == SLIM_CONFIG.RESIDENT_IN_REGISTRATION_BOOK).ToList();
-                    rangePriceModel.Count = kindOdUserInHouse.First().Count;
-                }
-                else if (kindOdUserInHouse.First().User.ResidentType == SLIM_CONFIG.RESIDENT_HAS_KT3)
-                {
-                    rangePriceModel.RangePrices =
-                        rangePrices.Where(rp => rp.Type == SLIM_CONFIG.RESIDENT_HAS_KT3).ToList();
-                    rangePriceModel.Count = kindOdUserInHouse.First().Count;
-                }
-                else
-                {
-                    rangePriceModel.RangePrices =
-                        rangePrices.Where(rp => rp.Type == SLIM_CONFIG.RESIDENT_OTHER).ToList();
-                    rangePriceModel.Count = kindOdUserInHouse.First().Count;
-                }
-                return rangePriceModel;
-            }
-            return null;
-        }
+       
 
         public static double CalculateWaterUtiServiceVersion1(double consumption, List<UtilityServiceRangePrice> rangePrices)
         {

@@ -128,16 +128,17 @@ function appenImageToPost(index, id) {
 
             });
             listElement = listElement + "</div>";
-            currentElement.append(listElement);
-            if(currentElement.data("lightGallery")) {
-                currentElement.data("lightGallery").destroy(true);
+            if(currentElement) {
+                currentElement.append(listElement);
+                if (currentElement.data("lightGallery")) {
+                    currentElement.data("lightGallery").destroy(true);
+                }
+                currentElement.lightGallery({
+                    thumbnail: true,
+                    animateThumb: false,
+                    showThumbByDefault: false
+                });
             }
-            currentElement.lightGallery({
-                thumbnail: true,
-                animateThumb: false,
-                showThumbByDefault: false
-            });
-            $("#loadingImages" + id).fadeOut("400");
         },
         error: function (er) {
             alert(er);
@@ -158,33 +159,47 @@ function getCommentsForPost(postid) {
             postId: postid,
             lastId: 0,
         },
-        success: function (successData) {
-            if (successData.data) {
-                var obj = successData;
-                var commentTag = $("#countComment" + postid);
-                commentTag.children("span:nth(0)").text(obj.data.length);
-                commentTag.children("span:nth(0)").data("currentIndex", obj.data.length);
-                commentTag.children("span:nth(1)").text(obj.totalComment);
-                commentTag.children("span:nth(1)").data("totalItem", obj.totalComment);
+        success: function (data) {
+            if (data.StatusCode === 0) {
+                var obj = data.Data;
+                if (obj.listComment) {
+                    var listData = obj.listComment;
+                    var commentTag = $("#countComment" + postid);
+                    commentTag.children("span:nth(0)").text(listData.length);
+                    commentTag.children("span:nth(0)").data("currentIndex", listData.length);
+                    commentTag.children("span:nth(1)").text(obj.totalComment);
+                    commentTag.children("span:nth(1)").data("totalItem", obj.totalComment);
 
-                if (obj.data.length < obj.totalComment) {
-                    $("#loadMoreComment" + postid).removeClass("hide");
+                    if (listData.length < obj.totalComment) {
+                        $("#loadMoreComment" + postid).removeClass("hide");
+                    }
+                    $.each(listData, function (index, comment) {
+                        addCommentToCommentArea(postid, comment);
+                        if (index === 0) {
+                            $("#commentsArea" + postid).data("lastCommentId", comment.id);
+                        }
+                        if (listData.length === (index + 1)) {
+                            $("#commentsArea" + postid).data("newestCommentId", comment.id);
+                        }
+                    });
+                    $("#countComment" + postid).children("span, strong").removeClass("hide");
                 }
-                $.each(obj.data, function (index, comment) {
-                    addCommentToCommentArea(postid, comment);
-                    if (index === 0) {
-                        $("#commentsArea" + postid).data("lastCommentId", comment.id);
-                    }
-                    if (obj.data.length === (index + 1)) {
-                        $("#commentsArea" + postid).data("newestCommentId", comment.id);
-                    }
+                else {
+                    $("#commentsArea" + postid).data("lastGetComment", obj.lastGetComment);
+                    $("#countComment" + postid).children("span, strong").addClass("hide");
+                    $("#countComment" + postid).children("i").removeClass("hide");
+                }
+            } else {
+                $("#amsMsgText").html("Rất tiếc! Bài viết này đã không còn tồn tại trong hệ thống.");
+                $("#amsMessageModal").unbind();
+                $("#amsMessageModal").modal("show");
+                $("#amsMessageModal").data("postId", data.Data);
+                $("#amsMessageModal").on("hidden.bs.modal", function () {
+                    var postId = $("#amsMessageModal").data("postId");
+                    $("#userPostItem" + postId).hide("300", function () {
+                        $(this).remove();
+                    });
                 });
-                $("#countComment" + postid).children("span, strong").removeClass("hide");
-            }
-            else {
-                $("#commentsArea" + postid).data("lastGetComment", successData.lastGetComment);
-                $("#countComment" + postid).children("span, strong").addClass("hide");
-                $("#countComment" + postid).children("i").removeClass("hide");
             }
         },
         error: function (er) {
@@ -208,11 +223,28 @@ function addComment(postId) {
                 postId: postId,
             },
             success: function (successData) {
-                if (successData === 'success') {
+                if (successData.StatusCode === 0) {
                     getNewCommentsForPost(postId);
                     $("#contentDetail" + postId).val("");
-                } else {
-                    alert(successData);
+                } else if (successData.StatusCode === 2) {
+                    $("#amsMsgText").html("Rất tiếc! Bài viết này đã không còn tồn tại trong hệ thống.");
+                    $("#amsMessageModal").unbind();
+                    $("#amsMessageModal").modal("show");
+                    $("#amsMessageModal").data("postId", successData.Data);
+                    $("#amsMessageModal").on("hidden.bs.modal", function () {
+                        if (location.pathname.indexOf("Post/Detail") > -1) {
+                            location.href = "/";
+                        }else {
+                            var postId = $("#amsMessageModal").data("postId");
+                            $("#userPostItem" + postId).hide("500", function () {
+                                $(this).remove();
+                            });
+                        }
+                    });
+                }else {
+                    $("#amsMsgText").html("Việc bình luận thất bại xin vui lòng thử lại !");
+                    $("#amsMessageModal").unbind();
+                    $("#amsMessageModal").modal("show");
                 }
             },
             error: function (er) {
@@ -240,42 +272,60 @@ function getNewCommentsForPost(postid) {
             newestCommentId: newestCommentId
         },
         success: function (data) {
-            var objectData = data.Data;
-            $.each(objectData.listComment, function (index, comment) {
-                addCommentToCommentArea(postid, comment, false);
-                //                if (data.Data.listComment.length == (index + 1)) {
-                //                    $("#commentsArea" + postid).data("lastGetComment", data.Data.lastGetComment);
-                //                }
-            });
 
-            if (objectData.listComment.length !== 0) {
-                var commentTag = $("#countComment" + postid);
-                var lastViewItem = commentTag.children("span:nth(0)").data("currentIndex");
-                var totalItem = commentTag.children("span:nth(1)").data("totalItem");
+            if(data.StatusCode === 0) {
+                var objectData = data.Data;
+                $.each(objectData.listComment, function (index, comment) {
+                    addCommentToCommentArea(postid, comment, false);
+                    //                if (data.Data.listComment.length == (index + 1)) {
+                    //                    $("#commentsArea" + postid).data("lastGetComment", data.Data.lastGetComment);
+                    //                }
+                });
 
-                if ((!lastViewItem) || (!totalItem)) {
-                    lastViewItem = 0;
-                    totalItem = 0;
+                if (objectData.listComment.length !== 0) {
+                    var commentTag = $("#countComment" + postid);
+                    var lastViewItem = commentTag.children("span:nth(0)").data("currentIndex");
+                    var totalItem = commentTag.children("span:nth(1)").data("totalItem");
+
+                    if ((!lastViewItem) || (!totalItem)) {
+                        lastViewItem = 0;
+                        totalItem = 0;
+                    }
+
+                    var lastCommentListLength = objectData.listComment.length;
+                    totalItem = parseInt(totalItem, 10) + lastCommentListLength;
+                    lastViewItem = parseInt(lastViewItem, 10) + lastCommentListLength;
+
+                    commentTag.children("span:nth(0)").data("currentIndex", lastViewItem);
+                    commentTag.children("span:nth(1)").data("totalItem", totalItem);
+                    commentTag.children("span:nth(0)").text(lastViewItem);
+                    commentTag.children("span:nth(1)").text(totalItem);
+
+                    $("#countComment" + postid).children("span, strong").removeClass("hide");
+                    $("#countComment" + postid).children("i:nth(1)").addClass("hide");
                 }
+                $("#commentsArea" + postid).data("newestCommentId", objectData.newestCommentId);
 
-                var lastCommentListLength = objectData.listComment.length;
-                totalItem = parseInt(totalItem, 10) + lastCommentListLength;
-                lastViewItem = parseInt(lastViewItem, 10) + lastCommentListLength;
-
-                commentTag.children("span:nth(0)").data("currentIndex", lastViewItem);
-                commentTag.children("span:nth(1)").data("totalItem", totalItem);
-                commentTag.children("span:nth(0)").text(lastViewItem);
-                commentTag.children("span:nth(1)").text(totalItem);
-
-                $("#countComment" + postid).children("span, strong").removeClass("hide");
-                $("#countComment" + postid).children("i:nth(1)").addClass("hide");
+                $("#commentsArea" + postid + " .comment-date").each(function () {
+                    var thisElement = $(this);
+                    thisElement.text(timeSince(thisElement.data("commentDate")) + " trước");
+                });
+            }else {
+                $("#amsMsgText").html("Rất tiếc! Bài viết này đã không còn tồn tại trong hệ thống.");
+                $("#amsMessageModal").unbind();
+                $("#amsMessageModal").modal("show");
+                $("#amsMessageModal").data("postId", data.Data);
+                $("#amsMessageModal").on("hidden.bs.modal", function () {
+                    if (location.pathname.indexOf("Post/Detail") > -1) {
+                        location.href = "/";
+                    } else {
+                        var postId = $("#amsMessageModal").data("postId");
+                        $("#userPostItem" + postId).hide("500", function () {
+                            $(this).remove();
+                        });
+                    }
+                });
             }
-            $("#commentsArea" + postid).data("newestCommentId", objectData.newestCommentId);
-
-            $("#commentsArea" + postid + " .comment-date").each(function () {
-                var thisElement = $(this);
-                thisElement.text(timeSince(thisElement.data("commentDate")) + " trước");
-            });
         },
         error: function (er) {
             alert(er);
@@ -300,27 +350,46 @@ function loadMorePost(postid) {
             lastId: lastId
         },
         success: function (data) {
-            if (data.data) {
-                var listData = data.data;
-                var commentTag = $("#countComment" + postid);
-                var lastViewItem = commentTag.children("span:nth(0)").data("currentIndex");
-                var totalItem = commentTag.children("span:nth(1)").data("totalItem");
+            if (data.StatusCode === 0) {
+                var obj = data.Data;
+                if (obj.listComment) {
+                    var listData = obj.listComment;
 
-                commentTag.children("span:nth(0)").data("currentIndex", parseInt(lastViewItem, 10) + listData.length);
-                if ((parseInt(lastViewItem, 10) + listData.length) === parseInt(totalItem, 10)) {
-                    $("#loadMoreComment" + postid).addClass("hide");
+                    var commentTag = $("#countComment" + postid);
+                    var lastViewItem = commentTag.children("span:nth(0)").data("currentIndex");
+                    var totalItem = commentTag.children("span:nth(1)").data("totalItem");
+
+                    commentTag.children("span:nth(0)").data("currentIndex", parseInt(lastViewItem, 10) + listData.length);
+                    if ((parseInt(lastViewItem, 10) + listData.length) === parseInt(totalItem, 10)) {
+                        $("#loadMoreComment" + postid).addClass("hide");
+                    }
+                    commentTag.children("span:nth(0)").text(parseInt(lastViewItem, 10) + listData.length);
+
+                    $.each(listData, function (index, comment) {
+                        addCommentToCommentArea(postid, comment, true);
+                        if (listData.length === (index + 1)) {
+                            $("#commentsArea" + postid).data("lastCommentId", comment.id);
+                        }
+                    });
+                } else {
+                    $("#commentsArea" + postid).data("lastGetComment", obj.lastGetComment);
+                    //                    $("#countComment" + postid).html("Chưa có bình luận nào");
                 }
-                commentTag.children("span:nth(0)").text(parseInt(lastViewItem, 10) + listData.length);
-
-                $.each(listData, function (index, comment) {
-                    addCommentToCommentArea(postid, comment, true);
-                    if (listData.length === (index + 1)) {
-                        $("#commentsArea" + postid).data("lastCommentId", comment.id);
+            }else {
+                $("#amsMsgText").html("Rất tiếc! Bài viết này đã không còn tồn tại trong hệ thống.");
+                $("#amsMessageModal").unbind();
+                $("#amsMessageModal").modal("show");
+                $("#amsMessageModal").data("postId", data.Data);
+                $("#amsMessageModal").on("hidden.bs.modal", function () {
+                    if (location.pathname.indexOf("Post/Detail") > -1) {
+                        location.href = "/";
+                    } else {
+                        var postId = $("#amsMessageModal").data("postId");
+                        $("#userPostItem" + postId).hide("500", function () {
+                            $(this).remove();
+                        });
                     }
                 });
-            } else {
-                $("#commentsArea" + postid).data("lastGetComment", data.lastGetComment);
-                //                    $("#countComment" + postid).html("Chưa có bình luận nào");
             }
         },
         error: function (er) {

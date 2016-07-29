@@ -48,7 +48,6 @@ namespace AMS
         public virtual DbSet<NotificationChange> NotificationChanges { get; set; }
         public virtual DbSet<NotificationObject> NotificationObjects { get; set; }
         public virtual DbSet<Poll> Polls { get; set; }
-        public virtual DbSet<Post> Posts { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Receipt> Receipts { get; set; }
         public virtual DbSet<ReceiptDetail> ReceiptDetails { get; set; }
@@ -63,5 +62,6 @@ namespace AMS
         public virtual DbSet<UtilityServiceRangePrice> UtilityServiceRangePrices { get; set; }
         public virtual DbSet<UtilServiceCategory> UtilServiceCategories { get; set; }
         public virtual DbSet<UtilServiceForHouseCat> UtilServiceForHouseCats { get; set; }
+        public virtual DbSet<Post> Posts { get; set; }
     }
 }

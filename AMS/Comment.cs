@@ -20,7 +20,7 @@ namespace AMS
         public string detail { get; set; }
         public Nullable<System.DateTime> createdDate { get; set; }
     
-        public virtual Post Post { get; set; }
         public virtual User User { get; set; }
+        public virtual Post Post { get; set; }
     }
 }

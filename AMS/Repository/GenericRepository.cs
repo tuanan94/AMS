@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core;
+using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web;
@@ -93,5 +95,6 @@ namespace AMS.Repository
             // Now find the product by primary key (detached entities are not cached)
             return table.Find(id);
         }
+        
     }
 }

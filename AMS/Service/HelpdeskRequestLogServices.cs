@@ -14,6 +14,14 @@ namespace AMS.Service
         {
             return logRepository.FindById(id);
         }
+        public void DeleteById(int id)
+        {
+            var e = logRepository.FindById(id);
+            if (null != e)
+            {
+                logRepository.Delete(e);
+            }
+        }
 
         public void Add(HelpdeskRequestLog log)
         {
@@ -26,7 +34,7 @@ namespace AMS.Service
 
         public HelpdeskRequestLog FindLastHelpdeskRequestLog(int id)
         {
-           return logRepository.List.Where(l => l.HelpdeskRequestId == id).OrderByDescending(l => l.CreateDate).First();
+            return logRepository.List.Where(l => l.HelpdeskRequestId == id).OrderByDescending(l => l.CreateDate).First();
         }
 
         public List<HelpdeskRequestLog> GetHelpdeskRequestLog(int id)

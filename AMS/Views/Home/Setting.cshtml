@@ -5,7 +5,7 @@
     ViewBag.Title = "Setting";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
     House curHouse = ViewBag.curHouse;
-    var pendingMembers = curHouse.Users.Where(u => u.Status != 1).ToList();
+    var pendingMembers = curHouse.Users.Where(u => u.Status == SLIM_CONFIG.USER_APPROVE_WAITING).ToList();
     UserService userService = new UserService();
     User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
 }
@@ -403,17 +403,16 @@
             success: function (successData) {
                 $("#createMemberUsername").val(successData);
                 checkAvailbleUsername();
-
             },
             error: function (er) {
                 alert(er);
             }
 
         });
-    })
+    });
     $("#createMemberUsername").change(function () {
-        checkAvailbleUsername()
-    })
+        checkAvailbleUsername();
+    });
     function checkAvailbleUsername(){
         $.ajax({
             url: "/Home/checkAvailableUsername/",
@@ -487,11 +486,13 @@
             isValid = false;
             $("#alertInfo").append('Số điện thoại và xác nhận không khớp<br/>');
         }
+        var userId = $("#memberPanelBody").data("curUserId");
         if(isValid){
             $.ajax({
                 url: "/Home/addMember/",
                 type: "POST",
                 data: {
+                    creatorId: userId,
                     fullname: fullname,
                     username: username,
                     birthDate: dateOfBirth.toISOString(),
@@ -542,10 +543,26 @@
             data: {
                 id: id
             },
-            success: function (successData) {
+            success: function (data) {
                 //alert(successData)
-                location.reload();
-
+                
+                if(data.StatusCode === 0) {
+                    $.ajax({
+                        url: "/Home/deleteUser/",
+                        type: "POST",
+                        data: {
+                            id: id
+                        },
+                        success: function (successData) {
+                            location.reload();
+                        },
+                        error: function (er) {
+                            alert(er);
+                        }
+                    });
+                }else {
+                    location.reload();
+                }
             },
             error: function (er) {
                 alert(er);

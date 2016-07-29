@@ -12,23 +12,6 @@ namespace AMS.Service
     {
         GenericRepository<Post> postRepository = new GenericRepository<Post>();
         GenericRepository<Comment> commentRepository = new GenericRepository<Comment>();
-        public void createPost(PostViewModel post)
-        {
-
-            Post h = new Post();
-            h.ImgUrl = post.ImgUrl;
-            h.Title = post.Title;
-            h.CreateDate = post.CreateDate;
-            postRepository.Add(h);
-        }
-        public void createPost(ListPostViewModel post)
-        {
-            Post h = new Post();
-            h.ImgUrl = post.ImgUrl;
-            h.Title = post.Title;
-
-            postRepository.Add(h);
-        }
         public int addPost(Post p)
         {
             postRepository.Add(p);
@@ -37,17 +20,7 @@ namespace AMS.Service
 
         public void CreatePosts(Post post)
         {
-
-
             postRepository.Add(post);
-        }
-        public void createPost(string Title, int PostId)
-        {
-            Post h = new Post();
-            h.Title = Title;
-            //  h.PostId = PostId;
-
-            postRepository.Add(h);
         }
         public Post findPostById(int id)
         {

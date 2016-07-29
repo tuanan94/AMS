@@ -22,10 +22,7 @@ namespace AMS
         }
     
         public int Id { get; set; }
-        public string Title { get; set; }
         public string Body { get; set; }
-        public string ImgUrl { get; set; }
-        public Nullable<int> PostStatus { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public Nullable<int> Status { get; set; }
