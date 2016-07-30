@@ -244,6 +244,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="originalUrl" Type="nvarchar(max)" />
           <Property Name="url" Type="nvarchar(max)" />
           <Property Name="thumbnailUrl" Type="nvarchar(max)" />
           <Property Name="createdDate" Type="datetime" />
@@ -1231,7 +1232,6 @@
           <EntitySet Name="HelpdeskServiceCategories" EntityType="AMSModel.HelpdeskServiceCategory" />
           <EntitySet Name="Houses" EntityType="AMSModel.House" />
           <EntitySet Name="HouseCategories" EntityType="AMSModel.HouseCategory" />
-          <EntitySet Name="Images" EntityType="AMSModel.Image" />
           <EntitySet Name="NotificationChanges" EntityType="AMSModel.NotificationChange" />
           <EntitySet Name="NotificationObjects" EntityType="AMSModel.NotificationObject" />
           <EntitySet Name="Polls" EntityType="AMSModel.Poll" />
@@ -1418,6 +1418,7 @@
             <End Role="User" EntitySet="Users" />
             <End Role="Post" EntitySet="Posts" />
           </AssociationSet>
+          <EntitySet Name="Images" EntityType="AMSModel.Image" />
         </EntityContainer>
         <EntityType Name="C__MigrationHistory">
           <Key>
@@ -1680,16 +1681,6 @@
           <Property Name="LastModified" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Houses" Relationship="AMSModel.FK_House_HouseType" FromRole="HouseCategory" ToRole="House" />
           <NavigationProperty Name="UtilServiceForHouseCats" Relationship="AMSModel.FK_UtilServiceForHouseCat_HouseCategory" FromRole="HouseCategory" ToRole="UtilServiceForHouseCat" />
-        </EntityType>
-        <EntityType Name="Image">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="thumbnailUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="createdDate" Type="DateTime" Precision="3" />
-          <Property Name="postId" Type="Int32" />
         </EntityType>
         <EntityType Name="NotificationChange">
           <Key>
@@ -2460,6 +2451,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Image">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="originalUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="thumbnailUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="createdDate" Type="DateTime" Precision="3" />
+          <Property Name="postId" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2707,17 +2709,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Images">
-            <EntityTypeMapping TypeName="AMSModel.Image">
-              <MappingFragment StoreEntitySet="Image">
-                <ScalarProperty Name="postId" ColumnName="postId" />
-                <ScalarProperty Name="createdDate" ColumnName="createdDate" />
-                <ScalarProperty Name="thumbnailUrl" ColumnName="thumbnailUrl" />
-                <ScalarProperty Name="url" ColumnName="url" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="NotificationChanges">
             <EntityTypeMapping TypeName="AMSModel.NotificationChange">
               <MappingFragment StoreEntitySet="NotificationChange">
@@ -2958,6 +2949,18 @@
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Body" ColumnName="Body" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Images">
+            <EntityTypeMapping TypeName="AMSModel.Image">
+              <MappingFragment StoreEntitySet="Image">
+                <ScalarProperty Name="postId" ColumnName="postId" />
+                <ScalarProperty Name="createdDate" ColumnName="createdDate" />
+                <ScalarProperty Name="thumbnailUrl" ColumnName="thumbnailUrl" />
+                <ScalarProperty Name="url" ColumnName="url" />
+                <ScalarProperty Name="originalUrl" ColumnName="originalUrl" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

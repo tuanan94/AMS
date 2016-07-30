@@ -24,7 +24,6 @@
         <EntityTypeShape EntityType="AMSModel.HelpdeskServiceCategory" Width="1.5" PointX="6" PointY="15.75" />
         <EntityTypeShape EntityType="AMSModel.House" Width="1.5" PointX="6" PointY="18.625" />
         <EntityTypeShape EntityType="AMSModel.HouseCategory" Width="1.5" PointX="3.75" PointY="16.875" />
-        <EntityTypeShape EntityType="AMSModel.Image" Width="1.5" PointX="6.75" PointY="6.75" />
         <EntityTypeShape EntityType="AMSModel.NotificationChange" Width="1.5" PointX="18.75" PointY="26.75" />
         <EntityTypeShape EntityType="AMSModel.NotificationObject" Width="1.5" PointX="16.5" PointY="36.5" />
         <EntityTypeShape EntityType="AMSModel.Poll" Width="1.5" PointX="0.75" PointY="14.875" />
@@ -85,6 +84,7 @@
         <AssociationConnector Association="AMSModel.FK_Comment_Post" />
         <AssociationConnector Association="AMSModel.FK_Report_Post" />
         <AssociationConnector Association="AMSModel.FK_tbl_post_tbl_user" />
+        <EntityTypeShape EntityType="AMSModel.Image" Width="1.5" PointX="7.375" PointY="6.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

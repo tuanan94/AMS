@@ -44,7 +44,6 @@ namespace AMS
         public virtual DbSet<HelpdeskServiceCategory> HelpdeskServiceCategories { get; set; }
         public virtual DbSet<House> Houses { get; set; }
         public virtual DbSet<HouseCategory> HouseCategories { get; set; }
-        public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<NotificationChange> NotificationChanges { get; set; }
         public virtual DbSet<NotificationObject> NotificationObjects { get; set; }
         public virtual DbSet<Poll> Polls { get; set; }
@@ -63,5 +62,6 @@ namespace AMS
         public virtual DbSet<UtilServiceCategory> UtilServiceCategories { get; set; }
         public virtual DbSet<UtilServiceForHouseCat> UtilServiceForHouseCats { get; set; }
         public virtual DbSet<Post> Posts { get; set; }
+        public virtual DbSet<Image> Images { get; set; }
     }
 }

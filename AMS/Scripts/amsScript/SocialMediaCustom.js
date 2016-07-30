@@ -90,45 +90,81 @@ function appenImageToPost(index, id) {
             var currentElement = {};
             var listElement = "";
             var isFirst = true;
-            $.each(obj, function (index, image) {
-                if (isFirst) {
-                    $("#imagesPost" + image.postId).html("");
-                    currentElement = $("#imagesPost" + image.postId);
-                    isFirst = false;
-                    if (obj.length == 1) {
-                        $("#imagesPost" + image.postId).removeClass("testetetet").addClass("one-col");
-                        if (parseInt(image.width) >= parseInt(image.height)) {
-                            listElement = listElement +
-                                '<div  data-src="' + image.url + '" style="border:1px solid white"><img style="width:100%; height:auto" src="' +
-                                image.thumbnailurl +
-                                '" alt="The Last of us"></div>';
-                        } else {
-                            listElement = listElement +
-                                '<div class="link-cursor" data-src="' + image.url + '" style="border:1px solid white" ><img style="height:100% !important; width:auto !important "src="' +
-                                image.thumbnailurl +
-                                '" alt="The Last of us"></div>';
+            var twoVerticalImg = false;
+            if(obj && obj.length === 2) {
+                var image1 = obj[0];
+                var image2 = obj[1];
+                if(image1.height > image1.width && image2.height > image2.width) {
+                    $.each(obj, function (index, image) {
+                        if (isFirst) {
+                            $("#imagesPost" + image.postId).html("");
+                            $("#imagesPost" + image.postId).removeClass("one-col");
+                            isFirst = false;
+                            currentElement = $("#imagesPost" + image.postId);
                         }
-                        return;
-                    } else {
-                        $("#imagesPost" + image.postId).removeClass("one-col").addClass("testetetet");
+                        listElement = listElement + '<div style="float:left;width:50%;height:50%" data-src="' + image.url + '" style="border:1px solid white" >' +
+                                                        '<img style="max-width:100%; height:100%" src="' + image.thumbnailurl + '" />' +
+                                                    '</div>';
+                    });
+                    twoVerticalImg = true;
+                } else if (image1.width > image1.height && image2.width > image2.height) {
+                    $.each(obj, function (index, image) {
+                        if (isFirst) {
+                            $("#imagesPost" + image.postId).html("");
+                            $("#imagesPost" + image.postId).removeClass("one-col");
+                            isFirst = false;
+                            currentElement = $("#imagesPost" + image.postId);
+                        }
+                        listElement = listElement + '<div style="float:left;width:100%;height:50%" data-src="' + image.url + '" style="border:1px solid white" >' +
+                                                        '<img style="max-width:100%; width:100%" src="' + image.thumbnailurl + '" />' +
+                                                    '</div>';
+                    });
+                    twoVerticalImg = true;
+                }
+            }
+
+            if (!twoVerticalImg) {
+                $.each(obj, function (index, image) {
+                    if (isFirst) {
+                        $("#imagesPost" + image.postId).html("");
+                        currentElement = $("#imagesPost" + image.postId);
+                        isFirst = false;
+                        if (obj.length == 1) {
+                            $("#imagesPost" + image.postId).removeClass("testetetet").addClass("one-col");
+                            if (parseInt(image.width) >= parseInt(image.height)) {
+                                listElement = listElement +
+                                    '<div  data-src="' + image.url + '" style="border:1px solid white"><img style="width:100%; height:auto" src="' +
+                                    image.thumbnailurl +
+                                    '" alt="The Last of us"></div>';
+                            } else {
+                                listElement = listElement +
+                                    '<div class="link-cursor" data-src="' + image.url + '" style="border:1px solid white" ><img style="height:100% !important; width:auto !important "src="' +
+                                    image.thumbnailurl +
+                                    '" alt="The Last of us"/></div>';
+                            }
+                            return;
+                        } else {
+                            //                        $("#imagesPost" + image.postId).removeClass("one-col").addClass("testetetet");
+                            $("#imagesPost" + image.postId).removeClass("one-col");
+                        }
+                        if (obj.length === 3) {
+                            if (image.width > image.height) {
+                                listElement = listElement + '<div style="float:left;width:100%;height:50%" data-src="' + image.url + '" style="border:1px solid white" >' +
+                                '<img style="max-width:100%; width:100%" src="' + image.thumbnailurl + '" />' +
+                                '</div>';
+                                return;
+                            }
+                        }
                     }
-                }
-                //                if (parseInt(image.width) >= parseInt(image.height)) {
-                //                    listElement = listElement + '<div style="position:relative;display: inline-block;" data-src="' + image.url + '" style="border:1px solid white"><img style="position:absolute; width:100% !important; height:auto !important" src="' + image.thumbnailurl + '" ></div>';
-                //                } else {
-                ////                    listElement = listElement + '<div style="position:relative" data-src="' + image.url + '" style="border:1px solid white" ><img style="height:100% !important; width:auto !important" src="' + image.thumbnailurl + '"></div>';
-                //                    listElement = listElement + '<div style="position:relative;display: inline-block;" data-src="' + image.url + '" style="border:1px solid white" ><img style="position:absolute; width:100% !important; height:auto !important" src="' + image.thumbnailurl + '"></div>';
-                //                }
+                    listElement = listElement + '<div style="float:left;width:50%;height:50%" data-src="' + image.url + '" style="border:1px solid white" >' +
+                        '<img style="max-width:100%" src="' + image.thumbnailurl + '" />' +
+                        '</div>';
 
-                if (obj.length % 2 == 0) {
-                    listElement = listElement + '<div style="position:relative;" data-src="' + image.url + '" style="border:1px solid white"><img style="position:absolute; width:100% !important; height:auto !important" src="' + image.thumbnailurl + '" ></div>';
-                } else {
-                    listElement = listElement + '<div style="position:relative;display: inline-block;" data-src="' + image.url + '" style="border:1px solid white" ><img style="position:absolute; width:100% !important; height:auto !important" src="' + image.thumbnailurl + '"></div>';
-                }
-
-            });
+                });
+            }
+            
             listElement = listElement + "</div>";
-            if(currentElement) {
+            if (currentElement) {
                 currentElement.append(listElement);
                 if (currentElement.data("lightGallery")) {
                     currentElement.data("lightGallery").destroy(true);
@@ -234,14 +270,14 @@ function addComment(postId) {
                     $("#amsMessageModal").on("hidden.bs.modal", function () {
                         if (location.pathname.indexOf("Post/Detail") > -1) {
                             location.href = "/";
-                        }else {
+                        } else {
                             var postId = $("#amsMessageModal").data("postId");
                             $("#userPostItem" + postId).hide("500", function () {
                                 $(this).remove();
                             });
                         }
                     });
-                }else {
+                } else {
                     $("#amsMsgText").html("Việc bình luận thất bại xin vui lòng thử lại !");
                     $("#amsMessageModal").unbind();
                     $("#amsMessageModal").modal("show");
@@ -273,7 +309,7 @@ function getNewCommentsForPost(postid) {
         },
         success: function (data) {
 
-            if(data.StatusCode === 0) {
+            if (data.StatusCode === 0) {
                 var objectData = data.Data;
                 $.each(objectData.listComment, function (index, comment) {
                     addCommentToCommentArea(postid, comment, false);
@@ -310,7 +346,7 @@ function getNewCommentsForPost(postid) {
                     var thisElement = $(this);
                     thisElement.text(timeSince(thisElement.data("commentDate")) + " trước");
                 });
-            }else {
+            } else {
                 $("#amsMsgText").html("Rất tiếc! Bài viết này đã không còn tồn tại trong hệ thống.");
                 $("#amsMessageModal").unbind();
                 $("#amsMessageModal").modal("show");
@@ -375,7 +411,7 @@ function loadMorePost(postid) {
                     $("#commentsArea" + postid).data("lastGetComment", obj.lastGetComment);
                     //                    $("#countComment" + postid).html("Chưa có bình luận nào");
                 }
-            }else {
+            } else {
                 $("#amsMsgText").html("Rất tiếc! Bài viết này đã không còn tồn tại trong hệ thống.");
                 $("#amsMessageModal").unbind();
                 $("#amsMessageModal").modal("show");
@@ -704,5 +740,8 @@ function replaceNewLineWithBrTag(commentText) {
     if (commentText) {
         return commentText.replace(/[\n]/g, "<br/>");
     }
+}
 
+function checkURL(url) {
+    return (url.toLowerCase().match(/\.(jpeg|jpg|bmp|png)$/) != null);
 }

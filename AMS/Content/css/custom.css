@@ -457,65 +457,6 @@ ul.timeline-list li.media > .media-body {
     }
 }
 
-.testetetet {
-    /* Prevent vertical gaps */
-    line-height: 0;
-    -webkit-column-count: 2;
-    -webkit-column-gap: 0px;
-    -moz-column-count: 2;
-    -moz-column-gap: 0px;
-    column-count: 2;
-    column-gap: 0px;
-}
-
-    .testetetet > div {
-        width: 237px !important;
-        height: 237px !important;
-        overflow: hidden;
-        border: 2px solid #fff;
-    }
-
-        .testetetet > div > img {
-            /* Just in case there are inline attributes */
-            width: 100% !important;
-            height: auto !important;
-        }
-
-@media (max-width: 1200px) {
-    .testetetet {
-        -moz-column-count: 2;
-        -webkit-column-count: 2;
-        column-count: 2;
-    }
-}
-
-@media (max-width: 1000px) {
-    .testetetet {
-        /*-moz-column-count: 3;
-        -webkit-column-count: 3;
-        column-count: 3;*/
-        -moz-column-count: 2;
-        -webkit-column-count: 2;
-        column-count: 2;
-    }
-}
-
-@media (max-width: 800px) {
-    .testetetet {
-        -moz-column-count: 2;
-        -webkit-column-count: 2;
-        column-count: 2;
-    }
-}
-
-@media (max-width: 400px) {
-    .testetetet {
-        -moz-column-count: 1;
-        -webkit-column-count: 1;
-        column-count: 1;
-    }
-}
-
 .loading-img {
     background-image: url('../images/loading.gif');
 }
@@ -581,3 +522,6 @@ ul.timeline-list li.media > .media-body {
         line-height: 16px !important;
         color: #212121;
     }
+.grid >div{
+    padding: 2px
+}

@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using AMS.Constant;
+using AMS.Controllers;
 using AMS.Models;
 
 namespace AMS.Service
@@ -32,27 +34,79 @@ namespace AMS.Service
                 imageRepository.Delete(img);
             }
         }
-        public void saveListImage(List<String> imageURLs, List<String> thumbImageURLs, int postId)
+        public void saveListImage(List<String> imageURLs, List<String> thumbImageURLs, List<String> originImages, int postId)
         {
             string url = "";
             string thumbUrl = "";
+            string oriUrl = "";
+
+            if (imageURLs.Count == 1)
+            {
+                System.Drawing.Image img = System.Drawing.Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + originImages[0]);
+                thumbImageURLs[0] = new StringBuilder(AmsConstants.ImageFilePathDownload).Append(AroundProviderController.SaveImage(img, AppDomain.CurrentDomain.BaseDirectory + AmsConstants.ImageFilePathDownload, 504, 394, 0, false)).ToString(); ;
+            }
+            else if (imageURLs.Count == 2)
+            {
+                System.Drawing.Image img = System.Drawing.Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + originImages[0]);
+                System.Drawing.Image img2 = System.Drawing.Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + originImages[1]);
+                if (img.Height > img.Width && img2.Height > img2.Width)
+                {
+                    thumbImageURLs[0] = new StringBuilder(AmsConstants.ImageFilePathDownload).Append(AroundProviderController.SaveImage(img, AppDomain.CurrentDomain.BaseDirectory + AmsConstants.ImageFilePathDownload, 394, 394, 0, false)).ToString(); ;
+                    thumbImageURLs[1] = new StringBuilder(AmsConstants.ImageFilePathDownload).Append(AroundProviderController.SaveImage(img2, AppDomain.CurrentDomain.BaseDirectory + AmsConstants.ImageFilePathDownload, 394, 394, 0, false)).ToString(); ;
+                }
+                else if (img.Width > img.Height && img2.Width > img2.Height)
+                {
+                    thumbImageURLs[0] = new StringBuilder(AmsConstants.ImageFilePathDownload).Append(AroundProviderController.SaveImage(img, AppDomain.CurrentDomain.BaseDirectory + AmsConstants.ImageFilePathDownload, 504, 504, 0, false)).ToString(); ;
+                    thumbImageURLs[1] = new StringBuilder(AmsConstants.ImageFilePathDownload).Append(AroundProviderController.SaveImage(img2, AppDomain.CurrentDomain.BaseDirectory + AmsConstants.ImageFilePathDownload, 504, 504, 0, false)).ToString(); ;
+                }
+            }
+            else if (originImages.Count == 3)
+            {
+                string curElemment = "";
+                for (int i = 0; i < imageURLs.Count;i++ )
+                {
+                    curElemment = originImages[i];
+                    System.Drawing.Image img = System.Drawing.Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + curElemment);
+                    if (img.Width > img.Height )
+                    {
+                        string imageSavePath = AppDomain.CurrentDomain.BaseDirectory + AmsConstants.ImageFilePathDownload;
+                        thumbImageURLs[i] = new StringBuilder(AmsConstants.ImageFilePathDownload).Append(AroundProviderController.SaveImage(img, imageSavePath, 504, 394, 0, false)).ToString(); ;
+                        
+                        var tempItem = thumbImageURLs[i];
+                        thumbImageURLs[i] = thumbImageURLs[0];
+                        thumbImageURLs[0] = tempItem;
+
+                        tempItem = originImages[i];
+                        originImages[i] = originImages[0];
+                        originImages[0] = tempItem;
+
+                        tempItem = imageURLs[i];
+                        imageURLs[i] = imageURLs[0];
+                        imageURLs[0] = tempItem;
+
+                        break;
+                    }
+                }
+            }
             for (int i = 0; i < imageURLs.Count; i++)
             {
                 url = imageURLs[i];
                 thumbUrl = thumbImageURLs[i];
+                oriUrl = originImages[i];
                 if (url != null && !url.Equals(""))
                 {
-                    saveImage(url, thumbUrl, postId);
+                    saveImage(url, thumbUrl, oriUrl, postId);
                 }
             }
         }
-        private int saveImage(String url, string thumbUrl, int postId)
+        private int saveImage(String url, string thumbUrl, string originUrl, int postId)
         {
             Image image = new Image();
             image.createdDate = DateTime.Now;
             image.postId = postId;
             image.url = url;
             image.thumbnailUrl = thumbUrl;
+            image.originalUrl = originUrl;
             imageRepository.Add(image);
             return image.id;
 

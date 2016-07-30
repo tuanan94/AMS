@@ -24,7 +24,7 @@ namespace AMS.Controllers
         [HttpPost]
         [Authorize]
         [ValidateInput(false)]
-        public String Create(List<String> images, List<String> thumbnailImages, String content, string embeded, int? oldPostId)
+        public String Create(List<String> images, List<String> thumbnailImages, List<String> originImages, String content, string embeded, int? oldPostId)
         {
             User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
             if (curUser == null)
@@ -47,11 +47,13 @@ namespace AMS.Controllers
             p.Body = content;
             p.EmbedCode = embeded;
             int postId = postService.addPost(p);
-            if (images == null)
+            if (images == null || thumbnailImages == null || originImages == null)
             {
                 images = new List<string>();
+                thumbnailImages = new List<string>();
+                originImages = new List<string>();
             }
-            imageService.saveListImage(images, thumbnailImages, postId);
+            imageService.saveListImage(images, thumbnailImages, originImages, postId);
             return "success";
         }
         [HttpPost]

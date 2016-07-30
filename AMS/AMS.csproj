@@ -477,6 +477,7 @@
     <Content Include="Content\css\bootstrap-switch.css" />
     <Content Include="Content\css\brown.css" />
     <Content Include="Content\css\brown.min.css" />
+    <Content Include="Content\css\cropper.min.css" />
     <Content Include="Content\css\custom.css" />
     <Content Include="Content\css\dataTables.bootstrap.min.css" />
     <Content Include="Content\css\datatables.css" />
@@ -578,6 +579,7 @@
       <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\amsScript\additional-methods.js" />
+    <Content Include="Scripts\amsScript\cropper.min.js" />
     <Content Include="Scripts\amsScript\DisplaySinglePost.js" />
     <Content Include="Scripts\amsScript\jquery.mousewheel.min.js" />
     <Content Include="Scripts\amsScript\jquery.raty.js" />

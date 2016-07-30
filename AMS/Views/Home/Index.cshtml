@@ -28,10 +28,12 @@
 
 }
 <link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css" />
+<link rel="stylesheet" href="~/Content/css/cropper.min.css" type="text/css" />
 <script src="~/Scripts/amsScript/DisplaySinglePost.js"></script>
 <script src="~/Scripts/amsScript/LoadFamilyTree.js"></script>
 <script src="~/Scripts/amsScript/LoadUserProfile.js"></script>
 <script src="~/Scripts/amsScript/ReportPost.js"></script>
+<script src="~/Scripts/amsScript/cropper.min.js"></script>
 <style>
     .button {
         display: block;
@@ -103,13 +105,28 @@
     ul.timeline-list li.mediawithoutBorder:before {
         border-left: none;
     }
+
+
+    /*Crop image*/
+    .img-container > img {
+        max-width: 100%;
+    }
+
+    .bootstrap-modal-cropper {
+        @* width: 100%;
+        *@ height: 400px;
+    }
+
+        .bootstrap-modal-cropper > img {
+            max-width: 100%;
+        }
+    /*Crop image*/
 </style>
 @*    <div class="cover overlay">*@
 @*        <img src="~/Content/images/banner-842.jpg" alt="cover">*@
 @*    </div>*@
 <div class="row">
     <div class="col-md-8" style="padding-left: 0; padding-right: 0">
-        <div id="addNewPost" class="new-post" onclick="onBlurPost()"></div>
         <ul class="timeline-list">
             <li class="media mediawithoutBorder">
                 <div class="media-body">
@@ -123,7 +140,7 @@
                                 </div>*@
                             @*
                                 </div>*@
-                            <a class="post-heading" style="border-right: 1px solid #efefef;" href="#postStatusArea" onclick="addImage()">
+                            <a class="post-heading" style="border-right: 1px solid #efefef;" onclick="addImage()">
                                 <i class="fa fa-fw fa-photo post-heading-icon"></i> Thêm hình ảnh
                             </a>
                             <a class="post-heading" href="#postStatusArea" data-toggle="modal" data-target="#addEmbedModal">
@@ -146,8 +163,8 @@
                                 </div>
                             </div>
                             <div class="row" style="margin-bottom: 10px">
+                                <input type="file" id="uploadEditorImage" style="display: none" />
                                 <div class="col-md-12" style="height: auto;" id="previewList">
-                                    <input type="file" id="uploadEditorImage" style="display: none" />
                                     <div id="progressBar" class="progress" style="width: 200px" hidden="hidden">
                                         <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 200px">
                                         </div>
@@ -168,22 +185,14 @@
                             @*
                                 </div>*@
                         </div>
-                        <div class="panel-footer share-buttons clearfix" @*id="postStatusArea" *@>
-                            @*                                <a href="#postStatusArea" onclick="addImage()">
-                            *@
-                            @*                                    <i class="fa fa-fw fa-photo"></i>*@
-                            @*
-                                </a>*@
-                            @*                                <a href="#postStatusArea" data-toggle="modal" data-target="#addEmbedModal">
-                            *@
-                            @*                                    <i class="fa fa-fw fa-code"></i>*@
-                            @*
-                                </a>*@
+                        <div class="panel-footer share-buttons clearfix">
                             <a href="#postStatusArea" style="float: right">
                                 <i class="fa fa-map-marker"></i>
                             </a>
                             <div class="pull-right">
-                                <button id="shareButton" type="submit" class="btn btn-primary btn-xs" style="margin-top: -12px" href="#" onclick="createNewPost()">Chia sẻ</button>
+                                <button id="shareButton" type="submit" class="btn btn-primary btn-xs" style="margin-top: -12px" href="#" onclick="createNewPost()">
+                                    Chia sẻ
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -362,13 +371,43 @@
 
             </div>
             <div class="modal-footer" style="margin-top: 0;">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="sendDeleteRequest()">Xóa bài viết</button>
-                </div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="sendDeleteRequest()">Xóa bài viết</button>
             </div>
+        </div>
     </div>
 </div>
 
+
+<!-- Delete modal -->
+<div class="modal fade ams-modal" id="editImageModal" role="dialog">
+    <div class="modal-dialog modal-lg" style="width: 800px">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">C</h4>
+            </div>
+            <div style="position: relative;padding: 20px;">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="bootstrap-modal-cropper">
+                            <img id="testLoadImage" />
+                        </div>
+                    </div>
+                    <div class="col-md-4" style="height: 243px;border: 1px solid #000;border-radius: 4px;">
+                        <div class="reviewImg" style="height: 200px;width: 100%;overflow: hidden;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 0;">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" onclick="getCroptImageSize()">Chấp nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @{
     if (!alert.Equals("") && SLIM_CONFIG.CURRENT_MODE == SLIM_CONFIG.PROGRAM_MODE_PRODUCT)
@@ -395,7 +434,6 @@
                 });
         }, 100);
 
-
         $('#collapseExample').collapse();
 
         window.addEventListener("resize", function () {
@@ -409,12 +447,7 @@
         $('.close').on('click', function (event) {
             event.preventDefault();
             /* Act on the event */
-
             $('.modalDialog').fadeOut();
-
-        });
-        $("#postStatusArea").on("click", function (e) {
-            onFocusPost();
         });
         $("#userAvatar").on("click", function (e) {
             e.stopPropagation();
@@ -431,23 +464,22 @@
         var $this = $(this);
         $this.button('loading');
         loadMore();
-
     });
 
     var listUploadImage = [];
     var listUploadThumnailImage = [];
+    var listOriginImage = [];
     function loadMore() {
         console.log("loadMore");
         loadAllPost(curTokenId);
     }
     function addImage() {
         $("#uploadEditorImage").click();
-        onFocusPost();
     }
     function saveEmbedCode() {
         // alert("saveEmbedCode");
         var embedContent = $("#embedCode").val();
-        $("#previewContent").html(embedContent);
+        $("#previewContent").html(getYoutubeFrameFromText(embedContent));
     }
     function createNewPost() {
         var postId = $("#postId").val();
@@ -458,7 +490,6 @@
                 $("#embedCode").val(getEmbedCode);
             }
         }
-
         $.ajax({
             url: "/Post/Create",
             type: "POST",
@@ -466,6 +497,7 @@
             data: {
                 oldPostId: postId,
                 thumbnailImages: listUploadThumnailImage,
+                originImages: listOriginImage,
                 images: listUploadImage,
                 content: $("#postContent").val(),
                 embeded: $("#embedCode").val()
@@ -480,43 +512,153 @@
                 alert(er);
                 //progessBar(false);
             }
-
         });
 
     }
-
+    /*New Implement*/
     $("#uploadEditorImage").change(function () {
         var data = new FormData();
-
         data.append("dir", "@SLIM_CONFIG.dirPostImage");
-
         var files = $("#uploadEditorImage").get(0).files;
         if (files.length > 0) {
-            data.append("image", files[0]);
-            data.append("thumbWidth", 480);
-            data.append("thumbHeight", 480);
 
-            data.append("width", 1200);
-            data.append("height", 627);
+            var imageFile = files[0];
+            if (checkURL(imageFile.name)) {
+                data.append("image", files[0]);
+                // progessBar(true);
+                $.ajax({
+                    url: "/Management/Image/UploadOriginalImage",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    data: data,
+
+                    success: function (successData) {
+                        var thumbnailData = successData.Data.oriImageUrl;
+                        $("#testLoadImage").unbind();
+                        $("#testLoadImage").prop("src", thumbnailData);
+                        $("#testLoadImage").on("load", function () {
+                            showEditImagePopup();
+                        });
+                        $("#uploadEditorImage").val("");
+                    },
+                    error: function (er) {
+                        alert(er);
+                        //progessBar(false);
+                    }
+                });
+            } else {
+                $("#amsMsgText").text("Chỉ hổ trợ hình ảnh có định đạng [png, jpeg, bmp]");
+                $("#amsMessageModal").modal("show");
+            }
         }
+        
+    });
+    /*New Implement*/
 
+
+    /*Old implement*/
+
+    //    $("#uploadEditorImage").change(function () {
+    //        var data = new FormData();
+    //        data.append("dir", "@SLIM_CONFIG.dirPostImage");
+    //        var files = $("#uploadEditorImage").get(0).files;
+    //        if (files.length > 0) {
+    //            data.append("image", files[0]);
+    //            data.append("thumbWidth", 480);
+    //            data.append("thumbHeight", 480);
+    //
+    //            data.append("width", 1200);
+    //            data.append("height", 627);
+    //        }
+    //        // progessBar(true);
+    //        $.ajax({
+    //            url: "/Management/Image/UploadPostImage/",
+    //            type: "POST",
+    //            processData: false,
+    //            contentType: false,
+    //            data: data,
+    //
+    //            success: function (successData) {
+    //                var thumbnailData = successData.Data.thumbnailUrl;
+    //                var imageData = successData.Data.imageUrl;
+    //
+    //                addImageToPreviewList(thumbnailData, listUploadImage.length);
+    //                listUploadImage[listUploadImage.length] = imageData;
+    //                listUploadThumnailImage[listUploadThumnailImage.length] = thumbnailData;
+    //                // progessBar(false);
+    //
+    //            },
+    //            error: function (er) {
+    //                alert(er);
+    //                //progessBar(false);
+    //            }
+    //
+    //        });
+    //    });
+    /*Old implement */
+    $(document).ready(function () {
+        loadAllPost(-1);
+    });
+
+    function innitializeCroper() {
+        var options = {
+            preview: '.reviewImg',
+            aspectRatio: 1,
+            multiple: false,
+            minCropBoxWidth: 243,
+            minCropBoxHeight: 243,
+            dragCrop: false,
+            movable: true,
+            dashed: false,
+            zoomable: false,
+            resizable: true,
+            crop: function (e) {
+            },
+            zoom: function (e) {
+                console.log(e.type, e.detail.ratio);
+            },
+            built: function () {
+            }
+        };
+        var tempImage = document.getElementById("testLoadImage");
+        window.cropper = new Cropper(tempImage, options);
+    }
+
+    function showEditImagePopup() {
+        $("#editImageModal").unbind();
+        $("#editImageModal").on("hidden.bs.modal", function () {
+            window.cropper.destroy();
+        }).on("shown.bs.modal", function () {
+            innitializeCroper();
+        }).modal("show");
+    }
+
+    function getCroptImageSize() {
+        var imageData = window.cropper.getData();
         // progessBar(true);
         $.ajax({
-            url: "/Management/Image/UploadPostImage/",
+            url: "/Management/Image/UploadPostImageResize",
             type: "POST",
-            processData: false,
-            contentType: false,
-            data: data,
+            data: {
+                imgUrl: $("#testLoadImage").prop("src").replace(location.origin, ""),
+                width: parseInt(imageData.width),
+                height: parseInt(imageData.height),
+                "x": parseInt(imageData.x),
+                "y": parseInt(imageData.y)
+            },
 
             success: function (successData) {
+
                 var thumbnailData = successData.Data.thumbnailUrl;
-                var imageData = successData.Data.imageUrl;
+                var imageUrlData = successData.Data.imageUrl;
+                var originUrl = successData.Data.originUrl;
 
                 addImageToPreviewList(thumbnailData, listUploadImage.length);
-                listUploadImage[listUploadImage.length] = imageData;
+                listUploadImage[listUploadImage.length] = imageUrlData;
                 listUploadThumnailImage[listUploadThumnailImage.length] = thumbnailData;
-                // progessBar(false);
-
+                listOriginImage[listOriginImage.length] = originUrl;
+                $("#editImageModal").modal("hide");
             },
             error: function (er) {
                 alert(er);
@@ -524,11 +666,11 @@
             }
 
         });
-    });
 
-    $(document).ready(function () {
-        loadAllPost(-1);
-    });
+
+    }
+
+
     function setMaxHeightNotifyBody() {
         var restHeight = $("#main-nav").height() +
             $("#weather").outerHeight(true) +
@@ -579,7 +721,6 @@
                     $('#userImagePost' + id).attr("src", "/Content/images/defaultProfile.png");
                 } else {
                     $('#userImagePost' + id).attr("src", obj["ProfileImage"]);
-
                 }
                 $('#userNamePost' + id).html(obj["Username"]);
                 $('#userHrefPost' + id).attr("href", "/Profile/" + obj["Id"]);
@@ -719,7 +860,7 @@
     }
 
 
-    
+
 
     //    function addComment(postId) {
     //        $.ajax({
@@ -807,6 +948,7 @@
         $('#previewImage' + position + '').hide();
         listUploadImage[position] = "";
         listUploadThumnailImage[position] = "";
+        listOriginImage[position] = "";
 
     }
     function reloadFeed() {
@@ -819,12 +961,13 @@
         $("#previewContent").html(embedContent);
         listUploadImage = [];
         listUploadThumnailImage = [];
+        listOriginImage = [];
         $("#previewList").html('');
         $("#postContent").val('');
         $("#postId").val('');
         $("#shareButton").html("Chia sẻ");
         $("#embedCode").val("");
-        $("#addNewPost").click();
+        $("#uploadEditorImage").val("");
         textAreaAdjust(document.getElementById("postContent"));
     }
     function report(id) {
@@ -857,12 +1000,7 @@
 
         });
     }
-    function onFocusPost() {
-        $("#addNewPost").css("display", "block");
-    }
-    function onBlurPost() {
-        $("#addNewPost").css("display", "none");
-    }
+
     function textAreaAdjust(o) {
         o.style.height = "1px";
         o.style.height = (25 + o.scrollHeight) + "px";

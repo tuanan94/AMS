@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -98,7 +99,7 @@ namespace AMS.Controllers
                     if (currentUserRate.Count != 0)
                     {
                         curUserRate = currentUserRate.First().Point.Value;
-                    }   
+                    }
                 }
             }
 
@@ -738,6 +739,8 @@ namespace AMS.Controllers
             MessageViewModels response = new MessageViewModels();
             string fileName = "";
             string thumbFileName = "";
+            string newPath = Server.MapPath(AmsConstants.ImageFilePath);
+
             if (System.Web.HttpContext.Current.Request.Files.AllKeys.Any())
             {
                 var pic = System.Web.HttpContext.Current.Request.Files["image"];
@@ -748,8 +751,8 @@ namespace AMS.Controllers
                 int thumbHeight = Int32.Parse(Request.Form["thumbHeight"]);
                 if (pic != null)
                 {
-                    fileName = SaveImage(pic, width, height, true);
-                    thumbFileName = SaveImage(pic, thumbWidth, thumbHeight, false);
+                    fileName = SaveImage(System.Drawing.Image.FromStream(pic.InputStream), newPath, width, height, 0, true); // 0 just mode parameter to process and save image
+                    thumbFileName = SaveImage(System.Drawing.Image.FromStream(pic.InputStream), newPath, thumbWidth, thumbHeight, 0, false); // 0 just mode parameter to process and save image
 
                     object obj = new
                     {
@@ -768,14 +771,101 @@ namespace AMS.Controllers
             else
             {
                 response.StatusCode = -1;
+                response.Msg = "Tải lên tập tin thất bại";
+            }
+            return Json(response);
+        }
+
+        [HttpPost]
+        [Route("Management/Image/UploadOriginalImage")]
+        public ActionResult UploadOriginalImage()
+        {
+            MessageViewModels response = new MessageViewModels();
+            string fileName = "";
+            string newPath = Server.MapPath(AmsConstants.ImageFilePath);
+
+            if (System.Web.HttpContext.Current.Request.Files.AllKeys.Any())
+            {
+                var pic = System.Web.HttpContext.Current.Request.Files["image"];
+
+                if (pic != null)
+                {
+                    fileName = SaveImage(System.Drawing.Image.FromStream(pic.InputStream), newPath, 0, 0, 1, true); // 1 just mode parameter to save image
+                    object obj = new
+                    {
+                        oriImageUrl = new StringBuilder(AmsConstants.ImageFilePathDownload).Append(fileName).ToString(),
+                    };
+                    response.Data = obj;
+                }
+                else
+                {
+                    response.StatusCode = -1;
+                    response.Msg = "Tải lên tập tin  thất bại";
+                }
+            }
+            else
+            {
+                response.StatusCode = -1;
+                response.Msg = "Tải lên tập tin thất bại";
+            }
+            return Json(response);
+        }
+
+        [HttpPost]
+        [Route("Management/Image/UploadPostImageResize")]
+        public ActionResult UploadPostImageResize(string imgUrl, int width, int height, int x, int y)
+        {
+            MessageViewModels response = new MessageViewModels();
+            string largeFileName = "";
+            string thumbFileName = "";
+            string originFileName = "";
+            string newPath = Server.MapPath(AmsConstants.ImageFilePath);
+
+            if (imgUrl != null)
+            {
+                System.Drawing.Image img = System.Drawing.Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + imgUrl);
+                thumbFileName = SaveImageTest(img, width, height, x, y);
+                largeFileName = SaveImage(img, newPath, width, height, 0, true);
+                originFileName = imgUrl;
+
+                object obj = new
+                {
+                    originUrl = originFileName,
+                    imageUrl = new StringBuilder(AmsConstants.ImageFilePathDownload).Append(largeFileName).ToString(),
+                    thumbnailUrl =
+                        new StringBuilder(AmsConstants.ImageFilePathDownload).Append(thumbFileName).ToString(),
+                };
+                response.Data = obj;
+            }
+            else
+            {
+                response.StatusCode = -1;
                 response.Msg = "Tải lên tập tin  thất bại";
             }
             return Json(response);
         }
 
-        private string SaveImage(HttpPostedFile pic, int width, int height, bool isScaled)
+        private string SaveImageTest(System.Drawing.Image pic, int width, int height, int x, int y)
         {
             string newPath = Server.MapPath(AmsConstants.ImageFilePath);
+            if (!Directory.Exists(newPath))
+            {
+                Directory.CreateDirectory(newPath);
+            }
+            System.Drawing.Image target = null;
+            target = CommonUtil.ResizeImageImage(pic, width, height, x, y);
+
+
+            string fileName =
+               new StringBuilder().Append("img_").Append(DateTime.Now.Ticks).Append(".").Append(CommonUtil.GetImageExt(pic))
+                   .ToString();
+            target.Save(new StringBuilder(newPath).Append(fileName).ToString());
+            return fileName;
+        }
+
+        public static string SaveImage(System.Drawing.Image pic, string imageLocation, int width, int height, int mode, bool isScaled)
+        {
+            string newPath = imageLocation;
             if (!Directory.Exists(newPath))
             {
                 Directory.CreateDirectory(newPath);
@@ -784,17 +874,26 @@ namespace AMS.Controllers
             cropRect.Width = width;
             cropRect.Height = height;
             System.Drawing.Image target = null;
-            if (isScaled)
+
+            if (mode == 1)//Just save image
             {
-                target = CommonUtil.ScaleImage(System.Drawing.Image.FromStream(pic.InputStream), cropRect.Width, cropRect.Height);
+                target = pic;
             }
             else
             {
-                target = CommonUtil.FixedSize(System.Drawing.Image.FromStream(pic.InputStream), cropRect.Width, cropRect.Height, true);
+                if (isScaled)
+                {
+                    target = CommonUtil.ScaleImage(pic, cropRect.Width, cropRect.Height);
+                }
+                else
+                {
+                    //                target = CommonUtil.FixedSize(System.Drawing.Image.FromStream(pic.InputStream), cropRect.Width, cropRect.Height, true);
+                    //                target = CommonUtil.ResizeImageNewForThumbnail(System.Drawing.Image.FromStream(pic.InputStream), cropRect.Width, cropRect.Height);
+                    target = CommonUtil.ScaleImageFixHeight(pic, cropRect.Width, cropRect.Height);
+                }
             }
-
             string fileName =
-               new StringBuilder().Append("img_").Append(DateTime.Now.Ticks).Append(".").Append(pic.ContentType.Replace(@"image/", ""))
+               new StringBuilder().Append("img_").Append(DateTime.Now.Ticks).Append(".").Append(CommonUtil.GetImageExt(pic))
                    .ToString();
             target.Save(new StringBuilder(newPath).Append(fileName).ToString());
             return fileName;
