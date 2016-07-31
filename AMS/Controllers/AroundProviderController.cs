@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -22,6 +23,8 @@ namespace AMS.Controllers
         AroundProviderService _aroundProviderService = new AroundProviderService();
         AroundProviderProductService _aroundProviderProductService = new AroundProviderProductService();
         AroundProviderCategoryService _aroundProviderCategoryService = new AroundProviderCategoryService();
+        UserRateAroundProviderServices _rateAroundProviderServices = new UserRateAroundProviderServices();
+        UserServices _userServices = new UserServices();
 
         //        // GET: ServiceAround
         //        public ActionResult Index()
@@ -45,13 +48,29 @@ namespace AMS.Controllers
         [Route("Home/AroundService/All")]
         public ActionResult ViewGetAllAroundProvider(String cat)
         {
-            ViewBag.AllProviders = _aroundProviderService.GetAllProviderWithCat(cat);
+            List<AroundProvider> providers = _aroundProviderService.GetAllProviderWithCat(cat);
             List<AroundProviderCategory> allCat = _aroundProviderCategoryService.GetAllOrderByProviderClickCount();
+            AroundProviderDetailModel providerDetail = null;
+            List<AroundProviderDetailModel> providerDetailList = new List<AroundProviderDetailModel>();
+            foreach (var provider in providers)
+            {
+                providerDetail = new AroundProviderDetailModel();
+                providerDetail.Id = provider.Id;
+                providerDetail.Name = provider.Name;
+                providerDetail.ProviderCatId = provider.AroundProviderCategoryId.Value;
+                providerDetail.Address = provider.Address;
+                providerDetail.ClickCount = provider.ClickCount.Value;
+                providerDetail.ImageUrl = provider.ImageUrl;
+
+                providerDetail.RatePoint = provider.UserRateAroundProviders.ToList().Count == 0 ? 0.0 : provider.UserRateAroundProviders.Average(r => r.Point).Value;
+                providerDetailList.Add(providerDetail);
+            }
             ViewBag.AllCategorys = allCat;
             if (allCat.Count != 0)
             {
                 ViewBag.highestProCat = allCat.First();
             }
+            ViewBag.AllProviders = providerDetailList;
             ViewBag.activeCat = cat;
             return View("ViewAroundProviderDetail");
         }
@@ -64,18 +83,72 @@ namespace AMS.Controllers
             List<AroundProviderProduct> products = _aroundProviderProductService.GetAroundProviderProduct(id);
 
             AroundProvider curProvider = _aroundProviderService.GetProvider(id);
+            int rateCount = 0;
+            double ratePoint = 0.0;
+            int curUserRate = -1;
             if (curProvider != null)
             {
                 curProvider.ClickCount++;
                 curProvider.LastModified = DateTime.Now;
                 _aroundProviderService.Update(curProvider);
+                rateCount = curProvider.UserRateAroundProviders.Count;
+                if (rateCount != 0)
+                {
+                    ratePoint = curProvider.UserRateAroundProviders.Average(r => r.Point).Value;
+                    var currentUserRate = curProvider.UserRateAroundProviders.Where(r => r.UserId == Int32.Parse(User.Identity.GetUserId())).ToList();
+                    if (currentUserRate.Count != 0)
+                    {
+                        curUserRate = currentUserRate.First().Point.Value;
+                    }
+                }
             }
 
+            ViewBag.RateCount = rateCount;
+            ViewBag.RatePoint = ratePoint;
+            ViewBag.CurUserRate = curUserRate;
             ViewBag.Products = products;
             ViewBag.CurProvider = curProvider;
-
             return View();
         }
+
+        [HttpPost]
+        [Route("Home/AroundService/UserRate")]
+        public ActionResult UserRate(int userId, int providerId, int point)
+        {
+            MessageViewModels response = new MessageViewModels();
+            User u = _userServices.FindById(userId);
+            AroundProvider provider = _aroundProviderService.FindById(providerId);
+            if (null != u && provider != null)
+            {
+                if (provider.UserRateAroundProviders.Any(r => r.UserId == u.Id))
+                {
+                    response.StatusCode = 2;
+                    response.Data = provider.UserRateAroundProviders.First(r => r.UserId == u.Id).Point;
+                    return Json(response);
+                }
+                UserRateAroundProvider userRate = new UserRateAroundProvider();
+                userRate.AroundProviderId = providerId;
+                userRate.UserId = userId;
+                userRate.Point = point;
+                _rateAroundProviderServices.Add(userRate);
+                _rateAroundProviderServices.Reload(userRate);
+                provider = _aroundProviderService.FindByIdAfterAdd(provider);
+                object obj =
+                    new
+                    {
+                        count = provider.UserRateAroundProviders.Count,
+                        point = provider.UserRateAroundProviders.Average(r => r.Point)
+                    };
+                response.Data = obj;
+            }
+            else
+            {
+                response.StatusCode = -1;
+            }
+            return Json(response);
+        }
+
+
 
         [HttpGet]
         [ManagerAuthorize]
@@ -368,7 +441,7 @@ namespace AMS.Controllers
                     //Double.Parse(lng.Value);
                     provider.Address = serviceProvider.SrvProvAddress;
                     provider.Latitude = Double.Parse(lat.Value).ToString();
-                    provider.Longitude = Double.Parse(lng.Value).ToString();  
+                    provider.Longitude = Double.Parse(lng.Value).ToString();
                 }
                 catch (Exception)
                 {
@@ -581,7 +654,7 @@ namespace AMS.Controllers
                             {
                                 _aroundProviderProductService.DeleteById(pro.Id);
                             }
-                            
+
                         }
                     }
                 }
@@ -612,6 +685,7 @@ namespace AMS.Controllers
             }
             return Json(response);
         }
+
 
         [HttpPost]
         [Route("Management/Image/Upload")]
@@ -665,6 +739,8 @@ namespace AMS.Controllers
             MessageViewModels response = new MessageViewModels();
             string fileName = "";
             string thumbFileName = "";
+            string newPath = Server.MapPath(AmsConstants.ImageFilePath);
+
             if (System.Web.HttpContext.Current.Request.Files.AllKeys.Any())
             {
                 var pic = System.Web.HttpContext.Current.Request.Files["image"];
@@ -675,8 +751,8 @@ namespace AMS.Controllers
                 int thumbHeight = Int32.Parse(Request.Form["thumbHeight"]);
                 if (pic != null)
                 {
-                    fileName = SaveImage(pic, width, height,true);
-                    thumbFileName = SaveImage(pic, thumbWidth, thumbHeight,false);
+                    fileName = SaveImage(System.Drawing.Image.FromStream(pic.InputStream), newPath, width, height, 0, true); // 0 just mode parameter to process and save image
+                    thumbFileName = SaveImage(System.Drawing.Image.FromStream(pic.InputStream), newPath, thumbWidth, thumbHeight, 0, false); // 0 just mode parameter to process and save image
 
                     object obj = new
                     {
@@ -695,14 +771,101 @@ namespace AMS.Controllers
             else
             {
                 response.StatusCode = -1;
+                response.Msg = "Tải lên tập tin thất bại";
+            }
+            return Json(response);
+        }
+
+        [HttpPost]
+        [Route("Management/Image/UploadOriginalImage")]
+        public ActionResult UploadOriginalImage()
+        {
+            MessageViewModels response = new MessageViewModels();
+            string fileName = "";
+            string newPath = Server.MapPath(AmsConstants.ImageFilePath);
+
+            if (System.Web.HttpContext.Current.Request.Files.AllKeys.Any())
+            {
+                var pic = System.Web.HttpContext.Current.Request.Files["image"];
+
+                if (pic != null)
+                {
+                    fileName = SaveImage(System.Drawing.Image.FromStream(pic.InputStream), newPath, 0, 0, 1, true); // 1 just mode parameter to save image
+                    object obj = new
+                    {
+                        oriImageUrl = new StringBuilder(AmsConstants.ImageFilePathDownload).Append(fileName).ToString(),
+                    };
+                    response.Data = obj;
+                }
+                else
+                {
+                    response.StatusCode = -1;
+                    response.Msg = "Tải lên tập tin  thất bại";
+                }
+            }
+            else
+            {
+                response.StatusCode = -1;
+                response.Msg = "Tải lên tập tin thất bại";
+            }
+            return Json(response);
+        }
+
+        [HttpPost]
+        [Route("Management/Image/UploadPostImageResize")]
+        public ActionResult UploadPostImageResize(string imgUrl, int width, int height, int x, int y)
+        {
+            MessageViewModels response = new MessageViewModels();
+            string largeFileName = "";
+            string thumbFileName = "";
+            string originFileName = "";
+            string newPath = Server.MapPath(AmsConstants.ImageFilePath);
+
+            if (imgUrl != null)
+            {
+                System.Drawing.Image img = System.Drawing.Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + imgUrl);
+                thumbFileName = SaveImageTest(img, width, height, x, y);
+                largeFileName = SaveImage(img, newPath, 960, 720, 0, true);
+                originFileName = imgUrl;
+
+                object obj = new
+                {
+                    originUrl = originFileName,
+                    imageUrl = new StringBuilder(AmsConstants.ImageFilePathDownload).Append(largeFileName).ToString(),
+                    thumbnailUrl =
+                        new StringBuilder(AmsConstants.ImageFilePathDownload).Append(thumbFileName).ToString(),
+                };
+                response.Data = obj;
+            }
+            else
+            {
+                response.StatusCode = -1;
                 response.Msg = "Tải lên tập tin  thất bại";
             }
             return Json(response);
         }
 
-        private string SaveImage(HttpPostedFile pic, int width, int height,bool isScaled)
+        private string SaveImageTest(System.Drawing.Image pic, int width, int height, int x, int y)
         {
             string newPath = Server.MapPath(AmsConstants.ImageFilePath);
+            if (!Directory.Exists(newPath))
+            {
+                Directory.CreateDirectory(newPath);
+            }
+            System.Drawing.Image target = null;
+            target = CommonUtil.ResizeImageImage(pic, width, height, x, y);
+
+
+            string fileName =
+               new StringBuilder().Append("img_").Append(DateTime.Now.Ticks).Append(".").Append(CommonUtil.GetImageExt(pic))
+                   .ToString();
+            target.Save(new StringBuilder(newPath).Append(fileName).ToString());
+            return fileName;
+        }
+
+        public static string SaveImage(System.Drawing.Image pic, string imageLocation, int width, int height, int mode, bool isScaled)
+        {
+            string newPath = imageLocation;
             if (!Directory.Exists(newPath))
             {
                 Directory.CreateDirectory(newPath);
@@ -711,17 +874,26 @@ namespace AMS.Controllers
             cropRect.Width = width;
             cropRect.Height = height;
             System.Drawing.Image target = null;
-            if (isScaled)
+
+            if (mode == 1)//Just save image
             {
-                target = CommonUtil.ScaleImage(System.Drawing.Image.FromStream(pic.InputStream), cropRect.Width, cropRect.Height);
+                target = pic;
             }
             else
             {
-               target = CommonUtil.FixedSize(System.Drawing.Image.FromStream(pic.InputStream), cropRect.Width, cropRect.Height, true);
+                if (isScaled)
+                {
+                    target = CommonUtil.ScaleImage(pic, cropRect.Width, cropRect.Height);
+                }
+                else
+                {
+                    //                target = CommonUtil.FixedSize(System.Drawing.Image.FromStream(pic.InputStream), cropRect.Width, cropRect.Height, true);
+                    //                target = CommonUtil.ResizeImageNewForThumbnail(System.Drawing.Image.FromStream(pic.InputStream), cropRect.Width, cropRect.Height);
+                    target = CommonUtil.ScaleImageFixHeight(pic, cropRect.Width, cropRect.Height);
+                }
             }
-
             string fileName =
-               new StringBuilder().Append("img_").Append(DateTime.Now.Ticks).Append(".").Append(pic.ContentType.Replace(@"image/", ""))
+               new StringBuilder().Append("img_").Append(DateTime.Now.Ticks).Append(".").Append(CommonUtil.GetImageExt(pic))
                    .ToString();
             target.Save(new StringBuilder(newPath).Append(fileName).ToString());
             return fileName;

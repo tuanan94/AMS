@@ -22,6 +22,7 @@ namespace AMS.Service
         {
             return helpdeskReqRepository.FindById(id);
         }
+
         public List<HelpdeskRequest> GetHdRequestByHouseId(int houseId)
         {
             return 

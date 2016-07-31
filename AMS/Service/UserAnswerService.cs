@@ -23,8 +23,10 @@ namespace AMS.Service
             return userAnswerRepository.FindById(id);
         }
 
-       
-
+        public UserAnswerPoll FindById(int userId, int pollId)
+        {
+            return userAnswerRepository.List.First( a => a.UserId == userId && a.PollId == pollId);
+        }
         public void DeleteUserAnswer(UserAnswerPoll obj)
         {
             userAnswerRepository.Delete(obj);

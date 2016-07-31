@@ -46,6 +46,8 @@
 /// <reference path="respond.js" />
 /// <reference path="amsscript/socialmediacustom.js" />
 /// <reference path="amsscript/jquery.mousewheel.min.js" />
+/// <reference path="amsscript/jquery.raty.js" />
+/// <reference path="amsscript/cropper.min.js" />
 
 
 

@@ -19,6 +19,8 @@ namespace AMS.Models
         public string Address { get; set; }
         public string ImageUrl { get; set; }
         public long ClickCount { get; set; }
+        public double RatePoint { get; set; }
+        public double ProviderCatId { get; set; }
     }
     public class AroundServiceCatModel
     {

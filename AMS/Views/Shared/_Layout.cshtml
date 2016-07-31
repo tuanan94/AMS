@@ -33,7 +33,8 @@
 
 
 </head>
-<body class="breakpoint-1024">
+
+<body class="breakpoint-1024" style="overflow-x: hidden">
     <div class="navbar navbar-main navbar-primary navbar-fixed-top" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -47,7 +48,7 @@
                 @*<a data-toggle="sidebar-chat" class="btn btn-link navbar-btn visible-xs"><i class="fa fa-comments"></i></a>*@
 
                 <a class="navbar-brand" href="/">
-                    <img src="~/Content/images/logo.png" style="height: 80px;margin-top: -37px;margin-bottom: -20px;" />
+                    <img src="~/Content/images/logo.png" style="height: 80px; margin-top: -37px; margin-bottom: -20px;" />
                     AMS
                 </a>
             </div>
@@ -72,7 +73,7 @@
                     @*                    }*@
 
                     <li style="@(url.Contains("/AroundService/") ? "background-color:#21988c" : "")">
-                        <a href="/Home/AroundService/All"><i class="fa fa-fw fa-stumbleupon-circle"></i> Dịch vụ xung quanh</a>
+                        <a href="/Home/AroundService/All"><i class="fa fa-fw fa-street-view"></i> Dịch vụ xung quanh</a>
                     </li>
                     <li style="@(url.Contains("/Survey/") ? "background-color:#21988c" : "")">
                         <a href="/Survey/doSurvey"><i class="fa fa-check-square-o"></i> Khảo sát</a>
@@ -80,20 +81,20 @@
 
                     @if (isManager)
                     {
-                        <li style="background-color:#428bca">
-                            <a href="/Management/HelpdeskRequest/ManageHdRequest"><i class="fa fa-black-tie"></i> Quản lý</a>
+                        <li style="background-color: #428bca">
+                            <a href="/Management/HelpdeskRequest/ManageHdRequest"><i class="fa fa-fw fa-black-tie"></i> Quản lý</a>
                         </li>
                     }
                     @if (isAdmin)
                     {
-                        <li style="background-color:#465665">
-                            <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-black-tie"></i> Quản lý</a>
+                        <li style="background-color: #465665">
+                            <a href="/Management/Config/UtilityService/ViewManageHouseBlock"><i class="fa fa-fw fa-black-tie"></i> Quản lý</a>
                         </li>
                     }
                     @if (isSupporter)
                     {
-                        <li style="background-color:#388e3c">
-                            <a href="/HelpdeskSupporter"><i class="fa fa-wrench"></i> Sửa chữa</a>
+                        <li style="background-color: #388e3c">
+                            <a href="/HelpdeskSupporter"><i class="fa fa-fw fa-wrench"></i> Sửa chữa</a>
                         </li>
                     }
                 </ul>
@@ -118,13 +119,22 @@
             </div>
         </div>
     </div>
-    <div class="st-container">
-        @RenderBody()
-        <hr />
+    @if (Request.Url.PathAndQuery == "/" || url.Contains("/House/") || url.Contains("/House/"))
+    {
+        <header class="cover overlay">
+            <img src="/Content/images/banner-842.jpg" alt="cover">
+        </header>
+    }
+
+    <div class="st-container" style="margin-left: auto; margin-right: auto">
+        <div class="row" style="margin: 0;padding-left: 15px;padding-right: 15px;">
+            @RenderBody()
+            <hr />
+        </div>
     </div>
 
 
-    @Scripts.Render("~/bundles/bootstrap")
+    @*@Scripts.Render("~/bundles/bootstrap")*@
     <script src="~/Scripts/amsScript/vendor.js"></script>
     <script src="~/Scripts/amsScript/scripts.js"></script>
     <script src="~/Scripts/amsScript/custom.js"></script>
@@ -145,7 +155,10 @@
     <script src="~/Scripts/amsScript/lg-fullscreen.js"></script>
     <script src="~/Scripts/amsScript/SocialMediaCustom.js"></script>
 
+    <script src="~/Scripts/amsScript/jquery.raty.js"></script>
+
     @RenderSection("scripts", required: false)
 
 </body>
+
 </html>

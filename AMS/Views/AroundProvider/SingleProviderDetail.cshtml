@@ -1,35 +1,67 @@
-﻿@{
+﻿@using Microsoft.AspNet.Identity
+@{
     ViewBag.Title = "Chi tiết dịch vụ";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
     List<AroundProviderProduct> products = ViewBag.Products;
     AroundProvider curProvider = ViewBag.CurProvider;
+    int curUserRate = ViewBag.CurUserRate;
+    int rateCount = ViewBag.RateCount;
+    double ratePoint = ViewBag.RatePoint;
 }
 
 <link href="~/Content/aroundProvider/main.css" rel="stylesheet" />
 
-<div class="col-md-12">
+<div class="row">
     <div class="panel panel-default">
         <div class="row">
             <div class="col-md-12">
-                <div class="col-md-8 page-title" id="left">
+                <div class="col-md-8 page-title" id="left" data-user-id="@User.Identity.GetUserId()" data-prov-id="@curProvider.Id"
+                     data-cur-user-rate="@curUserRate" data-rate-count="@rateCount" data-rate-point="@ratePoint">
+
                     <h2 class="text-capitalize">@curProvider.Name</h2>
-                    <ul style="font-size: 16px">
-                        <li class="icon-home-1">
-                            Địa chỉ: @curProvider.Address
+
+                    <ul class="provider-info" style="font-size: 16px;">
+
+                        <li>
+                            <i class="fa fa-eye"></i> <strong>Lượt xem:</strong> <span>@curProvider.ClickCount </span>
                         </li>
-                        <li class="icon-phone">
-                            Điện thoại: @curProvider.Tel
+                        <li>
+                            <i class="fa fa-heart-o "></i> <strong>Đánh giá:</strong> <span id="providerRate"></span> <strong id="providerRateUser"></strong>
                         </li>
-                        <li class="icon-comment-1">
-                            Mô tả: @curProvider.Description
+                        <li>
+                            <i class="fa fa-map-marker"></i> <strong>Địa chỉ:</strong> <span>@curProvider.Address</span>
                         </li>
-                        <li class="icon-visual-eye">
-                            Lượt xem: @curProvider.ClickCount
+                        <li>
+                            <i class="fa fa-phone"></i> <strong>Điện thoại:</strong> <span>@curProvider.Tel</span>
+                        </li>
+                        <li>
+                            <i class="fa fa-comment-o"></i> <strong>Mô tả:</strong> <span>@curProvider.Description </span>
                         </li>
                     </ul>
                 </div>
                 <div class="col-md-4" style="margin-top: 2%">
-                    <img style="width: 100%;" class="border-img" src="@curProvider.ImageUrl" />
+                    <div class="col-md-12">
+                        <img style="width: 100%;" class="border-img" src="@curProvider.ImageUrl" />
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-offset-8 col-md-4">
+                        <div class="pull-right" style="text-align: center;font-size: 20px;">
+                            @{
+                                if (curUserRate == -1)
+                                {
+                                    <div id="rateMessage"><i style="color: #aaa" class="fa fa-check-circle"></i> <span> Chưa Đánh Giá</span></div>
+                                }
+                                else
+                                {
+                                    <div id="rateMessage">
+                                        <i style="color: #25ad9f" class="fa fa-check-circle"></i>  <span> Đã Đánh Giá</span>
+                                    </div>
+                                }
+                            }
+                            <div id="userRate"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -50,9 +82,9 @@
                                 foreach (var product in products)
                                 {
                                     <li class="provider-product">
-                                        <div class="col-md-12 border-img ar-product">
+                                        <div class="col-md-12 ar-product">
                                             @*                                            <img style="width: 100%;padding: 10px" src="@product.ImgUrl" />*@
-                                            <img src="@product.ImgUrl" />
+                                            <img width="100%" class="img-border" style="border-color:#78909C " src="@product.ImgUrl" />
                                         </div>
                                         <div class="col-md-12">
                                             <div class="desc">
@@ -79,15 +111,78 @@
                 </div>
                 <div style="height: 300px; width: 100%;" id="map"><!--map-canvas will be postioned here--></div>
             </div>
-
-
             <input type="hidden" id="lat" value="@curProvider.Latitude" />
             <input type="hidden" id="lng" value="@curProvider.Longitude" />
         </div>
-
     </div>
 </div>
 
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8T4uVRg-6S4KK39kPUldWKATbqgOm4VE&v=3.exp&amp;sensor=false"></script>
 <script src="~/Scripts/aroundProvider/map.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        $.fn.raty.defaults.path = '/Content/images';
+        var dataElement = $("#left");
+        var ratePoint = dataElement.data("ratePoint");
+        var rateCount = dataElement.data("rateCount");
+        var curUserRate = dataElement.data("curUserRate");
+        $("#providerRate").raty({
+            score: ratePoint, number: 5,
+            readOnly: true,
+        });
+        if (rateCount != "0") {
+            $("#providerRateUser").html("<span>" + rateCount + " người </span>");
+        }
+
+        if (curUserRate == "-1") {
+            $("#userRate").raty({
+                number: 5, click: function (score, evt) {
+                    if ($("#left").data("curUserRate") != "-1") {
+                        return false;
+                    }
+                    $("#left").data("curUserRate", score);
+                    $('#userRate').raty('readOnly', true);
+                    var userId = $("#left").data("userId");
+                    var providerId = $("#left").data("provId");
+                    $.ajax({
+                        url: "/Home/AroundService/UserRate",
+                        data: {
+                            userId: userId,
+                            providerId: providerId,
+                            point: score
+                        },
+                        type: "POST",
+                        success: function (data) {
+                            if (data.StatusCode === 0) {
+                                $("#providerRate")
+                                    .raty({
+                                        score: data.Data.point,
+                                        readOnly: true
+                                    });
+                                $("#rateMessage > span").text("Đã Đánh Giá");
+                                $("#rateMessage > i").css("color", "#25ad9f");
+                            } else if (data.StatusCode === 2) {
+                                $("#rateMessage > span").text("Đã Đánh Giá");
+                                $("#rateMessage > i").css("color", "#25ad9f");
+                                $("#userRate").raty({
+                                    score: data.Data,
+                                    readOnly: true
+                                });
+                            } else {
+                                $("#left").data("curUserRate", "-1");
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+            $("#userRate").raty({
+                score: curUserRate, number: 5, readOnly: true,
+            });
+        }
+    });
+</script>
+

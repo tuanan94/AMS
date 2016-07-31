@@ -18,12 +18,6 @@ namespace AMS.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        HouseServices houseServices = new HouseServices();
-        PollService surveyService = new PollService();
-        QuestionService questionService = new QuestionService();
-        AnswerService answerService = new AnswerService();
-        UserAnswerService userAnswerService = new UserAnswerService();
-        UserServices userServices = new UserServices();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private UserService userService;
@@ -96,7 +90,7 @@ namespace AMS.Controllers
                    
                     return RedirectToLocal(returnUrl);
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("", "Không tìm thấy tài khoản hoặc mật khẩu không chính xác!. Xin vui lòng liên hệ ban quản lý để được giải quyết!");
                     return View(model);
             }
         }

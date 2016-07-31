@@ -36,6 +36,14 @@ namespace AMS.Service
         {
            
             PollRepository.Delete(obj);
+        } 
+        public void DeleteByIdPoll(int id)
+        {
+            Poll p = PollRepository.FindById(id);
+            if (null != p)
+            {
+                PollRepository.Delete(p);
+            }
         }
 
         public void UpdatePoll(Poll obj)

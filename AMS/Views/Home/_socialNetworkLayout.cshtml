@@ -9,7 +9,7 @@
     bool isResidentOrHouseOwner = curUser.RoleId == SLIM_CONFIG.USER_ROLE_RESIDENT || curUser.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER;
 }
 <link rel="stylesheet" href="~/Content/css/lightgallery.min.css" type="text/css" />
-
+<link rel="stylesheet" href="~/Content/css/socialNetworkCustom.css" type="text/css" />
 <style>
     .style_prevu_kit {
         display: inline-block;
@@ -35,58 +35,60 @@
             transform: scale(1.5);
         }
 </style>
+
+
+
 @if (isResidentOrHouseOwner)
 {
-    <div class="sidebar left hidden-xs" style="width: 200px">
-        <div class="sidebar-block" style="margin: auto;width: 100%;">
-            <a href="@(curHouse == null ? "#" : ("/House/" + curHouse.Id))" class="style_prevu_kit" style="width:100%">
-                <div class="profile">
-                    <img src="@(curHouse == null || curHouse.ProfileImage == null || curHouse.ProfileImage.Equals("") ? "/Content/images/home_default.jpg" : curHouse.ProfileImage)" alt="HOUSE" class="img-circle" width="100px">
-                    <h4>Nhà @(curHouse == null || curHouse.HouseName.Equals("") ? "chưa xác định" : curHouse.HouseName)</h4>
+
+    <div class="col-md-3">
+
+        <div class="row sidebar left hidden-xs left-nav" style="width: 100%; bottom: inherit; left: inherit; position: relative; top: inherit;">
+            <div class="sidebar-block" style="margin: auto; width: 100%;">
+                <a href="@(curHouse == null ? "#" : ("/House/" + curHouse.Id))" style="width: 100%">
+                    <div class="profile">
+                        <img src="@(curHouse == null || curHouse.ProfileImage == null || curHouse.ProfileImage.Equals("") ? "/Content/images/home_default.jpg" : curHouse.ProfileImage)" alt="HOUSE" class="img-circle" width="100px">
+                        <h4>Nhà @(curHouse == null || curHouse.HouseName.Equals("") ? "chưa xác định" : curHouse.HouseName)</h4>
+                    </div>
+                </a>
+            </div>
+
+            <div class="profile-icons text-center house-info">
+                <div class="text-center house-block">
+                    <i class=" fa fa-fw fa-database"></i> Tòa nhà
+                    <div style="text-align: center;">@(curHouse == null || curHouse.BlockId == null ? "" : curHouse.Block.BlockName)</div>
                 </div>
-            </a>
-        </div>
-        <div id="menu">
-            <ul id="slide-left" class="slide-left-active">
-                <li class="category">Tiện ích</li>
-                <li class="@(url.Contains("/Home/Setting")?"active":"")">
-                    <a href="/Home/Setting"><i class="fa fa-fw fa-cogs"></i> Thiết lập căn hộ</a>
-                </li>
-                <li class="@(url.Contains("/Home/ManageReceipt/View")?"active":"")">
-                    <a href="/Home/ManageReceipt/View"><i class="fa fa-fw fa-money"></i> Hóa đơn</a>
-                </li>
-                <li class="@(url.Contains("/Home")?"active":"")">
+                <div class="text-center house-floor">
+                    <i class=" fa fa-fw fa-table"></i> Tầng
+                    <div>@(curHouse == null || curHouse.Floor == null ? "" : curHouse.Floor)</div>
+                </div>
+            </div>
 
-                </li>
-                <li class="@(url.Contains("/Home/HelpdeskRequest/ViewHistory") ? "active" : "")">
-                    <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-fw fa-stumbleupon-circle"></i> Yêu cầu sửa chữa</a>
-                </li>
-                <li class="@(url.Contains("BalanceSheet") ? "active" : "")">
-                    <a href="/Management/BalanceSheet/View"><i class="fa fa-dollar"></i> Tài chính tòa nhà</a>
-                </li>
-            </ul>
-        </div>
+            <div id="menu">
+                <ul id="slide-left" class="slide-left-active">
+                    <li class="category">Tiện ích</li>
+                    <li class="@(url.Contains("/Home/Setting") ? "active" : "")">
+                        <a href="/Home/Setting"><i class="fa fa-fw fa-cogs"></i> Thiết lập căn hộ</a>
+                    </li>
+                    <li class="@(url.Contains("/Home/ManageReceipt/View") ? "active" : "")">
+                        <a href="/Home/ManageReceipt/View"><i class="fa fa-fw fa-money"></i> Hóa đơn</a>
+                    </li>
+                    <li class="@(url.Contains("/Home") ? "active" : "")">
 
+                    </li>
+                    <li class="@(url.Contains("/Home/HelpdeskRequest/ViewHistory") ? "active" : "")">
+                        <a href="/Home/HelpdeskRequest/ViewHistory"><i class="fa fa-fw fa-stumbleupon-circle"></i> Yêu cầu sửa chữa</a>
+                    </li>
+                    <li class="@(url.Contains("BalanceSheet") ? "active" : "")">
+                        <a href="/Management/BalanceSheet/View"><i class="fa fa-fw fa-dollar"></i> Tài chính tòa nhà</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
     </div>
 }
-<div class="sidebar right">
-    <div class="chat-search">
-        <input type="text" class="form-control" placeholder="Search">
-    </div>
-    <ul class="chat-filter nav nav-pills ">
-        <li class="active">
-            <a href="#" data-target="li">All</a>
-        </li>
-        <li>
-            <a href="#" data-target=".online">Online</a>
-        </li>
-        <li>
-            <a href="#" data-target=".offline">Offline</a>
-        </li>
-    </ul>
-</div>
-<div id="content" style="margin-left: 200px; @(isResidentOrHouseOwner == true ? "" : "margin-left:initial")">
-
+<div id="content" class="content col-md-9" style="margin-left:0; padding-left: 0; @(isResidentOrHouseOwner == true ? "" : "margin-left: 16.66666667%;")">
     @RenderBody()
     <!--Footer-->
     <div class="footer">
@@ -110,7 +112,7 @@
     </div>
 
     <div id="userInforModal" class="modal fade ams-modal" role="dialog">
-        <div class="modal-dialog modal-lg" style="width: 700px">
+        <div class="modal-dialog modal-lg" style="width: 600px">
             <div class="modal-content">
                 <div style="position: relative; padding: 0;">
                     <div>
@@ -125,13 +127,14 @@
                             </ul>
                         </div>
                         <div class="tab-content">
-                            <div class="panel-body modal-body tab-pane fade active in" id="userInfoTab">
+                            @*                            <div class="panel-body modal-body tab-pane fade active in" id="userInfoTab">*@
+                            <div class="tab-pane fade active in" id="userInfoTab">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="avatar" style="text-align: center">
                                             <img id="usrInfoAva" class="loading-img img-border popup-avar" onerror="this.src = '/Content/Images/defaultProfile.png';">
                                             <h3 id="usrInfoFullname" style="background-color: #21988C; color: white; border-top-left-radius: 30px; border-bottom-left-radius: 30px; padding: 5px"> data['FullName'] </h3>
-                                            <strong class="house-name" style="float: none;"><span id="_usrInfoHouseName"style="font-size: 17px;"><i class="fa fa-home icon-house"></i></span></strong>
+                                            <strong class="house-name" style="float: none;"><span id="_usrInfoHouseName" style="font-size: 17px;"><i class="fa fa-home icon-house"></i></span></strong>
                                         </div>
                                     </div>
                                     <div class="col-md-8">
@@ -213,10 +216,6 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                </div>
             </div>
         </div>
     </div>
@@ -244,16 +243,16 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header" style="background: #fcf8e3">
-@*                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
+                    @*                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
                     <h4 class="modal-title"><i class="fa fa-info-circle"></i> Thông báo</h4>
                 </div>
                 <div class="modal-body">
                     <div class="panel-body">
-                        <h4 id="amsMsgText">Thêm cư dân thành công</h4>
+                        <h4 class="text-center" id="amsMsgText">Thêm cư dân thành công</h4>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <div class="modal-footer" style="margin-top: 0;">
+                    <button id="amsMessageModalBtnCancel" type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                 </div>
             </div>
         </div>

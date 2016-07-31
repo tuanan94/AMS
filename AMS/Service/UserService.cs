@@ -39,6 +39,17 @@ namespace AMS.Service
 
             return user;
         }
+
+        public User findByIdDetach(User u, int id)
+        {
+            User user = userRepository.FindByIdAfterAdd(u, id);
+            return user;
+        }
+        public void reloadUer(User u)
+        {
+            userRepository.Reload(u);
+        }
+
         public UserProfileMapping findUserProfileMappingById(int id)
         {
             User user = findById(id);
@@ -47,21 +58,21 @@ namespace AMS.Service
             userProfileMapping.DateOfBirth = user.DateOfBirth.GetValueOrDefault();
             userProfileMapping.Email = user.Email;
             userProfileMapping.FullName = user.Fullname;
-            userProfileMapping.Gender = user.Gender.GetValueOrDefault() ;
+            userProfileMapping.Gender = user.Gender.GetValueOrDefault();
             userProfileMapping.ProfileImage = user.ProfileImage;
             userProfileMapping.HouseId = user.HouseId.GetValueOrDefault();
             userProfileMapping.HouseName = user.House == null ? "Không xác định" : user.House.HouseName;
             userProfileMapping.CreatedDate = user.CreateDate.Value.ToString(AmsConstants.DateFormat);
             userProfileMapping.Age = CommonUtil.CalculateAge(user.DateOfBirth.Value);
-            userProfileMapping.HouseProfile = user.House == null||user.House.ProfileImage==null||user.House.ProfileImage.Equals("") ? "/Content/Images/home_default.jpg" : user.House.ProfileImage;
-            List<Post> rawPost = user.Posts.OrderByDescending(p => p.CreateDate).Take(10).ToList();
+            userProfileMapping.HouseProfile = user.House == null || user.House.ProfileImage == null || user.House.ProfileImage.Equals("") ? "/Content/Images/home_default.jpg" : user.House.ProfileImage;
+            List<Post> rawPost = user.Posts.OrderByDescending(p => p.CreateDate).Take(5).ToList();
             List<MoreInfo> moreInfos = new List<MoreInfo>();
-            foreach(Post p in rawPost)
+            foreach (Post p in rawPost)
             {
                 MoreInfo pInfo = new MoreInfo();
-                pInfo.Id = p.Id +"";
+                pInfo.Id = p.Id + "";
                 pInfo.createdDate = p.CreateDate.Value.ToString("s");
-                pInfo.PostText = CommonUtil.TruncateLongString(p.Body, 100); 
+                pInfo.PostText = CommonUtil.TruncateLongString(p.Body, 100);
                 moreInfos.Add(pInfo);
             }
             userProfileMapping.moreInfos = moreInfos;
@@ -91,7 +102,7 @@ namespace AMS.Service
             }
             else
             {
-                if (password.Equals(user.Password))
+                if (password.Equals(user.Password) && user.Status == SLIM_CONFIG.USER_STATUS_ENABLE)
                 {
                     var ident = new ClaimsIdentity(
              new[] { 

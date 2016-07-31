@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using Twilio;
+using Encoder = System.Text.Encoder;
 
 namespace AMS.Constant
 {
@@ -61,6 +63,21 @@ namespace AMS.Constant
                 graphics.DrawImage(image, 0, 0, newWidth, newHeight);
             return newImage;
         }
+
+        /*http://stackoverflow.com/questions/6501797/resize-image-proportionally-with-maxheight-and-maxwidth-constraints*/
+        public static System.Drawing.Image ResizeImageImage(System.Drawing.Image image, int width, int height, int x, int y)
+        {
+            Rectangle crop = new Rectangle(x, y, width, height);
+            var newImage = new Bitmap(crop.Width, crop.Height);
+            using (var graphics = Graphics.FromImage(newImage))
+            {
+                graphics.Clear(Color.White);
+                graphics.DrawImage(image, new Rectangle(0, 0, crop.Width, crop.Height), crop, GraphicsUnit.Pixel);
+            }
+
+            return newImage;
+        }
+
 
         /*http://stackoverflow.com/questions/10323633/resize-image-in-c-sharp-with-aspect-ratio-and-crop-central-image-so-there-are-no*/
         public static System.Drawing.Image FixedSize(System.Drawing.Image image, int Width, int Height, bool needToFill)
@@ -122,6 +139,83 @@ namespace AMS.Constant
                 return bmPhoto;
             }
         }
+
+        public static System.Drawing.Image ResizeImageNewForThumbnail(System.Drawing.Image image,
+            /* note changed names */
+                     int canvasWidth, int canvasHeight
+            /* new */
+                     )
+        {
+
+
+            int originalWidth = image.Width;
+            int originalHeight = image.Height;
+
+            System.Drawing.Image thumbnail =
+                new Bitmap(canvasWidth, canvasHeight); // changed parm names
+            System.Drawing.Graphics graphic =
+                         System.Drawing.Graphics.FromImage(thumbnail);
+
+            graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            graphic.SmoothingMode = SmoothingMode.HighQuality;
+            graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            graphic.CompositingQuality = CompositingQuality.HighQuality;
+
+            /* ------------------ new code --------------- */
+
+            // Figure out the ratio
+            double ratioX = (double)canvasWidth / (double)originalWidth;
+            double ratioY = (double)canvasHeight / (double)originalHeight;
+            // use whichever multiplier is smaller
+            double ratio = ratioX < ratioY ? ratioX : ratioY;
+
+            // now we can get the new height and width
+            int newHeight = Convert.ToInt32(originalHeight * ratio);
+            int newWidth = Convert.ToInt32(originalWidth * ratio);
+
+            // Now calculate the X,Y position of the upper-left corner 
+            // (one of these will always be zero)
+            int posX = Convert.ToInt32((canvasWidth - (originalWidth * ratio)) / 2);
+            int posY = Convert.ToInt32((canvasHeight - (originalHeight * ratio)) / 2);
+
+            //            graphic.Clear(Color.White); // white padding
+            graphic.DrawImage(image, posX, posY, newWidth, newHeight);
+
+            return thumbnail;
+            /* ------------- end new code ---------------- */
+
+            //            System.Drawing.Imaging.ImageCodecInfo[] info =
+            //                             ImageCodecInfo.GetImageEncoders();
+            //            EncoderParameters encoderParameters;
+            //            encoderParameters = new EncoderParameters(1);
+            //            encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality,
+            //                             100L);
+            //            thumbnail.Save(path + newWidth + "." + originalFilename, info[1],
+            //                             encoderParameters);
+        }
+
+        /*http://stackoverflow.com/questions/991587/how-can-i-crop-scale-user-images-so-i-can-display-fixed-sized-thumbnails-without*/
+        public static System.Drawing.Image ScaleImageFixHeight(System.Drawing.Image oldImage, int canvasWidth, int canvasHeight)
+        {
+            double resizeFactor = 1;
+
+            if (oldImage.Width > canvasWidth || oldImage.Height > canvasHeight)
+            {
+                double widthFactor = Convert.ToDouble(oldImage.Width) / canvasWidth;
+                double heightFactor = Convert.ToDouble(oldImage.Height) / canvasWidth;
+                resizeFactor = Math.Max(widthFactor, heightFactor);
+            }
+            int width = Convert.ToInt32(oldImage.Width / resizeFactor);
+            int height = Convert.ToInt32(oldImage.Height / resizeFactor);
+            Bitmap newImage = new Bitmap(width, height);
+            Graphics g = Graphics.FromImage(newImage);
+            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            g.DrawImage(oldImage, 0, 0, newImage.Width, newImage.Height);
+            return newImage;
+        }
+
+
+
         /*http://stackoverflow.com/questions/3566830/what-method-in-the-string-class-returns-only-the-first-n-characters*/
         public static string TruncateLongString(string str, int maxLength)
         {
@@ -138,6 +232,24 @@ namespace AMS.Constant
             return age;
         }
 
-
+        public static string GetImageExt(System.Drawing.Image img)
+        {
+            string ext = "";
+            if (ImageFormat.Jpeg.Equals(img.RawFormat))
+            {
+                ext = "jpg";
+            }
+            else if (ImageFormat.Png.Equals(img.RawFormat))
+            {
+                // PNG
+                ext = "png";
+            }
+            else if (ImageFormat.Gif.Equals(img.RawFormat))
+            {
+                // GIF
+                ext = "gif";
+            }
+            return ext;
+        }
     }
 }

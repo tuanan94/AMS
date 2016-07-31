@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "ErrorMsg";
+    Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
+    string msg = ViewBag.ErrorMsg;
+}
+<div class="col-md-offset-2 col-md-8" style="padding-left: 0; padding-right: 0">
+    <div class="panel panel-default custom-panel">
+        <div class="panel-heading panel-heading-gray">
+            <i class="fa fa-info-circle"></i> Thông báo
+        </div>
+        <div class="panel-body">
+            <h4>@msg</h4>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        setTimeout(function () {
+            $('.left-nav')
+                .affix({
+                    offset: {
+                        top: function () { return 370; },
+                        bottom: 0
+                    }
+                });
+        }, 100);
+        setTimeout(function () {
+            $("#content > div.row").css("min-height", $("#content > div.row > div.col-md-8").height() + 200 + "px");
+        }, 500);
+    });
+</script>

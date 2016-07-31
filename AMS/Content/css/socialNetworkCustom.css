@@ -1,0 +1,160 @@
+﻿
+/* Large desktop */
+@media (min-width: 1200px) {
+    /*body {
+        margin-left: 25%;
+        margin-right: 25%
+    }
+    .sidebar.left {
+        margin-left: 25%
+    }
+    .navbar.navbar-main.navbar-primary.navbar-fixed-top {
+        margin-left: 25%;
+        margin-right: 25%
+    }*/
+    .st-container,
+    .navbar-static-top .container-fluid,
+    .navbar-fixed-top .container-fluid,
+    .navbar-fixed-bottom .st-container, header {
+        width: 1170px;
+    }
+
+    header {
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {
+    .st-container,
+    .navbar-static-top .container-fluid,
+    .navbar-fixed-top .container-fluid,
+    .navbar-fixed-bottom .st-container, header {
+        width: 940px;
+    }
+
+    header {
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+}
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+}
+
+/* Landscape phones and down */
+@media (max-width: 480px) {
+}
+
+#content {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+    #content > .col-md-12 {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+.panel.panel-default ul.comments li {
+    background: #ffffff;
+}
+
+.loading-image-post {
+    background: #9E9E9E url('/Content/images/loading.gif') center no-repeat;
+    background-size: 100px auto;
+}
+
+.embed-row > iframe {
+    width: 100%;
+}
+
+.img-review {
+    height: 100px;
+    width: auto;
+    float: left;
+    position: relative;
+    margin: 5px;
+    border: 1px solid #e5e5e5;
+}
+
+.img-review-del-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+}
+
+.morecontent span {
+    display: none;
+}
+
+.morelink, .morelink:hover, .morelink:focus {
+    font-size: 15px;
+    font-style: italic;
+    color: #009688;
+    text-decoration: none !important;
+}
+
+.custom-panel > .panel-heading.panel-heading-gray {
+    background: #25ad9f;
+    color: #000000;
+}
+
+    .custom-panel > .panel-heading.panel-heading-gray > i {
+        color: #fff;
+    }
+
+.text-center {
+    text-align: center;
+}
+
+.house-info {
+    padding: 0 15px;
+    height: 70px;
+    border-bottom: 1px solid #ffffff;
+    border-top: 1px solid #ffffff;
+}
+
+    .house-info .house-block {
+        line-height: 2.37;
+        float: left;
+        width: 50%;
+        height: 100%;
+        border-right: 1px solid #fff;
+    }
+
+    .house-info .house-floor {
+        line-height: 2.37;
+        float: left;
+        width: 50%;
+        height: 100%;
+        border-left: 1px solid #fff;
+    }
+
+    .house-info div > i {
+        color: #009688;
+    }
+
+/*Crop image*/
+
+.bootstrap-modal-cropper {
+    height: 400px;
+}
+
+    .bootstrap-modal-cropper > img {
+        max-width: 100%;
+    }
+/*Crop image*/
+.lg-outer .lg-item {
+    width: 80%;
+    height: 80%;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+}

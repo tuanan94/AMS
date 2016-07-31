@@ -335,7 +335,58 @@ $.extend(true, $.fn.dataTable.defaults, {
         }
     }
 });
+/*function setNavPosition() {
+    var path = location.pathname;
+    if (path === "/" || path.indexOf("/House/") > -1) {
+        $('.left-nav')
+            .css(
+            {
+                "width": $('.left-nav').parent().width() + "px",
+                "position": "relative"
+            });
+    } else {
+        $('.left-nav')
+            .css(
+            {
+                "width": $('.left-nav').parent().width() + "px",
+                "position": "fixed"
+            });
+    }
+}*/
+
+function setNavPosition() {
+    var path = location.pathname;
+    if (path === "/" || path.indexOf("/House/") > -1) {
+        $('.left-nav').each(function () {
+            $(this).css(
+            {
+                "width": $(this).parent().width() + "px",
+                "position": "relative"
+            });
+        });
+    } else {
+        $('.left-nav').each(function () {
+            $(this).css(
+            {
+                "width": $(this).parent().width() + "px",
+                "position": "fixed"
+            });
+        });
+    }
+}
+
 $(document).ready(function () {
+    setNavPosition();
+
+    //    setTimeout(function() {
+    window.addEventListener("resize", function () {
+        $('.left-nav').each(function () {
+            $(this).css("width", $(this).parent().width() + "px");
+        });
+    });
+    //    }, 100);
+
+
     $("#addHelpdeskRequestForm").validate({
         rules: {
             hdSrvName: {
@@ -458,9 +509,9 @@ $(document).ready(function () {
             });
         }
     });
-    
 
-    
+
+
 
     $("#addHelpdeskRequestModal").on("hidden.bs.modal", function () {
         document.getElementById("addHelpdeskRequestForm").reset();
@@ -485,42 +536,42 @@ $(document).ready(function () {
         }
     });
 
-//    $(document).on("change", "#hdSrvCatName", function () {
-//
-//        $("#hdSrvPrice").val("");
-//        $("#hdSrvDesc").val("");
-//        if ($(this).find("option:selected").val()) {
-//            var selected = parseInt($(this).find("option:selected").val(), 10);
-//            $("#hdSrvCatName").prop("disable", true);
-//            $("#hdServiceId").prop("disabled", true);
-//            getHdSrvByCatId(selected, "hdServiceId", function () {
-//                $("#hdSrvCatName").prop("disable", false);
-//                $("#hdServiceId").prop("disabled", false);
-//                $("select[name=HdServiceId]").val(-1);
-//                $("#hdServiceId").selectpicker("refresh");
-//            });
-//        } else {
-//            var selectTag = "<option value='' selected='selected'> " + "Hãy chọn dịch vụ hỗ trợ" + " </option>";
-//            $("#hdServiceId").html(selectTag);
-//            $("#hdServiceId").selectpicker("refresh");
-//        }
-//    });
+    //    $(document).on("change", "#hdSrvCatName", function () {
+    //
+    //        $("#hdSrvPrice").val("");
+    //        $("#hdSrvDesc").val("");
+    //        if ($(this).find("option:selected").val()) {
+    //            var selected = parseInt($(this).find("option:selected").val(), 10);
+    //            $("#hdSrvCatName").prop("disable", true);
+    //            $("#hdServiceId").prop("disabled", true);
+    //            getHdSrvByCatId(selected, "hdServiceId", function () {
+    //                $("#hdSrvCatName").prop("disable", false);
+    //                $("#hdServiceId").prop("disabled", false);
+    //                $("select[name=HdServiceId]").val(-1);
+    //                $("#hdServiceId").selectpicker("refresh");
+    //            });
+    //        } else {
+    //            var selectTag = "<option value='' selected='selected'> " + "Hãy chọn dịch vụ hỗ trợ" + " </option>";
+    //            $("#hdServiceId").html(selectTag);
+    //            $("#hdServiceId").selectpicker("refresh");
+    //        }
+    //    });
 
-//    $(document).on("change", "#hdServiceId", function () {
-//        $("#hdSrvPrice").val("");
-//        $("#hdSrvDesc").val("");
-//        if ($(this).find("option:selected").val()) {
-//            var selected = parseInt($(this).find("option:selected").val(), 10);
-//            if (window.hdSrvList !== undefined || window.hdSrvList.length !== 0) {
-//                for (var i = 0; i < window.hdSrvList.length; i++) {
-//                    if (window.hdSrvList[i].Id === selected) {
-//                        $("#hdSrvPrice").val(window.hdSrvList[i].Price);
-//                        $("#hdSrvDesc").val(window.hdSrvList[i].Description);
-//                    }
-//                }
-//            }
-//        }
-//    });
+    //    $(document).on("change", "#hdServiceId", function () {
+    //        $("#hdSrvPrice").val("");
+    //        $("#hdSrvDesc").val("");
+    //        if ($(this).find("option:selected").val()) {
+    //            var selected = parseInt($(this).find("option:selected").val(), 10);
+    //            if (window.hdSrvList !== undefined || window.hdSrvList.length !== 0) {
+    //                for (var i = 0; i < window.hdSrvList.length; i++) {
+    //                    if (window.hdSrvList[i].Id === selected) {
+    //                        $("#hdSrvPrice").val(window.hdSrvList[i].Price);
+    //                        $("#hdSrvDesc").val(window.hdSrvList[i].Description);
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    });
 
     $("#addNewHdRequest").on("click", function () {
         console.log($("#createHdService").serialize());
@@ -579,7 +630,7 @@ $(document).ready(function () {
         }
     });
 
-    
+
 
     activeNavigationBar();
 });
@@ -1295,12 +1346,12 @@ equalheight = function (container) {
             rowDivs[currentDiv].height(currentTallest);
         }
     });
-    function textAreaAdjust(o) {
-        o.style.height = "1px";
-        o.style.height = (25 + o.scrollHeight) + "px";
-    }
+    
 }
-
+function textAreaAdjust(o) {
+    o.style.height = "1px";
+    o.style.height = (25 + o.scrollHeight) + "px";
+}
 function timeSince(dateString) {
     console.log("timeSince: " + dateString + "Z");
 
@@ -1343,5 +1394,5 @@ function timeSince(dateString) {
             }
         }
     }
-    return interval + ' ' + intervalType;
+    return interval + ' ' + intervalType ;
 }

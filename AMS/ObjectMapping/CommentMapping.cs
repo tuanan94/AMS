@@ -13,6 +13,7 @@ namespace AMS.ObjectMapping
         public String fullName { get; set; }
         public String userProfile { get; set; }
         public String detail { get; set; }
-        public DateTime createdDate { get; set; }
+        public String createdDate { get; set; }
+        public long lastGetComment { get; set; }
     }
 }

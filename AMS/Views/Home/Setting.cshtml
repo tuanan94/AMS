@@ -5,7 +5,7 @@
     ViewBag.Title = "Setting";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
     House curHouse = ViewBag.curHouse;
-    var pendingMembers = curHouse.Users.Where(u => u.Status != 1).ToList();
+    var pendingMembers = curHouse.Users.Where(u => u.Status == SLIM_CONFIG.USER_APPROVE_WAITING).ToList();
     UserService userService = new UserService();
     User curUser = userService.findById(int.Parse(User.Identity.GetUserId()));
 }
@@ -13,145 +13,134 @@
 <link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css" />
 <script src="~/Scripts/amsScript/LoadFamilyTree.js"></script>
 <script src="~/Scripts/amsScript/LoadUserProfile.js"></script>
-<div class="container-fluid">
-    <div class="media user-profile">
-        <div class="media-body">
-            <div class="row">
-                <div class="col-md-8" style="text-align: center">
+<div class="row">
+    <div class="col-md-8" style="text-align: center">
 
-                    <div class="panel panel-default">
-                        <div style="text-align: left"  class="panel-heading panel-heading-gray">
-                            @if (curUser != null && curUser.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)
-                            {
-                                <a class="btn btn-primary btn-xs pull-right" data-toggle="modal" data-target="#addMemberModal">Thêm thành viên  <i class="fa fa-plus"></i></a>
-                            }
-                            <i class="icon-user-1"></i> Thành viên
-                        </div>
-                        <div class="panel-body hide" id="memberPanelBody" data-cur-user-id="@curUser.Id" data-cur-user-role-id="@curUser.RoleId" data-cur-user-house-id="@curUser.HouseId">
-                            <div class="row" style="position: relative;">
-                                <div class="house-roof">
-                                    <span style="line-height: 140px;">Nhà</span>@*Must be has text in this tag*@
-                                </div>
-                                <div class="abs-centering">
-                                    <a id="usrInfoUrlToFamily" class="link-cursor">
-                                        <img id="usrInfoHouseImg" class="img-border" onerror="this.src = '/Content/images/home_default.jpg';" src="@curHouse.ProfileImage" style="height: 90px; border: 2px solid #bf360c;">
-                                        <div>
-                                            <span id="usrInfoHouseName" class="house-title">@curHouse.HouseName</span>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+        <div class="panel panel-default custom-panel">
+            <div style="text-align: left" class="panel-heading panel-heading-gray">
+                @if (curUser != null && curUser.RoleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)
+                {
+                    <a class="btn btn-primary btn-xs pull-right" data-toggle="modal" data-target="#addMemberModal">Thêm thành viên  <i class="fa fa-plus"></i></a>
+                }
+                <i class="icon-user-1"></i> Thành viên
+            </div>
+            <div class="panel-body hide" id="memberPanelBody" data-cur-user-id="@curUser.Id" data-cur-user-role-id="@curUser.RoleId" data-cur-user-house-id="@curUser.HouseId">
+                <div class="row" style="position: relative;">
+                    <div class="house-roof">
+                        <span style="line-height: 140px;">Nhà</span>@*Must be has text in this tag*@
                     </div>
-
-                    <div class="panel panel-default">
-                        <div style="text-align: left" class="panel-heading panel-heading-gray">
-                            <i class="icon-user-1"></i> Thành viên đang đợi duyệt
-                        </div>
-                        <div class="panel-body" id="pendingMember">
-
-                            <div class="row" style="text-align:center">
-                                @{
-                                    foreach (User pendingU in pendingMembers)
-                                    {   <div class="familymember">
-                                        <a class="" onclick="LoadUserProfile(@pendingU.Id)">
-                                            <div style="height:120px;float:left">
-                                                <img src="@(pendingU.ProfileImage==null||pendingU.ProfileImage.Equals("")?"/Content/Images/defaultProfile.png":pendingU.ProfileImage)" style="height:80%" />
-                                                <div style="margin-top: 5px; font-size: small;font-weight: 700;background-color: aliceblue;">
-                                                    @pendingU.Fullname
-                                                </div>
-
-                                            </div>
-                                        </a>
-                                        <div>
-                                            <button class="btn cancelRequest btn-danger" onclick="deleteRequest(@pendingU.Id)">
-                                                Hủy yêu cầu
-                                            </button>
-                                        </div>
-                                    </div>
-                                    }
-                                }
-
+                    <div class="abs-centering">
+                        <a id="usrInfoUrlToFamily" class="link-cursor">
+                            <img id="usrInfoHouseImg" class="img-border" onerror="this.src = '/Content/images/home_default.jpg';" src="@curHouse.ProfileImage" style="height: 90px; border: 2px solid #bf360c;">
+                            <div>
+                                <span id="usrInfoHouseName" class="house-title">@curHouse.HouseName</span>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="col-md-4">
-                    <div class="media-object">
-                        <div class="panel panel-default profile-user-box">
-                            <div class="avatar">
-                                <img id="@("houseProfile"+curHouse.Id)" style="width:200px" src="@(curHouse.ProfileImage==null||curHouse.ProfileImage.Equals("")?"/Content/Images/home_default.jpg":curHouse.ProfileImage)" alt="" class="img-circle" onclick="chooseProfile()">
-                                <br />
-                                <div style="font-style:italic">
-                                    Click chọn hình ảnh để thay đổi
-                                </div>
-                                <button id="saveProfileBtn" class="btn btn-primary" onclick="saveHomeProfile()" style="margin-top:10px;display:none">Lưu thay đổi</button>
-                                <button id="unsaveProfileBtn" class="btn btn-default" onclick="unsaveHomeProfile()" style="margin-top:10px;display:none">Hủy</button>
+        <div class="panel panel-default  custom-panel" style="margin-bottom: 50px;">
+            <div style="text-align: left" class="panel-heading panel-heading-gray">
+                <i class="icon-user-1"></i> Thành viên đang đợi duyệt
+            </div>
+            <div class="panel-body" id="pendingMember">
 
-                                <h3>Nhà @curHouse.HouseName</h3>
-                                <input style="visibility:hidden" type="file" id="uploadEditorImage" />
-                                <div id="progressBar" class="progress" style="width:200px" hidden="hidden">
-                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:200px">
+                <div class="row" style="text-align:center">
+                    @{
+                        foreach (User pendingU in pendingMembers)
+                        {   <div class="familymember">
+                            <a class="" onclick="LoadUserProfile(@pendingU.Id)">
+                                <div style="height:120px;float:left">
+                                    <img src="@(pendingU.ProfileImage==null||pendingU.ProfileImage.Equals("")?"/Content/Images/defaultProfile.png":pendingU.ProfileImage)" style="height:80%" />
+                                    <div style="margin-top: 5px; font-size: small;font-weight: 700;background-color: aliceblue;">
+                                        @pendingU.Fullname
                                     </div>
+
                                 </div>
-
-
-                            </div>
-                            <div class="profile-icons">
-                                <span><i class="fa fa-users"></i> @curHouse.Users.Count</span>
-                                <span><i class="fa fa-photo"></i> Block: @curHouse.Block.BlockName</span>
-                                <span><i class="fa fa-video-camera"></i> Tầng: @curHouse.Floor </span>
+                            </a>
+                            <div>
+                                <button class="btn cancelRequest btn-danger" onclick="deleteRequest(@pendingU.Id)">
+                                    Hủy yêu cầu
+                                </button>
                             </div>
                         </div>
+                        }
+                    }
 
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="col-md-4">
+        <div class="media-object">
+            <div class="panel panel-default profile-user-box">
+                <div class="avatar">
+                    <img id="@("houseProfile"+curHouse.Id)" style="width:200px" src="@(curHouse.ProfileImage==null||curHouse.ProfileImage.Equals("")?"/Content/Images/home_default.jpg":curHouse.ProfileImage)" alt="" class="img-circle" onclick="chooseProfile()">
+                    <br />
+                    <div style="font-style:italic">
+                        Click chọn hình ảnh để thay đổi
                     </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading panel-heading-gray">
-                            <a class="btn btn-white btn-xs pull-right"><i class="fa fa-pencil"></i></a>
-                            <i class="fa fa-info-circle"></i> Riêng tư
-                        </div>
-                        <div class="panel-body">
-                            <ul class="list-unstyled profile-about">
-                                <li>
-                                    <div class="row">
-                                        <div class="col-sm-8">
-                                            <span class="text-muted" style="word-break:break-word">Cho phép người khác đến thăm</span>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <input id="allowOtherView" class="form-control" type="checkbox" name="my-checkbox" @(curHouse.AllowOtherView == false ? "" : "checked")>
+                    <button id="saveProfileBtn" class="btn btn-primary" onclick="saveHomeProfile()" style="margin-top:10px;display:none">Lưu thay đổi</button>
+                    <button id="unsaveProfileBtn" class="btn btn-default" onclick="unsaveHomeProfile()" style="margin-top:10px;display:none">Hủy</button>
 
-
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="row">
-                                        <div class="col-sm-8">
-                                            <span class="text-muted" style="word-break:break-word">Cho phép hiện thông tin thành viên</span>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <input id="allowDisplayMember" class="form-control" type="checkbox" name="my-checkbox" @(curHouse.DisplayMember == false ? "" : "checked")>
-
-
-                                        </div>
-                                    </div>
-                                </li>
-
-                            </ul>
+                    <h3>Nhà @curHouse.HouseName</h3>
+                    <input style="visibility:hidden" type="file" id="uploadEditorImage" />
+                    <div id="progressBar" class="progress" style="width:200px" hidden="hidden">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:200px">
                         </div>
                     </div>
 
 
                 </div>
-
-
+                <div class="profile-icons">
+                    <span><i class="fa fa-users"></i> @curHouse.Users.Count</span>
+                    <span><i class="fa fa-photo"></i> Block: @curHouse.Block.BlockName</span>
+                    <span><i class="fa fa-video-camera"></i> Tầng: @curHouse.Floor </span>
+                </div>
             </div>
 
+
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading panel-heading-gray">
+                <a class="btn btn-white btn-xs pull-right"><i class="fa fa-pencil"></i></a>
+                <i class="fa fa-info-circle"></i> Riêng tư
+            </div>
+            <div class="panel-body">
+                <ul class="list-unstyled profile-about">
+                    <li>
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <span class="text-muted" style="word-break:break-word">Cho phép người khác đến thăm</span>
+                            </div>
+                            <div class="col-sm-4">
+                                <input id="allowOtherView" class="form-control" type="checkbox" name="my-checkbox" @(curHouse.AllowOtherView == false ? "" : "checked")>
+
+
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <span class="text-muted" style="word-break:break-word">Cho phép hiện thông tin thành viên</span>
+                            </div>
+                            <div class="col-sm-4">
+                                <input id="allowDisplayMember" class="form-control" type="checkbox" name="my-checkbox" @(curHouse.DisplayMember == false ? "" : "checked")>
+
+
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
+
 
 <!-- Modal -->
 <div id="addMemberModal" class="modal fade" role="dialog">
@@ -414,17 +403,16 @@
             success: function (successData) {
                 $("#createMemberUsername").val(successData);
                 checkAvailbleUsername();
-
             },
             error: function (er) {
                 alert(er);
             }
 
         });
-    })
+    });
     $("#createMemberUsername").change(function () {
-        checkAvailbleUsername()
-    })
+        checkAvailbleUsername();
+    });
     function checkAvailbleUsername(){
         $.ajax({
             url: "/Home/checkAvailableUsername/",
@@ -498,11 +486,13 @@
             isValid = false;
             $("#alertInfo").append('Số điện thoại và xác nhận không khớp<br/>');
         }
+        var userId = $("#memberPanelBody").data("curUserId");
         if(isValid){
             $.ajax({
                 url: "/Home/addMember/",
                 type: "POST",
                 data: {
+                    creatorId: userId,
                     fullname: fullname,
                     username: username,
                     birthDate: dateOfBirth.toISOString(),
@@ -553,10 +543,26 @@
             data: {
                 id: id
             },
-            success: function (successData) {
+            success: function (data) {
                 //alert(successData)
-                location.reload();
-
+                
+                if(data.StatusCode === 0) {
+                    $.ajax({
+                        url: "/Home/deleteUser/",
+                        type: "POST",
+                        data: {
+                            id: id
+                        },
+                        success: function (successData) {
+                            location.reload();
+                        },
+                        error: function (er) {
+                            alert(er);
+                        }
+                    });
+                }else {
+                    location.reload();
+                }
             },
             error: function (er) {
                 alert(er);
@@ -608,5 +614,5 @@
         });
         $("#amsConfirmModal").modal("show");
     }
-      
+
 </script>

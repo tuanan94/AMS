@@ -28,10 +28,12 @@
 
 }
 <link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css" />
+<link rel="stylesheet" href="~/Content/css/cropper.min.css" type="text/css" />
 <script src="~/Scripts/amsScript/DisplaySinglePost.js"></script>
 <script src="~/Scripts/amsScript/LoadFamilyTree.js"></script>
 <script src="~/Scripts/amsScript/LoadUserProfile.js"></script>
 <script src="~/Scripts/amsScript/ReportPost.js"></script>
+<script src="~/Scripts/amsScript/cropper.min.js"></script>
 <style>
     .button {
         display: block;
@@ -104,109 +106,102 @@
         border-left: none;
     }
 </style>
-<div class="container-fluid">
-    <div class="cover overlay">
-        <img src="~/Content/images/banner-842.jpg" alt="cover">
-    </div>
-    <div class="row">
-        <div class="col-md-offset-1 col-md-8">
-            <div id="addNewPost" class="new-post" onclick="onBlurPost()"></div>
-            <ul class="timeline-list">
-                <li class="media mediawithoutBorder">
-                    <div class="media-body">
-                        <div class="panel panel-default share">
-                            <div class="panel-heading" style="border-bottom: solid 1px #efefef;background-color: transparent;">
-                                @*                                <div id="previewEmbed" class="row" style="height: auto;">
-                                *@
-                                @*                                    <div id="previewContent">
-                                *@
-                                @*
-                                    </div>*@
-                                @*
-                                    </div>*@
-                                <a class="post-heading" style="border-right: 1px solid #efefef;" href="#postStatusArea" onclick="addImage()">
-                                    <i class="fa fa-fw fa-photo post-heading-icon"></i> Thêm hình ảnh
-                                </a>
-                                <a class="post-heading" href="#postStatusArea" data-toggle="modal" data-target="#addEmbedModal">
-                                    <i class="fa fa-fw fa-code post-heading-icon"></i> Thêm mã nhúng
-                                </a>
-                            </div>
-                            <div class="panel-body" id="postStatusArea">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div style="display: flex">
-                                            <div class="pull-left" id="userAvatar" data-user-id="@curUser.Id" style="margin-right: 10px">
-                                                <img src="@(curUser.ProfileImage == null ? " />Content/images/defaultProfile.png" : curUser.ProfileImage)" onerror="this.src='/Content/Images/defaultProfile.png';" class="avartar-img">
-                                            </div>
-                                            <input id="postId" value="" style="display:none" />
-                                            <div style="flex: 1; width: 0">
-                                                <textarea onkeyup="textAreaAdjust(this)" style="overflow: hidden;height:45px" id="postContent" name="status" class="form-control share-text" rows="8" placeholder="Chia sẻ những thông tin của bạn..."></textarea>
+@*    <div class="cover overlay">*@
+@*        <img src="~/Content/images/banner-842.jpg" alt="cover">*@
+@*    </div>*@
+<div class="row">
+    <div class="col-md-8" style="padding-left: 0; padding-right: 0">
+        <ul class="timeline-list">
+            <li class="media mediawithoutBorder">
+                <div class="media-body">
+                    <div class="panel panel-default share">
+                        <div class="panel-heading" style="border-bottom: solid 1px #efefef; background-color: transparent;">
+                            @*                                <div id="previewEmbed" class="row" style="height: auto;">
+                            *@
+                            @*                                    <div id="previewContent">
+                            *@
+                            @*
+                                </div>*@
+                            @*
+                                </div>*@
+                            <a class="post-heading" style="border-right: 1px solid #efefef;" onclick="addImage()">
+                                <i class="fa fa-fw fa-photo post-heading-icon"></i> Thêm hình ảnh
+                            </a>
+                            <a class="post-heading" href="#postStatusArea" data-toggle="modal" data-target="#addEmbedModal">
+                                <i class="fa fa-fw fa-code post-heading-icon"></i> Thêm mã nhúng
+                            </a>
+                        </div>
+                        <div class="panel-body" id="postStatusArea">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div style="display: flex">
+                                        <div class="pull-left" id="userAvatar" data-user-id="@curUser.Id" style="margin-right: 10px">
+                                            <img src="@(curUser.ProfileImage == null ? " />Content/images/defaultProfile.png" : curUser.ProfileImage)" onerror="this.src = '/Content/Images/defaultProfile.png';" class="avartar-img">
+                                        </div>
+                                        <input id="postId" value="" style="display: none" />
+                                        <div style="flex: 1; width: 0">
+                                            <textarea onkeyup="textAreaAdjust(this)" style="overflow: hidden; height: 45px" id="postContent" name="status" class="form-control share-text" rows="8" placeholder="Chia sẻ những thông tin của bạn..."></textarea>
 
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row" style="margin-bottom: 10px">
-                                    <div class="col-md-12" style="height: auto;" id="previewList">
-                                        <input type="file" id="uploadEditorImage" style="display: none" />
-                                        <div id="progressBar" class="progress" style="width: 200px" hidden="hidden">
-                                            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 200px">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="previewEmbed" class="row" style="height: auto;">
-                                    <div id="previewContent">
-                                    </div>
-                                </div>
-                                @*                                <input type="file" id="uploadEditorImage" style="display: none" />*@
-                                @*                                <div id="progressBar" class="progress" style="width: 200px" hidden="hidden">
-                                *@
-                                @*                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 200px">
-                                *@
-                                @*
-                                    </div>*@
-                                @*
-                                    </div>*@
                             </div>
-                            <div class="panel-footer share-buttons clearfix" @*id="postStatusArea" *@>
-                                @*                                <a href="#postStatusArea" onclick="addImage()">
-                                *@
-                                @*                                    <i class="fa fa-fw fa-photo"></i>*@
-                                @*
-                                    </a>*@
-                                @*                                <a href="#postStatusArea" data-toggle="modal" data-target="#addEmbedModal">
-                                *@
-                                @*                                    <i class="fa fa-fw fa-code"></i>*@
-                                @*
-                                    </a>*@
-                                <a href="#postStatusArea" style="float: right">
-                                    <i class="fa fa-map-marker"></i>
-                                </a>
-                                <div class="pull-right">
-                                    <button id="shareButton" type="submit" class="btn btn-primary btn-xs" style="margin-top: -12px" href="#" onclick="createNewPost()">Chia sẻ</button>
+                            <div class="row" style="margin-bottom: 10px">
+                                <input type="file" id="uploadEditorImage" style="display: none" />
+                                <div class="col-md-12" style="height: auto;" id="previewList">
+                                    <div id="progressBar" class="progress" style="width: 200px" hidden="hidden">
+                                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 200px">
+                                        </div>
+                                    </div>
                                 </div>
+                            </div>
+                            <div id="previewEmbed" class="row" style="height: auto;">
+                                <div id="previewContent">
+                                </div>
+                            </div>
+                            @*                                <input type="file" id="uploadEditorImage" style="display: none" />*@
+                            @*                                <div id="progressBar" class="progress" style="width: 200px" hidden="hidden">
+                            *@
+                            @*                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 200px">
+                            *@
+                            @*
+                                </div>*@
+                            @*
+                                </div>*@
+                        </div>
+                        <div class="panel-footer share-buttons clearfix">
+                            <a href="#postStatusArea" style="float: right">
+                                <i class="fa fa-map-marker"></i>
+                            </a>
+                            <div class="pull-right">
+                                <button id="shareButton" type="submit" class="btn btn-primary btn-xs" style="margin-top: -12px" href="#" onclick="createNewPost()">
+                                    Chia sẻ
+                                </button>
                             </div>
                         </div>
                     </div>
-                    @*
-                        </div>*@
-                </li>
-            </ul>
-            <ul class="timeline-list" id="timeline"></ul>
-            <div style="margin:3em;text-align:center">
-                <button id="loadMoreBtn" type="button" class="btn btn-primary btn-lg" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Đang tải thêm...">Tải thêm tin khác</button>
-            </div>
+                </div>
+                @*
+                    </div>*@
+            </li>
+        </ul>
+        <ul class="timeline-list" id="timeline"></ul>
+        <div style="margin: 3em; text-align: center">
+            <button id="loadMoreBtn" type="button" class="btn btn-primary btn-lg" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Đang tải thêm...">Tải thêm tin khác</button>
         </div>
-        <div class="col-md-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    Thời tiết hiện tại
+    </div>
+    <div class="col-md-4">
+        <div class="left-nav">
+            <div id="weather" class="panel panel-default custom-panel">
+                <div class="panel-heading panel-heading-gray">
+                    <i class="fa fa-sun-o"></i> Thời tiết hiện tại
                 </div>
                 <div class="weather-svg">
                     <div class="today text-center">
 
-                        <div class="clearfix"><img src="@weather.weatherIcon" /></div>
+                        <div class="clearfix">
+                            <img src="@weather.weatherIcon" />
+                        </div>
 
                         <div class="details">
                             Nhiệt độ:
@@ -214,21 +209,19 @@
                         </div>
                     </div>
                 </div>
-
             </div>
 
-            <div class="panel panel-default">
-                <div class="panel-heading panel-heading-gray" style="background-color:#25ad9f;color:white">
-                    Thông báo
+            <div id="notify" class="panel panel-default custom-panel">
+                <div class="panel-heading panel-heading-gray">
+                    <i class="fa fa-info-circle"></i> Thông báo
                     @{if (notificationChanges != null && notificationChanges.Where(p => p.User.Id != curUser.Id).ToList().Count != 0)
                     {
                         <span id="clean-noty" class="pull-right" onclick="clearAllNotify()"> Xóa tất cả</span>
                     }
                     }
-
                 </div>
 
-                <div class="panel-body">
+                <div class="panel-body" style="overflow-y: auto">
 
                     @foreach (NotificationChange nChange in notificationChanges.OrderByDescending(p => p.CreatedDate))
                     {
@@ -249,16 +242,18 @@
                         else if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_HELPDESK_REQUEST.Equals(nChange.NotificationObject.TargetObject) && nChange.NotificationObject.TargetObjectID != null && SLIM_CONFIG.NOTIC_VERB_ASSIGN_REQUEST.Equals(nChange.Verb))
                         {
                             HelpdeskRequestLog hdRequestLog = helpdeskRequestLogService.findById(nChange.NotificationObject.TargetObjectID.Value);
-
-                            User changeToUser = userServices.FindById(hdRequestLog.ChangeToUserId.HasValue ? hdRequestLog.ChangeToUserId.Value : -1);
-                            if (hdRequestLog != null && changeToUser != null)
+                            if (null != hdRequestLog)
                             {
-                                <div class="noti-element" style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
-                                    <i class="fa fa-fw fa-info"></i>
-                                    <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hỗ trợ của bạn đã được chuyển cho nhân viên hỗ trợ <strong>@changeToUser.Fullname</strong></a>
-                                    <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
-                                    <br />
-                                </div>
+                                User changeToUser = userServices.FindById(hdRequestLog.ChangeToUserId.HasValue ? hdRequestLog.ChangeToUserId.Value : -1);
+                                if (hdRequestLog != null && changeToUser != null)
+                                {
+                                    <div class="noti-element" style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
+                                        <i class="fa fa-fw fa-info"></i>
+                                        <a href="/Home/HelpdeskRequest/ViewDetail?hdReqId=@hdRequestLog.HelpdeskRequestId">Yêu cầu hỗ trợ của bạn đã được chuyển cho nhân viên hỗ trợ <strong>@changeToUser.Fullname</strong></a>
+                                        <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
+                                        <br />
+                                    </div>
+                                }
                             }
                         }
                         else if (nChange.NotificationObject != null && SLIM_CONFIG.NOTIC_TARGET_OBJECT_HELPDESK_REQUEST.Equals(nChange.NotificationObject.TargetObject) && nChange.NotificationObject.TargetObjectID != null && SLIM_CONFIG.NOTIC_VERB_FINISH_REQUEST.Equals(nChange.Verb))
@@ -281,14 +276,13 @@
                             <div class="noti-element" style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
                                 <i class="fa fa-fw fa-info"></i>
                                 <strong>@nChange.User.Fullname</strong> <span>đã</span> @nChange.Verb <span> @nChange.NotificationObject.TargetObject của bạn</span>
-                                <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-fw fa-close" style="float: right"></i></a>
+                                <a onclick="deleteNotification(@nChange.ID)"><i class="fa fa-fw fa-close" style="float: right"></i></a>
 
                                 <br />
                             </div>
                         }
                     }
                 </div>
-
             </div>
 
         </div>
@@ -349,18 +343,18 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Xác nhận xóa bài viết</h4>
             </div>
-
             <div class="modal-body">
                 <div>
-                    <h3 style="text-align:center">
+                    <h4 style="text-align:center">
                         Bạn có thật sự muốn xóa bài viết này?
-                    </h3>
+                    </h4>
                 </div>
                 <input id="confirmDeletePostId" hidden="hidden" value="" />
 
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" style="margin-top: 0;">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="sendDeleteRequest()">Xóa bài viết</button>
             </div>
@@ -368,6 +362,36 @@
     </div>
 </div>
 
+
+<!-- Delete modal -->
+<div class="modal fade ams-modal" id="editImageModal" role="dialog">
+    <div class="modal-dialog modal-lg" style="width: 800px">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">C</h4>
+            </div>
+            <div style="position: relative;padding: 20px;">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="bootstrap-modal-cropper">
+                            <img id="testLoadImage" />
+                        </div>
+                    </div>
+                    <div class="col-md-4" style="height: 243px;border: 1px solid #000;border-radius: 4px;">
+                        <div class="reviewImg" style="height: 200px;width: 100%;overflow: hidden;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 0;">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" onclick="getCroptImageSize()">Chấp nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @{
     if (!alert.Equals("") && SLIM_CONFIG.CURRENT_MODE == SLIM_CONFIG.PROGRAM_MODE_PRODUCT)
@@ -384,17 +408,30 @@
 <script>
     var curTokenId = -1;
     $(document).ready(function () {
+        setTimeout(function () {
+            $('.left-nav')
+                .affix({
+                    offset: {
+                        top: function () { return 370; },
+                        bottom: 0
+                    }
+                });
+        }, 100);
+
+        $('#collapseExample').collapse();
+
+        window.addEventListener("resize", function () {
+            setMaxHeightNotifyBody();
+        });
+        setMaxHeightNotifyBody();
+
+
         $('.modalDialog').fadeIn();
 
         $('.close').on('click', function (event) {
             event.preventDefault();
             /* Act on the event */
-
             $('.modalDialog').fadeOut();
-
-        });
-        $("#postStatusArea").on("click", function (e) {
-            onFocusPost();
         });
         $("#userAvatar").on("click", function (e) {
             e.stopPropagation();
@@ -411,26 +448,31 @@
         var $this = $(this);
         $this.button('loading');
         loadMore();
-
     });
 
     var listUploadImage = [];
     var listUploadThumnailImage = [];
+    var listOriginImage = [];
     function loadMore() {
         console.log("loadMore");
         loadAllPost(curTokenId);
     }
     function addImage() {
         $("#uploadEditorImage").click();
-        onFocusPost();
     }
     function saveEmbedCode() {
         // alert("saveEmbedCode");
         var embedContent = $("#embedCode").val();
-        $("#previewContent").html(embedContent);
+        $("#previewContent").html(getYoutubeFrameFromText(embedContent));
     }
     function createNewPost() {
         var postId = $("#postId").val();
+        if (!$("#embedCode").val()) {
+            var getEmbedCode = getYoutubeFrameFromText($("#postContent").val());
+            if (getEmbedCode !== "") {
+                $("#embedCode").val(getEmbedCode);
+            }
+        }
         $.ajax({
             url: "/Post/Create",
             type: "POST",
@@ -438,6 +480,7 @@
             data: {
                 oldPostId: postId,
                 thumbnailImages: listUploadThumnailImage,
+                originImages: listOriginImage,
                 images: listUploadImage,
                 content: $("#postContent").val(),
                 embeded: $("#embedCode").val()
@@ -452,56 +495,129 @@
                 alert(er);
                 //progessBar(false);
             }
-
         });
-
     }
-
+    /*New Implement*/
     $("#uploadEditorImage").change(function () {
         var data = new FormData();
-
         data.append("dir", "@SLIM_CONFIG.dirPostImage");
-
         var files = $("#uploadEditorImage").get(0).files;
         if (files.length > 0) {
-            data.append("image", files[0]);
-            data.append("thumbWidth", 480);
-            data.append("thumbHeight", 480);
-
-            data.append("width", 1200);
-            data.append("height", 627);
+            var imageFile = files[0];
+            if (checkURL(imageFile.name)) {
+                data.append("image", files[0]);
+                // progessBar(true);
+                $.ajax({
+                    url: "/Management/Image/UploadOriginalImage",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    data: data,
+                    success: function (successData) {
+                        var thumbnailData = successData.Data.oriImageUrl;
+                        $("#testLoadImage").unbind();
+                        $("#testLoadImage").prop("src", thumbnailData);
+                        $("#testLoadImage").on("load", function () {
+                            showEditImagePopup();
+                        });
+                        $("#uploadEditorImage").val("");
+                    },
+                    error: function (er) {
+                        alert(er);
+                    }
+                });
+            } else {
+                $("#amsMsgText").text("Chỉ hổ trợ hình ảnh có định đạng [png, jpeg, bmp]");
+                $("#amsMessageModal").modal("show");
+            }
         }
+    });
+    /*New Implement*/
 
+
+    /*Old implement*/
+
+    //    $("#uploadEditorImage").change(function () {
+    //        var data = new FormData();
+    //        data.append("dir", "@SLIM_CONFIG.dirPostImage");
+    //        var files = $("#uploadEditorImage").get(0).files;
+    //        if (files.length > 0) {
+    //            data.append("image", files[0]);
+    //            data.append("thumbWidth", 480);
+    //            data.append("thumbHeight", 480);
+    //
+    //            data.append("width", 1200);
+    //            data.append("height", 627);
+    //        }
+    //        // progessBar(true);
+    //        $.ajax({
+    //            url: "/Management/Image/UploadPostImage/",
+    //            type: "POST",
+    //            processData: false,
+    //            contentType: false,
+    //            data: data,
+    //
+    //            success: function (successData) {
+    //                var thumbnailData = successData.Data.thumbnailUrl;
+    //                var imageData = successData.Data.imageUrl;
+    //
+    //                addImageToPreviewList(thumbnailData, listUploadImage.length);
+    //                listUploadImage[listUploadImage.length] = imageData;
+    //                listUploadThumnailImage[listUploadThumnailImage.length] = thumbnailData;
+    //                // progessBar(false);
+    //
+    //            },
+    //            error: function (er) {
+    //                alert(er);
+    //                //progessBar(false);
+    //            }
+    //
+    //        });
+    //    });
+    /*Old implement */
+    $(document).ready(function () {
+        loadAllPost(-1);
+    });
+
+    function getCroptImageSize() {
+        var imageData = window.cropper.getData();
         // progessBar(true);
         $.ajax({
-            url: "/Management/Image/UploadPostImage/",
+            url: "/Management/Image/UploadPostImageResize",
             type: "POST",
-            processData: false,
-            contentType: false,
-            data: data,
-
+            data: {
+                imgUrl: $("#testLoadImage").prop("src").replace(location.origin, ""),
+                width: parseInt(imageData.width),
+                height: parseInt(imageData.height),
+                "x": parseInt(imageData.x),
+                "y": parseInt(imageData.y)
+            },
             success: function (successData) {
+
                 var thumbnailData = successData.Data.thumbnailUrl;
-                var imageData = successData.Data.imageUrl;
+                var imageUrlData = successData.Data.imageUrl;
+                var originUrl = successData.Data.originUrl;
 
                 addImageToPreviewList(thumbnailData, listUploadImage.length);
-                listUploadImage[listUploadImage.length] = imageData;
+                listUploadImage[listUploadImage.length] = imageUrlData;
                 listUploadThumnailImage[listUploadThumnailImage.length] = thumbnailData;
-                // progessBar(false);
-
+                listOriginImage[listOriginImage.length] = originUrl;
+                $("#editImageModal").modal("hide");
             },
             error: function (er) {
                 alert(er);
                 //progessBar(false);
             }
-
         });
-    });
-    $(document).ready(function () {
-        loadAllPost(-1);
+    }
 
-    });
 
+    function setMaxHeightNotifyBody() {
+        var restHeight = $("#main-nav").height() +
+            $("#weather").outerHeight(true) +
+            $("#content > div.footer").outerHeight(true) + 100;
+        $("#notify > div.panel-body").css("max-height", ($(window.top).height() - restHeight) + "px");
+    }
     function loadAllPost(idToken) {
         $.ajax({
             url: "/Post/getPost",
@@ -521,9 +637,6 @@
 
                 });
                 $("#loadMoreBtn").button('reset');
-
-
-                //                $('.grid').masonry("reload");
             },
             error: function (er) {
                 alert(er);
@@ -549,7 +662,6 @@
                     $('#userImagePost' + id).attr("src", "/Content/images/defaultProfile.png");
                 } else {
                     $('#userImagePost' + id).attr("src", obj["ProfileImage"]);
-
                 }
                 $('#userNamePost' + id).html(obj["Username"]);
                 $('#userHrefPost' + id).attr("href", "/Profile/" + obj["Id"]);
@@ -569,7 +681,7 @@
             //            reportDiv = '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>';
             reportDiv = '<div style="position: absolute;right: 0;width: 30px;">' +
               '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
-              '<div style="color:#f9a825" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>' +
+              '<div class="link-cursor" style="color:#000000" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>' +
                        '</div>' +
                        '</div>';
         }
@@ -580,8 +692,8 @@
                             '<a class="dropdown-toggle" data-toggle="dropdown" style="color: #ffffff;"> <i class="fa fa-angle-down"></i>' +
                            '</a>' +
                            '<ul class="dropdown-menu" role="menu" style="min-width: 0px;min-height: 0px;padding: 0;">' +
-                               '<li><a style="color:##" class="btn btn-white btn-xs pull-right" onclick="deletePost(' + postObject['Id'] + ')"><i class="fa fa-fw fa-times"></i></a></li>' +
-                               '<li><a href="#postContent" class="btn btn-white btn-xs pull-right" onclick="editPost(' + postObject['Id'] + ')"><i class="fa fa-fw fa-edit"></i></a></li>' +
+                               '<li><a style="font-weight: bold;" onclick="deletePost(' + postObject['Id'] + ')"><i style="color: #BF360C;" class="fa fa-fw fa-times"></i> Xóa</a></li>' +
+                               '<li><a style="font-weight: bold;" href="/Post/Detail?postId=' + postObject['Id'] + '"><i style="color: #004D40;" class="fa fa-fw fa-edit"></i> Chi tiết</a></li>' +
                            '</ul>' +
                        '</div>' +
                        '</div>' +
@@ -619,25 +731,32 @@
                     '</div>' +
                 '</div>' +
             '</div>';
-        $("#timeline").append('<li class="media">'
+        $("#timeline").append('<li class="media" id="userPostItem' + postObject['Id'] + '">'
                         + '<div class="media-body">'
                             + '<div class="panel panel-default panel-feed">' + header
                                 + '<div class="panel-body" >'
-                                    + '<p>' + postObject['Body'] + '</p>'
-                                  /*  + '<section class="form-group testetetet" id="imagesPost' + postObject['Id'] + '" style="height:auto">'
-                                    + '</section>'*/
-
+                                    + '<p id="postBody' + postObject['Id'] + '">' + replaceNewLineWithBrTag(postObject['Body']) + '</p>'
                                     + '<div class="form-group">'
                                      + '<div class="grid" id="imagesPost' + postObject['Id'] + '">'
                                     + '</div>'
                                     + '</div>'
-                                    + '<div class="row" style="height:auto;">'
-                                    + postObject['EmbedCode']
+                                    + '<div class="row embed-row" style="height:auto;">'
+                                    + getYoutubeFrameFromText(postObject['EmbedCode'])
                                     + '</div>'
                                 + '</div>'
-                                + '<div class="view-all-comments" id="countComment' + postObject['Id'] + '"><a href="#"><i class="fa fa-comments-o"></i> View all</a> 10 comments</div>'
+
+                                + '<div class="view-all-comments" style="height: 25px;">' +
+                                    '<div id="countComment' + postObject['Id'] + '" style="float: left;"><i style="color: #546E7A;"class="fa fa-comments-o"></i><i class="hide"> Chưa có bình luận</i> <span></span><strong> / </strong><span></span> <span> bình luận</span></div>' +
+                                    '<div class="hide" id="loadMoreComment' + postObject['Id'] + '" style="float: right;"><a onclick="loadMorePost(' + postObject['Id'] + ')"><i class="fa fa-refresh"></i> Tải bình luận trước đó </a></div>' +
+                                '</div>'
+
                                 + '<ul class="comments" id="commentsArea' + postObject['Id'] + '">'
                                 + '</ul>'
+
+                                 + '<div class="view-all-comments" style="height: 25px; text-align:center">' +
+                                    '<div class=""><a onclick="getNewCommentsForPost(' + postObject['Id'] + ')"><i class="fa fa-refresh"></i> Tải mới </a></div>' +
+                                '</div>'
+
                                 + '<ul class="comments">'
                                  + '<li class="comment-form">'
                                         + '<div class="input-group" style="width: 100%;">'
@@ -655,7 +774,8 @@
             + '</li>'
 
         );
-        $(".dropdown-toggle").dropdown();
+
+        loadMoreText(postObject['Id']);
     }
     function editPost(postId) {
         alert("editPost" + postId);
@@ -671,106 +791,79 @@
                 $("#postContent").val(obj['Body']);
                 $("#postId").val(obj['Id']);
                 $("#shareButton").html("Cập nhật bài viết");
+                smoothScrollToTop();
             },
             error: function (er) {
                 alert(er);
             }
-
         });
         //Get post
     }
 
 
-    function deletePost(postId) { //this function just display Confirm message
-        //alert("deletePost" + postId)
-        $("#deletePostModal").modal("show");
-        $("#confirmDeletePostId").val(postId);
-    }
 
-    function sendDeleteRequest() {
-        var id = $("#confirmDeletePostId").val();
-        $.ajax({
-            url: "/Post/deletePost",
-            type: "POST",
-            data: {
-                postId: id,
-            }, success: function (successData) {
-                location.reload();
-            },
-            error: function (er) {
-                alert(er);
-            }
-        });
-    }
 
-    function addComment(postId) {
-        $.ajax({
-            url: "/Post/CreateComment",
-            type: "POST",
-            data: {
-                detail: $("#contentDetail" + postId).val(),
-                postId: postId,
-            },
-            success: function (successData) {
-                if (successData === 'success') {
-                    $("#commentsArea" + postId).html("");
-                    getCommentsForPost(postId);
-                    $("#contentDetail" + postId).val("");
-                } else {
-                    alert(successData);
-                }
-            },
-            error: function (er) {
-                alert(er);
-            }
+    //    function addComment(postId) {
+    //        $.ajax({
+    //            url: "/Post/CreateComment",
+    //            type: "POST",
+    //            data: {
+    //                detail: $("#contentDetail" + postId).val(),
+    //                postId: postId,
+    //            },
+    //            success: function (successData) {
+    //                if (successData === 'success') {
+    //                    //                    $("#commentsArea" + postId).html("");
+    //                    getNewCommentsForPost(postId);
+    //                    $("#contentDetail" + postId).val("");
+    //                } else {
+    //                    alert(successData);
+    //                }
+    //            },
+    //            error: function (er) {
+    //                alert(er);
+    //            }
+    //
+    //        });
+    //    }
 
-        });
-    }
+    //    function getCommentsForPost(postid) {
+    //        if (postid == null) {
+    //            alert("postid == null");
+    //            return;
+    //        }
+    //        $.ajax({
+    //            url: "/Post/getCommentsForPost",
+    //            type: "GET",
+    //            data: {
+    //                postId: postid,
+    //            },
+    //            success: function (successData) {
+    //                var obj = successData;
+    //                if (Array.isArray(obj)) {
+    //                    if (obj.length === 0) {
+    //                        $("#countComment" + postid).html("Chưa có bình luận nào");
+    //                    } else {
+    //                        $("#countComment" + postid).html(obj.length + " bình luận");
+    //                    }
+    //                    $.each(obj, function (index, comment) {
+    //                        addCommentToCommentArea(postid, comment);
+    //                        if (obj.length == (index + 1)) {
+    //                            $("#commentsArea" + postid).data("lastGetComment", comment.lastGetComment);
+    //                        }
+    //                    });
+    //                } else {
+    //                    $("#commentsArea" + postid).data("lastGetComment", obj.lastGetComment);
+    //                }
+    //            },
+    //            error: function (er) {
+    //                alert(er);
+    //            }
+    //
+    //        });
+    //    }
 
-    function getCommentsForPost(postid) {
-        if (postid == null) {
-            alert("postid == null");
-            return;
-        }
-        $.ajax({
-            url: "/Post/getCommentsForPost",
-            type: "GET",
-            data: {
-                postId: postid,
-            },
-            success: function (successData) {
-                var obj = JSON.parse(successData);
-                if (obj.length === 0) {
-                    $("#countComment" + postid).html("Chưa có bình luận nào");
-                } else {
-                    $("#countComment" + postid).html(obj.length + " bình luận");
-                }
-                $.each(obj, function (index, comment) {
-                    addCommentToCommentArea(postid, comment);
-                });
-            },
-            error: function (er) {
-                alert(er);
-            }
 
-        });
-    }
-    function addCommentToCommentArea(postId, comment) {
-        $("#commentsArea" + postId).append('<li>'
-            + '<div class="media ">'
-            + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)"  class="pull-left link-cursor">'
-            + '<img  src="' + comment['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avartar-img link-cursor">'
-            + '</a>'
-            + '<div class="media-body">'
-            + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)" class="comment-author link-cursor">' + comment['fullName'] + ': </a>'
-            + '<span>' + comment['detail'] + '</span>'
-            + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
-            + '</div>'
-            + '</div>'
-
-            + '</li>');
-
-    }
 
     function getImagesForPost(index, id) {
         appenImageToPost(index, id);
@@ -796,6 +889,7 @@
         $('#previewImage' + position + '').hide();
         listUploadImage[position] = "";
         listUploadThumnailImage[position] = "";
+        listOriginImage[position] = "";
 
     }
     function reloadFeed() {
@@ -808,11 +902,14 @@
         $("#previewContent").html(embedContent);
         listUploadImage = [];
         listUploadThumnailImage = [];
+        listOriginImage = [];
         $("#previewList").html('');
         $("#postContent").val('');
         $("#postId").val('');
         $("#shareButton").html("Chia sẻ");
-
+        $("#embedCode").val("");
+        $("#uploadEditorImage").val("");
+        textAreaAdjust(document.getElementById("postContent"));
     }
     function report(id) {
         $("#reportPostId").val(id);
@@ -836,7 +933,7 @@
             },
             success: function (successData) {
                 //alert(successData);
-                $("#notification" + noticChangedId).hide('slow', function () { $("#notification11").remove(); });
+                $("#notification" + noticChangedId).hide('slow', function () { $("#notification" + noticChangedId).remove(); });
             },
             error: function (er) {
                 alert(er);
@@ -844,12 +941,7 @@
 
         });
     }
-    function onFocusPost() {
-        $("#addNewPost").css("display", "block");
-    }
-    function onBlurPost() {
-        $("#addNewPost").css("display", "none");
-    }
+
     function textAreaAdjust(o) {
         o.style.height = "1px";
         o.style.height = (25 + o.scrollHeight) + "px";

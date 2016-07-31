@@ -28,14 +28,43 @@ namespace AMS.Service
         {
             return notificationChangeRepository.FindById(id);
         }
+
+        public void DeleteNotiChangeById(int notiChangeId)
+        {
+            NotificationChange nChange = findNotificationChange(notiChangeId);
+            if (nChange != null)
+            {
+                notificationChangeRepository.Delete(nChange);
+            }
+        }
+
         private void addNotificationObject(NotificationObject nObject)
         {
             notificationObjectRepository.Add(nObject);
         }
+
+        public void DeleteNotiObjectById(int nObjectId)
+        {
+            NotificationObject nChange = notificationObjectRepository.FindById(nObjectId);
+            if (nChange != null)
+            {
+                notificationObjectRepository.Delete(nChange);
+            }
+        }
+        public void DeleteNotiObject(NotificationObject nObject)
+        {
+            notificationObjectRepository.Delete(nObject);
+        }
+        public NotificationObject FindNotiObjectById(int nObjectId)
+        {
+            return  notificationObjectRepository.FindById(nObjectId);
+        }
+
         private void addNotificationChange(NotificationChange nChange)
         {
             notificationChangeRepository.Add(nChange);
         }
+
         /// <summary>
         /// A notification is about something (object = event, friendship..) being changed (verb = added, requested..) by someone (actor) and reported to the user (subject).
         /// </summary>

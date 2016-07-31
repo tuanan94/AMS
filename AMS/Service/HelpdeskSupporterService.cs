@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using AMS.Enum;
 using AMS.Repository;
 
 namespace AMS.Service
@@ -45,6 +46,10 @@ namespace AMS.Service
             currRequest.Status = status;
             try
             {
+                if (status == (int) StatusEnum.Done)
+                {
+                    currRequest.DoneDate = DateTime.Now;
+                }
                 _helpdeskSupporterRepository.Update(currRequest);
                 return true;
             }

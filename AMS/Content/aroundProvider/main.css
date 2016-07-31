@@ -531,7 +531,6 @@ nav {
                     margin-top: 0px;
                     /*background: #fff;*/
                     background: #000;
-
                     transform: rotate(45deg);
                 }
 
@@ -810,7 +809,8 @@ a, a.read-more:hover, a.read-more:hover i {
 }
 
     .project-date p {
-        padding: 15px;
+        /*padding: 15px;*/
+        padding: 15px 5px;
     }
 
 .project-count {
@@ -819,7 +819,8 @@ a, a.read-more:hover, a.read-more:hover i {
 
     .project-count p {
         float: left;
-        padding: 15px;
+        /*padding: 15px;*/
+        padding: 15px 5px;
     }
 
 .project-link {
@@ -830,6 +831,8 @@ a, a.read-more:hover, a.read-more:hover i {
     .project-link p {
         color: #aaa;
         margin: 0;
+        line-height: 20px;
+        height: 40px;
     }
 
     .project-link h2 {
