@@ -326,7 +326,7 @@ namespace AMS.Controllers
             }
             foreach (var item in listSurveys)
             {
-                if (DateTime.Now >= item.PublishDate)
+                if (DateTime.Now >= item.PublishDate && DateTime.Now <= item.EndDate)
                 {
                     
                     listUserAnswer = (userAnswerService.GetListUserAnswerPollsByPollId(item.Id));
