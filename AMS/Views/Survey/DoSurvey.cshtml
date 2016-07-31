@@ -303,7 +303,10 @@
                                                     <div class="col-md-6">
                                                         <div class="pull-right" style="text-align: right">
                                                             <div style="text-align: left">
-                                                                <i class="fa fa-calendar"></i> <span style="font-size: 14px;">Kết thúc:</span> <strong>@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.EndDate))</strong>
+                                                                @{string date = item.EndDate.Value.ToString(AmsConstants.DateTimeFormat);
+                                                                var dateTime = date.Split(' ');
+                                                                }
+                                                                <i class="fa fa-calendar"></i> <span style="font-size: 14px;">Kết thúc:</span><strong>@dateTime[0]</strong> 
                                                             </div>
                                                             <div style="text-align: left">
                                                                 @{
