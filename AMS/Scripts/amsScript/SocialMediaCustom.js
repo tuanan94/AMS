@@ -157,7 +157,7 @@ function appenImageToPost(index, id) {
                         }
                     }
                     listElement = listElement + '<div style="float:left;width:50%;height:50%" data-src="' + image.url + '" style="border:1px solid white" >' +
-                        '<img style="max-width:100%" src="' + image.thumbnailurl + '" />' +
+                        '<img style="max-width:100%; width:100%" src="' + image.thumbnailurl + '" />' +
                         '</div>';
 
                 });
@@ -521,10 +521,15 @@ function getPostDetail(postId) {
                         }
                         var thumbnailUrl = thisEle.data("imgThumbUrl");
                         var url = thisEle.data("imgUrl");
+                        var originUrl = thisEle.data("originImgUrl");
+                        if(!originUrl) {
+                            originUrl = "";
+                        }
                         imgObj = {
                             id: imgId,
                             thumbnailurl: thumbnailUrl,
-                            url: url
+                            url: url,
+                            originUrl: originUrl
                         }
                         imgList.push(imgObj);
                     });
@@ -599,11 +604,11 @@ function parseJsonToImgReview(img) {
     if (img.id) {
         return '<div id="previewImageModal' + img.id + '" data-img-id="' + img.id + '" data-img-thumb-url="' + img.thumbnailurl + '" ' + ' data-img-url="' + img.url + '" class="img-review">' +
                             '<img onclick="removeImgPreview(\'' + img.id + '\')" src="/Content/images/delete.png" class="img-review-del-btn" />' +
-                            '<img src="' + img.thumbnailurl + '" class="preview-img"/>' +
+                            '<img src="' + img.userCropUrl + '" class="preview-img"/>' +
                             '</div>';
     } else {
         var tempId = new Date().getTime();
-        return '<div id="previewImageModal' + tempId + '" data-img-thumb-url="' + img.thumbnailUrl + '" ' + ' data-img-url="' + img.imageUrl + '" class="img-review">' +
+        return '<div id="previewImageModal' + tempId + '" data-img-thumb-url="' + img.thumbnailUrl + '" ' + ' data-img-url="' + img.imageUrl + '" data-origin-img-url="' + img.originUrl + '" class="img-review">' +
                             '<img onclick="removeImgPreview(\'' + tempId + '\')" src="/Content/images/delete.png" class="img-review-del-btn" />' +
                             '<img src="' + img.thumbnailUrl + '" class="preview-img"/>' +
                             '</div>';
@@ -639,17 +644,71 @@ function showEditEmbedCode(id) {
                         .append(getYoutubeFrameFromText($("#previewContentModal").data("embedCode")));
                 });
         $("#addEmbedModal").modal("show");
-
-    } else {
     }
 }
-function addImageModal() {
 
+function innitializeCroper() {
+    var options = {
+        preview: '.reviewImg',
+        aspectRatio: 1,
+        multiple: false,
+        minCropBoxWidth: 243,
+        minCropBoxHeight: 243,
+        dragCrop: false,
+        movable: true,
+        dashed: false,
+        zoomable: false,
+        resizable: true,
+        crop: function (e) {
+        },
+        zoom: function (e) {
+            console.log(e.type, e.detail.ratio);
+        },
+        built: function () {
+        }
+    };
+    var tempImage = document.getElementById("testLoadImage");
+    window.cropper = new Cropper(tempImage, options);
+}
+
+function showEditImagePopup() {
+    $("#editImageModal").unbind();
+    $("#editImageModal").on("hidden.bs.modal", function () {
+        window.cropper.destroy();
+    }).on("shown.bs.modal", function () {
+        innitializeCroper();
+    }).modal("show");
+}
+
+function getCroptImageSizeModal() {
+    var imageData = window.cropper.getData();
+    // progessBar(true);
+    $.ajax({
+        url: "/Management/Image/UploadPostImageResize",
+        type: "POST",
+        data: {
+            imgUrl: $("#testLoadImage").prop("src").replace(location.origin, ""),
+            width: parseInt(imageData.width),
+            height: parseInt(imageData.height),
+            "x": parseInt(imageData.x),
+            "y": parseInt(imageData.y)
+        },
+        success: function (successData) {
+            $("#previewListModal").prepend(parseJsonToImgReview(successData.Data));
+            $("#editImageModal").modal("hide");
+        },
+        error: function (er) {
+            alert(er);
+            //progessBar(false);
+        }
+    });
+}
+
+function addImageModal() {
     var embedData = $("#previewContentModal").data("embedCode");
     if (!embedData) {
 
         $("#uploadPostImageModal").click();
-
         $("#uploadPostImageModal").unbind();
         $("#uploadPostImageModal").change(function () {
             var data = new FormData();
@@ -658,35 +717,39 @@ function addImageModal() {
 
             var files = $("#uploadPostImageModal").get(0).files;
             if (files.length > 0) {
-                data.append("image", files[0]);
-                data.append("thumbWidth", 480);
-                data.append("thumbHeight", 480);
-
-                data.append("width", 1200);
-                data.append("height", 627);
-
-                // progessBar(true);
-                $.ajax({
-                    url: "/Management/Image/UploadPostImage/",
-                    type: "POST",
-                    processData: false,
-                    contentType: false,
-                    data: data,
-                    success: function (successData) {
-                        $("#previewListModal").prepend(parseJsonToImgReview(successData.Data));
-                        // progessBar(false);
-                        $("#uploadPostImageModal").val("");
-                    },
-                    error: function (er) {
-                        alert(er);
-                        //progessBar(false);
-                    }
-                });
+                var imageFile = files[0];
+                if (checkURL(imageFile.name)) {
+                    data.append("image", files[0]);
+                    // progessBar(true);
+                    $.ajax({
+                        url: "/Management/Image/UploadOriginalImage",
+                        type: "POST",
+                        processData: false,
+                        contentType: false,
+                        data: data,
+                        success: function (successData) {
+                            var thumbnailData = successData.Data.oriImageUrl;
+                            $("#testLoadImage").unbind();
+                            $("#testLoadImage").prop("src", thumbnailData);
+                            $("#testLoadImage").on("load", function () {
+                                showEditImagePopup();
+                            });
+                            $("#uploadPostImageModal").val("");
+                        },
+                        error: function (er) {
+                            alert(er);
+                        }
+                    });
+                } else {
+                    $("#amsMsgText").text("Chỉ hổ trợ hình ảnh có định đạng [png, jpeg, bmp]");
+                    $("#amsMessageModal").modal("show");
+                }
             }
         });
-
     }
 }
+
+
 
 function getId(url) {
     var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;

@@ -22,6 +22,10 @@ namespace AMS.Service
         {
             imageRepository.Add(image);
         }
+        public void Update(Image image)
+        {
+            imageRepository.Update(image);
+        }
         public Image FindById(int id)
         {
             return imageRepository.FindById(id);
@@ -34,12 +38,13 @@ namespace AMS.Service
                 imageRepository.Delete(img);
             }
         }
-        public void saveListImage(List<String> imageURLs, List<String> thumbImageURLs, List<String> originImages, int postId)
+        public void saveListImage(List<string> imageURLs, List<string> thumbImageURLs, List<string> originImages, int postId)
         {
             string url = "";
             string thumbUrl = "";
+            string userCropUrl = "";
             string oriUrl = "";
-
+            List<string> userCropImg = thumbImageURLs.ToList();
             if (imageURLs.Count == 1)
             {
                 System.Drawing.Image img = System.Drawing.Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + originImages[0]);
@@ -63,15 +68,15 @@ namespace AMS.Service
             else if (originImages.Count == 3)
             {
                 string curElemment = "";
-                for (int i = 0; i < imageURLs.Count;i++ )
+                for (int i = 0; i < imageURLs.Count; i++)
                 {
                     curElemment = originImages[i];
                     System.Drawing.Image img = System.Drawing.Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + curElemment);
-                    if (img.Width > img.Height )
+                    if (img.Width > img.Height)
                     {
                         string imageSavePath = AppDomain.CurrentDomain.BaseDirectory + AmsConstants.ImageFilePathDownload;
                         thumbImageURLs[i] = new StringBuilder(AmsConstants.ImageFilePathDownload).Append(AroundProviderController.SaveImage(img, imageSavePath, 504, 394, 0, false)).ToString(); ;
-                        
+
                         var tempItem = thumbImageURLs[i];
                         thumbImageURLs[i] = thumbImageURLs[0];
                         thumbImageURLs[0] = tempItem;
@@ -83,7 +88,6 @@ namespace AMS.Service
                         tempItem = imageURLs[i];
                         imageURLs[i] = imageURLs[0];
                         imageURLs[0] = tempItem;
-
                         break;
                     }
                 }
@@ -93,13 +97,14 @@ namespace AMS.Service
                 url = imageURLs[i];
                 thumbUrl = thumbImageURLs[i];
                 oriUrl = originImages[i];
+                userCropUrl = userCropImg[i];
                 if (url != null && !url.Equals(""))
                 {
-                    saveImage(url, thumbUrl, oriUrl, postId);
+                    saveImage(url, thumbUrl, userCropUrl, oriUrl, postId);
                 }
             }
         }
-        private int saveImage(String url, string thumbUrl, string originUrl, int postId)
+        private int saveImage(string url, string thumbUrl, string userCropUrl, string originUrl, int postId)
         {
             Image image = new Image();
             image.createdDate = DateTime.Now;
@@ -107,6 +112,7 @@ namespace AMS.Service
             image.url = url;
             image.thumbnailUrl = thumbUrl;
             image.originalUrl = originUrl;
+            image.userCropUrl = userCropUrl;
             imageRepository.Add(image);
             return image.id;
 

@@ -7,7 +7,9 @@ using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Reflection;
+using System.Text;
 using AMS;
+using AMS.Constant;
 using AMS.Filter;
 using AMS.Models;
 using AMS.ObjectMapping;
@@ -72,7 +74,7 @@ namespace AMS.Controllers
             {
                 response.StatusCode = -1;
                 return Json(response);
-            } 
+            }
             if (targetPost.Status == SLIM_CONFIG.POST_STATUS_HIDE)
             {
                 response.StatusCode = 2;
@@ -361,6 +363,7 @@ namespace AMS.Controllers
                     imgModel.id = img.id;
                     imgModel.postId = img.postId.Value;
                     imgModel.thumbnailurl = img.thumbnailUrl;
+                    imgModel.userCropUrl = img.userCropUrl;
                     imgModel.url = img.url;
                     listImage.Add(imgModel);
                 }
@@ -388,23 +391,6 @@ namespace AMS.Controllers
                 {
                     p.EmbedCode = null;
                 }
-                if (null != post.ListImages)
-                {
-                    foreach (var img in post.ListImages)
-                    {
-                        if (img.id == 0)
-                        {
-                            Image eImg = new Image();
-                            eImg.thumbnailUrl = img.thumbnailurl;
-                            eImg.url = img.url;
-                            eImg.createdDate = DateTime.Now;
-                            eImg.postId = p.Id;
-                            imageService.saveImage(eImg);
-                        }
-                    }
-                }
-
-                postService.UpdatePost(p);
 
                 if (null != post.ListImgRemoved)
                 {
@@ -413,6 +399,121 @@ namespace AMS.Controllers
                         imageService.RemoveById(imgId);
                     }
                 }
+
+                if (null != post.ListImages)
+                {
+                    var listObjImages = post.ListImages;
+                    foreach (var imgObj in listObjImages)
+                    {
+                        if (imgObj.id == 0)
+                        {
+                            Image eImg = new Image();
+                            eImg.thumbnailUrl = imgObj.thumbnailurl;
+                            eImg.userCropUrl = imgObj.thumbnailurl;
+                            eImg.url = imgObj.url;
+                            eImg.createdDate = DateTime.Now;
+                            eImg.postId = p.Id;
+                            eImg.originalUrl = imgObj.originUrl;
+                            imageService.saveImage(eImg);
+                        }
+                        else
+                        {
+                            Image eImg = imageService.FindById(imgObj.id);
+                            if (eImg != null && !eImg.thumbnailUrl.Equals(imgObj.userCropUrl))
+                            {
+                                eImg.thumbnailUrl = eImg.userCropUrl;
+                                imageService.Update(eImg);
+                            }
+                        }
+                    }
+
+                    List<Image> postImage = imageService.GetImagesByPostId(p.Id).ToList();
+
+                    bool isUpdateImage = false;
+                    if (postImage.Count == 1)
+                    {
+                        System.Drawing.Image img = System.Drawing.Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + postImage[0].originalUrl);
+                        postImage[0].thumbnailUrl = new StringBuilder(AmsConstants.ImageFilePathDownload).Append(AroundProviderController.SaveImage(img, AppDomain.CurrentDomain.BaseDirectory + AmsConstants.ImageFilePathDownload, 504, 394, 0, false)).ToString(); ;
+                        imageService.Update(postImage[0]);
+                    }
+                    else if (postImage.Count == 2)
+                    {
+                        System.Drawing.Image img = System.Drawing.Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + postImage[0].originalUrl);
+                        System.Drawing.Image img2 = System.Drawing.Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + postImage[1].originalUrl);
+                        if (img.Height > img.Width && img2.Height > img2.Width) // Check 2 image is portrail 
+                        {
+                            postImage[0].thumbnailUrl = new StringBuilder(AmsConstants.ImageFilePathDownload).Append(AroundProviderController.SaveImage(img, AppDomain.CurrentDomain.BaseDirectory + AmsConstants.ImageFilePathDownload, 394, 394, 0, false)).ToString(); ;
+                            postImage[1].thumbnailUrl = new StringBuilder(AmsConstants.ImageFilePathDownload).Append(AroundProviderController.SaveImage(img2, AppDomain.CurrentDomain.BaseDirectory + AmsConstants.ImageFilePathDownload, 394, 394, 0, false)).ToString(); ;
+                            imageService.Update(postImage[0]);
+                            imageService.Update(postImage[1]);
+                        
+                        }
+                        else if (img.Width > img.Height && img2.Width > img2.Height)// Check 2 image is landscape
+                        {
+                            postImage[0].thumbnailUrl = new StringBuilder(AmsConstants.ImageFilePathDownload).Append(AroundProviderController.SaveImage(img, AppDomain.CurrentDomain.BaseDirectory + AmsConstants.ImageFilePathDownload, 504, 504, 0, false)).ToString(); ;
+                            postImage[1].thumbnailUrl = new StringBuilder(AmsConstants.ImageFilePathDownload).Append(AroundProviderController.SaveImage(img2, AppDomain.CurrentDomain.BaseDirectory + AmsConstants.ImageFilePathDownload, 504, 504, 0, false)).ToString(); ;
+                            imageService.Update(postImage[0]);
+                            imageService.Update(postImage[1]);
+                        }
+                        else
+                        {
+                            foreach (var image in postImage)
+                            {
+                                image.thumbnailUrl = image.userCropUrl;
+                                imageService.Update(image);
+                            }
+                        }
+                    }
+                    else if (postImage.Count == 3)
+                    {
+                        string curElemment = "";
+
+                        /*Process thumbnail image*/
+                        int index = -1;
+                        for (int i = 0; i < postImage.Count; i++)
+                        {
+                            curElemment = postImage[i].originalUrl;
+                            System.Drawing.Image img = System.Drawing.Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + curElemment);
+                            if (img.Width > img.Height)
+                            {
+                                string imageSavePath = AppDomain.CurrentDomain.BaseDirectory + AmsConstants.ImageFilePathDownload;
+
+                                postImage[i].thumbnailUrl = new StringBuilder(AmsConstants.ImageFilePathDownload).Append(AroundProviderController.SaveImage(img, imageSavePath, 504, 394, 0, false)).ToString(); ;
+
+                                var tempItem = postImage[i].thumbnailUrl;
+                                postImage[i].thumbnailUrl = postImage[0].thumbnailUrl;
+                                postImage[0].thumbnailUrl = tempItem;
+
+                                tempItem = postImage[i].originalUrl;
+                                postImage[i].originalUrl = postImage[0].originalUrl;
+                                postImage[0].originalUrl = tempItem;
+
+                                tempItem = postImage[i].userCropUrl;
+                                postImage[i].userCropUrl = postImage[0].userCropUrl;
+                                postImage[0].userCropUrl = tempItem;
+
+                                tempItem = postImage[i].url;
+                                postImage[i].url = postImage[0].url;
+                                postImage[0].url = tempItem;
+
+                                imageService.Update(postImage[0]);
+                                index = 0;
+                                break;
+                            }
+                        }
+                        Image image = null;
+                        for (int i = 0; i < postImage.Count; i++)
+                        {
+                            image = postImage[i];
+                            if (i != index)
+                            {
+                                image.thumbnailUrl = image.userCropUrl;
+                                imageService.Update(image);
+                            }
+                        }
+                    }
+                }
+                postService.UpdatePost(p);
                 PostMapping newData = new PostMapping();
                 newData.Id = p.Id;
                 newData.Body = p.Body;
@@ -467,6 +568,16 @@ namespace AMS.Controllers
             cMapping.userProfile = c.User.ProfileImage;
             cMapping.userId = c.userId.GetValueOrDefault();
             return cMapping;
+        }
+        private PostImageModel parseImageToModel(Image i)
+        {
+            PostImageModel imgModel = new PostImageModel();
+            imgModel.id = i.id;
+            imgModel.originUrl = i.originalUrl;
+            imgModel.thumbnailurl = i.thumbnailUrl;
+            imgModel.url = i.url;
+            imgModel.postId = i.postId.Value;
+            return imgModel;
         }
     }
 }

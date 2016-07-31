@@ -825,7 +825,7 @@ namespace AMS.Controllers
             {
                 System.Drawing.Image img = System.Drawing.Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + imgUrl);
                 thumbFileName = SaveImageTest(img, width, height, x, y);
-                largeFileName = SaveImage(img, newPath, width, height, 0, true);
+                largeFileName = SaveImage(img, newPath, 960, 720, 0, true);
                 originFileName = imgUrl;
 
                 object obj = new

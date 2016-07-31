@@ -72,7 +72,7 @@
 }
 
 .img-review {
-    height: 150px;
+    height: 100px;
     width: auto;
     float: left;
     position: relative;
@@ -138,3 +138,23 @@
     .house-info div > i {
         color: #009688;
     }
+
+/*Crop image*/
+
+.bootstrap-modal-cropper {
+    height: 400px;
+}
+
+    .bootstrap-modal-cropper > img {
+        max-width: 100%;
+    }
+/*Crop image*/
+.lg-outer .lg-item {
+    width: 80%;
+    height: 80%;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+}

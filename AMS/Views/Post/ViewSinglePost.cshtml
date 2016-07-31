@@ -14,11 +14,13 @@
     alert = auto.Auto(currentUser);
 
 }
-<link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css" />
+<link rel="stylesheet" href="~/Content/css/FamilyTree.css" type="text/css"/>
+<link rel="stylesheet" href="~/Content/css/cropper.min.css" type="text/css" />
 <script src="~/Scripts/amsScript/DisplaySinglePost.js"></script>
 <script src="~/Scripts/amsScript/LoadFamilyTree.js"></script>
 <script src="~/Scripts/amsScript/LoadUserProfile.js"></script>
 <script src="~/Scripts/amsScript/ReportPost.js"></script>
+<script src="~/Scripts/amsScript/cropper.min.js"></script>
 <style>
     .button {
         display: block;
@@ -142,19 +144,8 @@
                                 <div class="panel-body">
                                     <p id="postBody@(post.Id)">@Html.Raw(post.Body)</p>
                                     <div class="form-group">
-                                        @*<div style="position: relative; height: @(frameHeight + "px;")">
-                                            <div id="loadingImages@(post.Id)" class="loading-image-post" style="position: absolute; width: 100%; height: 100%; z-index: 15">
-                                            </div>*@
-                                        @*                                    <div class="grid testetetet" style="position: absolute;" id="imagesPost@(post.Id)">*@
                                         <div class="grid testetetet" id="imagesPost@(post.Id)">
-                                            @*<div style="position: relative;" data-src="/Upload/img/img_636049071417255866.jpeg">
-                                                    <img style="position: absolute; width: 100% !important; height: auto !important" src="/Upload/img/img_636049071418745951.jpeg">
-                                                </div>
-                                                <div style="position: relative;" data-src="/Upload/img/img_636049071591185814.jpeg">
-                                                    <img style="position: absolute; width: 100% !important; height: auto !important" src="/Upload/img/img_636049071591775848.jpeg">
-                                                </div>*@
                                         </div>
-                                        @*</div>*@
                                     </div>
                                     <div id="embedYoutubeFrame" class="row embed-row" style="height: auto;">
                                     </div>
@@ -336,6 +327,36 @@
     </div>
 </div>
 
+<!-- Delete modal -->
+<div class="modal fade ams-modal" id="editImageModal" role="dialog">
+    <div class="modal-dialog modal-lg" style="width: 800px">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">C</h4>
+            </div>
+            <div style="position: relative;padding: 20px;">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="bootstrap-modal-cropper">
+                            <img id="testLoadImage" />
+                        </div>
+                    </div>
+                    <div class="col-md-4" style="height: 243px;border: 1px solid #000;border-radius: 4px;">
+                        <div class="reviewImg" style="height: 200px;width: 100%;overflow: hidden;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 0;">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" onclick="getCroptImageSizeModal()">Chấp nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @{
     if (!alert.Equals("") && SLIM_CONFIG.CURRENT_MODE == SLIM_CONFIG.PROGRAM_MODE_PRODUCT)
@@ -386,12 +407,7 @@
         $('.close').on('click', function (event) {
             event.preventDefault();
             /* Act on the event */
-
             $('.modalDialog').fadeOut();
-
-        });
-        $("#postStatusArea").on("click", function (e) {
-            onFocusPost();
         });
         $("#userAvatar").on("click", function (e) {
             e.stopPropagation();
@@ -417,52 +433,6 @@
         console.log("loadMore");
         loadAllPost(curTokenId);
     }
-    function addImage() {
-        $("#uploadEditorImage").click();
-        onFocusPost();
-    }
-
-    $("#uploadEditorImage").change(function () {
-        var data = new FormData();
-
-        data.append("dir", "@SLIM_CONFIG.dirPostImage");
-
-        var files = $("#uploadEditorImage").get(0).files;
-        if (files.length > 0) {
-            data.append("image", files[0]);
-            data.append("thumbWidth", 480);
-            data.append("thumbHeight", 480);
-
-            data.append("width", 1200);
-            data.append("height", 627);
-        }
-
-        // progessBar(true);
-        $.ajax({
-            url: "/Management/Image/UploadPostImage/",
-            type: "POST",
-            processData: false,
-            contentType: false,
-            data: data,
-
-            success: function (successData) {
-                var thumbnailData = successData.Data.thumbnailUrl;
-                var imageData = successData.Data.imageUrl;
-
-                addImageToPreviewList(thumbnailData, listUploadImage.length);
-                listUploadImage[listUploadImage.length] = imageData;
-                listUploadThumnailImage[listUploadThumnailImage.length] = thumbnailData;
-                // progessBar(false);
-
-            },
-            error: function (er) {
-                alert(er);
-                //progessBar(false);
-            }
-
-        });
-    });
-
     function loadAllPost(idToken) {
         $.ajax({
             url: "/Post/getPost",
@@ -482,9 +452,6 @@
 
                 });
                 $("#loadMoreBtn").button('reset');
-
-
-                //                $('.grid').masonry("reload");
             },
             error: function (er) {
                 alert(er);
@@ -640,8 +607,6 @@
                 $("#postContent").val(obj['Body']);
                 $("#postId").val(obj['Id']);
                 $("#shareButton").html("Cập nhật bài viết");
-
-
             },
             error: function (er) {
                 alert(er);
@@ -650,8 +615,6 @@
         });
         //Get post
     }
-
-
     function deletePost(postId) { //this function just display Confirm message
         //alert("deletePost" + postId)
         $("#deletePostModal").modal("show");
@@ -677,12 +640,6 @@
     function getImagesForPost(index, id) {
         appenImageToPost(index, id);
     }
-    function addImageToPost(imageUrl, postId, width) {
-        $("#imagesPost" + postId)
-            .append('<img src="' + imageUrl + '" style="width:' + width + '%;height:auto;margin-right:5px">');
-
-    }
-
     function addImageToPreviewList(dir, position) {
         //        $("#previewList").prepend('<div id="previewImage' + position + '" style="height:100px;width:100px;float:left;position:relative;margin: 0px 5px;"><img onclick="removePreview(' + position + ')" src="/Content/images/delete.png" style="position:absolute;top:0px;right:0px;width:20px;height:20px"/><img src="' + dir + '" style="max-width:100%;max-height:100%"/></div>')
         $("#previewList")
@@ -728,12 +685,6 @@
         sendReport(postId, reportContent);
     }
 
-    function onFocusPost() {
-        $("#addNewPost").css("display", "block");
-    }
-    function onBlurPost() {
-        $("#addNewPost").css("display", "none");
-    }
     function textAreaAdjust(o) {
         o.style.height = "1px";
         o.style.height = (25 + o.scrollHeight) + "px";
