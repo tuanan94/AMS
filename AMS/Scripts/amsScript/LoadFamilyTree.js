@@ -160,7 +160,7 @@ function loadAllMemberForSettingPage(houseid, selectorStr) {
             for (var i = 0; i < familyLevel.length; i++) {
                 addUserToFamilyTreeNew(familyLevel[i], USERS);
             }
-            $("#memberPanelBody").removeClass("hide");
+            $("#memberPanelBodySetting").removeClass("hide");
         },
         error: function (er) {
             alert(er);
@@ -173,7 +173,7 @@ function addUserToFamilyTreeNew(level, USERS) {
     var divLevel = $("#level" + level);
     if (divLevel.length) {
     } else {
-        $("#memberPanelBody").append('<div id="level_' + level + '"></div>');
+        $("#memberPanelBodySetting").append('<div id="level_' + level + '"></div>');
         // Set range header
         for (var i = 0; i < USERS.length; i++) {
             var u = USERS[i];
@@ -205,8 +205,8 @@ function addUserToFamilyTreeNew(level, USERS) {
             } else {
                 userProfile = u['ProfileImage'];
             };
-            var curUserId = $("#memberPanelBody").data("curUserId");
-            var curUserRoleId = $("#memberPanelBody").data("curUserRoleId");
+            var curUserId = $("#memberPanelBodySetting").data("curUserId");
+            var curUserRoleId = $("#memberPanelBodySetting").data("curUserRoleId");
 
             if (curUserRoleId == window.UserRoleHouseHolder.toString()) {
                 if (curUserId == u["Id"].toString() && u["RoleId"].toString() == curUserRoleId) {
@@ -227,7 +227,7 @@ function imageFrame(userId, userProfileImg, fullName, hasDeleteBtn) {
     if (hasDeleteBtn) {
         return '<a class="familymember link-cursor" onclick="LoadUserProfile(\'' + userId + '\')" style="border:none;padding-right: 0;">'
 //        return '<a href="#" class="familymember" style="border:none;padding-right: 0;">'
-                                        + "<div onclick='openModalDeleteBlock(\"" + userId + "\",\"" + fullName + "\")'>"
+                                        + "<div onclick='openModalDeleteResident(\"" + userId + "\",\"" + fullName + "\")'>"
                                             + '<div class="img-border in-house-avar" style="height: 120px;width: 120px">'
                                                 + '<img class="loading-img" onError="this.src=\'/Content/Images/defaultProfile.png\';" src="' + userProfileImg + '"style="width:120px; height:120px"/>'
                                                     + "<div class='mem-remove'>" +

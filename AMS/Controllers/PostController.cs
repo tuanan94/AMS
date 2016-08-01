@@ -299,7 +299,7 @@ namespace AMS.Controllers
             {
                 pMapping.Id = p.Id;
                 pMapping.Status = p.Status;
-                pMapping.Body = p.Body.Replace("\n", "<br/>");
+                pMapping.Body = p.Body != null ? p.Body.Replace("\n", "<br/>") : "";
                 pMapping.CreateDate = p.CreateDate.GetValueOrDefault();
                 pMapping.EmbedCode = p.EmbedCode;
                 pMapping.UserId = p.UserId;
@@ -346,7 +346,7 @@ namespace AMS.Controllers
             if (p != null)
             {
                 pMapping.Id = p.Id;
-                pMapping.Body = p.Body.Replace("\n", "<br/>");
+                pMapping.Body = p.Body != null ? p.Body.Replace("\n", "<br/>") : "";
                 pMapping.CreateDate = p.CreateDate.GetValueOrDefault();
                 pMapping.EmbedCode = p.EmbedCode;
                 pMapping.UserId = p.UserId;

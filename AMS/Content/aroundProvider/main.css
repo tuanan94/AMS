@@ -118,7 +118,7 @@ a:active {
     }
 
 .desc {
-    border-bottom: 5px solid #01DFD7;
+    /*border-bottom: 5px solid #01DFD7;*/
     /*padding-bottom: 40px;*/
     padding-bottom: 50px;
 }
@@ -770,7 +770,50 @@ nav {
 
 .single-project {
     margin-bottom: 50px;
+    position: relative;
 }
+
+    .single-project > section {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        position: relative;
+        /*box-shadow: 0 1px 4px rgba(0, 0, 0, .1);*/
+    }
+
+        .single-project > section:after {
+            border: 1px solid rgba(0, 0, 0, .1);
+            box-sizing: border-box;
+            content: '';
+            display: block;
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+
+    .single-project:after {
+        border: 1px solid rgba(0, 0, 0, .1);
+        box-sizing: border-box;
+        content: '';
+        display: block;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+    }
+    .single-project > a {
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 3;
+        cursor: pointer;
+    }
+
+
 
     .single-project:hover .project-meta {
         bottom: 0;
@@ -779,6 +822,7 @@ nav {
 .project-preview {
     position: relative;
     overflow: hidden;
+    border-radius: 4px 4px 0 0;
 }
 
 a, a.read-more:hover, a.read-more:hover i {
@@ -800,7 +844,23 @@ a, a.read-more:hover, a.read-more:hover i {
     transition: .3s;
 }
 
-    .project-meta p {
+/*AnLTNM*/
+.project-meta-modify {
+    background: none repeat scroll 0 0 #25ad9f;
+    border-radius: 5px;
+    bottom: -10%;
+    color: #fff;
+    font-size: 12px;
+    left: 0;
+    margin-bottom: 2%;
+    margin-left: 2%;
+    overflow: hidden;
+    position: absolute;
+    width: auto;
+    transition: .3s;
+}
+
+    .project-meta p, .project-meta-modify p {
         margin: 0;
     }
 
@@ -829,7 +889,8 @@ a, a.read-more:hover, a.read-more:hover i {
 }
 
     .project-link p {
-        color: #aaa;
+        /*color: #aaa;*/
+        color: #4b4f56;
         margin: 0;
         line-height: 20px;
         height: 40px;

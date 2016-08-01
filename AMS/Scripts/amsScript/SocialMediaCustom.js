@@ -782,7 +782,6 @@ function getYoutubeFrameFromText(commentText) {
             }
         }
     }
-
     return "";
 }
 
@@ -803,6 +802,7 @@ function replaceNewLineWithBrTag(commentText) {
     if (commentText) {
         return commentText.replace(/[\n]/g, "<br/>");
     }
+    return "";
 }
 
 function checkURL(url) {

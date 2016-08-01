@@ -4,8 +4,7 @@
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
     List<AroundProviderDetailModel> allProviders = ViewBag.AllProviders;
     List<AroundProviderCategory> allCategories = ViewBag.AllCategorys;
-    AroundProviderCategory highestProCat = ViewBag.highestProCat;
-    String activeCat = ViewBag.activeCat;
+    int highestProCat = ViewBag.highestProCat;
 }
 <link href="~/Content/aroundProvider/main.css" rel="stylesheet" />
 <link href="~/Content/css/jquery.raty.css" rel="stylesheet" />
@@ -23,7 +22,6 @@
                 <div class="form-group">
                     <div class="work-filter wow fadeInRight animated" data-wow-duration="500ms">
                         <ul class="text-center">
-                            @activeCat
                             @{
                                 if (allCategories != null)
                                 {
@@ -49,32 +47,36 @@
                         {
                             <div class="col-md-4 mix work-item category-@provider.ProviderCatId" style="float: left; overflow: hidden">
                                 <div class="single-project @provider.ProviderCatId">
-                                    <div class="project-preview" style="overflow: hidden">
-                                        <a href="/Home/AroundService/SingleProviderDetail?id=@provider.Id">
-                                            <img src="@provider.ImageUrl" class="img-responsive" alt="">
-                                        </a>
-                                        <div class="project-meta">
-                                            <div class="project-date">
-                                                <div class="user-rate" data-score="@provider.RatePoint"></div>
-                                            </div>
+                                    <section>
+                                        <div class="project-preview" style="overflow: hidden">
+                                            <a href="/Home/AroundService/SingleProviderDetail?id=@provider.Id">
+                                                <img src="@provider.ImageUrl" class="img-responsive" alt="">
+                                            </a>
+                                            <div class="project-meta-modify">
+                                                <div class="project-date">
+                                                    <div class="user-rate" data-score="@provider.RatePoint"></div>
+                                                </div>
 
-                                            <div class="project-count">
-                                                <p><i class="fa fa-eye"></i> @provider.ClickCount</p>
+                                                <div class="project-count">
+                                                    <p><i class="fa fa-eye"></i> @provider.ClickCount</p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="project-link" style="max-height: 80px; overflow: hidden;">
-                                        <h2>
-                                            <a href="" style="font-weight: 700">@provider.Name</a>
-                                        </h2>
-                                        <p style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">@provider.Address</p>
-                                    </div>
+                                        <div class="project-link" style="max-height: 80px; overflow: hidden;">
+                                            <h2 class="truncate" style="max-width: 100%">
+                                                <a href="" style="font-weight: 700">@provider.Name</a>
+                                            </h2>
+                                            <p style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">@provider.Address</p>
+                                        </div>
+                                    </section>
+                                    <a href="/Home/AroundService/SingleProviderDetail?id=@provider.Id">
+                                    </a>
                                 </div>
                             </div>
                         }
                     }
-                    <input type="hidden" id="highest" value="@(highestProCat != null ? highestProCat.Id.ToString() : null)" />
+                    <input type="hidden" id="highest" value="@(highestProCat)" />
                 </div>
 
             </div>

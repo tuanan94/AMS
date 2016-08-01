@@ -46,9 +46,18 @@ namespace AMS.Controllers
         [AutoRedirect.MandatorySurveyRedirect]
         [Authorize]
         [Route("Home/AroundService/All")]
-        public ActionResult ViewGetAllAroundProvider(String cat)
+        public ActionResult ViewGetAllAroundProvider(int? catId)
         {
-            List<AroundProvider> providers = _aroundProviderService.GetAllProviderWithCat(cat);
+            List<AroundProvider> providers = _aroundProviderService.GetAllProviderWithCat(null);
+            if (catId != null)
+            {
+                AroundProviderCategory curentCat = _aroundProviderCategoryService.FindById(catId.Value);
+                if (null == curentCat)
+                {
+                    ViewBag.ErrorMsg = " Rất tiếc không tìm thấy loại dịch vụ xung quanh";
+                    return View("~/Views/Post/ErrorMsg.cshtml");
+                }
+            }
             List<AroundProviderCategory> allCat = _aroundProviderCategoryService.GetAllOrderByProviderClickCount();
             AroundProviderDetailModel providerDetail = null;
             List<AroundProviderDetailModel> providerDetailList = new List<AroundProviderDetailModel>();
@@ -66,12 +75,15 @@ namespace AMS.Controllers
                 providerDetailList.Add(providerDetail);
             }
             ViewBag.AllCategorys = allCat;
-            if (allCat.Count != 0)
+            if (allCat.Count != 0 && catId == null)
             {
-                ViewBag.highestProCat = allCat.First();
+                ViewBag.highestProCat = allCat.First().Id;
+            }
+            else if (catId != null)
+            {
+                ViewBag.highestProCat = catId;
             }
             ViewBag.AllProviders = providerDetailList;
-            ViewBag.activeCat = cat;
             return View("ViewAroundProviderDetail");
         }
 
@@ -80,9 +92,13 @@ namespace AMS.Controllers
         [Authorize]
         public ActionResult SingleProviderDetail(int id)
         {
-            List<AroundProviderProduct> products = _aroundProviderProductService.GetAroundProviderProduct(id);
-
             AroundProvider curProvider = _aroundProviderService.GetProvider(id);
+            if (null == curProvider)
+            {
+                ViewBag.ErrorMsg = " Rất tiếc không tìm thấy dịch vụ xung quanh";
+                return View("~/Views/Post/ErrorMsg.cshtml");
+            }
+            List<AroundProviderProduct> products = _aroundProviderProductService.GetAroundProviderProduct(id);
             int rateCount = 0;
             double ratePoint = 0.0;
             int curUserRate = -1;

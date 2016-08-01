@@ -158,3 +158,16 @@
     right: 0;
     margin: auto;
 }
+
+.btn-send-cus {
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 34px;
+    padding: 0 10px;
+    border: 1px solid #313131;
+    background-color: #00897B;
+}
+.btn-send-cus:hover {
+    border: 1px solid #313131;
+    background-color: #225f54 !important;
+}

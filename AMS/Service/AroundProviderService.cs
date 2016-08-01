@@ -21,11 +21,11 @@ namespace AMS.Service
             int intCat = -1;
             if (cat == null || cat.Equals("") || int.TryParse(cat, out intCat) == false)
             {
-                result = GetAllProviders();
+                result = _arroundProviderRepository.List.OrderByDescending(c => c.ClickCount).ToList();
             }
             else
             {
-                result = _arroundProviderRepository.List.Where(c => c.AroundProviderCategoryId == intCat).ToList();
+                result = _arroundProviderRepository.List.Where(c => c.AroundProviderCategoryId == intCat).OrderByDescending(c => c.ClickCount).ToList();
             }
             return result;
         }

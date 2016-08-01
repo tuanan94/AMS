@@ -219,7 +219,10 @@ namespace AMS.Constant
         /*http://stackoverflow.com/questions/3566830/what-method-in-the-string-class-returns-only-the-first-n-characters*/
         public static string TruncateLongString(string str, int maxLength)
         {
-            return str.Substring(0, Math.Min(str.Length, maxLength));
+            if (str != null)
+            {
+                return str.Substring(0, Math.Min(str.Length, maxLength));
+            } return "";
         }
         /*http://stackoverflow.com/questions/3566830/what-method-in-the-string-class-returns-only-the-first-n-characters*/
         public static int CalculateAge(DateTime dob)

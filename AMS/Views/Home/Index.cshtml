@@ -170,13 +170,14 @@
                                 </div>*@
                         </div>
                         <div class="panel-footer share-buttons clearfix">
-                            <a href="#postStatusArea" style="float: right">
-                                <i class="fa fa-map-marker"></i>
-                            </a>
+                            @*                            <a href="#postStatusArea" style="float: right">*@
+                            @*                                <i class="fa fa-map-marker"></i>*@
+                            @*                            </a>*@
                             <div class="pull-right">
-                                <button id="shareButton" type="submit" class="btn btn-primary btn-xs" style="margin-top: -12px" href="#" onclick="createNewPost()">
-                                    Chia sẻ
-                                </button>
+                                @*                                <button id="shareButton" type="submit" class="btn btn-primary btn-xs" style="margin-top: -12px" href="#" onclick="createNewPost()">*@
+                                <span id="shareButton" class="btn btn-primary btn-send-cus" onclick="createNewPost()">
+                                    <i class="fa fa-fw fa-paper-plane-o" style="color: #000000 !important;"></i> Chia sẻ
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -473,29 +474,33 @@
                 $("#embedCode").val(getEmbedCode);
             }
         }
-        $.ajax({
-            url: "/Post/Create",
-            type: "POST",
-            datatype: 'json',
-            data: {
-                oldPostId: postId,
-                thumbnailImages: listUploadThumnailImage,
-                originImages: listOriginImage,
-                images: listUploadImage,
-                content: $("#postContent").val(),
-                embeded: $("#embedCode").val()
-            },
-            success: function (successData) {
-                if (successData == 'success') {
-                    clearCreatePostForm();
-                    reloadFeed();
+        var embedCode = $("#embedCode").val();
+        var bodyContent = $("#postContent").val();
+        if (listUploadImage.length !== 0 || bodyContent || embedCode) {
+            $.ajax({
+                url: "/Post/Create",
+                type: "POST",
+                datatype: 'json',
+                data: {
+                    oldPostId: postId,
+                    thumbnailImages: listUploadThumnailImage,
+                    originImages: listOriginImage,
+                    images: listUploadImage,
+                    content: bodyContent,
+                    embeded: embedCode
+                },
+                success: function (successData) {
+                    if (successData == 'success') {
+                        clearCreatePostForm();
+                        reloadFeed();
+                    }
+                },
+                error: function (er) {
+//                    alert(er);
+                    //progessBar(false);
                 }
-            },
-            error: function (er) {
-                alert(er);
-                //progessBar(false);
-            }
-        });
+            });
+        }
     }
     /*New Implement*/
     $("#uploadEditorImage").change(function () {
@@ -790,7 +795,7 @@
                 var obj = JSON.parse(successData);
                 $("#postContent").val(obj['Body']);
                 $("#postId").val(obj['Id']);
-                $("#shareButton").html("Cập nhật bài viết");
+//                $("#shareButton").html("Cập nhật bài viết");
                 smoothScrollToTop();
             },
             error: function (er) {
@@ -906,7 +911,7 @@
         $("#previewList").html('');
         $("#postContent").val('');
         $("#postId").val('');
-        $("#shareButton").html("Chia sẻ");
+//        $("#shareButton").html("Chia sẻ");
         $("#embedCode").val("");
         $("#uploadEditorImage").val("");
         textAreaAdjust(document.getElementById("postContent"));
