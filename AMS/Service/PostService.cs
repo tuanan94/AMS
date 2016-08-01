@@ -77,14 +77,18 @@ namespace AMS.Service
                 }
 
             }
+            Post managerFirstPost = allPostWithHouseID.Where(p => p.User.RoleId == SLIM_CONFIG.USER_ROLE_MANAGER).FirstOrDefault();
             for (int i = position + 1; i < allPostWithHouseID.Count && result.Count < SLIM_CONFIG.POST_NUMBER_SOCIAL_FEED; i++)
             {
+                if (tokenId != -1 && allPostWithHouseID.ElementAt(i) == managerFirstPost)
+                {
+                    continue;
+                }
                 result.Add(allPostWithHouseID.ElementAt(i));
             }
             //Add manager's post to head
             if (tokenId == -1)
             {
-                Post managerFirstPost = allPostWithHouseID.Where(p => p.User.RoleId == SLIM_CONFIG.USER_ROLE_MANAGER).FirstOrDefault();
                 if (managerFirstPost != null)
                 {
                     if (result.Contains(managerFirstPost))
