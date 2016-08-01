@@ -131,7 +131,7 @@ namespace AMS.Controllers
             int aa = 0;
             foreach (var item in listSurveys)
             {
-                if (DateTime.Now >= item.PublishDate)
+                if (DateTime.Now >= item.PublishDate && DateTime.Now <= item.EndDate)
                 {
 
                     listUserAnswer = (userAnswerService.GetListUserAnswerPollsByPollId(item.Id));
@@ -162,7 +162,7 @@ namespace AMS.Controllers
 
                             }
 
-                            if ((k != 1 && p == 1 && item.Status == 1) || (k != 1 && p == 0 && item.Status == 1))
+                            if ((k != 1 && p == 1 && item.Status == 1) )
                             //if (k != 1)
                             {
                                 //po.Question = item.Question;
@@ -173,6 +173,11 @@ namespace AMS.Controllers
                                 //po.Answer4 = item.Answer4;
                                 //po.Answer5 = item.Answer5;
                                 //po.EndDate = item.EndDate;
+                                lists.Add(item);
+                                aa++;
+                            }
+                            else if (k != 1 && listBlockPolls.Count == 0 && item.Status == 1)
+                            {
                                 lists.Add(item);
                                 aa++;
                             }
@@ -201,6 +206,11 @@ namespace AMS.Controllers
                                 lists.Add(item);
                                 aa++;
                             }
+                            else if (k != 1 && listBlockPolls.Count == 0 && item.Status == 1)
+                            {
+                                lists.Add(item);
+                                aa++;
+                            }
                         }
                         else if ((item.Mode == 3 && currentUser.RoleId == 4 && item.Status == 1) || (item.Mode == 3 && currentUser.RoleId == 3 && item.Status == 1))
                         {
@@ -221,6 +231,11 @@ namespace AMS.Controllers
 
                             if (k != 1 && p == 1 && item.Status == 1)
                             // if (k != 1)
+                            {
+                                lists.Add(item);
+                                aa++;
+                            }
+                            else if (k != 1 && listBlockPolls.Count == 0 && item.Status == 1)
                             {
                                 lists.Add(item);
                                 aa++;
@@ -326,7 +341,7 @@ namespace AMS.Controllers
             }
             foreach (var item in listSurveys)
             {
-                if (DateTime.Now >= item.PublishDate)
+                if (DateTime.Now >= item.PublishDate && DateTime.Now <= item.EndDate)
                 {
                     
                     listUserAnswer = (userAnswerService.GetListUserAnswerPollsByPollId(item.Id));
@@ -357,7 +372,7 @@ namespace AMS.Controllers
 
                             }
 
-                            if ((k != 1 && p == 1 && item.Status == 1) || (k != 1 && p == 0 && item.Status == 1))
+                            if ((k != 1 && p == 1 && item.Status == 1) )
                             //if (k != 1)
                             {
                                 //po.Question = item.Question;
@@ -368,6 +383,9 @@ namespace AMS.Controllers
                                 //po.Answer4 = item.Answer4;
                                 //po.Answer5 = item.Answer5;
                                 //po.EndDate = item.EndDate;
+                                lists.Add(item);
+                            }else if (k != 1 && listBlockPolls.Count == 0 && item.Status == 1)
+                            {
                                 lists.Add(item);
                             }
 
@@ -394,6 +412,10 @@ namespace AMS.Controllers
                             {
                                 lists.Add(item);
                             }
+                            else if (k != 1 && listBlockPolls.Count == 0 && item.Status == 1)
+                            {
+                                lists.Add(item);
+                            }
                         }
                         else if ((item.Mode == 3 && currentUser.RoleId == 4 && item.Status == 1) || (item.Mode == 3 && currentUser.RoleId == 3 && item.Status == 1))
                         {
@@ -414,6 +436,10 @@ namespace AMS.Controllers
 
                             if (k != 1 && p == 1 && item.Status == 1)
                             // if (k != 1)
+                            {
+                                lists.Add(item);
+                            }
+                            else if (k != 1 && listBlockPolls.Count == 0 && item.Status == 1)
                             {
                                 lists.Add(item);
                             }
