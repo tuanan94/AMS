@@ -101,11 +101,13 @@
 
 .custom-panel > .panel-heading.panel-heading-gray {
     background: #25ad9f;
-    color: #000000;
+    color: #fff;
+    /*font-weight: bold;
+    font-size: 12px;*/
 }
 
     .custom-panel > .panel-heading.panel-heading-gray > i {
-        color: #fff;
+        color: #424242;
     }
 
 .text-center {
@@ -164,10 +166,16 @@
     font-weight: bold;
     line-height: 34px;
     padding: 0 10px;
-    border: 1px solid #313131;
     background-color: #00897B;
 }
 .btn-send-cus:hover {
     border: 1px solid #313131;
     background-color: #225f54 !important;
+}
+
+.panel-footer .weather:hover, .panel-footer .weather:active {
+    color: #b71c1c !important
+}
+.panel-footer .weather > i {
+    color: #b71c1c
 }
