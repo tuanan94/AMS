@@ -714,11 +714,6 @@ namespace AMS.Controllers
                 }
             }
            
-           
-          
-           
-
-         
             obj.Description = model.Title;
             obj.Question = listQuestion[0];
            
@@ -730,62 +725,60 @@ namespace AMS.Controllers
             obj.Priority = int.Parse(priority[0]);
             PollService.UpdatePoll(obj);
             string[] listBlock = Request.Form.GetValues("block");
-            if (listBlock != null)
-            {
-                List<string> listBlockrs = new List<string>(listBlock);
-
-                List<BlockPoll> listBlockPollsDb = BlockPollService.FindByPollId(model.Id);
-
-                List<int> listEditBlock = new List<int>();
-                List<int> listLoad = new List<int>();
-
-                foreach (var VARIABLE in listBlockrs)
+            //try
+            //{
+                if (listBlock != null)
                 {
-                    listEditBlock.Add(blockService.FindBlockByName(VARIABLE).Id);
-                }
-                foreach (var aa in listBlockPollsDb)
-                {
-                    listLoad.Add(aa.BlockId);
-                }
-                if (listEditBlock.Count < listLoad.Count)
-                {
-                    List<int> list3 = listLoad.Except(listEditBlock).ToList();
-                    // number of check less than before, delete
-                    foreach (var object1 in list3)
+                    List<string> listBlockrs = new List<string>(listBlock);
+                    List<BlockPoll> listBlockPollsDb = BlockPollService.FindByPollId(model.Id);
+
+                    List<int> listEditBlock = new List<int>();
+                    List<int> listLoad = new List<int>();
+
+                    foreach (var VARIABLE in listBlockrs)
                     {
-                        BlockPoll BlockPoll = BlockPollService.FIndBlockPollByBlockIdPollId(object1, model.Id);
-                        BlockPollService.DeleteBlockPoll(BlockPoll);
+                        listEditBlock.Add(blockService.FindBlockByName(VARIABLE).Id);
+                    }
+                    foreach (var aa in listBlockPollsDb)
+                    {
+                        listLoad.Add(aa.BlockId);
+                    }
+                    if (listEditBlock.Count < listLoad.Count)
+                    {
+                        List<int> list3 = listLoad.Except(listEditBlock).ToList();
+                        // number of check less than before, delete
+                        foreach (var object1 in list3)
+                        {
+                            BlockPoll BlockPoll = BlockPollService.FIndBlockPollByBlockIdPollId(object1, model.Id);
+                            BlockPollService.DeleteBlockPoll(BlockPoll);
+                        }
+                    }
+                    else if (listEditBlock.Count >= listLoad.Count)
+                    {
+                        List<int> list4 = listEditBlock.Except(listLoad).ToList();
+                        // number of check more than before, 
+                       
+                        foreach (var obj1 in list4)
+                        {
+                            BlockPoll blockPoll = new BlockPoll();
+                            blockPoll.BlockId = obj1;
+                            blockPoll.PollId = model.Id;
+                            BlockPollService.AddBlockPoll(blockPoll);
+                        }
+
                     }
                 }
-                else if (listEditBlock.Count >= listLoad.Count)
+                else
                 {
-                    List<int> list4 = listEditBlock.Except(listLoad).ToList();
-                    // number of check more than before, 
-                    BlockPoll BlockPoll = new BlockPoll();
-                    foreach (var obj1 in list4)
+                    List<BlockPoll> listBlockPollsDb = BlockPollService.FindByPollId(model.Id);
+                    List<int> listLoad = new List<int>();
+
+
+                    foreach (var aa in listBlockPollsDb)
                     {
-                        BlockPoll.BlockId = obj1;
-                        BlockPoll.PollId = model.Id;
-                        BlockPollService.AddBlockPoll(BlockPoll);
+                        listLoad.Add(aa.BlockId);
                     }
 
-                }
-            }
-            else
-            {
-               
-
-                List<BlockPoll> listBlockPollsDb = BlockPollService.FindByPollId(model.Id);
-
-              
-                List<int> listLoad = new List<int>();
-
-            
-                foreach (var aa in listBlockPollsDb)
-                {
-                    listLoad.Add(aa.BlockId);
-                }
-               
                     List<int> list3 = listLoad.ToList();
                     // number of check less than before, delete
                     foreach (var object1 in list3)
@@ -793,8 +786,14 @@ namespace AMS.Controllers
                         BlockPoll BlockPoll = BlockPollService.FIndBlockPollByBlockIdPollId(object1, model.Id);
                         BlockPollService.DeleteBlockPoll(BlockPoll);
                     }
+
+                }
+            //}
+            //catch
+            //{
                 
-            }
+            //}
+            
         
             List<int> aaa= new List<int>();
             aaa.Add(1);
