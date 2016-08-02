@@ -51,7 +51,7 @@ namespace AMS.Views.HelpdeskSupporter
                         requestModel = new HelpdeskRequestViewModel();
                         requestModel.Id = rq.Id;
                         requestModel.Title = rq.Title;
-                        requestModel.HelpdeskServiceCatName = rq.HelpdeskServiceCategory.Name;
+                        requestModel.HelpdeskServiceCatName = rq.HelpdeskRequestCategory.Name;
                         requestModel.CreateDate = rq.CreateDate.Value.ToString(AmsConstants.DateTimeFormat);
                         requestModel.CreateDateLong = rq.CreateDate.Value.Ticks;
 
@@ -93,7 +93,7 @@ namespace AMS.Views.HelpdeskSupporter
 
             request.Status = hr.Status.Value;
             request.HouseName = hr.House.HouseName;
-            request.HelpdeskServiceCatName = hr.HelpdeskServiceCategory.Name;
+            request.HelpdeskServiceCatName = hr.HelpdeskRequestCategory.Name;
             request.Id = hr.Id;
             request.HelpdeskSupporterId = currHelpdeskSupporterId;
             ViewBag.currRequest = request;
@@ -169,7 +169,7 @@ namespace AMS.Views.HelpdeskSupporter
                     {
                         log = new HelpdeskRequestLogViewModel();
                         log.Title = rq.HelpdeskRequest.Title;
-                        log.SrvCatName = rq.HelpdeskRequest.HelpdeskServiceCategory.Name;
+                        log.SrvCatName = rq.HelpdeskRequest.HelpdeskRequestCategory.Name;
                         log.CreateDate = rq.CreateDate.Value.ToString(AmsConstants.DateTimeFormat);
                         log.CreateDateLong = rq.CreateDate.Value.Ticks;
                         log.StatusTo = rq.StatusTo.Value;

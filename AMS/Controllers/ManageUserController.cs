@@ -22,6 +22,7 @@ namespace AMS.Controllers
         private BlockServices _blockServices = new BlockServices();
         private HouseServices _houseServices = new HouseServices();
         private UserService userService = new UserService();
+        private PostService _postService = new PostService();
 
         [HttpGet]
         [ManagerAuthorize]
@@ -459,7 +460,7 @@ namespace AMS.Controllers
             try
             {
                 User u = parseAddDataUser(user, SLIM_CONFIG.USER_ROLE_MANAGER);
-                u.FamilyLevel =SLIM_CONFIG.FAMILY_LEVEL_ADMIN;
+                u.FamilyLevel = SLIM_CONFIG.FAMILY_LEVEL_ADMIN;
                 _userServices.Add(u);
                 StringBuilder message = new StringBuilder();
                 message.Append("Chung cu AMS. Tai khoan duoc tao thanh cong! Ten đang nhap: ")
@@ -619,7 +620,7 @@ namespace AMS.Controllers
                         User u = _userServices.FindById(resId);
                         if (u.RoleId == SLIM_CONFIG.USER_ROLE_SUPPORTER)
                         {
-                            if (u.HelpdeskRequests1.Any(r => r.Status == (int)StatusEnum.Processing))
+                            if (u.HelpdeskRequests.Any(r => r.Status == (int)StatusEnum.Processing))
                             {
                                 response.StatusCode = 2;
                                 response.Data = u.Fullname;
@@ -643,7 +644,7 @@ namespace AMS.Controllers
                         {
                             if (u.RoleId == SLIM_CONFIG.USER_ROLE_SUPPORTER)// double check
                             {
-                                if (u.HelpdeskRequests1.Any(r => r.Status == (int)StatusEnum.Processing))
+                                if (u.HelpdeskRequests.Any(r => r.Status == (int)StatusEnum.Processing))
                                 {
                                     response.StatusCode = 2;
                                     response.Data = u.Fullname;
@@ -666,6 +667,16 @@ namespace AMS.Controllers
                             u.Status = SLIM_CONFIG.USER_STATUS_DELETE;
                             u.HouseId = null;
                             u.LastModified = DateTime.Now;
+                            if (u.Posts != null)
+                            {
+                                foreach (var p in u.Posts)
+                                {
+                                    Post ePost = _postService.findPostById(p.Id);
+                                    ePost.Status = SLIM_CONFIG.POST_STATUS_HIDE;
+                                    ePost.UpdateDate = DateTime.Now;
+                                    _postService.UpdatePost(ePost);
+                                }
+                            }
                             _userServices.Update(u);
                         }
                         else
@@ -703,6 +714,17 @@ namespace AMS.Controllers
                             u.Status = SLIM_CONFIG.USER_STATUS_DELETE;
                             u.HouseId = null;
                             u.LastModified = DateTime.Now;
+
+                            if (u.Posts != null)
+                            {
+                                foreach (var p in u.Posts)
+                                {
+                                    Post ePost = _postService.findPostById(p.Id);
+                                    ePost.Status = SLIM_CONFIG.POST_STATUS_HIDE;
+                                    ePost.UpdateDate = DateTime.Now;
+                                    _postService.UpdatePost(ePost);
+                                }
+                            }
                             _userServices.Update(u);
                         }
                         else

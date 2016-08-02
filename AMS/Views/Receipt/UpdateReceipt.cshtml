@@ -25,10 +25,10 @@
                         <a href="/Management/ManageReceipt/View"><i class="fa fa-file-text-o"></i> Quản lý hóa đơn</a>
                     </li>
                     <li>
-                        <a href="/Management/ManageReceipt/CreateManualReceiptView"><i class="fa fa fa-plus"></i> Tạo hóa đơn thủ công</a>
+                        <a href="/Management/ManageReceipt/CreateManualReceiptView"><i class="fa fa-file-o"></i> Tạo hóa đơn lẻ</a>
                     </li>
                     <li class="">
-                        <a href="/Management/ManageReceipt/CreateAutomationReceiptView"><i class="fa fa fa-plus"></i> Tạo hóa đơn tự động</a>
+                        <a href="/Management/ManageReceipt/CreateAutomationReceiptView"><i class="fa fa-files-o"></i> Tạo hóa đơn hàng loạt</a>
                     </li>
                     <li class="">
                         <a href="/Management/ManageReceipt/ViewDownloadRecordTemplate"><i class="fa fa-cloud-download"></i> Tải bảng ghi nước</a>
@@ -287,7 +287,7 @@
                                 @{if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
                                 {
                                     <span id="btnPublished" onclick="changeStatusReceipt(@receipt.Id, @User.Identity.GetUserId(), @SLIM_CONFIG.RECEIPT_STATUS_UNPAID)" class="btn btn-info"><i class="fa fa-globe"></i> Công bố</span>
-                                    <button type="submit" id="btnUpdate" class="btn btn-primary"><i class="fa fa-pencil"></i>Cập nhật</button>
+                                    <button type="submit" id="btnUpdate" class="btn btn-primary"><i class="fa fa-pencil"></i> Cập nhật</button>
                                     <span id="btnPaid" onclick="changeStatusReceipt(@receipt.Id,    @User.Identity.GetUserId(),
                                           @SLIM_CONFIG.RECEIPT_STATUS_PAID )" class="btn btn-success hide">
                                         <i class="fa fa-check"></i> Thanh toán
@@ -527,7 +527,7 @@
                 },
                 "order-item-name": {
                     required: "Trường bắt buộc và tối đa 255 ký tự",
-//                    maxlength: "Tối đa 255 ký tự."
+                    //                    maxlength: "Tối đa 255 ký tự."
                 },
                 "order-item-qty": {
                     required: "Trường bắt buộc",

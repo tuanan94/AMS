@@ -176,6 +176,10 @@ td.highlight {
     background: #428bca !important;
 }
 
+    .navbar-nav-manager .open > a > span {
+        color: #fff !important;
+    }
+
 .navbar-nav-manager > li > a.dropdown-toggle {
     padding: 0 15px;
     height: 71px;
@@ -411,6 +415,22 @@ body {
     text-align: center;
 }
 
+    .provider-product > .product-info {
+        margin: 0;
+        border: 1px solid #616161;
+        border-radius: 5px;
+        position: relative;
+    }
+
+        .provider-product > .product-info > .product-img{
+            
+            border-bottom: 2px solid #616161;
+        } 
+        .provider-product > .product-info > .product-img > img {
+            border-radius: 5px 5px 0 0;
+            width: 100%;
+        }
+
 .canvas-bls {
     text-align: center;
     padding-top: 30px;
@@ -522,6 +542,10 @@ ul.timeline-list li.media > .media-body {
         line-height: 16px !important;
         color: #212121;
     }
-.grid >div{
-    padding: 2px
+
+.grid > div {
+    padding: 2px;
+}
+.error {
+    color: #EF5350;
 }

@@ -139,8 +139,6 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="BlockName" Type="nvarchar" MaxLength="50" />
-          <Property Name="NoFloor" Type="int" />
-          <Property Name="NoRoomPerFloor" Type="int" />
         </EntityType>
         <EntityType Name="BlockPoll">
           <Key>
@@ -179,6 +177,15 @@
           <Property Name="HouseId" Type="int" />
           <Property Name="SupporterId" Type="int" />
         </EntityType>
+        <EntityType Name="HelpdeskRequestCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="LastModified" Type="datetime" />
+          <Property Name="CreateDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="HelpdeskRequestHelpdeskSupporter">
           <Key>
             <PropertyRef Name="Id" />
@@ -201,15 +208,6 @@
           <Property Name="StatusFrom" Type="int" />
           <Property Name="StatusTo" Type="int" />
           <Property Name="DeadLine" Type="datetime" />
-        </EntityType>
-        <EntityType Name="HelpdeskServiceCategory">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="255" />
-          <Property Name="LastModified" Type="datetime" />
-          <Property Name="CreateDate" Type="datetime" />
         </EntityType>
         <EntityType Name="House">
           <Key>
@@ -387,7 +385,6 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Email" Type="varchar" MaxLength="255" />
           <Property Name="Username" Type="varchar" MaxLength="255" />
           <Property Name="Password" Type="varchar" MaxLength="255" />
           <Property Name="RoleId" Type="int" />
@@ -587,10 +584,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_HelpdeskRequest_HelpdeskServiceCategory">
-          <End Role="HelpdeskServiceCategory" Type="Self.HelpdeskServiceCategory" Multiplicity="0..1" />
+          <End Role="HelpdeskRequestCategory" Type="Self.HelpdeskRequestCategory" Multiplicity="0..1" />
           <End Role="HelpdeskRequest" Type="Self.HelpdeskRequest" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="HelpdeskServiceCategory">
+            <Principal Role="HelpdeskRequestCategory">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="HelpdeskRequest">
@@ -599,18 +596,6 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_HelpdeskRequest_User">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="HelpdeskRequest" Type="Self.HelpdeskRequest" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="HelpdeskRequest">
-              <PropertyRef Name="SupporterId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_HelpdeskRequest_User1">
           <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="HelpdeskRequest" Type="Self.HelpdeskRequest" Multiplicity="*" />
           <ReferentialConstraint>
@@ -634,6 +619,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_HelpdeskRequestLog_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="HelpdeskRequestLog" Type="Self.HelpdeskRequestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="HelpdeskRequestLog">
+              <PropertyRef Name="ChangeToUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_HelpdeskRequestLog_User1">
           <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="HelpdeskRequestLog" Type="Self.HelpdeskRequestLog" Multiplicity="*" />
@@ -643,18 +640,6 @@
             </Principal>
             <Dependent Role="HelpdeskRequestLog">
               <PropertyRef Name="ChangeFromUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_HelpdeskRequestLog_User2">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="HelpdeskRequestLog" Type="Self.HelpdeskRequestLog" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="HelpdeskRequestLog">
-              <PropertyRef Name="ChangeToUserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1012,9 +997,9 @@
           <EntitySet Name="BlockPoll" EntityType="Self.BlockPoll" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Comment" EntityType="Self.Comment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HelpdeskRequest" EntityType="Self.HelpdeskRequest" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HelpdeskRequestCategory" EntityType="Self.HelpdeskRequestCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HelpdeskRequestHelpdeskSupporter" EntityType="Self.HelpdeskRequestHelpdeskSupporter" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HelpdeskRequestLog" EntityType="Self.HelpdeskRequestLog" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="HelpdeskServiceCategory" EntityType="Self.HelpdeskServiceCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="House" EntityType="Self.House" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HouseCategory" EntityType="Self.HouseCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Image" EntityType="Self.Image" Schema="dbo" store:Type="Tables" />
@@ -1073,14 +1058,10 @@
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
           </AssociationSet>
           <AssociationSet Name="FK_HelpdeskRequest_HelpdeskServiceCategory" Association="Self.FK_HelpdeskRequest_HelpdeskServiceCategory">
-            <End Role="HelpdeskServiceCategory" EntitySet="HelpdeskServiceCategory" />
+            <End Role="HelpdeskRequestCategory" EntitySet="HelpdeskRequestCategory" />
             <End Role="HelpdeskRequest" EntitySet="HelpdeskRequest" />
           </AssociationSet>
           <AssociationSet Name="FK_HelpdeskRequest_User" Association="Self.FK_HelpdeskRequest_User">
-            <End Role="User" EntitySet="User" />
-            <End Role="HelpdeskRequest" EntitySet="HelpdeskRequest" />
-          </AssociationSet>
-          <AssociationSet Name="FK_HelpdeskRequest_User1" Association="Self.FK_HelpdeskRequest_User1">
             <End Role="User" EntitySet="User" />
             <End Role="HelpdeskRequest" EntitySet="HelpdeskRequest" />
           </AssociationSet>
@@ -1088,11 +1069,11 @@
             <End Role="HelpdeskRequest" EntitySet="HelpdeskRequest" />
             <End Role="HelpdeskRequestLog" EntitySet="HelpdeskRequestLog" />
           </AssociationSet>
-          <AssociationSet Name="FK_HelpdeskRequestLog_User1" Association="Self.FK_HelpdeskRequestLog_User1">
+          <AssociationSet Name="FK_HelpdeskRequestLog_User" Association="Self.FK_HelpdeskRequestLog_User">
             <End Role="User" EntitySet="User" />
             <End Role="HelpdeskRequestLog" EntitySet="HelpdeskRequestLog" />
           </AssociationSet>
-          <AssociationSet Name="FK_HelpdeskRequestLog_User2" Association="Self.FK_HelpdeskRequestLog_User2">
+          <AssociationSet Name="FK_HelpdeskRequestLog_User1" Association="Self.FK_HelpdeskRequestLog_User1">
             <End Role="User" EntitySet="User" />
             <End Role="HelpdeskRequestLog" EntitySet="HelpdeskRequestLog" />
           </AssociationSet>
@@ -1228,14 +1209,16 @@
           <EntitySet Name="BlockPolls" EntityType="AMSModel.BlockPoll" />
           <EntitySet Name="Comments" EntityType="AMSModel.Comment" />
           <EntitySet Name="HelpdeskRequests" EntityType="AMSModel.HelpdeskRequest" />
+          <EntitySet Name="HelpdeskRequestCategories" EntityType="AMSModel.HelpdeskRequestCategory" />
           <EntitySet Name="HelpdeskRequestHelpdeskSupporters" EntityType="AMSModel.HelpdeskRequestHelpdeskSupporter" />
           <EntitySet Name="HelpdeskRequestLogs" EntityType="AMSModel.HelpdeskRequestLog" />
-          <EntitySet Name="HelpdeskServiceCategories" EntityType="AMSModel.HelpdeskServiceCategory" />
           <EntitySet Name="Houses" EntityType="AMSModel.House" />
           <EntitySet Name="HouseCategories" EntityType="AMSModel.HouseCategory" />
+          <EntitySet Name="Images" EntityType="AMSModel.Image" />
           <EntitySet Name="NotificationChanges" EntityType="AMSModel.NotificationChange" />
           <EntitySet Name="NotificationObjects" EntityType="AMSModel.NotificationObject" />
           <EntitySet Name="Polls" EntityType="AMSModel.Poll" />
+          <EntitySet Name="Posts" EntityType="AMSModel.Post" />
           <EntitySet Name="Questions" EntityType="AMSModel.Question" />
           <EntitySet Name="Receipts" EntityType="AMSModel.Receipt" />
           <EntitySet Name="ReceiptDetails" EntityType="AMSModel.ReceiptDetail" />
@@ -1294,19 +1277,19 @@
             <End Role="Poll" EntitySet="Polls" />
             <End Role="BlockPoll" EntitySet="BlockPolls" />
           </AssociationSet>
+          <AssociationSet Name="FK_Comment_Post" Association="AMSModel.FK_Comment_Post">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
           <AssociationSet Name="FK_Comment_User1" Association="AMSModel.FK_Comment_User1">
             <End Role="User" EntitySet="Users" />
             <End Role="Comment" EntitySet="Comments" />
           </AssociationSet>
           <AssociationSet Name="FK_HelpdeskRequest_HelpdeskServiceCategory" Association="AMSModel.FK_HelpdeskRequest_HelpdeskServiceCategory">
-            <End Role="HelpdeskServiceCategory" EntitySet="HelpdeskServiceCategories" />
+            <End Role="HelpdeskRequestCategory" EntitySet="HelpdeskRequestCategories" />
             <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
           </AssociationSet>
           <AssociationSet Name="FK_HelpdeskRequest_User" Association="AMSModel.FK_HelpdeskRequest_User">
-            <End Role="User" EntitySet="Users" />
-            <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
-          </AssociationSet>
-          <AssociationSet Name="FK_HelpdeskRequest_User1" Association="AMSModel.FK_HelpdeskRequest_User1">
             <End Role="User" EntitySet="Users" />
             <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
           </AssociationSet>
@@ -1318,11 +1301,11 @@
             <End Role="House" EntitySet="Houses" />
             <End Role="HelpdeskRequest" EntitySet="HelpdeskRequests" />
           </AssociationSet>
-          <AssociationSet Name="FK_HelpdeskRequestLog_User1" Association="AMSModel.FK_HelpdeskRequestLog_User1">
+          <AssociationSet Name="FK_HelpdeskRequestLog_User" Association="AMSModel.FK_HelpdeskRequestLog_User">
             <End Role="User" EntitySet="Users" />
             <End Role="HelpdeskRequestLog" EntitySet="HelpdeskRequestLogs" />
           </AssociationSet>
-          <AssociationSet Name="FK_HelpdeskRequestLog_User2" Association="AMSModel.FK_HelpdeskRequestLog_User2">
+          <AssociationSet Name="FK_HelpdeskRequestLog_User1" Association="AMSModel.FK_HelpdeskRequestLog_User1">
             <End Role="User" EntitySet="Users" />
             <End Role="HelpdeskRequestLog" EntitySet="HelpdeskRequestLogs" />
           </AssociationSet>
@@ -1357,6 +1340,14 @@
           <AssociationSet Name="FK_UserDoServey_Survey" Association="AMSModel.FK_UserDoServey_Survey">
             <End Role="Poll" EntitySet="Polls" />
             <End Role="UserAnswerPoll" EntitySet="UserAnswerPolls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Report_Post" Association="AMSModel.FK_Report_Post">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_post_tbl_user" Association="AMSModel.FK_tbl_post_tbl_user">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Post" EntitySet="Posts" />
           </AssociationSet>
           <AssociationSet Name="FK_Receipt_User" Association="AMSModel.FK_Receipt_User">
             <End Role="User" EntitySet="Users" />
@@ -1406,20 +1397,6 @@
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
-          <EntitySet Name="Posts" EntityType="AMSModel.Post" />
-          <AssociationSet Name="FK_Comment_Post" Association="AMSModel.FK_Comment_Post">
-            <End Role="Post" EntitySet="Posts" />
-            <End Role="Comment" EntitySet="Comments" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Report_Post" Association="AMSModel.FK_Report_Post">
-            <End Role="Post" EntitySet="Posts" />
-            <End Role="Report" EntitySet="Reports" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tbl_post_tbl_user" Association="AMSModel.FK_tbl_post_tbl_user">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Post" EntitySet="Posts" />
-          </AssociationSet>
-          <EntitySet Name="Images" EntityType="AMSModel.Image" />
         </EntityContainer>
         <EntityType Name="C__MigrationHistory">
           <Key>
@@ -1561,8 +1538,6 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="BlockName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="NoFloor" Type="Int32" />
-          <Property Name="NoRoomPerFloor" Type="Int32" />
           <NavigationProperty Name="BlockPolls" Relationship="AMSModel.FK_BlockSurvey_Block1" FromRole="Block" ToRole="BlockPoll" />
           <NavigationProperty Name="Houses" Relationship="AMSModel.FK_House_Block" FromRole="Block" ToRole="House" />
         </EntityType>
@@ -1586,8 +1561,8 @@
           <Property Name="userId" Type="Int32" />
           <Property Name="detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="createdDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="User" Relationship="AMSModel.FK_Comment_User1" FromRole="Comment" ToRole="User" />
           <NavigationProperty Name="Post" Relationship="AMSModel.FK_Comment_Post" FromRole="Comment" ToRole="Post" />
+          <NavigationProperty Name="User" Relationship="AMSModel.FK_Comment_User1" FromRole="Comment" ToRole="User" />
         </EntityType>
         <EntityType Name="HelpdeskRequest">
           <Key>
@@ -1606,11 +1581,20 @@
           <Property Name="HelpdeskServiceCatId" Type="Int32" />
           <Property Name="HouseId" Type="Int32" />
           <Property Name="SupporterId" Type="Int32" />
-          <NavigationProperty Name="HelpdeskServiceCategory" Relationship="AMSModel.FK_HelpdeskRequest_HelpdeskServiceCategory" FromRole="HelpdeskRequest" ToRole="HelpdeskServiceCategory" />
+          <NavigationProperty Name="HelpdeskRequestCategory" Relationship="AMSModel.FK_HelpdeskRequest_HelpdeskServiceCategory" FromRole="HelpdeskRequest" ToRole="HelpdeskRequestCategory" />
           <NavigationProperty Name="User" Relationship="AMSModel.FK_HelpdeskRequest_User" FromRole="HelpdeskRequest" ToRole="User" />
-          <NavigationProperty Name="User1" Relationship="AMSModel.FK_HelpdeskRequest_User1" FromRole="HelpdeskRequest" ToRole="User" />
           <NavigationProperty Name="HelpdeskRequestLogs" Relationship="AMSModel.FK_HelpdeskRequestLog_HelpdeskReq" FromRole="HelpdeskRequest" ToRole="HelpdeskRequestLog" />
           <NavigationProperty Name="House" Relationship="AMSModel.FK_tbl_h_desk_request_tbl_house" FromRole="HelpdeskRequest" ToRole="House" />
+        </EntityType>
+        <EntityType Name="HelpdeskRequestCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="LastModified" Type="DateTime" Precision="3" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="HelpdeskRequests" Relationship="AMSModel.FK_HelpdeskRequest_HelpdeskServiceCategory" FromRole="HelpdeskRequestCategory" ToRole="HelpdeskRequest" />
         </EntityType>
         <EntityType Name="HelpdeskRequestHelpdeskSupporter">
           <Key>
@@ -1635,18 +1619,8 @@
           <Property Name="StatusTo" Type="Int32" />
           <Property Name="DeadLine" Type="DateTime" Precision="3" />
           <NavigationProperty Name="HelpdeskRequest" Relationship="AMSModel.FK_HelpdeskRequestLog_HelpdeskReq" FromRole="HelpdeskRequestLog" ToRole="HelpdeskRequest" />
-          <NavigationProperty Name="User" Relationship="AMSModel.FK_HelpdeskRequestLog_User1" FromRole="HelpdeskRequestLog" ToRole="User" />
-          <NavigationProperty Name="User1" Relationship="AMSModel.FK_HelpdeskRequestLog_User2" FromRole="HelpdeskRequestLog" ToRole="User" />
-        </EntityType>
-        <EntityType Name="HelpdeskServiceCategory">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="LastModified" Type="DateTime" Precision="3" />
-          <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="HelpdeskRequests" Relationship="AMSModel.FK_HelpdeskRequest_HelpdeskServiceCategory" FromRole="HelpdeskServiceCategory" ToRole="HelpdeskRequest" />
+          <NavigationProperty Name="User" Relationship="AMSModel.FK_HelpdeskRequestLog_User" FromRole="HelpdeskRequestLog" ToRole="User" />
+          <NavigationProperty Name="User1" Relationship="AMSModel.FK_HelpdeskRequestLog_User1" FromRole="HelpdeskRequestLog" ToRole="User" />
         </EntityType>
         <EntityType Name="House">
           <Key>
@@ -1682,6 +1656,18 @@
           <Property Name="LastModified" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Houses" Relationship="AMSModel.FK_House_HouseType" FromRole="HouseCategory" ToRole="House" />
           <NavigationProperty Name="UtilServiceForHouseCats" Relationship="AMSModel.FK_UtilServiceForHouseCat_HouseCategory" FromRole="HouseCategory" ToRole="UtilServiceForHouseCat" />
+        </EntityType>
+        <EntityType Name="Image">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="originalUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="thumbnailUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="userCropUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="createdDate" Type="DateTime" Precision="3" />
+          <Property Name="postId" Type="Int32" />
         </EntityType>
         <EntityType Name="NotificationChange">
           <Key>
@@ -1726,6 +1712,22 @@
           <Property Name="Answer5" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="BlockPolls" Relationship="AMSModel.FK_BlockSurvey_Survey" FromRole="Poll" ToRole="BlockPoll" />
           <NavigationProperty Name="UserAnswerPolls" Relationship="AMSModel.FK_UserDoServey_Survey" FromRole="Poll" ToRole="UserAnswerPoll" />
+        </EntityType>
+        <EntityType Name="Post">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="EmbedCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Disable" Type="Int32" />
+          <NavigationProperty Name="Comments" Relationship="AMSModel.FK_Comment_Post" FromRole="Post" ToRole="Comment" />
+          <NavigationProperty Name="Reports" Relationship="AMSModel.FK_Report_Post" FromRole="Post" ToRole="Report" />
+          <NavigationProperty Name="User" Relationship="AMSModel.FK_tbl_post_tbl_user" FromRole="Post" ToRole="User" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -1784,8 +1786,8 @@
           <Property Name="PostId" Type="Int32" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="ReportContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="User" Relationship="AMSModel.FK_Report_User" FromRole="Report" ToRole="User" />
           <NavigationProperty Name="Post" Relationship="AMSModel.FK_Report_Post" FromRole="Report" ToRole="Post" />
+          <NavigationProperty Name="User" Relationship="AMSModel.FK_Report_User" FromRole="Report" ToRole="User" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -1824,7 +1826,6 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Username" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="RoleId" Type="Int32" />
@@ -1844,18 +1845,17 @@
           <NavigationProperty Name="BalanceSheets" Relationship="AMSModel.FK_Transaction_User" FromRole="User" ToRole="BalanceSheet" />
           <NavigationProperty Name="Comments" Relationship="AMSModel.FK_Comment_User1" FromRole="User" ToRole="Comment" />
           <NavigationProperty Name="HelpdeskRequests" Relationship="AMSModel.FK_HelpdeskRequest_User" FromRole="User" ToRole="HelpdeskRequest" />
-          <NavigationProperty Name="HelpdeskRequests1" Relationship="AMSModel.FK_HelpdeskRequest_User1" FromRole="User" ToRole="HelpdeskRequest" />
-          <NavigationProperty Name="HelpdeskRequestLogs" Relationship="AMSModel.FK_HelpdeskRequestLog_User1" FromRole="User" ToRole="HelpdeskRequestLog" />
-          <NavigationProperty Name="HelpdeskRequestLogs1" Relationship="AMSModel.FK_HelpdeskRequestLog_User2" FromRole="User" ToRole="HelpdeskRequestLog" />
+          <NavigationProperty Name="HelpdeskRequestLogs" Relationship="AMSModel.FK_HelpdeskRequestLog_User" FromRole="User" ToRole="HelpdeskRequestLog" />
+          <NavigationProperty Name="HelpdeskRequestLogs1" Relationship="AMSModel.FK_HelpdeskRequestLog_User1" FromRole="User" ToRole="HelpdeskRequestLog" />
           <NavigationProperty Name="House" Relationship="AMSModel.FK_User_House" FromRole="User" ToRole="House" />
           <NavigationProperty Name="NotificationChanges" Relationship="AMSModel.FK_NotificationChange_User1" FromRole="User" ToRole="NotificationChange" />
           <NavigationProperty Name="NotificationObjects" Relationship="AMSModel.FK_NotificationObject_User" FromRole="User" ToRole="NotificationObject" />
+          <NavigationProperty Name="Posts" Relationship="AMSModel.FK_tbl_post_tbl_user" FromRole="User" ToRole="Post" />
           <NavigationProperty Name="Receipts" Relationship="AMSModel.FK_Receipt_User" FromRole="User" ToRole="Receipt" />
           <NavigationProperty Name="Reports" Relationship="AMSModel.FK_Report_User" FromRole="User" ToRole="Report" />
           <NavigationProperty Name="Role" Relationship="AMSModel.FK_tbl_user_tbl_role" FromRole="User" ToRole="Role" />
           <NavigationProperty Name="UserAnswerPolls" Relationship="AMSModel.FK_UserDoServey_User" FromRole="User" ToRole="UserAnswerPoll" />
           <NavigationProperty Name="UserRateAroundProviders" Relationship="AMSModel.FK_UserRateAroundProvider_User" FromRole="User" ToRole="UserRateAroundProvider" />
-          <NavigationProperty Name="Posts" Relationship="AMSModel.FK_tbl_post_tbl_user" FromRole="User" ToRole="Post" />
         </EntityType>
         <EntityType Name="UserAnswerPoll">
           <Key>
@@ -2070,6 +2070,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Comment_Post">
+          <End Type="AMSModel.Post" Role="Post" Multiplicity="0..1" />
+          <End Type="AMSModel.Comment" Role="Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="postId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Comment_User1">
           <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
           <End Type="AMSModel.Comment" Role="Comment" Multiplicity="*" />
@@ -2083,10 +2095,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_HelpdeskRequest_HelpdeskServiceCategory">
-          <End Type="AMSModel.HelpdeskServiceCategory" Role="HelpdeskServiceCategory" Multiplicity="0..1" />
+          <End Type="AMSModel.HelpdeskRequestCategory" Role="HelpdeskRequestCategory" Multiplicity="0..1" />
           <End Type="AMSModel.HelpdeskRequest" Role="HelpdeskRequest" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="HelpdeskServiceCategory">
+            <Principal Role="HelpdeskRequestCategory">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="HelpdeskRequest">
@@ -2095,18 +2107,6 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_HelpdeskRequest_User">
-          <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
-          <End Type="AMSModel.HelpdeskRequest" Role="HelpdeskRequest" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="HelpdeskRequest">
-              <PropertyRef Name="SupporterId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_HelpdeskRequest_User1">
           <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
           <End Type="AMSModel.HelpdeskRequest" Role="HelpdeskRequest" Multiplicity="*" />
           <ReferentialConstraint>
@@ -2142,6 +2142,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_HelpdeskRequestLog_User">
+          <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="AMSModel.HelpdeskRequestLog" Role="HelpdeskRequestLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="HelpdeskRequestLog">
+              <PropertyRef Name="ChangeToUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_HelpdeskRequestLog_User1">
           <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
           <End Type="AMSModel.HelpdeskRequestLog" Role="HelpdeskRequestLog" Multiplicity="*" />
@@ -2151,18 +2163,6 @@
             </Principal>
             <Dependent Role="HelpdeskRequestLog">
               <PropertyRef Name="ChangeFromUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_HelpdeskRequestLog_User2">
-          <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
-          <End Type="AMSModel.HelpdeskRequestLog" Role="HelpdeskRequestLog" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="HelpdeskRequestLog">
-              <PropertyRef Name="ChangeToUserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2259,6 +2259,30 @@
             </Principal>
             <Dependent Role="UserAnswerPoll">
               <PropertyRef Name="PollId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Report_Post">
+          <End Type="AMSModel.Post" Role="Post" Multiplicity="0..1" />
+          <End Type="AMSModel.Report" Role="Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_post_tbl_user">
+          <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="AMSModel.Post" Role="Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2400,71 +2424,7 @@
           <End Type="AMSModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="AMSModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
-        <EntityType Name="Post">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CreateDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
-          <Property Name="Status" Type="Int32" />
-          <Property Name="UserId" Type="Int32" />
-          <Property Name="EmbedCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Disable" Type="Int32" />
-          <NavigationProperty Name="Comments" Relationship="AMSModel.FK_Comment_Post" FromRole="Post" ToRole="Comment" />
-          <NavigationProperty Name="Reports" Relationship="AMSModel.FK_Report_Post" FromRole="Post" ToRole="Report" />
-          <NavigationProperty Name="User" Relationship="AMSModel.FK_tbl_post_tbl_user" FromRole="Post" ToRole="User" />
-        </EntityType>
-        <Association Name="FK_Comment_Post">
-          <End Type="AMSModel.Post" Role="Post" Multiplicity="0..1" />
-          <End Type="AMSModel.Comment" Role="Comment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Post">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Comment">
-              <PropertyRef Name="postId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Report_Post">
-          <End Type="AMSModel.Post" Role="Post" Multiplicity="0..1" />
-          <End Type="AMSModel.Report" Role="Report" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Post">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Report">
-              <PropertyRef Name="PostId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tbl_post_tbl_user">
-          <End Type="AMSModel.User" Role="User" Multiplicity="0..1" />
-          <End Type="AMSModel.Post" Role="Post" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Post">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="Image">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="originalUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="thumbnailUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="userCropUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="createdDate" Type="DateTime" Precision="3" />
-          <Property Name="postId" Type="Int32" />
-        </EntityType>
-        </Schema>
+      </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -2600,8 +2560,6 @@
           <EntitySetMapping Name="Blocks">
             <EntityTypeMapping TypeName="AMSModel.Block">
               <MappingFragment StoreEntitySet="Block">
-                <ScalarProperty Name="NoRoomPerFloor" ColumnName="NoRoomPerFloor" />
-                <ScalarProperty Name="NoFloor" ColumnName="NoFloor" />
                 <ScalarProperty Name="BlockName" ColumnName="BlockName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -2646,6 +2604,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="HelpdeskRequestCategories">
+            <EntityTypeMapping TypeName="AMSModel.HelpdeskRequestCategory">
+              <MappingFragment StoreEntitySet="HelpdeskRequestCategory">
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="HelpdeskRequestHelpdeskSupporters">
             <EntityTypeMapping TypeName="AMSModel.HelpdeskRequestHelpdeskSupporter">
               <MappingFragment StoreEntitySet="HelpdeskRequestHelpdeskSupporter">
@@ -2667,16 +2635,6 @@
                 <ScalarProperty Name="ChangeToUserId" ColumnName="ChangeToUserId" />
                 <ScalarProperty Name="ChangeFromUserId" ColumnName="ChangeFromUserId" />
                 <ScalarProperty Name="HelpdeskRequestId" ColumnName="HelpdeskRequestId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="HelpdeskServiceCategories">
-            <EntityTypeMapping TypeName="AMSModel.HelpdeskServiceCategory">
-              <MappingFragment StoreEntitySet="HelpdeskServiceCategory">
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2708,6 +2666,19 @@
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Images">
+            <EntityTypeMapping TypeName="AMSModel.Image">
+              <MappingFragment StoreEntitySet="Image">
+                <ScalarProperty Name="postId" ColumnName="postId" />
+                <ScalarProperty Name="createdDate" ColumnName="createdDate" />
+                <ScalarProperty Name="userCropUrl" ColumnName="userCropUrl" />
+                <ScalarProperty Name="thumbnailUrl" ColumnName="thumbnailUrl" />
+                <ScalarProperty Name="url" ColumnName="url" />
+                <ScalarProperty Name="originalUrl" ColumnName="originalUrl" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2748,6 +2719,20 @@
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Posts">
+            <EntityTypeMapping TypeName="AMSModel.Post">
+              <MappingFragment StoreEntitySet="Post">
+                <ScalarProperty Name="Disable" ColumnName="Disable" />
+                <ScalarProperty Name="EmbedCode" ColumnName="EmbedCode" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2858,7 +2843,6 @@
                 <ScalarProperty Name="RoleId" ColumnName="RoleId" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2940,33 +2924,6 @@
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
-          <EntitySetMapping Name="Posts">
-            <EntityTypeMapping TypeName="AMSModel.Post">
-              <MappingFragment StoreEntitySet="Post">
-                <ScalarProperty Name="Disable" ColumnName="Disable" />
-                <ScalarProperty Name="EmbedCode" ColumnName="EmbedCode" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="Body" ColumnName="Body" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Images">
-            <EntityTypeMapping TypeName="AMSModel.Image">
-              <MappingFragment StoreEntitySet="Image">
-                <ScalarProperty Name="postId" ColumnName="postId" />
-                <ScalarProperty Name="createdDate" ColumnName="createdDate" />
-                <ScalarProperty Name="userCropUrl" ColumnName="userCropUrl" />
-                <ScalarProperty Name="thumbnailUrl" ColumnName="thumbnailUrl" />
-                <ScalarProperty Name="url" ColumnName="url" />
-                <ScalarProperty Name="originalUrl" ColumnName="originalUrl" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

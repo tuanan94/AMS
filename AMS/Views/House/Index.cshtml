@@ -198,7 +198,7 @@
     @*    </div>*@
     <div style="margin-top: -120px; text-align: center; position: relative; display: inline-block;margin-left: 25px;">
         <div class="border-img" style="width: 190px; height: 190px; background: #fff; float: left; border: 2px solid #fff;">
-            <img src="@(curHouse.ProfileImage == null || curHouse.ProfileImage.Equals("") ? "/Content/images/home_default.jpg" : curHouse.ProfileImage)" style="width: auto; height: 100%;">
+            <img src="@(curHouse.ProfileImage == null || curHouse.ProfileImage.Equals("") ? "/Content/images/home_default.jpg" : curHouse.ProfileImage)" onerror="this.src = '/Content/images/home_default.jpg';" style="width: auto; height: 100%;">
         </div>
 
         <div style="font-size: 26px; /* added *//* added */float: left;">
@@ -262,7 +262,7 @@
                         Bạn có thật sự muốn xóa bài viết này?
                     </h4>
                 </div>
-                <input id="confirmDeletePostId" hidden="hidden" value=""/>
+                <input id="confirmDeletePostId" hidden="hidden" value="" />
 
             </div>
             <div class="modal-footer" style="margin-top: 0;">
@@ -395,7 +395,7 @@
         });
     });
 
-    function loadAllPost(idToken,houseId) {
+    function loadAllPost(idToken, houseId) {
         $.ajax({
             url: "/Post/getPost",
             type: "GET",
@@ -548,96 +548,96 @@
                 + '</div>'
                 + '</li>'
             );
-            loadMoreText(postObject['Id']);
-        }
+        loadMoreText(postObject['Id']);
+    }
 
-        //    function addCommentToCommentArea(postId, comment) {
-        //        $("#commentsArea" + postId).append('<li>'
-        //            + '<div class="media">'
-        //                + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)"  class="pull-left link-cursor">'
-        //                    + '<img  src="' + comment['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avartar-img link-cursor">'
-        //                + '</a>'
-        //                    + '<div class="media-body">'
-        //                        + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)" class="comment-author link-cursor">' + comment['fullName'] + ': </a>'
-        //                        + '<span>' + comment['detail'] + '</span>'
-        //                        + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
-        //                    + '</div>'
-        //            + '</div>'
-        //        + '</li>');
-        //
-        //    }
+    //    function addCommentToCommentArea(postId, comment) {
+    //        $("#commentsArea" + postId).append('<li>'
+    //            + '<div class="media">'
+    //                + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)"  class="pull-left link-cursor">'
+    //                    + '<img  src="' + comment['userProfile'] + '" onerror="this.src=\'/Content/Images/defaultProfile.png\';" class="media-object avartar-img link-cursor">'
+    //                + '</a>'
+    //                    + '<div class="media-body">'
+    //                        + '<a onclick ="LoadUserProfile(' + comment["userId"] + ',true)" class="comment-author link-cursor">' + comment['fullName'] + ': </a>'
+    //                        + '<span>' + comment['detail'] + '</span>'
+    //                        + '<div class="comment-date">' + timeSince(comment['createdDate']) + ' trước </div>'
+    //                    + '</div>'
+    //            + '</div>'
+    //        + '</li>');
+    //
+    //    }
 
-        function getImagesForPost(index, id) {
-            appenImageToPost(index, id);
-        }
-        function addImageToPost(imageUrl, postId, width) {
-            $("#imagesPost" + postId)
-                .append('<img src="' + imageUrl + '" style="width:' + width + '%;height:auto;margin-right:5px">');
+    function getImagesForPost(index, id) {
+        appenImageToPost(index, id);
+    }
+    function addImageToPost(imageUrl, postId, width) {
+        $("#imagesPost" + postId)
+            .append('<img src="' + imageUrl + '" style="width:' + width + '%;height:auto;margin-right:5px">');
 
-        }
+    }
 
-        function addImageToPreviewList(dir, position) {
-            //        $("#previewList").prepend('<div id="previewImage' + position + '" style="height:100px;width:100px;float:left;position:relative;margin: 0px 5px;"><img onclick="removePreview(' + position + ')" src="/Content/images/delete.png" style="position:absolute;top:0px;right:0px;width:20px;height:20px"/><img src="' + dir + '" style="max-width:100%;max-height:100%"/></div>')
-            $("#previewList")
-                .prepend('<div id="previewImage' +
-                    position +
-                    '" style="height:100px;width:auto;float:left;position:relative;margin:5px;border: 1px solid #e5e5e5;"><img onclick="removePreview(' +
-                    position +
-                    ')" src="/Content/images/delete.png" style="position:absolute;top:5px;right:5px;width:20px;height:20px"/><img src="' +
-                    dir +
-                    '" class="preview-img"/></div>');
-        }
-        function removePreview(position) {
-            $('#previewImage' + position + '').hide();
-            listUploadImage[position] = "";
+    function addImageToPreviewList(dir, position) {
+        //        $("#previewList").prepend('<div id="previewImage' + position + '" style="height:100px;width:100px;float:left;position:relative;margin: 0px 5px;"><img onclick="removePreview(' + position + ')" src="/Content/images/delete.png" style="position:absolute;top:0px;right:0px;width:20px;height:20px"/><img src="' + dir + '" style="max-width:100%;max-height:100%"/></div>')
+        $("#previewList")
+            .prepend('<div id="previewImage' +
+                position +
+                '" style="height:100px;width:auto;float:left;position:relative;margin:5px;border: 1px solid #e5e5e5;"><img onclick="removePreview(' +
+                position +
+                ')" src="/Content/images/delete.png" style="position:absolute;top:5px;right:5px;width:20px;height:20px"/><img src="' +
+                dir +
+                '" class="preview-img"/></div>');
+    }
+    function removePreview(position) {
+        $('#previewImage' + position + '').hide();
+        listUploadImage[position] = "";
 
-        }
-        function reloadFeed() {
-            //clear all feed
-            $("#timeline").html("");
-            var houseId = $("#memberPanelBodyHousePage").data("houseId");
-            loadAllPost(null,houseId);
-        }
-        function clearCreatePostForm() {
-            var embedContent = "";
-            $("#previewContent").html(embedContent);
-            listUploadImage = [];
-            $("#previewList").html('');
-            $("#postContent").val('');
-        }
-        function report(id) {
-            $("#reportPostId").val(id);
-            $("#reportContent").val("");
-            $("#reportModal").modal();
-        }
-        function processSendReport() {;
-            var postId = $("#reportPostId").val();
-            var reportContent = $("#reportContent").val();
-            console.log("processSendReport: postid=" + postId + "reportContent=" + reportContent);
-            sendReport(postId, reportContent);
-        }
-        function deleteNotification(noticChangedId) {
-            console.log('deleteNotification' + noticChangedId);
-            $.ajax({
-                url: "/Home/deleteNotification",
-                type: "POST",
-                data: {
-                    data: noticChangedId,
-                    type: "@SLIM_CONFIG.NOTIC_DELETE_TYPE_CHANGEID",
-                },
-                success: function (successData) {
-                    //alert(successData);
-                    $("#notification" + noticChangedId).hide('slow', function () { $("#notification11").remove(); });
-                },
-                error: function (er) {
-                    alert(er);
-                }
+    }
+    function reloadFeed() {
+        //clear all feed
+        $("#timeline").html("");
+        var houseId = $("#memberPanelBodyHousePage").data("houseId");
+        loadAllPost(null, houseId);
+    }
+    function clearCreatePostForm() {
+        var embedContent = "";
+        $("#previewContent").html(embedContent);
+        listUploadImage = [];
+        $("#previewList").html('');
+        $("#postContent").val('');
+    }
+    function report(id) {
+        $("#reportPostId").val(id);
+        $("#reportContent").val("");
+        $("#reportModal").modal();
+    }
+    function processSendReport() {;
+        var postId = $("#reportPostId").val();
+        var reportContent = $("#reportContent").val();
+        console.log("processSendReport: postid=" + postId + "reportContent=" + reportContent);
+        sendReport(postId, reportContent);
+    }
+    function deleteNotification(noticChangedId) {
+        console.log('deleteNotification' + noticChangedId);
+        $.ajax({
+            url: "/Home/deleteNotification",
+            type: "POST",
+            data: {
+                data: noticChangedId,
+                type: "@SLIM_CONFIG.NOTIC_DELETE_TYPE_CHANGEID",
+            },
+            success: function (successData) {
+                //alert(successData);
+                $("#notification" + noticChangedId).hide('slow', function () { $("#notification11").remove(); });
+            },
+            error: function (er) {
+                alert(er);
+            }
 
-            });
-        }
+        });
+    }
 
-        function textAreaAdjust(o) {
-            o.style.height = "1px";
-            o.style.height = (25 + o.scrollHeight) + "px";
-        }
+    function textAreaAdjust(o) {
+        o.style.height = "1px";
+        o.style.height = (25 + o.scrollHeight) + "px";
+    }
 </script>

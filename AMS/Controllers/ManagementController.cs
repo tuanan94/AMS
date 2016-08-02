@@ -20,7 +20,7 @@ namespace AMS.Controllers
 {
     public class ManagementController : Controller
     {
-        HelpdeskServiceCatService _helpdeskServiceCatService = new HelpdeskServiceCatService();
+        HelpdeskRequestCatService _helpdeskServiceCatService = new HelpdeskRequestCatService();
         UserServices _userServices = new UserServices();
         AroundProviderService _aroundProviderService = new AroundProviderService();
         NotificationService notificationService = new NotificationService();
@@ -53,7 +53,7 @@ namespace AMS.Controllers
                 if (action.Equals("loadHdSrvCat"))
                 {
                     // Start load all service category
-                    List<HelpdeskServiceCategory> hdSrvCategories = _helpdeskServiceCatService.GetAll();
+                    List<HelpdeskRequestCategory> hdSrvCategories = _helpdeskServiceCatService.GetAll();
                     List<HelpdeskServiceCatModel> hdSrvCats = new List<HelpdeskServiceCatModel>();
                     HelpdeskServiceCatModel hdSrvCat = null;
                     for (var i = 0; i < hdSrvCategories.Capacity; i++)
@@ -76,7 +76,7 @@ namespace AMS.Controllers
                     try
                     {
                         int id = Int32.Parse(idStr);
-                        HelpdeskServiceCategory hdSrvCategory = _helpdeskServiceCatService.FindById(id);
+                        HelpdeskRequestCategory hdSrvCategory = _helpdeskServiceCatService.FindById(id);
                         if (null != hdSrvCategory)
                         {
                             HelpdeskServiceCatModel catModel = new HelpdeskServiceCatModel();
@@ -114,7 +114,7 @@ namespace AMS.Controllers
                 {
                     NameValueCollection nvc = this.Request.Form;
                     String name = nvc["hdSrvCatName"];
-                    HelpdeskServiceCategory hdSrvCategory = new HelpdeskServiceCategory();
+                    HelpdeskRequestCategory hdSrvCategory = new HelpdeskRequestCategory();
                     hdSrvCategory.Name = name;
                     _helpdeskServiceCatService.Add(hdSrvCategory);
                     MessageViewModels response = new MessageViewModels();
@@ -129,7 +129,7 @@ namespace AMS.Controllers
                     try
                     {
                         int id = Int32.Parse(idStr);
-                        HelpdeskServiceCategory hdSrvCategory = _helpdeskServiceCatService.FindById(id);
+                        HelpdeskRequestCategory hdSrvCategory = _helpdeskServiceCatService.FindById(id);
                         if (hdSrvCategory != null)
                         {
                             hdSrvCategory.Name = name;
@@ -161,7 +161,7 @@ namespace AMS.Controllers
                         {
                             try
                             {
-                                HelpdeskServiceCategory s = _helpdeskServiceCatService.FindById(Int32.Parse(id));
+                                HelpdeskRequestCategory s = _helpdeskServiceCatService.FindById(Int32.Parse(id));
                                 if (null != s)
                                 {
                                     _helpdeskServiceCatService.Delete(s);

@@ -47,7 +47,8 @@
             <div class="sidebar-block" style="margin: auto; width: 100%;">
                 <a href="@(curHouse == null ? "#" : ("/House/" + curHouse.Id))" style="width: 100%">
                     <div class="profile">
-                        <img src="@(curHouse == null || curHouse.ProfileImage == null || curHouse.ProfileImage.Equals("") ? "/Content/images/home_default.jpg" : curHouse.ProfileImage)" alt="HOUSE" class="img-circle" width="100px">
+                        <img src="@(curHouse == null || curHouse.ProfileImage == null || curHouse.ProfileImage.Equals("") ? "/Content/images/home_default.jpg" : curHouse.ProfileImage)"
+                             onerror="this.src = '/Content/images/home_default.jpg';" alt="HOUSE" class="img-circle" width="100px">
                         <h4>Nhà @(curHouse == null || curHouse.HouseName.Equals("") ? "chưa xác định" : curHouse.HouseName)</h4>
                     </div>
                 </a>

@@ -56,7 +56,6 @@ namespace AMS.Service
             UserProfileMapping userProfileMapping = new UserProfileMapping();
             userProfileMapping.Id = user.Id;
             userProfileMapping.DateOfBirth = user.DateOfBirth.GetValueOrDefault();
-            userProfileMapping.Email = user.Email;
             userProfileMapping.FullName = user.Fullname;
             userProfileMapping.Gender = user.Gender.GetValueOrDefault();
             userProfileMapping.ProfileImage = user.ProfileImage;

@@ -593,12 +593,13 @@ namespace AMS.Controllers
             Block block = _blockServices.FindById(blockId);
             if (null != block)
             {
-                block.NoFloor = block.Houses.Where(h => h.Status != null && h.Status == SLIM_CONFIG.HOUSE_STATUS_ENABLE).GroupBy(h => h.Floor).Count();
+                int noFloor = block.Houses.Where(h => h.Status != null && h.Status == SLIM_CONFIG.HOUSE_STATUS_ENABLE).GroupBy(h => h.Floor).Count();
                 bool canRemoveBlock = true;
                 if (block.Houses.Any(house => house.Status == SLIM_CONFIG.HOUSE_STATUS_ENABLE && house.OwnerID != null))
                 {
                     canRemoveBlock = false;
                 }
+                ViewBag.noFloor = noFloor;
                 ViewBag.block = block;
                 ViewBag.canRemoveBlock = canRemoveBlock;
             }
@@ -619,8 +620,8 @@ namespace AMS.Controllers
                     {
                         Block block = new Block();
                         block.BlockName = housesInBlock.Name;
-                        block.NoFloor = housesInBlock.NoOfFloor;
-                        block.NoFloor = housesInBlock.NoRoomPerFloor;
+//                        block.NoFloor = housesInBlock.NoOfFloor;
+//                        block.NoFloor = housesInBlock.NoRoomPerFloor;
                         _blockServices.Add(block);
 
                         if (null != housesInBlock.Houses)

@@ -127,7 +127,7 @@
                             <a class="post-heading" style="border-right: 1px solid #efefef;" onclick="addImage()">
                                 <i class="fa fa-fw fa-photo post-heading-icon"></i> Thêm hình ảnh
                             </a>
-                            <a class="post-heading" href="#postStatusArea" data-toggle="modal" data-target="#addEmbedModal">
+                            <a class="post-heading" onclick="openEmbedCodeModal()" >
                                 <i class="fa fa-fw fa-code post-heading-icon"></i> Thêm mã nhúng
                             </a>
                         </div>
@@ -170,13 +170,14 @@
                                 </div>*@
                         </div>
                         <div class="panel-footer share-buttons clearfix">
-                            <a href="#postStatusArea" style="float: right">
-                                <i class="fa fa-map-marker"></i>
-                            </a>
+                            @*                            <a href="#postStatusArea" style="float: right">*@
+                            @*                                <i class="fa fa-map-marker"></i>*@
+                            @*                            </a>*@
                             <div class="pull-right">
-                                <button id="shareButton" type="submit" class="btn btn-primary btn-xs" style="margin-top: -12px" href="#" onclick="createNewPost()">
-                                    Chia sẻ
-                                </button>
+                                @*                                <button id="shareButton" type="submit" class="btn btn-primary btn-xs" style="margin-top: -12px" href="#" onclick="createNewPost()">*@
+                                <span id="shareButton" class="btn btn-primary btn-send-cus" onclick="createNewPost()">
+                                    <i class="fa fa-fw fa-paper-plane-o" style="color: #000000 !important;"></i> Chia sẻ
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -194,7 +195,7 @@
         <div class="left-nav">
             <div id="weather" class="panel panel-default custom-panel">
                 <div class="panel-heading panel-heading-gray">
-                    <i class="fa fa-sun-o"></i> Thời tiết hiện tại
+                    <i class="fa fa-bolt"></i> Thời tiết hiện tại
                 </div>
                 <div class="weather-svg">
                     <div class="today text-center">
@@ -214,11 +215,7 @@
             <div id="notify" class="panel panel-default custom-panel">
                 <div class="panel-heading panel-heading-gray">
                     <i class="fa fa-info-circle"></i> Thông báo
-                    @{if (notificationChanges != null && notificationChanges.Where(p => p.User.Id != curUser.Id).ToList().Count != 0)
-                    {
-                        <span id="clean-noty" class="pull-right" onclick="clearAllNotify()"> Xóa tất cả</span>
-                    }
-                    }
+
                 </div>
 
                 <div class="panel-body" style="overflow-y: auto">
@@ -235,7 +232,7 @@
                             <div class="noti-element" style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
                                 <i class="fa fa-fw fa-info"></i>
                                 <a href="/Survey/doSurvey"> <strong>@nChange.User.Fullname</strong> <span>đã</span> @nChange.Verb một bình chọn mới </a>
-                                <a onclick="deleteNotification(@nChange.ID)"> <i class="fa fa-close" style="float: right"></i></a>
+                                <a onclick="deletenotification(@nChange.ID)"><i class="fa fa-close" style="float: right"></i></a>
                                 <br />
                             </div>
                         }
@@ -276,15 +273,20 @@
                             <div class="noti-element" style="margin-bottom: 10px" id="@("notification" + nChange.ID)">
                                 <i class="fa fa-fw fa-info"></i>
                                 <strong>@nChange.User.Fullname</strong> <span>đã</span> @nChange.Verb <span> @nChange.NotificationObject.TargetObject của bạn</span>
-                                <a onclick="deleteNotification(@nChange.ID)"><i class="fa fa-fw fa-close" style="float: right"></i></a>
-
+                                <a onclick="deletenotification(@nChange.ID)"><i class="fa fa-fw fa-close" style="float: right"></i></a>
                                 <br />
                             </div>
                         }
                     }
                 </div>
+                @{if (notificationChanges != null && notificationChanges.Where(p => p.User.Id != curUser.Id).ToList().Count != 0)
+                {
+                    <div id="clean-noty" class="panel-footer" style="text-align:center">
+                        <a class="weather" onclick="clearAllNotify()"> <i  class="fa fa-times"></i> Xóa tất cả</a>
+                    </div>
+                }
+                }
             </div>
-
         </div>
     </div>
 </div>
@@ -370,7 +372,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">C</h4>
+                <h4 class="modal-title">Chỉnh sửa hình ảnh</h4>
             </div>
             <div style="position: relative;padding: 20px;">
                 <div class="row">
@@ -458,7 +460,14 @@
         loadAllPost(curTokenId);
     }
     function addImage() {
-        $("#uploadEditorImage").click();
+        if (!$("#embedCode").val()) {
+            $("#uploadEditorImage").click();
+        }
+    }
+    function openEmbedCodeModal() {
+        if (listUploadImage.length === 0) {
+            $("#addEmbedModal").modal("show");
+        }
     }
     function saveEmbedCode() {
         // alert("saveEmbedCode");
@@ -473,29 +482,33 @@
                 $("#embedCode").val(getEmbedCode);
             }
         }
-        $.ajax({
-            url: "/Post/Create",
-            type: "POST",
-            datatype: 'json',
-            data: {
-                oldPostId: postId,
-                thumbnailImages: listUploadThumnailImage,
-                originImages: listOriginImage,
-                images: listUploadImage,
-                content: $("#postContent").val(),
-                embeded: $("#embedCode").val()
-            },
-            success: function (successData) {
-                if (successData == 'success') {
-                    clearCreatePostForm();
-                    reloadFeed();
+        var embedCode = $("#embedCode").val();
+        var bodyContent = $("#postContent").val();
+        if (listUploadImage.length !== 0 || bodyContent || embedCode) {
+            $.ajax({
+                url: "/Post/Create",
+                type: "POST",
+                datatype: 'json',
+                data: {
+                    oldPostId: postId,
+                    thumbnailImages: listUploadThumnailImage,
+                    originImages: listOriginImage,
+                    images: listUploadImage,
+                    content: bodyContent,
+                    embeded: embedCode
+                },
+                success: function (successData) {
+                    if (successData == 'success') {
+                        clearCreatePostForm();
+                        reloadFeed();
+                    }
+                },
+                error: function (er) {
+                    //                    alert(er);
+                    //progessBar(false);
                 }
-            },
-            error: function (er) {
-                alert(er);
-                //progessBar(false);
-            }
-        });
+            });
+        }
     }
     /*New Implement*/
     $("#uploadEditorImage").change(function () {
@@ -790,7 +803,7 @@
                 var obj = JSON.parse(successData);
                 $("#postContent").val(obj['Body']);
                 $("#postId").val(obj['Id']);
-                $("#shareButton").html("Cập nhật bài viết");
+                //                $("#shareButton").html("Cập nhật bài viết");
                 smoothScrollToTop();
             },
             error: function (er) {
@@ -887,10 +900,14 @@
     }
     function removePreview(position) {
         $('#previewImage' + position + '').hide();
-        listUploadImage[position] = "";
-        listUploadThumnailImage[position] = "";
-        listOriginImage[position] = "";
 
+//        listUploadImage[position] = "";
+//        listUploadThumnailImage[position] = "";
+//        listOriginImage[position] = "";
+
+                listUploadImage.splice(position,1);
+                listUploadThumnailImage.splice(position, 1);
+                listOriginImage.splice(position, 1);
     }
     function reloadFeed() {
         //clear all feed
@@ -906,7 +923,7 @@
         $("#previewList").html('');
         $("#postContent").val('');
         $("#postId").val('');
-        $("#shareButton").html("Chia sẻ");
+        //        $("#shareButton").html("Chia sẻ");
         $("#embedCode").val("");
         $("#uploadEditorImage").val("");
         textAreaAdjust(document.getElementById("postContent"));

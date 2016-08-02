@@ -3,6 +3,7 @@
     Block block = ViewBag.block;
     bool canRemoveBlock = ViewBag.canRemoveBlock;
     bool isManager = User.IsInRole("Manager");
+    int noFloor = ViewBag.noFloor == null ? 0 : ViewBag.noFloor;
     string buttonClass = " btn-info";
 
     if (isManager)
@@ -92,11 +93,11 @@
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">Số tầng</label>
                                         @{
-                                            if (@block.NoFloor > 0)
+                                            if (@noFloor > 0)
                                             {
                                                 <div class="col-md-7">
                                                     <div class="input-group">
-                                                        <input type="text" name="numberOfFloor" value="@block.NoFloor" class="form-control" />
+                                                        <input type="text" name="numberOfFloor" value="@noFloor" class="form-control" />
                                                         <span class="input-group-addon" onclick="showPopupEditFloorName()"><i class="fa fa-pencil"></i></span>
                                                     </div>
                                                 </div>
@@ -104,7 +105,7 @@
                                             else
                                             {
                                                 <div class="col-md-7">
-                                                    <input type="text" name="numberOfFloor" value="@block.NoFloor" class="form-control" />
+                                                    <input type="text" name="numberOfFloor" value="@noFloor" class="form-control" />
                                                 </div>
                                             }
                                         }
@@ -233,7 +234,6 @@
                             <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
                             <span id="addHouseSuccessMsg">Tạo mới căn hộ thành công</span>
                         </div>
-
                         <div class="alert alert-danger" id="addHouseFailedNoti" style="display: none">
                             <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
                             <span id="addHouseFailedMsg">Tạo mới căn hộ thất bại</span>

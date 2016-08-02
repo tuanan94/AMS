@@ -15,6 +15,13 @@
     <div class="panel panel-default">
         <div class="row">
             <div class="col-md-12">
+                <ol class="breadcrumb">
+                    <li><a href="/Home/AroundService/All">Dịch vu xung quanh</a></li>
+                    <li><a href="/Home/AroundService/All?catId=@curProvider.AroundProviderCategoryId">@curProvider.AroundProviderCategory.Name</a></li>
+                    <li class="active"><a href="/Home/AroundService/SingleProviderDetail?id=@curProvider.Id">@curProvider.Name</a></li>
+                </ol>
+            </div>
+            <div class="col-md-12">
                 <div class="col-md-8 page-title" id="left" data-user-id="@User.Identity.GetUserId()" data-prov-id="@curProvider.Id"
                      data-cur-user-rate="@curUserRate" data-rate-count="@rateCount" data-rate-point="@ratePoint">
 
@@ -41,25 +48,34 @@
                 </div>
                 <div class="col-md-4" style="margin-top: 2%">
                     <div class="col-md-12">
-                        <img style="width: 100%;" class="border-img" src="@curProvider.ImageUrl" />
+                        <div class="single-project">
+                            <section>
+                                <div class="project-preview" style="overflow: hidden; border-bottom: 2px solid #ccc;">
+                                    <img style="width: 100%;" src="@curProvider.ImageUrl"/>
+                                </div>
+
+                                <div class="project-link" style="z-index: 3; font-size: 16px;">
+                                    @{
+                                        if (curUserRate == -1)
+                                        {
+                                            <div id="rateMessage"><i style="color: #aaa" class="fa fa-check-circle"></i> <span style="font-weight: bold;"> Chưa Đánh Giá</span></div>
+                                        }
+                                        else
+                                        {
+                                            <div id="rateMessage">
+                                                <i style="color: #25ad9f" class="fa fa-check-circle"></i> <span style="font-weight: bold;"> Đã Đánh Giá</span>
+                                            </div>
+                                        }
+                                    }
+                                    <div id="userRate"></div>
+                                </div>
+                            </section>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="col-md-offset-8 col-md-4">
-                        <div class="pull-right" style="text-align: center;font-size: 20px;">
-                            @{
-                                if (curUserRate == -1)
-                                {
-                                    <div id="rateMessage"><i style="color: #aaa" class="fa fa-check-circle"></i> <span> Chưa Đánh Giá</span></div>
-                                }
-                                else
-                                {
-                                    <div id="rateMessage">
-                                        <i style="color: #25ad9f" class="fa fa-check-circle"></i>  <span> Đã Đánh Giá</span>
-                                    </div>
-                                }
-                            }
-                            <div id="userRate"></div>
+                        <div class="pull-right" style="text-align: center;">
                         </div>
                     </div>
                 </div>
@@ -82,18 +98,21 @@
                                 foreach (var product in products)
                                 {
                                     <li class="provider-product">
-                                        <div class="col-md-12 ar-product">
-                                            @*                                            <img style="width: 100%;padding: 10px" src="@product.ImgUrl" />*@
-                                            <img width="100%" class="img-border" style="border-color:#78909C " src="@product.ImgUrl" />
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="desc">
-                                                <div class="left-text">
-                                                    <h5>
-                                                        <a href="#">@product.Name</a>
-                                                    </h5>
+                                        <div class="row product-info">
+                                            <div class="product-img">
+                                                <img src="@product.ImgUrl"/>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="desc">
+                                                    <div class="left-text truncate" style="float: left; width: 100%; text-align: left; margin-top: 3px;">
+                                                        <strong style="font-size: 18px; text-transform: capitalize;">
+                                                            @product.Name
+                                                        </strong>
+                                                    </div>
+                                                    <div style="float: right; width: 100%; font-size: 15px; color: #4b4f56; text-align: right; font-weight: bold;" class="price">
+                                                        @product.Price.Value.ToString("N0") <small>đ</small>
+                                                    </div>
                                                 </div>
-                                                <span class="price">@product.Price.Value.ToString("N0") <small>đ</small></span>
                                             </div>
                                         </div>
                                     </li>
@@ -111,8 +130,8 @@
                 </div>
                 <div style="height: 300px; width: 100%;" id="map"><!--map-canvas will be postioned here--></div>
             </div>
-            <input type="hidden" id="lat" value="@curProvider.Latitude" />
-            <input type="hidden" id="lng" value="@curProvider.Longitude" />
+            <input type="hidden" id="lat" value="@curProvider.Latitude"/>
+            <input type="hidden" id="lng" value="@curProvider.Longitude"/>
         </div>
     </div>
 </div>

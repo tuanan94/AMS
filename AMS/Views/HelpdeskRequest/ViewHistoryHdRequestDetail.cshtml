@@ -93,7 +93,7 @@
                                         {
                                             @*                                <span class="btn btn-info" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Processing), @User.Identity.GetUserId())">Bắt đầu công việc</span>*@
                                         }
-                                        else if (hd.Status == (int)StatusEnum.Processing && (roleId == SLIM_CONFIG.USER_ROLE_SUPPORTER || roleId == SLIM_CONFIG.USER_ROLE_MANAGER) && hd.User1 != null)
+                                        else if (hd.Status == (int)StatusEnum.Processing && (roleId == SLIM_CONFIG.USER_ROLE_SUPPORTER || roleId == SLIM_CONFIG.USER_ROLE_MANAGER) && hd.User != null)
                                         {
                                             <span class="btn btn-success" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Done), @User.Identity.GetUserId())"> Hoàn thành</span>
                                         }
@@ -207,13 +207,13 @@
                                         <div class="col-md-8">
                                             @{
                                                 string assignee = "";
-                                                if (hd.User1 == null)
+                                                if (hd.User == null)
                                                 {
                                                     assignee = "Đang chờ giao việc";
                                                 }
                                                 else
                                                 {
-                                                    assignee = hd.User1.Fullname;
+                                                    assignee = hd.User.Fullname;
                                                 }
                                                 <input id="HdReqSupporter" name="HdReqSupporter" class="form-control" value="@assignee" />
                                             }
@@ -454,7 +454,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Chia công việc</h4>
+                <h4 class="modal-title">Giao việc</h4>
             </div>
             <form id="assignTaskForm" class="form-horizontal" method="POST" action="/Home/HelpdeskRequest/AssignTask" role="form">
                 <div class="modal-body">

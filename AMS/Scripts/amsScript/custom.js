@@ -356,7 +356,7 @@ $.extend(true, $.fn.dataTable.defaults, {
 
 function setNavPosition() {
     var path = location.pathname;
-    if (path === "/" || path.indexOf("/House/") > -1) {
+    if (path === "/" || path.indexOf("/House/") > -1 || path.indexOf("/Home/") > -1|| path.indexOf("/Home/Index") > -1) {
         $('.left-nav').each(function () {
             $(this).css(
             {
