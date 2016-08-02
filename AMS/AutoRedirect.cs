@@ -27,7 +27,7 @@ namespace AMS
             string alert = "";
             foreach (var item in listSurveys)
             {
-                if (DateTime.Now >= item.PublishDate && item.Priority == 1)
+                if (DateTime.Now >= item.PublishDate && item.Priority == 1 && DateTime.Now <= item.EndDate)
                 {
                    // User currentUser = userServices.FindById(int.Parse(User.Identity.GetUserId()));
                     listUserAnswer = (userAnswerService.GetListUserAnswerPollsByPollId(item.Id));
@@ -56,8 +56,12 @@ namespace AMS
                                 }
 
                             }
-                            if ((k != 1 && p == 1 && item.Status == 1) || (k != 1 && p == 0 && item.Status == 1))
+                            if ((k != 1 && p == 1 && item.Status == 1) )
                             //if (k != 1)
+                            {
+                                alert = "Bạn Có Một Survey Cần phải Làm!";
+                            }
+                            else if (k != 1 && listBlockPolls.Count == 0 && item.Status == 1)
                             {
                                 alert = "Bạn Có Một Survey Cần phải Làm!";
                             }
@@ -83,6 +87,10 @@ namespace AMS
                             {
                                 alert = "Bạn Có Một Survey Cần phải Làm!";
                             }
+                            else if (k != 1 && listBlockPolls.Count == 0 && item.Status == 1)
+                            {
+                                alert = "Bạn Có Một Survey Cần phải Làm!";
+                            }
                         }
                         else if ((item.Mode == 3 && currentUser.RoleId == 4 && item.Status == 1) || (item.Mode == 3 && currentUser.RoleId == 3 && item.Status == 1))
                         {
@@ -102,6 +110,10 @@ namespace AMS
                             }
                             if (k != 1 && p == 1 && item.Status == 1)
                             // if (k != 1)
+                            {
+                                alert = "Bạn Có Một Survey Cần phải Làm!";
+                            }
+                            else if (k != 1 && listBlockPolls.Count == 0 && item.Status == 1)
                             {
                                 alert = "Bạn Có Một Survey Cần phải Làm!";
                             }
