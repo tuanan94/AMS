@@ -48,6 +48,15 @@
 /// <reference path="amsscript/jquery.mousewheel.min.js" />
 /// <reference path="amsscript/jquery.raty.js" />
 /// <reference path="amsscript/cropper.min.js" />
+/// <reference path="intro/lightbox.min.js" />
+/// <reference path="intro/main.js" />
+/// <reference path="intro/mousescroll.js" />
+/// <reference path="intro/respond.min.js" />
+/// <reference path="intro/smoothscroll.js" />
+/// <reference path="intro/wow.min.js" />
+/// <reference path="intro/html5shiv.js" />
+/// <reference path="intro/jquery.countto.js" />
+/// <reference path="intro/jquery.inview.min.js" />
 
 
 

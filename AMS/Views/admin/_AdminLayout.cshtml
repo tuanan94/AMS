@@ -7,9 +7,9 @@
     UserService userService = new UserService();
     String profileImg = "/Content/images/defaultProfile.png";
     string userId = User.Identity.GetUserId();
+    User curUser = userService.findById(Int32.Parse(User.Identity.GetUserId()));
     if (userId != null)
     {
-        User curUser = userService.findById(Int32.Parse(userId));
         if (curUser != null && curUser.ProfileImage != null && !curUser.ProfileImage.Equals(""))
         {
             profileImg = curUser.ProfileImage;
@@ -44,7 +44,7 @@
                 <ul class="nav navbar-nav navbar-nav-admin">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle user truncate" data-toggle="dropdown">
-                            <img onerror="this.onerror = null; this.src = '/Content/images/defaultProfile.png'; " src="@profileImg" class="img-circle" width="40"> @currentUser.GetUserName() <span class="caret"></span>
+                            <img onerror="this.onerror = null; this.src = '/Content/images/defaultProfile.png'; " src="@profileImg" class="img-circle" width="40"> @(curUser == null ? "" : curUser.Fullname) <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li>
@@ -79,9 +79,9 @@
         <div id="content" style="margin-left: 0">
             @RenderBody()
             <!--Footer-->
-            <div class="footer" style="left: 0px">
-                Social Network Template © Copyright Notice
-            </div>
+@*            <div class="footer" style="left: 0px">*@
+@*                Social Network Template © Copyright Notice*@
+@*            </div>*@
         </div>
 
         <hr />

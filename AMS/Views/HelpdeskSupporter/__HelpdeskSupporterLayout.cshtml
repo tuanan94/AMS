@@ -2,7 +2,6 @@
 @using Microsoft.AspNet.Identity;
 @{
     Layout = null;
-    var currentUser = User.Identity;
     String url = HttpContext.Current.Request.Url.AbsolutePath;
     UserService userService = new UserService();
     String profileImg = "/Content/images/defaultProfile.png";
@@ -62,9 +61,9 @@
     <div id="content" style="margin-left: 0; position: relative">
         @RenderBody()
         <!--Footer-->
-        <div class="footer" style="left: 0px">
+        @*<div class="footer" style="left: 0px">
             Social Network Template © Copyright Notice
-        </div>
+        </div>*@
     </div>
 
 

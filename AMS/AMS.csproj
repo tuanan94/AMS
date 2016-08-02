@@ -275,6 +275,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HouseController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
+    <Compile Include="Controllers\IntroController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ManagementController.cs" />
     <Compile Include="Controllers\ManageUserController.cs" />
@@ -481,6 +482,18 @@
     <Content Include="Content\css\default.css" />
     <Content Include="Content\css\default.min.css" />
     <Content Include="Content\css\FamilyTree.css" />
+    <Content Include="Content\css\intro\animate.min.css" />
+    <Content Include="Content\css\intro\bootstrap.min.css" />
+    <Content Include="Content\css\intro\font-awesome.min.css" />
+    <Content Include="Content\css\intro\lightbox.css" />
+    <Content Include="Content\css\intro\main.css" />
+    <Content Include="Content\css\intro\presets\preset1.css" />
+    <Content Include="Content\css\intro\presets\preset2.css" />
+    <Content Include="Content\css\intro\presets\preset3.css" />
+    <Content Include="Content\css\intro\presets\preset4.css" />
+    <Content Include="Content\css\intro\presets\preset5.css" />
+    <Content Include="Content\css\intro\presets\preset6.css" />
+    <Content Include="Content\css\intro\responsive.css" />
     <Content Include="Content\css\jquery-ui.min.css" />
     <Content Include="Content\css\jquery.datetimepicker.css" />
     <Content Include="Content\css\jquery.raty.css" />
@@ -501,6 +514,30 @@
     <Content Include="Content\images\cancel-on.png" />
     <Content Include="Content\images\defaultPhoto.png" />
     <Content Include="Content\images\defaultProfile.png" />
+    <Content Include="Content\images\demos\about-bg.jpg" />
+    <Content Include="Content\images\demos\blog\1.jpg" />
+    <Content Include="Content\images\demos\blog\2.jpg" />
+    <Content Include="Content\images\demos\blog\3.jpg" />
+    <Content Include="Content\images\demos\contact-bg.jpg" />
+    <Content Include="Content\images\demos\favicon.ico" />
+    <Content Include="Content\images\demos\features-bg.jpg" />
+    <Content Include="Content\images\demos\logo.png" />
+    <Content Include="Content\images\demos\portfolio\1.jpg" />
+    <Content Include="Content\images\demos\portfolio\2.jpg" />
+    <Content Include="Content\images\demos\portfolio\3.jpg" />
+    <Content Include="Content\images\demos\portfolio\4.jpg" />
+    <Content Include="Content\images\demos\portfolio\5.jpg" />
+    <Content Include="Content\images\demos\portfolio\6.jpg" />
+    <Content Include="Content\images\demos\portfolio\7.jpg" />
+    <Content Include="Content\images\demos\portfolio\8.jpg" />
+    <Content Include="Content\images\demos\portfolio\portfolio-details.jpg" />
+    <Content Include="Content\images\demos\slider\1.jpg" />
+    <Content Include="Content\images\demos\slider\2.jpg" />
+    <Content Include="Content\images\demos\slider\3.jpg" />
+    <Content Include="Content\images\demos\team\1.jpg" />
+    <Content Include="Content\images\demos\team\2.jpg" />
+    <Content Include="Content\images\demos\team\3.jpg" />
+    <Content Include="Content\images\demos\team\4.jpg" />
     <Content Include="Content\images\error_no_house.png" />
     <Content Include="Content\images\familycover.jpg" />
     <Content Include="Content\images\defaultPro.png" />
@@ -664,6 +701,15 @@
     <Content Include="Content\fonts\picto-foundry-weather.ttf" />
     <Content Include="Content\fonts\picto-foundry-weather.woff" />
     <Content Include="ClassDiagram1.cd" />
+    <Content Include="Scripts\intro\html5shiv.js" />
+    <Content Include="Scripts\intro\jquery.countTo.js" />
+    <Content Include="Scripts\intro\jquery.inview.min.js" />
+    <Content Include="Scripts\intro\lightbox.min.js" />
+    <Content Include="Scripts\intro\main.js" />
+    <Content Include="Scripts\intro\mousescroll.js" />
+    <Content Include="Scripts\intro\respond.min.js" />
+    <Content Include="Scripts\intro\smoothscroll.js" />
+    <Content Include="Scripts\intro\wow.min.js" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -819,6 +865,7 @@
     <Content Include="Views\House\NotDisplay.cshtml" />
     <Content Include="Views\Post\ViewSinglePost.cshtml" />
     <Content Include="Views\Post\ErrorMsg.cshtml" />
+    <Content Include="Views\Intro\Index.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
