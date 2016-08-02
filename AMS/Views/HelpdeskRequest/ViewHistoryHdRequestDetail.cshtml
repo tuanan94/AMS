@@ -294,7 +294,7 @@
                                                 @{foreach (var log in helpdeskRequestLogs)
                                                 {
                                                     <tr>
-                                                        <td>@log.User.Fullname </td>
+                                                        <td>@log.User1.Fullname </td>
                                                         @{
                                                     if (log.StatusFrom == (int)StatusEnum.Open && log.StatusTo == (int)StatusEnum.Open)
                                                     {
@@ -303,13 +303,13 @@
                                                     else if (log.StatusFrom == (int)StatusEnum.AssignTask)
                                                     {
                                                         <td>
-                                                            Chuyển việc cho: [<strong> @log.User1.Fullname </strong>]
+                                                            Chuyển việc cho: [<strong> @log.User.Fullname </strong>]
                                                         </td>
                                                     }
                                                     else if (log.StatusFrom == (int)StatusEnum.Open && log.StatusFrom == (int)StatusEnum.Processing)
                                                     {
                                                         <td>
-                                                            Việc được giao cho: [<strong> @log.User1.Fullname </strong>]
+                                                            Việc được giao cho: [<strong> @log.User.Fullname </strong>]
                                                         </td>
                                                     }
                                                     else if (log.StatusFrom == (int)StatusEnum.ChangeDueDate)
