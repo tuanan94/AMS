@@ -761,12 +761,32 @@ namespace AMS.Controllers
                 {
                     List<int> list4 = listEditBlock.Except(listLoad).ToList();
                     // number of check more than before, 
-                    BlockPoll BlockPoll = new BlockPoll();
-                    foreach (var obj1 in list4)
+                    List<int> list5 = listEditBlock.Intersect(listLoad).ToList();
+                    if (list5.Count == 0)
                     {
-                        BlockPoll.BlockId = obj1;
-                        BlockPoll.PollId = model.Id;
-                        BlockPollService.AddBlockPoll(BlockPoll);
+                        // uncheck A, check B
+                        foreach (var object1 in listLoad)
+                        {
+                            BlockPoll BlockPoll = BlockPollService.FIndBlockPollByBlockIdPollId(object1, model.Id);
+                            BlockPollService.DeleteBlockPoll(BlockPoll);
+                        }
+                        foreach (var obj1 in listEditBlock)
+                        {
+                            BlockPoll blockPoll = new BlockPoll();
+                            blockPoll.BlockId = obj1;
+                            blockPoll.PollId = model.Id;
+                            BlockPollService.AddBlockPoll(blockPoll);
+                        }
+                    }
+                    else if (list5.Count != 0)
+                    {
+                        foreach (var obj1 in list4)
+                        {
+                            BlockPoll blockPoll = new BlockPoll();
+                            blockPoll.BlockId = obj1;
+                            blockPoll.PollId = model.Id;
+                            BlockPollService.AddBlockPoll(blockPoll);
+                        }
                     }
 
                 }
