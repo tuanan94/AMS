@@ -620,7 +620,7 @@ namespace AMS.Controllers
                         User u = _userServices.FindById(resId);
                         if (u.RoleId == SLIM_CONFIG.USER_ROLE_SUPPORTER)
                         {
-                            if (u.HelpdeskRequests1.Any(r => r.Status == (int)StatusEnum.Processing))
+                            if (u.HelpdeskRequests.Any(r => r.Status == (int)StatusEnum.Processing))
                             {
                                 response.StatusCode = 2;
                                 response.Data = u.Fullname;
@@ -644,7 +644,7 @@ namespace AMS.Controllers
                         {
                             if (u.RoleId == SLIM_CONFIG.USER_ROLE_SUPPORTER)// double check
                             {
-                                if (u.HelpdeskRequests1.Any(r => r.Status == (int)StatusEnum.Processing))
+                                if (u.HelpdeskRequests.Any(r => r.Status == (int)StatusEnum.Processing))
                                 {
                                     response.StatusCode = 2;
                                     response.Data = u.Fullname;

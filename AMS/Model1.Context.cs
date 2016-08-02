@@ -39,14 +39,16 @@ namespace AMS
         public virtual DbSet<BlockPoll> BlockPolls { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<HelpdeskRequest> HelpdeskRequests { get; set; }
+        public virtual DbSet<HelpdeskRequestCategory> HelpdeskRequestCategories { get; set; }
         public virtual DbSet<HelpdeskRequestHelpdeskSupporter> HelpdeskRequestHelpdeskSupporters { get; set; }
         public virtual DbSet<HelpdeskRequestLog> HelpdeskRequestLogs { get; set; }
-        public virtual DbSet<HelpdeskServiceCategory> HelpdeskServiceCategories { get; set; }
         public virtual DbSet<House> Houses { get; set; }
         public virtual DbSet<HouseCategory> HouseCategories { get; set; }
+        public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<NotificationChange> NotificationChanges { get; set; }
         public virtual DbSet<NotificationObject> NotificationObjects { get; set; }
         public virtual DbSet<Poll> Polls { get; set; }
+        public virtual DbSet<Post> Posts { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Receipt> Receipts { get; set; }
         public virtual DbSet<ReceiptDetail> ReceiptDetails { get; set; }
@@ -61,7 +63,5 @@ namespace AMS
         public virtual DbSet<UtilityServiceRangePrice> UtilityServiceRangePrices { get; set; }
         public virtual DbSet<UtilServiceCategory> UtilServiceCategories { get; set; }
         public virtual DbSet<UtilServiceForHouseCat> UtilServiceForHouseCats { get; set; }
-        public virtual DbSet<Post> Posts { get; set; }
-        public virtual DbSet<Image> Images { get; set; }
     }
 }

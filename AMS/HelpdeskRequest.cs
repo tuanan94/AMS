@@ -34,9 +34,8 @@ namespace AMS
         public Nullable<int> HouseId { get; set; }
         public Nullable<int> SupporterId { get; set; }
     
-        public virtual HelpdeskServiceCategory HelpdeskServiceCategory { get; set; }
+        public virtual HelpdeskRequestCategory HelpdeskRequestCategory { get; set; }
         public virtual User User { get; set; }
-        public virtual User User1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HelpdeskRequestLog> HelpdeskRequestLogs { get; set; }
         public virtual House House { get; set; }

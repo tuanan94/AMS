@@ -16,7 +16,7 @@ namespace AMS.Controllers
 {
     public class HelpdeskRequestController : Controller
     {
-        HelpdeskServiceCatService _helpdeskServiceCat = new HelpdeskServiceCatService();
+        HelpdeskRequestCatService _helpdeskServiceCat = new HelpdeskRequestCatService();
         UserServices _userServices = new UserServices();
         HelpdeskRequestServices _hdReqServices = new HelpdeskRequestServices();
         HelpdeskRequestLogServices _helpdeskRequestLogServices = new HelpdeskRequestLogServices();
@@ -27,7 +27,7 @@ namespace AMS.Controllers
         public ActionResult CreateNewHdRequest()
         {
 
-            List<HelpdeskServiceCategory> hdSrvCats = _helpdeskServiceCat.GetAll();
+            List<HelpdeskRequestCategory> hdSrvCats = _helpdeskServiceCat.GetAll();
             ViewBag.hdSrvCats = hdSrvCats;
             return View("CreateHdRequest");
         }
@@ -40,7 +40,7 @@ namespace AMS.Controllers
             try
             {
                 User u = _userServices.FindById(request.HdReqUserId);
-                HelpdeskServiceCategory hdServiceCat = _helpdeskServiceCat.FindById(request.HdServiceCatId);
+                HelpdeskRequestCategory hdServiceCat = _helpdeskServiceCat.FindById(request.HdServiceCatId);
                 if (u != null && hdServiceCat != null)
                 {
                     HelpdeskRequest hdRequest = new HelpdeskRequest();
@@ -88,7 +88,7 @@ namespace AMS.Controllers
                 HelpdeskRequest hdRequest = _hdReqServices.FindById(request.HdReqId);
                 if (u != null && hdRequest != null)
                 {
-                    HelpdeskServiceCategory hdServiceCat = _helpdeskServiceCat.FindById(request.HdServiceCatId);
+                    HelpdeskRequestCategory hdServiceCat = _helpdeskServiceCat.FindById(request.HdServiceCatId);
                     hdRequest.HelpdeskServiceCatId = hdServiceCat.Id;
                     hdRequest.Title = request.HdReqTitle;
                     hdRequest.Description = request.HdReqUserDesc;
@@ -248,13 +248,13 @@ namespace AMS.Controllers
                                     row.HdReqDeadline = req.DueDate.Value.ToString(AmsConstants.DateTimeFormat);
                                     row.HdReqDeadlineLong = req.DueDate.Value.Ticks;
                                 }
-                                row.HdReqSrvCatName = req.HelpdeskServiceCategory.Name;
+                                row.HdReqSrvCatName = req.HelpdeskRequestCategory.Name;
                                 row.HdReqHouse = req.House.HouseName;
                                 row.HdReqStatus = req.Status.Value;
 
-                                if (req.User1 != null)
+                                if (req.User != null)
                                 {
-                                    row.HdReqSupporter = req.User1.Fullname;
+                                    row.HdReqSupporter = req.User.Fullname;
                                 }
                                 else
                                 {
@@ -559,7 +559,7 @@ namespace AMS.Controllers
                 HdReqDetailInfo hdReqDetailInfo = new HdReqDetailInfo();
                 hdReqDetailInfo.SelectedHdSrvCatId = hdRequest.HelpdeskServiceCatId.Value;
 
-                List<HelpdeskServiceCategory> hdSrvCats = _helpdeskServiceCat.GetAll();
+                List<HelpdeskRequestCategory> hdSrvCats = _helpdeskServiceCat.GetAll();
 
                 List<HelpdeskServiceCatModel> hdSrvCatModels = new List<HelpdeskServiceCatModel>();
                 HelpdeskServiceCatModel hdSrvCatModel = null;
@@ -571,7 +571,7 @@ namespace AMS.Controllers
                     hdSrvCatModels.Add(hdSrvCatModel);
                 }
 
-                List<HelpdeskServiceCategory> hdServices = _helpdeskServiceCat.GetAll();
+                List<HelpdeskRequestCategory> hdServices = _helpdeskServiceCat.GetAll();
                 List<HelpdeskServiceModel> hdReqModels = new List<HelpdeskServiceModel>();
                 HelpdeskServiceModel hdSrvModel = null;
                 foreach (var hdSrv in hdServices)
