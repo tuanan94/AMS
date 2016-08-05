@@ -25,7 +25,6 @@ namespace AMS
         public string Description { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> CloseDate { get; set; }
-        public Nullable<System.DateTime> AssignDate { get; set; }
         public Nullable<System.DateTime> ModifyDate { get; set; }
         public Nullable<System.DateTime> DueDate { get; set; }
         public Nullable<System.DateTime> DoneDate { get; set; }

@@ -131,7 +131,6 @@
           <Property Name="TotalExpenseInCash" Type="float" />
           <Property Name="RedundancyStartMonth" Type="float" />
           <Property Name="RedundancyEndMonth" Type="float" />
-          <Property Name="PreviousBlsId" Type="int" />
         </EntityType>
         <EntityType Name="Block">
           <Key>
@@ -168,7 +167,6 @@
           <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="CloseDate" Type="datetime" />
-          <Property Name="AssignDate" Type="datetime" />
           <Property Name="ModifyDate" Type="datetime" />
           <Property Name="DueDate" Type="datetime" />
           <Property Name="DoneDate" Type="datetime" />
@@ -1527,7 +1525,6 @@
           <Property Name="TotalExpenseInCash" Type="Double" />
           <Property Name="RedundancyStartMonth" Type="Double" />
           <Property Name="RedundancyEndMonth" Type="Double" />
-          <Property Name="PreviousBlsId" Type="Int32" />
           <NavigationProperty Name="Receipts" Relationship="AMSModel.FK_Receipt_BalanceSheet" FromRole="BalanceSheet" ToRole="Receipt" />
           <NavigationProperty Name="Transactions" Relationship="AMSModel.FK_Transaction_BalanceSheet" FromRole="BalanceSheet" ToRole="Transaction" />
           <NavigationProperty Name="User" Relationship="AMSModel.FK_Transaction_User" FromRole="BalanceSheet" ToRole="User" />
@@ -1573,7 +1570,6 @@
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="CloseDate" Type="DateTime" Precision="3" />
-          <Property Name="AssignDate" Type="DateTime" Precision="3" />
           <Property Name="ModifyDate" Type="DateTime" Precision="3" />
           <Property Name="DueDate" Type="DateTime" Precision="3" />
           <Property Name="DoneDate" Type="DateTime" Precision="3" />
@@ -2424,7 +2420,7 @@
           <End Type="AMSModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="AMSModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -2538,7 +2534,6 @@
           <EntitySetMapping Name="BalanceSheets">
             <EntityTypeMapping TypeName="AMSModel.BalanceSheet">
               <MappingFragment StoreEntitySet="BalanceSheet">
-                <ScalarProperty Name="PreviousBlsId" ColumnName="PreviousBlsId" />
                 <ScalarProperty Name="RedundancyEndMonth" ColumnName="RedundancyEndMonth" />
                 <ScalarProperty Name="RedundancyStartMonth" ColumnName="RedundancyStartMonth" />
                 <ScalarProperty Name="TotalExpenseInCash" ColumnName="TotalExpenseInCash" />
@@ -2595,7 +2590,6 @@
                 <ScalarProperty Name="DoneDate" ColumnName="DoneDate" />
                 <ScalarProperty Name="DueDate" ColumnName="DueDate" />
                 <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
-                <ScalarProperty Name="AssignDate" ColumnName="AssignDate" />
                 <ScalarProperty Name="CloseDate" ColumnName="CloseDate" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Description" ColumnName="Description" />

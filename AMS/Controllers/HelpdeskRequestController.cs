@@ -425,7 +425,6 @@ namespace AMS.Controllers
 
                         if (hdRequest.Status == (int)StatusEnum.Open)
                         {
-                            hdRequest.AssignDate = DateTime.Now;
                             hdRequest.Status = (int)StatusEnum.Processing;
 
                             hdRequestLog.StatusFrom = (int)StatusEnum.Open;

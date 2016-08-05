@@ -20,7 +20,6 @@ namespace AMS.ViewModel
         public string CloseDate { get; set; }
         public string DueDate { get; set; }
         public long DueDateLOng { get; set; }
-        public string AssignDate { get; set; }
         public int Status { get; set; }
         public double Price { get; set; }
         public string HelpdeskServiceCatName{ get; set; }

@@ -36,7 +36,6 @@ namespace AMS
         public Nullable<double> TotalExpenseInCash { get; set; }
         public Nullable<double> RedundancyStartMonth { get; set; }
         public Nullable<double> RedundancyEndMonth { get; set; }
-        public Nullable<int> PreviousBlsId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Receipt> Receipts { get; set; }
