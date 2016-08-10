@@ -45,7 +45,7 @@ namespace AMS.Controllers
                 {
                     HelpdeskRequest hdRequest = new HelpdeskRequest();
 
-                    hdRequest.HelpdeskServiceCatId = request.HdServiceCatId;
+                    hdRequest.HelpdeskRequestCatId = request.HdServiceCatId;
                     hdRequest.HouseId = u.HouseId;//AnTT them vao cho nay 27-5-2016
                     hdRequest.CreateDate = DateTime.Now;
                     hdRequest.Description = request.HdReqUserDesc;
@@ -56,7 +56,7 @@ namespace AMS.Controllers
                     int id = _hdReqServices.Add(hdRequest);
                     HelpdeskRequestLog log = new HelpdeskRequestLog();
                     log.ChangeFromUserId = u.Id;
-                    log.ChangeToUserId = u.Id;
+                    log.AssignToUserId = u.Id;
                     log.HelpdeskRequestId = id;
                     log.StatusFrom = (int)StatusEnum.Open;
                     log.StatusTo = (int)StatusEnum.Open;
@@ -89,7 +89,7 @@ namespace AMS.Controllers
                 if (u != null && hdRequest != null)
                 {
                     HelpdeskRequestCategory hdServiceCat = _helpdeskServiceCat.FindById(request.HdServiceCatId);
-                    hdRequest.HelpdeskServiceCatId = hdServiceCat.Id;
+                    hdRequest.HelpdeskRequestCatId = hdServiceCat.Id;
                     hdRequest.Title = request.HdReqTitle;
                     hdRequest.Description = request.HdReqUserDesc;
                     hdRequest.ModifyDate = DateTime.Now;
@@ -432,7 +432,7 @@ namespace AMS.Controllers
 
                             hdRequestLog.ChangeFromUserId = fromUser.Id;
                             hdRequestLog.HelpdeskRequestId = hdRequest.Id;
-                            hdRequestLog.ChangeToUserId = toUser.Id;
+                            hdRequestLog.AssignToUserId = toUser.Id;
 
                             hdRequestLog.CreateDate = DateTime.Now;
                             _helpdeskRequestLogServices.Add(hdRequestLog);
@@ -446,7 +446,7 @@ namespace AMS.Controllers
 
                         hdRequestLog.ChangeFromUserId = fromUser.Id;
                         hdRequestLog.HelpdeskRequestId = hdRequest.Id;
-                        hdRequestLog.ChangeToUserId = toUser.Id;
+                        hdRequestLog.AssignToUserId = toUser.Id;
 
                         hdRequestLog.CreateDate = DateTime.Now;
                         _helpdeskRequestLogServices.Add(hdRequestLog);
@@ -524,7 +524,7 @@ namespace AMS.Controllers
                         hdRequestLog.StatusTo = (int)StatusEnum.ChangeDueDate;
                         hdRequestLog.ChangeFromUserId = fromUser.Id;
                         hdRequestLog.HelpdeskRequestId = hdRequest.Id;
-                        hdRequestLog.ChangeToUserId = fromUser.Id;
+                        hdRequestLog.AssignToUserId = fromUser.Id;
                         hdRequestLog.DeadLine = DateTime.Parse(hdReqChngStatus.DueDate);
                         hdRequestLog.CreateDate = DateTime.Now;
 
@@ -556,7 +556,7 @@ namespace AMS.Controllers
             if (null != hdRequest)
             {
                 HdReqDetailInfo hdReqDetailInfo = new HdReqDetailInfo();
-                hdReqDetailInfo.SelectedHdSrvCatId = hdRequest.HelpdeskServiceCatId.Value;
+                hdReqDetailInfo.SelectedHdSrvCatId = hdRequest.HelpdeskRequestCatId.Value;
 
                 List<HelpdeskRequestCategory> hdSrvCats = _helpdeskServiceCat.GetAll();
 

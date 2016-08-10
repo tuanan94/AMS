@@ -1389,6 +1389,10 @@ function timeSince(dateString) {
                     } else {
                         interval = seconds;
                         intervalType = " giây";
+                        if (interval < 60) {
+                            interval = "vài giây";
+                            intervalType = "";
+                        }
                     }
                 }
             }

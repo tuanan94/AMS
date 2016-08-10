@@ -241,7 +241,7 @@
                             HelpdeskRequestLog hdRequestLog = helpdeskRequestLogService.findById(nChange.NotificationObject.TargetObjectID.Value);
                             if (null != hdRequestLog)
                             {
-                                User changeToUser = userServices.FindById(hdRequestLog.ChangeToUserId.HasValue ? hdRequestLog.ChangeToUserId.Value : -1);
+                                User changeToUser = userServices.FindById(hdRequestLog.AssignToUserId.HasValue ? hdRequestLog.AssignToUserId.Value : -1);
                                 if (hdRequestLog != null && changeToUser != null)
                                 {
                                     <div class="noti-element" style="margin-bottom: 10px" id="@("notification" + nChange.ID)">

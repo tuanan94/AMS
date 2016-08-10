@@ -99,13 +99,13 @@ namespace AMS.Service
         }
         public Block FindByName(string name)
         {
-            var block = _blockRepository.List.Where(b => b.BlockName.Equals("Employee")).ToList();
+            var block = _blockRepository.List.Where(b => b.BlockName.Equals(name)).ToList();
             return block.Any() ? block.First() : null;
         }
 
         public List<Block> GetAllBlocks()
         {
-            return _blockRepository.List.OrderBy(b => b.BlockName).ToList();
+            return _blockRepository.List.Where(b=> b.BlockName != null && !b.BlockName.Equals(SLIM_CONFIG.EMPLOYEE_BLOCK_HOUSE_NAME)).OrderBy(b => b.BlockName).ToList();
         }
         public bool CheckBlockNameIsExisted(int blockId, string name)
         {

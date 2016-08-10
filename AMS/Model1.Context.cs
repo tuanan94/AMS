@@ -41,7 +41,6 @@ namespace AMS
         public virtual DbSet<HelpdeskRequest> HelpdeskRequests { get; set; }
         public virtual DbSet<HelpdeskRequestCategory> HelpdeskRequestCategories { get; set; }
         public virtual DbSet<HelpdeskRequestHelpdeskSupporter> HelpdeskRequestHelpdeskSupporters { get; set; }
-        public virtual DbSet<HelpdeskRequestLog> HelpdeskRequestLogs { get; set; }
         public virtual DbSet<House> Houses { get; set; }
         public virtual DbSet<HouseCategory> HouseCategories { get; set; }
         public virtual DbSet<Image> Images { get; set; }
@@ -63,5 +62,6 @@ namespace AMS
         public virtual DbSet<UtilityServiceRangePrice> UtilityServiceRangePrices { get; set; }
         public virtual DbSet<UtilServiceCategory> UtilServiceCategories { get; set; }
         public virtual DbSet<UtilServiceForHouseCat> UtilServiceForHouseCats { get; set; }
+        public virtual DbSet<HelpdeskRequestLog> HelpdeskRequestLogs { get; set; }
     }
 }

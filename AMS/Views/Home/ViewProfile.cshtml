@@ -41,7 +41,7 @@
                             <input type="text" disabled="disabled" class="form-control" id="username" value="@user.Username">
                         </div>
                         <div class="col-md-3" style=" height: 34px;">
-                            <a onclick="showChangePassModal('@User.Identity.GetUserId()')" style="position: absolute;bottom: 0;left: 0;"> Đổi mật khẩu</a>
+                            <a class="cursor-pointer" onclick="showChangePassModal('@User.Identity.GetUserId()')" style="position: absolute;bottom: 0;left: 0;"> Đổi mật khẩu</a>
                         </div>
                     </div>
                     <div class="form-group">
@@ -200,7 +200,6 @@
     var oldProfileImage = "@user.ProfileImage";
     var profileImage = "@user.ProfileImage";
     function saveProfileImage() {
-        alert(profileImage);
         updateProfile(profileImage);
     }
 

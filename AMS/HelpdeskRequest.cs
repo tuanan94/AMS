@@ -29,14 +29,14 @@ namespace AMS
         public Nullable<System.DateTime> DueDate { get; set; }
         public Nullable<System.DateTime> DoneDate { get; set; }
         public Nullable<int> Status { get; set; }
-        public Nullable<int> HelpdeskServiceCatId { get; set; }
+        public Nullable<int> HelpdeskRequestCatId { get; set; }
         public Nullable<int> HouseId { get; set; }
         public Nullable<int> SupporterId { get; set; }
     
         public virtual HelpdeskRequestCategory HelpdeskRequestCategory { get; set; }
         public virtual User User { get; set; }
+        public virtual House House { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HelpdeskRequestLog> HelpdeskRequestLogs { get; set; }
-        public virtual House House { get; set; }
     }
 }
