@@ -88,7 +88,7 @@
                 <div class="tab-content">
                     <div class="tab-pane fade active in" id="">
 
-                        @using (Html.BeginForm("Surveys", "Survey", FormMethod.Post, new { @class = "form-horizontal" }))
+                        @using (Html.BeginForm("Surveys", "Survey", FormMethod.Post, new { @class = "form-horizontal", @onsubmit = "return mySubmitFunction()" }))
                         {
                             <div class="form-group" id="form">
 
@@ -416,35 +416,32 @@
         //onChangeDateTime: logic,
         //onShow: logic
     });
-    $(function () {
-        $("#StartDate").datepicker({
-            format: "yyyy/mm/dd",
-            startDate: "-3d",
-            onSelect: function (selected) {
-                $("#EndDate").datepicker("option", "minDate", selected)
-            }
-        });
+  
+    //$(document).ready(function () {
 
-        //$("#StartDate").attr('readOnly', 'false');
-    });
-    //$(function () {
-    //    $("#PublishDate").datetimepicker({
-    //        format: "yyyy/mm/dd",
-    //        startDate: "-3d"
-    //    });
-    //    //$("#PublishDate").attr('readOnly', 'false');
-    //});
-    //$(function () {
-    //    $("#EndDate").datepicker({
-    //        format: "yyyy/mm/dd",
-    //        startDate: "-3d",
-    //        onSelect: function (selected) {
-    //            $("#StartDate").datepicker("option", "maxDate", selected)
+    //    $("#PublishDate").datepicker({
+    //        dateFormat: "dd-M-yy",
+    //        minDate: 0,
+    //        onSelect: function (date) {
+    //            var dt2 = $('#EndDate');
+    //            var startDate = $(this).datepicker('getDate');
+    //            var minDate = $(this).datepicker('getDate');
+    //            dt2.datepicker('setDate', minDate);
+    //            startDate.setDate(startDate.getDate() + 30);
+    //            //sets dt2 maxDate to the last day of 30 days window
+    //            dt2.datepicker('option', 'maxDate', startDate);
+    //            dt2.datepicker('option', 'minDate', minDate);
+    //            $(this).datepicker('option', 'minDate', minDate);
     //        }
     //    });
-
+    //    $('#EndDate').datepicker({
+    //        dateFormat: "dd-M-yy"
+    //    });
     //});
-
+    function mySubmitFunction() {
+        bInfos()
+        return false;
+    }
     function bInfos() {
 
         b = document.getElementById('EndDate').value;

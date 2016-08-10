@@ -113,17 +113,17 @@
                                                     <td>
 
                                                         @{
-                                                if (@item.EndDate >= DateTime.Now || @item.Status == 1)
+                                                if (@item.EndDate >= DateTime.Now && item.Status ==1)
                                                 {
                                                     <span class="label" style="background-color: #3366ff; font-size: 14px; color: white">Đang mở</span>
 
                                                 }
-                                                else if (@item.Status == 0)
+                                                else if (@item.EndDate < DateTime.Now )
                                                 {
                                                     <span class="label" style="background-color: #ff9999; font-size: 14px; color: white;">Đã kết thúc</span>
 
                                                 }
-                                                else
+                                                else if( @item.Status == 0)
                                                 {
                                                     <span class="label" style="background-color: #ff9999; font-size: 14px; color: white;">Đã kết thúc</span>
 
