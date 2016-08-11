@@ -14,8 +14,6 @@ namespace AMS
         List<UserAnswerPoll> listUserAnswer = new List<UserAnswerPoll>();
 
         HouseServices houseServices = new HouseServices();
-        QuestionService questionService = new QuestionService();
-        AnswerService answerService = new AnswerService();
         BlockPollService BlockPollService = new BlockPollService();
         PollService surveyService = new PollService();
         UserAnswerService userAnswerService = new UserAnswerService();

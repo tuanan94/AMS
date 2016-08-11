@@ -37,7 +37,7 @@ namespace AMS.Models
         public string ForMonth { get; set; }
         public string HouseName { get; set; }
         public int Status { get; set; }
-        public int IsAutomation { get; set; }
+        public int IsBatch { get; set; }
     }
     public class OrderItemModel
     {

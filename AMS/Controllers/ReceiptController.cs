@@ -454,13 +454,13 @@ namespace AMS.Controllers
                         if (r.PublishDate != null && r.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED &&
                             DateTime.Today.Date >= r.PublishDate)
                         {
-                            if (r.IsAutomation == SLIM_CONFIG.RECEIPT_TYPE_MANUAL)
+                            if (r.IsBatch == SLIM_CONFIG.RECEIPT_TYPE_MANUAL)
                             {
                                 r.Status = SLIM_CONFIG.RECEIPT_STATUS_UNPAID;
                                 r.LastModified = DateTime.Now;
                                 _receiptServices.Update(r);
                             }
-                            else if (r.IsAutomation == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION)
+                            else if (r.IsBatch == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION)
                             {
                                 List<Receipt> groupedByCreateDateReceipts =
                                     _receiptServices.GetReceiptsByCreateDate(r.CreateDate.Value);
@@ -479,9 +479,9 @@ namespace AMS.Controllers
                         model.CreateDate = r.CreateDate.Value.ToString(AmsConstants.DateTimeFormat);
                         model.CreateDateLong = r.CreateDate.Value.Ticks;
                         model.Status = r.Status.Value;
-                        model.IsAutomation = r.IsAutomation.Value;
+                        model.IsBatch= r.IsBatch.Value;
 
-                        if (model.IsAutomation == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION)
+                        if (model.IsBatch == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION)
                         {
                             if (r.Status.Value != SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
                             {
@@ -963,7 +963,7 @@ namespace AMS.Controllers
                     return Json(response);
                 }
 
-                if (blSheet.Receipts.Any(r => r.IsAutomation == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION))
+                if (blSheet.Receipts.Any(r => r.IsBatch == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION))
                 {
                     response.StatusCode = 2;
                     response.Msg = "Hóa đơn hàng loạt tháng này đã được tạo";
@@ -978,7 +978,7 @@ namespace AMS.Controllers
                 receipt.Description = automationReceipt.Description;
                 receipt.Status = SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED;
                 receipt.Title = automationReceipt.Title;
-                receipt.IsAutomation = SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION;
+                receipt.IsBatch = SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION;
                 receipt.Type = SLIM_CONFIG.TRANSACTION_TYPE_INCOME;
                 receipt.BlsId = blSheet.Id;
                 receipt.ManagerId = u.Id;
@@ -1517,7 +1517,7 @@ namespace AMS.Controllers
                         eReceipt.ManagerId = u.Id;
                         eReceipt.Description = receipt.ReceiptDesc;
                         eReceipt.Title = receipt.ReceiptTitle;
-                        eReceipt.IsAutomation = SLIM_CONFIG.RECEIPT_TYPE_MANUAL;
+                        eReceipt.IsBatch = SLIM_CONFIG.RECEIPT_TYPE_MANUAL;
                         eReceipt.BlsId = blSheet.Id;
 
                         if (receipt.Mode == SLIM_CONFIG.RECEIPT_ADD_MODE_SAVE_PUBLISH)

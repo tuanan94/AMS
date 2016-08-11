@@ -35,8 +35,8 @@ namespace AMS
     
         public virtual HelpdeskRequestCategory HelpdeskRequestCategory { get; set; }
         public virtual User User { get; set; }
-        public virtual House House { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HelpdeskRequestLog> HelpdeskRequestLogs { get; set; }
+        public virtual House House { get; set; }
     }
 }

@@ -229,7 +229,7 @@ namespace AMS.Controllers
                         {
                             List<ReceiptDetail> receiptDetails = utilService.ReceiptDetails.Where(
                                 rd => rd.Receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED &&
-                                    rd.Receipt.IsAutomation == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION).ToList();
+                                    rd.Receipt.IsBatch == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION).ToList();
                             foreach (var rd in receiptDetails)
                             {
                                 ReceiptDetail receiptDetail = _receiptDetailServices.FindById(rd.Id);
@@ -394,7 +394,7 @@ namespace AMS.Controllers
                 {
                     List<ReceiptDetail> receiptDetails = fixedCost.ReceiptDetails.Where(
                         rd => rd.Receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED &&
-                            rd.Receipt.IsAutomation == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION).ToList();
+                            rd.Receipt.IsBatch == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION).ToList();
                     foreach (var rd in receiptDetails)
                     {
                         ReceiptDetail receiptDetail = _receiptDetailServices.FindById(rd.Id);
@@ -475,7 +475,7 @@ namespace AMS.Controllers
                             /*Update if exist order that applied this util service*/
                             receiptDetails = curUtilSrv.UtilityService.ReceiptDetails.Where(
                                 rd => rd.Receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED &&
-                                    rd.Receipt.IsAutomation == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION).ToList();
+                                    rd.Receipt.IsBatch == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION).ToList();
                             foreach (var rd in receiptDetails)
                             {
                                 ReceiptDetail receiptDetail = _receiptDetailServices.FindById(rd.Id);
@@ -534,7 +534,7 @@ namespace AMS.Controllers
 
                                 receiptDetails = curentSrv.UtilityService.ReceiptDetails.Where(
                                     rd => rd.Receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED &&
-                                    rd.Receipt.IsAutomation == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION).ToList();
+                                    rd.Receipt.IsBatch == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION).ToList();
                                 foreach (var rd in receiptDetails)
                                 {
                                     ReceiptDetail receiptDetail = _receiptDetailServices.FindById(rd.Id);
@@ -1184,7 +1184,7 @@ namespace AMS.Controllers
                     }
                     rangePrice.Price = rp.Price;
                     rangePrice.ServiceId = utilServiceId;
-                    rangePrice.Type = type;
+//                    rangePrice.Type = type;
                     rangePrice.CreateDate = DateTime.Now;
                     rangePrice.LastModified = DateTime.Now;
                     _rangePriceServices.Add(rangePrice);

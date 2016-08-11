@@ -18,8 +18,6 @@ namespace AMS.Controllers
         BlockService blockService = new BlockService();
         HouseServices houseServices = new HouseServices();
         PollService PollService = new PollService();
-        QuestionService questionService = new QuestionService();
-        AnswerService answerService = new AnswerService();
         UserAnswerService userAnswerService = new UserAnswerService();
         UserServices userService = new UserServices();
         BlockPollService BlockPollService = new BlockPollService();
@@ -898,7 +896,6 @@ namespace AMS.Controllers
                 }
                 Poll survey = new Poll();
              
-                Answer answer = new Answer();
                 int number = totalAnsertGroup.Count;
                 int ii = 0;
                 foreach (var content in listQuestions)

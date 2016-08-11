@@ -31,7 +31,7 @@ namespace AMS
         public Nullable<int> ManagerId { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> LastModified { get; set; }
-        public Nullable<int> IsAutomation { get; set; }
+        public Nullable<int> IsBatch { get; set; }
         public Nullable<int> BlsId { get; set; }
     
         public virtual BalanceSheet BalanceSheet { get; set; }

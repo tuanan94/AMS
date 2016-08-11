@@ -80,7 +80,7 @@
             "bInfo": false,
             "columns": [
                 { data: "ReceiptTitle" },
-                { data: "IsAutomation" },
+                { data: "IsBatch" },
                 { data: "ReceiptTitle" },
                 { data: "HouseName" },
                 { data: "TotalOrder" },
@@ -98,7 +98,7 @@
                 "targets": 1,
                 "width": "1%",
                 "className": "dt-center",
-                "data": "IsAutomation",
+                "data": "IsBatch",
                 "render": function (data, type, full, meta) {
                     if (type === "display" || type === "filter") {
                         if (data === window.StatusAutomationReceipt) {
@@ -119,7 +119,7 @@
                 "data": "HouseName",
                 "render": function (data, type, full, meta) {
                     if (type === "display" || type === "filter") {
-                        if (full.IsAutomation !== window.StatusAutomationReceipt) {
+                        if (full.IsBatch !== window.StatusAutomationReceipt) {
 //                            return "<span class='label date-color' style='margin-right: 5px'>" + full.Block + "</span>" +
 //                                "<span class='label time-color' style='margin-right: 5px'>" + full.Floor + "</span>" +
 //                                "<span class='label room-color' >" + full.HouseName + "</span>";
@@ -136,7 +136,7 @@
                 "width": "10%",
                 "render": function (data, type, full, meta) {
                     if (type === "display" || type === "filter") {
-                        if (full.IsAutomation !== window.StatusAutomationReceipt) {
+                        if (full.IsBatch !== window.StatusAutomationReceipt) {
                             return numberWithCommas(data);
                         }
                         return "";
@@ -183,12 +183,12 @@
                 "render": function (data, type, full) {
                     if (type === "display" || type === "filter") {
                         if (data !== null && data !== undefined) {
-                            if (full.IsAutomation === window.StatusAutomationReceipt) {
-                                return "<div style='text-align:right'><span onclick='editOrderDetail(\"" + full.CreateDateLong + "\",\"" + full.IsAutomation + "\",\"" + fromUserId + "\")' class='btn btn-default btn-xs lbl-margin-right'>" +
+                            if (full.IsBatch === window.StatusAutomationReceipt) {
+                                return "<div style='text-align:right'><span onclick='editOrderDetail(\"" + full.CreateDateLong + "\",\"" + full.IsBatch + "\",\"" + fromUserId + "\")' class='btn btn-default btn-xs lbl-margin-right'>" +
                                 "<i class='fa fa-pencil'></i>" +
                                 "</span> </div>";
                             }
-                            return "<div style='text-align:right'><span onclick='editOrderDetail(\"" + data + "\",\"" + full.IsAutomation + "\",\"" + fromUserId + "\")' class='btn btn-default btn-xs lbl-margin-right'>" +
+                            return "<div style='text-align:right'><span onclick='editOrderDetail(\"" + data + "\",\"" + full.IsBatch + "\",\"" + fromUserId + "\")' class='btn btn-default btn-xs lbl-margin-right'>" +
                                 "<i class='fa fa-pencil'></i>" +
                                 "</span> </div>";
                         }
@@ -200,8 +200,8 @@
         });
         generateTableIndex(dataTable5);
     });
-    function editOrderDetail(receiptId, isAutomation, userId) {
-        if (parseInt(isAutomation, 10) === window.StatusAutomationReceipt) {
+    function editOrderDetail(receiptId, isBatch, userId) {
+        if (parseInt(isBatch, 10) === window.StatusAutomationReceipt) {
             location.href = "/Management/ManageReceipt/ViewBatchReceipt?receiptId=" + receiptId;
         } else {
             location.href = "/Management/ManageReceipt/Edit/Detail?userId=" + userId + "&orderId=" + receiptId;

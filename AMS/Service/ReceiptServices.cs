@@ -133,7 +133,7 @@ namespace AMS.Service
         public List<Receipt> GetBatchReceiptByMonth(DateTime month)
         {
             return _receiptRepository.List.Where(r => r.PublishDate.Value.Date == month.Date.Date
-                && r.PublishDate.Value.Month == month.Date.Month && r.IsAutomation == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION).ToList();
+                && r.PublishDate.Value.Month == month.Date.Month && r.IsBatch == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION).ToList();
         }
 
         public List<Receipt> GetAllReceipts()
@@ -171,7 +171,7 @@ namespace AMS.Service
         public Receipt GetLastAutomationReceiptOfHouse(int houseId)
         {
             List<Receipt> listReceipt = _receiptRepository.List.Where(
-                r => r.HouseId == houseId && r.IsAutomation == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION
+                r => r.HouseId == houseId && r.IsBatch == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION
                      && r.ReceiptDetails.Where(rd => rd.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
                          .Count() != 0).OrderByDescending(r => r.PublishDate).ToList();
             return listReceipt.Count == 0 ? null : listReceipt.First();

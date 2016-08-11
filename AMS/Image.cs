@@ -21,5 +21,7 @@ namespace AMS
         public string userCropUrl { get; set; }
         public Nullable<System.DateTime> createdDate { get; set; }
         public Nullable<int> postId { get; set; }
+    
+        public virtual Post Post { get; set; }
     }
 }

@@ -31,6 +31,7 @@ namespace AMS
         public string ImageUrl { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> LastModified { get; set; }
+        public Nullable<int> Status { get; set; }
         public string Longitude { get; set; }
         public string Latitude { get; set; }
     
