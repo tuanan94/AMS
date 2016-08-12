@@ -466,6 +466,7 @@
     <Content Include="Content\css\custom.css" />
     <Content Include="Content\css\dataTables.bootstrap.min.css" />
     <Content Include="Content\css\datatables.css" />
+    <Content Include="Content\css\datepicker.min.css" />
     <Content Include="Content\css\default-nav-inverse.css" />
     <Content Include="Content\css\default-nav-inverse.min.css" />
     <Content Include="Content\css\default.css" />
@@ -615,6 +616,8 @@
     <Content Include="Scripts\amsScript\SocialMediaCustom.js" />
     <Content Include="Scripts\amsScript\vendor.js" />
     <Content Include="Scripts\amsScript\vendor.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker.min.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\bootstrap-switch.js" />
     <Content Include="Scripts\aroundProvider\jquery.mixitup.js" />
     <Content Include="Scripts\aroundProvider\map.js" />
@@ -690,6 +693,7 @@
     <Content Include="Content\fonts\picto-foundry-weather.ttf" />
     <Content Include="Content\fonts\picto-foundry-weather.woff" />
     <Content Include="ClassDiagram1.cd" />
+    <Content Include="Scripts\en-gb.js" />
     <Content Include="Scripts\intro\html5shiv.js" />
     <Content Include="Scripts\intro\jquery.countTo.js" />
     <Content Include="Scripts\intro\jquery.inview.min.js" />
@@ -699,6 +703,7 @@
     <Content Include="Scripts\intro\respond.min.js" />
     <Content Include="Scripts\intro\smoothscroll.js" />
     <Content Include="Scripts\intro\wow.min.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
