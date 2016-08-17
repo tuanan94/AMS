@@ -480,7 +480,12 @@ ul.timeline-list li.media > .media-body {
 .loading-img {
     background-image: url('../images/loading.gif');
 }
-
+.loading-family {
+    background-image: url('../images/loading.gif');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 50px;
+}
 .img-border {
     border: 2px solid #fff;
     border-radius: 4px;

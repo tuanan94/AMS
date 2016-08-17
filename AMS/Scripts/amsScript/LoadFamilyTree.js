@@ -160,7 +160,8 @@ function loadAllMemberForSettingPage(houseid, selectorStr) {
             for (var i = 0; i < familyLevel.length; i++) {
                 addUserToFamilyTreeNew(familyLevel[i], USERS);
             }
-            $("#memberPanelBodySetting").removeClass("hide");
+            $("#memberPanelBodySetting > .row").removeClass("hide");
+            $("#memberPanelBodySetting").removeClass("loading-family");
         },
         error: function (er) {
             alert(er);

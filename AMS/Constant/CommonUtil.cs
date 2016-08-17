@@ -46,10 +46,10 @@ namespace AMS.Constant
                 messContent
                 );
             
-            Console.WriteLine(message.Status);
-            Console.WriteLine(message.Sid);
-            Console.Write("Press any key to continue.");
-            Console.ReadKey();
+//            Console.WriteLine(message.Status);
+//            Console.WriteLine(message.Sid);
+//            Console.Write("Press any key to continue.");
+//            Console.ReadKey();
         }
 
         /*http://stackoverflow.com/questions/6501797/resize-image-proportionally-with-maxheight-and-maxwidth-constraints*/

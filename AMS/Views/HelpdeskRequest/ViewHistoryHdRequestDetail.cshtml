@@ -70,7 +70,7 @@
                     if (roleId == SLIM_CONFIG.USER_ROLE_MANAGER)
                     {
                         <li>
-                            <a href="/Management/ResidentApprovement"><i class="fa fa-group"></i> Yêu cầu thành viên</a>
+                            <a href="/Management/ResidentApprovement"><i class="fa fa-group"></i> Xác nhận cư dân</a>
                         </li>
                     }
                 }
@@ -99,7 +99,7 @@
                                         }
                                         else if (hd.Status == (int)StatusEnum.Done && (roleId == SLIM_CONFIG.USER_ROLE_RESIDENT || roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER))
                                         {
-                                            <span class="btn btn-success" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Close ), @User.Identity.GetUserId())"> Đóng</span>
+                                            <span class="btn btn-danger" onclick="changeHdReqStatus(@hd.Id, @hd.Status, @((int) StatusEnum.Close ), @User.Identity.GetUserId())"> Đóng</span>
                                         }
                                         if (hd.Status == (int)StatusEnum.Open || hd.Status == (int)StatusEnum.Processing && (roleId == SLIM_CONFIG.USER_ROLE_SUPPORTER
                                                                                                                                || roleId == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER || roleId == SLIM_CONFIG.USER_ROLE_RESIDENT))

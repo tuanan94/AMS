@@ -135,12 +135,12 @@ function appenImageToPost(index, id) {
                                 listElement = listElement +
                                     '<div  data-src="' + image.url + '" style="border:1px solid white"><img style="width:100%; height:auto" src="' +
                                     image.thumbnailurl +
-                                    '" alt="The Last of us"></div>';
+                                    '" alt=""></div>';
                             } else {
                                 listElement = listElement +
                                     '<div class="link-cursor" data-src="' + image.url + '" style="border:1px solid white" ><img style="height:100% !important; width:auto !important "src="' +
                                     image.thumbnailurl +
-                                    '" alt="The Last of us"/></div>';
+                                    '" alt=""/></div>';
                             }
                             return;
                         } else {

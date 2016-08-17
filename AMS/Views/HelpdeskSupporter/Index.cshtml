@@ -27,9 +27,10 @@
                             <th>#</th>
                             <th>Tiêu đề</th>
                             <th>Căn hộ</th>
+                            <th>Loại</th>
+                            <th>Trạng thái</th>
                             <th>Ngày tạo</th>
                             <th>Ngày hết hạn</th>
-                            <th>Trạng thái</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -38,9 +39,10 @@
                                 <th>#</th>
                                 <th>Tiêu đề</th>
                                 <th>Căn hộ</th>
+                                <th>Loại</th>
+                                <th>Trạng thái</th>
                                 <th>Ngày tạo</th>
                                 <th>Ngày hết hạn</th>
-                                <th>Trạng thái</th>
                                 <th></th>
                             </tr>
                         </tfoot>
@@ -68,6 +70,7 @@
             "columns": [
                 { data: "Title" },
                 { data: "Title" },
+                { data: "HouseName" },
                 { data: "HelpdeskServiceCatName" },
                 { data: "Status" },
                 { data: "CreateDate" },
@@ -85,7 +88,16 @@
                     "width": "25%"
                 },
                 {
-                    "targets": 3,
+                    "targets": 2,
+                    "render": function (data, type, full, meta) {
+                        if (type === "display" || type === "filter") {
+                            return "<span class='label house-color label-warning'>" + data + "</span>";
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "targets": 4,
                     "render": function (data, type, full) {
                         if (type === "display" || type === "filter") {
                             var msg = "";
@@ -115,7 +127,7 @@
                     }
                 },
                 {
-                    "targets": 4,
+                    "targets": 5,
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
                             var dateTime = data.split(" ");
@@ -126,7 +138,7 @@
                     "width": "15%"
                 },
                 {
-                    "targets": 5,
+                    "targets": 6,
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
                             if (data !== null && data !== undefined) {
@@ -140,7 +152,9 @@
                     "width": "15%"
                 },
                 {
-                    "targets": 6,
+                    "targets": 7,
+                    "searchable": false,
+                    "orderable": false,
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
                             return "<div style='text-align:right'><span class='btn btn-default btn-xs' onclick='hdReqDetail(" + data + ")'> <i class='fa fa-pencil'></i> </span></div>";
@@ -148,7 +162,7 @@
                         return data;
                     }
                 }
-            ], "order": [[4, 'desc']]
+            ], "order": [[5, 'desc']]
        });
        generateTableIndex(hdSupporterTbl);
     });

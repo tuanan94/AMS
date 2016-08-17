@@ -369,6 +369,10 @@ namespace AMS.Controllers
                         u.Creator = Int32.Parse(User.Identity.GetUserId());
                         u.RoleId = user.IsHouseOwner;
                         u.FamilyLevel = user.RelationLevel;
+                        if (user.IsHouseOwner == SLIM_CONFIG.USER_ROLE_HOUSEHOLDER)
+                        {
+                            u.FamilyLevel = 0; // At the center row in house
+                        }
                         u.Password = CommonUtil.GetUniqueKey(8);
                         u.SendPasswordTo = user.CellNumb;
                         _userServices.Add(u);
@@ -505,6 +509,7 @@ namespace AMS.Controllers
                         u.DateOfBirth = DateTime.ParseExact(user.Dob, AmsConstants.DateFormat, CultureInfo.CurrentCulture);
                         u.LastModified = DateTime.Now;
                         u.FamilyLevel = user.RelationLevel;
+
                         u.SendPasswordTo = user.CellNumb;
                         if (user.IdCreateDate != null)
                         {
@@ -532,6 +537,8 @@ namespace AMS.Controllers
                                 usr.LastModified = DateTime.Now;
                                 _userServices.Update(usr);
                             }
+
+                            u.FamilyLevel = 0;
                         }
                         _userServices.Update(u);
                     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -525,10 +526,10 @@ namespace AMS.Controllers
                         hdRequestLog.ChangeFromUserId = fromUser.Id;
                         hdRequestLog.HelpdeskRequestId = hdRequest.Id;
                         hdRequestLog.AssignToUserId = fromUser.Id;
-                        hdRequestLog.DeadLine = DateTime.Parse(hdReqChngStatus.DueDate);
+                        hdRequestLog.DeadLine = DateTime.ParseExact(hdReqChngStatus.DueDate,AmsConstants.DateTimeFormat,CultureInfo.CurrentCulture);
                         hdRequestLog.CreateDate = DateTime.Now;
 
-                        hdRequest.DueDate = DateTime.Parse(hdReqChngStatus.DueDate);
+                        hdRequest.DueDate = DateTime.ParseExact(hdReqChngStatus.DueDate, AmsConstants.DateTimeFormat, CultureInfo.CurrentCulture);
                         hdRequest.ModifyDate = DateTime.Now;
 
                         _hdReqServices.Update(hdRequest);
