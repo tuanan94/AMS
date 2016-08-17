@@ -12,11 +12,11 @@
     BlockService blockService = new BlockService();
     string alert = ViewBag.alert;
 }
-<link href="~/Content/css/jquery.datetimepicker.css" rel="stylesheet" />
-
-@*<script src="~/Scripts/exporting.js"></script>*@
-<script src="~/Scripts/highcharts.js"></script>
-<script src="~/Scripts/amsScript/canvasjs.min.js"></script>
+<link href="~/Content/css/datepicker.min.css" rel="stylesheet" />
+<script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/en-gb.js"></script>
 
 <style>
     #rcorners2 {
@@ -65,7 +65,7 @@
         }
 
     .binh {
-        border-color: #1ABC9C;
+        /*border-color: #1ABC9C;*/
         box-shadow: none;
     }
 </style>
@@ -274,8 +274,8 @@
                                         <div class="form-group">
                                             <div class="col-sm-offset-4 col-sm-8" style="margin-top: 10px">
                                                 @*<a href="@Url.Action("UpdateSurvey", "Survey", new { PollId =@surveys.Id})" class="fa fa-list-alt">Lưu..</a>*@
-                                                <button style="margin-right: 5px" type="submit" class="btn btn-primary"> <i class="fa fa-save"></i> Cập Nhật</button>
-                                                <button type="button" data-toggle="modal" data-target="#myModall" class="btn btn-primary"><i class="fa fa-bar-chart"></i> Xem Thống Kê</button>
+                                                <button style="margin-right: 5px" type="submit" class="btn btn-info"> <i class="fa fa-save"></i> Cập Nhật</button>
+                                                <button type="button" data-toggle="modal" data-target="#myModall" class="btn btn-info"><i class="fa fa-bar-chart"></i> Xem Thống Kê</button>
                                                 @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control binh", @type = "hidden", onchange = "bInfos()", @Value = Convert.ToString(string.Format("{0:yyyy/MM/dd}", DateTime.Now)) })
                                             </div>
 
@@ -371,7 +371,57 @@
     </div>
 </div>
 <script>
-    
+    jQuery(function () {
+        var startDate;
+        var d = new Date(); d.setHours(0, 0, 0, 0);
+        var open = false;
+        $("#PublishDate").datetimepicker({
+            timepicker: true,
+            closeOnDateSelect: false,
+            closeOnTimeSelect: true,
+            initTime: true,
+            minDate: d
+        });
+        $("#EndDate").datetimepicker({
+            timepicker: true,
+            closeOnDateSelect: false,
+            closeOnTimeSelect: true,
+            initTime: true,
+            minDate: d
+        });
+
+        jQuery("#PublishDate").on("dp.change", function (e) {
+            var f = new Date(e.date); var n = new Date();
+            checkDate(jQuery('#PublishDate'), f, n);
+            jQuery('#EndDate').data("DateTimePicker").setMinDate(e.date);
+        });
+        jQuery("#EndDate").on("dp.change", function (e) {
+            var f = new Date(e.date); var n = new Date();
+            checkDate(jQuery('#PublishDate'), f, n);
+            jQuery('#PublishDate').data("DateTimePicker").setMaxDate(e.date);
+        });
+
+        var checkDate = function (obj, f, n) {
+            if (f.getTime() + 60 * 1000 < n.getTime() && !open) {
+                open = true;
+                $('#message').dialog({
+                    modal: true,
+                    position: ['center', 'center'],
+                    show: 'blind',
+                    hide: 'blind',
+                    width: 400,
+                    dialogClass: 'ui-dialog-osx',
+                    buttons: {
+                        "I understand. Let me try again": function () {
+                            $(this).dialog("close");
+                            obj.data('DateTimePicker').setDate(n);
+                            open = false;
+                        }
+                    }
+                });
+            }
+        }
+    });
 
     function bInfos() {
 

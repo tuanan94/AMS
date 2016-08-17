@@ -25,7 +25,7 @@
         }
 
         .binh {
-            border-color: #1ABC9C;
+          
             box-shadow: none;
         }
         /*//import url('//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css');*/
@@ -66,8 +66,14 @@
         }
     </style>
 }
-<link href="~/Content/css/jquery.datetimepicker.css" rel="stylesheet" />
-<script src="~/Scripts/jquery.datetimepicker.full.js"></script>
+<link href="~/Content/css/datepicker.min.css" rel="stylesheet" />
+<script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Scripts/en-gb.js"></script>
+
+@*<link href="~/Content/css/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.datetimepicker.full.js"></script>*@
 <body @*onload="hide()"*@>
     <div class="col-md-12">
         <div class="panel panel-default">
@@ -340,6 +346,60 @@
     </div>
 </div>
 <script>
+    jQuery(function () {
+        var startDate;
+        var d = new Date(); d.setHours(0, 0, 0, 0);
+        var open = false;
+        $("#PublishDate").datetimepicker({
+            timepicker: true,
+            closeOnDateSelect: false,
+            closeOnTimeSelect: true,
+            initTime: true,
+            minDate: d
+        });
+        $("#EndDate").datetimepicker({
+            timepicker: true,
+            closeOnDateSelect: false,
+            closeOnTimeSelect: true,
+            initTime: true,
+            minDate: d
+        });
+
+        jQuery("#PublishDate").on("dp.change", function (e) {
+            var f = new Date(e.date); var n = new Date();
+            checkDate(jQuery('#PublishDate'), f, n);
+            jQuery('#EndDate').data("DateTimePicker").setMinDate(e.date);
+        });
+        jQuery("#EndDate").on("dp.change", function (e) {
+            var f = new Date(e.date); var n = new Date();
+            checkDate(jQuery('#PublishDate'), f, n);
+            jQuery('#PublishDate').data("DateTimePicker").setMaxDate(e.date);
+        });
+
+        var checkDate = function (obj, f, n) {
+            if (f.getTime() + 60 * 1000 < n.getTime() && !open) {
+                open = true;
+                $('#message').dialog({
+                    modal: true,
+                    position: ['center', 'center'],
+                    show: 'blind',
+                    hide: 'blind',
+                    width: 400,
+                    dialogClass: 'ui-dialog-osx',
+                    buttons: {
+                        "I understand. Let me try again": function () {
+                            $(this).dialog("close");
+                            obj.data('DateTimePicker').setDate(n);
+                            open = false;
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+
+
     $("#check").change(function () {
         if (this.value == '1') { document.getElementById('other').style.visibility = 'visible' }
         if (!document.getElementById('check').checked) {
@@ -406,16 +466,16 @@
     $("#EndDate").attr("required", true);
     //$("#idd3").attr("required", true);
     //$("#idd4").attr("required", true);
-    $("#PublishDate").datetimepicker(
-    {
-        //onChangeDateTime: logic,
-        //onShow: logic
-    });
-    $("#EndDate").datetimepicker(
-    {
-        //onChangeDateTime: logic,
-        //onShow: logic
-    });
+    //$("#PublishDate").datetimepicker(
+    //{
+    //    //onChangeDateTime: logic,
+    //    //onShow: logic
+    //});
+    //$("#EndDate").datetimepicker(
+    //{
+    //    //onChangeDateTime: logic,
+    //    //onShow: logic
+    //});
   
     //$(document).ready(function () {
 
