@@ -120,9 +120,9 @@
                 "render": function (data, type, full, meta) {
                     if (type === "display" || type === "filter") {
                         if (full.IsBatch !== window.StatusAutomationReceipt) {
-//                            return "<span class='label date-color' style='margin-right: 5px'>" + full.Block + "</span>" +
-//                                "<span class='label time-color' style='margin-right: 5px'>" + full.Floor + "</span>" +
-//                                "<span class='label room-color' >" + full.HouseName + "</span>";
+                            //                            return "<span class='label date-color' style='margin-right: 5px'>" + full.Block + "</span>" +
+                            //                                "<span class='label time-color' style='margin-right: 5px'>" + full.Floor + "</span>" +
+                            //                                "<span class='label room-color' >" + full.HouseName + "</span>";
                             return "<span class='label room-color' >" + full.HouseName + "</span>";
                         }
                         return "";
@@ -136,10 +136,11 @@
                 "width": "10%",
                 "render": function (data, type, full, meta) {
                     if (type === "display" || type === "filter") {
-                        if (full.IsBatch !== window.StatusAutomationReceipt) {
-                            return numberWithCommas(data);
-                        }
-                        return "";
+                        //                        if (full.IsBatch !== window.StatusAutomationReceipt) {
+                        //                            return numberWithCommas(data);
+                        //                        }
+                        //                        return "";
+                        return numberWithCommas(data);
                     }
                     return data;
                 }
@@ -168,8 +169,8 @@
                     if (type === "display" || type === "filter") {
                         if (data !== null && data !== undefined) {
                             var dateTime = data.split(" ");
-//                            return "<span class='label date-color label-warning'>" + dateTime[0] +
-//                                "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";
+                            //                            return "<span class='label date-color label-warning'>" + dateTime[0] +
+                            //                                "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";
                             return "<strong>" + dateTime[0] +
                                 "</strong> " + dateTime[1];
                         }

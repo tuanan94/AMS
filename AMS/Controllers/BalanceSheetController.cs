@@ -636,7 +636,7 @@ namespace AMS.Controllers
                 model.UtilSrvCatId = receiptDetail.UtilityService.UtilServiceCategory.Id;
                 model.TransDesc = currentTransaction.ReceiptDetail.Receipt.Description;
                 model.TransStartDate =
-                    currentTransaction.ReceiptDetail.Receipt.BalanceSheet.CreateDate.Value.ToString(AmsConstants.MonthYearFormat);
+                    currentTransaction.ReceiptDetail.Receipt.BalanceSheet.StartDate.Value.ToString(AmsConstants.MonthYearFormat);
                 model.TransType = currentTransaction.ReceiptDetail.Receipt.Type.Value;
 
                 model.TransTitle = receiptDetail.Receipt.Title;

@@ -51,6 +51,11 @@
                                         <span id="btnEdit" class="btn btn-default" onclick="editAutomationReceiptHeader(@receipt.CreateDate.Value.Ticks)"><i class="fa fa-edit"></i> Chỉnh sửa</span>
                                         <span id="btnPublish" class="btn btn-default" onclick="publishOrder(@receipt.CreateDate.Value.Ticks)"><i class="fa fa-paragraph"></i> Công bố</span>
                                         <span id="btnDel" class="btn btn-danger" onclick="deleteOrder(@receipt.CreateDate.Value.Ticks)"><i class="fa fa-times"></i> Xóa</span>
+                                        <span id="btnPaymentInfo" class="btn btn-info btn-stroke hide" onclick="batchReceiptPaymentInfo(@receipt.CreateDate.Value.Ticks)"><i class="fa fa-info"></i> Thông tin chi trả</span>
+                                    }
+                                    else
+                                    {
+                                        <span id="btnPaymentInfo" class="btn btn-info btn-stroke" onclick="batchReceiptPaymentInfo(@receipt.CreateDate.Value.Ticks)"><i class="fa fa-info"></i> Thông tin chi trả</span>
                                     }
                                 }
                             </div>
@@ -58,7 +63,7 @@
                         <div class="form-group">
                             <div class="col-md-6">
                                 <fieldset class="scheduler-border less-padding  border-top">
-                                    <legend class="scheduler-border bold-black" > Thông tin hóa đơn</legend>
+                                    <legend class="scheduler-border bold-black"> Thông tin hóa đơn</legend>
                                     <div class="form-group">
                                         <label for="serviceTypeName" class="col-md-2 control-label">Tiêu đề</label>
                                         <div class="col-md-10">
@@ -130,7 +135,7 @@
                                                 <table class="table v-middle table-bordered table-condensed ">
                                                     <thead>
                                                         <tr>
-                                                            <th ></th>
+                                                            <th></th>
                                                             <th style="width: 40%" class="text-capitalize">Dạng cư trú</th>
                                                             <th style="width: 60%" class="text-capitalize text-center">
                                                                 Khung giá
@@ -397,6 +402,61 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                 <button id="delBtn" type="button" class="btn btn-danger btn-ok" data-receipt-id="@receipt.CreateDate.Value.Ticks">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="paymentInfoModal" class="modal fade ams-modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Thông tin thanh toán hóa đơn</h4>
+            </div>
+            <div class="form-horizontal" role="form">
+                <div class="modal-body">
+                    <div class="panel-body">
+
+                        <div class="alert alert-info" id="" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Cập nhật thành công.</span>
+                        </div>
+                        <div class="alert alert-danger" id="" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Cập nhật thất bại.</span>
+                        </div>
+                        <div class="alert alert-danger" id="" style="display: none">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <span>Hóa đơn tháng <strong id=""></strong> đã được tạo</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentInfoTitle" class="col-md-3 control-label">Tiêu đề </label>
+                            <div class="col-md-9">
+                                <input id="paymentInfoTitle" name="Title" type="text" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentInfoTitleTotalWater" class="col-md-3 control-label">Tổng số nước</label>
+                            <div class="col-md-9">
+                                <input id="paymentInfoTitleTotalWater" name="Title" type="text" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentInfoTitleTotalWater" class="col-md-3 control-label">Đã thanh toán</label>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <input type="text" id="paymentInfoTotalPaid" class="form-control" />
+                                    <span class="input-group-addon">Tổng</span>
+                                    <input type="text" id="paymentInfoTotal" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="margin-top: 0">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
             </div>
         </div>
     </div>
@@ -863,6 +923,7 @@
                 $("#btnEdit").addClass("hide");
                 $("#btnPublish").addClass("hide");
                 $("#btnDel").addClass("hide");
+                $("#btnPaymentInfo").removeClass("hide");
             } else {
                 $("#failedPublishOrderNotify").fadeIn("fast");
             }
@@ -1092,7 +1153,10 @@
                             } else {
                                 tag = tag + "<td>" + price.ToAmount + "</td>";
                             }
-                            tag = tag + "<td>" + numberWithCommas(price.Price) + "</td>" +
+                            tag = tag +
+                                "<td>" +
+                                numberWithCommas(price.Price) +
+                                "</td>" +
                                 "</tr>";
                             bodyElement.append(tag);
                         }
@@ -1103,14 +1167,38 @@
                         var bodyElement = $("#fixedCostPriceTbl");
                         bodyElement.html("");
                         var tag = "<tr>" +
-                                "<td>" + price.Name + "</td>" +
-                                "<td>" + numberWithCommas(price.Price) + "</td>" +
+                            "<td>" +
+                            price.Name +
+                            "</td>" +
+                            "<td>" +
+                            numberWithCommas(price.Price) +
+                            "</td>" +
                             "</tr>";
                         bodyElement.append(tag);
                         $("#waterCostRow").addClass("hide");
                         $("#fixedCostRow").removeClass("hide");
                     }
                     $("#viewUtilityServiceDetailModal").modal("show");
+                }
+            }
+        });
+    }
+
+    function batchReceiptPaymentInfo(createDate) {
+        $.ajax({
+            url: "/Management/ManageReceipt/GetBatchReceiptPaymentInfo",
+            type: "GET",
+            data: {
+                createDate: createDate
+            },
+            success: function (data) {
+                if (data.StatusCode === 0) {
+                    var dataObj = data.Data;
+                    $("#paymentInfoTitle").val($("#receiptTitle").val());
+                    $("#paymentInfoTitleTotalWater").val(dataObj.TotalWater);
+                    $("#paymentInfoTotalPaid").val(numberWithCommas(dataObj.TotalPaid));
+                    $("#paymentInfoTotal").val(numberWithCommas(dataObj.Total));
+                    $("#paymentInfoModal").modal("show");
                 }
             }
         });

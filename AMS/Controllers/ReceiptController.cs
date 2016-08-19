@@ -479,12 +479,14 @@ namespace AMS.Controllers
                         model.CreateDate = r.CreateDate.Value.ToString(AmsConstants.DateTimeFormat);
                         model.CreateDateLong = r.CreateDate.Value.Ticks;
                         model.Status = r.Status.Value;
-                        model.IsBatch= r.IsBatch.Value;
+                        model.IsBatch = r.IsBatch.Value;
 
                         if (model.IsBatch == SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION)
                         {
                             if (r.Status.Value != SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED)
                             {
+
+
                                 if (_receiptServices.CheckAllAutomationReceiptIsPaid(r.CreateDate.Value))
                                 {
                                     model.Status = SLIM_CONFIG.RECEIPT_STATUS_PAID;
@@ -499,19 +501,33 @@ namespace AMS.Controllers
                                 model.Status = SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED;
                             }
 
+                            List<Receipt> batchReceipts = _receiptServices.GetReceiptsByCreateDate(r.CreateDate.Value);
+                            double totalBatch = 0;
+                            foreach (var bReceipt in batchReceipts)
+                            {
+                                foreach (var bDetail in bReceipt.ReceiptDetails)
+                                {
+                                    totalBatch += bDetail.Total.Value;
+                                }
+                            }
+                            model.TotalOrder = totalBatch;
                         }
                         model.Block = r.House.Block.BlockName;
                         model.Floor = r.House.Floor;
                         model.HouseName = r.House.HouseName;
                         model.ReceiptTitle = r.Title;
                         List<ReceiptDetail> receipDetails = r.ReceiptDetails.ToList();
-                        double total = 0;
-                        foreach (var receiptDetail in receipDetails)
+                        if (model.IsBatch != SLIM_CONFIG.RECEIPT_TYPE_AUTOMATION)
                         {
-                            //                            total += od.UnitPrice.Value * od.Quantity.Value;
-                            total += receiptDetail.Total.Value;
+                            double total = 0;
+                            foreach (var receiptDetail in receipDetails)
+                            {
+                                //                            total += od.UnitPrice.Value * od.Quantity.Value;
+                                total += receiptDetail.Total.Value;
+                            }
+                            model.TotalOrder = total;
                         }
-                        model.TotalOrder = total;
+
                         receiptModel.Add(model);
                     }
                     return Json(receiptModel, JsonRequestBehavior.AllowGet);
@@ -1434,6 +1450,59 @@ namespace AMS.Controllers
         }
 
         [HttpGet]
+        [Route("Management/ManageReceipt/GetBatchReceiptPaymentInfo")]
+        public ActionResult GetBatchReceiptPaymentInfo(long createDate)
+        {
+            MessageViewModels response = new MessageViewModels();
+            try
+            {
+                List<Receipt> receiptGroupByCreateDate = _receiptServices.GetReceiptsByCreateDate(new DateTime(createDate));
+                if (receiptGroupByCreateDate != null && receiptGroupByCreateDate.Count != 0)
+                {
+                    double total = 0;
+                    double totalPaid = 0;
+                    int totalWater = 0;
+
+                    foreach (var receipt in receiptGroupByCreateDate)
+                    {
+                        foreach (var od in receipt.ReceiptDetails)
+                        {
+                            if (od.UtilityService.Type ==
+                                     SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
+                            {
+                                totalWater +=  od.Quantity.Value;
+                            }
+                            if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_PAID)
+                            {
+                                totalPaid += od.Total.Value;
+                            }
+                            total += od.Total.Value;
+                        }
+                    }
+                    object data = new
+                    {
+                        TotalWater = totalWater,
+                        Total = total,
+                        TotalPaid = totalPaid,
+                    };
+                    response.Data = data;
+                }
+                else
+                {
+                    response.StatusCode = -1;
+                    response.Msg = "KHông tìn thấy hóa đơn";
+                }
+            }
+            catch (Exception e)
+            {
+
+                response.StatusCode = -1;
+                response.Msg = "Cập nhật thất bại";
+            }
+            return Json(response,JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
         [ManagerAuthorize]
         [Route("Management/ManageReceipt/CreateManualReceiptView")]
         public ActionResult ManageManualReceipt()
@@ -1889,6 +1958,17 @@ namespace AMS.Controllers
                                     }
                                     else
                                     {
+//                                        Transaction newTrans = new Transaction();
+//                                        newTrans.ReceiptDetailId = receiptDetail.Id;
+//                                        newTrans.PaidAmount = receiptDetail.Total;
+//                                        newTrans.TotalAmount = receiptDetail.Total;
+////                                        double totalInPast = receiptDetail.Transactions.Sum(allTrans => allTrans.PaidAmount).Value;
+////                                        newTrans.TotalAmount = receiptDetail.Total - totalInPast;
+//                                        newTrans.CreateDate = DateTime.Now;
+//                                        newTrans.LastModified = DateTime.Now;
+//                                        newTrans.BlsId = curBls.Id;
+//                                        _transactionService.Add(newTrans);
+
                                         response.StatusCode = -1;
                                         return Json(response);
                                     }
@@ -2150,7 +2230,7 @@ namespace AMS.Controllers
         //            }
         //            return totalWaterPrice;
         //        }
-       
+
 
         public static double CalculateWaterUtiServiceVersion1(double consumption, List<UtilityServiceRangePrice> rangePrices)
         {
