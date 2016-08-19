@@ -564,14 +564,21 @@ namespace AMS.Controllers
             //    questionService.DeleteQuestion(itemQuestion);
             //}
             List<UserAnswerPoll> listUserAnswerPolls = userAnswerService.GetListUserAnswerPollsByPollId(obj.Id);
-            foreach (var item in listUserAnswerPolls)
+            if (listUserAnswerPolls != null)
             {
-                userAnswerService.DeleteUserAnswer(item);
+                foreach (var item in listUserAnswerPolls)
+                {
+                    userAnswerService.DeleteUserAnswer(item);
+                }
             }
+
             List<BlockPoll> listBlockPolls = BlockPollService.FindByPollId(obj.Id);
-            foreach (var item1 in listBlockPolls)
+            if (listBlockPolls != null)
             {
-                BlockPollService.DeleteBlockPoll(item1);
+                foreach (var item1 in listBlockPolls)
+                {
+                    BlockPollService.DeleteBlockPoll(item1);
+                }
             }
             PollService.DeletePoll(obj);
 
