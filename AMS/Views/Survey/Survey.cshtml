@@ -94,7 +94,7 @@
                 <div class="tab-content">
                     <div class="tab-pane fade active in" id="">
 
-                        @using (Html.BeginForm("Surveys", "Survey", FormMethod.Post, new { @class = "form-horizontal", @onsubmit = "mySubmitFunction()" }))
+                        @using (Html.BeginForm("Surveys", "Survey", FormMethod.Post, new { @class = "form-horizontal", @onsubmit = "return mySubmitFunction()" }))
                         {
                             <div class="form-group" id="form">
 
@@ -499,8 +499,28 @@
     //    });
     //});
     function mySubmitFunction() {
-        bInfos()
-        return false;
+        //bInfos()
+        //return false;
+        b = document.getElementById('EndDate').value;
+        c = document.getElementById('PublishDate').value;
+        a = document.getElementById('StartDate').value;
+        var d2 = new Date(b)
+        var d3 = new Date(c)
+        var d1 = new Date(a)
+        //if (CompareDates(d1, d2, '-') == 0) {
+        //    alert('Selected date must be current date or previous date!');
+        //    return false;
+        //}
+        if (d3 > d2) {
+            alert('Ngày kết thúc không hợp lệ!'); return false;
+        } else if (d3 < d1) {
+            alert('Ngày hiệu lực không hợp lệ!'); return false;
+        } else if (d2 < d1) {
+            alert('Ngày kết thúc không hợp lệ!'); return false;
+        }
+
+        else { return true; }
+
     }
     function bInfos() {
 
