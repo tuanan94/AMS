@@ -12,6 +12,9 @@
         if (curUser != null && curUser.ProfileImage != null && !curUser.ProfileImage.Equals(""))
         {
             profileImg = curUser.ProfileImage;
+        }
+        if (null != curUser && curUser.Fullname != null)
+        {
             userFullName = curUser.Fullname;
         }
     }

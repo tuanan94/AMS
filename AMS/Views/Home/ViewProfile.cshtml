@@ -4,6 +4,10 @@
     ViewBag.Title = "ViewProfile";
     Layout = "~/Views/Home/_socialNetworkLayout.cshtml";
     User user = ViewBag.user;
+    if (null == user.ProfileImage)
+    {
+        user.ProfileImage = "";
+    }
 }
 
 <div class="col-md-12">
