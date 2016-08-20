@@ -562,6 +562,40 @@ namespace AMS.Controllers
         }
 
         [HttpPost]
+        [Route("Management/ManageUser/ResetPassword")]
+        public ActionResult ResetPassword(int userId)
+        {
+            MessageViewModels response = new MessageViewModels();
+            try
+            {
+                User u = _userServices.FindById(userId);
+                if (null != u)
+                {
+                    u.Password = CommonUtil.GetUniqueKey(8);
+                    StringBuilder message = new StringBuilder();
+                    message.Append("Chung cu AMS. Dat lai mat khau tai khoan cua thanh cong! Ten đang nhap: ")
+                        .Append(u.Username)
+                        .Append(". Mat khau: ")
+                        .Append(u.Password);
+                    CommonUtil.SentSms(u.SendPasswordTo, message.ToString());
+                    u.LastModified = DateTime.Now;
+                    _userServices.Update(u);
+                }
+                else
+                {
+                    response.StatusCode = -1;
+                }
+            }
+            catch (Exception)
+            {
+                response.StatusCode = -1;
+                return Json(response);
+            }
+            return Json(response);
+        }
+
+
+        [HttpPost]
         [Route("Management/ManageUser/UpdateEmployee")]
         public ActionResult UpdateEmployee(UserInfoViewModel user)
         {

@@ -70,7 +70,7 @@
             </div>
             <form id="addResidentForm" class="form-horizontal" role="form">
                 <div class="modal-body">
-                    <div class="panel-body">
+@*                    <div class="panel-body">*@
                         <div class="alert alert-info" id="addResSuccessNoti" style="display: none">
                             <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
                             <span id="successMsg">Thêm cư dân thành công</span>
@@ -157,22 +157,27 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="form-group res-info relationship-row">
-                            <label for="ownerRelationShip" class="col-md-3 control-label ">Mối quan hệ</label>
-                            <div class="col-md-9">
-                                <select class="form-control" id="ownerRelationShip" name="RelationLevel">
-                                    <option value="0">Vợ, Chồng, Anh, Chị, Em, Bạn...</option>
-                                    <option value="-2">Ông, bà (Lớn hơn 2 bậc)</option>
-                                    <option value="-1">Bố, mẹ, cô, dì, chú, bác, cậu, mợ...(Lớn hơn 1 bậc)</option>
-                                    <option value="1">Con, cháu (gọi bằng cô, dì, chú, bác)</option>
-                                    <option value="2">Cháu (gọi bằng ông, bà)</option>
-                                </select>
-                            </div>
+                    <div class="form-group res-info relationship-row">
+                        <label for="ownerRelationShip" class="col-md-3 control-label ">Mối quan hệ</label>
+                        <div class="col-md-9">
+                            <select class="form-control" id="ownerRelationShip" name="RelationLevel">
+                                <option value="0">Vợ, Chồng, Anh, Chị, Em, Bạn...</option>
+                                <option value="-2">Ông, bà (Lớn hơn 2 bậc)</option>
+                                <option value="-1">Bố, mẹ, cô, dì, chú, bác, cậu, mợ...(Lớn hơn 1 bậc)</option>
+                                <option value="1">Con, cháu (gọi bằng cô, dì, chú, bác)</option>
+                                <option value="2">Cháu (gọi bằng ông, bà)</option>
+                            </select>
                         </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <div class="col-md-12">
+                            <span id="btnResetPass" onclick="resetPassword()" class="btn btn-info btn-stroke pull-right"><i class="fa fa-refresh"></i> Mật khẩu</span>
+                        </div>
+                    </div>
                         <input type="hidden" id="accountId" name="Id" />
                     </div>
-                </div>
-                <div class="modal-footer">
+@*                </div>*@
+                <div class="modal-footer" style="margin-top: 0">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                     @*                    <button id="btnAdd" type="button" class="btn btn-info hide" onclick="addNewResident()">Chấp nhận</button>*@
                     <button id="btnAdd" name="btnAdd" type="submit" class="btn btn-info hide">Chấp nhận</button>
@@ -461,201 +466,219 @@
 
                         $("#btnAdd").removeClass("hide");
                         $("#btnUpdate").addClass("hide");
+                        $("#btnResetPass").addClass("hide");
                         $("#userAccountName").prop("readonly", "");
 
                         $("input[type='radio'][name='IsHouseOwner'][value='@SLIM_CONFIG.USER_ROLE_RESIDENT']").prop("checked", "checked");
+                    $(".relationship-row").removeClass("hide");
+
+                    $("#addResidentModal").modal("show");
+                }
+            }
+        });
+    }
+
+    function getResidentInfor(residentId) {
+
+        $.ajax({
+            url: "/Management/ManageUser/GetResidentInFor",
+            data: {
+                residentId: residentId
+            },
+            type: "get",
+            success: function(data) {
+                if (data.StatusCode === 0) {
+
+                    var obj = data.Data.data;
+
+                    $("#resName").val(obj.Name);
+                    $("#dob").val(obj.Dob);
+                    $("#resId").val(obj.Idenity);
+                    $("#accountId").val(obj.Id);
+                    $("#userAccountName").val(obj.UserAccountName);
+                    $("#cellNumb").val(obj.CellNumb);
+                    $("#idCreateDate").val(obj.IdCreateDate);
+
+                    $("input:radio[name=Gender]").filter("[value=" + obj.Gender + "]").prop("checked", "checked");
+                    $("input:radio[name=IsHouseOwner]").filter("[value=" + obj.RoldId + "]").prop("checked", "checked");
+
+                    $("#ownerRelationShip").val(obj.RelationLevel);
+
+                    if (obj.RoldId === window.UserRoleHouseHolder) {
+                        $("input:radio[name=IsHouseOwner]").prop("disabled", "disabled");
+                        $("#_houseId").prop("disabled", "disabled");
+                        $("#_houseBlock").prop("disabled", "disabled");
+                        $("#_houseFloor").prop("disabled", "disabled");
+                        $(".relationship-row").addClass("hide");
+                    } else {
+                        $("input:radio[name=IsHouseOwner]").prop("disabled", "");
+                        $("#_houseId").prop("disabled", "");
+                        $("#_houseBlock").prop("disabled", "");
+                        $("#_houseFloor").prop("disabled", "");
                         $(".relationship-row").removeClass("hide");
-
-                        $("#addResidentModal").modal("show");
                     }
+
+                    var block = parseJsonToSelectTags(data.Data.blocks, obj.BlockId.toString());
+                    var floor = parseJsonToSelectTags(data.Data.floors, obj.Floor);
+                    var room = parseJsonToSelectTags(data.Data.rooms, obj.HouseId.toString());
+                    $("#_houseBlock").html(block);
+                    $("#_houseFloor").html(floor);
+                    $("#_houseId").html(room);
+
+                    window.mode = window.UPDATEMODE;
+                    $("#successMsg").text("Cập nhật cư dân thành công.");
+                    $("#failedMsg").text("Cập nhật cư dân thất bại.");
+                    $("#title").text("Cập nhật cư dân");
+
+                    $("#btnAdd").addClass("hide");
+                    $("#btnUpdate").removeClass("hide");
+                    $("#btnResetPass").removeClass("hide");
+
+                    $("#userAccountName").prop("readonly", "readonly");
+                    $("#addResidentModal").modal("show");
                 }
-            });
-        }
+            }
+        });
+    }
 
-        function getResidentInfor(residentId) {
-
-            $.ajax({
-                url: "/Management/ManageUser/GetResidentInFor",
-                data: {
-                    residentId: residentId
-                },
-                type: "get",
-                success: function (data) {
-                    if (data.StatusCode === 0) {
-
-                        var obj = data.Data.data;
-
-                        $("#resName").val(obj.Name);
-                        $("#dob").val(obj.Dob);
-                        $("#resId").val(obj.Idenity);
-                        $("#accountId").val(obj.Id);
-                        $("#userAccountName").val(obj.UserAccountName);
-                        $("#cellNumb").val(obj.CellNumb);
-                        $("#idCreateDate").val(obj.IdCreateDate);
-
-                        $("input:radio[name=Gender]").filter("[value=" + obj.Gender + "]").prop("checked", "checked");
-                        $("input:radio[name=IsHouseOwner]").filter("[value=" + obj.RoldId + "]").prop("checked", "checked");
-
-                        $("#ownerRelationShip").val(obj.RelationLevel);
-
-                        if (obj.RoldId === window.UserRoleHouseHolder) {
-                            $("input:radio[name=IsHouseOwner]").prop("disabled", "disabled");
-                            $("#_houseId").prop("disabled", "disabled");
-                            $("#_houseBlock").prop("disabled", "disabled");
-                            $("#_houseFloor").prop("disabled", "disabled");
-                            $(".relationship-row").addClass("hide");
-                        } else {
-                            $("input:radio[name=IsHouseOwner]").prop("disabled", "");
-                            $("#_houseId").prop("disabled", "");
-                            $("#_houseBlock").prop("disabled", "");
-                            $("#_houseFloor").prop("disabled", "");
-                            $(".relationship-row").removeClass("hide");
-                        }
-
-                        var block = parseJsonToSelectTags(data.Data.blocks, obj.BlockId.toString());
-                        var floor = parseJsonToSelectTags(data.Data.floors, obj.Floor);
-                        var room = parseJsonToSelectTags(data.Data.rooms, obj.HouseId.toString());
-                        $("#_houseBlock").html(block);
-                        $("#_houseFloor").html(floor);
-                        $("#_houseId").html(room);
-
-                        window.mode = window.UPDATEMODE;
-                        $("#successMsg").text("Cập nhật cư dân thành công.");
-                        $("#failedMsg").text("Cập nhật cư dân thất bại.");
-                        $("#title").text("Cập nhật cư dân");
-
-                        $("#btnAdd").addClass("hide");
-                        $("#btnUpdate").removeClass("hide");
-
-                        $("#userAccountName").prop("readonly", "readonly");
-                        $("#addResidentModal").modal("show");
-                    }
-                }
-            });
-        }
-
-        function addNewResident() {
-            $.ajax({
-                "url": "/Management/ManageUser/AddNewResident",
-                data: $("#addResidentForm").serialize(),
-                type: "POST",
-                success: function (data) {
-                    if (data.StatusCode === 0) {
-                        $("#successMsg").html("Thêm mới cư dân thành công.");
-                        $("#addResSuccessNoti").fadeIn("fast");
-                        setTimeout(function () {
+    function addNewResident() {
+        $.ajax({
+            "url": "/Management/ManageUser/AddNewResident",
+            data: $("#addResidentForm").serialize(),
+            type: "POST",
+            success: function(data) {
+                if (data.StatusCode === 0) {
+                    $("#successMsg").html("Thêm mới cư dân thành công.");
+                    $("#addResSuccessNoti").fadeIn("fast");
+                    setTimeout(function() {
                             $("#addResSuccessNoti").fadeOut("fast");
                             resetFormData("addResidentForm");
-                        }, 3000);
+                        },
+                        3000);
 
-                        window.manageUserListTbl.ajax.reload(null, false);
-                    } else if (data.StatusCode === 2) {
-                        $("#addTransMsg").text("Căn hộ này chưa có chủ nhà!");
-                        $("#msgAddFailedNoty").fadeIn("fast");
-                        setTimeout(function () {
+                    window.manageUserListTbl.ajax.reload(null, false);
+                } else if (data.StatusCode === 2) {
+                    $("#addTransMsg").text("Căn hộ này chưa có chủ nhà!");
+                    $("#msgAddFailedNoty").fadeIn("fast");
+                    setTimeout(function() {
                             $("#msgAddFailedNoty").fadeOut("fast");
-                        }, 3000);
-                    } else {
-                        $("#addResFailedNoti").fadeIn("fast");
-                        setTimeout(function () {
+                        },
+                        3000);
+                } else {
+                    $("#addResFailedNoti").fadeIn("fast");
+                    setTimeout(function() {
                             $("#addResFailedNoti").fadeOut("fast");
-                        }, 3000);
-                    }
-                    console.log(data);
+                        },
+                        3000);
                 }
-            });
-        }
+                console.log(data);
+            }
+        });
+    }
 
-        function updateResident() {
-            var form = $("#addResidentForm");
-            var disabled = form.find(':input:disabled').removeAttr('disabled');
-            var serializedForm = form.serialize();
-            disabled.attr('disabled', 'disabled');
+    function updateResident() {
+        var form = $("#addResidentForm");
+        var disabled = form.find(':input:disabled').removeAttr('disabled');
+        var serializedForm = form.serialize();
+        disabled.attr('disabled', 'disabled');
 
-            $.ajax({
-                "url": "/Management/ManageUser/UpdateResident",
-                data: serializedForm,
-                type: "POST",
-                success: function (data) {
-                    if (data.StatusCode === 0) {
-                        $("#addResSuccessNoti").fadeIn("fast");
-                        setTimeout(function () {
+        $.ajax({
+            "url": "/Management/ManageUser/UpdateResident",
+            data: serializedForm,
+            type: "POST",
+            success: function (data) {
+
+                $("#successMsg").text("Cập nhật cư dân thành công.");
+                $("#failedMsg").text("Cập nhật cư dân thất bại.");
+
+                if (data.StatusCode === 0) {
+                    $("#addResSuccessNoti").fadeIn("fast");
+                    setTimeout(function() {
                             $("#addResSuccessNoti").fadeOut("fast");
                             resetFormData("addResidentForm");
                             $("#addResidentModal").modal("hide");
-                        }, 3000);
+                        },
+                        3000);
 
-                        window.manageUserListTbl.ajax.reload(null, false);
-                    } else if (data.StatusCode === 2) {
-                        $("#addTransMsg").text("Căn hộ này chưa có chủ nhà!");
-                        $("#msgAddFailedNoty").fadeIn("fast");
-                        setTimeout(function () {
+                    window.manageUserListTbl.ajax.reload(null, false);
+                } else if (data.StatusCode === 2) {
+                    $("#addTransMsg").text("Căn hộ này chưa có chủ nhà!");
+                    $("#msgAddFailedNoty").fadeIn("fast");
+                    setTimeout(function() {
                             $("#msgAddFailedNoty").fadeOut("fast");
-                        }, 3000);
-                    } else {
-                        $("#addResFailedNoti").fadeIn("fast");
-                        setTimeout(function () {
+                        },
+                        3000);
+                } else {
+                    $("#addResFailedNoti").fadeIn("fast");
+                    setTimeout(function() {
                             $("#addResFailedNoti").fadeOut("fast");
-                        }, 3000);
-                    }
-                    console.log(data);
+                        },
+                        3000);
                 }
-            });
-            disabled.attr('disabled', 'disabled');
-        }
+                console.log(data);
+            }
+        });
+        disabled.attr('disabled', 'disabled');
+    }
 
-        function deleteConsumptionRecord(id) {
-            //        var element = $("#resident_" + id).addClass("hide");
-            window.deleteRes.push(id);
-            window.manageUserListTbl.row("#resident_" + id).remove().draw(false);
-            $("#delConsumptionRecordBtnGroup").removeClass("hide").addClass("show");
-        }
-        function cancelDeleteConsumptionRecord() {
-            for (var i = 0; i < window.residentList.length; i++) {
-                var originItem = window.residentList[i];
-                for (var z = 0; z < window.deleteRes.length; z++) {
-                    var deleteItem = window.deleteRes[z];
-                    if (originItem.Id.toString() === deleteItem) {
-                        window.manageUserListTbl.row.add(originItem).draw();
-                    }
+    function deleteConsumptionRecord(id) {
+        //        var element = $("#resident_" + id).addClass("hide");
+        window.deleteRes.push(id);
+        window.manageUserListTbl.row("#resident_" + id).remove().draw(false);
+        $("#delConsumptionRecordBtnGroup").removeClass("hide").addClass("show");
+    }
+
+    function cancelDeleteConsumptionRecord() {
+        for (var i = 0; i < window.residentList.length; i++) {
+            var originItem = window.residentList[i];
+            for (var z = 0; z < window.deleteRes.length; z++) {
+                var deleteItem = window.deleteRes[z];
+                if (originItem.Id.toString() === deleteItem) {
+                    window.manageUserListTbl.row.add(originItem).draw();
                 }
             }
-            window.deleteRes = new Array();
-            $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
         }
-        function commitDeleteConsumptionRecord() {
-            $.ajax({
-                url: "/Management/ManageUser/DeleteResident",
-                type: "POST",
-                data: {
-                    listResId: window.deleteRes
-                },
-                success: function (data) {
-                    window.deleteRes = new Array();
-                    window.manageUserListTbl.ajax.reload(null, false);
-                    if (data.StatusCode === 0) {
-                        $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
-                    } else if (data.StatusCode === 4) {
-                        $("#deleteUserFailMsg").html("Không thể xóa được chủ hộ <strong> " +
-                                data.Data.fullName + "</strong> của căn hộ <strong>" + data.Data.houseName +
-                                "</strong> vì vẫn còn cư dân trong căn hộ!. Xin vui lòng xóa cư dân trước khi xóa chủ hộ");
-                        $("#deleteUserFail").fadeIn("fast");
-                        $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
-                    } else {
-                        $("#addTransMsg").html("Xóa cư dân thất bại xin vui lòng thử lại!");
-                        $("#deleteUserFail").fadeIn("fast");
-                        $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");
-                    }
+        window.deleteRes = new Array();
+        $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
+    }
+
+    function commitDeleteConsumptionRecord() {
+        $.ajax({
+            url: "/Management/ManageUser/DeleteResident",
+            type: "POST",
+            data: {
+                listResId: window.deleteRes
+            },
+            success: function(data) {
+                window.deleteRes = new Array();
+                window.manageUserListTbl.ajax.reload(null, false);
+                if (data.StatusCode === 0) {
+                    $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
+                } else if (data.StatusCode === 4) {
+                    $("#deleteUserFailMsg")
+                        .html("Không thể xóa được chủ hộ <strong> " +
+                            data.Data.fullName +
+                            "</strong> của căn hộ <strong>" +
+                            data.Data.houseName +
+                            "</strong> vì vẫn còn cư dân trong căn hộ!. Xin vui lòng xóa cư dân trước khi xóa chủ hộ");
+                    $("#deleteUserFail").fadeIn("fast");
+                    $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");;
+                } else {
+                    $("#addTransMsg").html("Xóa cư dân thất bại xin vui lòng thử lại!");
+                    $("#deleteUserFail").fadeIn("fast");
+                    $("#delConsumptionRecordBtnGroup").removeClass("show").addClass("hide");
                 }
-            });
-        }
+            }
+        });
+    }
 
-        //    function validForm() {
-        //        $("#addResidentForm").valid();
-        //    }
+    //    function validForm() {
+    //        $("#addResidentForm").valid();
+    //    }
 
-        function validateAddNewResident() {
-            $("#addResidentForm").validate({
+    function validateAddNewResident() {
+        $("#addResidentForm")
+            .validate({
                 rules: {
                     Name: {
                         required: true,
@@ -678,12 +701,12 @@
                         maxlength: 9,
                         minlength: 9,
                         number: true,
-                        required: function (element) {
+                        required: function(element) {
                             return $("#idCreateDate").is(':filled');
                         },
                     },
                     IdCreateDate: {
-                        required: function (element) {
+                        required: function(element) {
                             return $("#resId").is(':filled');
                         },
                     }
@@ -713,10 +736,10 @@
                         required: "Vui lòng nhập số CMND."
                     },
                     IdCreateDate: {
-                        required:"Vui lòng nhập ngày cấp CMND."
+                        required: "Vui lòng nhập ngày cấp CMND."
                     }
                 },
-                submitHandler: function () {
+                submitHandler: function() {
                     if ($("#btnUpdate").hasClass("hide")) {
                         addNewResident();
                     } else {
@@ -724,59 +747,87 @@
                     }
                 }
             });
-        }
-        function _parseJsonToSelectTag(floor, room, roomId) {
-            var selectTagList = [];
-            var selectTag = "";
-            if (getHouseMode !== "floor") {
-                for (var i = 0; i < floor.length; i++) {
-                    var obj = floor[i];
-                    selectTag = "<option value=\"" + obj + "\">" + obj + "</option>";
-                    selectTagList.push(selectTag);
-                }
-                $("#_houseFloor").html(selectTagList);
-            }
+    }
 
-            selectTagList = [];
-            for (var j = 0; j < room.length; j++) {
-                var roomName = room[j];
-                var roomIdObj = roomId[j];
-                selectTag = "<option value=\"" + roomIdObj + "\">" + roomName + "</option>";
+    function _parseJsonToSelectTag(floor, room, roomId) {
+        var selectTagList = [];
+        var selectTag = "";
+        if (getHouseMode !== "floor") {
+            for (var i = 0; i < floor.length; i++) {
+                var obj = floor[i];
+                selectTag = "<option value=\"" + obj + "\">" + obj + "</option>";
                 selectTagList.push(selectTag);
             }
-            $("#_houseId").html(selectTagList);
+            $("#_houseFloor").html(selectTagList);
         }
 
-        function _getRoomAndFloor(blockId, floorName, mode, callback) {
-            window.getHouseMode = mode;
-            $.ajax({
-                type: "GET",
-                url: "/Management/ManageUser/GetRoomAndFloor",
-                data: {
-                    blockId: blockId,
-                    floorName: floorName
-                },
-                success: function (data) {
-                    var floor = data.Data.Floor;
-                    var room = data.Data.Room;
-                    var roomId = data.Data.RoomId;
-                    var msg = "<option value=\"\">" + "Không có dữ liệu " + "</option>";
-                    var msg2 = "<option value=\"\">" + "Không có dữ liệu" + "</option>";
-                    if (floor === undefined || floor === null || floor.length === 0) {
-                        $("#houseFloor").html(msg);
-                        $("#houseId").html(msg2);
-                    } else if (room === undefined || room === null || room.length === 0) {
-                        $("#houseId").html(msg2);
-                    } else {
-                        _parseJsonToSelectTag(floor, room, roomId, mode);
-                    }
-                    if (callback && isFunction(callback)) {
-                        callback();
-                    }
-                },
-                error: function () {
+        selectTagList = [];
+        for (var j = 0; j < room.length; j++) {
+            var roomName = room[j];
+            var roomIdObj = roomId[j];
+            selectTag = "<option value=\"" + roomIdObj + "\">" + roomName + "</option>";
+            selectTagList.push(selectTag);
+        }
+        $("#_houseId").html(selectTagList);
+    }
 
+    function _getRoomAndFloor(blockId, floorName, mode, callback) {
+        window.getHouseMode = mode;
+        $.ajax({
+            type: "GET",
+            url: "/Management/ManageUser/GetRoomAndFloor",
+            data: {
+                blockId: blockId,
+                floorName: floorName
+            },
+            success: function(data) {
+                var floor = data.Data.Floor;
+                var room = data.Data.Room;
+                var roomId = data.Data.RoomId;
+                var msg = "<option value=\"\">" + "Không có dữ liệu " + "</option>";
+                var msg2 = "<option value=\"\">" + "Không có dữ liệu" + "</option>";
+                if (floor === undefined || floor === null || floor.length === 0) {
+                    $("#houseFloor").html(msg);
+                    $("#houseId").html(msg2);
+                } else if (room === undefined || room === null || room.length === 0) {
+                    $("#houseId").html(msg2);
+                } else {
+                    _parseJsonToSelectTag(floor, room, roomId, mode);
                 }
-            });
-        }
+                if (callback && isFunction(callback)) {
+                    callback();
+                }
+            },
+            error: function() {
+
+            }
+        });
+    }
+
+    function resetPassword() {
+        var userId = $("#accountId").val();
+        $.ajax({
+            "url": "/Management/ManageUser/ResetPassword",
+            data: {
+                userId: userId
+            },
+            type: "POST",
+            success: function (data) {
+                $("#successMsg").text("Đặt lại mật khẩu thành công.");
+                $("#failedMsg").text("Đặt lại mật khẩu thất bại.");
+                if (data.StatusCode === 0) {
+                    $("#addResSuccessNoti").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#addResSuccessNoti").fadeOut("fast");
+                    },3000);
+                }  else {
+                    $("#addResFailedNoti").fadeIn("fast");
+                    setTimeout(function () {
+                        $("#addResFailedNoti").fadeOut("fast");
+                    },3000);
+                }
+                console.log(data);
+            }
+        });
+    }
 </script>
