@@ -1105,7 +1105,7 @@ namespace AMS.Controllers
                 }
                 else
                 {
-                    List<House> getHouseInFloor = _houseServices.GetActiveRoomsInFloor(block.Id, oldFloorName);
+                    List<House> getHouseInFloor = _houseServices.GetAllRoomsInFloor(block.Id, oldFloorName);
                     string name = "";
                     string houseName = "";
                     foreach (var h in getHouseInFloor)

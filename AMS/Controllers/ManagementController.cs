@@ -231,7 +231,16 @@ namespace AMS.Controllers
                 uResdident.FullName = u.Fullname;
                 uResdident.HouseId = u.HouseId.Value;
                 uResdident.HouseName = u.House.HouseName;
-                uResdident.HouseHolderName = u.House.Users.First().Fullname;
+                if (u.House.OwnerID != null)
+                {
+                    User houholder = _userServices.FindById(u.House.OwnerID.Value);
+                    uResdident.HouseHolderName = houholder.Fullname;
+                }
+                else
+                {
+                    uResdident.HouseHolderName = "";
+                }
+
                 uResdident.CreateDate = u.CreateDate.Value.ToString(parternTime);
                 unapprovedResident.Add(uResdident);
             }

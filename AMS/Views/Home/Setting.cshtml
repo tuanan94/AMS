@@ -99,9 +99,9 @@
                     </div>
                 </div>
                 <div class="profile-icons">
-                    <span><i class="fa fa-users"></i> @curHouse.Users.Count</span>
-                    <span><i class="fa fa-photo"></i> Block: @curHouse.Block.BlockName</span>
-                    <span><i class="fa fa-video-camera"></i> Tầng: @curHouse.Floor </span>
+@*                    <span><i class="fa fa-users"></i> @curHouse.Users.Count</span>*@
+@*                    <span><i class="fa fa-photo"></i> Block: @curHouse.Block.BlockName</span>*@
+@*                    <span><i class="fa fa-video-camera"></i> Tầng: @curHouse.Floor </span>*@
                 </div>
             </div>
 
@@ -109,7 +109,7 @@
         </div>
         <div class="panel panel-default">
             <div class="panel-heading panel-heading-gray">
-                <a class="btn btn-white btn-xs pull-right"><i class="fa fa-pencil"></i></a>
+                <a class="btn btn-white btn-xs pull-right"></a>
                 <i class="fa fa-info-circle"></i> Riêng tư
             </div>
             <div class="panel-body">
@@ -643,13 +643,25 @@
             var curUserId = $("#memberPanelBodySetting").data("curUserId");
             var curUserHouseId = $("#memberPanelBodySetting").data("curUserHouseId");
             $.ajax({
-                url: "/Home/deleteUser/",
+                url: "/Home/deleteRequest",
                 type: "POST",
                 data: {
                     id: $('#amsConfirmModal').data("userId")
                 },
                 success: function (successData) {
-                    location.reload();
+                    $.ajax({
+                        url: "/Home/deleteUser",
+                        type: "POST",
+                        data: {
+                            id: successData.Data
+                        },
+                        success: function (successData) {
+                            location.reload();
+                        },
+                        error: function (er) {
+                            alert(er);
+                        }
+                    });
                 },
                 error: function (er) {
                     alert(er);

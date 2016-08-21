@@ -48,7 +48,7 @@
                                             <th>Trạng thái</th>
 @*                                            <th>Nhân viên hỗ trợ</th>*@
                                             <th>Ngày tạo</th>
-                                            <th>Ngày hoàn thành</th>
+@*                                            <th>Ngày hoàn thành</th>*@
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -60,7 +60,7 @@
                                             <th>Trạng thái</th>
 @*                                            <th>Nhân viên hỗ trợ</th>*@
                                             <th>Ngày tạo</th>
-                                            <th>Ngày hoàn thành</th>
+@*                                            <th>Ngày hoàn thành</th>*@
                                             <th></th>
                                         </tr>
                                     </tfoot>
@@ -104,7 +104,7 @@
                 { data: "HdReqStatus" },
 //                { data: "HdReqSupporter" },
                 { data: "HdReqCreateDate" },
-                { data: "HdReqDeadline" },
+//                { data: "HdReqDeadline" },
                 { data: "HdReqId" }
             ],
             "columnDefs": [
@@ -172,23 +172,23 @@
                     },
                     "width": "15%"
                 },
+//                {
+//                    "targets": 5,
+//                    "data": "HdReqDeadline",
+//                    "render": function (data, type, full, meta) {
+//                        if (type === "display" || type === "filter") {
+//                            if (data !== null && data !== undefined) {
+//                                var dateTime = data.split(" ");
+//                                return "<strong>" + dateTime[0] + "</strong> " + dateTime[1];
+//                            }
+//                            return "Đang chờ xác nhận";
+//                        }
+//                        return data;
+//                    },
+//                    "width": "15%"
+//                },
                 {
                     "targets": 5,
-                    "data": "HdReqDeadline",
-                    "render": function (data, type, full, meta) {
-                        if (type === "display" || type === "filter") {
-                            if (data !== null && data !== undefined) {
-                                var dateTime = data.split(" ");
-                                return "<strong>" + dateTime[0] + "</strong> " + dateTime[1];
-                            }
-                            return "Đang chờ xác nhận";
-                        }
-                        return data;
-                    },
-                    "width": "15%"
-                },
-                {
-                    "targets": 6,
                     "data": "HdReqId",
                     "render": function (data, type, full, meta) {
                         if (type === "display" || type === "filter") {
