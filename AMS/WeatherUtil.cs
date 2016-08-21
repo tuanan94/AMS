@@ -24,21 +24,39 @@ namespace AMS
             requestContent += "&format=json";
             var request = (HttpWebRequest)WebRequest.Create(requestContent);
 
-            var response = (HttpWebResponse)request.GetResponse();
-
-            var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
-            JavaScriptSerializer jss = new JavaScriptSerializer();
-            var jsonobject = jss.Deserialize<dynamic>(responseString);
-            var data = jsonobject["data"];
-            var current_condition = data["current_condition"];
-            string weatherCode = current_condition[0]["weatherCode"];
-            string weatherDes = current_condition[0]["weatherDesc"][0]["value"];
-            string weatherIconUrl = current_condition[0]["weatherIconUrl"][0]["value"];
-            string temp_C = current_condition[0]["temp_C"];
-            weatherResult.code = weatherCode;
-            weatherResult.desc = weatherDes;
-            weatherResult.weatherIcon = weatherResult.getWeatherIcon(weatherCode, weatherIconUrl);
-            weatherResult.tempC = temp_C;
+            WebResponse response = null;
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+            }
+            catch
+            {
+                //do nothing
+            }
+            if (response != null)
+            {
+                var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
+                JavaScriptSerializer jss = new JavaScriptSerializer();
+                var jsonobject = jss.Deserialize<dynamic>(responseString);
+                var data = jsonobject["data"];
+                var current_condition = data["current_condition"];
+                string weatherCode = current_condition[0]["weatherCode"];
+                string weatherDes = current_condition[0]["weatherDesc"][0]["value"];
+                string weatherIconUrl = current_condition[0]["weatherIconUrl"][0]["value"];
+                string temp_C = current_condition[0]["temp_C"];
+                weatherResult.code = weatherCode;
+                weatherResult.desc = weatherDes;
+                weatherResult.weatherIcon = weatherResult.getWeatherIcon(weatherCode, weatherIconUrl);
+                weatherResult.tempC = temp_C;
+            }
+            else
+            {
+                weatherResult.code = "116";
+                weatherResult.desc = "Partly Cloudy";
+                weatherResult.weatherIcon = weatherResult.getWeatherIcon("116", "http://cdn.worldweatheronline.net/images/wsymbols01_png_64/wsymbol_0002_sunny_intervals.png");
+                weatherResult.tempC = "30";
+            }
+         
             return weatherResult;
         }
     }
