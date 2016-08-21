@@ -92,7 +92,8 @@ function addUserToFamilyTree(level, USERS, selectorStr) {
             var rangeName = "";
             if (u['FamilyLevel'] == level && u['Status'] == '1') {
                 if (u.RoleId == 3 || u.RoleId == 4) {
-                    rangeName = rangeNames[colorLevel];
+//                    rangeName = rangeNames[colorLevel];
+                    rangeName = getLevelNameFromIndex(level);
                 } else {
                     rangeName = rangeNamesManager[colorLevel];
                 }
@@ -181,7 +182,7 @@ function addUserToFamilyTreeNew(level, USERS) {
             var rangeName = "";
             if (u['FamilyLevel'] == level && u['Status'] == '1') {
                 if (u.RoleId == 3 || u.RoleId == 4) {
-                    rangeName = rangeNames[colorLevel];
+                    rangeName = getLevelNameFromIndex(level);
                 } else {
                     rangeName = rangeNamesManager[colorLevel];
                 }
@@ -294,5 +295,26 @@ function addUserToMap(user, root) {
             }
 
         }
+    }
+}
+
+function getLevelNameFromIndex(index) {
+    switch (index) {
+        case -2:
+            return rangeNames[0];
+            break;
+        case -1:
+            return rangeNames[1];
+            break;
+        case 0:
+            return rangeNames[2];
+            break;
+        case 1:
+            return rangeNames[3];
+            break;
+        case 2:
+            return rangeNames[4];
+            break;
+    default:
     }
 }

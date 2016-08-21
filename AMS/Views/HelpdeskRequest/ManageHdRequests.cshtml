@@ -37,7 +37,7 @@
                                         <th>Trạng thái</th>
                                         <th>Nhân viên được giao</th>
                                         <th>Ngày tạo</th>
-                                        <th>Ngày hoàn thành</th>
+@*                                        <th>Ngày hẹn</th>*@
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -50,7 +50,7 @@
                                         <th>Trạng thái</th>
                                         <th>Nhân viên hỗ trợ</th>
                                         <th>Ngày tạo</th>
-                                        <th>Ngày hoàn thành</th>
+@*                                        <th>Ngày hẹn</th>*@
                                         <th></th>
                                     </tr>
                                 </tfoot>
@@ -93,7 +93,7 @@
                 { data: "HdReqStatus" },
                 { data: "HdReqSupporter" },
                 { data: "HdReqCreateDate" },
-                { data: "HdReqDeadline" },
+//                { data: "HdReqDeadline" },
                 { data: "HdReqId" }
             ],
             "columnDefs": [
@@ -174,26 +174,26 @@
                     },
                     "width": "12%"
                 },
+//                {
+//                    "targets": 7,
+//                    "data": "HdReqDeadline",
+//                    "render": function (data, type, full, meta) {
+//                        if (type === "display" || type === "filter") {
+//                            if (data !== null && data !== undefined) {
+//                                //                                var dateTime = data.split(" ");
+//                                //                                return "<span class='label date-color label-warning'>" + dateTime[0] +
+//                                //                                    "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";
+//                                var dateTime = data.split(" ");
+//                                return "<strong>" + dateTime[0] + "</strong> " + dateTime[1];
+//                            }
+//                            return "Đang chờ xác nhận";
+//                        }
+//                        return full.HdReqDeadlineLong;
+//                    },
+//                    "width": "12%"
+//                },
                 {
                     "targets": 7,
-                    "data": "HdReqDeadline",
-                    "render": function (data, type, full, meta) {
-                        if (type === "display" || type === "filter") {
-                            if (data !== null && data !== undefined) {
-                                //                                var dateTime = data.split(" ");
-                                //                                return "<span class='label date-color label-warning'>" + dateTime[0] +
-                                //                                    "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";
-                                var dateTime = data.split(" ");
-                                return "<strong>" + dateTime[0] + "</strong> " + dateTime[1];
-                            }
-                            return "Đang chờ xác nhận";
-                        }
-                        return full.HdReqDeadlineLong;
-                    },
-                    "width": "12%"
-                },
-                {
-                    "targets": 8,
                     "data": "HdReqId",
                     "searchable": false,
                     "orderable": false,
