@@ -404,7 +404,11 @@ namespace AMS.Controllers
                         receiptDetail.Quantity = (int)rd.Receipt.House.Area.Value;
                         if (receiptDetail.Quantity.Value != 0)
                         {
-                            receiptDetail.UnitPrice = receiptDetail.Total / receiptDetail.Quantity.Value;
+                            receiptDetail.UnitPrice = rangePrice.Price;
+                        }
+                        else
+                        {
+                            receiptDetail.UnitPrice = 0;
                         }
                         var transactions = receiptDetail.Transactions.Where(tr => tr.BalanceSheet.Id == receiptDetail.Receipt.BlsId).ToList();
                         _receiptDetailServices.Update(receiptDetail);
@@ -546,7 +550,11 @@ namespace AMS.Controllers
                                     receiptDetail.UtilityServiceId = utilServiceForHouseCat.UtilServiceId.Value;
                                     if (receiptDetail.Quantity.Value != 0)
                                     {
-                                        receiptDetail.UnitPrice = receiptDetail.Total / receiptDetail.Quantity.Value;
+                                        receiptDetail.UnitPrice = price;
+                                    }
+                                    else
+                                    {
+                                        receiptDetail.UnitPrice = 0;
                                     }
                                     var transactions = receiptDetail.Transactions.Where(tr => tr.BalanceSheet.Id == receiptDetail.Receipt.BlsId).ToList();
                                     _receiptDetailServices.Update(receiptDetail);

@@ -185,7 +185,7 @@ namespace AMS.Controllers
                             }
                             model = new ReceiptInfoModel();
                             model.ReceiptId = receipt.Id;
-                            model.PublishDate = receipt.PublishDate.Value.ToString(AmsConstants.DateTimeFormat);
+                            model.PublishDate = receipt.PublishDate.Value.ToString(AmsConstants.DateFormat);
                             model.PublishDateStick = receipt.PublishDate.Value.Ticks;
                             model.Status = receipt.Status.Value;
                             model.HouseName = receipt.House.HouseName;
@@ -267,7 +267,7 @@ namespace AMS.Controllers
                         }
                         model = new ReceiptInfoModel();
                         model.ReceiptId = receipt.Id;
-                        model.PublishDate = receipt.PublishDate.Value.ToString(AmsConstants.DateTimeFormat);
+                        model.PublishDate = receipt.PublishDate.Value.ToString(AmsConstants.DateFormat);
                         model.PublishDateStick = receipt.PublishDate.Value.Ticks;
                         model.Status = receipt.Status.Value;
                         model.HouseName = receipt.House.HouseName;
@@ -1128,6 +1128,9 @@ namespace AMS.Controllers
                                 fixCostForHouseCat.First().UtilityService.UtilityServiceRangePrices.First().Price.Value *
                                 house.Area.Value;
                             receiptDetail.UtilityServiceId = fixCostForHouseCat.First().UtilityService.Id;
+                            receiptDetail.UnitPrice =
+                                fixCostForHouseCat.First().UtilityService.UtilityServiceRangePrices.First().Price.Value;
+                            receiptDetail.Quantity = (int) house.Area.Value;
                             receiptDetail.Total = fixedCost;
                             receiptDetail.ReceiptId = receipt.Id;
                             receiptDetail.CreateDate = DateTime.Now;
@@ -1470,7 +1473,7 @@ namespace AMS.Controllers
                             if (od.UtilityService.Type ==
                                      SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
                             {
-                                totalWater +=  od.Quantity.Value;
+                                totalWater += od.Quantity.Value;
                             }
                             if (receipt.Status == SLIM_CONFIG.RECEIPT_STATUS_PAID)
                             {
@@ -1499,7 +1502,7 @@ namespace AMS.Controllers
                 response.StatusCode = -1;
                 response.Msg = "Cập nhật thất bại";
             }
-            return Json(response,JsonRequestBehavior.AllowGet);
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -1958,16 +1961,16 @@ namespace AMS.Controllers
                                     }
                                     else
                                     {
-//                                        Transaction newTrans = new Transaction();
-//                                        newTrans.ReceiptDetailId = receiptDetail.Id;
-//                                        newTrans.PaidAmount = receiptDetail.Total;
-//                                        newTrans.TotalAmount = receiptDetail.Total;
-////                                        double totalInPast = receiptDetail.Transactions.Sum(allTrans => allTrans.PaidAmount).Value;
-////                                        newTrans.TotalAmount = receiptDetail.Total - totalInPast;
-//                                        newTrans.CreateDate = DateTime.Now;
-//                                        newTrans.LastModified = DateTime.Now;
-//                                        newTrans.BlsId = curBls.Id;
-//                                        _transactionService.Add(newTrans);
+                                        //                                        Transaction newTrans = new Transaction();
+                                        //                                        newTrans.ReceiptDetailId = receiptDetail.Id;
+                                        //                                        newTrans.PaidAmount = receiptDetail.Total;
+                                        //                                        newTrans.TotalAmount = receiptDetail.Total;
+                                        ////                                        double totalInPast = receiptDetail.Transactions.Sum(allTrans => allTrans.PaidAmount).Value;
+                                        ////                                        newTrans.TotalAmount = receiptDetail.Total - totalInPast;
+                                        //                                        newTrans.CreateDate = DateTime.Now;
+                                        //                                        newTrans.LastModified = DateTime.Now;
+                                        //                                        newTrans.BlsId = curBls.Id;
+                                        //                                        _transactionService.Add(newTrans);
 
                                         response.StatusCode = -1;
                                         return Json(response);

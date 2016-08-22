@@ -112,7 +112,7 @@
                                                         <td>@detail.UtilityService.Name</td>
 
                                                         <td>
-                                                            @if (detail.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER || detail.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST)
+                                                            @if (detail.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
                                                             {
                                                                 <div style="text-align: center">-</div>
                                                             }
@@ -122,13 +122,13 @@
                                                             }
                                                         </td>
                                                         <td>
-                                                            @if (detail.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER || detail.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_FIXED_COST)
+                                                            @if (detail.UtilityService.Type == SLIM_CONFIG.UTILITY_SERVICE_TYPE_WATER)
                                                             {
                                                                 <div style="text-align: center">-</div>
                                                             }
                                                             else
                                                             {
-                                                                @(detail.UnitPrice == null ? "-" : detail.UnitPrice.Value.ToString())
+                                                                @(detail.UnitPrice == null ? "-" : detail.UnitPrice.Value.ToString("N0"))
                                                             }
                                                         </td>
                                                         <td>@(detail.Total.Value.ToString("N0"))</td>

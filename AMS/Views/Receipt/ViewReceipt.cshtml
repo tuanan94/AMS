@@ -97,7 +97,7 @@
                             <th>Tiêu đề</th>
                             <th>Tổng</th>
                             <th>Trạng thái</th>
-                            <th>Ngày tạo</th>
+                            <th>Ngày công bố</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -107,7 +107,7 @@
                             <th>Tiêu đề</th>
                             <th>Tổng</th>
                             <th>Trạng thái</th>
-                            <th>Ngày tạo</th>
+                            <th>Ngày công bố</th>
                             <th></th>
                         </tr>
                     </tfoot>
@@ -278,9 +278,10 @@
                     "render": function (data, type, full) {
                         if (type === "display" || type === "filter") {
                             if (data !== null && data !== undefined) {
-                                var dateTime = data.split(" ");
-                                return "<strong>" + dateTime[0] +
-                                    "</strong> " + dateTime[1];
+//                                var dateTime = data.split(" ");
+                                return "<strong>" + data +
+                                    "</strong> ";
+//                                    "</strong> " + dateTime[1];
                                 /*return "<span class='label date-color label-warning'>" + dateTime[0] +
                                     "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";*/
                             }
@@ -404,9 +405,10 @@
                     "render": function (data, type, full) {
                         if (type === "display" || type === "filter") {
                             if (data !== null && data !== undefined) {
-                                var dateTime = data.split(" ");
-                                return "<strong>" + dateTime[0] +
-                                    "</strong> " + dateTime[1];
+//                                var dateTime = data.split(" ");
+                                return "<strong>" + data +
+                                    "</strong> ";
+//                                    "</strong> " + dateTime[1];
                                 /*return "<span class='label date-color label-warning'>" + dateTime[0] +
                                     "</span>  <span class='label time-color label-gray'>" + dateTime[1] + "</span>";*/
                             }
