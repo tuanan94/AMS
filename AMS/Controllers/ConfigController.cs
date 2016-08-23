@@ -152,16 +152,19 @@ namespace AMS.Controllers
         {
             List<HouseCategory> houseCategories = _houseCategoryServices.GetAll();
             UtilServiceForHouseCat utilServiceForHouseCat = _utilServiceForHouseCatServices.FindById(id);
+            bool updateable = true;
             if (utilServiceForHouseCat != null)
             {
                 ViewBag.utilServiceForHouseCat = utilServiceForHouseCat;
                 ViewBag.houseCategories = houseCategories;
-            }
-            else
-            {
+                if (utilServiceForHouseCat.UtilityService.ReceiptDetails != null && 
+                    utilServiceForHouseCat.UtilityService.ReceiptDetails.Any(rd => rd.Receipt.Status != null && rd.Receipt.Status != SLIM_CONFIG.RECEIPT_STATUS_UNPUBLISHED))
+                {
+                    updateable = false;
+                }
 
             }
-
+            ViewBag.updateable = updateable;
             return View("UpdateUtilityService");
         }
 
